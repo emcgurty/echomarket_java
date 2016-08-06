@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+
+                template="./echomarketTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    
+    <ui:define name="content">
+        <h:form  id="user_login"  >
+
+            <f:metadata>
+                <f:viewParam name="reset_code" id="reset_code" value="#{userBean.resetCode}" />
+            </f:metadata>     
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
+           
+                    <h:panelGrid id="grid" columns="1" >
+                        <h:panelGroup>
+                            <h:outputLabel for="username" value="#{bundle.username}" >       
+                                <h:inputText id="username"
+                                             value="#{userBean.username}"
+                                             size="16"
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqUserName}"
+                                             autocomplete="off">
+                                </h:inputText>
+                            </h:outputLabel>
+                            <h:message for="username" errorClass="error" />
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputLabel for="password" value="#{bundle.password}" >       
+                                <h:inputSecret id="password"
+                                               size="16"
+                                               value="#{userBean.password}"
+                                               title="#{bundle.password}"
+                                               required="true"
+                                               requiredMessage="#{bundle.ReqPassword}"
+                                               autocomplete="off">
+
+
+                                </h:inputSecret>
+                            </h:outputLabel>
+                            <h:message for="password" errorClass="error" />
+                        </h:panelGroup>
+                        <h:commandLink  action="#{userBean.loginUser()}" id="user_login" value="Login" />
+                        <h:commandLink  action="forgotUsername" id="forgot_username" value="Forgot Username" />
+                        <h:commandLink  action="forgotUserPassword" id="forgot_password" value="Forgot Password" />
+                    </h:panelGrid>
+                </h:form>
+            
+    </ui:define>
+</ui:composition>

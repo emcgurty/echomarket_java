@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+
+                template="./echomarketTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+     <ui:define name="content">
+        <h:form  id="forgotUserName"  >
+
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
+
+
+            <h:outputLabel for="user_email"  value="#{bundle.email}">       
+                <h:inputText id="user_email"
+                             value="#{userBean.email}"
+                             required="true"
+                             requiredMessage="#{bundle.ReqUserEmail}">
+                </h:inputText>
+            </h:outputLabel>
+
+            <br /><br />  
+
+            <h:outputLabel for="password"  value="#{bundle.password}">       
+                <h:inputSecret id="password"
+                             value="#{userBean.password}"
+                             required="true"
+                             requiredMessage="#{bundle.ReqPassword}">
+                </h:inputSecret>
+            </h:outputLabel>
+
+            <br /><br />
+            <h:commandLink  action="#{userBean.forgotUserName()}" id="forgot_user_name" value="Get User Name">
+            </h:commandLink>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

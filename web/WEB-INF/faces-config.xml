@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+              version="2.0">
+
+
+    <!-- ========== Application Wide Features ================================ -->
+
+
+    <application>
+        <resource-bundle>
+            <base-name>echomarket.web.messages.Messages</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>de</supported-locale>
+            <supported-locale>fr</supported-locale>
+            <supported-locale>es</supported-locale>
+        </locale-config>
+    </application>
+
+
+    <!-- ========== Managed Beans ============================================ -->
+    
+    <managed-bean>
+        <managed-bean-name>usersBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.UserBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <description>Gets the reset code from url</description>
+            <property-name>reset_code</property-name>
+            <property-class>java.lang.String</property-class>
+            <value>#{param['reset_code']}</value>
+        </managed-property>
+          <managed-property>
+            <description>Gets the username from the url</description>
+            <property-name>username</property-name>
+            <property-class>java.lang.String</property-class>
+            <value>#{param['username']}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>selectedOption</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.SelectedOptionBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>purposeBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.PurposeBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>contactDescribesBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.ContactDescribesBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>categoriesBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.CategoriesBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
+    <validator>  
+     <validator-id>selectOneMenuValidator</validator-id>  
+     <validator-class>echomarket.resources.SelectOneMenuValidator</validator-class>  
+ </validator>
+    <managed-bean>
+        <managed-bean-name>usStatesManagedBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.UsStatesManagedBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>countriesBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.CountriesBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>itemConditionBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.ItemConditionBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>lenderBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.LenderBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+</faces-config>

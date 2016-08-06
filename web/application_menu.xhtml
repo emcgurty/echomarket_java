@@ -1,0 +1,151 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <h:outputStylesheet library="css" name="menu_nav.css"/>
+    </h:head>
+
+    <h:form>
+
+<!--        <c:choose>
+            <c:when test="${userBean.username == null}">
+                <h:outputText value="Awaiting user login" />
+            </c:when>
+            <c:otherwise>
+                <h:outputText value="#{userBean.username}" />
+            </c:otherwise>
+        </c:choose>-->
+
+
+        <ul id="nav" class="application_menu">
+            <li class="subs">
+                <a href="#s1">Echo Market</a>
+                <ul>
+                    <li>
+                        <h:commandLink id="allItemsListing" action="all_items_listing">
+                            <h:outputText value="All Items Listing"/>
+                        </h:commandLink>
+
+                    </li>
+
+                    <li>
+                        <h:commandLink id="about" action="about">
+                            <h:outputText value="About"/>
+                        </h:commandLink>
+                    </li>
+                    <li>
+                        <h:commandLink id="donate" action="donate">
+                            <h:outputText value="Donate!"/>
+                        </h:commandLink>
+                    </li>
+
+                    <li>
+                        <h:commandLink id="legal" action="legal">
+                            <h:outputText value="Legal"/>
+                        </h:commandLink>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="subs">
+                <a href="#s1">Borrowing</a>
+                <ul>
+                    <li>
+                        <h:commandLink id="borrowerSeeking" action="borrower_seeking">
+                            <h:outputText value="I need to borrow"/>
+
+                        </h:commandLink>
+
+                    </li>
+
+                    <li>
+                        <h:commandLink id="borrowListing" action="borrower_listing">
+                            <h:outputText value="What's available to borrow"/>
+
+                        </h:commandLink>                  
+                    </li>
+                    <li>
+                        <h:commandLink id="borrowHistory" action="borrow_history">
+                            <h:outputText value="My borrowing history"/>
+
+                        </h:commandLink>                  
+                    </li>
+                    <li>
+                        <h:commandLink id="borrowerUpdate" action="borrower_update">
+                            <h:outputText value="Change my borrowing requirements"/>
+
+                        </h:commandLink>                  
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="subs">
+                <a href="#s1">Lending</a>
+                <ul>
+                    <li>
+                        <h:commandLink id="lender_offering" action="lender_offering">
+                            <h:outputText value="I want to lend"/>
+
+                        </h:commandLink>
+
+                    </li>
+
+                    <li>
+                        <h:commandLink id="lenderListing" action="lender_listing">
+                            <h:outputText value="What's available from lenders"/>
+
+                        </h:commandLink>                  
+                    </li>
+                    <li>
+                        <h:commandLink id="lenderHistory" action="lender_history">
+                            <h:outputText value="My lending history"/>
+
+                        </h:commandLink>                  
+                    </li>
+                    <li>
+                        <h:commandLink id="lenderUpdate" action="lender_update">
+                            <h:outputText value="Change my lending requirements"/>
+
+                        </h:commandLink>                  
+                    </li>
+
+                </ul>
+            </li>
+
+
+            <li class="subs">
+                <a href="#s1">Login</a>
+                <ul>
+                    <li>
+                        <h:commandLink id="register" action="user_registration">
+                            <h:outputText value="Register"/>
+
+                        </h:commandLink>
+
+                    </li>
+
+                    <li>
+                        <h:commandLink id="login" action="login">
+                            <h:outputText value="Login"/>
+
+                        </h:commandLink>                    </li>
+                    <li>
+                        <h:commandLink  id="user_logout" value="Log Out">
+<!--                            <f:actionListener 
+                                type="echo_market.listeners.EndSession"  />     -->
+                        </h:commandLink>
+                    </li>
+
+
+                </ul>
+            </li>
+
+        </ul>
+
+    </h:form>
+</ui:composition>

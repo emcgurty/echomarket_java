@@ -1,0 +1,27 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <!--        <h:outputStylesheet library="css" name="menu_nav.css"/>-->
+    </h:head>
+    <h:form>
+
+        <div class="top" >
+            <div style="margin:10px;margin-top:25px;" >
+                <div class="messagecolor">
+                    <h:messages showSummary="true" 
+                                showDetail="false"
+                                errorStyle="color: #d20005" 
+                                infoStyle="color: blue"/>
+                </div>
+                <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
+                <h:commandLink  action="index"  class="right_div" value="Save Borrower Item Registration" onclick="saveBAll();"/>
+            </div> 
+        </div> 
+    </h:form>
+
+
+</ui:composition>

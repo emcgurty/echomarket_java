@@ -1,0 +1,750 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./echomarketTemplate.xhtml">
+
+    <ui:define name="header"  >
+        <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" /> 
+    </ui:define>
+    <ui:define name="content"  >
+
+
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <h:outputScript library="javascript" name="image.js"  />
+            <h:outputScript library="javascript" name="bl_util.js"  />
+            <title>#{bundle.borrowerSeeking}</title>
+        </h:head>
+        <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
+        <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
+
+            <h:inputSecret id="is_active" value="1"   style="display:none;" />
+            <h:inputSecret id="user_id" value="#{bb.userId}" style="display:none;" />
+
+            <div id="borrower_registration" class="borrower_registration" >
+
+                <div id="form_contact_information" class="contact_information" >
+                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader"/>
+
+                    <div  class="div_p" id="menu_item_1" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Borrower Information..." />
+                            <a href="#menu_item_2" class="right_div" onclick="showBorrowersContactPreferences();">Continue to 'Contact Preferences'</a>
+                        </div>
+                    </div>
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Yourself generally, your affiliation..." />
+                        </div>
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="float:left;margin-left:25px">
+                            <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
+                                <br />
+                                <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}"  >
+
+                                    <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
+                                                   var="c" itemValue="#{c.id}" itemLabel="#{c.borrowerOrLenderText}"  />   
+                                    <f:ajax event="change" execute="@this"   render="otherDescribeYourselfText" />
+                                </h:selectOneMenu>
+                            </h:outputLabel>
+                            <h:message styleClass="error-message" for="contact_describe_id"/>
+                        </div>
+
+                        <h:panelGroup id="otherDescribeYourselfText"  >    
+                            <h:outputLabel  value="Please provide an 'Other' description:" for="other_describe_yourself"   rendered="#{bb.contactDescribeId eq '16'}"  style="margin-left:25px">
+                                <br />
+                                <h:inputText id="other_describe_yourself" value="#{bb.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"> 
+                                </h:inputText>
+                            </h:outputLabel>
+                        </h:panelGroup>
+                    </div>
+
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="float:left;margin-left:25px">
+                            <h:outputLabel value="#{bundle.OrganizationName}"  for="organization_name" >
+                                <h:inputText  id="organization_name" value="#{bb.organizationName}" validatorMessage=""  >
+                                    <f:ajax event="change" execute="@this" render="yesNoOrganization" />
+                                </h:inputText>
+                            </h:outputLabel>
+
+                        </div>
+                        <div style="float:left;margin-left:74px">
+                            <h:panelGroup id="yesNoOrganization" >
+                                <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayBorrowerOrganizationName" rendered="#{bb.organizationName ne null }" >
+                                    <h:selectOneRadio id="displayBorrowerOrganizationName" value="#{bb.displayBorrowerOrganizationName}" layout='lineDirection'>
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>     
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Your Name..." />
+
+                        </div>
+                    </div>
+
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+
+                        <div style="margin-left: 25px;float:left">
+                            <h:outputLabel value="First Name:" for="firstName" ><span class="required_fields">*</span>
+                                <br />
+                                <h:inputText  id="firstName" value="#{bb.firstName}"  required="yes" requiredMessage="#{bundle.RegFirstName}" maxlength="24" size="24"  />
+
+                            </h:outputLabel>
+                        </div>
+                        <div style="margin-left: 25px;float:left">
+                            <h:outputLabel value="Middle Initial:"  for="mi" >
+                                <br />
+                                <h:inputText  id="mi" value="#{bb.mi}" maxlength="1" size="1" />
+                            </h:outputLabel>
+                        </div>
+                        <div style="margin-left: 25px;float:left">
+                            <h:outputLabel value="Last Name:"  for="lastName" ><span class="required_fields">*</span>
+                                <br />
+                                <h:inputText  id="lastName" value="#{bb.lastName}" required="yes" requiredMessage="#{bundle.RegFirstName}" maxlength="24" size="24" />
+                            </h:outputLabel>
+                        </div>
+
+                        <div style="margin-left: 25px;float:left">
+
+                            <h:outputLabel value="Allow public to see your Name?"  for="displayBorrowerName" >
+                                <h:selectOneRadio id="displayBorrowerName" value="#{bb.displayBorrowerName}" layout="pageDirection" >
+                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel> 
+
+                        </div>
+                    </div>
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Your Registration Address..." />
+                        </div>
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin-left: 5px;float:left">
+                            <h:dataTable value="#{bb.buildAddressList('primary')}" var="pa" style="margin-left: 10px;float:left">
+                                <h:column rowHeader="">
+                                    <table >
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span class="required_fields">*</span>
+                                                <h:inputText id="addressLine1" value="#{pa.addressLine1}"
+                                                             required="true" requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left: 5px;">
+                                                </h:inputText>
+                                                <h:message styleClass="error-message" for="addressLine1"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                                                <h:inputText id="addressLine2" value="#{pa.addressLine2}" style="margin-left: 5px;">
+                                                </h:inputText>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel for="city" value="#{bundle.City}"/><span class="required_fields">*</span>
+                                                <h:inputText id="city" value="#{pa.city}"
+                                                             required="true" requiredMessage="#{bundle.ReqCity}" style="margin-left: 5px;">
+                                                </h:inputText>
+                                                <h:message styleClass="error-message" for="city"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
+                                                <h:selectOneMenu id="usStates" value="#{pa.usStateId}" style="margin-left: 5px;">
+                                                    <f:validator validatorId="selectOneMenuValidator" />  
+                                                    <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
+                                                                   var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
+                                                                   >   
+                                                    </f:selectItems>    
+                                                </h:selectOneMenu>
+                                                <h:message styleClass="error-message" for="usStates"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel for="province" value="#{bundle.Province}"/>
+                                                <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;">
+                                                </h:inputText>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel for="region" value="#{bundle.Region}"/>
+                                                <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;">
+                                                </h:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td >
+                                                <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span class="required_fields">*</span>
+                                                <h:inputText id="postalCode" value="#{pa.postalCode}" 
+                                                             required="true" requiredMessage="#{bundle.ReqPostalCode}" style="margin-left: 5px;">
+                                                </h:inputText>
+                                                <h:message styleClass="error-message" for="postalCode"/>
+                                            </td>
+                                            <td >
+                                                <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                                                <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;">
+                                                    <f:validator validatorId="selectOneMenuValidator" />  
+                                                    <f:selectItems id="country_id" value="#{country.buildCountries()}"  
+                                                                   var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
+                                                    </f:selectItems>    
+                                                </h:selectOneMenu>
+                                                <h:message styleClass="error-message" for="countryID"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr >
+                                            <td colspan="2">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+
+                                        <tr >
+                                            <td colspan="2">
+                                                <h:outputLabel value="Allow public to see your Registration Address?"  for="displayBorrowerAddress" >
+                                                    <h:selectOneRadio id="displayBorrowerAddress" value="#{bb.displayBorrowerAddress}" layout='lineDirection'>
+                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                                    </h:selectOneRadio>    
+                                                </h:outputLabel>     
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>    
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Your Phone Access..." />
+                        </div>
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin-left: 25px;float:left">
+                            <table width='99%'>
+                                <tr class="odd">
+                                    <td style="width:33%;">
+                                        <h:outputLabel  for="homePhone"  value="Home Phone:" >
+                                            <h:inputText  id="homePhone"  value="#{bb.homePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                        </h:outputLabel>
+                                        <div style="float:left" >
+                                            <h:outputLabel value="Allow public to see your Home Phone Number?"  for="publicDisplayHomePhone" >
+                                                <h:selectOneRadio id="publicDisplayHomePhone" value="#{bb.publicDisplayHomePhone}"  >
+                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                                </h:selectOneRadio>    
+                                            </h:outputLabel>   
+                                        </div>
+                                    </td>
+
+                                    <td style="width:33%;">
+                                        <h:outputLabel  for="cellPhone"  value="Cell Phone:" >
+                                            <h:inputText  id="cellPhone"  value="#{bb.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
+                                        </h:outputLabel>
+                                        <div style="float:left" >
+                                            <h:outputLabel value=".. to see your Cell Phone Number?"  for="publicDisplayCellPhone" >
+                                                <h:selectOneRadio id="publicDisplayCellPhone" value="#{bb.publicDisplayCellPhone}"  >
+                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                                </h:selectOneRadio>    
+                                            </h:outputLabel>   
+                                        </div>
+                                    </td>
+                                    <td style="width:33%;">
+                                        <h:outputLabel  for="alternativePhone"  value="Alternative Phone:" >
+                                            <h:inputText  id="alternativePhone"  value="#{bb.alternativePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                        </h:outputLabel>
+                                        <div style="float:left" >
+                                            <h:outputLabel value="... to see your Alternative Phone Number?"  for="publicDisplayAlternativePhone" >
+                                                <h:selectOneRadio id="publicDisplayAlternativePhone" value="#{bb.publicDisplayAlternativePhone}"  >
+                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                                </h:selectOneRadio>    
+                                            </h:outputLabel>   
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                        <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                            <div style="margin:10px;float:right;" >
+                                <a onclick="showBorrowersContactPreferences();" style="color:crimson;font-style:italic"  >Continue to 'Contact Preferences'</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div id="form_borrower_preference" class="contact_information" style="display:block">
+                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader" />
+
+                    <div  class="div_p" id="menu_item_2" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Contact Preferences ...Choose at least one..." />
+                            <a href="#menu_item_3" class="right_div" onclick="showItem()();">Continue to 'The Item to Borrow'</a>
+                        </div>
+                    </div>
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Contact Option: By Address.." />
+                        </div>
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="float:left;margin-left:25px">
+                            <h:panelGroup id="postalWithContactAddress" >    
+                                <h:outputLabel value="Which Address?" for="useWhichContactAddress">
+                                    <h:selectOneRadio id="useWhichContactAddress" value="#{bb.useWhichContactAddress}"  >
+                                        <f:selectItem itemValue="3" itemLabel="Use your Registration Address?" />
+                                        <f:selectItem itemValue="2" itemLabel="Use an Alternative Address?" />	
+                                        <f:selectItem itemValue="1" itemLabel="Either address is fine." />
+                                        <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
+                                        <f:ajax event="change" execute="@this"   render="buildAlternativeAddress" />
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="buildAlternativeAddress" styleClass="display:block;float:left;height:auto;width:inherit;margin-top:10px;"  >    
+                                <h:dataTable id="buildAlternativeAddressTable"  value="#{bb.buildAddressList('alternative')}" var="pa"
+                                             rendered="#{bb.useWhichContactAddress eq '2'|| bb.useWhichContactAddress eq '1'}"
+
+                                             >
+
+                                    <h:column  rowHeader="Alternative Address" id="buildAlternativeAddress" >
+                                        <table id="buildAlternativeAddressTable" stlye="margin-left:10px;">
+                                            <thead>
+                                                <tr colspan="2" style="text-align: center">
+                                                    <h:outputLabel value="Alternative Address" style="text-align: center;margin-left:5px;"/>
+                                                </tr>
+                                            </thead>
+                                            <tr>
+                                                <td>
+                                                    <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span class="required_fields">*</span>
+                                                    <h:inputText id="addressLine1" value="#{pa.addressLine1}"
+                                                                 required="true" requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left: 5px;">
+                                                    </h:inputText>
+                                                    <h:message styleClass="error-message" for="addressLine1"/>
+                                                </td>
+
+                                                <td>
+                                                    <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                                                    <h:inputText id="addressLine2" value="#{pa.addressLine2}" style="margin-left: 5px;">
+                                                    </h:inputText>
+
+                                                </td>
+                                            </tr> 
+
+
+                                            <tr>
+                                                <td>
+                                                    <h:outputLabel for="city" value="#{bundle.City}"/><span class="required_fields">*</span>
+                                                    <h:inputText id="city" value="#{pa.city}"
+                                                                 required="true" requiredMessage="#{bundle.ReqCity}" style="margin-left: 5px;">
+                                                    </h:inputText>
+                                                    <h:message styleClass="error-message" for="city"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
+                                                    <h:selectOneMenu id="usStates" value="#{pa.usStateId}" style="margin-left: 5px;">
+                                                        <f:validator validatorId="selectOneMenuValidator" />  
+                                                        <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
+                                                                       var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
+                                                                       >   
+                                                        </f:selectItems>    
+                                                    </h:selectOneMenu>
+                                                    <h:message styleClass="error-message" for="usStates"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <h:outputLabel for="province" value="#{bundle.Province}"/>
+                                                    <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;">
+                                                    </h:inputText>
+                                                </td>
+                                                <td>
+                                                    <h:outputLabel for="region" value="#{bundle.Region}"/>
+                                                    <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;">
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td >
+                                                    <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span class="required_fields">*</span>
+                                                    <h:inputText id="postalCode" value="#{pa.postalCode}" 
+                                                                 required="true" requiredMessage="#{bundle.ReqPostalCode}" style="margin-left: 5px;">
+                                                    </h:inputText>
+                                                    <h:message styleClass="error-message" for="postalCode"/>
+                                                </td>
+                                                <td >
+                                                    <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                                                    <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;">
+                                                        <f:validator validatorId="selectOneMenuValidator" />  
+                                                        <f:selectItems id="country_id" value="#{country.buildCountries()}"  
+                                                                       var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
+                                                        </f:selectItems>    
+                                                    </h:selectOneMenu>
+                                                    <h:message styleClass="error-message" for="countryID"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr >
+                                                <td colspan="2">
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td colspan="2">
+                                                    <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayBorrowerAlternativeAddress" >
+                                                        <h:selectOneRadio id="displayBorrowerAlternativeAddress" value="#{bb.displayBorrowerAlternativeAddress}" layout='lineDirection'>
+                                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                                        </h:selectOneRadio>    
+                                                    </h:outputLabel>     
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </h:column>
+                                </h:dataTable>
+
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Contact Option: By Email..." />
+
+                        </div>
+                    </div>
+
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="float:left;margin-left:25px;">
+                            <h:outputLabel for="borrower_contact_by_email" value="Which E-Mail Address?:"  >
+
+                                <h:selectOneRadio id="borrower_contact_by_email" value="#{bb.borrowerContactByEmail}"  >
+                                    <f:selectItem itemValue="3" itemLabel="Your login Email? #{userBean.email}" />
+                                    <f:selectItem itemValue="2" itemLabel="An alternative email." />	
+                                    <f:selectItem itemValue="1" itemLabel="Either Email." />
+                                    <f:selectItem itemValue="0" itemLabel="Neither Email." />	
+                                    <f:ajax event="change" execute="@this"   render="userAlternativeEmailGroup" />
+                                </h:selectOneRadio>    
+                            </h:outputLabel>
+
+                            <div style="float:left;margin-left:25px;">
+                                <h:panelGroup id="userAlternativeEmailGroup"  >
+
+                                    <h:outputLabel for="userAlternativeEmail" value="Your Alternative Email:" 
+                                                   rendered="#{bb.borrowerContactByEmail eq '1'  || bb.borrowerContactByEmail eq '2'}"  style="margin-left: 5px; margin-top:5px;">
+                                        <h:inputText  value="#{bb.emailAlternative}" id="userAlternativeEmail" style="margin-left: 5px;"/>
+                                    </h:outputLabel>
+
+                                </h:panelGroup>              
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Contact Option: By Phone..." />
+
+                        </div>
+                    </div>
+                    <div style="float:left;margin-left:25px;" id="byYourPhone">
+                        <div style="margin-left:10px;float:left;" >
+                            <h:outputLabel value="Can lenders call you at your home phone?:"  for="borrowerContactByHomePhone" >
+                                <h:selectOneRadio id="borrowerContactByHomePhone" value="#{bb.borrowerContactByHomePhone}"  >
+                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel> 
+                        </div>
+                        <div style="margin-left:25px;float:left;" >
+                            <h:outputLabel value="... by your cell phone?:"  for="borrowerContactByCellPhone" >
+                                <h:selectOneRadio id="borrowerContactByCellPhone" value="#{bb.borrowerContactByCellPhone}"  >
+                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel>
+
+                        </div>
+                        <div style="margin-left:25px;float:left;" >
+                            <h:outputLabel value="... by your alternative phone?:"  for="borrowerContactByAlternativePhone" >
+                                <h:selectOneRadio id="borrowerContactByAlternativePhone" value="#{bb.borrowerContactByAlternativePhone}"  >
+                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                </h:selectOneRadio>    
+
+                            </h:outputLabel>
+
+                        </div>
+                    </div>
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Contact Option: By Social Media..." />
+
+                        </div>
+                    </div>
+
+                    <div style="float:left;margin-left:25px;">
+
+                        <table  style="margin-left:15px;">
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Your Facebook Account:" for="borrowerContactByFacebook" >
+                                        <h:inputText  id="borrowerContactByFacebook" value="#{bb.borrowerContactByFacebook}" style="margin-left:5px;" /> 
+                                    </h:outputLabel>
+                                </td>
+                                <td>
+                                    <h:outputLabel value="Your LinkedIn Account:" for="borrowerContactByLinkedIn" >
+                                        <h:inputText  id="borrowerContactByLinkedIn" value="#{bb.borrowerContactByLinkedIn}" style="margin-left:5px;" /> 
+                                    </h:outputLabel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Your Twitter Account:" for="borrowerContactByTwitter" >
+                                        <h:inputText  id="borrowerContactByTwitter" value="#{bb.borrowerContactByTwitter}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+                                <td>
+                                    <h:outputLabel value="Your Instagram Account:" for="borrowerContactByInstagram" >
+                                        <h:inputText id="borrowerContactByInstagram" value="#{bb.borrowerContactByInstagram}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Other Social Media:" for="borrowerContactByOtherSocialMedia" >
+                                        <h:inputText  id="borrowerContactByOtherSocialMedia" value="#{bb.borrowerContactByOtherSocialMedia}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+
+                                <td>
+                                    <h:outputLabel value="Other Social Media Access:" for="borrowerContactByOtherSocialMediaAccess" >
+                                        <h:inputText  id="borrowerContactByOtherSocialMediaAccess" value="#{bb.borrowerContactByOtherSocialMediaAccess}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin:10px;float:right;" >
+                            <a onclick="showItem();" style="color:crimson;font-style:italic"  >Continue to 'The Item to Borrow'</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="form_item" class="contact_information" style="display:none;">
+                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader" />
+
+                    <div  class="div_p" id="menu_item_3" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="The Item you would like to borrow" />
+                            <a href="#menu_item_3" class="right_div" onclick="showBLegal();">Continue to 'Good Faith'</a>
+                        </div>
+                    </div>
+
+                    <table >
+                        <tr class="odd">
+                            <td style="width:50%;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
+                                        <h:selectOneMenu id="categoryId" value="#{bb.categoryId}" >
+                                            <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
+                                                           itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
+                                            </f:selectItems>
+                                            <f:ajax event="change" execute="@this"   render="other_category" />                                                
+                                        </h:selectOneMenu>
+                                    </h:outputLabel>  
+
+
+                                </div>
+                            </td>
+                            <td style="width:50%;">
+
+
+                                <h:panelGroup id="other_category" >    
+                                    <h:outputLabel for="otherItemCategory" value="Add another category:" rendered="#{bb.categoryId eq '0'}">
+                                        <h:inputText  value="#{bb.otherItemCategory}" id="otherItemCategory"  />
+                                    </h:outputLabel>    
+                                </h:panelGroup>
+
+                            </td>
+
+                        </tr>
+
+                        <tr class="even">
+                            <td colspan='2'>
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel value="#{bundle.BasedOn}"  for="notifyLenders" >
+                                        <h:selectOneRadio id="notifyLenders" value="#{bb.notifyLenders}"  >
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>                                     
+
+                                </div></td>
+                        </tr>
+
+                        <tr class="odd">
+                            <td style="width:50%">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
+                                        <h:inputText  id="itemDescription" value="#{bb.itemDescription}" />
+                                    </h:outputLabel>
+                                </div></td>
+                            <td style="width:50%">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel value="#{bundle.ItemCondition}" for="item_condition_id"  ><span class="required_fields">*</span>
+                                        <h:selectOneMenu id="item_condtion_id" value="#{bb.itemConditionId}" onchange="">
+                                            <f:validator validatorId="selectOneMenuValidator" />  
+                                            <f:selectItems id="item_condtion" value="#{itemc.buildItemConditionsArray()}"  
+                                                           var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
+                                                           >   
+                                            </f:selectItems>    
+                                        </h:selectOneMenu>
+                                    </h:outputLabel>
+
+                                </div></td>
+                        </tr>
+
+                        <tr class="even">
+                            <td  style="width:50%;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="itemModel" value="#{bundle.ItemModel}" >
+                                        <h:inputText id="itemModel" value="#{bb.itemModel}" />
+                                    </h:outputLabel>
+                                </div></td>
+                            <td  style="width:50%;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
+                                        <h:inputText  id="itemCount" value="#{bb.itemCount}" size="2" maxlength="2" required="true"/>
+                                    </h:outputLabel>
+                                </div></td>
+                        </tr>
+                    </table>
+                    <br />
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+                        <h:dataTable id="ImageDatatable"  value="#{bb.buildImageAccess()}" var="image" >
+                            <h:column rowHeader="">
+                                <div style="margin-left:25px;margin-top:5px;float:left;">
+                                    <h:outputLabel for="itemImage" value="Image of Item"     >                       
+                                        <input type="file" id="itemImage"  value="#{image.imageFileName}" />
+                                        <span class="file_image_error">&nbsp;</span>
+                                    </h:outputLabel>
+                                </div>    
+                                <br />
+                                <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
+                                    <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
+                                        <img id="imagePreview" height="200" width="200" src="" alt="Uploaded image file" />
+                                    </h:outputLabel>
+                                </div>
+                                <br />
+                                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                                    <h:outputLabel for="itemImageCaption" value="If you'd like, provide a caption for your item image" >
+                                        <h:inputText  id="itemImageCaption" value="#{image.itemImageCaption}" size="50" maxlength="50"/>
+                                    </h:outputLabel>
+                                </div>
+                            </h:column>
+                        </h:dataTable>
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin:10px;float:right;" >
+                            <a onclick="showBLegal();" style="color:crimson;font-style:italic"  >Continue to 'Good Faith'</a>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div id="form_legal" class="contact_information" >
+                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader" />
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+                        <p >
+                            Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
+                        </p>
+
+                        <p >
+                            Once a borrower or lender has been introduced, Echo Market will play no mediating role in that event.
+                        </p>
+
+                        <p >
+                            In the aftermath of that event, Echo Market will offer a 'Satisfaction Survey' to both the borrower and the lender.
+                            If satisfaction is found poor, Echo Market will then seek more information to determine the continuance of either the borrower or lender participation.
+                        </p>
+
+                        <p >
+                            Otherwise, thanks for seeking to borrow with Echo Market.  All the Very Best!
+                        </p>
+                    </div>
+
+                    <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
+                        <ul >
+                            <li style="margin:5px;">
+                                <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill" ><span class="required_fields">*</span>
+                                    <h:selectOneRadio id="goodwill" value="#{bb.goodwill}"  >
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>                                     
+
+                            </li>
+                            <li style="margin:5px;">
+                                <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore" ><span class="required_fields">*</span>
+                                    <h:selectOneRadio id="age18OrMore" value="#{bb.age18OrMore}"  >
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>                                     
+
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a onclick="showItem();" style="color:crimson;font-style:italic"  >Let's Save!</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+    <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+    </ui:define>
+</ui:composition>

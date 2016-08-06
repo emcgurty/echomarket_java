@@ -1,0 +1,45 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <h:outputStylesheet library="css" name="menu_nav.css"/>
+    </h:head>
+
+
+    <ul id="nav" class="borrower_menu"> 
+        <li class="subs" id="parent_tab_item" ><a   href="#parent_menu_item" onclick=""  
+                                               >
+                Item Registration: </a></li>
+        
+        <li class="subs" id="tab_item_1" ><a   href="#menu_item_1" onclick="showFormContact();"  
+                                               >
+                Borrower Information  ==> </a></li>
+        <li class="subs" id="tab_item_2" ><a   href="#menu_item_2" onclick="showBorrowersContactPreferences();" 
+                                               >
+                Contact Preferences  ==> </a></li>
+        <li class="subs" id="tab_item_3" ><a   href="#menu_item_3" onclick="showItem();" 
+                                               >
+                Item to Borrow ==> </a></li>
+        <li class="subs" id="tab_item_4" ><a   href="#menu_item_3" onclick="showBLegal();" 
+                                               >
+                Good Faith ==> </a></li>
+        
+        <li class="subs" id="save_now" style="float:right;margin-right:15px">
+            <a href="#s1" >Save or Delay Registration</a>
+            <ul >
+                <li class="subs">
+                    <a href="">Register my item to borrow</a>
+                </li>
+                <li class="subs">
+                    <a href="">Will complete registration later</a>
+                </li>
+           </ul>
+        </li>
+    </ul>
+
+
+
+</ui:composition>
