@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="echomarket" name="echomarket.hibernate.Contacts" optimistic-lock="version" table="contacts">
+    <id name="contactId" type="string">
+      <column length="40" name="contact_id"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="subject" type="string">
+      <column length="40" name="subject" not-null="true"/>
+    </property>
+    <property name="remoteIp" type="string">
+      <column length="150" name="remote_ip"/>
+    </property>
+    <property name="email" type="string">
+      <column length="100" name="email" not-null="true"/>
+    </property>
+    <property name="comments" type="string">
+      <column name="comments" not-null="true"/>
+    </property>
+    <property name="dateCreated" type="timestamp">
+      <column length="19" name="date_created" not-null="true"/>
+    </property>
+    <property name="userId" type="string">
+      <column length="40" name="user_id"/>
+    </property>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="echomarket"/>
+  <table-filter match-name="advertisers"/>
+  <table-filter match-name="article_items"/>
+  <table-filter match-name="orders"/>
+  <table-filter match-name="communities"/>
+  <table-filter match-name="item_conditions"/>
+  <table-filter match-name="parties"/>
+  <table-filter match-name="party_relationships"/>
+  <table-filter match-name="item_images"/>
+  <table-filter match-name="lenders"/>
+  <table-filter match-name="articles"/>
+  <table-filter match-name="roles"/>
+  <table-filter match-name="contact_describes"/>
+  <table-filter match-name="users"/>
+  <table-filter match-name="customer_types"/>
+  <table-filter match-name="community_members"/>
+  <table-filter match-name="searches"/>
+  <table-filter match-name="us_states"/>
+  <table-filter match-name="countries"/>
+  <table-filter match-name="contacts"/>
+  <table-filter match-name="purpose"/>
+  <table-filter match-name="vendors"/>
+  <table-filter match-name="categories"/>
+  <table-filter match-name="borrowers"/>
+  <table-filter match-name="sessions"/>
+  <table-filter match-name="addresses"/>
+  <table-filter match-name="user_transactions"/>
+</hibernate-reverse-engineering>

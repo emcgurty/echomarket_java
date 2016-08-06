@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class catalog="echomarket" name="echomarket.hibernate.ContactDescribes" optimistic-lock="version" table="contact_describes">
+        <id name="id" type="string">
+            <column length="2" name="id"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="purposeType" type="string">
+            <column length="10" name="purpose_type"/>
+        </property>
+        <property name="optionValue" type="int">
+            <column name="option_value" not-null="true"/>
+        </property>
+        <property name="borrowerOrLenderText" type="string">
+            <column length="100" name="borrower_or_lender_text"/>
+        </property>
+    </class>
+</hibernate-mapping>
