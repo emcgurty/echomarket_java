@@ -34,8 +34,8 @@ public class AbstractBean implements Serializable {
      * <p>Return the
      * <code>FacesContext</code> instance for the current request.
      */
-    private String application_email_address = "emmechomarket@gmail.com";
-    private String application_email_password = "WDSPOT1134_e2" ;
+    private String application_email_address = "";
+    private String application_email_password = "" ;
 
 
 
