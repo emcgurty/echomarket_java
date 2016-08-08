@@ -18,7 +18,7 @@ import org.hibernate.Transaction;
 @RequestScoped
 public class ItemConditionBean extends AbstractBean implements Serializable{
 
-    private Integer id;
+//    private Integer id;
     private String condition;
 
     public ItemConditionBean() {
@@ -57,19 +57,19 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
         return result;
     }
 
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
+//    /**
+//     * @return the id
+//     */
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    /**
+//     * @param id the id to set
+//     */
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
 
     /**
      * @return the condition

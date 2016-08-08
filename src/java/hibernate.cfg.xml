@@ -38,5 +38,6 @@
         <mapping resource="echomarket/hibernate/Purpose.hbm.xml"/>
         <mapping resource="echomarket/hibernate/ItemConditions.hbm.xml"/>
         <mapping resource="echomarket/hibernate/CustomerTypes.hbm.xml"/>
+        <mapping resource="echomarket/hibernate/TestTable.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

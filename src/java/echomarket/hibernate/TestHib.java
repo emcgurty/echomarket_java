@@ -14,16 +14,43 @@ public class TestHib {
     public static void main(String[] args) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        List result = session.createQuery("from Countries ORDER BY id").list();
+//        List result = session.createQuery("from Countries ORDER BY id").list();
+//        
+////        List result = session.createQuery("from ContactDescribes Where purposeType = :pt ORDER BY optionValue")
+////                    .setParameter("pt", "borrower")
+////                    .list();
+//        
+//        //List result = session.createQuery("from Categories ORDER BY category_type").list();
+//        session.getTransaction().commit();
+//        
+//        System.out.printf("SESE");
         
-//        List result = session.createQuery("from ContactDescribes Where purposeType = :pt ORDER BY optionValue")
-//                    .setParameter("pt", "borrower")
+         List result = null;
+        //Session session = hib_session();
+        //Transaction tx = session.beginTransaction();
+
+        try {
+            result = session.createQuery("from Purpose").list();
+//                    .setParameter("pt", "lender")
 //                    .list();
-        
-        //List result = session.createQuery("from Categories ORDER BY category_type").list();
+        } catch (Exception e) {
+            System.out.println("Error at line 57 in CDBeans");
+            e.printStackTrace();
+
+        }
         session.getTransaction().commit();
+
+         System.out.printf("SESE");
         
-        System.out.printf("SESE");
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
     }
 }

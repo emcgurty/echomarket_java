@@ -39,7 +39,6 @@ public void init() {
     setEchomarket_types(Arrays.asList(buildTypeList()));
     setEchomarket_types_stored(Arrays.asList(buildTypeListStored()));
 }
-
     private String username;
     private String userAlias;
     private String userType;
@@ -94,8 +93,6 @@ public void init() {
     }
     
     
-    
-    //
     public String getLastName() {
         return lastName;
     }
@@ -122,25 +119,18 @@ public void init() {
 
     public String registerUser() {
         
+        Users create_record = null;
         List tmp = null;
         String hold_userTypeBuild = "";
         String fullname = firstName + " " + lastName;
         String aep = null;
         String aea = null;
         String ac = null;
+        Integer holdUserType = null;
         Boolean savedRecord = false;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
-        int assign_id = 0;
-        Users create_record;
-        Criteria c = hib.createCriteria(Users.class);
-        c.addOrder(Order.desc("id"));
-        c.setMaxResults(1);
-        create_record = (Users) c.uniqueResult();
-        if (create_record == null) {
-            assign_id = 1;
-        }
-    
+        
         try {
             if (hib.isOpen() == false) {
                 hib = hib_session();
@@ -150,15 +140,15 @@ public void init() {
             }
             ///  I am pursuing this effort in getting from established arrays, rather than making Where Database calls
             for (String userTypeArray1 : getUserTypeArray()) {
-                assign_id = getEchomarket_types().indexOf(userTypeArray1);
+                holdUserType = getEchomarket_types().indexOf(userTypeArray1);
                 tmp  = getEchomarket_types_stored();
-                Object get_tmp_value  = tmp.get(assign_id);
+                Object get_tmp_value  = tmp.get(holdUserType);
                 hold_userTypeBuild = hold_userTypeBuild + get_tmp_value +  ";";
                 
             }
             
             setUserType(hold_userTypeBuild);
-            create_record = new Users(firstName, lastName, username, userAlias, password, email, getUserType());
+            create_record = new Users(getId(),firstName, lastName, username, userAlias, password, email, getUserType());
             hib.save(create_record);
             ac = create_record.getResetCode();
             tx.commit();
@@ -171,11 +161,11 @@ public void init() {
         }
 
         // Send email 
-        aep = returnApplicationPwd();
-        aea = returnApplicationAddress();
+        aea = getApp_email();
+        aep = getApp_password();
         hib = null;
         tx = null;
-        c = null;
+        //c = null;
         create_record = null;
         //public SendEmail(String whichEmail, String username, String user_alias, String user_email, String application_email_address, String application_email_password, String message) {
         if (savedRecord == true) {
@@ -315,7 +305,7 @@ public void init() {
         results = session.createQuery(queryString).setParameter("rc", getResetCode()).list();
         tx.commit();
         Users users_Array = (Users) results.get(0);
-        int user_id =  users_Array.getId();
+        String user_id =  users_Array.getId();
         users_Array = null;    
         
         // Should return only one row
@@ -389,8 +379,8 @@ public void init() {
             tx.commit();
             try {
                 //  SendEmail .... You indicated that you forgot your user password, follow this link to change it
-                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, returnApplicationAddress(),
-                        returnApplicationPwd(), Integer.toString(userArray.getId()), buildReset_Code);
+                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, getApp_email(),
+                        getApp_password(), userArray.getId(), buildReset_Code);
                 se = null;
             } catch (Exception e) {
                 System.out.println("Send Mail Failed");

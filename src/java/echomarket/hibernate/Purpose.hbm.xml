@@ -3,15 +3,15 @@
 <!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
   <class catalog="echomarket" name="echomarket.hibernate.Purpose" optimistic-lock="version" table="purpose">
-    <id name="id" type="java.lang.Integer">
-      <column name="id"/>
-      <generator class="identity"/>
+      <id name="id" type="string">
+      <column length="40" name="id"/>
+      <generator class="assigned"/>
     </id>
     <property name="purposeType" type="string">
       <column length="20" name="purpose_type" not-null="true"/>
     </property>
     <property name="purposeOrder" type="java.lang.Integer">
-      <column name="purpose_order"/>
+      <column name="purpose_order" not-null="true" />
     </property>
     <property name="purposeShort" type="string">
       <column length="20" name="purpose_short" not-null="true"/>

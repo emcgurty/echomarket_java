@@ -12,23 +12,27 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 public class SelectOneMenuValidator implements Validator {
+
     /* (non-Javadoc)
      * @see javax.faces.validator.Validator#validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
      */
 
     public void validate(FacesContext context, UIComponent arg1, Object value)
             throws ValidatorException {
+        String emValue = "";
+        try {
+            emValue = (String) value;
+            if (emValue != null && emValue.toUpperCase().equals("PLEASE SELECT")) {
+                FacesMessage message = new FacesMessage();
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                message.setSummary("Please Select a question!");
+                message.setDetail("Please Select a question!");
+                context.addMessage("Please make selection.", message);
+                throw new ValidatorException(message);
+            }
+        } catch (Exception e) {
 
-         String emValue = (String)value;
-
-         if(emValue != null && emValue.toUpperCase().equals("PLEASE SELECT")){ 
-             FacesMessage message = new FacesMessage();  
-             message.setSeverity(FacesMessage.SEVERITY_ERROR);  
-             message.setSummary("Please Select a question!");  
-             message.setDetail("Please Select a question!");              
-             context.addMessage("Please make selection.", message);      
-             throw new ValidatorException(message); 
-         }
+        }
 
     }
 }

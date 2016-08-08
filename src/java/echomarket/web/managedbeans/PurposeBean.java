@@ -8,8 +8,8 @@ package echomarket.web.managedbeans;
 import echomarket.hibernate.Purpose;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -17,46 +17,18 @@ import org.hibernate.Transaction;
  *
  * @author emm
  */
-@ManagedBean
+@Named(value = "purposeBean")
 @RequestScoped
 public class PurposeBean extends AbstractBean implements Serializable {
 
-    /**
-     * Creates a new instance of PurposeBean
-     */
-    
-    private Integer id;
     private String purposeType;
-
 
     public PurposeBean() {
     }
-
-       
-    /**
-     * @return the id
-     */
-    private Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    private void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the purposeType
-     */
     private String getPurposeType() {
         return purposeType;
     }
 
-    /**
-     * @param purposeType the purposeType to set
-     */
     private void setPurposeType(String purposeType) {
         this.purposeType = purposeType;
     }

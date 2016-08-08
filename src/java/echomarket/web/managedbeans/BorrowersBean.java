@@ -22,7 +22,6 @@ import org.hibernate.criterion.Order;
 @RequestScoped
 public class BorrowersBean extends AbstractBean implements Serializable {
 
-    private String id;
     private String userId;
     private int contactDescribeId;
     private String organizationName;
@@ -804,20 +803,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      */
     public void setAdvertiserId(String advertiserId) {
         this.advertiserId = advertiserId;
-    }
-
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
     }
 
     /**

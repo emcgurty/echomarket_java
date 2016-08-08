@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import javax.enterprise.context.RequestScoped;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -22,7 +21,7 @@ import org.hibernate.criterion.Order;
 @RequestScoped
 public class LenderBean extends AbstractBean implements Serializable {
 
-    private String id;
+
     private int contactDescribeId;
     private String otherDescribeYourself;
     private String firstName;
@@ -128,15 +127,8 @@ public class LenderBean extends AbstractBean implements Serializable {
                         a_array.getCity(), a_array.getProvince(), a_array.getUsStateId(), a_array.getRegion(), a_array.getCountryId(), a_array.getAddressType());
             }
         } else {
-//           Addresses create_record;    return the record with max id
-//           Session hib = hib_session();
-//           tx = hib.beginTransaction();
-//            Criteria c = hib.createCriteria(Addresses.class);
-//            c.addOrder(Order.desc("id"));
-//            c.setMaxResults(1);
-//            create_record = (Addresses) c.uniqueResult();
-            String tmp_id = UUID.randomUUID().toString();
-            //// Need to check not dup..
+
+            String tmp_id = getId();
             address_array = new Addresses[1];
             address_array[0] = new Addresses(tmp_id, whichAddress);
 
@@ -163,15 +155,8 @@ public class LenderBean extends AbstractBean implements Serializable {
                         a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId());
             }
         } else {
-//           Addresses create_record;    return the record with max id
-//           Session hib = hib_session();
-//           tx = hib.beginTransaction();
-//            Criteria c = hib.createCriteria(Addresses.class);
-//            c.addOrder(Order.desc("id"));
-//            c.setMaxResults(1);
-//            create_record = (Addresses) c.uniqueResult();
-            String tmp_id = UUID.randomUUID().toString();
-            //// Need to check not dup..
+
+            String tmp_id = getId();
             address_array = new ItemImages[1];
             address_array[0] = new ItemImages(tmp_id);
 
@@ -180,19 +165,19 @@ public class LenderBean extends AbstractBean implements Serializable {
 
     }
 
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+//    /**
+//     * @return the id
+//     */
+//    public String getId() {
+//        return id;
+//    }
+//
+//    /**
+//     * @param id the id to set
+//     */
+//    public void setId(String id) {
+//        this.id = id;
+//    }
 
     /**
      * @return the contactDescribeId
@@ -1313,4 +1298,11 @@ public class LenderBean extends AbstractBean implements Serializable {
     public void setDisplayLenderAlternativeAddress(Integer displayLenderAlternativeAddress) {
         this.displayLenderAlternativeAddress = displayLenderAlternativeAddress;
     }
+    
+    public String saveLenderRegistration() {
+        String savedNewLenderRecord = "";
+        System.out.println("Lets see return varbale");
+        return savedNewLenderRecord;
+    }
+    
 }

@@ -26,16 +26,16 @@ public class CategoriesBean extends AbstractBean implements Serializable{
     /**
      * @return the id
      */
-    public Integer getId() {
-        return id;
-    }
+//    public Integer getId() {
+//        return id;
+//    }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
+//    /**
+//     * @param id the id to set
+//     */
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
 
     /**
      * @return the categoryType

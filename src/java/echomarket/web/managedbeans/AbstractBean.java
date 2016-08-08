@@ -5,80 +5,94 @@
  * compliance with  the terms of the License at:
  * http://developers.sun.com/license/berkeley_license.html
  */
-
-
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.HibernateUtil;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-//import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Id;
 import org.hibernate.Session;
 
-
 /**
- * <p>Abstract base class for managed beans to share utility methods.</p>
+ * <p>
+ * Abstract base class for managed beans to share utility methods.</p>
  */
 @Named
 @SessionScoped
-public class AbstractBean implements Serializable {
-//    @Inject
-//    ShoppingCart cart;
+public abstract class AbstractBean implements Serializable {
+
+//    Source:  Setting UUID ids: http://blog.xebia.com/jpa-implementation-patterns-using-uuids-as-primary-keys/
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String id;
+    private String app_email;
+    private String app_password;
+
+    public AbstractBean() {
+        this.id = UUID.randomUUID().toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof AbstractBean)) {
+            return false;
+        }
+        AbstractBean other = (AbstractBean) obj;
+        return getId().equals(other.getId());
+    }
 
     /**
-     * <p>Return the
-     * <code>FacesContext</code> instance for the current request.
+     * @return the id
      */
-    private String application_email_address = "emmechomarket@gmail.com";
-    private String application_email_password = "WDSPOT1134_e2" ;
+    protected String getId() {
+        return id;
+    }
 
-
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     protected FacesContext context() {
         return (FacesContext.getCurrentInstance());
     }
- 
+
     protected Session hib_session() {
         return HibernateUtil.getSessionFactory().getCurrentSession();
-      
+
     }
-    
-    public String returnApplicationAddress() {
-        return this.application_email_address;
-        
-    }
-    
-    public String returnApplicationPwd() {
-        return this.application_email_password;
-        
-    }
-    
-    
-    
-    /**
-     * <p>Add a localized message to the
-     * <code>FacesContext</code> for the current request.</p>
-     *
-     * @param clientId Client identifier of the component this message relates
-     * to, or
-     * <code>null</code> for global messages
-     * @param key Message key of the message to include
-     */
+
     protected void message(
-        String clientId,
-        String key) {
+            String clientId,
+            String key) {
         // Look up the requested message text
         String text = "";
 
         try {
             ResourceBundle bundle = ResourceBundle.getBundle(
-                        "echomarket.web.messages.Messages",
-                        context().getViewRoot().getLocale());
+                    "echomarket.web.messages.Messages",
+                    context().getViewRoot().getLocale());
             text = bundle.getString(key);
         } catch (Exception e) {
             text = "???" + key + "???";
@@ -86,33 +100,33 @@ public class AbstractBean implements Serializable {
 
         // Construct and add a FacesMessage containing it
         context()
-            .addMessage(
-            clientId,
-            new FacesMessage(text));
+                .addMessage(
+                        clientId,
+                        new FacesMessage(text));
     }
 
     /**
-     * <p>Add a localized message to the
-     * <code>FacesContext</code> for the current request.</p>
+     * <p>
+     * Add a localized message to the <code>FacesContext</code> for the current
+     * request.</p>
      *
      * @param clientId Client identifier of the component this message relates
-     * to, or
-     * <code>null</code> for global messages
+     * to, or <code>null</code> for global messages
      * @param key Message key of the message to include
      * @param params Substitution parameters for using the localized text as a
      * message format
      */
     protected void message(
-        String clientId,
-        String key,
-        Object[] params) {
+            String clientId,
+            String key,
+            Object[] params) {
         // Look up the requested message text
         String text = "";
 
         try {
             ResourceBundle bundle = ResourceBundle.getBundle(
-                        "echomarket.web.messages.Messages",
-                        context().getViewRoot().getLocale());
+                    "echomarket.web.messages.Messages",
+                    context().getViewRoot().getLocale());
             text = bundle.getString(key);
         } catch (Exception e) {
             text = "???" + key + "???";
@@ -125,11 +139,38 @@ public class AbstractBean implements Serializable {
 
         // Construct and add a FacesMessage containing it
         context()
-            .addMessage(
-            clientId,
-            new FacesMessage(text));
+                .addMessage(
+                        clientId,
+                        new FacesMessage(text));
     }
+
+    /**
+     * @return the app_email
+     */
+    public String getApp_email() {
+        return app_email;
+    }
+
+    /**
+     * @param app_email the app_email to set
+     */
+    public void setApp_email(String app_email) {
+        this.app_email = app_email;
+    }
+
+    /**
+     * @return the app_password
+     */
+    public String getApp_password() {
+        return app_password;
+    }
+
+    /**
+     * @param app_password the app_password to set
+     */
+    public void setApp_password(String app_password) {
+        this.app_password = app_password;
+    }
+
     
-
-
 }
