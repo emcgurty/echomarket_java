@@ -13,7 +13,6 @@
     </ui:define>
     <ui:define name="content"  >
 
-
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <h:outputScript library="javascript" name="image.js"  />
@@ -565,8 +564,6 @@
                     </div>
                 </div>
                 <div id="form_item" class="contact_information" style="display:none;">
-                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader" />
-
                     <div  class="div_p" id="menu_item_3" >
                         <div style="margin:10px;" >
                             <h:outputText value="The Item you would like to borrow" />
@@ -689,9 +686,7 @@
 
 
                 <div id="form_legal" class="contact_information" >
-                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader" />
-
-                    <div style="margin-left:25px;margin-top:5px;float:left;">
+                     <div style="margin-left:25px;margin-top:5px;float:left;">
                         <p >
                             Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
                         </p>

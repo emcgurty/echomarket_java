@@ -24,7 +24,25 @@
 
 
     <!-- ========== Managed Beans ============================================ -->
-    
+    <managed-bean>
+        <managed-bean-name>abstractBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedBeans.AbstractBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+         <managed-property>
+            <description>Get email</description>
+            <property-name>app_email</property-name>
+            <property-class>java.lang.String</property-class>
+            <value>emcgurty2gmail.com</value>
+        </managed-property>
+         <managed-property>
+            <description>Get pw</description>
+            <property-name>app_password</property-name>
+            <property-class>java.lang.String</property-class>
+            <value>Posdfwefnsd123</value>
+        </managed-property>
+    </managed-bean>
+
+                                                    
     <managed-bean>
         <managed-bean-name>usersBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedBeans.UserBean</managed-bean-class>
@@ -48,11 +66,7 @@
         <managed-bean-class>echomarket.web.managedBeans.SelectedOptionBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
-    <managed-bean>
-        <managed-bean-name>purposeBean</managed-bean-name>
-        <managed-bean-class>echomarket.web.managedBeans.PurposeBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>contactDescribesBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedBeans.ContactDescribesBean</managed-bean-class>
@@ -86,6 +100,11 @@
     <managed-bean>
         <managed-bean-name>lenderBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.LenderBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>LocaleBean</managed-bean-name>
+        <managed-bean-class>LocaleBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 </faces-config>

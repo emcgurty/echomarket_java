@@ -1,0 +1,258 @@
+<!--<div id="form_monetary" class="contact_information" >
+    <table class="personal">
+        <tr>
+            <td>
+                <div style="display:inline-table;margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="forFree" value="For Free?"  >
+                        <h:selectOneRadio id="forFree" value="#{ll.forFree}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+
+                </div>
+            </td>
+            <td>
+                <div>
+                    &nbsp;
+                </div></td>
+        </tr>
+        <tr>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
+                        <h:selectOneRadio id="smallFee" value="#{ll.smallFee}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+                </div>
+            </td>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
+                        <h:outputText id="smallFeeAmount" value="#{ll.smallFeeAmount}" />
+                    </h:outputLabel>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="availableForPurchase" value="Item may be available for small purchase amount?:"  >
+                        <h:selectOneRadio id="availableForPurchase" value="#{ll.availableForPurchase}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+                </div>
+            </td>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
+                        <h:outputText id="availableForPurchaseAmount" value="#{ll.availableForPurchaseAmount}" />
+                    </h:outputLabel>
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="availableForDonation" value="Item may be available for donation?:"  >
+                        <h:selectOneRadio id="availableForDonation" value="#{ll.availableForDonation}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+
+                </div>
+            </td>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel for="donateAnonymous" value="If yes, would you like to anonymously donate?:"  >
+                        <h:selectOneRadio id="donateAnonymous" value="#{ll.donateAnonymous}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="trade" value="Would you be interesting in trading?:"  >
+                        <h:selectOneRadio id="trade" value="#{ll.trade}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+
+
+
+                </div></td>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel class="personal">If yes, what would you like in exchange?</h:outputLabel>
+                    <%= nf.text_field( :trade_item) %>
+                    <span class="error">&nbsp;</span>
+                </div></td>
+        </tr>
+        <tr>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="securityDeposit" value="Do you require a security deposit?:"  >
+                        <h:selectOneRadio id="securityDeposit" value="#{ll.securityDeposit}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+
+                </div>
+            </td>
+            <td>
+                <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel class="personal">If yes, please provide the security deposit amount:</h:outputLabel>
+                    <%= nf.text_field( :security_deposit_amount) %>
+                    <span class="security_deposit_amount_error">&nbsp;</span>
+                </div></td>
+        </tr>
+    </table>
+        
+     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+        <div style="margin:20px;float:right;" >
+            <a href="#menu_item_7" onclick="showDuration();">Continue to 'Terms of Lending: Duration'</a>
+        </div>
+    </div>
+    
+    
+</div>
+<div   class="div_p" id="menu_item_7" >
+    7. Terms of Lending: Duration
+</div>
+<div id="form_duration" class="contact_information" style="display:none;">
+    <div style="float:left;width:33%;margin-left:25px;">
+
+
+        <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  >
+            <h:selectOneRadio id="agreedNumberOfDays" value="#{ll.agreedNumberOfDays}" layout='lineDirection'>
+                <f:selectItem itemValue="1" itemLabel="Yes" />
+                <f:selectItem itemValue="0" itemLabel="No" />	
+            </h:selectOneRadio>    
+        </h:outputLabel>
+
+    </div>
+
+
+    <div style="float:left;">
+        <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:"  >
+            <h:selectOneRadio id="agreedNumberOfHours" value="#{ll.agreedNumberOfHours}" layout='lineDirection'>
+                <f:selectItem itemValue="1" itemLabel="Yes" />
+                <f:selectItem itemValue="0" itemLabel="No" />	
+            </h:selectOneRadio>    
+        </h:outputLabel>
+
+
+
+
+    </div>
+    <div style="float:left;margin-left:40px;">
+
+        <h:outputLabel for="indefiniteDuration" value="Indefinite?"  >
+            <h:selectOneRadio id="indefiniteDuration" value="#{ll.indefiniteDuration}" layout='lineDirection'>
+                <f:selectItem itemValue="1" itemLabel="Yes" />
+                <f:selectItem itemValue="0" itemLabel="No" />	
+            </h:selectOneRadio>    
+        </h:outputLabel>
+
+
+    </div>
+    
+     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+        <div style="margin:20px;float:right;" >
+                <a href="#menu_item_8" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
+        </div>
+    </div>
+    
+</div>
+<div   class="div_p" id="menu_item_8">
+    8. Terms of Lending: Conditions
+</div>
+<div id="form_conditions" class="contact_information" style="display:none;">
+    <table class="personal" >
+        <tr>
+            <td style="vertical-align:top;">
+                <div style="margin-left:25px;margin-top:5px;">
+
+                    <h:outputLabel for="presentDuringBorrowingPeriod" value="Would you like to be present during borrowing period?"  >
+                        <h:selectOneRadio id="presentDuringBorrowingPeriod" value="#{ll.presentDuringBorrowingPeriod}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+
+                </div>
+            </td>
+            <td style="vertical-align:top;">
+                
+                <div style="display:block;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
+                    <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+                        
+                        <h:outputLabel for="entirePeriod" value="During the entire lending period?:"  >
+                            <h:selectOneRadio id="entirePeriod" value="#{ll.entirePeriod}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+                        
+                    </div>
+                    <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+
+                        <h:outputLabel for="partialPeriod" value="During lending period partially?:"  >
+                            <h:selectOneRadio id="partialPeriod" value="#{ll.partialPeriod}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top;">
+                <div style="margin-left:25px;margin-top:5px;">
+                    <h:outputLabel for="provideProperUseTraining" value="Would you like to provide item proper-use training?"  >
+                        <h:selectOneRadio id="provideProperUseTraining" value="#{ll.provideProperUseTraining}" layout='lineDirection'>
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>    
+                    </h:outputLabel>
+
+                </div>
+            </td>
+            <td style="vertical-align:top;">
+                <div style="margin-left:15px;margin-top:5px;">
+                    <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
+                        <h:outputTextarea id="specificConditions"  value="#{ll.specificConditions}"  maxlength="255" size="10X40" />
+                    </h:outputLabel>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+
+    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+        <div style="margin:20px;float:right;" >
+            <a href="#menu_item_9" onclick="showLegal();">Continue to 'Good Faith'</a>
+        </div>
+    </div>
+
+</div>-->

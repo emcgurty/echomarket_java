@@ -618,6 +618,37 @@ function showBLegal() {
     return false;
 }
 
+function showLegal() {
+    hideAllBFormHrefs();
+//    $("li#tab_item_1").css("display", "block");
+//    $("li#tab_item_2").css("display", "block");
+//    $("li#tab_item_3").css("display", "block");
+//    $("li#tab_item_4").css("display", "block");
+    whichSaveMenu(1);
+    $("#form_legal").css("display", "block");
+    return false;
+}
+function showConditions() {
+    hideAllBFormHrefs();
+//    $("li#tab_item_1").css("display", "block");
+//    $("li#tab_item_2").css("display", "block");
+//    $("li#tab_item_3").css("display", "block");
+//    $("li#tab_item_4").css("display", "block");
+    whichSaveMenu(1);
+    $("#form_conditions").css("display", "block");
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+
 function validateBItem() {
 //    var return_value = true;
 //    var whichType = 'borrower';
@@ -686,6 +717,23 @@ function hideAllBFormHrefs() {
     return false;
 }
 
+
+function showBorrowerToLender() {
+    hideAllBFormHrefs();
+//    $("li[id^=tab_item_1]").css("display", "block");
+    whichSaveMenu(1);
+    $("#form_borrower_to_lender").css("display", "block");
+    return false;
+}
+
+function showLenderToBorrower() {
+    hideAllBFormHrefs();
+//    $("li[id^=tab_item_1]").css("display", "block");
+    whichSaveMenu(1);
+    $("#form_lender_to_borrower").css("display", "block");
+    return false;
+}
+
 function showFormContact() {
     hideAllBFormHrefs();
     $("li[id^=tab_item_1]").css("display", "block");
@@ -694,6 +742,27 @@ function showFormContact() {
     $("#form_contact_information").css("display", "block");
     return false;
 }
+
+function showMonetary() {
+    hideAllBFormHrefs();
+//    $("li#tab_item_1").css("display", "block");
+//    $("li#tab_item_2").css("display", "block");
+//    $("li#tab_item_3").css("display", "block");
+    whichSaveMenu(1);
+    $("#form_monetary").css("display", "block");
+    return false;
+}
+
+function showDuration() {
+    hideAllBFormHrefs();
+//    $("li#tab_item_1").css("display", "block");
+//    $("li#tab_item_2").css("display", "block");
+//    $("li#tab_item_3").css("display", "block");
+    whichSaveMenu(1);
+    $("#form_duration").css("display", "block");
+    return false;
+}
+
 
 function showItem() {
     hideAllBFormHrefs();
@@ -899,14 +968,14 @@ function size_of_menu() {
     var imw = $("div#index_div").css("width");
 
     if (bmw) {
-        alert("b");
+//        alert("b");
         $("div.borrower_registration").css("width", bmw);
         $("div.application_footer").css("width", bmw);
     } else if (imw) {
-        alert("i");
+//        alert("i");
         $("div.application_footer").css("width", imw);
     } else if (lmw) {
-        alert("l");
+//        alert("l");
         $("div.lender_registration").css("width", lmw);
         $("div.application_footer").css("width", lmw);
 
