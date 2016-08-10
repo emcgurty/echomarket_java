@@ -5,6 +5,7 @@
  */
 package echomarket.SendEmail;
 
+
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -16,6 +17,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+
 //import org.hibernate.validator.internal.util.logging.Messages;
 
 public class SendEmail implements java.io.Serializable {
@@ -34,14 +37,15 @@ public class SendEmail implements java.io.Serializable {
     }
 
     public SendEmail(String whichEmail, String username, String user_alias,
-            String user_email, String application_email_address, String application_email_password, String random, String rc) {
+            String user_email, String app_email, String app_password, String random, String rc) {
 
+        
         this.whichEmail = whichEmail;
         this.username = username;
         this.user_alias = user_alias;
         this.user_email = user_email;
-        this.application_email_address = application_email_address;
-        this.application_email_password = application_email_password;
+        this.application_email_address = app_email;
+        this.application_email_password = app_password;
         this.reset_code = rc;
         Session sess = establishSession();
 
@@ -108,7 +112,6 @@ public class SendEmail implements java.io.Serializable {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", "587");
-
         // Get the Session object.
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {

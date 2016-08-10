@@ -41,7 +41,7 @@ public class PurposeBean extends AbstractBean implements Serializable {
         purposeArray = new Purpose[size_of_list];
         for (int i = 0; i < size_of_list; i++) {
             Purpose to_Array = (Purpose) purpose_list.get(i);
-            purposeArray[i] = new Purpose(to_Array.getId(), to_Array.getPurposeType());
+            purposeArray[i] = new Purpose(to_Array.getId(), to_Array.getPurposeType(), to_Array.getPurposeShort());
         }
         return purposeArray;
     }

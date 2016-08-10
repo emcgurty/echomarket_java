@@ -4,59 +4,41 @@ import echomarket.hibernate.PasswordEncryptionService;
 import echomarket.hibernate.PasswordValidator;
 import echomarket.hibernate.Purpose;
 import echomarket.hibernate.Users;
+import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
-//import java.io.IOException;
 import javax.faces.bean.ManagedBean;
-//import javax.faces.component.UIComponent;
-//import javax.faces.context.FacesContext;
-//import javax.faces.validator.ValidatorException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.event.ComponentSystemEvent;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
 
 @ManagedBean
 @SessionScoped
 public class UserBean extends AbstractBean implements Serializable {
 
-//@PostConstruct
-public void init() {
-    
-    setEchomarket_types(Arrays.asList(buildTypeList()));
-    setEchomarket_types_stored(Arrays.asList(buildTypeListStored()));
-}
+
     private String username;
     private String userAlias;
     private String userType;
     private List<String> userTypeArray;
-    private List<String> echomarket_types;
-    private List<String> echomarket_types_stored;
     private String password;
     private String firstName;
     private String lastName;
     private String email;
-    private String reset_code;
+    private String resetCode;
+    private String appEmail;  
 
-    public String getResetCode() {
-        return reset_code;
-    }
-
-    public void setResetCode(String rs) {
-        this.reset_code = rs;
+    public UserBean() {
     }
 
     public String getEmail() {
@@ -83,7 +65,6 @@ public void init() {
         this.userAlias = ua;
     }
 
-        
     public String getUserType() {
         return userType;
     }
@@ -91,8 +72,7 @@ public void init() {
     public void setUserType(String ut) {
         this.userType = ut;
     }
-    
-    
+
     public String getLastName() {
         return lastName;
     }
@@ -118,19 +98,19 @@ public void init() {
     }
 
     public String registerUser() {
-        
+
+        String test_mb = getAppEmail();  
+        List result = null;
         Users create_record = null;
         List tmp = null;
         String hold_userTypeBuild = "";
         String fullname = firstName + " " + lastName;
-        String aep = null;
-        String aea = null;
         String ac = null;
         Integer holdUserType = null;
         Boolean savedRecord = false;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
-        
+
         try {
             if (hib.isOpen() == false) {
                 hib = hib_session();
@@ -140,15 +120,15 @@ public void init() {
             }
             ///  I am pursuing this effort in getting from established arrays, rather than making Where Database calls
             for (String userTypeArray1 : getUserTypeArray()) {
-                holdUserType = getEchomarket_types().indexOf(userTypeArray1);
-                tmp  = getEchomarket_types_stored();
-                Object get_tmp_value  = tmp.get(holdUserType);
-                hold_userTypeBuild = hold_userTypeBuild + get_tmp_value +  ";";
-                
+//                holdUserType = getEchomarket_types().indexOf(userTypeArray1);
+//                tmp = getEchomarket_types_stored();
+//                Object get_tmp_value = tmp.get(holdUserType);
+                hold_userTypeBuild = hold_userTypeBuild + userTypeArray1 + ";";
+
             }
-            
+
             setUserType(hold_userTypeBuild);
-            create_record = new Users(getId(),firstName, lastName, username, userAlias, password, email, getUserType());
+            create_record = new Users(getId(), firstName, lastName, username, userAlias, password, email, getUserType());
             hib.save(create_record);
             ac = create_record.getResetCode();
             tx.commit();
@@ -160,18 +140,26 @@ public void init() {
         } finally {
         }
 
-        // Send email 
-        aea = getApp_email();
-        aep = getApp_password();
-        hib = null;
-        tx = null;
-        //c = null;
-        create_record = null;
+//        hib = null;
+//        tx = null;
+//        //c = null;
+//        create_record = null;
         //public SendEmail(String whichEmail, String username, String user_alias, String user_email, String application_email_address, String application_email_password, String message) {
         if (savedRecord == true) {
 
+            if (hib.isOpen() == false ) {
+                hib = hib_session();
+            }
+
+            if (tx.isActive() == false) {
+                tx = hib.beginTransaction();
+            }
+
+            List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
+            Map a_array = (Map) results.get(0);
+
             try {
-                SendEmail se = new SendEmail("registration", username, userAlias, email, aea, aep, password, ac);
+                SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
                 se = null;
             } catch (Exception e) {
                 System.out.println("Send Mail Failed");
@@ -196,57 +184,57 @@ public void init() {
         this.setEmail("");
         this.setPassword("");
     }
-    
-    private String[] buildTypeList(){
-        
+
+    private String[] buildTypeList() {
+
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         String[] results = null;
-        String queryString = "from Purpose order by purpose_order" ;
+        String queryString = "from Purpose order by purpose_order";
         List rl = hib.createQuery(queryString).list();
         tx.commit();
         results = new String[rl.size()];
 
-        for  (int i = 0; i < rl.size(); i++) {
+        for (int i = 0; i < rl.size(); i++) {
             Purpose p_a = (Purpose) rl.get(i);
             String tmp = p_a.getPurposeType();
             results[i] = tmp;
         }
-        
+
         return results;
     }
 
-    
-    private String[] buildTypeListStored(){
-        
+    private String[] buildTypeListStored() {
+
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         String[] results = null;
-        String queryString = "from Purpose order by purpose_order" ;
+        String queryString = "from Purpose order by purpose_order";
         List rl = hib.createQuery(queryString).list();
         tx.commit();
         results = new String[rl.size()];
 
-        for  (int i = 0; i < rl.size(); i++) {
+        for (int i = 0; i < rl.size(); i++) {
             Purpose p_a = (Purpose) rl.get(i);
             String tmp = p_a.getPurposeShort();
             results[i] = tmp;
         }
-        
+
         return results;
     }
+
     public String loginUser() {
         Boolean act_results = false;
-        if (getResetCode() != null)  {  
+        if (getResetCode() != null) {
             act_results = ActivateUser();
-        }    
-            
+        }
+
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         List results = null;
         String return_string = null;
         Boolean getp = false;
-        String queryString = "from Users where username = :un   and activated_at != null" ;
+        String queryString = "from Users where username = :un   and activated_at != null";
         results = hib.createQuery(queryString).setParameter("un", username).list();
         tx.commit();
 
@@ -281,7 +269,7 @@ public void init() {
             firstName = null;
             lastName = null;
             email = null;
-            reset_code = null;
+            setResetCode(null);
 
             message(
                     null,
@@ -294,9 +282,8 @@ public void init() {
         return return_string;
     }
 
-    
     private Boolean ActivateUser() {
-    
+
         List results = null;
         Date ndate = new Date();
         Session session = hib_session();
@@ -305,18 +292,18 @@ public void init() {
         results = session.createQuery(queryString).setParameter("rc", getResetCode()).list();
         tx.commit();
         Users users_Array = (Users) results.get(0);
-        String user_id =  users_Array.getId();
-        users_Array = null;    
-        
+        String user_id = users_Array.getId();
+        users_Array = null;
+
         // Should return only one row
         if (results.size() == 1) {
             if (session.isOpen() == false) {
-                session =  hib_session();
+                session = hib_session();
             }
             if (tx.isActive() == false) {
                 tx = session.beginTransaction();
             }
-            
+
             Users uu = (Users) session.get(Users.class, user_id);
             uu.setActivatedAt(ndate);
             uu.setResetCode(null);
@@ -324,17 +311,17 @@ public void init() {
             session = null;
             tx = null;
             uu = null;
-                    message(
-                null,
-                "ActivateSuccessful",
-                new Object[]{});
+            message(
+                    null,
+                    "ActivateSuccessful",
+                    new Object[]{});
             return true;
-        }   else {
+        } else {
             return false;
         }
-        
+
     }
-    
+
     public String managePasswordChange() {
 
         List results = ValidateUserNameResetCode();
@@ -377,10 +364,21 @@ public void init() {
             buildReset_Code = uu.BuildRandomValue();
             uu.setResetCode(buildReset_Code);
             tx.commit();
+
+            if (hib.isOpen() == false) {
+                hib = hib_session();
+            }
+
+            if (tx.isActive() == false) {
+                tx = hib.beginTransaction();
+            }
+
+            results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
+            Map a_array = (Map) results.get(0);
+
             try {
                 //  SendEmail .... You indicated that you forgot your user password, follow this link to change it
-                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, getApp_email(),
-                        getApp_password(), userArray.getId(), buildReset_Code);
+                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, a_array.getKey_text(), a_array.getValue_text(), userArray.getId(), buildReset_Code);
                 se = null;
             } catch (Exception e) {
                 System.out.println("Send Mail Failed");
@@ -403,7 +401,7 @@ public void init() {
 
         String results = ValidateEmailAndPassword(getEmail(), getPassword());
         if (results != null) {
-            
+
             message(
                     null,
                     "FoundUsername",
@@ -421,7 +419,7 @@ public void init() {
     }
 
     private String ValidateEmailAndPassword(String em, String pw) {
-        
+
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         // Validate email and password
@@ -447,21 +445,20 @@ public void init() {
             } catch (InvalidKeySpecException ex) {
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
-        
+
         if (auth_pw == true && auth_em == true) {
             hib = null;
             tx = null;
             return return_user_name;
-        } else  {
+        } else {
             hib = null;
             tx = null;
             return null;
         }
     }
-    
-    
+
     private List ValidateEmail(String email) {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
@@ -485,7 +482,7 @@ public void init() {
         List results = null;
 
         String queryString = "from Users where username = :un and reset_code = :rc";
-        results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", reset_code).list();
+        results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", getResetCode()).list();
         tx.commit();
         if (results.size() == 1) {
             return results;
@@ -558,34 +555,34 @@ public void init() {
         this.userTypeArray = userTypeArray;
     }
 
+    
+
     /**
-     * @return the echomarket_types
+     * @return the resetCode
      */
-    public List<String> getEchomarket_types() {
-        return echomarket_types;
+    public String getResetCode() {
+        return resetCode;
     }
 
     /**
-     * @param echomarket_types the echomarket_types to set
+     * @param resetCode the resetCode to set
      */
-    public void setEchomarket_types(List<String> echomarket_types) {
-        this.echomarket_types = echomarket_types;
+    public void setResetCode(String resetCode) {
+        this.resetCode = resetCode;
     }
 
     /**
-     * @return the echomarket_types_stored
+     * @return the appEmail
      */
-    public List<String> getEchomarket_types_stored() {
-        return echomarket_types_stored;
+    public String getAppEmail() {
+        return appEmail;
     }
 
     /**
-     * @param echomarket_types_stored the echomarket_types_stored to set
+     * @param appEmail the appEmail to set
      */
-    public void setEchomarket_types_stored(List<String> echomarket_types_stored) {
-        this.echomarket_types_stored = echomarket_types_stored;
+    public void setAppEmail(String appEmail) {
+        this.appEmail = appEmail;
     }
-
-
 
 }

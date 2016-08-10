@@ -29,4 +29,5 @@
   <table-filter match-name="addresses"/>
   <table-filter match-name="user_transactions"/>
   <table-filter match-name="test_table"/>
+  <table-filter match-name="map"/>
 </hibernate-reverse-engineering>
