@@ -20,7 +20,7 @@
             <title>#{bundle.LenderSeeking}</title>
         </h:head>
         <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
-        <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
+        <h:form enctype="multipart/form-data" >
 
             <h:inputSecret id="is_active" value="1"   style="display:none;" />
             <h:inputSecret id="user_id" value="#{ll.userId}" style="display:none;" />

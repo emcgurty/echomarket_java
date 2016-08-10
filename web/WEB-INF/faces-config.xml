@@ -5,7 +5,7 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
 
-
+    
     <!-- ========== Application Wide Features ================================ -->
 
 
@@ -28,22 +28,11 @@
         <managed-bean-name>abstractBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedBeans.AbstractBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
-         <managed-property>
-            <description>Get email</description>
-            <property-name>app_email</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>emcgurty2gmail.com</value>
-        </managed-property>
-         <managed-property>
-            <description>Get pw</description>
-            <property-name>app_password</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>Posdfwefnsd123</value>
-        </managed-property>
+      
     </managed-bean>
 
                                                     
-    <managed-bean>
+    <managed-bean >
         <managed-bean-name>usersBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedBeans.UserBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -53,12 +42,19 @@
             <property-class>java.lang.String</property-class>
             <value>#{param['reset_code']}</value>
         </managed-property>
-          <managed-property>
+        <managed-property>
             <description>Gets the username from the url</description>
             <property-name>username</property-name>
             <property-class>java.lang.String</property-class>
             <value>#{param['username']}</value>
         </managed-property>
+        <managed-property>
+            <description>app_email</description>
+            <property-name>app_email</property-name>
+            <property-class>java.lang.String</property-class>
+            <value>#{'emcgurty@gmail.com'}</value>
+        </managed-property>
+
     </managed-bean>
     
     <managed-bean>
@@ -79,9 +75,9 @@
     </managed-bean>
     
     <validator>  
-     <validator-id>selectOneMenuValidator</validator-id>  
-     <validator-class>echomarket.resources.SelectOneMenuValidator</validator-class>  
- </validator>
+        <validator-id>selectOneMenuValidator</validator-id>  
+        <validator-class>echomarket.resources.SelectOneMenuValidator</validator-class>  
+    </validator>
     <managed-bean>
         <managed-bean-name>usStatesManagedBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedBeans.UsStatesManagedBean</managed-bean-class>
