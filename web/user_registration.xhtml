@@ -5,13 +5,12 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-
                 template="./echomarketTemplate.xhtml">
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="registrationHeader" /> 
     </ui:define>
     <ui:define name="content">
-        <h:form>
+        <h:form  >
 
             <div class="messagecolor">
                 <h:messages showSummary="true" 
@@ -20,14 +19,20 @@
                             infoStyle="color: blue"/>
             </div>
 
-            <br />            
+              
 
-            <div id="registration_div"  class="top"  style="align-content: center">
+            <div  class="top" id="form_user_registration">
+                        <div style="margin:10px;" >
+                            <h:outputText value="User Registration" />
+                            <h:commandLink  action="#{userBean.registerUser()}" id="add_registration" value="Register" class="right_div">
+                                <!--                <f:actionListener  type="echo_market.listeners.UserActionListener"  />-->
+                            </h:commandLink>
+                        </div>
 
-                <table style="width:75%;margin: 25px;" >
+                <table style="width:75%;margin-left: 50px" align="center" id="user_registration_table">
 
-                    <tr>
-                        <td style="width:50%;">
+                    <tr >
+                        <td style="width:50%;padding-bottom: 15px;">
                             <h:outputLabel for="username" value="#{bundle.username}" >       
                                 <h:inputText id="username"
                                              value="#{userBean.username}"
@@ -40,7 +45,7 @@
                                 </h:inputText>
                             </h:outputLabel>
                         </td>
-                        <td style="width:50%;">
+                        <td style="width:50%;  padding-bottom: 15px;">
 
                             <h:outputLabel for="user_alias"  value="#{bundle.userAlias}">       
                                 <h:inputText id="user_alias"
@@ -56,8 +61,8 @@
                             </h:outputLabel>
                         </td>
                     </tr>
-                    <tr>
-                       <td style="width:50%;">
+                    <tr style="margin:15px;">
+                        <td style="width:50%;padding-bottom: 15px;">
 
                             <h:outputLabel for="firstName"  value="#{bundle.firstName}">       
                                 <h:inputText id="firstName"
@@ -71,7 +76,7 @@
                                 </h:inputText>
                             </h:outputLabel>
                         </td>
-                        <td>
+                        <td style="width:50%;padding-bottom: 15px;">
                             <h:outputLabel for="lastName"  value="#{bundle.lastName}" >       
                                 <h:inputText id="lastName"
                                              size="16"
@@ -86,8 +91,8 @@
 
                         </td>
                     </tr>
-                    <tr>
-                        <td>
+                    <tr >
+                        <td style="width:50%;padding-bottom: 15px;">
                             <f:event listener="#{userBean.validatePassword}" type="postValidate" />
 
 
@@ -105,7 +110,7 @@
                             </h:outputLabel>
 
                         </td>
-                        <td>
+                        <td style="width:50%;padding-bottom: 15px;">
                             <h:outputLabel for="confirmPassword" value="#{bundle.confirmPassword}" >       
                                 <h:inputSecret id="confirmPassword"
                                                size="16"
@@ -119,8 +124,8 @@
                             </h:outputLabel>
                         </td>
                     </tr>
-                    <tr colspan="2">
-                        <td>
+                    <tr  >
+                       <td colspan="2" style="width:100%;padding-bottom: 15px;">
                             <h:outputLabel for="email" value="#{bundle.email}" >       
                                 <h:inputText id="email"
                                              size="16"
@@ -136,27 +141,20 @@
                             </h:outputLabel>
 
                         </td>
-                    </tr>
+                    </tr >
                     <tr >
-                        <td>
+                        <td colspan="2" style="width:100%;padding-bottom: 15px;">
 
                             <h:outputLabel for="userTypeArray" value="#{bundle.userType}" >
-                                <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}" >
+                                <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate...">
                                     <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
-                                                   itemLabel="#{c.purposeType}" itemValue="#{c.purposeShort}"  >   
+                                                   itemLabel="#{c.purposeType}" itemValue="#{c.purposeShort}"   >   
                                     </f:selectItems>
                                 </h:selectManyCheckbox>
                             </h:outputLabel>   
                         </td>
-                        <td>
-                            <h:commandLink  action="#{userBean.registerUser()}" id="add_registration" value="Register">
-
-                                <!--                <f:actionListener 
-                                                    type="echo_market.listeners.UserActionListener"  />-->
-
-                            </h:commandLink>
-                        </td>
                     </tr>
+                    
                 </table>
             </div>
         </h:form>
