@@ -9,9 +9,12 @@
                 template="./echomarketTemplate.xhtml"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-    
+    <ui:define name="header"  >
+        <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
+    </ui:define>
+
     <ui:define name="content">
-        <h:form  id="user_login"  >
+        <h:form  id="user_login">
 
             <f:metadata>
                 <f:viewParam name="reset_code" id="reset_code" value="#{userBean.resetCode}" />
@@ -22,40 +25,78 @@
                             errorStyle="color: #d20005" 
                             infoStyle="color: blue"/>
             </div>
-           
-                    <h:panelGrid id="grid" columns="1" >
-                        <h:panelGroup>
-                            <h:outputLabel for="username" value="#{bundle.username}" >       
-                                <h:inputText id="username"
-                                             value="#{userBean.username}"
-                                             size="16"
-                                             required="true"
-                                             requiredMessage="#{bundle.ReqUserName}"
-                                             autocomplete="off">
-                                </h:inputText>
-                            </h:outputLabel>
-                            <h:message for="username" errorClass="error" />
-                        </h:panelGroup>
-                        <h:panelGroup>
-                            <h:outputLabel for="password" value="#{bundle.password}" >       
-                                <h:inputSecret id="password"
-                                               size="16"
-                                               value="#{userBean.password}"
-                                               title="#{bundle.password}"
-                                               required="true"
-                                               requiredMessage="#{bundle.ReqPassword}"
-                                               autocomplete="off">
+
+            <div  class="top" id="form_login">
+
+                <table style="width:75%;margin-left: 50px" align="center" id="user_login_table">
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputText value="User Login" />
+                            <h:commandLink  action="#{userBean.loginUser()}" id="user_login_header" value="Login" class="right_div" />
+                        </td>
+
+                    </tr>    
+                    <tr>
+                        <td style="padding-bottom: 15px;">
+                           
+                                <h:panelGroup>
+                                    <h:outputLabel for="username" value="#{bundle.username}" >       
+                                        <h:inputText id="username"
+                                                     value="#{userBean.username}"
+                                                     size="16"
+                                                     required="true"
+                                                     requiredMessage="#{bundle.ReqUserName}"
+                                                     autocomplete="off"
+                                                     style="margin-left: 5px;" >
+                                        </h:inputText>
+                                    </h:outputLabel>
+                                    <h:message for="username" errorClass="error" />
+                                </h:panelGroup>
+
+                        </td>
+                        </tr>
+                    <tr>
+                        <td style="padding-bottom: 15px;">
+                                <h:panelGroup>
+                                    <h:outputLabel for="password" value="#{bundle.password}" >       
+                                        <h:inputSecret id="password"
+                                                       size="16"
+                                                       value="#{userBean.password}"
+                                                       title="#{bundle.password}"
+                                                       required="true"
+                                                       requiredMessage="#{bundle.ReqPassword}"
+                                                       autocomplete="off"
+                                                       style="margin-left: 5px;"
+                                                       >
 
 
-                                </h:inputSecret>
-                            </h:outputLabel>
-                            <h:message for="password" errorClass="error" />
-                        </h:panelGroup>
-                        <h:commandLink  action="#{userBean.loginUser()}" id="user_login" value="Login" />
-                        <h:commandLink  action="forgotUsername" id="forgot_username" value="Forgot Username" />
-                        <h:commandLink  action="forgotUserPassword" id="forgot_password" value="Forgot Password" />
-                    </h:panelGrid>
-                </h:form>
-            
-    </ui:define>
-</ui:composition>
+                                        </h:inputSecret>
+                                    </h:outputLabel>
+                                    <h:message for="password" errorClass="error" />
+                                </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-bottom: 15px;">  
+                            <p>
+                                <h:commandLink  action="#{userBean.loginUser()}" id="user_login" value="Login" />
+                                <h:outputText value=" | " />
+                                <h:commandLink  action="forgotUsername" id="forgot_username" value="Forgot Username"  />
+                                 <h:outputText value=" | " />
+                                 <h:commandLink  action="forgotUserPassword" id="forgot_password" value="Forgot Password"   />
+                            </p>     
+                        </td> 
+                    </tr>
+                </table>
+            </div>
+                            </h:form>
+        
+                            </ui:define>
+
+                            <ui:define name="footer"  >
+                                <ui:include rendered="true" src="application_footer.xhtml" id="LoginFooter" /> 
+                            </ui:define>
+
+
+                            </ui:composition>
