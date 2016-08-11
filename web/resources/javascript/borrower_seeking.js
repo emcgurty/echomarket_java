@@ -971,6 +971,8 @@ function size_of_menu() {
 //    var ah = $("div.application_header").css("width");
 //    var center_without_menu = ah - rap - lap;
     var fur = $("div#form_user_registration").css("width");
+    var uli = $("div#user_login");
+
 
 
     if (bmw) {
@@ -987,7 +989,11 @@ function size_of_menu() {
 
     } else if (fur) {
 //        alert("f");
-       $("div.application_footer").css("width", fur);
+        $("div.application_footer").css("width", fur);
+
+    } else if (uli) {
+//        alert("f");
+        $("div.application_footer").css("width", fur);
 
 
     }
