@@ -966,6 +966,12 @@ function size_of_menu() {
     var bmw = $("ul#nav.borrower_menu").css("width");
     var lmw = $("ul#nav.lender_menu").css("width");
     var imw = $("div#index_div").css("width");
+//    var rap = $("div#right.app_panel").css("width");
+//    var lap = $("div#left.app_panel").css("width");
+//    var ah = $("div.application_header").css("width");
+//    var center_without_menu = ah - rap - lap;
+    var fur = $("div#form_user_registration").css("width");
+
 
     if (bmw) {
 //        alert("b");
@@ -978,6 +984,11 @@ function size_of_menu() {
 //        alert("l");
         $("div.lender_registration").css("width", lmw);
         $("div.application_footer").css("width", lmw);
+
+    } else if (fur) {
+//        alert("f");
+       $("div.application_footer").css("width", fur);
+
 
     }
 
