@@ -22,24 +22,25 @@
 
             <br />            
 
-            <div id="registration_div"  class="top"  >
+            <div id="registration_div"  class="top"  style="align-content: center">
 
                 <table style="width:75%;margin: 25px;" >
 
                     <tr>
-                        <td>
+                        <td style="width:50%;">
                             <h:outputLabel for="username" value="#{bundle.username}" >       
                                 <h:inputText id="username"
                                              value="#{userBean.username}"
                                              size="16"
                                              required="true"
-                                             requiredMessage="#{bundle.ReqUserName}">
+                                             requiredMessage="#{bundle.ReqUserName}"
+                                             style="margin-left:5px">
 
 
                                 </h:inputText>
                             </h:outputLabel>
                         </td>
-                        <td>
+                        <td style="width:50%;">
 
                             <h:outputLabel for="user_alias"  value="#{bundle.userAlias}">       
                                 <h:inputText id="user_alias"
@@ -47,7 +48,8 @@
                                              value="#{userBean.userAlias}"
                                              title="#{bundle.userAlias}"
                                              required="true"
-                                             requiredMessage="#{bundle.ReqUserAlias}">
+                                             requiredMessage="#{bundle.ReqUserAlias}"
+                                             style="margin-left:5px">
 
 
                                 </h:inputText>
@@ -55,7 +57,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>              
+                       <td style="width:50%;">
 
                             <h:outputLabel for="firstName"  value="#{bundle.firstName}">       
                                 <h:inputText id="firstName"
@@ -63,7 +65,7 @@
                                              value="#{userBean.firstName}"
 
                                              required="true"
-                                             requiredMessage="#{bundle.ReqFirstName}">
+                                             requiredMessage="#{bundle.ReqFirstName}" style="margin-left:5px">
 
 
                                 </h:inputText>
@@ -76,7 +78,7 @@
                                              value="#{userBean.lastName}"
 
                                              required="true"
-                                             requiredMessage="#{bundle.ReqLastName}">
+                                             requiredMessage="#{bundle.ReqLastName}" style="margin-left:5px">
 
 
                                 </h:inputText>
@@ -96,7 +98,7 @@
                                                title="#{bundle.password}"
                                                required="true"
                                                requiredMessage="#{bundle.ReqPassword}"
-                                               >
+                                               style="margin-left:5px">
 
 
                                 </h:inputSecret>
@@ -109,7 +111,8 @@
                                                size="16"
                                                title="#{bundle.confirmPassword}"
                                                required="true"
-                                               requiredMessage="#{bundle.ReqConfirmPassword}">
+                                               requiredMessage="#{bundle.ReqConfirmPassword}"
+                                               style="margin-left:5px">
 
 
                                 </h:inputSecret>
@@ -126,7 +129,7 @@
                                              required="true"
                                              requiredMessage="#{bundle.ReqEmail}"
                                              validatorMessage="#{bundle.ValidEmail}" 
-                                             >
+                                             style="margin-left:5px">
                                     <f:validateRegex
                                         pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                 </h:inputText>
@@ -146,8 +149,6 @@
                             </h:outputLabel>   
                         </td>
                         <td>
-
-
                             <h:commandLink  action="#{userBean.registerUser()}" id="add_registration" value="Register">
 
                                 <!--                <f:actionListener 
