@@ -555,9 +555,7 @@ public class UserBean extends AbstractBean implements Serializable {
         this.userTypeArray = userTypeArray;
     }
 
-    
-
-    /**
+        /**
      * @return the resetCode
      */
     public String getResetCode() {

@@ -64,6 +64,9 @@ public abstract class AbstractBean implements Serializable {
     protected String getId() {
         return id;
     }
+    private String application_email_address = "";
+    private String application_email_password = "" ;
+
 
     /**
      * @param id the id to set
