@@ -995,7 +995,6 @@ function size_of_menu() {
 //        alert("f");
         $("div.application_footer").css("width", fur);
 
-
     }
 
 
