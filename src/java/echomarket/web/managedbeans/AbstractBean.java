@@ -27,6 +27,7 @@ import org.hibernate.Session;
 @SessionScoped
 public abstract class AbstractBean implements Serializable {
 
+//  
 //    Source:  Setting UUID ids: http://blog.xebia.com/jpa-implementation-patterns-using-uuids-as-primary-keys/
 
     private static final long serialVersionUID = 1L;
