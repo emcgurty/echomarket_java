@@ -56,7 +56,7 @@ public class SendEmail implements java.io.Serializable {
         } else if ("forgotPassword" == this.whichEmail) {
             //SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, returnApplicationAddress(), returnApplicationPwd(), null, reset_code);
             // random is user_id
-            this.user_id = Integer.valueOf(random);
+            this.reset_code = random;
             sendForgotPasswordEmail(sess);
         } else if ("forgotUserName" == this.whichEmail) {
     
@@ -90,7 +90,7 @@ public class SendEmail implements java.io.Serializable {
                 "echomarket.web.messages.Messages",
                 FacesContext.getCurrentInstance().getViewRoot().getLocale());
         String url_string = bundle.getString("PasswordChangeUrl");
-        Object paramArray[] = new Object[2];
+        Object paramArray[] = new Object[1];
         paramArray[0] = this.getResetCode();
         url_string = MessageFormat.format(url_string, paramArray);   //could just use Object[] {value(s)}
         String buildMessage = "<html><h1>Within Echomarket, you indicated that you can't remember or lost your password...</h1>"
