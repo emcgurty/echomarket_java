@@ -9,7 +9,11 @@
                 template="./echomarketTemplate.xhtml"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-     <ui:define name="content">
+    <ui:define name="header"  >
+        <ui:include rendered="true" src="application_header.xhtml" id="ForgotUsernameHeader" /> 
+    </ui:define>
+
+    <ui:define name="content">
         <h:form  id="forgotUserName"  >
 
             <div class="messagecolor">
@@ -19,29 +23,52 @@
                             infoStyle="color: blue"/>
             </div>
 
+            <div  class="top" id="form_forgot_username">
 
-            <h:outputLabel for="user_email"  value="#{bundle.email}">       
-                <h:inputText id="user_email"
-                             value="#{userBean.email}"
-                             required="true"
-                             requiredMessage="#{bundle.ReqUserEmail}">
-                </h:inputText>
-            </h:outputLabel>
+                <table style="width:75%;margin-left: 50px" align="center" id="forgot_username_table">
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
 
-            <br /><br />  
+                            <h:outputText value="Forgot Username" />
 
-            <h:outputLabel for="password"  value="#{bundle.password}">       
-                <h:inputSecret id="password"
-                             value="#{userBean.password}"
-                             required="true"
-                             requiredMessage="#{bundle.ReqPassword}">
-                </h:inputSecret>
-            </h:outputLabel>
+                            <h:commandLink  action="#{userBean.forgotUserName()}" id="forgot_username" value="Get Username" class="right_div">
+                                <!--<f:ajax />-->
+                            </h:commandLink>
 
-            <br /><br />
-            <h:commandLink  action="#{userBean.forgotUserName()}" id="forgot_user_name" value="Get User Name">
-            </h:commandLink>
+
+                        </td>
+
+                    </tr> 
+                    <tr>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="email"  value="#{bundle.email}">       
+                                <h:inputText id="email"
+                                             value="#{userBean.email}"
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqUserEmail}" style="margin-left:10px">
+                                </h:inputText>
+                            </h:outputLabel>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="password"  value="#{bundle.password}">       
+                                <h:inputSecret id="password"
+                                               value="#{userBean.password}"
+                                               required="true"
+                                               requiredMessage="#{bundle.ReqPassword}" style="margin-left:10px">
+                                </h:inputSecret>
+                            </h:outputLabel>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
         </h:form>
+    </ui:define>
+
+    <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="ForgotUsernameFooter" /> 
     </ui:define>
 </ui:composition>
