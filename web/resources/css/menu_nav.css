@@ -109,7 +109,7 @@
 }
 #nav ul li a:hover {
     background-color: #6D84B4;
-    border-bottom: 1px solid yellow;  /* #3B5998; this is a Facebook blue */
+    border-bottom: 1px solid yellow;  
     border-top: 1px solid #3B5998;
     color: #FFFFFF;
 }
