@@ -220,6 +220,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
     public String loginUser() {
         Boolean act_results = false;
+        // getResetCode learned from url
         if (getResetCode() != null) {
             act_results = ActivateUser();
         }
@@ -255,6 +256,13 @@ public class UserBean extends AbstractBean implements Serializable {
         tx = null;
         results = null;
         if (getp == true) {
+            message(
+                    null,
+                    "LogInSuccessful",
+                    null);
+
+            
+            
             return_string = "index";
         } else if (getp == false) {
             username = null;
