@@ -140,11 +140,6 @@ public class UserBean extends AbstractBean implements Serializable {
         } finally {
         }
 
-//        hib = null;
-//        tx = null;
-//        //c = null;
-//        create_record = null;
-        //public SendEmail(String whichEmail, String username, String user_alias, String user_email, String application_email_address, String application_email_password, String message) {
         if (savedRecord == true) {
 
             if (hib.isOpen() == false ) {
@@ -166,7 +161,7 @@ public class UserBean extends AbstractBean implements Serializable {
             }
         }
 
-        //resetForm(); 
+
         message(
                 null,
                 "NewRegistration",
@@ -424,11 +419,10 @@ public class UserBean extends AbstractBean implements Serializable {
         Transaction tx = hib.beginTransaction();
         // Validate email and password
         String return_user_name = null;
-        List results = null;
         Boolean auth_pw = false;
         Boolean auth_em = false;
         String queryString = "from Users where email  = :em";
-        results = hib.createQuery(queryString).setParameter("em", em).list();
+        List results = hib.createQuery(queryString).setParameter("em", em).list();
         tx.commit();
         if (results.size() == 1) {
             auth_em = true;
@@ -463,10 +457,8 @@ public class UserBean extends AbstractBean implements Serializable {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         // Validate email
-        List results = null;
-
         String queryString = "from Users where email  = :em";
-        results = hib.createQuery(queryString).setParameter("em", email).list();
+        List results = hib.createQuery(queryString).setParameter("em", email).list();
         tx.commit();
         if (results.size() == 1) {
             return results;
@@ -479,10 +471,8 @@ public class UserBean extends AbstractBean implements Serializable {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         // Validate email
-        List results = null;
-
         String queryString = "from Users where username = :un and reset_code = :rc";
-        results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", getResetCode()).list();
+        List results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", getResetCode()).list();
         tx.commit();
         if (results.size() == 1) {
             return results;
