@@ -972,6 +972,7 @@ function size_of_menu() {
 //    var center_without_menu = ah - rap - lap;
     var fur = $("div#form_user_registration").css("width");
     var uli = $("div#user_login");
+    var flog = $("div#form_login.top").css("width");
 
 
 
@@ -995,6 +996,8 @@ function size_of_menu() {
 //        alert("f");
         $("div.application_footer").css("width", fur);
 
+    } else if (flog){
+        $("div.application_footer").css("width", flog);
     }
 
 
