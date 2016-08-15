@@ -12,23 +12,33 @@
         <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" /> 
     </ui:define>
     <ui:define name="content"  >
-
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <h:outputScript library="javascript" name="image.js"  />
-            <h:outputScript library="javascript" name="bl_util.js"  />
             <title>#{bundle.borrowerSeeking}</title>
         </h:head>
         <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
         <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
 
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
             <h:inputSecret id="is_active" value="1"   style="display:none;" />
             <h:inputSecret id="user_id" value="#{bb.userId}" style="display:none;" />
 
             <div id="borrower_registration" class="borrower_registration" >
 
                 <div id="form_contact_information" class="contact_information" >
-                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader"/>
+
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                        </div> 
+                    </div> 
 
                     <div  class="div_p" id="menu_item_1" >
                         <div style="margin:10px;" >
@@ -44,7 +54,7 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="float:left;margin-left:25px">
-                            <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
+                            <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" >
                                 <br />
                                 <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}"  >
 
@@ -137,7 +147,7 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                         <div style="margin-left: 5px;float:left">
-                            <h:dataTable value="#{bb.buildAddressList('primary')}" var="pa" style="margin-left: 10px;float:left">
+                            <h:dataTable value="#{bb.primary}" id="primary"   var="pa"           >    
                                 <h:column rowHeader="">
                                     <table >
                                         <tr>
@@ -296,8 +306,14 @@
                 </div>
 
 
-                <div id="form_borrower_preference" class="contact_information" style="display:block">
-                    <ui:include rendered="true" src="borrower_header.xhtml" id="borrowerHeader" />
+                <div id="form_borrower_preference" class="contact_information" >
+
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                        </div> 
+                    </div> 
 
                     <div  class="div_p" id="menu_item_2" >
                         <div style="margin:10px;" >
@@ -327,7 +343,7 @@
                             </h:panelGroup>
 
                             <h:panelGroup id="buildAlternativeAddress" styleClass="display:block;float:left;height:auto;width:inherit;margin-top:10px;"  >    
-                                <h:dataTable id="buildAlternativeAddressTable"  value="#{bb.buildAddressList('alternative')}" var="pa"
+                                <h:dataTable id="alternative"  value="#{bb.alternative}" var="pa"
                                              rendered="#{bb.useWhichContactAddress eq '2'|| bb.useWhichContactAddress eq '1'}"
 
                                              >
@@ -563,7 +579,18 @@
                         </div>
                     </div>
                 </div>
-                <div id="form_item" class="contact_information" style="display:none;">
+                <div id="form_item" class="contact_information" >
+
+
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                        </div> 
+                    </div> 
+
+
+
                     <div  class="div_p" id="menu_item_3" >
                         <div style="margin:10px;" >
                             <h:outputText value="The Item you would like to borrow" />
@@ -583,8 +610,6 @@
                                             <f:ajax event="change" execute="@this"   render="other_category" />                                                
                                         </h:selectOneMenu>
                                     </h:outputLabel>  
-
-
                                 </div>
                             </td>
                             <td style="width:50%;">
@@ -686,7 +711,14 @@
 
 
                 <div id="form_legal" class="contact_information" >
-                     <div style="margin-left:25px;margin-top:5px;float:left;">
+
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                        </div> 
+                    </div> 
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
                         <p >
                             Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
                         </p>
