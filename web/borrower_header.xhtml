@@ -18,7 +18,7 @@
                                 infoStyle="color: blue"/>
                 </div>
                 <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
-                <h:commandLink  action="index"  class="right_div" value="Save Borrower Item Registration" onclick="saveBAll();"/>
+                <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
             </div> 
         </div> 
     </h:form>
