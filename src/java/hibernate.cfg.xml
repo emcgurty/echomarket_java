@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/echomarket?zeroDateTimeBehavior=convertToNull</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">emm8429731</property>
-        <property name="hibernate.connection.pool_size">8</property>
-        <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.current_session_context_class">thread</property>
-        <!--<property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>-->
-        <!--<property name="hibernate.query.factory_class">org.hibernate.hql.ast.ASTQueryTranslatorFactory</property>-->
-        <mapping resource="echomarket/hibernate/Addresses.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Parties.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Lenders.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Searches.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/UserTransactions.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Roles.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/ItemImages.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/PartyRelationships.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Users.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Orders.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/UsStates.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Countries.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/ContactDescribes.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Sessions.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/CommunityMembers.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Contacts.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Borrowers.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Advertisers.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Categories.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/ArticleItems.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Vendors.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Articles.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Communities.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/Purpose.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/ItemConditions.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/CustomerTypes.hbm.xml"/>
-        <mapping resource="echomarket/hibernate/TestTable.hbm.xml"/>
-            <mapping resource="echomarket/hibernate/Map.hbm.xml"/>
-    </session-factory>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/echomarket?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">emm8429731</property>
+    <property name="hibernate.connection.pool_size">8</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <!--<property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>-->
+    <!--<property name="hibernate.query.factory_class">org.hibernate.hql.ast.ASTQueryTranslatorFactory</property>-->
+    <mapping resource="echomarket/hibernate/Addresses.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Parties.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Lenders.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Searches.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/UserTransactions.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Roles.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/ItemImages.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/PartyRelationships.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Users.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Orders.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/UsStates.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Countries.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/ContactDescribes.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Sessions.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/CommunityMembers.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Contacts.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Borrowers.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Advertisers.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Categories.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/ArticleItems.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Vendors.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Articles.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Communities.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Purpose.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/ItemConditions.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/CustomerTypes.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/TestTable.hbm.xml"/>
+    <mapping resource="echomarket/hibernate/Map.hbm.xml"/>
+  </session-factory>
 </hibernate-configuration>
