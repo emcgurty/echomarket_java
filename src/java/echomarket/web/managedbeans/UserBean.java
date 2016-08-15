@@ -37,7 +37,7 @@ public class UserBean extends AbstractBean implements Serializable {
     private String email;
     private String resetCode;
     private String appEmail;  
-
+    
     public UserBean() {
     }
 
