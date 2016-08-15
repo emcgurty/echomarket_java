@@ -9,14 +9,14 @@
                 template="./echomarketTemplate.xhtml">
 
     <ui:define name="header"  >
-        <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" /> 
+        <ui:include rendered="true" src="application_header.xhtml" id="LenderHeader" /> 
     </ui:define>
     <ui:define name="content"  >
 
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <h:outputScript library="javascript" name="image.js"  />
-            <h:outputScript library="javascript" name="bl_util.js"  />
+          
             <title>#{bundle.LenderSeeking}</title>
         </h:head>
         <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
