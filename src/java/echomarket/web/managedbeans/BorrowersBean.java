@@ -1,26 +1,27 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Addresses;
-import echomarket.hibernate.Purpose;
 import echomarket.hibernate.Users;
 import echomarket.hibernate.Borrowers;
 import echomarket.hibernate.ItemImages;
-import echomarket.SendEmail.SendEmail;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.enterprise.context.RequestScoped;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-
 
 @ManagedBean(name = "bb")
 @RequestScoped
 public class BorrowersBean extends AbstractBean implements Serializable {
+
 
     private String userId;
     private int contactDescribeId;
@@ -70,52 +71,71 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String remoteIp;
     private String comment;
     private String advertiserId;
+    
+//  public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
+    
+    private static ArrayList<Addresses> primary
+            = new ArrayList<Addresses>(Arrays.asList(
+                    
+                    new Addresses(UUID.randomUUID().toString(), null, null, null, null, null,null, null, null, null, null, "primary")
+            
+            
+            ));
 
-    public BorrowersBean() {
-        
+    private static ArrayList<Addresses> alternative
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(),  null, null, null, null, null,null, null, null, null, null, "alternative")));
+
+    public ArrayList<Addresses> getPrimary() {
+        return primary;
+    }
+
+    public ArrayList<Addresses> getAlternative() {
+        return alternative;
+    }
+
+    /**
+     * @param aPrimary the primary to set
+     */
+    public static void setPrimary(ArrayList<Addresses> aPrimary) {
+        primary = aPrimary;
+    }
+
+    /**
+     * @param aAlternative the alternative to set
+     */
+    public static void setAlternative(ArrayList<Addresses> aAlternative) {
+        alternative = aAlternative;
     }
 
 
-    public Addresses[] buildAddressList(String whichAddress) {
+
+    public String saveBorrowerRegistration() {
         
-        List results = null;
-        Addresses[] address_array  = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
-        String queryString = "from Addresses where borrower_id = :bid  and address_type = :wa";
-        results = session.createQuery(queryString).setParameter("bid", getId()).setParameter("wa", whichAddress).list();
-        tx.commit();
-        int result_size = results.size();
-        if (result_size > 0) {
-        address_array = new Addresses[result_size];    
-        for(int i = 0; i < result_size; i++){
-            Addresses a_array = (Addresses) results.get(i);
-            /// String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, 
-                     //String city, String province, String usStateId, String region, String countryId, String addressType
-            address_array[i] = new Addresses(a_array.getId(),a_array.getLenderId(), a_array.getBorrowerId(),a_array.getAddressLine1(), a_array.getAddressLine2(), a_array.getPostalCode(),
-                        a_array.getCity(), a_array.getProvince(), a_array.getUsStateId(), a_array.getRegion(), a_array.getCountryId(), a_array.getAddressType());
-        }
-        } else {
-//           Addresses create_record;    return the record with max id
-//           Session hib = hib_session();
-//           tx = hib.beginTransaction();
-//            Criteria c = hib.createCriteria(Addresses.class);
-//            c.addOrder(Order.desc("id"));
-//            c.setMaxResults(1);
-//            create_record = (Addresses) c.uniqueResult();
-            String tmp_id = UUID.randomUUID().toString();
-            //// Need to check not dup..
-            address_array = new Addresses[1];                
-            address_array[0]= new Addresses(tmp_id,whichAddress);
-                   
-        }
-        return address_array;
+        //  For the moment I do not want to set up HIbernate for table associations.  Instead used ArrayList, which is working fine.  Get return of properties
+        // Test here
+        String asdssd = getItemModel();
+        // Test here 
+        List padrs = getPrimary();
+        /// Begin Hiernate transaction... first to save Borroweer detail, then with borrower_id, save addresses
+        //Session sb = hib_session();
+        //Transaction tx = sb.beginTransaction();
+        
+        //   Need to learn if I can pass ArrayList in creating new.  new Addresses adr = new Addresses(padrs);
+        
+        message(
+                null,
+                "BorrowerRegistionRecordSaved",
+                null);
+
+        return "index";
     }
-           
-    public ItemImages[] buildImageAccess(){
-        
+
+    
+// Need to eliminate this and perform same as done for addresses
+    public ItemImages[] buildImageAccess() {
+
         List results = null;
-        ItemImages[] address_array  = null;
+        ItemImages[] address_array = null;
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
         String queryString = "from ItemImages where borrower_id = :bid";
@@ -123,13 +143,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         tx.commit();
         int result_size = results.size();
         if (result_size > 0) {
-        address_array = new ItemImages[result_size];    
-        for(int i = 0; i < result_size; i++){
-            ItemImages a_array = (ItemImages) results.get(i);
-            address_array[i] = new ItemImages(a_array.getId(),a_array.getBorrowerId(), a_array.getLenderId(), a_array.getImageContentType(), 
-                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(), 
-                        a_array.getDateUpdated(),a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId());
-        }
+            address_array = new ItemImages[result_size];
+            for (int i = 0; i < result_size; i++) {
+                ItemImages a_array = (ItemImages) results.get(i);
+                address_array[i] = new ItemImages(a_array.getId(), a_array.getBorrowerId(), a_array.getLenderId(), a_array.getImageContentType(),
+                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
+                        a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId());
+            }
         } else {
 //           Addresses create_record;    return the record with max id
 //           Session hib = hib_session();
@@ -140,13 +160,14 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 //            create_record = (Addresses) c.uniqueResult();
             String tmp_id = UUID.randomUUID().toString();
             //// Need to check not dup..
-            address_array = new ItemImages[1];                
-            address_array[0]= new ItemImages(tmp_id);
-                   
+            address_array = new ItemImages[1];
+            address_array[0] = new ItemImages(tmp_id);
+
         }
         return address_array;
-        
+
     }
+
     /**
      * @return the userId
      */
@@ -197,7 +218,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param displayBorrowerOrganizationName the displayBorrowerOrganizationName to set
+     * @param displayBorrowerOrganizationName the
+     * displayBorrowerOrganizationName to set
      */
     public void setDisplayBorrowerOrganizationName(int displayBorrowerOrganizationName) {
         this.displayBorrowerOrganizationName = displayBorrowerOrganizationName;
@@ -365,7 +387,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param publicDisplayAlternativePhone the publicDisplayAlternativePhone to set
+     * @param publicDisplayAlternativePhone the publicDisplayAlternativePhone to
+     * set
      */
     public void setPublicDisplayAlternativePhone(Integer publicDisplayAlternativePhone) {
         this.publicDisplayAlternativePhone = publicDisplayAlternativePhone;
@@ -449,7 +472,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param borrowerContactByAlternativePhone the borrowerContactByAlternativePhone to set
+     * @param borrowerContactByAlternativePhone the
+     * borrowerContactByAlternativePhone to set
      */
     public void setBorrowerContactByAlternativePhone(Integer borrowerContactByAlternativePhone) {
         this.borrowerContactByAlternativePhone = borrowerContactByAlternativePhone;
@@ -519,7 +543,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param borrowerContactByOtherSocialMedia the borrowerContactByOtherSocialMedia to set
+     * @param borrowerContactByOtherSocialMedia the
+     * borrowerContactByOtherSocialMedia to set
      */
     public void setBorrowerContactByOtherSocialMedia(String borrowerContactByOtherSocialMedia) {
         this.borrowerContactByOtherSocialMedia = borrowerContactByOtherSocialMedia;
@@ -533,7 +558,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param borrowerContactByOtherSocialMediaAccess the borrowerContactByOtherSocialMediaAccess to set
+     * @param borrowerContactByOtherSocialMediaAccess the
+     * borrowerContactByOtherSocialMediaAccess to set
      */
     public void setBorrowerContactByOtherSocialMediaAccess(String borrowerContactByOtherSocialMediaAccess) {
         this.borrowerContactByOtherSocialMediaAccess = borrowerContactByOtherSocialMediaAccess;
@@ -813,12 +839,11 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param displayBorrowerAlternativeAddress the displayBorrowerAlternativeAddress to set
+     * @param displayBorrowerAlternativeAddress the
+     * displayBorrowerAlternativeAddress to set
      */
     public void setDisplayBorrowerAlternativeAddress(int displayBorrowerAlternativeAddress) {
         this.displayBorrowerAlternativeAddress = displayBorrowerAlternativeAddress;
     }
-    
-    
 
 }
