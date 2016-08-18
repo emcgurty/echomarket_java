@@ -1035,13 +1035,5 @@ function whichSaveMenu(whichSave) {
     return false;
 }
 
-//function selectcontactDescribeIdChanged(thing) {
-//        alert("dc");
-//        var contact_describe_id_str = $("select#rb:contactDescribeId option:selected").text();
-//        alert(contact_describe_id_str);
-//        if (contact_describe_id_str != "Please select") {
-//         $("span#contactDescribeId").html(contact_describe_id_str);
-//        }
-//    }
 
 
