@@ -6,6 +6,23 @@ jQuery(document).ready(function ($) {
     $(window).resize(function () {
         size_of_menu();
     });
+    $('select').on('change', function () {
+
+        var select_value = this.value;
+        alert(select_value);
+//        On databse all 'Please select' have value -2
+        if (select_value == "-2") {
+
+            var select_id = this.id;
+            select_id = select_id.replace('rb:', '');
+            $("span#" + select_id).css("visibility", "visible");
+            $("span#" + select_id).text("Please make a selection.");
+        } else {
+            $("span#" + select_id).css("visibility", "hidden");
+            $("span#" + select_id).text("");
+        }
+
+    });
     function readURL(input) {
 
         if (input.files && input.files[0]) {
@@ -26,7 +43,7 @@ jQuery(document).ready(function ($) {
 //        
 //        if ((y_n == 1) && ($("#organization_name").val() == "")) {
 //            $("span#organization_name_error").text("Please provide an organization name.");
-//            $("span#organization_name_error").css("visibility", "visible");
+//            $("span#organization_name_error"))text("Please provide an organization name.");    
 //        } else {
 //            $("span#organization_name_error").text("");
 //            $("span#organization_name_error").css("visibility", "hidden");
@@ -37,6 +54,30 @@ jQuery(document).ready(function ($) {
     $("#displayBorrowerOrganizationName").change(function () {
         makeorgright();
     });
+//    $("select#contactDescribeId").change(function () {
+//        alert("dc");
+//
+//        var contact_describe_id_str = $("select#contactDescribeId option:selected").text();
+//         if (contact_describe_id_str != "Please select") {
+//
+//            $("span#contactDescribeId").html(contact_describe_id_str);
+//
+//        }
+//    });
+//    
+
+
+
+
+
+
+
+
+
+
+
+
+
     $("input[name='borrower[displayBorrowerAddress]']").bind('change', function () {
         var y_n = $("input[name='borrower[displayBorrowerAddress]']:checked").val();
         if (y_n == 1) {
@@ -301,25 +342,7 @@ jQuery(document).ready(function ($) {
 
 //item_registration:contact_describe_id
 //
-//    $("select#contact_describe_id").bind('change', function () {
-//        alert("dc");
-//
-//        var contact_describe_id_str = $("select#contact_describe_id option:selected").text();
-//        if (contact_describe_id_str == "Other") {
-//            $("div#other_describe_yourself").css("display", "inline");
-//            $("span#contact_describe_id").html(contact_describe_id_str);
-//        } else {
-//            $("div#other_describe_yourself").css("display", "none");
-//            $("#other_describe_yourself").val("");
-//
-//        }
-//        if (contact_describe_id_str != "Please select") {
-//
-//            $("span#contact_describe_id").html(contact_describe_id_str);
-//
-//        }
-//    });
-//    $("select#contact_describe_id").trigger('change');
+
 //
 //    $("input[name='borrower[contact_by_email]']").bind('change', function () {
 //        $("span#email2_contact_error").css("visibility", "hidden");
@@ -738,7 +761,6 @@ function showFormContact() {
     hideAllBFormHrefs();
     $("li[id^=tab_item_1]").css("display", "block");
     whichSaveMenu(1);
-
     $("#form_contact_information").css("display", "block");
     return false;
 }
@@ -956,9 +978,7 @@ function showReview() {
     $("li[id^=tab_item_]").css("display", "block");
     $("div[class=contact_information]").css("display", "block");
     $("div[id^=menu_item_]").css("display", "none");
-
     return false;
-
 }
 
 function size_of_menu() {
@@ -973,9 +993,6 @@ function size_of_menu() {
     var fur = $("div#form_user_registration").css("width");
     var uli = $("div#user_login");
     var flog = $("div#form_login.top").css("width");
-
-
-
     if (bmw) {
 //        alert("b");
         $("div.borrower_registration").css("width", bmw);
@@ -987,16 +1004,13 @@ function size_of_menu() {
 //        alert("l");
         $("div.lender_registration").css("width", lmw);
         $("div.application_footer").css("width", lmw);
-
     } else if (fur) {
 //        alert("f");
         $("div.application_footer").css("width", fur);
-
     } else if (uli) {
 //        alert("f");
         $("div.application_footer").css("width", fur);
-
-    } else if (flog){
+    } else if (flog) {
         $("div.application_footer").css("width", flog);
     }
 
@@ -1019,9 +1033,15 @@ function whichSaveMenu(whichSave) {
 //        $("li#save_later").css("display", "none");
 //    }
     return false;
-
 }
 
-
+//function selectcontactDescribeIdChanged(thing) {
+//        alert("dc");
+//        var contact_describe_id_str = $("select#rb:contactDescribeId option:selected").text();
+//        alert(contact_describe_id_str);
+//        if (contact_describe_id_str != "Please select") {
+//         $("span#contactDescribeId").html(contact_describe_id_str);
+//        }
+//    }
 
 
