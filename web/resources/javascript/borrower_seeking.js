@@ -6,9 +6,9 @@ jQuery(document).ready(function ($) {
     $(window).resize(function () {
         size_of_menu();
     });
-    
+
     function validateSelects(input) {
-        
+        alert(input.id);
         var returnResult = false;
         var select_value = input.value;
         var select_id = input.id;
@@ -31,15 +31,14 @@ jQuery(document).ready(function ($) {
             returnResult = true
         }
         return returnResult;
-        
+
     }
-    
+
+
     $('select').on('change', function () {
         validateSelects(this);
-        
     });
-    
-    
+
     function readURL(input) {
 
         if (input.files && input.files[0]) {
@@ -858,12 +857,14 @@ function showBorrowersContactPreferences() {
      //    if (true) {  */
 
 
-
-    hideAllBFormHrefs();
-    $("li#tab_item_1").css("display", "block");
-    $("li#tab_item_2").css("display", "block");
-    whichSaveMenu(1);
-    $("#form_borrower_preference").css("display", "block");
+    var returnResult = ValidateOtherDescription();
+    if (returnResult == true) {
+        hideAllBFormHrefs();
+        $("li#tab_item_1").css("display", "block");
+        $("li#tab_item_2").css("display", "block");
+        whichSaveMenu(1);
+        $("#form_borrower_preference").css("display", "block");
+    }
     return false;
 }
 
@@ -1052,5 +1053,17 @@ function whichSaveMenu(whichSave) {
     return false;
 }
 
+function ValidateOtherDescription() {
+    var returnValue = true;
+    var cdi = $("#contactDescribeId").value;
+    var ocdi = $("input#otherDescribeYourself").text;
 
+    if ((cdi == '100') && (ocdi == null)) {
 
+        $("span#otherDescribeYourself").css("visibility", "visible");
+        $("span#otherDescribeYourself").text("Please provide an 'Other' description");
+        returnValue = false;
+    }
+
+    return returnValue;
+}

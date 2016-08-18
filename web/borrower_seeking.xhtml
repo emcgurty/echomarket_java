@@ -27,8 +27,11 @@
                             infoStyle="color: blue"/>
             </div>
             <h:inputSecret id="is_active" value="1"   style="display:none;" />
+            <h:inputSecret id="approved" value="1"   style="display:none;" />
             <h:inputSecret id="user_id" value="#{bb.userId}" style="display:none;" />
 
+            <input type="button" onclick="ValidateOtherDescription();"
+            
             <div id="borrower_registration" class="borrower_registration" >
 
                 <div id="form_contact_information" class="contact_information" >
@@ -56,22 +59,23 @@
                         <div style="float:left;margin-left:25px">
                             <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" >
                                 <br />
-                                <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}"  >
+                                <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}" >
 
                                     <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
-                                                   var="c" itemValue="#{c.id}" itemLabel="#{c.borrowerOrLenderText}"  />   
+                                                   var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
                                     <f:ajax event="change" execute="@this"   render="otherDescribeYourselfText" />
                                 </h:selectOneMenu>
                             </h:outputLabel>
                             <h:message styleClass="error-message" for="contact_describe_id"/>
-                        </div>
+                            <span class="error-message" id="contactDescribeId" ></span>
+                             </div>
 
                         <h:panelGroup id="otherDescribeYourselfText"  >    
-                            <h:outputLabel  value="Please provide an 'Other' description:" for="other_describe_yourself"   rendered="#{bb.contactDescribeId eq '16'}"  style="margin-left:25px">
-                                <br />
-                                <h:inputText id="other_describe_yourself" value="#{bb.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"> 
+                            <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"   rendered="#{bb.contactDescribeId eq '100'}"  style="margin-left:25px">
+                                <h:inputText id="otherDescribeYourself" value="#{bb.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"> 
                                 </h:inputText>
                             </h:outputLabel>
+                            <span class="error-message" id="otherDescribeYourself" ></span>
                         </h:panelGroup>
                     </div>
 
@@ -108,7 +112,7 @@
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
 
                         <div style="margin-left: 25px;float:left">
-                            <h:outputLabel value="First Name:" for="firstName" ><span class="required_fields">*</span>
+                            <h:outputLabel value="First Name:" for="firstName" ><span id="firstName" class="required_fields">*</span>
                                 <br />
                                 <h:inputText  id="firstName" value="#{bb.firstName}"  required="yes" requiredMessage="#{bundle.RegFirstName}" maxlength="24" size="24"  />
 
@@ -121,7 +125,7 @@
                             </h:outputLabel>
                         </div>
                         <div style="margin-left: 25px;float:left">
-                            <h:outputLabel value="Last Name:"  for="lastName" ><span class="required_fields">*</span>
+                            <h:outputLabel value="Last Name:"  for="lastName" ><span id="lastName" class="required_fields">*</span>
                                 <br />
                                 <h:inputText  id="lastName" value="#{bb.lastName}" required="yes" requiredMessage="#{bundle.RegFirstName}" maxlength="24" size="24" />
                             </h:outputLabel>
@@ -152,7 +156,7 @@
                                     <table >
                                         <tr>
                                             <td>
-                                                <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span class="required_fields">*</span>
+                                                <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
                                                 <h:inputText id="addressLine1" value="#{pa.addressLine1}"
                                                              required="true" requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left: 5px;">
                                                 </h:inputText>
@@ -166,7 +170,7 @@
                                         </tr> 
                                         <tr>
                                             <td>
-                                                <h:outputLabel for="city" value="#{bundle.City}"/><span class="required_fields">*</span>
+                                                <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
                                                 <h:inputText id="city" value="#{pa.city}"
                                                              required="true" requiredMessage="#{bundle.ReqCity}" style="margin-left: 5px;">
                                                 </h:inputText>
@@ -182,6 +186,7 @@
                                                     </f:selectItems>    
                                                 </h:selectOneMenu>
                                                 <h:message styleClass="error-message" for="usStates"/>
+                                                <span class="error-message" id="usStates" ></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -198,7 +203,7 @@
                                         </tr>
                                         <tr >
                                             <td >
-                                                <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span class="required_fields">*</span>
+                                                <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
                                                 <h:inputText id="postalCode" value="#{pa.postalCode}" 
                                                              required="true" requiredMessage="#{bundle.ReqPostalCode}" style="margin-left: 5px;">
                                                 </h:inputText>
@@ -213,6 +218,7 @@
                                                     </f:selectItems>    
                                                 </h:selectOneMenu>
                                                 <h:message styleClass="error-message" for="countryID"/>
+                                                 <span class="error-message" id="countryId" ></span>
                                             </td>
                                         </tr>
 
@@ -251,7 +257,7 @@
                                 <tr class="odd">
                                     <td style="width:33%;">
                                         <h:outputLabel  for="homePhone"  value="Home Phone:" >
-                                            <h:inputText  id="homePhone"  value="#{bb.homePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                            <h:inputText  id="homePhone"  value="#{bb.homePhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
                                         </h:outputLabel>
                                         <div style="float:left" >
                                             <h:outputLabel value="Allow public to see your Home Phone Number?"  for="publicDisplayHomePhone" >
@@ -391,6 +397,7 @@
                                                         </f:selectItems>    
                                                     </h:selectOneMenu>
                                                     <h:message styleClass="error-message" for="usStates"/>
+                                                    <span class="error-message" id="usStates" ></span>
                                                 </td>
                                             </tr>
 
@@ -423,6 +430,7 @@
                                                         </f:selectItems>    
                                                     </h:selectOneMenu>
                                                     <h:message styleClass="error-message" for="countryID"/>
+                                                    <span class="error-message" id="countryID" ></span>
                                                 </td>
                                             </tr>
 
