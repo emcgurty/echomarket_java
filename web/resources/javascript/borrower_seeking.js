@@ -6,23 +6,40 @@ jQuery(document).ready(function ($) {
     $(window).resize(function () {
         size_of_menu();
     });
-    $('select').on('change', function () {
-
-        var select_value = this.value;
-        alert(select_value);
-//        On databse all 'Please select' have value -2
+    
+    function validateSelects(input) {
+        
+        var returnResult = false;
+        var select_value = input.value;
+        var select_id = input.id;
+        select_id = select_id.replace('rb:', '');
+        //alert(select_value);
+//        On database all 'Please select' have value -2
         if (select_value == "-2") {
 
-            var select_id = this.id;
-            select_id = select_id.replace('rb:', '');
+            var lastColon = select_id.lastIndexOf(":");
+            // alert(lastColon);
+            var lengthOfSelectId = select_id.length;
+            //alert(lengthOfSelectId);
+            var select_id = select_id.substring(lastColon + 1, lengthOfSelectId);
+            //alert(select_id);
             $("span#" + select_id).css("visibility", "visible");
             $("span#" + select_id).text("Please make a selection.");
         } else {
             $("span#" + select_id).css("visibility", "hidden");
             $("span#" + select_id).text("");
+            returnResult = true
         }
-
+        return returnResult;
+        
+    }
+    
+    $('select').on('change', function () {
+        validateSelects(this);
+        
     });
+    
+    
     function readURL(input) {
 
         if (input.files && input.files[0]) {
