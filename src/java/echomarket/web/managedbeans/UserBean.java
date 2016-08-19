@@ -18,6 +18,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -255,6 +256,7 @@ public class UserBean extends AbstractBean implements Serializable {
         hib = null;
         tx = null;
         results = null;
+        setSessionVariables();
         if (getp == true) {
             message(
                     null,
@@ -580,5 +582,13 @@ public class UserBean extends AbstractBean implements Serializable {
     public void setAppEmail(String appEmail) {
         this.appEmail = appEmail;
     }
+    
+    private void setSessionVariables() {
+         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "user_id", getId()); 
+         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "user_alias", getUserAlias()); 
+         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "user_type", getUserType()); 
+         //LOGGER.debug(""+FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id"));
+    }
+        
 
 }
