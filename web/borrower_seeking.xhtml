@@ -28,9 +28,6 @@
             </div>
             <h:inputSecret id="is_active" value="1"   style="display:none;" />
             <h:inputSecret id="approved" value="1"   style="display:none;" />
-            <h:inputSecret id="user_id" value="#{bb.userId}" style="display:none;" />
-
-            <input type="button" onclick="ValidateOtherDescription();"
             
             <div id="borrower_registration" class="borrower_registration" >
 
@@ -58,25 +55,25 @@
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="float:left;margin-left:25px">
                             <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" >
-                                <br />
-                                <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}" >
+                               <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}" >
 
                                     <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
                                                    var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
-                                    <f:ajax event="change" execute="@this"   render="otherDescribeYourselfText" />
-                                </h:selectOneMenu>
+                                    </h:selectOneMenu>
                             </h:outputLabel>
-                            <h:message styleClass="error-message" for="contact_describe_id"/>
+                            <h:message styleClass="error-message" for="contactDescribeId"/>
                             <span class="error-message" id="contactDescribeId" ></span>
                              </div>
 
-                        <h:panelGroup id="otherDescribeYourselfText"  >    
-                            <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"   rendered="#{bb.contactDescribeId eq '100'}"  style="margin-left:25px">
-                                <h:inputText id="otherDescribeYourself" value="#{bb.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"> 
+                        <div id="otherDescribeYourselfText"  style="visibility: hidden;">    
+                            <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"  style="margin-left:25px">
+                                <h:inputText id="otherDescribeYourself" value="#{bb.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24" > 
                                 </h:inputText>
                             </h:outputLabel>
+                            <h:message styleClass="error-message" for="otherDescribeYourself"/>
                             <span class="error-message" id="otherDescribeYourself" ></span>
-                        </h:panelGroup>
+                            
+                        </div>
                     </div>
 
 
@@ -115,7 +112,6 @@
                             <h:outputLabel value="First Name:" for="firstName" ><span id="firstName" class="required_fields">*</span>
                                 <br />
                                 <h:inputText  id="firstName" value="#{bb.firstName}"  required="yes" requiredMessage="#{bundle.RegFirstName}" maxlength="24" size="24"  />
-
                             </h:outputLabel>
                         </div>
                         <div style="margin-left: 25px;float:left">
