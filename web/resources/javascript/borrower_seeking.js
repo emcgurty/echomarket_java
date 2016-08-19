@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
         select_id = select_id.replace('rb:', '');
         //alert(select_value);
 //        On database all 'Please select' have value -2
-        if (select_value == "-2") {
+        if (select_value == '-2') {
 
             var lastColon = select_id.lastIndexOf(":");
             // alert(lastColon);
@@ -30,9 +30,29 @@ jQuery(document).ready(function ($) {
             $("span#" + select_id).text("");
             returnResult = true
         }
+
+        if ((select_id == 'contactDescribeId') && (select_value == '100')) {
+//            Added this becuase rendered object are not retained in posting
+            $("div#otherDescribeYourselfText").css("visibility", "visible");
+        } else {
+            $("input#otherDescribeYourself").html("");
+            $("div#otherDescribeYourselfText").css("visibility", "hidden");
+           
+            
+        }
+
+
         return returnResult;
 
     }
+
+
+    $('input').on('change', function () {
+        alert(this.id);
+        if (this.id == 'rb:_otherDescribeYourself') {
+            alert("_otherDescribeYourself");
+        }
+    });
 
 
     $('select').on('change', function () {
