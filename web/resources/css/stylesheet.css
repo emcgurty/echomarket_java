@@ -70,8 +70,6 @@ div#box a {
 
 }
 
-
-
 div.application_footer p {
     margin: 0;
     background: white;
@@ -81,7 +79,6 @@ div.application_footer p {
     margin-right: -50%;
     transform: translate(-50%, -50%) 
 }
-
 
 div.contact_information {
     position: relative;
