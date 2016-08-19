@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -22,11 +23,14 @@ import org.hibernate.Transaction;
 @RequestScoped
 public class BorrowersBean extends AbstractBean implements Serializable {
 
-
     private String userId;
+    //private String user_type;
+    private String user_alias;
     private int contactDescribeId;
+
     private String organizationName;
     private int displayBorrowerOrganizationName;
+
     private String otherDescribeYourself;
     private String firstName;
     private String mi;
@@ -71,19 +75,15 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String remoteIp;
     private String comment;
     private String advertiserId;
-    
+
 //  public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
-    
     private static ArrayList<Addresses> primary
             = new ArrayList<Addresses>(Arrays.asList(
-                    
-                    new Addresses(UUID.randomUUID().toString(), null, null, null, null, null,null, null, null, null, null, "primary")
-            
-            
+                    new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "primary")
             ));
 
     private static ArrayList<Addresses> alternative
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(),  null, null, null, null, null,null, null, null, null, null, "alternative")));
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "alternative")));
 
     public ArrayList<Addresses> getPrimary() {
         return primary;
@@ -107,21 +107,63 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         alternative = aAlternative;
     }
 
-
-
     public String saveBorrowerRegistration() {
-        
-        //  For the moment I do not want to set up HIbernate for table associations.  Instead used ArrayList, which is working fine.  Get return of properties
-        // Test here
-        String asdssd = getItemModel();
+
+        this.userId = getUserId();
+        this.contactDescribeId = getContactDescribeId();
+        this.otherDescribeYourself = getOtherDescribeYourself();
+        this.organizationName = getOrganizationName();
+        this.displayBorrowerOrganizationName = getDisplayBorrowerOrganizationName();
+
+        this.firstName = getFirstName();
+        this.mi = getMi();
+        this.lastName = getLastName();
+
+        this.displayBorrowerName = getDisplayBorrowerName();
+        this.displayBorrowerAddress = getDisplayBorrowerAddress();
+        this.homePhone = getHomePhone();
+        this.cellPhone = getCellPhone();
+        this.alternativePhone = getAlternativePhone();
+        this.publicDisplayHomePhone = getPublicDisplayHomePhone();
+        this.publicDisplayCellPhone = getPublicDisplayCellPhone();
+        this.publicDisplayAlternativePhone = getPublicDisplayAlternativePhone();
+        this.useWhichContactAddress = getUseWhichContactAddress();
+        this.emailAlternative = getEmailAlternative();
+        this.borrowerContactByEmail = getBorrowerContactByEmail();
+        this.borrowerContactByHomePhone = getBorrowerContactByHomePhone();
+        this.borrowerContactByCellPhone = getBorrowerContactByCellPhone();
+        this.borrowerContactByAlternativePhone = getBorrowerContactByAlternativePhone();
+        this.borrowerContactByFacebook = getBorrowerContactByFacebook();
+        this.borrowerContactByTwitter = getBorrowerContactByTwitter();
+        this.borrowerContactByInstagram = getBorrowerContactByInstagram();
+        this.borrowerContactByLinkedIn = getBorrowerContactByLinkedIn();
+        this.borrowerContactByOtherSocialMedia = getBorrowerContactByOtherSocialMedia();
+        this.borrowerContactByOtherSocialMediaAccess = getBorrowerContactByOtherSocialMediaAccess();
+        this.categoryId = getCategoryId();
+        this.otherItemCategory = getOtherItemCategory();
+        this.itemModel = getItemModel();
+        this.itemDescription = getItemDescription();
+        this.itemConditionId = getItemConditionId();
+        this.itemCount = getItemCount();
+        this.goodwill = getGoodwill();
+        this.age18OrMore = getAge18OrMore();
+        this.isActive = getIsActive();
+        this.approved = getApproved();
+        this.notifyLenders = getNotifyLenders();
+        this.receiveLenderNotification = getReceiveLenderNotification();
+        this.isCommunity = getIsCommunity();
+        this.remoteIp = getRemoteIp();
+        this.comment = getComment();
+        this.advertiserId = getAdvertiserId();
+        this.displayBorrowerAlternativeAddress = getDisplayBorrowerAlternativeAddress();
+
         // Test here 
         List padrs = getPrimary();
         /// Begin Hiernate transaction... first to save Borroweer detail, then with borrower_id, save addresses
         //Session sb = hib_session();
         //Transaction tx = sb.beginTransaction();
-        
+
         //   Need to learn if I can pass ArrayList in creating new.  new Addresses adr = new Addresses(padrs);
-        
         message(
                 null,
                 "BorrowerRegistionRecordSaved",
@@ -130,7 +172,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return "index";
     }
 
-    
 // Need to eliminate this and perform same as done for addresses
     public ItemImages[] buildImageAccess() {
 
@@ -172,14 +213,23 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      * @return the userId
      */
     public String getUserId() {
-        return userId;
+
+        String returnString = null;
+        try {
+            returnString = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id").toString();
+        } catch (Exception e) {
+
+        }
+
+        return returnString;
     }
 
     /**
      * @param userId the userId to set
      */
     public void setUserId(String userId) {
-        this.userId = userId;
+        // Only during development
+        this.userId = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user_id", "LIZ").toString();
     }
 
     /**
@@ -844,6 +894,45 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      */
     public void setDisplayBorrowerAlternativeAddress(int displayBorrowerAlternativeAddress) {
         this.displayBorrowerAlternativeAddress = displayBorrowerAlternativeAddress;
+    }
+
+//    /**
+//     * @return the user_type
+//     */
+//    public String getUser_type() {
+//        String returnString = null;
+//        try {
+//            returnString = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_type").toString();
+//        } catch(Exception e) {}
+//        
+//         return returnString;
+//    }
+//
+//    /**
+//     * @param user_type the user_type to set
+//     */
+//    public void setUser_type(String user_type) {
+//        this.user_type = user_type;
+//    }
+    /**
+     * @return the user_alias
+     */
+    public String getUser_alias() {
+        String returnString = null;
+        try {
+            returnString = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_alias").toString();
+        } catch (Exception e) {
+        }
+
+        return returnString;
+    }
+
+    /**
+     * @param user_alias the user_alias to set
+     */
+    public void setUser_alias(String user_alias) {
+        //this.user_alias = user_alias;  Only during development
+        this.userId = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user_alias", "LIZ").toString();
     }
 
 }
