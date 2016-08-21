@@ -37,22 +37,12 @@ jQuery(document).ready(function ($) {
         } else {
             $("input#otherDescribeYourself").html("");
             $("div#otherDescribeYourselfText").css("visibility", "hidden");
-           
-            
-        }
 
+
+        }
 
         return returnResult;
-
     }
-
-
-    $('input').on('change', function () {
-        alert(this.id);
-        if (this.id == 'rb:_otherDescribeYourself') {
-            alert("_otherDescribeYourself");
-        }
-    });
 
 
     $('select').on('change', function () {
@@ -90,28 +80,6 @@ jQuery(document).ready(function ($) {
     $("#displayBorrowerOrganizationName").change(function () {
         makeorgright();
     });
-//    $("select#contactDescribeId").change(function () {
-//        alert("dc");
-//
-//        var contact_describe_id_str = $("select#contactDescribeId option:selected").text();
-//         if (contact_describe_id_str != "Please select") {
-//
-//            $("span#contactDescribeId").html(contact_describe_id_str);
-//
-//        }
-//    });
-//    
-
-
-
-
-
-
-
-
-
-
-
 
 
     $("input[name='borrower[displayBorrowerAddress]']").bind('change', function () {
@@ -134,6 +102,7 @@ jQuery(document).ready(function ($) {
 
     });
     $("input[name='borrower[displayBorrowerAddress]']").trigger('change');
+
     $("input[name='borrower[displayBorrowerName]']").bind('change', function () {
         var y_n = $("input[name='borrower[displayBorrowerName]']:checked").val();
         if (y_n == 1) {
@@ -152,6 +121,7 @@ jQuery(document).ready(function ($) {
 
     });
     $("input[name='borrower[displayBorrowerName]']").trigger('change');
+
     $("input[name='borrower[notify_lenders]']").bind('change', function () {
         var y_n = $("input[name='borrower[notify_lenders]']:checked").val();
         if (y_n == 1) {
@@ -598,13 +568,10 @@ jQuery(document).ready(function ($) {
 
 
 });
-var address1 = "";
-var address2 = "";
-var city = "";
-var province = "";
-var postal_code = "";
-var state_cmb = "";
-var country_cmb = "";
+
+
+
+
 function validateUseWhichBorrowerContactAddress() {
 //    var return_value = true;
 //
@@ -623,7 +590,7 @@ function validateUseWhichBorrowerContactAddress() {
 }
 
 function saveBAll() {
-
+    ValidateOtherDescription();
 //    alert("saveBall");
 //    return;
 //    var validContactInfo = validateContactPreferences();
@@ -697,15 +664,6 @@ function showConditions() {
     $("#form_conditions").css("display", "block");
     return false;
 }
-
-
-
-
-
-
-
-
-
 
 
 function validateBItem() {
@@ -1074,16 +1032,107 @@ function whichSaveMenu(whichSave) {
 }
 
 function ValidateOtherDescription() {
+
     var returnValue = true;
-    var cdi = $("#contactDescribeId").value;
-    var ocdi = $("input#otherDescribeYourself").text;
+    var foundComponent = 0;
+    var cdi = null;
+    var ocdi = null;
+    var firstName = null;
+    var lastName = null;
+    var addressLine1 = null;
+    var city = null;
+    var postalCode = null;
+    var countryId = null;
+
+    $("span").css("visibility", "hidden");
+
+    $("select").each(function () {
+
+        if (this.id == 'rb:contactDescribeId') {
+            cdi = this.value;
+            foundComponent++;
+//            Cheating here, eventailly need to parse for id
+        } else if (this.id == 'rb:primary:0:countryId') {
+            countryId = this.value;
+            alert(countryId);
+            foundComponent++;
+        } else if (foundComponent == 2) {
+            return false
+        } else {
+        }
+    });
+
+    foundComponent = 0;
+
+    $("input").each(function () {
+        if (this.id == 'rb:otherDescribeYourself') {
+            ocdi = this.text;
+            foundComponent++;
+        } else if (this.id == 'rb:firstName') {
+            firstName = this.text;
+            foundComponent++;
+        } else if (this.id == 'rb:lastName') {
+            lastName = this.text;
+            foundComponent++;
+        } else if (this.id == 'rb:addressLine1') {
+            addressLine1 = this.text;
+            foundComponent++;
+        } else if (this.id == 'rb:city') {
+            city = this.text;
+            foundComponent++;
+        } else if (this.id == 'rb:postalCode') {
+            postalCode = this.text;
+            foundComponent++;
+        } else {
+            foundComponent == 6;
+            return false;
+        }
+
+    });
 
     if ((cdi == '100') && (ocdi == null)) {
-
         $("span#otherDescribeYourself").css("visibility", "visible");
         $("span#otherDescribeYourself").text("Please provide an 'Other' description");
         returnValue = false;
     }
 
+    if (countryId == -2) {
+        $("span#countryId.error-message").css("visibility", "visible");
+        $("span#countryId.error-message").text("Please provide your Country");
+        returnValue = false;
+    }
+
+    if (firstName == null) {
+        $("span#firstName.error-message").css("visibility", "visible");
+        $("span#firstName.error-message").text("Please provide your First Name");
+        returnValue = false;
+    }
+
+    if (lastName == null) {
+        $("span#lastName.error-message").css("visibility", "visible");
+        $("span#lastName.error-message").text("Please provide your Last Name");
+        returnValue = false;
+    }
+
+    if (city == null) {
+        $("span#city.error-message").css("visibility", "visible");
+        $("span#city.error-message").text("Please provide your City");
+        returnValue = false;
+    }
+
+    if (postalCode == null) {
+        $("span#postalCode.error-message").css("visibility", "visible");
+        $("span#postalCode.error-message").text("Please provide your PostalCode");
+        returnValue = false;
+    }
+
+    if (addressLine1 == null) {
+        $("span#addressLine1.error-message").css("visibility", "visible");
+        $("span#addressLine1.error-message").text("Please provide your First Address Line");
+        returnValue = false;
+    }
+
     return returnValue;
 }
+
+  
