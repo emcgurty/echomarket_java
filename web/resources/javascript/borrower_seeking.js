@@ -8,7 +8,7 @@ jQuery(document).ready(function ($) {
     });
 
     function validateSelects(input) {
-        alert(input.id);
+        //alert(input.id);
         var returnResult = false;
         var select_value = input.value;
         var select_id = input.id;
@@ -589,50 +589,6 @@ function validateUseWhichBorrowerContactAddress() {
 //    return return_value;
 }
 
-function saveBAll() {
-    ValidateOtherDescription();
-//    alert("saveBall");
-//    return;
-//    var validContactInfo = validateContactPreferences();
-//
-//    var validItem = validateBItem();
-//
-//    var validContactAdress = validateUseWhichBorrowerContactAddress();
-//
-//    var validLegal = checkBLegal();
-//
-//    if (!(validContactInfo)) {
-//        showFormContact();
-//        return;
-//    }
-//
-//    if (!(validLegal)) {
-//        showBLegal();
-//
-//        return;
-//    }
-//
-//    if (!(validItem)) {
-//        showItem();
-//
-//        return;
-//
-//    }
-//
-//    if (!(validContactAdress)) {
-//        alert("You have selected to provide an Alternative address with incomplete content.  Please go to '2. Your Borrowers Contact Preferences' to correct this matter.");
-//        $("span#whichContactAddressError").css("visibility", "visible");
-//        $("div#table_alternative_address_input").css("display", "block");
-//        location.href = "#menu_item_2";
-//        return;
-//    } else {
-//
-//        $("form.seeking").submit();
-//    }
-//
-//    return;
-}
-
 function showBLegal() {
     hideAllBFormHrefs();
     $("li#tab_item_1").css("display", "block");
@@ -792,50 +748,7 @@ function showItem() {
 
 function showBorrowersContactPreferences() {
 
-    /*
-     ////    var foundInvalid = validateContactPreferences();
-     //     var foundInvalid = true;
-     //
-     //    var home_phone_contact = $("#home_phone");
-     //    var cell_phone_contact = $("#cell_phone");
-     //    var alternative_phone_contact = $("#alternative_phone");
-     //
-     //    $("div#form_borrower_preference").css("display", "block");
-     //    $("div#byYourPhone").css("display", "block");
-     //    if ((home_phone_contact.val() == '') && (cell_phone_contact.val() == '') && (alternative_phone_contact.val() == '')) {
-     //        $("div#byYourPhone").css("display", "none");
-     //    } else {
-     //        $("div#byYourPhone").css("display", "block");
-     //    }
-     //
-     //    if (home_phone_contact.val() == '') {
-     //        $("div#displayHomePhoneContact").css("display", "none");
-     //        $("div#nodisplayHomePhoneContact").css("display", "block");
-     //    } else {
-     //        $("div#displayHomePhoneContact").css("display", "block");
-     //        $("div#nodisplayHomePhoneContact").css("display", "none");
-     //    }
-     //
-     //    if (cell_phone_contact.val() == '') {
-     //        $("div#displayCellPhoneContact").css("display", "none");
-     //        $("div#nodisplayCellPhoneContact").css("display", "block");
-     //    } else {
-     //        $("div#displayCellPhoneContact").css("display", "block");
-     //        $("div#nodisplayCellPhoneContact").css("display", "none");
-     //    }
-     //
-     //    if (alternative_phone_contact.val() == '') {
-     //        $("div#displayAlternativePhoneContact").css("display", "none");
-     //        $("div#nodisplayAlternativePhoneContact").css("display", "block");
-     //    } else {
-     //        $("div#displayAlternativePhoneContact").css("display", "block");
-     //        $("div#nodisplayAlternativePhoneContact").css("display", "none");
-     //
-     //    }
-     //    if (true) {  */
-
-
-    var returnResult = ValidateOtherDescription();
+    var returnResult = ValidateContactInformation();
     if (returnResult == true) {
         hideAllBFormHrefs();
         $("li#tab_item_1").css("display", "block");
@@ -1031,7 +944,7 @@ function whichSaveMenu(whichSave) {
     return false;
 }
 
-function ValidateOtherDescription() {
+function ValidateContactInformation() {
 
     var returnValue = true;
     var foundComponent = 0;
@@ -1054,7 +967,7 @@ function ValidateOtherDescription() {
 //            Cheating here, eventailly need to parse for id
         } else if (this.id == 'rb:primary:0:countryId') {
             countryId = this.value;
-            alert(countryId);
+            //alert(countryId);
             foundComponent++;
         } else if (foundComponent == 2) {
             return false
@@ -1066,25 +979,25 @@ function ValidateOtherDescription() {
 
     $("input").each(function () {
         if (this.id == 'rb:otherDescribeYourself') {
-            ocdi = this.text;
+            ocdi = this.value;
             foundComponent++;
         } else if (this.id == 'rb:firstName') {
-            firstName = this.text;
+            firstName = this.value;
             foundComponent++;
         } else if (this.id == 'rb:lastName') {
-            lastName = this.text;
+            lastName = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:addressLine1') {
-            addressLine1 = this.text;
+        } else if (this.id == 'rb:primary:0:addressLine1') {
+            addressLine1 = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:city') {
-            city = this.text;
+        } else if (this.id == 'rb:primary:0:city') {
+            city = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:postalCode') {
-            postalCode = this.text;
+        } else if (this.id == 'rb:primary:0:postalCode') {
+            postalCode = this.value;
             foundComponent++;
-        } else {
-            foundComponent == 6;
+        } else if (foundComponent == 6) {
+            //alert(foundComponent);
             return false;
         }
 
@@ -1094,6 +1007,11 @@ function ValidateOtherDescription() {
         $("span#otherDescribeYourself").css("visibility", "visible");
         $("span#otherDescribeYourself").text("Please provide an 'Other' description");
         returnValue = false;
+    } else if ((cdi == '-2') && (ocdi == null)) {
+        $("span#contactDescribeId").css("visibility", "visible");
+        $("span#contactDescribeId").text("Please make a selection");
+        returnValue = false;
+
     }
 
     if (countryId == -2) {
@@ -1102,31 +1020,31 @@ function ValidateOtherDescription() {
         returnValue = false;
     }
 
-    if (firstName == null) {
+    if (firstName == '') {
         $("span#firstName.error-message").css("visibility", "visible");
         $("span#firstName.error-message").text("Please provide your First Name");
         returnValue = false;
     }
 
-    if (lastName == null) {
+    if (lastName == '') {
         $("span#lastName.error-message").css("visibility", "visible");
         $("span#lastName.error-message").text("Please provide your Last Name");
         returnValue = false;
     }
 
-    if (city == null) {
+    if (city == '') {
         $("span#city.error-message").css("visibility", "visible");
         $("span#city.error-message").text("Please provide your City");
         returnValue = false;
     }
 
-    if (postalCode == null) {
+    if (postalCode == '') {
         $("span#postalCode.error-message").css("visibility", "visible");
         $("span#postalCode.error-message").text("Please provide your PostalCode");
         returnValue = false;
     }
 
-    if (addressLine1 == null) {
+    if (addressLine1 == '') {
         $("span#addressLine1.error-message").css("visibility", "visible");
         $("span#addressLine1.error-message").text("Please provide your First Address Line");
         returnValue = false;
