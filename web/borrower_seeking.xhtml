@@ -28,7 +28,7 @@
             </div>
             <h:inputSecret id="is_active" value="1"   style="display:none;" />
             <h:inputSecret id="approved" value="1"   style="display:none;" />
-            
+
             <div id="borrower_registration" class="borrower_registration" >
 
                 <div id="form_contact_information" class="contact_information" >
@@ -37,6 +37,7 @@
                         <div style="margin:10px;margin-top:25px;" >
                             <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
                             <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                            <a onclick="saveBAll();" style="color:crimson;font-style:italic"  >Let's Save!</a>
                         </div> 
                     </div> 
 
@@ -55,15 +56,15 @@
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="float:left;margin-left:25px">
                             <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" >
-                               <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}" >
+                                <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}" >
 
                                     <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
                                                    var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
-                                    </h:selectOneMenu>
+                                </h:selectOneMenu>
                             </h:outputLabel>
                             <h:message styleClass="error-message" for="contactDescribeId"/>
                             <span class="error-message" id="contactDescribeId" ></span>
-                             </div>
+                        </div>
 
                         <div id="otherDescribeYourselfText"  style="visibility: hidden;">    
                             <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"  style="margin-left:25px">
@@ -72,7 +73,7 @@
                             </h:outputLabel>
                             <h:message styleClass="error-message" for="otherDescribeYourself"/>
                             <span class="error-message" id="otherDescribeYourself" ></span>
-                            
+
                         </div>
                     </div>
 
@@ -111,8 +112,10 @@
                         <div style="margin-left: 25px;float:left">
                             <h:outputLabel value="First Name:" for="firstName" ><span id="firstName" class="required_fields">*</span>
                                 <br />
-                                <h:inputText  id="firstName" value="#{bb.firstName}"  required="yes" requiredMessage="#{bundle.RegFirstName}" maxlength="24" size="24"  />
+                                <h:inputText  id="firstName" value="#{bb.firstName}"  maxlength="24" size="24"  />
+
                             </h:outputLabel>
+                            <span class="error-message" id="firstName" ></span>
                         </div>
                         <div style="margin-left: 25px;float:left">
                             <h:outputLabel value="Middle Initial:"  for="mi" >
@@ -123,8 +126,10 @@
                         <div style="margin-left: 25px;float:left">
                             <h:outputLabel value="Last Name:"  for="lastName" ><span id="lastName" class="required_fields">*</span>
                                 <br />
-                                <h:inputText  id="lastName" value="#{bb.lastName}" required="yes" requiredMessage="#{bundle.RegFirstName}" maxlength="24" size="24" />
+                                <h:inputText  id="lastName" value="#{bb.lastName}" maxlength="24" size="24" />
+
                             </h:outputLabel>
+                            <span class="error-message" id="lastName" ></span>
                         </div>
 
                         <div style="margin-left: 25px;float:left">
@@ -154,9 +159,9 @@
                                             <td>
                                                 <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
                                                 <h:inputText id="addressLine1" value="#{pa.addressLine1}"
-                                                             required="true" requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left: 5px;">
+                                                             style="margin-left: 5px;">
                                                 </h:inputText>
-                                                <h:message styleClass="error-message" for="addressLine1"/>
+                                                <span class="error-message" id="addressLine1" ></span>
                                             </td>
                                             <td>
                                                 <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
@@ -168,9 +173,9 @@
                                             <td>
                                                 <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
                                                 <h:inputText id="city" value="#{pa.city}"
-                                                             required="true" requiredMessage="#{bundle.ReqCity}" style="margin-left: 5px;">
+                                                             style="margin-left: 5px;">
                                                 </h:inputText>
-                                                <h:message styleClass="error-message" for="city"/>
+                                                <span class="error-message" id="city" ></span>
                                             </td>
                                             <td>
                                                 <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
@@ -201,9 +206,9 @@
                                             <td >
                                                 <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
                                                 <h:inputText id="postalCode" value="#{pa.postalCode}" 
-                                                             required="true" requiredMessage="#{bundle.ReqPostalCode}" style="margin-left: 5px;">
+                                                             style="margin-left: 5px;">
                                                 </h:inputText>
-                                                <h:message styleClass="error-message" for="postalCode"/>
+                                                <span class="error-message" id="postalCode" ></span>
                                             </td>
                                             <td >
                                                 <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
@@ -213,8 +218,7 @@
                                                                    var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                                                     </f:selectItems>    
                                                 </h:selectOneMenu>
-                                                <h:message styleClass="error-message" for="countryID"/>
-                                                 <span class="error-message" id="countryId" ></span>
+                                                <span class="error-message" id="countryId" ></span>
                                             </td>
                                         </tr>
 
