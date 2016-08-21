@@ -49,6 +49,17 @@ jQuery(document).ready(function ($) {
         validateSelects(this);
     });
 
+
+    $("input[id='WhichContactAddress']").change(function () {
+        var use_which_ca = $("this:checked").val();
+        if ((use_which_ca == 1) || (use_which_ca == 2)) {
+            alert("use_which_ca");
+        }
+
+    });
+
+
+
     function readURL(input) {
 
         if (input.files && input.files[0]) {
@@ -82,248 +93,248 @@ jQuery(document).ready(function ($) {
     });
 
 
-    $("input[name='borrower[displayBorrowerAddress]']").bind('change', function () {
-        var y_n = $("input[name='borrower[displayBorrowerAddress]']:checked").val();
-        if (y_n == 1) {
-            if (
-                    ($(".borrower.primary.address_line_1").val() == "") ||
-                    ($(".borrower.primary.postal_code").val() == "") ||
-                    ($(".borrower.primary.city").val() == "") ||
-                    ($(".borrower.primary.country_id option:selected").text() == "Please select")
-                    ) {
-
-                $("span#display_address_error").text("Please provide a complete address.");
-                $("span#display_address_error").css("visibility", "visible");
-            } else {
-                $("span#display_address_error").text("");
-                $("span#display_address_error").css("visibility", "hidden");
-            }
-        }
-
-    });
-    $("input[name='borrower[displayBorrowerAddress]']").trigger('change');
-
-    $("input[name='borrower[displayBorrowerName]']").bind('change', function () {
-        var y_n = $("input[name='borrower[displayBorrowerName]']:checked").val();
-        if (y_n == 1) {
-            if (
-                    ($("#first_name").val() == "") ||
-                    ($("#last_name").val() == "")
-                    ) {
-
-                $("span#public_display_name_error").text("Please provide a complete name.");
-                $("span#public_display_name_error").css("visibility", "visible");
-            } else {
-                $("span#public_display_name_error").text("");
-                $("span#public_display_name_error").css("visibility", "hidden");
-            }
-        }
-
-    });
-    $("input[name='borrower[displayBorrowerName]']").trigger('change');
-
-    $("input[name='borrower[notify_lenders]']").bind('change', function () {
-        var y_n = $("input[name='borrower[notify_lenders]']:checked").val();
-        if (y_n == 1) {
-            $("span#category_notification_selection").text("Yes");
-        } else if (y_n == 0) {
-            $("span#category_notification_selection").text("No");
-        }
-    });
-    $("input[name='borrower[notify_lenders]']").trigger('change');
-    $("#age_18_or_more").bind('change', function () {
-        var is_c = $("#age_18_or_more").is(':checked');
-        if (is_c == true) {
-            $("span#18_selection").html("Yes");
-        } else if (is_c == false) {
-            $("span#18_selection").html("No");
-        }
-
-    });
-    $("#age_18_or_more").trigger('change');
-    $("#goodwill").bind('change', function () {
-        var is_c = $("#goodwill").is(':checked');
-        if (is_c == true) {
-            $("span#goodwill_selection").html("Yes");
-        } else if (is_c == false) {
-            $("span#goodwill_selection").html("No");
-        }
-
-    });
-    $("#goodwill").trigger('change');
-    $("#contact_by_home_phone").bind('change', function () {
-        if ($("#contact_by_home_phone").is(':checked')) {
-            $("span#home_phone_contact_permission_selection").html("Yes");
-        } else {
-            $("span#home_phone_contact_permission_selection").html("No");
-        }
-
-    });
-    $("#contact_by_home_phone").trigger('change');
-    $("#contact_by_cell_phone").bind('change', function () {
-        if ($("#contact_by_cell_phone").is(':checked')) {
-            $("span#cell_phone_contact_permission_selection").html("Yes");
-        } else {
-            $("span#cell_phone_contact_permission_selection").html("No");
-        }
-    });
-    $("#contact_by_cell_phone").trigger('change');
-    $("#contact_by_alternative_phone").bind('change', function () {
-        if ($("#contact_by_alternative_phone").is(':checked')) {
-            $("span#alternative_phone_contact_permission_selection").html("Yes");
-        } else {
-            $("span#alternative_phone_contact_permission_selection").html("No");
-        }
-    });
-    $("#contact_by_alternative_phone").trigger('change');
-    $("#contact_by_Facebook").bind('change', function () {
-
-        $("span#facebook_selection").html($(this).val());
-    });
-    $("#contact_by_Facebook").trigger('change');
-    $("#contact_by_Twitter").bind('change', function () {
-
-        $("span#twitter_selection").html($(this).val());
-    });
-    $("#contact_by_Twitter").trigger('change');
-    $("#contact_by_Instagram").bind('change', function () {
-
-        $("span#instagram_selection").html($(this).val());
-    });
-    $("#contact_by_Instagram").trigger('change');
-    $("#contact_by_LinkedIn").bind('change', function () {
-
-        $("span#linkedin_selection").html($(this).val());
-    });
-    $("#contact_by_LinkedIn").trigger('change');
-    $("#contact_by_Other_Social_Media").bind('change', function () {
-
-        $("span#other_media_selection").html($(this).val());
-    });
-    $("#contact_by_Other_Social_Media").trigger('change');
-    $("#contact_by_Other_Social_Media_Access").bind('change', function () {
-
-        $("span#other_media_access_selection").html($(this).val());
-    });
-    $("#contact_by_Other_Social_Media_Access").trigger('change');
-    $("#public_display_home_phone").bind('change', function () {
-
-        if (((($("#public_display_home_phone").prop('checked')))) && ((($("#home_phone").val() == '')))) {
-
-            $("span#home_phone_error").text("Whoops! Don't forget your home phone.");
-            $("span#home_phone_error").css("visibility", "visible");
-        } else {
-
-            $("span#home_phone_error").text("");
-            $("span#home_phone_error").css("visibility", "hidden");
-        }
-        if ($("#public_display_home_phone").prop('checked')) {
-            $("span#display_home_phone_selection").html("Yes");
-        } else {
-            $("span#display_home_phone_selection").html("No");
-        }
-
-    });
-    $("#public_display_home_phone").trigger('change');
-    $("#public_display_cell_phone").bind('change', function () {
-
-        if (((($("#public_display_cell_phone").prop('checked')))) && ((($("#cell_phone").val() == '')))) {
-
-            $("span#cell_phone_error").text("Whoops! Don't forget your cell phone.");
-            $("span#cell_phone_error").css("visibility", "visible");
-        } else {
-
-            $("span#cell_phone_error").text("");
-            $("span#cell_phone_error").css("visibility", "hidden");
-        }
-
-        if ($("#public_display_cell_phone").prop('checked')) {
-            $("span#display_cell_phone_selection").html("Yes");
-        } else {
-            $("span#display_cell_phone_selection").html("No");
-        }
-
-    });
-    $("#public_display_cell_phone").trigger('change');
-    $("#public_display_alternative_phone").bind('change', function () {
-
-        if (((($("#public_display_alternative_phone").prop('checked')))) && ((($("#alternative_phone").val() == '')))) {
-
-            $("span#alternative_phone_error").text("Whoops! Don't forget your alternative phone.");
-            $("span#alternative_phone_error").css("visibility", "visible");
-        } else {
-
-            $("span#alternative_phone_error").text("");
-            $("span#alternative_phone_error").css("visibility", "hidden");
-        }
-        if ($("#public_display_alternative_phone").prop('checked')) {
-            $("span#display_alternative_phone_selection").html("Yes");
-        } else {
-            $("span#display_alternative_phone_selection").html("No");
-        }
-    });
-    $("#public_display_alternative_phone").trigger('change');
-    $("#home_phone").bind('change', function () {
-
-        $("span#home_phone_error").text("");
-        $("span#home_phone_error").css("visibility", "hidden");
-        if ($("#home_phone").val() != '') {
-            if (($("#home_phone").val() == $("#cell_phone").val()) || ($("#home_phone").val() == $("#alternative_phone").val())) {
-
-                $("span#home_phone_error").text("Home phone should be distinct from others.");
-                $("span#home_phone_error").css("visibility", "visible");
-            }
-        }
-
-        if (($("#home_phone").val() == '') && ($("#public_display_home_phone").prop('checked') > -1)) {
-            $("span#home_phone_error").text("Empty Home phone will not be displayed.");
-            $("span#home_phone_error").css("visibility", "visible");
-        }
-
-        $("span#home_phone_contact_selection").html($(this).val());
-        $("span#contact_home_phone").html($(this).val());
-        $("span#home_phone_selection").html($(this).val());
-    });
-    $("#home_phone").trigger('change');
-    $("#cell_phone").bind('change', function () {
-        $("span#cell_phone_error").text("");
-        $("span#cell_phone_error").css("visibility", "hidden");
-        if ($("#cell_phone").val() != '') {
-            if (($("#cell_phone").val() == $("#home_phone").val()) || ($("#cell_phone").val() == $("#alternative_phone").val())) {
-
-                $("span#cell_phone_error").text("Cell phone should be distinct from others.");
-                $("span#cell_phone_error").css("visibility", "visible");
-            }
-        }
-
-        if (($("#cell_phone").val() == '') && ($("#public_display_cell_phone").prop('checked') > -1)) {
-            $("span#cell_phone_error").text("Empty Cell phone will not be displayed.");
-            $("span#cell_phone_error").css("visibility", "visible");
-        }
-        $("span#cell_phone_contact_selection").html($(this).val());
-        $("span#contact_cell_phone").html($(this).val());
-        $("span#cell_phone_selection").html($(this).val());
-    });
-    $("#cell_phone").trigger('change');
-    $("#alternative_phone").bind('change', function () {
-        $("span#alternative_phone_error").text("");
-        $("span#alternative_phone_error").css("visibility", "hidden");
-        if ($("#alternative_phone").val() != '') {
-            if (($("#alternative_phone").val() == $("#home_phone").val()) || ($("#alternative_phone").val() == $("#cell_phone").val())) {
-
-                $("span#alternative_phone_error").text("Alternative phone should be distinct from others.");
-                $("span#alternative_phone_error").css("visibility", "visible");
-            }
-        }
-        if (($("#alternative_phone").val() == '') && ($("#public_display_alternative_phone").prop('checked') > -1)) {
-            $("span#alternative_phone_error").text("Empty Alternative phone will not be displayed.");
-            $("span#alternative_phone_error").css("visibility", "visible");
-        }
-        $("span#alternative_phone_contact_selection").html($(this).val());
-        $("span#contact_alternative_phone").html($(this).val());
-        $("span#alternative_phone_selection").html($(this).val());
-    });
-    $("#alternative_phone").trigger('change');
+//    $("input[name='borrower[displayBorrowerAddress]']").bind('change', function () {
+//        var y_n = $("input[name='borrower[displayBorrowerAddress]']:checked").val();
+//        if (y_n == 1) {
+//            if (
+//                    ($(".borrower.primary.address_line_1").val() == "") ||
+//                    ($(".borrower.primary.postal_code").val() == "") ||
+//                    ($(".borrower.primary.city").val() == "") ||
+//                    ($(".borrower.primary.country_id option:selected").text() == "Please select")
+//                    ) {
+//
+//                $("span#display_address_error").text("Please provide a complete address.");
+//                $("span#display_address_error").css("visibility", "visible");
+//            } else {
+//                $("span#display_address_error").text("");
+//                $("span#display_address_error").css("visibility", "hidden");
+//            }
+//        }
+//
+//    });
+//    $("input[name='borrower[displayBorrowerAddress]']").trigger('change');
+//
+//    $("input[name='borrower[displayBorrowerName]']").bind('change', function () {
+//        var y_n = $("input[name='borrower[displayBorrowerName]']:checked").val();
+//        if (y_n == 1) {
+//            if (
+//                    ($("#first_name").val() == "") ||
+//                    ($("#last_name").val() == "")
+//                    ) {
+//
+//                $("span#public_display_name_error").text("Please provide a complete name.");
+//                $("span#public_display_name_error").css("visibility", "visible");
+//            } else {
+//                $("span#public_display_name_error").text("");
+//                $("span#public_display_name_error").css("visibility", "hidden");
+//            }
+//        }
+//
+//    });
+//    $("input[name='borrower[displayBorrowerName]']").trigger('change');
+//
+//    $("input[name='borrower[notify_lenders]']").bind('change', function () {
+//        var y_n = $("input[name='borrower[notify_lenders]']:checked").val();
+//        if (y_n == 1) {
+//            $("span#category_notification_selection").text("Yes");
+//        } else if (y_n == 0) {
+//            $("span#category_notification_selection").text("No");
+//        }
+//    });
+//    $("input[name='borrower[notify_lenders]']").trigger('change');
+//    $("#age_18_or_more").bind('change', function () {
+//        var is_c = $("#age_18_or_more").is(':checked');
+//        if (is_c == true) {
+//            $("span#18_selection").html("Yes");
+//        } else if (is_c == false) {
+//            $("span#18_selection").html("No");
+//        }
+//
+//    });
+//    $("#age_18_or_more").trigger('change');
+//    $("#goodwill").bind('change', function () {
+//        var is_c = $("#goodwill").is(':checked');
+//        if (is_c == true) {
+//            $("span#goodwill_selection").html("Yes");
+//        } else if (is_c == false) {
+//            $("span#goodwill_selection").html("No");
+//        }
+//
+//    });
+//    $("#goodwill").trigger('change');
+//    $("#contact_by_home_phone").bind('change', function () {
+//        if ($("#contact_by_home_phone").is(':checked')) {
+//            $("span#home_phone_contact_permission_selection").html("Yes");
+//        } else {
+//            $("span#home_phone_contact_permission_selection").html("No");
+//        }
+//
+//    });
+//    $("#contact_by_home_phone").trigger('change');
+//    $("#contact_by_cell_phone").bind('change', function () {
+//        if ($("#contact_by_cell_phone").is(':checked')) {
+//            $("span#cell_phone_contact_permission_selection").html("Yes");
+//        } else {
+//            $("span#cell_phone_contact_permission_selection").html("No");
+//        }
+//    });
+//    $("#contact_by_cell_phone").trigger('change');
+//    $("#contact_by_alternative_phone").bind('change', function () {
+//        if ($("#contact_by_alternative_phone").is(':checked')) {
+//            $("span#alternative_phone_contact_permission_selection").html("Yes");
+//        } else {
+//            $("span#alternative_phone_contact_permission_selection").html("No");
+//        }
+//    });
+//    $("#contact_by_alternative_phone").trigger('change');
+//    $("#contact_by_Facebook").bind('change', function () {
+//
+//        $("span#facebook_selection").html($(this).val());
+//    });
+//    $("#contact_by_Facebook").trigger('change');
+//    $("#contact_by_Twitter").bind('change', function () {
+//
+//        $("span#twitter_selection").html($(this).val());
+//    });
+//    $("#contact_by_Twitter").trigger('change');
+//    $("#contact_by_Instagram").bind('change', function () {
+//
+//        $("span#instagram_selection").html($(this).val());
+//    });
+//    $("#contact_by_Instagram").trigger('change');
+//    $("#contact_by_LinkedIn").bind('change', function () {
+//
+//        $("span#linkedin_selection").html($(this).val());
+//    });
+//    $("#contact_by_LinkedIn").trigger('change');
+//    $("#contact_by_Other_Social_Media").bind('change', function () {
+//
+//        $("span#other_media_selection").html($(this).val());
+//    });
+//    $("#contact_by_Other_Social_Media").trigger('change');
+//    $("#contact_by_Other_Social_Media_Access").bind('change', function () {
+//
+//        $("span#other_media_access_selection").html($(this).val());
+//    });
+//    $("#contact_by_Other_Social_Media_Access").trigger('change');
+//    $("#public_display_home_phone").bind('change', function () {
+//
+//        if (((($("#public_display_home_phone").prop('checked')))) && ((($("#home_phone").val() == '')))) {
+//
+//            $("span#home_phone_error").text("Whoops! Don't forget your home phone.");
+//            $("span#home_phone_error").css("visibility", "visible");
+//        } else {
+//
+//            $("span#home_phone_error").text("");
+//            $("span#home_phone_error").css("visibility", "hidden");
+//        }
+//        if ($("#public_display_home_phone").prop('checked')) {
+//            $("span#display_home_phone_selection").html("Yes");
+//        } else {
+//            $("span#display_home_phone_selection").html("No");
+//        }
+//
+//    });
+//    $("#public_display_home_phone").trigger('change');
+//    $("#public_display_cell_phone").bind('change', function () {
+//
+//        if (((($("#public_display_cell_phone").prop('checked')))) && ((($("#cell_phone").val() == '')))) {
+//
+//            $("span#cell_phone_error").text("Whoops! Don't forget your cell phone.");
+//            $("span#cell_phone_error").css("visibility", "visible");
+//        } else {
+//
+//            $("span#cell_phone_error").text("");
+//            $("span#cell_phone_error").css("visibility", "hidden");
+//        }
+//
+//        if ($("#public_display_cell_phone").prop('checked')) {
+//            $("span#display_cell_phone_selection").html("Yes");
+//        } else {
+//            $("span#display_cell_phone_selection").html("No");
+//        }
+//
+//    });
+//    $("#public_display_cell_phone").trigger('change');
+//    $("#public_display_alternative_phone").bind('change', function () {
+//
+//        if (((($("#public_display_alternative_phone").prop('checked')))) && ((($("#alternative_phone").val() == '')))) {
+//
+//            $("span#alternative_phone_error").text("Whoops! Don't forget your alternative phone.");
+//            $("span#alternative_phone_error").css("visibility", "visible");
+//        } else {
+//
+//            $("span#alternative_phone_error").text("");
+//            $("span#alternative_phone_error").css("visibility", "hidden");
+//        }
+//        if ($("#public_display_alternative_phone").prop('checked')) {
+//            $("span#display_alternative_phone_selection").html("Yes");
+//        } else {
+//            $("span#display_alternative_phone_selection").html("No");
+//        }
+//    });
+//    $("#public_display_alternative_phone").trigger('change');
+//    $("#home_phone").bind('change', function () {
+//
+//        $("span#home_phone_error").text("");
+//        $("span#home_phone_error").css("visibility", "hidden");
+//        if ($("#home_phone").val() != '') {
+//            if (($("#home_phone").val() == $("#cell_phone").val()) || ($("#home_phone").val() == $("#alternative_phone").val())) {
+//
+//                $("span#home_phone_error").text("Home phone should be distinct from others.");
+//                $("span#home_phone_error").css("visibility", "visible");
+//            }
+//        }
+//
+//        if (($("#home_phone").val() == '') && ($("#public_display_home_phone").prop('checked') > -1)) {
+//            $("span#home_phone_error").text("Empty Home phone will not be displayed.");
+//            $("span#home_phone_error").css("visibility", "visible");
+//        }
+//
+//        $("span#home_phone_contact_selection").html($(this).val());
+//        $("span#contact_home_phone").html($(this).val());
+//        $("span#home_phone_selection").html($(this).val());
+//    });
+//    $("#home_phone").trigger('change');
+//    $("#cell_phone").bind('change', function () {
+//        $("span#cell_phone_error").text("");
+//        $("span#cell_phone_error").css("visibility", "hidden");
+//        if ($("#cell_phone").val() != '') {
+//            if (($("#cell_phone").val() == $("#home_phone").val()) || ($("#cell_phone").val() == $("#alternative_phone").val())) {
+//
+//                $("span#cell_phone_error").text("Cell phone should be distinct from others.");
+//                $("span#cell_phone_error").css("visibility", "visible");
+//            }
+//        }
+//
+//        if (($("#cell_phone").val() == '') && ($("#public_display_cell_phone").prop('checked') > -1)) {
+//            $("span#cell_phone_error").text("Empty Cell phone will not be displayed.");
+//            $("span#cell_phone_error").css("visibility", "visible");
+//        }
+//        $("span#cell_phone_contact_selection").html($(this).val());
+//        $("span#contact_cell_phone").html($(this).val());
+//        $("span#cell_phone_selection").html($(this).val());
+//    });
+//    $("#cell_phone").trigger('change');
+//    $("#alternative_phone").bind('change', function () {
+//        $("span#alternative_phone_error").text("");
+//        $("span#alternative_phone_error").css("visibility", "hidden");
+//        if ($("#alternative_phone").val() != '') {
+//            if (($("#alternative_phone").val() == $("#home_phone").val()) || ($("#alternative_phone").val() == $("#cell_phone").val())) {
+//
+//                $("span#alternative_phone_error").text("Alternative phone should be distinct from others.");
+//                $("span#alternative_phone_error").css("visibility", "visible");
+//            }
+//        }
+//        if (($("#alternative_phone").val() == '') && ($("#public_display_alternative_phone").prop('checked') > -1)) {
+//            $("span#alternative_phone_error").text("Empty Alternative phone will not be displayed.");
+//            $("span#alternative_phone_error").css("visibility", "visible");
+//        }
+//        $("span#alternative_phone_contact_selection").html($(this).val());
+//        $("span#contact_alternative_phone").html($(this).val());
+//        $("span#alternative_phone_selection").html($(this).val());
+//    });
+//    $("#alternative_phone").trigger('change');
 //
 //    $("#category_id").bind('change', function () {
 //        var cat_cmb = $("select#category_id option:selected").text();
@@ -743,146 +754,29 @@ function showItem() {
     $("li#tab_item_3").css("display", "block");
     whichSaveMenu(1);
     $("#form_item").css("display", "block");
+
     return false;
 }
 
 function showBorrowersContactPreferences() {
 
     var returnResult = ValidateContactInformation();
+    alert("all okay");
+    alert(returnResult);
     if (returnResult == true) {
         hideAllBFormHrefs();
         $("li#tab_item_1").css("display", "block");
         $("li#tab_item_2").css("display", "block");
         whichSaveMenu(1);
         $("#form_borrower_preference").css("display", "block");
+//        Totally do not understand why I need to make second call to check divs
+       displayPhone();
     }
+
     return false;
 }
 
-/* Returns foundInvalid */
-function validateContactPreferences() {
-    var foundInvalid = true;
-    var y_n = "";
-    $("span.error").css("visibility", "hidden");
-    y_n = $("input[name='borrower[displayBorrowerOrganizationName]']:checked").val();
-    if ((y_n == 1) && ($("#organization_name").val() == "")) {
-        $("span#organization_name_error").text("Please provide an organization name.");
-        $("span#organization_name_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
 
-    y_n = $("input[name='borrower[displayBorrowerAddress]']:checked").val();
-    if (y_n == 1) {
-        if (
-                ($(".borrower.primary.address_line_1").val() == "") ||
-                ($(".borrower.primary.postal_code").val() == "") ||
-                ($(".borrower.primary.city").val() == "") ||
-                ($(".borrower.primary.country_id option:selected").text() == "Please select")
-                ) {
-
-            $("span#display_address_error").text("Please provide a complete address.");
-            $("span#display_address_error").css("visibility", "visible");
-            foundInvalid = false;
-        }
-    }
-
-
-    y_n = $("input[name='borrower[displayBorrowerName]']:checked").val();
-    if (y_n == 1) {
-        if (
-                ($("#first_name").val() == "") ||
-                ($("#last_name").val() == "")
-                ) {
-
-            $("span#public_display_name_error").text("Please provide a complete name.");
-            $("span#public_display_name_error").css("visibility", "visible");
-            foundInvalid = false;
-        }
-    }
-
-
-
-    if ($("select#contact_describe_id option:selected").text() == "Please select") {
-        $("#describe_yourself_combo_error").text("Please choose an option to describe yourself.");
-        $("#describe_yourself_combo_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-    if (($("select#contact_describe_id option:selected").text() == "Other") && ($("#other_describe_yourself").val() == "")) {
-
-        $("#other_describe_yourself_error").text("Other description is required.");
-        $("#other_describe_yourself_error").css("visibility", "visible");
-        foundInvalid = false;
-    } else {
-        $("#other_describe_yourself_error").text("");
-        $("#other_describe_yourself_error").css("visibility", "hidden");
-    }
-
-    if ($("#first_name").val() == "") {
-        $("#first_name_error").text("First name is required.");
-        $("#first_name_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-    if ($("#last_name").val() == "") {
-        $("#last_name_error").text("Last name is required.");
-        $("#last_name_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-    if ($(".borrower.primary.city").val() == "") {
-        $("#city_error").text("City name is required.");
-        $("#city_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-    if ($(".borrower.primary.address_line_1").val() == "") {
-        $("#address_line_1_error").text("Address Line 1 is required.");
-        $("#address_line_1_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-    if ($(".borrower.primary.postal_code").val() != "") {
-        var re = /^[A-Za-z]+$/;
-        var hold_postal_value = $(".borrower.primary.postal_code").val();
-        if (re.test(hold_postal_value)) {
-            $("#postal_code_error").text("Please verify your postal code, it should contain at least one numeric value.");
-            $("#postal_code_error").css("visibility", "visible");
-            foundInvalid = false;
-        }
-    }
-
-    if ($(".borrower.primary.postal_code").val() == "") {
-        $("#postal_code_error").text("Postal code is required.");
-        $("#postal_code_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-    if ($(".borrower.primary.country_id option:selected").text() == "Please select") {
-        $("#country_error").text("Please select a Country.");
-        $("#country_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-
-
-    if (($(".borrower.primary.country_id option:selected").text() != "Please select") || ($(".borrower.primary.country_id option:selected").text() != "United States")) {
-        if ($("input#borrower.primary.region").val() == "") {
-            $("#state_error").text("Please provide a Region.");
-            $("#state_error").css("visibility", "visible");
-            foundInvalid = false;
-        }
-    }
-
-    if ((($(".borrower.primary.us_state_id option:selected").text() == "Please select") || ($(".borrower.primary.us_state_id option:selected").val() == '')) && ($(".borrower.primary.country_id option:selected").text() == "United States")) {
-
-        $("#state_error").text("Please select a State.");
-        $("#state_error").css("visibility", "visible");
-        foundInvalid = false;
-    }
-
-    return foundInvalid;
-}
 function showReview() {
     $("li[id^=tab_item_]").css("display", "block");
     $("div[class=contact_information]").css("display", "block");
@@ -944,8 +838,11 @@ function whichSaveMenu(whichSave) {
     return false;
 }
 
-function ValidateContactInformation() {
 
+function ValidateContactInformation() {
+    // Just for debugging
+    //return true;
+    
     var returnValue = true;
     var foundComponent = 0;
     var cdi = null;
@@ -956,11 +853,12 @@ function ValidateContactInformation() {
     var city = null;
     var postalCode = null;
     var countryId = null;
-
+    var homePhone = null;
+    var cellPhone = null;
+    var alternativePhone = null;
     $("span").css("visibility", "hidden");
 
     $("select").each(function () {
-
         if (this.id == 'rb:contactDescribeId') {
             cdi = this.value;
             foundComponent++;
@@ -970,13 +868,11 @@ function ValidateContactInformation() {
             //alert(countryId);
             foundComponent++;
         } else if (foundComponent == 2) {
-            return false
+            return false;
         } else {
         }
     });
-
     foundComponent = 0;
-
     $("input").each(function () {
         if (this.id == 'rb:otherDescribeYourself') {
             ocdi = this.value;
@@ -996,7 +892,18 @@ function ValidateContactInformation() {
         } else if (this.id == 'rb:primary:0:postalCode') {
             postalCode = this.value;
             foundComponent++;
-        } else if (foundComponent == 6) {
+        } else if (this.id == 'rb:homePhone') {
+            homePhone = this.value;
+            alert("did get home phone value");
+            alert(homePhone);
+            foundComponent++;
+        } else if (this.id == 'rb:cellPhone') {
+            cellPhone = this.value;
+            foundComponent++;
+        } else if (this.id == 'rb:alternativePhone') {
+            alternativePhone = this.value;
+            foundComponent++;
+        } else if (foundComponent == 9) {
             //alert(foundComponent);
             return false;
         }
@@ -1019,6 +926,35 @@ function ValidateContactInformation() {
         $("span#countryId.error-message").text("Please provide your Country");
         returnValue = false;
     }
+
+    $("div").each(function () {
+
+        if (this.id != '') {
+        if ((this.id == 'display_homePhone') && (homePhone == '')) {
+            alert("asdasdasdasdsdasdasdasd");
+            $(this).css("display", "none");
+            foundComponent++;
+            alert(1);
+        } else if ((this.id == 'display_cellPhone') && (cellPhone == '')) {
+            $(this).css("display", "none");
+            foundComponent++;
+            alert(2);
+        } else if ((this.id == 'display_alternativePhone') && (alternativePhone == '')) {
+            $(this).css("display", "none");
+            foundComponent++;
+            alert(3);
+        } else if (foundComponent == 3) {
+            return false;
+        } else {
+            //alert(this.id);
+        }
+    }
+    });
+
+//    if ((homePhone == '') && (cellPhone == '')&& (alternativePhone == '')) {
+//        $("div#display_phone").css("display", "none");
+//    }
+
 
     if (firstName == '') {
         $("span#firstName.error-message").css("visibility", "visible");
@@ -1052,5 +988,54 @@ function ValidateContactInformation() {
 
     return returnValue;
 }
+
+//function displayPhone() {
+//    
+//    var homePhone = null;
+//    var cellPhone = null;
+//    var alternativePhone = null;
+//    var foundComponent = 0;
+//    $("input").each(function () {
+//        if (this.id == 'rb:homePhone') {
+//            homePhone = this.value;
+//            alert("did get home phone value");
+//            alert(homePhone);
+//            foundComponent++;
+//        } else if (this.id == 'rb:cellPhone') {
+//            cellPhone = this.value;
+//            foundComponent++;
+//        } else if (this.id == 'rb:alternativePhone') {
+//            alternativePhone = this.value;
+//            foundComponent++;
+//        } else if (foundComponent == 3) {
+//            //alert(foundComponent);
+//            return false;
+//        }
+//    });
+//
+//    $("div").each(function () {
+//        if (this.id != '' || this.dic != null)    {
+//        if ((this.id == 'display_homePhone') && (homePhone == '')) {
+//            $(this).css("display", "none");
+//            foundComponent++;
+//            alert(1);
+//        } else if ((this.id == 'display_cellPhone') && (cellPhone == '')) {
+//            $(this).css("display", "none");
+//            foundComponent++;
+//            alert(2);
+//        } else if ((this.id == 'display_alternativePhone') && (alternativePhone == '')) {
+//            $(this).css("display", "none");
+//            foundComponent++;
+//            alert(3);
+//        } else if (foundComponent == 3) {
+//            return false;
+//        } else {
+//            //alert(this.id);
+//        }
+//    }
+//    });
+//    
+//}
+
 
   
