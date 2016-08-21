@@ -15,6 +15,8 @@
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <h:outputScript library="javascript" name="image.js"  />
+
+
             <title>#{bundle.borrowerSeeking}</title>
         </h:head>
         <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
@@ -37,7 +39,6 @@
                         <div style="margin:10px;margin-top:25px;" >
                             <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
                             <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
-                            <a onclick="saveBAll();" style="color:crimson;font-style:italic"  >Let's Save!</a>
                         </div> 
                     </div> 
 
@@ -252,61 +253,57 @@
                     </div>
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+
+
                         <div style="margin-left: 25px;float:left">
-                            <table width='99%'>
-                                <tr class="odd">
-                                    <td style="width:33%;">
-                                        <h:outputLabel  for="homePhone"  value="Home Phone:" >
-                                            <h:inputText  id="homePhone"  value="#{bb.homePhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
-                                        </h:outputLabel>
-                                        <div style="float:left" >
-                                            <h:outputLabel value="Allow public to see your Home Phone Number?"  for="publicDisplayHomePhone" >
-                                                <h:selectOneRadio id="publicDisplayHomePhone" value="#{bb.publicDisplayHomePhone}"  >
-                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                    <f:selectItem itemValue="0" itemLabel="No" />	
-                                                </h:selectOneRadio>    
-                                            </h:outputLabel>   
-                                        </div>
-                                    </td>
 
-                                    <td style="width:33%;">
-                                        <h:outputLabel  for="cellPhone"  value="Cell Phone:" >
-                                            <h:inputText  id="cellPhone"  value="#{bb.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
-                                        </h:outputLabel>
-                                        <div style="float:left" >
-                                            <h:outputLabel value=".. to see your Cell Phone Number?"  for="publicDisplayCellPhone" >
-                                                <h:selectOneRadio id="publicDisplayCellPhone" value="#{bb.publicDisplayCellPhone}"  >
-                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                    <f:selectItem itemValue="0" itemLabel="No" />	
-                                                </h:selectOneRadio>    
-                                            </h:outputLabel>   
-                                        </div>
-                                    </td>
-                                    <td style="width:33%;">
-                                        <h:outputLabel  for="alternativePhone"  value="Alternative Phone:" >
-                                            <h:inputText  id="alternativePhone"  value="#{bb.alternativePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
-                                        </h:outputLabel>
-                                        <div style="float:left" >
-                                            <h:outputLabel value="... to see your Alternative Phone Number?"  for="publicDisplayAlternativePhone" >
-                                                <h:selectOneRadio id="publicDisplayAlternativePhone" value="#{bb.publicDisplayAlternativePhone}"  >
-                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                    <f:selectItem itemValue="0" itemLabel="No" />	
-                                                </h:selectOneRadio>    
-                                            </h:outputLabel>   
-                                        </div>
-                                    </td>
+                            <div style="float:left; margin-left: 5x;margin-right: 10px;display:block;" >`
+                                <h:outputLabel  for="homePhone"  value="Home Phone:" >
+                                    <h:inputText  id="homePhone"  value="#{bb.homePhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
+                                </h:outputLabel>
 
-                                </tr>
-                            </table>
-                        </div>
-
-
-                        <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                            <div style="margin:10px;float:right;" >
-                                <a onclick="showBorrowersContactPreferences();" style="color:crimson;font-style:italic"  >Continue to 'Contact Preferences'</a>
+                                <h:outputLabel value="Allow public to see your Home Phone Number?"  for="publicDisplayHomePhone" >
+                                    <h:selectOneRadio id="publicDisplayHomePhone" value="#{bb.publicDisplayHomePhone}"  >
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>   
                             </div>
-                        </div>
 
+                            <div style="float:left;margin-left: 5x;margin-right: 10px;display:block;" >
+                                <h:outputLabel  for="cellPhone"  value="Cell Phone:" >
+                                    <h:inputText  id="cellPhone"  value="#{bb.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
+                                </h:outputLabel>
+
+                                <h:outputLabel value=".. to see your Cell Phone Number?"  for="publicDisplayCellPhone" >
+                                    <h:selectOneRadio id="publicDisplayCellPhone" value="#{bb.publicDisplayCellPhone}"  >
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>   
+                            </div>
+
+                            <div style="float:left;margin-left: 5x;margin-right: 10px;display:block;" >
+                                <h:outputLabel  for="alternativePhone"  value="Alternative Phone:" >
+                                    <h:inputText  id="alternativePhone"  value="#{bb.alternativePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                </h:outputLabel>
+
+                                <h:outputLabel value="... to see your Alternative Phone Number?"  for="publicDisplayAlternativePhone" >
+                                    <h:selectOneRadio id="publicDisplayAlternativePhone" value="#{bb.publicDisplayAlternativePhone}"  >
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>   
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin:10px;float:right;" >
+                            <a onclick="showBorrowersContactPreferences();" style="color:crimson;font-style:italic"  >Continue to 'Contact Preferences'</a>
+                        </div>
                     </div>
 
                 </div>
@@ -336,23 +333,19 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="float:left;margin-left:25px">
-                            <h:panelGroup id="postalWithContactAddress" >    
+                            <div id="postalWithContactAddress" >    
                                 <h:outputLabel value="Which Address?" for="useWhichContactAddress">
                                     <h:selectOneRadio id="useWhichContactAddress" value="#{bb.useWhichContactAddress}"  >
                                         <f:selectItem itemValue="3" itemLabel="Use your Registration Address?" />
                                         <f:selectItem itemValue="2" itemLabel="Use an Alternative Address?" />	
                                         <f:selectItem itemValue="1" itemLabel="Either address is fine." />
                                         <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
-                                        <f:ajax event="change" execute="@this"   render="buildAlternativeAddress" />
                                     </h:selectOneRadio>    
                                 </h:outputLabel>
-                            </h:panelGroup>
+                            </div>
 
-                            <h:panelGroup id="buildAlternativeAddress" styleClass="display:block;float:left;height:auto;width:inherit;margin-top:10px;"  >    
-                                <h:dataTable id="alternative"  value="#{bb.alternative}" var="pa"
-                                             rendered="#{bb.useWhichContactAddress eq '2'|| bb.useWhichContactAddress eq '1'}"
-
-                                             >
+                            <div id="buildAlternativeAddress" styleClass="display:block;float:left;height:auto;width:inherit;margin-top:10px;"  >    
+                                <h:dataTable id="alternative"  value="#{bb.alternative}" var="pa" >
 
                                     <h:column  rowHeader="Alternative Address" id="buildAlternativeAddress" >
                                         <table id="buildAlternativeAddressTable" stlye="margin-left:10px;">
@@ -453,7 +446,7 @@
                                     </h:column>
                                 </h:dataTable>
 
-                            </h:panelGroup>
+                            </div>
                         </div>
                     </div>
                     <div  class="div_p"  >
@@ -493,13 +486,12 @@
                     </div>
 
 
-                    <div  class="div_p"  >
+                    <div  class="div_p"  id="display_phone">
                         <div style="margin:10px;" >
                             <h:outputText value="Contact Option: By Phone..." />
-
                         </div>
                     </div>
-                    <div style="float:left;margin-left:25px;" id="byYourPhone">
+                    <div style="float:left;margin-left:25px;display:block;" id="display_homePhone">
                         <div style="margin-left:10px;float:left;" >
                             <h:outputLabel value="Can lenders call you at your home phone?:"  for="borrowerContactByHomePhone" >
                                 <h:selectOneRadio id="borrowerContactByHomePhone" value="#{bb.borrowerContactByHomePhone}"  >
@@ -508,7 +500,7 @@
                                 </h:selectOneRadio>    
                             </h:outputLabel> 
                         </div>
-                        <div style="margin-left:25px;float:left;" >
+                        <div style="margin-left:25px;float:left;display:block;" id="display_cellPhone">
                             <h:outputLabel value="... by your cell phone?:"  for="borrowerContactByCellPhone" >
                                 <h:selectOneRadio id="borrowerContactByCellPhone" value="#{bb.borrowerContactByCellPhone}"  >
                                     <f:selectItem itemValue="1" itemLabel="Yes" />
@@ -517,7 +509,7 @@
                             </h:outputLabel>
 
                         </div>
-                        <div style="margin-left:25px;float:left;" >
+                        <div style="margin-left:25px;float:left;display:block;" id="display_alternativePhone">
                             <h:outputLabel value="... by your alternative phone?:"  for="borrowerContactByAlternativePhone" >
                                 <h:selectOneRadio id="borrowerContactByAlternativePhone" value="#{bb.borrowerContactByAlternativePhone}"  >
                                     <f:selectItem itemValue="1" itemLabel="Yes" />
