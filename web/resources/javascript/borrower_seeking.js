@@ -60,6 +60,20 @@ jQuery(document).ready(function ($) {
 
 
 
+    $('input').on('change', function () {
+//        alert("ap");
+//        alert(this.id);
+//        if (this.id == 'rb:alternativePhone') {
+//            if (this.value) {
+//                $("div#display_alternativePhone.phone").css("display", "block");
+//            } else {
+//                $("div#display_alternativePhone.phone").css("display", "none");
+//            }
+//        }
+//        alert($("div#display_alternativePhone.phone").css("display"));
+
+    });
+
     function readURL(input) {
 
         if (input.files && input.files[0]) {
@@ -761,16 +775,16 @@ function showItem() {
 function showBorrowersContactPreferences() {
 
     var returnResult = ValidateContactInformation();
-    alert("all okay");
-    alert(returnResult);
+    //displayPhone();
+//    alert("all okay");
+//    alert(returnResult);
     if (returnResult == true) {
+        displayPhone();
         hideAllBFormHrefs();
         $("li#tab_item_1").css("display", "block");
         $("li#tab_item_2").css("display", "block");
         whichSaveMenu(1);
         $("#form_borrower_preference").css("display", "block");
-//        Totally do not understand why I need to make second call to check divs
-       displayPhone();
     }
 
     return false;
@@ -840,9 +854,9 @@ function whichSaveMenu(whichSave) {
 
 
 function ValidateContactInformation() {
-    // Just for debugging
-    //return true;
-    
+// Just for debugging
+    return true;
+
     var returnValue = true;
     var foundComponent = 0;
     var cdi = null;
@@ -853,11 +867,10 @@ function ValidateContactInformation() {
     var city = null;
     var postalCode = null;
     var countryId = null;
-    var homePhone = null;
-    var cellPhone = null;
-    var alternativePhone = null;
+//    var homePhone = null;
+//    var cellPhone = null;
+//    var alternativePhone = null;
     $("span").css("visibility", "hidden");
-
     $("select").each(function () {
         if (this.id == 'rb:contactDescribeId') {
             cdi = this.value;
@@ -892,24 +905,23 @@ function ValidateContactInformation() {
         } else if (this.id == 'rb:primary:0:postalCode') {
             postalCode = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:homePhone') {
-            homePhone = this.value;
-            alert("did get home phone value");
-            alert(homePhone);
-            foundComponent++;
-        } else if (this.id == 'rb:cellPhone') {
-            cellPhone = this.value;
-            foundComponent++;
-        } else if (this.id == 'rb:alternativePhone') {
-            alternativePhone = this.value;
-            foundComponent++;
+//        } else if (this.id == 'rb:homePhone') {
+//            homePhone = this.value;
+//            alert("did get home phone value");
+//            alert(homePhone);
+//            foundComponent++;
+//        } else if (this.id == 'rb:cellPhone') {
+//            cellPhone = this.value;
+//            foundComponent++;
+//        } else if (this.id == 'rb:alternativePhone') {
+//            alternativePhone = this.value;
+//            foundComponent++;
         } else if (foundComponent == 9) {
-            //alert(foundComponent);
+//alert(foundComponent);
             return false;
         }
 
     });
-
     if ((cdi == '100') && (ocdi == null)) {
         $("span#otherDescribeYourself").css("visibility", "visible");
         $("span#otherDescribeYourself").text("Please provide an 'Other' description");
@@ -918,7 +930,6 @@ function ValidateContactInformation() {
         $("span#contactDescribeId").css("visibility", "visible");
         $("span#contactDescribeId").text("Please make a selection");
         returnValue = false;
-
     }
 
     if (countryId == -2) {
@@ -927,30 +938,34 @@ function ValidateContactInformation() {
         returnValue = false;
     }
 
-    $("div").each(function () {
-
-        if (this.id != '') {
-        if ((this.id == 'display_homePhone') && (homePhone == '')) {
-            alert("asdasdasdasdsdasdasdasd");
-            $(this).css("display", "none");
-            foundComponent++;
-            alert(1);
-        } else if ((this.id == 'display_cellPhone') && (cellPhone == '')) {
-            $(this).css("display", "none");
-            foundComponent++;
-            alert(2);
-        } else if ((this.id == 'display_alternativePhone') && (alternativePhone == '')) {
-            $(this).css("display", "none");
-            foundComponent++;
-            alert(3);
-        } else if (foundComponent == 3) {
-            return false;
-        } else {
-            //alert(this.id);
-        }
-    }
-    });
-
+//    $("div.phone").each(function () {
+//
+//        if (this.id != "") {
+//
+//            $(this).css("display", "none");
+//            if (this.id == 'display_homePhone') {
+//                if (homePhone) {
+//                    $(this).css("display", "block");
+//                    alert(1);
+//                }
+//            }
+//
+//            if (this.id == 'display_cellPhone') {
+//                if (cellPhone) {
+//                    $(this).css("display", "block");
+//                    alert(2);
+//                }
+//            }
+//
+//            if (this.id == 'display_alternativePhone') {
+//                if (alternativePhone) {
+//                    $(this).css("display", "block");
+//                    alert(3);
+//                }
+//            }
+//        }
+//
+//    });
 //    if ((homePhone == '') && (cellPhone == '')&& (alternativePhone == '')) {
 //        $("div#display_phone").css("display", "none");
 //    }
@@ -989,53 +1004,69 @@ function ValidateContactInformation() {
     return returnValue;
 }
 
-//function displayPhone() {
-//    
-//    var homePhone = null;
-//    var cellPhone = null;
-//    var alternativePhone = null;
-//    var foundComponent = 0;
-//    $("input").each(function () {
-//        if (this.id == 'rb:homePhone') {
-//            homePhone = this.value;
-//            alert("did get home phone value");
-//            alert(homePhone);
-//            foundComponent++;
-//        } else if (this.id == 'rb:cellPhone') {
-//            cellPhone = this.value;
-//            foundComponent++;
-//        } else if (this.id == 'rb:alternativePhone') {
-//            alternativePhone = this.value;
-//            foundComponent++;
-//        } else if (foundComponent == 3) {
-//            //alert(foundComponent);
-//            return false;
-//        }
-//    });
-//
-//    $("div").each(function () {
-//        if (this.id != '' || this.dic != null)    {
-//        if ((this.id == 'display_homePhone') && (homePhone == '')) {
-//            $(this).css("display", "none");
-//            foundComponent++;
-//            alert(1);
-//        } else if ((this.id == 'display_cellPhone') && (cellPhone == '')) {
-//            $(this).css("display", "none");
-//            foundComponent++;
-//            alert(2);
-//        } else if ((this.id == 'display_alternativePhone') && (alternativePhone == '')) {
-//            $(this).css("display", "none");
-//            foundComponent++;
-//            alert(3);
-//        } else if (foundComponent == 3) {
-//            return false;
-//        } else {
-//            //alert(this.id);
-//        }
-//    }
-//    });
-//    
-//}
+function displayPhone() {
+
+    var homePhone = null;
+    var cellPhone = null;
+    var alternativePhone = null;
+    var foundComponent = 0;
+    $("input").each(function () {
+        if (this.id == 'rb:homePhone') {
+            homePhone = this.value;
+            foundComponent++;
+        } else if (this.id == 'rb:cellPhone') {
+            cellPhone = this.value;
+            foundComponent++;
+        } else if (this.id == 'rb:alternativePhone') {
+            alternativePhone = this.value;
+            foundComponent++;
+        } else if (foundComponent == 3) {
+            return false;
+        }
+    });
+
+    try {
+        if (homePhone) {
+            $("div#display_homePhone.phone").css("display", "block");
+        } else {
+            $("div#display_homePhone.phone").css("display", "none");
+        }
+    } catch (err) {
+        $("div#display_homePhone.phone").css("display", "none");
+    }
+
+    try {
+        if (cellPhone) {
+            $("div#display_cellPhone.phone").css("display", "block");
+        } else {
+            $("div#display_cellPhone.phone").css("display", "none");
+        }
+    } catch (err) {
+        $("div#display_cellPhone.phone").css("display", "none");
+    }
+
+    try {
+        if (alternativePhone) {
+            $("div#display_alternativePhone.phone").css("display", "block");
+        } else {
+            $("div#display_alternativePhone.phone").css("display", "none");
+        }
+    } catch (err) {
+        $("div#display_alternativePhone.phone").css("display", "none");
+    }
+
+    if ((homePhone) || (cellPhone) || (alternativePhone)) {
+        $("div#display_phone.div_p").css("display", "block");
+    } else {
+        $("div#display_phone.div_p").css("display", "none");
+    }
+
+
+    alert($("div#display_homePhone.phone").css("display"));
+    alert($("div#display_cellPhone.phone").css("display"));
+    alert($("div#display_alternativePhone.phone").css("display"));
+
+}
 
 
   
