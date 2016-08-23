@@ -50,28 +50,16 @@ jQuery(document).ready(function ($) {
     });
 
 
-    $("input[id='WhichContactAddress']").change(function () {
-        var use_which_ca = $("this:checked").val();
-        if ((use_which_ca == 1) || (use_which_ca == 2)) {
-            alert("use_which_ca");
-        }
-
-    });
-
-
-
     $('input').on('change', function () {
-//        alert("ap");
-//        alert(this.id);
-//        if (this.id == 'rb:alternativePhone') {
-//            if (this.value) {
-//                $("div#display_alternativePhone.phone").css("display", "block");
-//            } else {
-//                $("div#display_alternativePhone.phone").css("display", "none");
-//            }
-//        }
-//        alert($("div#display_alternativePhone.phone").css("display"));
-
+           
+        if (this.id.includes('useWhichContactAddress')) {
+            if ((this.id.includes('1')) || (this.id.includes('2'))) {
+             $("div#buildAlternativeAddress").css("display", "block");
+           } else {
+             $("div#buildAlternativeAddress").css("display", "none");
+           }
+          return false; 
+        }
     });
 
     function readURL(input) {
@@ -1062,9 +1050,9 @@ function displayPhone() {
     }
 
 
-    alert($("div#display_homePhone.phone").css("display"));
-    alert($("div#display_cellPhone.phone").css("display"));
-    alert($("div#display_alternativePhone.phone").css("display"));
+//    alert($("div#display_homePhone.phone").css("display"));
+//    alert($("div#display_cellPhone.phone").css("display"));
+//    alert($("div#display_alternativePhone.phone").css("display"));
 
 }
 
