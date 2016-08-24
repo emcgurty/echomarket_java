@@ -418,9 +418,10 @@ function ValidateContactInformation() {
 
     $("span.error-message").css("visibility", "hidden");
     $("select").each(function () {
-        if (this.id == 'rb:contactDescribeId') {
+        if (this.id.includes('contactDescribeId')) {
+            
             cdi = this.value;
-            alert(cdi);
+            
             foundComponent++;
 //            Cheating here, eventailly need to parse for id
         } else if (this.id == 'rb:primary:0:countryId') {
@@ -467,12 +468,12 @@ function ValidateContactInformation() {
 
     });
     if ((cdi == '100') && (!(ocdi))) {
-        $("span#otherDescribeYourself").css("visibility", "visible");
-        $("span#otherDescribeYourself").text("Please provide an 'Other' description");
+        $("span#otherDescribeYourself.error-message").css("visibility", "visible");
+        $("span#otherDescribeYourself.error-message").text("Please provide an 'Other' description");
         returnValue = false;
     } else if ((cdi == '-2') && (ocdi == null)) {
-        $("span#contactDescribeId").css("visibility", "visible");
-        $("span#contactDescribeId").text("Please make a selection");
+        $("span#contactDescribeId.error-message").css("visibility", "visible");
+        $("span#contactDescribeId.error-message").text("Please make a selection");
         returnValue = false;
     }
 
@@ -574,6 +575,3 @@ function displayPhone() {
 
 
 }
-
-
-  
