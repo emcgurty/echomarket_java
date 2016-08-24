@@ -50,13 +50,14 @@
                     </div>
                     <div  class="div_p" >
                         <div style="margin:10px;" >
-                            <h:outputText value="Yourself generally, your affiliation..." />
+                            <h:outputText value="Yourself generally, your affiliation" />
                         </div>
                     </div>
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="float:left;margin-left:25px">
                             <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" >
+                                <br />
                                 <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}" >
 
                                     <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
@@ -67,8 +68,10 @@
                             <span class="error-message" id="contactDescribeId" ></span>
                         </div>
 
-                        <div id="otherDescribeYourselfText"  style="visibility: hidden;">    
+                        
+                        <div id="otherDescribeYourselfText"  style="float:left;margin-left:25px;visibility: hidden;">    
                             <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"  style="margin-left:25px">
+                                <br />
                                 <h:inputText id="otherDescribeYourself" value="#{bb.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24" > 
                                 </h:inputText>
                             </h:outputLabel>
@@ -82,21 +85,22 @@
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                         <div style="float:left;margin-left:25px">
                             <h:outputLabel value="#{bundle.OrganizationName}"  for="organization_name" >
-                                <h:inputText  id="organization_name" value="#{bb.organizationName}" validatorMessage=""  >
-                                    <f:ajax event="change" execute="@this" render="yesNoOrganization" />
+                                <h:inputText  id="organization_name" class="org_name"  value="#{bb.organizationName}"  >
+                             
                                 </h:inputText>
                             </h:outputLabel>
+                              <span class="error-message" id="organization_name" ></span>
 
                         </div>
-                        <div style="float:left;margin-left:74px">
-                            <h:panelGroup id="yesNoOrganization" >
-                                <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayBorrowerOrganizationName" rendered="#{bb.organizationName ne null }" >
+                        <div style="float:left;margin">
+                            <div id="yesNoOrganization" style="display:none;margin-left:15px;">
+                                <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayBorrowerOrganizationName" >
                                     <h:selectOneRadio id="displayBorrowerOrganizationName" value="#{bb.displayBorrowerOrganizationName}" layout='lineDirection'>
                                         <f:selectItem itemValue="1" itemLabel="Yes" />
                                         <f:selectItem itemValue="0" itemLabel="No" />	
                                     </h:selectOneRadio>    
                                 </h:outputLabel>     
-                            </h:panelGroup>
+                            </div>
                         </div>
                     </div>
 
@@ -152,7 +156,7 @@
                     </div>
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                        <div style="margin-left: 5px;float:left">
+                        <div style="margin-left: 15px;float:left">
                             <h:dataTable value="#{bb.primary}" id="primary"   var="pa"           >    
                                 <h:column rowHeader="">
                                     <table >
@@ -258,7 +262,7 @@
                                 <tr class="odd">
                                     <td style="width:33%;">
                                         <h:outputLabel  for="homePhone"  value="Home Phone:" >
-                                            <h:inputText  id="homePhone"  value="#{bb.homePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                            <h:inputText  id="homePhone"  class="homePhone"   value="#{bb.homePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
                                         </h:outputLabel>
                                         <div style="float:left" >
                                             <h:outputLabel value="Allow public to see your Home Phone Number?"  for="publicDisplayHomePhone" >
@@ -267,12 +271,15 @@
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
                                             </h:outputLabel>   
+                                            <span class="error-message" id="homePhone" ></span>    
                                         </div>
                                     </td>
 
                                     <td style="width:33%;">
                                         <h:outputLabel  for="cellPhone"  value="Cell Phone:" >
-                                            <h:inputText  id="cellPhone"  value="#{bb.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
+                                            <h:inputText  id="cellPhone"  class="cellPhone" value="#{bb.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
+                                            
+                                            
                                         </h:outputLabel>
                                         <div style="float:left" >
                                             <h:outputLabel value=".. to see your Cell Phone Number?"  for="publicDisplayCellPhone" >
@@ -280,12 +287,13 @@
                                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
-                                            </h:outputLabel>   
+                                            </h:outputLabel>
+                                        <span class="error-message" id="cellPhone" ></span>    
                                         </div>
                                     </td>
                                     <td style="width:33%;">
                                         <h:outputLabel  for="alternativePhone"  value="Alternative Phone:" >
-                                            <h:inputText  id="alternativePhone"  value="#{bb.alternativePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                            <h:inputText  id="alternativePhone"  class="alternativePhone" value="#{bb.alternativePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
                                         </h:outputLabel>
                                         <div style="float:left" >
                                             <h:outputLabel value="... to see your Alternative Phone Number?"  for="publicDisplayAlternativePhone" >
@@ -294,6 +302,7 @@
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
                                             </h:outputLabel>   
+                                            <span class="error-message" id="alternativePhone" ></span>        
                                         </div>
                                     </td>
 
