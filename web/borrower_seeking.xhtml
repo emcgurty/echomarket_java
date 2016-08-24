@@ -56,7 +56,7 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="float:left;margin-left:25px">
-                            <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" >
+                            <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span id="contactDescribeId" class="required_fields">*</span>
                                 <br />
                                 <h:selectOneMenu id="contactDescribeId" value="#{bb.contactDescribeId}" >
 
@@ -64,7 +64,6 @@
                                                    var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
                                 </h:selectOneMenu>
                             </h:outputLabel>
-                            <h:message styleClass="error-message" for="contactDescribeId"/>
                             <span class="error-message" id="contactDescribeId" ></span>
                         </div>
 
