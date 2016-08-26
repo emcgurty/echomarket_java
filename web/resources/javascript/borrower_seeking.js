@@ -16,8 +16,7 @@ jQuery(document).ready(function ($) {
         var select_value = input.value;
         var select_id = input.id;
         select_id = select_id.replace('rb:', '');
-        //alert(select_value);
-//        On database all 'Please select' have value -2
+        //        On database all 'Please select' have value -2
         if (select_value == '-2') {
 
             var lastColon = select_id.lastIndexOf(":");
@@ -40,8 +39,20 @@ jQuery(document).ready(function ($) {
         } else {
             $("input#otherDescribeYourself").html("");
             $("div#otherDescribeYourselfText").css("visibility", "hidden");
+        }
 
-
+        if ((select_id == 'categoryId') && (select_value == 0)) {
+            $("div#other_category").css("display", "block");
+        } else if ((select_id == 'categoryId') && (select_value == -2)) {
+            $("span#" + select_id).css("visibility", "visible");
+            $("span#" + select_id).text("Please make a selection.");
+            $("input#otherItemCategory").html("");
+            $("div#other_category").css("display", "none");
+        } else if ((select_id == 'categoryId') && (select_value > 0)) {
+            $("span#" + select_id).css("visibility", "hidden");
+            $("span#" + select_id).text("");
+            $("input#otherItemCategory").html("");
+            $("div#other_category").css("display", "none");
         }
 
         return returnResult;
@@ -128,6 +139,18 @@ jQuery(document).ready(function ($) {
 
         } else if (this.id.includes('organization_name')) {
             $("div#yesNoOrganization").css("display", "block");
+
+        } else if (this.id.includes('itemCount')) {
+
+            if (isNaN(this.value)) {
+                $("span#itemCount.error-message").css("visibility", "visible");
+                $("span#itemCount.error-message").text("Please provide a item count");
+            } else {
+                $("span#itemCount.error-message").text("");
+                $("span#itemCount.error-message").css("visibility", "hidden");
+            }
+
+
         } else {
             return false;
         }
@@ -540,18 +563,18 @@ function displayPhone() {
 }
 
 function checkBLegal() {
-    
+
     var legal_check = $("input[type=radio]");
     var getValue = false;
     var foundValue = 0;
-    
+
     try {
 
         for (var i = 0; i < legal_check.length; i++) {
             var id = legal_check[i].id;
             if (id.includes('age18OrMore')) {
                 if (legal_check[i].value == 1) {
-                        if (legal_check[i].checked == false) {
+                    if (legal_check[i].checked == false) {
                         $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
                         $("span#age18OrMore_span.error-message").css("visibility", "visible");
                     } else {
@@ -560,7 +583,7 @@ function checkBLegal() {
                         getValue = true;
                     }
                 }
-                   foundValue++;
+                foundValue++;
             } else if (id.includes('goodwill')) {
                 if (legal_check[i].value == 1) {
                     if (legal_check[i].checked == false) {
@@ -573,9 +596,9 @@ function checkBLegal() {
                     }
                 }
                 foundValue++;
-            }  else if (foundValue == 2) {
-                  break;
-                
+            } else if (foundValue == 2) {
+                break;
+
             }
         }
 
