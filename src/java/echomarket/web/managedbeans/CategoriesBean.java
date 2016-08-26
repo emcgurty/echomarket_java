@@ -15,7 +15,7 @@ import org.hibernate.Transaction;
 
 @ManagedBean(name = "cats")
 @RequestScoped
-public class CategoriesBean extends AbstractBean implements Serializable{
+public class CategoriesBean extends AbstractBean implements Serializable {
 
     private Integer id;
     private String categoryType;
@@ -23,23 +23,6 @@ public class CategoriesBean extends AbstractBean implements Serializable{
     public CategoriesBean() {
     }
 
-    /**
-     * @return the id
-     */
-//    public Integer getId() {
-//        return id;
-//    }
-
-//    /**
-//     * @param id the id to set
-//     */
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
-
-    /**
-     * @return the categoryType
-     */
     public String getCategoryType() {
         return categoryType;
     }
@@ -71,7 +54,7 @@ public class CategoriesBean extends AbstractBean implements Serializable{
         Transaction tx = session.beginTransaction();
 
         try {
-            result = session.createQuery("from Categories").list();
+            result = session.createQuery("from Categories Order By id").list();
         } catch (Exception e) {
             System.out.println("Error line 74 CatBean");
             e.printStackTrace();
