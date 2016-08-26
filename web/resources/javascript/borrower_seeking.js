@@ -541,17 +541,17 @@ function displayPhone() {
 
 function checkBLegal() {
     
-    var legel_check = $("input[type=radio]");
+    var legal_check = $("input[type=radio]");
     var getValue = false;
     var foundValue = 0;
     
     try {
 
-        for (var i = 0; i < legel_check.length; i++) {
-            var id = legel_check[i].id;
+        for (var i = 0; i < legal_check.length; i++) {
+            var id = legal_check[i].id;
             if (id.includes('age18OrMore')) {
-                if (legel_check[i].value == 1) {
-                        if (legel_check[i].checked == false) {
+                if (legal_check[i].value == 1) {
+                        if (legal_check[i].checked == false) {
                         $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
                         $("span#age18OrMore_span.error-message").css("visibility", "visible");
                     } else {
@@ -562,8 +562,8 @@ function checkBLegal() {
                 }
                    foundValue++;
             } else if (id.includes('goodwill')) {
-                if (legel_check[i].value == 1) {
-                    if (legel_check[i].checked == false) {
+                if (legal_check[i].value == 1) {
+                    if (legal_check[i].checked == false) {
                         $("span#goodwill_span.error-message").text("You must be acting in goodwill.");
                         $("span#goodwill_span.error-message").css("visibility", "visible");
                     } else {
