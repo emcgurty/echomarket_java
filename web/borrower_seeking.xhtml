@@ -434,7 +434,7 @@
                                                         </f:selectItems>    
                                                     </h:selectOneMenu>
                                                     <h:message styleClass="error-message" for="countryID"/>
-                                                    <span class="error-message" id="countryID" ></span>
+                                                    <span class="error-message" id="countryId" ></span>
                                                 </td>
                                             </tr>
 
@@ -618,10 +618,10 @@
                                             <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
                                                            itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
                                             </f:selectItems>
-                                            
+
                                         </h:selectOneMenu>
                                     </h:outputLabel>  
-                                        <span class="error-message" id="categoryId" ></span>
+                                    <span class="error-message" id="categoryId" ></span>
                                 </div>
                             </td>
                             <td style="width:50%;">
@@ -629,7 +629,7 @@
 
                                 <div id="other_category" style="display:none;">    
                                     <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
-                                        <h:inputText  value="#{bb.otherItemCategory}" id="otherItemCategory"  />
+                                        <h:inputText  value="#{bb.otherItemCategory}" id="otherItemCategory"  class="items"/>
                                     </h:outputLabel>    
                                 </div>
 
@@ -653,8 +653,8 @@
                         <tr class="odd">
                             <td style="width:50%">
                                 <div style="margin-left:25px;margin-top:5px;">
-                                    <h:outputLabel for="" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
-                                        <h:inputText  id="itemDescription" value="#{bb.itemDescription}" />
+                                    <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
+                                        <h:inputText  id="itemDescription" value="#{bb.itemDescription}" class="items"/>
                                     </h:outputLabel>
                                 </div></td>
                             <td style="width:50%">
@@ -668,7 +668,7 @@
                                             </f:selectItems>    
                                         </h:selectOneMenu>
                                     </h:outputLabel>
-
+                                    <span class="error-message" id="itemConditionId" ></span>
                                 </div></td>
                         </tr>
 
@@ -682,7 +682,7 @@
                             <td  style="width:50%;">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
-                                        <h:inputText  id="itemCount" value="#{bb.itemCount}" size="2" maxlength="2" required="true" />
+                                        <h:inputText  id="itemCount" value="#{bb.itemCount}" size="2" maxlength="2" required="true" class="items"/>
                                     </h:outputLabel>
                                     <span class="error-message" id="itemCount" ></span>
                                 </div></td>
@@ -763,10 +763,10 @@
                             </li>
                             <li style="margin:5px;">
                                 <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore" ><span class="required_fields">*</span>
-                                     <h:selectOneRadio  id="age18OrMore" value="#{bb.age18OrMore}"  >
+                                    <h:selectOneRadio  id="age18OrMore" value="#{bb.age18OrMore}"  >
                                         <f:selectItem itemValue="1" itemLabel="Yes" />
                                         <f:selectItem itemValue="0" itemLabel="No" />	
-                                     </h:selectOneRadio>    
+                                    </h:selectOneRadio>    
                                 </h:outputLabel>                                     
                                 <span class="error-message" id="age18OrMore_span" ></span>
                             </li>
@@ -775,7 +775,7 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="margin:20px;float:right;" >
-                            
+
                             <a onclick="checkBLegal();" style="color:crimson;font-style:italic">Save Registration</a>
                         </div>
                     </div>
