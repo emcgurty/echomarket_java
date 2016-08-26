@@ -7,6 +7,8 @@ jQuery(document).ready(function ($) {
         size_of_menu();
     });
 
+
+
     function validateSelects(input) {
         // Need to utilize include() here
         $("span.error-message").css("visibility", "hidden");
@@ -121,9 +123,9 @@ jQuery(document).ready(function ($) {
                 $("span#alternativePhone.error-message").text("");
                 $("span#alternativePhone.error-message").css("visibility", "hidden");
             }
-        
-            
-            
+
+
+
         } else if (this.id.includes('organization_name')) {
             $("div#yesNoOrganization").css("display", "block");
         } else {
@@ -147,25 +149,10 @@ jQuery(document).ready(function ($) {
     $("#itemImage").change(function () {
         readURL(this);
     });
-    function makeorgright() {
-//        var y_n = $("#displayBorrowerOrganizationName:checked").val();
-//
-//        if ((y_n == 1) && ($("#organization_name").val() == "")) {
-//            $("span#organization_name_error").css("visibility", "visible");
-//            $("span#organization_name_error").text("Please provide an organization name.");
-//        } else {
-//            $("span#organization_name_error").text("");
-//            $("span#organization_name_error").css("visibility", "hidden");
-//
-//        }
-    }
 
-    return;
-//    $("#displayBorrowerOrganizationName").change(function () {
-//        makeorgright();
-//    });
 
 });
+
 
 function showBLegal() {
     hideAllBFormHrefs();
@@ -236,31 +223,7 @@ function validateBItem() {
 //    return return_value;
 }
 
-function checkBLegal() {
 
-    var notChecked = true;
-//    var legal_18 = $("#age_18_or_more");
-//    var legal_goodwill = $("#goodwill");
-//
-//    if (!(legal_18.is(':checked'))) {
-//        notChecked = false;
-//        $("span#18_or_more_error").text("You must be 18 years of age.");
-//        $("span#18_or_more_error").css("visibility", "visible");
-//    } else {
-//        $("span#18_or_more_error").text("");
-//        $("span#18_or_more_error").css("visibility", "hidden");
-//    }
-//    if (!(legal_goodwill.is(':checked'))) {
-//        notChecked = false;
-//        $("span#goodwill_error").text("You must be acting in goodwill.");
-//        $("span#goodwill_error").css("visibility", "visible");
-//    } else {
-//        $("span#goodwill_error").text("");
-//        $("span#goodwill_error").css("visibility", "hidden");
-//    }
-
-    return notChecked;
-}
 
 function hideAllBFormHrefs() {
     clearMenu();
@@ -419,9 +382,9 @@ function ValidateContactInformation() {
     $("span.error-message").css("visibility", "hidden");
     $("select").each(function () {
         if (this.id.includes('contactDescribeId')) {
-            
+
             cdi = this.value;
-            
+
             foundComponent++;
 //            Cheating here, eventailly need to parse for id
         } else if (this.id == 'rb:primary:0:countryId') {
@@ -440,7 +403,7 @@ function ValidateContactInformation() {
 
         if (this.id.includes('otherDescribeYourself')) {
             ocdi = this.value;
-            alert(ocdi);
+            // alert(ocdi);
             foundComponent++;
         } else if (this.id == 'rb:organization_name') {
             orgName = this.value;
@@ -574,4 +537,45 @@ function displayPhone() {
     }
 
 
+}
+
+function checkBLegal() {
+    
+    var legel_check = $("input[type=radio]");
+    var getValue = false;
+    
+    try {
+
+        for (var i = 0; i < legel_check.length; i++) {
+            var id = legel_check[i].id;
+            if (id.includes('age18OrMore')) {
+                if (legel_check[i].value == 1) {
+                        if (legel_check[i].checked == false) {
+                        $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
+                        $("span#age18OrMore_span.error-message").css("visibility", "visible");
+                    } else {
+                        $("span#age18OrMore_span.error-message").text("");
+                        $("span#age18OrMore_span.error-message").css("visibility", "hidden");
+                        getValue = true;
+                    }
+                }
+
+            } else if (id.includes('goodwill')) {
+                if (legel_check[i].value == 1) {
+                    if (legel_check[i].checked == false) {
+                        $("span#goodwill_span.error-message").text("You must be acting in goodwill.");
+                        $("span#goodwill_span.error-message").css("visibility", "visible");
+                    } else {
+                        $("span#goodwill_span.error-message").text("");
+                        $("span#goodwill_span.error-message").css("visibility", "hidden");
+                        getValue = true;
+                    }
+                }
+            }
+        }
+
+    } catch (err) {
+    }
+
+    return getValue;
 }
