@@ -67,7 +67,7 @@
                             <span class="error-message" id="contactDescribeId" ></span>
                         </div>
 
-                        
+
                         <div id="otherDescribeYourselfText"  style="float:left;margin-left:25px;visibility: hidden;">    
                             <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"  style="margin-left:25px">
                                 <br />
@@ -85,10 +85,10 @@
                         <div style="float:left;margin-left:25px">
                             <h:outputLabel value="#{bundle.OrganizationName}"  for="organization_name" >
                                 <h:inputText  id="organization_name" class="org_name"  value="#{bb.organizationName}"  >
-                             
+
                                 </h:inputText>
                             </h:outputLabel>
-                              <span class="error-message" id="organization_name" ></span>
+                            <span class="error-message" id="organization_name" ></span>
 
                         </div>
                         <div style="float:left;margin">
@@ -277,8 +277,8 @@
                                     <td style="width:33%;">
                                         <h:outputLabel  for="cellPhone"  value="Cell Phone:" >
                                             <h:inputText  id="cellPhone"  class="cellPhone" value="#{bb.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
-                                            
-                                            
+
+
                                         </h:outputLabel>
                                         <div style="float:left" >
                                             <h:outputLabel value=".. to see your Cell Phone Number?"  for="publicDisplayCellPhone" >
@@ -287,7 +287,7 @@
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
                                             </h:outputLabel>
-                                        <span class="error-message" id="cellPhone" ></span>    
+                                            <span class="error-message" id="cellPhone" ></span>    
                                         </div>
                                     </td>
                                     <td style="width:33%;">
@@ -503,7 +503,7 @@
                         </div>
                     </div>
                     <div style="float:left;margin-left:25px;display:block;" >
-                         <div style="margin-left:25px;float:left;display:none;" id="display_homePhone" class="phone" >
+                        <div style="margin-left:25px;float:left;display:none;" id="display_homePhone" class="phone" >
                             <h:outputLabel value="Can lenders call you at your home phone?:"  for="borrowerContactByHomePhone" >
                                 <h:selectOneRadio id="borrowerContactByHomePhone" value="#{bb.borrowerContactByHomePhone}"  >
                                     <f:selectItem itemValue="1" itemLabel="Yes" />
@@ -752,28 +752,29 @@
                         <ul >
                             <li style="margin:5px;">
                                 <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill" ><span class="required_fields">*</span>
-                                    <h:selectOneRadio id="goodwill" value="#{bb.goodwill}"  >
+                                    <h:selectOneRadio id="goodwill"  value="#{bb.goodwill}"  >
                                         <f:selectItem itemValue="1" itemLabel="Yes" />
                                         <f:selectItem itemValue="0" itemLabel="No" />	
                                     </h:selectOneRadio>    
                                 </h:outputLabel>                                     
-
+                                <span class="error-message" id="goodwill_span" ></span>
                             </li>
                             <li style="margin:5px;">
                                 <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore" ><span class="required_fields">*</span>
-                                    <h:selectOneRadio id="age18OrMore" value="#{bb.age18OrMore}"  >
+                                     <h:selectOneRadio  id="age18OrMore" value="#{bb.age18OrMore}"  >
                                         <f:selectItem itemValue="1" itemLabel="Yes" />
                                         <f:selectItem itemValue="0" itemLabel="No" />	
-                                    </h:selectOneRadio>    
+                                     </h:selectOneRadio>    
                                 </h:outputLabel>                                     
-
+                                <span class="error-message" id="age18OrMore_span" ></span>
                             </li>
                         </ul>
                     </div>
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="margin:20px;float:right;" >
-                            <a onclick="showItem();" style="color:crimson;font-style:italic"  >Let's Save!</a>
+                            
+                            <a onclick="checkBLegal();" style="color:crimson;font-style:italic">Save Registration</a>
                         </div>
                     </div>
 
@@ -786,3 +787,5 @@
         <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
     </ui:define>
 </ui:composition>
+
+
