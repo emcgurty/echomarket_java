@@ -543,6 +543,7 @@ function checkBLegal() {
     
     var legel_check = $("input[type=radio]");
     var getValue = false;
+    var foundValue = 0;
     
     try {
 
@@ -559,7 +560,7 @@ function checkBLegal() {
                         getValue = true;
                     }
                 }
-
+                   foundValue++;
             } else if (id.includes('goodwill')) {
                 if (legel_check[i].value == 1) {
                     if (legel_check[i].checked == false) {
@@ -571,6 +572,10 @@ function checkBLegal() {
                         getValue = true;
                     }
                 }
+                foundValue++;
+            }  else if (foundValue == 2) {
+                  break;
+                
             }
         }
 
