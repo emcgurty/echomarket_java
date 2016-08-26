@@ -618,19 +618,20 @@
                                             <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
                                                            itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
                                             </f:selectItems>
-                                            <f:ajax event="change" execute="@this"   render="other_category" />                                                
+                                            
                                         </h:selectOneMenu>
                                     </h:outputLabel>  
+                                        <span class="error-message" id="categoryId" ></span>
                                 </div>
                             </td>
                             <td style="width:50%;">
 
 
-                                <h:panelGroup id="other_category" >    
-                                    <h:outputLabel for="otherItemCategory" value="Add another category:" rendered="#{bb.categoryId eq '0'}">
+                                <div id="other_category" style="display:none;">    
+                                    <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
                                         <h:inputText  value="#{bb.otherItemCategory}" id="otherItemCategory"  />
                                     </h:outputLabel>    
-                                </h:panelGroup>
+                                </div>
 
                             </td>
 
@@ -658,8 +659,8 @@
                                 </div></td>
                             <td style="width:50%">
                                 <div style="margin-left:25px;margin-top:5px;">
-                                    <h:outputLabel value="#{bundle.ItemCondition}" for="item_condition_id"  ><span class="required_fields">*</span>
-                                        <h:selectOneMenu id="item_condtion_id" value="#{bb.itemConditionId}" onchange="">
+                                    <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
+                                        <h:selectOneMenu id="itemConditionId" value="#{bb.itemConditionId}" onchange="">
                                             <f:validator validatorId="selectOneMenuValidator" />  
                                             <f:selectItems id="item_condtion" value="#{itemc.buildItemConditionsArray()}"  
                                                            var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
@@ -681,8 +682,9 @@
                             <td  style="width:50%;">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
-                                        <h:inputText  id="itemCount" value="#{bb.itemCount}" size="2" maxlength="2" required="true"/>
+                                        <h:inputText  id="itemCount" value="#{bb.itemCount}" size="2" maxlength="2" required="true" />
                                     </h:outputLabel>
+                                    <span class="error-message" id="itemCount" ></span>
                                 </div></td>
                         </tr>
                     </table>
