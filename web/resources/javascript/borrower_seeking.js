@@ -25,16 +25,15 @@ jQuery(document).ready(function ($) {
             //alert(lengthOfSelectId);
             var select_id = select_id.substring(lastColon + 1, lengthOfSelectId);
             //alert(select_id);
-            $("span#" + select_id).css("visibility", "visible");
+            $("span#" + select_id + ".error-message").css("visibility", "visible");
             $("span#" + select_id).text("Please make a selection.");
         } else {
-            $("span#" + select_id).css("visibility", "hidden");
+            $("span#" + select_id + ".error-message").css("visibility", "hidden");
             $("span#" + select_id).text("");
             returnResult = true
         }
 
         if ((select_id == 'contactDescribeId') && (select_value == '100')) {
-//            Added this becuase rendered object are not retained in posting
             $("div#otherDescribeYourselfText").css("visibility", "visible");
         } else {
             $("input#otherDescribeYourself").html("");
@@ -44,13 +43,13 @@ jQuery(document).ready(function ($) {
         if ((select_id == 'categoryId') && (select_value == 0)) {
             $("div#other_category").css("display", "block");
         } else if ((select_id == 'categoryId') && (select_value == -2)) {
-            $("span#" + select_id).css("visibility", "visible");
-            $("span#" + select_id).text("Please make a selection.");
+            $("span#" + select_id + ".error-message").css("visibility", "visible");
+            $("span#" + select_id + ".error-message").text("Please make a selection.");
             $("input#otherItemCategory").html("");
             $("div#other_category").css("display", "none");
         } else if ((select_id == 'categoryId') && (select_value > 0)) {
-            $("span#" + select_id).css("visibility", "hidden");
-            $("span#" + select_id).text("");
+            $("span#" + select_id + ".error-message").css("visibility", "hidden");
+            $("span#" + select_id + ".error-message").text("");
             $("input#otherItemCategory").html("");
             $("div#other_category").css("display", "none");
         }
@@ -178,13 +177,16 @@ jQuery(document).ready(function ($) {
 
 
 function showBLegal() {
-    hideAllBFormHrefs();
-    $("li#tab_item_1").css("display", "block");
-    $("li#tab_item_2").css("display", "block");
-    $("li#tab_item_3").css("display", "block");
-    $("li#tab_item_4").css("display", "block");
-    whichSaveMenu(1);
-    $("#form_legal").css("display", "block");
+    var returnResult = validateItem();
+    if (returnResult) {
+        hideAllBFormHrefs();
+        $("li#tab_item_1").css("display", "block");
+        $("li#tab_item_2").css("display", "block");
+        $("li#tab_item_3").css("display", "block");
+        $("li#tab_item_4").css("display", "block");
+        whichSaveMenu(1);
+        $("#form_legal").css("display", "block");
+    }
     return false;
 }
 
@@ -210,40 +212,63 @@ function showConditions() {
 }
 
 
-function validateBItem() {
-//    var return_value = true;
-//    var whichType = 'borrower';
-//    var item_count_element = $("#" + whichType + "_item_count");
-//    var item_count_value = item_count_element.val();
-//    var bad_count = isNaN(item_count_value);
-//    $("span#item_description_error").css("visibility", "hidden");
-//    $("span#item_count_error").css("visibility", "hidden");
-//    $("span#item_condition_id_error").css("visibility", "hidden");
-//    $("span#category_id_error").css("visibility", "hidden");
-//
+function validateItem() {
+    alert("vatiem");
+    var return_value = false;
+    var item_id = null;
+    var item_value = null;
+
+    var getItemInputs = $("input[type=text]");
+    alert(getItemInputs.length);
+
+    for (var i = 0; i < getItemInputs.length; i++) {
+        item_id = getItemInputs[i].id;
+        item_value = getItemInputs[i].value;
+        alert(item_value);
+        alert(item_id);
+        if (item_id.includes('itemCount')) {
+            
+            //alert(isNaN(item_value));
+            if (!(isNaN(item_value))) {
+                $("span#" + item_id + ".error-message").css("visibility", "visible");
+                $("span#" + item_id + ".error-message").text("Please provide an item count.");
+            }
+
+        } else if (item_id.includes('itemDescription')) {
+            if (!(item_value)) {
+                $("span#" + item_id + ".error-message").css("visibility", "visible");
+                $("span#" + item_id + ".error-message").text("Please provide a item description.");
+            }
+
+        } else {
+        }
+    }
+
+//    
 //    if (bad_count) {
-//        $("span#item_count_error").css("visibility", "visible");
-//        return_value = false;
-//    } else if ((parseInt(item_count_value) < 1) || (parseInt(item_count_value) > 100)) {
-//        $("span#item_count_error").css("visibility", "visible");
+//        $("span#itemCount.error-message").css("visibility", "visible");
+//        $("span#itemCount.error-message").text("Please provide an Item Count");
 //        return_value = false;
 //    }
 //
-//    if ($("#" + whichType + "_item_description").val() == '') {
-//        $("span#item_description_error").css("visibility", "visible");
+//    if ($("#rb:itemDescription").val() == '') {
+//        $("span#itemDescription.error-message").css("visibility", "visible");
+//        $("span#itemDescription.error-message").text("Please provide an Item Description");
 //        return_value = false;
 //    }
 //
-//    if ($("#" + whichType + "_item_condition_id option:selected").text() == 'Please select') {
-//        $("span#item_condition_id_error").css("visibility", "visible");
+//    if ($("#rb:itemConditionId option:selected").text() == 'Please select') {
+//        $("span#itemConditionId.error-message_error").css("visibility", "visible");
+//        $("span#itemConditionId.error-message_error").text("Provide an Item Condition");
 //        return_value = false;
 //    }
-//    if ($("#" + whichType + "_category_id option:selected").text() == 'Please select') {
-//        $("span#category_id_error").css("visibility", "visible");
+//    if ($("#rb:categoryId option:selected").text() == 'Please select') {
+//        $("span#categoryId.error-message").css("visibility", "visible");
+//        $("span#categoryId.error-message").test("Please provide a Category");
 //        return_value = false;
 //    }
-//
-//    return return_value;
+
+    return return_value;
 }
 
 
