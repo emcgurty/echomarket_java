@@ -24,13 +24,10 @@ import org.hibernate.Transaction;
 public class BorrowersBean extends AbstractBean implements Serializable {
 
     private String userId;
-    //private String user_type;
     private String user_alias;
     private int contactDescribeId;
-
     private String organizationName;
     private int displayBorrowerOrganizationName;
-
     private String otherDescribeYourself;
     private String firstName;
     private String mi;
@@ -109,61 +106,27 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     public String saveBorrowerRegistration() {
 
-        this.userId = getUserId();
-        this.contactDescribeId = getContactDescribeId();
-        this.otherDescribeYourself = getOtherDescribeYourself();
-        this.organizationName = getOrganizationName();
-        this.displayBorrowerOrganizationName = getDisplayBorrowerOrganizationName();
-
-        this.firstName = getFirstName();
-        this.mi = getMi();
-        this.lastName = getLastName();
-
-        this.displayBorrowerName = getDisplayBorrowerName();
-        this.displayBorrowerAddress = getDisplayBorrowerAddress();
-        this.homePhone = getHomePhone();
-        this.cellPhone = getCellPhone();
-        this.alternativePhone = getAlternativePhone();
-        this.publicDisplayHomePhone = getPublicDisplayHomePhone();
-        this.publicDisplayCellPhone = getPublicDisplayCellPhone();
-        this.publicDisplayAlternativePhone = getPublicDisplayAlternativePhone();
-        this.useWhichContactAddress = getUseWhichContactAddress();
-        this.emailAlternative = getEmailAlternative();
-        this.borrowerContactByEmail = getBorrowerContactByEmail();
-        this.borrowerContactByHomePhone = getBorrowerContactByHomePhone();
-        this.borrowerContactByCellPhone = getBorrowerContactByCellPhone();
-        this.borrowerContactByAlternativePhone = getBorrowerContactByAlternativePhone();
-        this.borrowerContactByFacebook = getBorrowerContactByFacebook();
-        this.borrowerContactByTwitter = getBorrowerContactByTwitter();
-        this.borrowerContactByInstagram = getBorrowerContactByInstagram();
-        this.borrowerContactByLinkedIn = getBorrowerContactByLinkedIn();
-        this.borrowerContactByOtherSocialMedia = getBorrowerContactByOtherSocialMedia();
-        this.borrowerContactByOtherSocialMediaAccess = getBorrowerContactByOtherSocialMediaAccess();
-        this.categoryId = getCategoryId();
-        this.otherItemCategory = getOtherItemCategory();
-        this.itemModel = getItemModel();
-        this.itemDescription = getItemDescription();
-        this.itemConditionId = getItemConditionId();
-        this.itemCount = getItemCount();
-        this.goodwill = getGoodwill();
-        this.age18OrMore = getAge18OrMore();
-        this.isActive = getIsActive();
-        this.approved = getApproved();
-        this.notifyLenders = getNotifyLenders();
-        this.receiveLenderNotification = getReceiveLenderNotification();
-        this.isCommunity = getIsCommunity();
-        this.remoteIp = getRemoteIp();
-        this.comment = getComment();
-        this.advertiserId = getAdvertiserId();
-        this.displayBorrowerAlternativeAddress = getDisplayBorrowerAlternativeAddress();
-
-        // Test here 
         List padrs = getPrimary();
+        List aadrs = getAlternative();
         /// Begin Hiernate transaction... first to save Borroweer detail, then with borrower_id, save addresses
-        //Session sb = hib_session();
-        //Transaction tx = sb.beginTransaction();
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        Date today_date = new Date();
 
-        //   Need to learn if I can pass ArrayList in creating new.  new Addresses adr = new Addresses(padrs);
+        Borrowers bb = new Borrowers(getId(), getUserId(), getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
+                getFirstName(), getMi(), getLastName(), getDisplayBorrowerName(), getDisplayBorrowerAddress(), getHomePhone(),
+                getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
+                getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(),
+                getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(),
+                getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(),
+                getBorrowerContactByOtherSocialMedia(), getBorrowerContactByOtherSocialMediaAccess(), getCategoryId(), getOtherItemCategory(),
+                getItemModel(), getItemDescription(), getItemConditionId(), getItemCount(), getGoodwill(), getAge18OrMore(),
+                getIsActive(), today_date, today_date, null, getApproved(), getNotifyLenders(), getReceiveLenderNotification(),
+                getIsCommunity(), null, getComment(), getAdvertiserId(), getDisplayBorrowerAlternativeAddress());
+
+        sb.save(bb);
+        tx.commit();
+
         message(
                 null,
                 "BorrowerRegistionRecordSaved",
@@ -218,8 +181,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         try {
             returnString = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id").toString();
         } catch (Exception e) {
-
-        }
+            
+                    }
 
         return returnString;
     }
