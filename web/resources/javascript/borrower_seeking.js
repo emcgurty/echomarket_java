@@ -45,12 +45,12 @@ jQuery(document).ready(function ($) {
         } else if ((select_id == 'categoryId') && (select_value == -2)) {
             $("span#" + select_id + ".error-message").css("visibility", "visible");
             $("span#" + select_id + ".error-message").text("Please make a selection.");
-            $("input#otherItemCategory").html("");
+            $("input#otherItemCategory").text("");
             $("div#other_category").css("display", "none");
         } else if ((select_id == 'categoryId') && (select_value > 0)) {
             $("span#" + select_id + ".error-message").css("visibility", "hidden");
             $("span#" + select_id + ".error-message").text("");
-            $("input#otherItemCategory").html("");
+            $("input#otherItemCategory").text("");
             $("div#other_category").css("display", "none");
         }
 
@@ -143,11 +143,22 @@ jQuery(document).ready(function ($) {
 
             if (isNaN(this.value)) {
                 $("span#itemCount.error-message").css("visibility", "visible");
-                $("span#itemCount.error-message").text("Please provide a item count");
+                $("span#itemCount.error-message").text("Please provide an item count");
             } else {
                 $("span#itemCount.error-message").text("");
                 $("span#itemCount.error-message").css("visibility", "hidden");
             }
+
+        } else if (this.id.includes('itemDescription')) {
+
+            if (this.value == '') {
+                $("span#itemDescription.error-message").css("visibility", "visible");
+                $("span#itemDescription.error-message").text("Please provide an item description");
+            } else {
+                $("span#itemDescription.error-message").text("");
+                $("span#itemDescription.error-message").css("visibility", "hidden");
+            }
+
 
 
         } else {
@@ -213,60 +224,64 @@ function showConditions() {
 
 
 function validateItem() {
-    alert("vatiem");
-    var return_value = false;
+
+    var return_value = true;
     var item_id = null;
     var item_value = null;
 
-    var getItemInputs = $("input[type=text]");
-    alert(getItemInputs.length);
+    var getItemInputs = $("input[type=text].items");
 
     for (var i = 0; i < getItemInputs.length; i++) {
         item_id = getItemInputs[i].id;
+        item_id = item_id.replace('rb:', '');
         item_value = getItemInputs[i].value;
-        alert(item_value);
-        alert(item_id);
+
         if (item_id.includes('itemCount')) {
-            
-            //alert(isNaN(item_value));
-            if (!(isNaN(item_value))) {
+
+            if ((isNaN(item_value)) || (item_value == '')) {
                 $("span#" + item_id + ".error-message").css("visibility", "visible");
                 $("span#" + item_id + ".error-message").text("Please provide an item count.");
+                return_value = false;
             }
 
         } else if (item_id.includes('itemDescription')) {
-            if (!(item_value)) {
+
+            if (item_value == '') {
                 $("span#" + item_id + ".error-message").css("visibility", "visible");
                 $("span#" + item_id + ".error-message").text("Please provide a item description.");
+                return_value = false;
+            }
+        } else if (item_id.includes('otherItemCategory')) {
+            if ($("div#other_category").css("display") == 'block') {
+                if (item_value == '') {
+
+                    $("span#" + item_id + ".error-message").css("visibility", "visible");
+                    $("span#" + item_id + ".error-message").text("Please provide your Item Category.");
+                    return_value = false;
+                }
             }
 
         } else {
         }
+
+
     }
 
-//    
-//    if (bad_count) {
-//        $("span#itemCount.error-message").css("visibility", "visible");
-//        $("span#itemCount.error-message").text("Please provide an Item Count");
-//        return_value = false;
-//    }
-//
-//    if ($("#rb:itemDescription").val() == '') {
-//        $("span#itemDescription.error-message").css("visibility", "visible");
-//        $("span#itemDescription.error-message").text("Please provide an Item Description");
-//        return_value = false;
-//    }
-//
-//    if ($("#rb:itemConditionId option:selected").text() == 'Please select') {
-//        $("span#itemConditionId.error-message_error").css("visibility", "visible");
-//        $("span#itemConditionId.error-message_error").text("Provide an Item Condition");
-//        return_value = false;
-//    }
-//    if ($("#rb:categoryId option:selected").text() == 'Please select') {
-//        $("span#categoryId.error-message").css("visibility", "visible");
-//        $("span#categoryId.error-message").test("Please provide a Category");
-//        return_value = false;
-//    }
+    var getItemSelect = $(".items.select");
+
+    for (var i = 0; i < getItemSelect.length; i++) {
+        item_id = getItemSelect[i].id;
+        item_id = item_id.replace('rb:', '');
+        item_value = getItemSelect[i].value;
+
+        if (item_id.includes('itemConditionId')) {
+            if (item_value == -2) {
+                $("span#" + item_id + ".error-message").css("visibility", "visible");
+                $("span#" + item_id + ".error-message").text("Please make a selection.");
+                return_value = false;
+            }
+        }
+    }
 
     return return_value;
 }
@@ -415,6 +430,7 @@ function whichSaveMenu(whichSave) {
 
 
 function ValidateContactInformation() {
+
     var returnValue = true;
     var foundComponent = 0;
     var cdi = null;
