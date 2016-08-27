@@ -46,7 +46,7 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
         Transaction tx = session.beginTransaction();
 
         try {
-            result = session.createQuery("from ItemConditions").list();
+            result = session.createQuery("from ItemConditions order by id").list();
         } catch (Exception e) {
             System.out.println("Error line 48 Itemm Conditions");
             e.printStackTrace();
