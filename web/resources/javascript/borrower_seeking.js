@@ -71,7 +71,7 @@ jQuery(document).ready(function ($) {
             try {
                 getOrgNameVal = $("input[class='org_name']").val();
             } catch (err) {
-     
+
             }
 
             if ((y_n == 1) && (getOrgNameVal == "")) {
@@ -193,6 +193,17 @@ function showBLegal() {
     return false;
 }
 
+function ValdateThenShowReview() {
+    var validL = checkBLegal();
+    if (validL) {
+        showReview();
+
+    }
+
+}
+
+
+
 function showLegal() {
     hideAllBFormHrefs();
 //    $("li#tab_item_1").css("display", "block");
@@ -298,7 +309,7 @@ function validateAlternativeAddress() {
             if (item_id.includes('addressLine1')) {
 
                 if (item_value == '') {
-                    
+
                     $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
                     $("span#" + item_id + "_alternative.error-message").text("Please provide your first Address Line.");
                     return_value = false;
@@ -427,7 +438,14 @@ function showBorrowersContactPreferences() {
 
 
 function showReview() {
-    $("li[id^=tab_item_]").css("display", "block");
+    $("a.right_div").css("display", "none");
+    $("div.top").css("display", "none");
+    $("div.top.review").css("display", "block");
+    $("li#tab_item_1").css("display", "block");
+    $("li#tab_item_2").css("display", "block");
+    $("li#tab_item_3").css("display", "block");
+    $("li#tab_item_4").css("display", "block");
+    whichSaveMenu(1);
     $("div[class=contact_information]").css("display", "block");
     $("div[id^=menu_item_]").css("display", "none");
     return false;
