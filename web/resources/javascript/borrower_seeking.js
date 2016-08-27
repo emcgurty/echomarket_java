@@ -441,6 +441,7 @@ function showReview() {
     $("a.right_div").css("display", "none");
     $("div.top").css("display", "none");
     $("div.top.review").css("display", "block");
+    $("a.right_div.review").css("display", "block");
     $("li#tab_item_1").css("display", "block");
     $("li#tab_item_2").css("display", "block");
     $("li#tab_item_3").css("display", "block");
