@@ -14,17 +14,10 @@ jQuery(document).ready(function ($) {
         $("span.error-message").css("visibility", "hidden");
         var returnResult = false;
         var select_value = input.value;
-        var select_id = input.id;
-        select_id = select_id.replace('rb:', '');
+        var select_id = getChildID(input.id);
         //        On database all 'Please select' have value -2
         if (select_value == '-2') {
 
-            var lastColon = select_id.lastIndexOf(":");
-            // alert(lastColon);
-            var lengthOfSelectId = select_id.length;
-            //alert(lengthOfSelectId);
-            var select_id = select_id.substring(lastColon + 1, lengthOfSelectId);
-            //alert(select_id);
             $("span#" + select_id + ".error-message").css("visibility", "visible");
             $("span#" + select_id).text("Please make a selection.");
         } else {
@@ -78,7 +71,7 @@ jQuery(document).ready(function ($) {
             try {
                 getOrgNameVal = $("input[class='org_name']").val();
             } catch (err) {
-                //alert(1);
+     
             }
 
             if ((y_n == 1) && (getOrgNameVal == "")) {
@@ -133,7 +126,6 @@ jQuery(document).ready(function ($) {
                 $("span#alternativePhone.error-message").text("");
                 $("span#alternativePhone.error-message").css("visibility", "hidden");
             }
-
 
 
         } else if (this.id.includes('organization_name')) {
@@ -286,7 +278,72 @@ function validateItem() {
     return return_value;
 }
 
+function validateAlternativeAddress() {
 
+
+    var return_value = true;
+
+    if ($("div#buildAlternativeAddress").css("display") == 'block') {
+
+        var item_id = null;
+        var item_value = null;
+
+        var getItemInputs = $("input[type=text].alternativeAddress");
+
+        for (var i = 0; i < getItemInputs.length; i++) {
+            item_id = getChildID(getItemInputs[i].id);
+
+            item_value = getItemInputs[i].value;
+
+            if (item_id.includes('addressLine1')) {
+
+                if (item_value == '') {
+                    
+                    $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
+                    $("span#" + item_id + "_alternative.error-message").text("Please provide your first Address Line.");
+                    return_value = false;
+                }
+            } else if (item_id.includes('city')) {
+
+                if (item_value == '') {
+                    try {
+                        $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
+                    } catch (err) {
+                        //alert(err);
+                    }
+                    $("span#" + item_id + "_alternative.error-message").text("Please provide your City.");
+                    return_value = false;
+                }
+            } else if (item_id.includes('postalCode')) {
+
+                if (item_value == '') {
+                    $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
+                    $("span#" + item_id + "_alternative.error-message").text("Please provide your Postal Code.");
+                    return_value = false;
+                }
+            } else {
+            }
+
+
+        }
+
+        var getItemSelect = $(".alternativeAddress.select");
+
+        for (var i = 0; i < getItemSelect.length; i++) {
+            item_id = getChildID(getItemSelect[i].id);
+            item_value = getItemSelect[i].value;
+
+            if (item_id.includes('countryId')) {
+                if (item_value == -2) {
+                    $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
+                    $("span#" + item_id + "_alternative.error-message").text("Please make a selection.");
+                    return_value = false;
+                }
+            }
+        }
+    }
+    return return_value;
+}
 
 function hideAllBFormHrefs() {
     clearMenu();
@@ -341,13 +398,15 @@ function showDuration() {
 
 
 function showItem() {
-    hideAllBFormHrefs();
-    $("li#tab_item_1").css("display", "block");
-    $("li#tab_item_2").css("display", "block");
-    $("li#tab_item_3").css("display", "block");
-    whichSaveMenu(1);
-    $("#form_item").css("display", "block");
-
+    var returnResult = validateAlternativeAddress();
+    if (returnResult == true) {
+        hideAllBFormHrefs();
+        $("li#tab_item_1").css("display", "block");
+        $("li#tab_item_2").css("display", "block");
+        $("li#tab_item_3").css("display", "block");
+        whichSaveMenu(1);
+        $("#form_item").css("display", "block");
+    }
     return false;
 }
 
@@ -647,4 +706,16 @@ function checkBLegal() {
     }
 
     return getValue;
+}
+
+function getChildID(parentID) {
+    var child_id = null;
+    child_id = parentID.replace('rb:', '');
+    var lastColon = child_id.lastIndexOf(":");
+    if (lastColon > 0) {
+        var lengthOfSelectId = child_id.length;
+        child_id = child_id.substring(lastColon + 1, lengthOfSelectId);
+    }
+    return child_id;
+
 }
