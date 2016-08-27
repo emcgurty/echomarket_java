@@ -41,6 +41,13 @@
                             <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
                         </div> 
                     </div> 
+                    
+                    <div class="top review" style="display:none;">
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                        </div> 
+                    </div> 
 
                     <div  class="div_p" id="menu_item_1" >
                         <div style="margin:10px;" >
@@ -369,7 +376,7 @@
                                                 <td>
                                                     <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span class="required_fields">*</span>
                                                     <h:inputText id="addressLine1" value="#{pa.addressLine1}"
-                                                                 required="true" requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left: 5px;" class="alternativeAddress">
+                                                                 style="margin-left: 5px;" class="alternativeAddress">
                                                     </h:inputText>
                                                     <span class="error-message" id="addressLine1_alternative" ></span>
                                                 </td>
@@ -387,7 +394,7 @@
                                                 <td>
                                                     <h:outputLabel for="city" value="#{bundle.City}"/><span class="required_fields">*</span>
                                                     <h:inputText id="city" value="#{pa.city}"
-                                                                 required="true" requiredMessage="#{bundle.ReqCity}" style="margin-left: 5px;" class="alternativeAddress">
+                                                                 style="margin-left: 5px;" class="alternativeAddress">
                                                     </h:inputText>
                                                     <span class="error-message" id="city_alternative" ></span>
                                                 </td>
@@ -421,7 +428,7 @@
                                                 <td >
                                                     <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span class="required_fields">*</span>
                                                     <h:inputText id="postalCode" value="#{pa.postalCode}" 
-                                                                 required="true" requiredMessage="#{bundle.ReqPostalCode}" style="margin-left: 5px;" class="alternativeAddress">
+                                                                 style="margin-left: 5px;" class="alternativeAddress">
                                                     </h:inputText>
                                                     <h:message styleClass="error-message" for="postalCode"/>
                                                     <span class="error-message" id="postalCode_alternative" ></span>
@@ -610,6 +617,13 @@
                         </div>
                     </div>
 
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Item Detail..." />
+
+                        </div>
+                    </div>
+                    
                     <table >
                         <tr class="odd">
                             <td style="width:50%;">
@@ -766,8 +780,8 @@
                                 <span class="error-message" id="goodwill_span" ></span>
                             </li>
                             <li style="margin:5px;">
-                                <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore" ><span class="required_fields">*</span>
-                                    <h:selectOneRadio  id="age18OrMore" value="#{bb.age18OrMore}"  >
+                                <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore"  ><span class="required_fields">*</span>
+                                    <h:selectOneRadio  id="age18OrMore" value="#{bb.age18OrMore}" required="#{bb.age18OrMore == 1}" >
                                         <f:selectItem itemValue="1" itemLabel="Yes" />
                                         <f:selectItem itemValue="0" itemLabel="No" />	
                                     </h:selectOneRadio>    
@@ -779,8 +793,7 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                         <div style="margin:20px;float:right;" >
-
-                            <a onclick="checkBLegal();" style="color:crimson;font-style:italic">Save Registration</a>
+                            <a onclick="ValdateThenShowReview();" style="color:crimson;font-style:italic">Review Registration</a>
                         </div>
                     </div>
 
