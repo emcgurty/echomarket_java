@@ -614,14 +614,14 @@
                             <td style="width:50%;">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
-                                        <h:selectOneMenu id="categoryId" value="#{bb.categoryId}" >
+                                        <h:selectOneMenu id="categoryId" value="#{bb.categoryId}"  style="margin-left:10px">
                                             <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
                                                            itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
                                             </f:selectItems>
 
                                         </h:selectOneMenu>
                                     </h:outputLabel>  
-                                    <span class="error-message" id="categoryId" ></span>
+                                    <br /><span class="error-message" id="categoryId" ></span>
                                 </div>
                             </td>
                             <td style="width:50%;">
@@ -629,8 +629,10 @@
 
                                 <div id="other_category" style="display:none;">    
                                     <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
-                                        <h:inputText  value="#{bb.otherItemCategory}" id="otherItemCategory"  class="items"/>
+                                        <h:inputText  value="#{bb.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"/>
+                                        
                                     </h:outputLabel>    
+                                    <span class="error-message" id="otherItemCategory" ></span>
                                 </div>
 
                             </td>
@@ -654,13 +656,14 @@
                             <td style="width:50%">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
-                                        <h:inputText  id="itemDescription" value="#{bb.itemDescription}" class="items"/>
+                                        <h:inputText  id="itemDescription" value="#{bb.itemDescription}" class="items"  style="margin-left:10px"/>
                                     </h:outputLabel>
+                                    <span class="error-message" id="itemDescription" ></span>
                                 </div></td>
                             <td style="width:50%">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
-                                        <h:selectOneMenu id="itemConditionId" value="#{bb.itemConditionId}" onchange="">
+                                        <h:selectOneMenu id="itemConditionId" value="#{bb.itemConditionId}"  style="margin-left:10px" class="items select">
                                             <f:validator validatorId="selectOneMenuValidator" />  
                                             <f:selectItems id="item_condtion" value="#{itemc.buildItemConditionsArray()}"  
                                                            var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
@@ -668,7 +671,7 @@
                                             </f:selectItems>    
                                         </h:selectOneMenu>
                                     </h:outputLabel>
-                                    <span class="error-message" id="itemConditionId" ></span>
+                                   <br /> <span class="error-message" id="itemConditionId" ></span>
                                 </div></td>
                         </tr>
 
@@ -676,13 +679,13 @@
                             <td  style="width:50%;">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel for="itemModel" value="#{bundle.ItemModel}" >
-                                        <h:inputText id="itemModel" value="#{bb.itemModel}" />
+                                        <h:inputText id="itemModel" value="#{bb.itemModel}"  style="margin-left:10px"/>
                                     </h:outputLabel>
                                 </div></td>
                             <td  style="width:50%;">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
-                                        <h:inputText  id="itemCount" value="#{bb.itemCount}" size="2" maxlength="2" required="true" class="items"/>
+                                        <h:inputText  id="itemCount" value="#{bb.itemCount}" size="2" maxlength="2" required="true" class="items"  style="margin-left:10px"/>
                                     </h:outputLabel>
                                     <span class="error-message" id="itemCount" ></span>
                                 </div></td>
@@ -706,8 +709,8 @@
                                 </div>
                                 <br />
                                 <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                                    <h:outputLabel for="itemImageCaption" value="If you'd like, provide a caption for your item image" >
-                                        <h:inputText  id="itemImageCaption" value="#{image.itemImageCaption}" size="50" maxlength="50"/>
+                                    <h:outputLabel for="itemImageCaption" value="If you'd like, provide a caption for your item image:" >
+                                        <h:inputText  id="itemImageCaption" value="#{image.itemImageCaption}" size="50" maxlength="50" style="margin-left:10px"/>
                                     </h:outputLabel>
                                 </div>
                             </h:column>
