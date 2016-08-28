@@ -9,24 +9,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-//import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
-//import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 /// Credit due: https://www.javacodegeeks.com/2015/11/jsf-scopes-tutorial-jsfcdi-session-scope.html
-
-
 @Named
 @ManagedBean(name = "bb")
 @SessionScoped
@@ -38,7 +29,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String userId;
     // @ManagedProperty(value="#{user_type}") -- doesn't work
     private String user_type;
-    
+    private String userName;
     private int contactDescribeId;
     private String organizationName;
     private int displayBorrowerOrganizationName;
@@ -127,11 +118,11 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         Date today_date = new Date();
         String getAbstId = getId();
         String current_user = null;
-        String ut = null;
+        //String ut = null;  -- just for testing
         try {
 
             current_user = ubean.getUserId();
-            ut = getUser_type();
+            //ut = getUser_type();
             
         } catch (Exception e) {
             System.out.println("Testing inject vs session Map");
@@ -194,6 +185,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                     null,
                     "BorrowerRegistionRecordSaved",
                     null);
+                    
         }
         return "index";
     }
@@ -916,12 +908,12 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 //         this.user_type = getUbean().getUserType();
 //         setUser_type(this.user_type);
 // }
-        FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
+//
+//        this.user_type = requestMap.get("user_type").toString();
 
-        this.user_type = requestMap.get("user_type").toString();
-
-        return this.user_type;
+        return ubean.getUserType();
     }
 
     /**
@@ -931,5 +923,18 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.user_type = user_type;
     }
 
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return ubean.getUsername();
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
 }
