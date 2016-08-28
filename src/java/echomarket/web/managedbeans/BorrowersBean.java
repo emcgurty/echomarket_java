@@ -11,20 +11,34 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import javax.enterprise.context.RequestScoped;
+//import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+//import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+/// Credit due: https://www.javacodegeeks.com/2015/11/jsf-scopes-tutorial-jsfcdi-session-scope.html
+
+
+@Named
 @ManagedBean(name = "bb")
-@RequestScoped
+@SessionScoped
 public class BorrowersBean extends AbstractBean implements Serializable {
 
+    @Inject
+    UserBean ubean;
+    // @ManagedProperty(value="#{userId}")  -- doesn't work
     private String userId;
-    private String user_alias;
+    // @ManagedProperty(value="#{user_type}") -- doesn't work
+    private String user_type;
+    
     private int contactDescribeId;
     private String organizationName;
     private int displayBorrowerOrganizationName;
@@ -73,7 +87,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String comment;
     private String advertiserId;
 
-//  public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
+    //  public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
     private static ArrayList<Addresses> primary
             = new ArrayList<Addresses>(Arrays.asList(
                     new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "primary")
@@ -108,12 +122,22 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         List padrs = getPrimary();
         List aadrs = getAlternative();
-        /// Begin Hiernate transaction... first to save Borroweer detail, then with borrower_id, save addresses
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
         Date today_date = new Date();
+        String getAbstId = getId();
+        String current_user = null;
+        String ut = null;
+        try {
 
-        Borrowers bb = new Borrowers(getId(), getUserId(), getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
+            current_user = ubean.getUserId();
+            ut = getUser_type();
+            
+        } catch (Exception e) {
+            System.out.println("Testing inject vs session Map");
+            e.printStackTrace();
+        }
+        Borrowers bb = new Borrowers(getAbstId, current_user, getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
                 getFirstName(), getMi(), getLastName(), getDisplayBorrowerName(), getDisplayBorrowerAddress(), getHomePhone(),
                 getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
                 getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(),
@@ -125,13 +149,52 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 getIsCommunity(), null, getComment(), getAdvertiserId(), getDisplayBorrowerAlternativeAddress());
 
         sb.save(bb);
-        tx.commit();
+        try {
+            tx.commit();
+        } catch (Exception e) {
+        }
+        //public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
 
-        message(
-                null,
-                "BorrowerRegistionRecordSaved",
-                null);
+        if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
+            Addresses balt = (Addresses) padrs.get(0);
+            balt.setBorrowerId(getAbstId);
+
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+
+            try {
+                sb.save(balt);
+                tx.commit();
+            } catch (Exception e) {
+            } finally {
+            }
+
+        }
+
+        Addresses ba = (Addresses) padrs.get(0);
+        ba.setBorrowerId(getAbstId);
+        if (sb.isOpen() == false) {
+            sb = hib_session();
+        }
+        if (tx.isActive() == false) {
+            tx = sb.beginTransaction();
+        }
+
+        try {
+            sb.save(ba);
+            tx.commit();
+        } catch (Exception e) {
+        } finally {
+            message(
+                    null,
+                    "BorrowerRegistionRecordSaved",
+                    null);
+        }
         return "index";
     }
 
@@ -155,44 +218,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                         a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId());
             }
         } else {
-//           Addresses create_record;    return the record with max id
-//           Session hib = hib_session();
-//           tx = hib.beginTransaction();
-//            Criteria c = hib.createCriteria(Addresses.class);
-//            c.addOrder(Order.desc("id"));
-//            c.setMaxResults(1);
-//            create_record = (Addresses) c.uniqueResult();
-            String tmp_id = UUID.randomUUID().toString();
-            //// Need to check not dup..
-            address_array = new ItemImages[1];
-            address_array[0] = new ItemImages(tmp_id);
 
         }
         return address_array;
-
-    }
-
-    /**
-     * @return the userId
-     */
-    public String getUserId() {
-
-        String returnString = null;
-        try {
-            returnString = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id").toString();
-        } catch (Exception e) {
-            
-                    }
-
-        return returnString;
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(String userId) {
-        // Only during development
-        this.userId = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user_id", "LIZ").toString();
     }
 
     /**
@@ -859,43 +887,49 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.displayBorrowerAlternativeAddress = displayBorrowerAlternativeAddress;
     }
 
-//    /**
-//     * @return the user_type
-//     */
-//    public String getUser_type() {
-//        String returnString = null;
-//        try {
-//            returnString = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_type").toString();
-//        } catch(Exception e) {}
-//        
-//         return returnString;
-//    }
-//
-//    /**
-//     * @param user_type the user_type to set
-//     */
-//    public void setUser_type(String user_type) {
-//        this.user_type = user_type;
-//    }
     /**
-     * @return the user_alias
+     * @return the userId
      */
-    public String getUser_alias() {
-        String returnString = null;
-        try {
-            returnString = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_alias").toString();
-        } catch (Exception e) {
-        }
+    private String getUserId() {
+//         if(getUbean() != null){
+//         this.userId = getUbean().getUserId();
+//         setUserId(this.userId);
+// }
+        this.userId = context().getExternalContext().getApplicationMap().get("user_id").toString();
 
-        return returnString;
+        return this.userId;
+
     }
 
     /**
-     * @param user_alias the user_alias to set
+     * @param userId the userId to set
      */
-    public void setUser_alias(String user_alias) {
-        //this.user_alias = user_alias;  Only during development
-        this.userId = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user_alias", "LIZ").toString();
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
+
+    /**
+     * @return the user_type
+     */
+    private String getUser_type() {
+//         if(getUbean() != null){
+//         this.user_type = getUbean().getUserType();
+//         setUser_type(this.user_type);
+// }
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
+
+        this.user_type = requestMap.get("user_type").toString();
+
+        return this.user_type;
+    }
+
+    /**
+     * @param user_type the user_type to set
+     */
+    public void setUser_type(String user_type) {
+        this.user_type = user_type;
+    }
+
 
 }
