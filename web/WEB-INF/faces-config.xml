@@ -48,13 +48,7 @@
             <property-class>java.lang.String</property-class>
             <value>#{param['username']}</value>
         </managed-property>
-        <managed-property>
-            <description>app_email</description>
-            <property-name>app_email</property-name>
-            <property-class>java.lang.String</property-class>
-            <value>#{'emcgurty@gmail.com'}</value>
-        </managed-property>
-
+        
     </managed-bean>
     
     <managed-bean>
@@ -97,6 +91,11 @@
         <managed-bean-name>lenderBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.LenderBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>borrowerBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.BorrowersBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>LocaleBean</managed-bean-name>
