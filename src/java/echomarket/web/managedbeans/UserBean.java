@@ -20,14 +20,16 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+@Named
 @ManagedBean
 @SessionScoped
 public class UserBean extends AbstractBean implements Serializable {
 
-
+    private String userId;
     private String username;
     private String userAlias;
     private String userType;
@@ -37,8 +39,8 @@ public class UserBean extends AbstractBean implements Serializable {
     private String lastName;
     private String email;
     private String resetCode;
-    private String appEmail;  
-    
+    private String appEmail;
+
     public UserBean() {
     }
 
@@ -100,7 +102,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
     public String registerUser() {
 
-        String test_mb = getAppEmail();  
+        String test_mb = getAppEmail();
         List result = null;
         Users create_record = null;
         List tmp = null;
@@ -111,7 +113,7 @@ public class UserBean extends AbstractBean implements Serializable {
         Boolean savedRecord = false;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
-
+        String current_user_id = null;
         try {
             if (hib.isOpen() == false) {
                 hib = hib_session();
@@ -127,9 +129,9 @@ public class UserBean extends AbstractBean implements Serializable {
                 hold_userTypeBuild = hold_userTypeBuild + userTypeArray1 + ";";
 
             }
-
+            current_user_id = getId();
             setUserType(hold_userTypeBuild);
-            create_record = new Users(getId(), firstName, lastName, username, userAlias, password, email, getUserType());
+            create_record = new Users(current_user_id, firstName, lastName, username, userAlias, password, email, getUserType());
             hib.save(create_record);
             ac = create_record.getResetCode();
             tx.commit();
@@ -139,11 +141,12 @@ public class UserBean extends AbstractBean implements Serializable {
             System.out.println("Create new User failed");
             savedRecord = false;
         } finally {
+            setUserId(current_user_id);
         }
 
         if (savedRecord == true) {
 
-            if (hib.isOpen() == false ) {
+            if (hib.isOpen() == false) {
                 hib = hib_session();
             }
 
@@ -161,7 +164,6 @@ public class UserBean extends AbstractBean implements Serializable {
                 System.out.println("Send Mail Failed");
             }
         }
-
 
         message(
                 null,
@@ -234,11 +236,12 @@ public class UserBean extends AbstractBean implements Serializable {
         String queryString = "from Users where username = :un   and activated_at != null";
         results = hib.createQuery(queryString).setParameter("un", username).list();
         tx.commit();
+        Users users_Array = new Users();
 
         //  Must return only one record
         if (results.size() == 1) {
 
-            Users users_Array = (Users) results.get(0);
+            users_Array = (Users) results.get(0);
             byte[] salt = users_Array.getSalt();
             byte[] crypted_password = users_Array.getCryptedPassword();
 
@@ -250,21 +253,25 @@ public class UserBean extends AbstractBean implements Serializable {
             } catch (InvalidKeySpecException ex) {
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         } else {
             getp = false;
         }
         hib = null;
         tx = null;
         results = null;
-        setSessionVariables();
+
         if (getp == true) {
+            setUserId(users_Array.getId());
+            setUserType(users_Array.getUserType());
+            setUserAlias(users_Array.getUserAlias());
+            setUsername(users_Array.getUsername());
+            setSessionVariables();
+
             message(
                     null,
                     "LogInSuccessful",
                     null);
-
-            
-            
             return_string = "index";
         } else if (getp == false) {
             username = null;
@@ -555,7 +562,7 @@ public class UserBean extends AbstractBean implements Serializable {
         this.userTypeArray = userTypeArray;
     }
 
-        /**
+    /**
      * @return the resetCode
      */
     public String getResetCode() {
@@ -582,13 +589,31 @@ public class UserBean extends AbstractBean implements Serializable {
     public void setAppEmail(String appEmail) {
         this.appEmail = appEmail;
     }
-    
+
     private void setSessionVariables() {
-         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "user_id", getId()); 
-         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "user_alias", getUserAlias()); 
-         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "user_type", getUserType()); 
-         //LOGGER.debug(""+FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id"));
+        /// Actually not necessary in @Inject success.... just retaining for now
+        FacesContext context = FacesContext.getCurrentInstance();
+        java.util.Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
+
+        requestMap.put("user_id", getUserId());
+        requestMap.put("user_alias", getUserAlias());
+        requestMap.put("user_type", getUserType());
+        requestMap.put("username", getUsername());
+       // System.out.println("asdasd");
     }
-        
+
+    /**
+     * @return the userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
 }
