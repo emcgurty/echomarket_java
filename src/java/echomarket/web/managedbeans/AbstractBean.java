@@ -65,9 +65,6 @@ public abstract class AbstractBean implements Serializable {
     protected String getId() {
         return id;
     }
-    private String application_email_address = "";
-    private String application_email_password = "" ;
-
 
     /**
      * @param id the id to set
@@ -145,36 +142,6 @@ public abstract class AbstractBean implements Serializable {
                         clientId,
                         new FacesMessage(text));
     }
-
-//    /**
-//     * @return the app_email
-//     */
-//    public String getApp_email() {
-//        context().getViewRoot();
-//        
-//        return app_email;
-//    }
-//
-//    /**
-//     * @param app_email the app_email to set
-//     */
-//    public void setApp_email(String app_email) {
-//        this.app_email = app_email;
-//    }
-//
-//    /**
-//     * @return the app_password
-//     */
-//    public String getApp_password() {
-//        return app_password;
-//    }
-//
-//    /**
-//     * @param app_password the app_password to set
-//     */
-//    public void setApp_password(String app_password) {
-//        this.app_password = app_password;
-//    }
 
     
 }
