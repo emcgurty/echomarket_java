@@ -17,7 +17,7 @@ import javax.inject.Named;
  * @author emm
  */
 @Named
-@ManagedBean(name = "itemImages")
+@ManagedBean(name = "itim")
 @SessionScoped
 public class ItemImagesBean extends AbstractBean implements Serializable {
 
