@@ -78,6 +78,27 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String comment;
     private String advertiserId;
 
+    //public ItemImages(String id, String borrowerId, String lenderId, String imageContentType, 
+    //Integer imageHeight, Integer imageWidth, Integer isActive, Date dateCreated, Date dateDeleted, Date dateUpdated, 
+    //String imageFileName, String itemImageCaption, String advertiserId) {
+    private static ArrayList<ItemImages> images
+            = new ArrayList<ItemImages>(Arrays.asList(
+                    new ItemImages(UUID.randomUUID().toString(), null, null, null, null, null, null, hold_date(), hold_date(), hold_date(), "temp", null, null)
+            ));
+
+    /**
+     * @return the images
+     */
+    public static ArrayList<ItemImages> getImages() {
+        return images;
+    }
+
+    /**
+     * @param aImages the images to set
+     */
+    public static void setImages(ArrayList<ItemImages> aImages) {
+        images = aImages;
+    }  
     //  public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
     private static ArrayList<Addresses> primary
             = new ArrayList<Addresses>(Arrays.asList(
@@ -148,7 +169,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
-            Addresses balt = (Addresses) padrs.get(0);
+            Addresses balt = (Addresses) aadrs.get(0);
             balt.setBorrowerId(getAbstId);
 
             if (sb.isOpen() == false) {
@@ -188,31 +209,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                     
         }
         return "index";
-    }
-
-// Need to eliminate this and perform same as done for addresses
-    public ItemImages[] buildImageAccess() {
-
-        List results = null;
-        ItemImages[] address_array = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
-        String queryString = "from ItemImages where borrower_id = :bid";
-        results = session.createQuery(queryString).setParameter("bid", getId()).list();
-        tx.commit();
-        int result_size = results.size();
-        if (result_size > 0) {
-            address_array = new ItemImages[result_size];
-            for (int i = 0; i < result_size; i++) {
-                ItemImages a_array = (ItemImages) results.get(i);
-                address_array[i] = new ItemImages(a_array.getId(), a_array.getBorrowerId(), a_array.getLenderId(), a_array.getImageContentType(),
-                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
-                        a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId());
-            }
-        } else {
-
-        }
-        return address_array;
     }
 
     /**
@@ -937,4 +933,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.userName = userName;
     }
 
+    private static Date hold_date() {
+        Date hold_date = new Date();
+        return hold_date;
+        
+    }
 }
