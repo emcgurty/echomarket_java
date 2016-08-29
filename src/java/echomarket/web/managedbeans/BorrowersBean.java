@@ -78,28 +78,12 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String comment;
     private String advertiserId;
 
-    //public ItemImages(String id, String borrowerId, String lenderId, String imageContentType, 
-    //Integer imageHeight, Integer imageWidth, Integer isActive, Date dateCreated, Date dateDeleted, Date dateUpdated, 
-    //String imageFileName, String itemImageCaption, String advertiserId) {
-    private static ArrayList<ItemImages> images
+   private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
                     new ItemImages(UUID.randomUUID().toString(), null, null, null, null, null, null, hold_date(), hold_date(), hold_date(), "temp", null, null)
             ));
 
-    /**
-     * @return the images
-     */
-    public static ArrayList<ItemImages> getImages() {
-        return images;
-    }
-
-    /**
-     * @param aImages the images to set
-     */
-    public static void setImages(ArrayList<ItemImages> aImages) {
-        images = aImages;
-    }  
-    //  public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
+   
     private static ArrayList<Addresses> primary
             = new ArrayList<Addresses>(Arrays.asList(
                     new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "primary")
@@ -107,6 +91,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     private static ArrayList<Addresses> alternative
             = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "alternative")));
+
+    /**
+     * @return the itemImage
+     */
+    public ArrayList<ItemImages> getPicture() {
+        return picture;
+    }
 
     public ArrayList<Addresses> getPrimary() {
         return primary;
@@ -130,10 +121,18 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         alternative = aAlternative;
     }
 
+    /**
+     * @param aItemImage the itemImage to set
+     */
+    public static void setPicture(ArrayList<ItemImages> aItemImage) {
+        picture = aItemImage;
+    }
+
     public String saveBorrowerRegistration() {
 
         List padrs = getPrimary();
         List aadrs = getAlternative();
+        List ii = getPicture();
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
         Date today_date = new Date();
@@ -144,7 +143,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             current_user = ubean.getUserId();
             //ut = getUser_type();
-            
+
         } catch (Exception e) {
             System.out.println("Testing inject vs session Map");
             e.printStackTrace();
@@ -206,7 +205,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                     null,
                     "BorrowerRegistionRecordSaved",
                     null);
-                    
+
         }
         return "index";
     }
@@ -936,6 +935,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private static Date hold_date() {
         Date hold_date = new Date();
         return hold_date;
-        
+
     }
 }
