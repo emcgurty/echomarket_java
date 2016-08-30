@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="item_images")
-public class ItemImages  implements java.io.Serializable {
+public class ItemImages   implements java.io.Serializable {
 
      @Id
      private String id;
@@ -150,9 +150,6 @@ public class ItemImages  implements java.io.Serializable {
     public void setAdvertiserId(String advertiserId) {
         this.advertiserId = advertiserId;
     }
-
-
-
 
 }
 
