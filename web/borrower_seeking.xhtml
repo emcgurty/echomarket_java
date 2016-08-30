@@ -712,8 +712,9 @@
                         <h:dataTable id="picture"  value="#{bb.picture}" var="image" >
                             <h:column rowHeader="">
                                 <div style="margin-left:25px;margin-top:5px;float:left;">
-                                    <h:outputLabel for="imageFileName" value="Image of Item"     >                       
-                                        <input type="file" id="imageFileName"  value="#{image.imageFileName}" />
+                                    <h:outputLabel for="imageFileName" value="Image of Item"     >    
+                                         <h:inputFile id="imageFileName" value="#{bb.imageFileName}" />
+<!--                                        <input type="file" id="imageFileName"   />-->
                                         <span class="file_image_error">&nbsp;</span>
                                     </h:outputLabel>
                                 </div>    
