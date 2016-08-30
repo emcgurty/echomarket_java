@@ -1,9 +1,18 @@
 package echomarket.web.managedbeans;
 
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Users;
 import echomarket.hibernate.Borrowers;
 import echomarket.hibernate.ItemImages;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,9 +20,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -77,13 +88,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String remoteIp;
     private String comment;
     private String advertiserId;
+    private Part imageFileName;
 
-   private static ArrayList<ItemImages> picture
+    private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
                     new ItemImages(UUID.randomUUID().toString(), null, null, null, null, null, null, hold_date(), hold_date(), hold_date(), "temp", null, null)
             ));
 
-   
     private static ArrayList<Addresses> primary
             = new ArrayList<Addresses>(Arrays.asList(
                     new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "primary")
@@ -93,10 +104,17 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "alternative")));
 
     /**
-     * @return the itemImage
+     * @return the picture
      */
     public ArrayList<ItemImages> getPicture() {
         return picture;
+    }
+
+    /**
+     * @param aPicture the picture to set
+     */
+    public static void setPicture(ArrayList<ItemImages> aPicture) {
+        picture = aPicture;
     }
 
     public ArrayList<Addresses> getPrimary() {
@@ -121,14 +139,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         alternative = aAlternative;
     }
 
-    /**
-     * @param aItemImage the itemImage to set
-     */
-    public static void setPicture(ArrayList<ItemImages> aItemImage) {
-        picture = aItemImage;
-    }
-
-    public String saveBorrowerRegistration() {
+    public String saveBorrowerRegistration() throws IOException {
 
         List padrs = getPrimary();
         List aadrs = getAlternative();
@@ -138,6 +149,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         Date today_date = new Date();
         String getAbstId = getId();
         String current_user = null;
+        
+
         //String ut = null;  -- just for testing
         try {
 
@@ -165,7 +178,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } catch (Exception e) {
         }
         //public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
-
+        SaveUserItemImage(getImageFileName(),getAbstId);    
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
             Addresses balt = (Addresses) aadrs.get(0);
@@ -937,4 +950,65 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return hold_date;
 
     }
+
+    /**
+     * @return the imageFileName
+     */
+    public Part getImageFileName() {
+        return imageFileName;
+    }
+
+    /**
+     * @param imageFileName the imageFileName to set
+     */
+    public void setImageFileName(Part imageFileName) {
+        this.imageFileName = imageFileName;
+    }
+
+    private void SaveUserItemImage(Part ui, String bid) throws IOException {
+
+        final String path = "images/borrower_images/";
+
+        final String fileName = getFileName(ui);
+
+        OutputStream out = null;
+        InputStream filecontent = null;
+
+        try {
+            out = new FileOutputStream(new File(path +  fileName));
+            filecontent = ui.getInputStream();
+
+            int read = 0;
+            final byte[] bytes = new byte[1024];
+
+            while ((read = filecontent.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+
+        } catch (FileNotFoundException fne) {
+            LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                    new Object[]{fne.getMessage()});
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+            if (filecontent != null) {
+                filecontent.close();
+            }
+
+        }
+    }
+
+    private String getFileName(final Part part) {
+        //final String partHeader = part.getHeader("content-disposition");
+
+        for (String content : part.getHeader("content-disposition").split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(
+                        content.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return null;
+    }
+
 }
