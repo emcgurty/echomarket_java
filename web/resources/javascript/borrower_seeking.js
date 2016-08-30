@@ -150,9 +150,13 @@ jQuery(document).ready(function ($) {
                 $("span#itemDescription.error-message").text("");
                 $("span#itemDescription.error-message").css("visibility", "hidden");
             }
+//
+        } else if (this.id.includes('imageFileName')) {
+
+            readURL(this);
 
 
-
+//
         } else {
             return false;
         }
@@ -171,10 +175,6 @@ jQuery(document).ready(function ($) {
         }
 
     }
-    $("#itemImage").change(function () {
-        readURL(this);
-    });
-
 
 });
 
