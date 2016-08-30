@@ -1,6 +1,5 @@
 package echomarket.web.managedbeans;
 
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Users;
@@ -149,7 +148,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         Date today_date = new Date();
         String getAbstId = getId();
         String current_user = null;
-        
 
         //String ut = null;  -- just for testing
         try {
@@ -178,7 +176,42 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } catch (Exception e) {
         }
         //public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
-        SaveUserItemImage(getImageFileName(),getAbstId);    
+
+        if (getImageFileName() != null) {
+            try {
+                SaveUserItemImage(getImageFileName(), getAbstId);
+            } catch (Exception e) {
+                System.out.println("Error in Saving Borrower File");;
+
+            }
+
+            ItemImages iii = (ItemImages) ii.get(0);
+            iii.setBorrowerId(getAbstId);
+            iii.setImageFileName(getImageFileName().toString());
+            iii.setImageContentType(getImageFileName().getContentType());
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+            sb.save(iii);
+            tx.commit();
+
+        } else {
+
+            ItemImages iii = (ItemImages) ii.get(0);
+            iii.setBorrowerId(getAbstId);
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+            sb.save(iii);
+            tx.commit();
+        }
+
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
             Addresses balt = (Addresses) aadrs.get(0);
@@ -967,15 +1000,14 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     private void SaveUserItemImage(Part ui, String bid) throws IOException {
 
-        final String path = "images/borrower_images/";
-
+        final String path = "/images/borrower_images/";
         final String fileName = getFileName(ui);
 
         OutputStream out = null;
         InputStream filecontent = null;
 
         try {
-            out = new FileOutputStream(new File(path +  fileName));
+            out = new FileOutputStream(new File(path + fileName));
             filecontent = ui.getInputStream();
 
             int read = 0;
