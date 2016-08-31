@@ -2,7 +2,6 @@ package echomarket.web.managedbeans;
 
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import echomarket.hibernate.Addresses;
-import echomarket.hibernate.Users;
 import echomarket.hibernate.Borrowers;
 import echomarket.hibernate.ItemImages;
 import java.io.File;
@@ -11,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -187,7 +185,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setBorrowerId(getAbstId);
-            iii.setImageFileName(getImageFileName().toString());
+            iii.setImageFileName(getFileName(getImageFileName()));
             iii.setImageContentType(getImageFileName().getContentType());
             if (sb.isOpen() == false) {
                 sb = hib_session();
@@ -945,14 +943,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      * @return the user_type
      */
     private String getUser_type() {
-//         if(getUbean() != null){
-//         this.user_type = getUbean().getUserType();
-//         setUser_type(this.user_type);
-// }
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
-//
-//        this.user_type = requestMap.get("user_type").toString();
 
         return ubean.getUserType();
     }
@@ -999,36 +989,47 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     private void SaveUserItemImage(Part ui, String bid) throws IOException {
-
-        final String path = "/images/borrower_images/";
-        final String fileName = getFileName(ui);
-
         OutputStream out = null;
         InputStream filecontent = null;
+        String itemImagePath = null;
+        String sPath1 = new File(".").getCanonicalPath();
+        String sPath2 = "\\images\\borrower_images\\";
+        String sPath3 = bid;
+        String sPath4 = "\\" + getFileName(ui);
+        File files = new File(sPath1 + sPath2 + sPath3);
+        Boolean makeDirectory = files.mkdirs();
 
-        try {
-            out = new FileOutputStream(new File(path + fileName));
-            filecontent = ui.getInputStream();
+        if (makeDirectory) {
+            itemImagePath = sPath1 + sPath2 + sPath3 + sPath4;
+            files = new File(itemImagePath);
+            if (!files.exists()) {
 
-            int read = 0;
-            final byte[] bytes = new byte[1024];
+                try {
+                    out = new FileOutputStream(files);
+                    filecontent = ui.getInputStream();
+                    int read = 0;
+                    final byte[] bytes = new byte[1024];
+                    while ((read = filecontent.read(bytes)) != -1) {
+                        out.write(bytes, 0, read);
+                    }
 
-            while ((read = filecontent.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
+                } catch (FileNotFoundException fne) {
+                    LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                            new Object[]{fne.getMessage()});
+                } finally {
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (filecontent != null) {
+                        filecontent.close();
+                    }
+
+                }
+            }  else {
+             /// Need to code to delete same image file of same borrower
             }
-
-        } catch (FileNotFoundException fne) {
-            LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                    new Object[]{fne.getMessage()});
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-            if (filecontent != null) {
-                filecontent.close();
-            }
-
         }
+
     }
 
     private String getFileName(final Part part) {
