@@ -47,6 +47,13 @@ jQuery(document).ready(function ($) {
             $("div#other_category").css("display", "none");
         }
 
+        if ((select_id == 'usStates') && (select_value != '-2')) {
+
+            $("select[id$='countryId']").val("US");
+        }
+
+
+
         return returnResult;
     }
 
