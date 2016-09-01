@@ -998,13 +998,17 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String sPath4 = "\\" + getFileName(ui);
         File files = new File(sPath1 + sPath2 + sPath3);
         Boolean makeDirectory = files.mkdirs();
-
-        if (makeDirectory) {
-            itemImagePath = sPath1 + sPath2 + sPath3 + sPath4;
-            files = new File(itemImagePath);
-            if (!files.exists()) {
-
+        itemImagePath = sPath1 + sPath2 + sPath3 + sPath4;
+        files = new File(itemImagePath);
+        
+         if (makeDirectory) {
+             
+             if (files.exists() ) {  
+                 Boolean fileDelete = files.delete();
+             }
+      
                 try {
+                    files = new File(itemImagePath);   /// not sure I have to run it again??
                     out = new FileOutputStream(files);
                     filecontent = ui.getInputStream();
                     int read = 0;
@@ -1023,14 +1027,15 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                     if (filecontent != null) {
                         filecontent.close();
                     }
-
+                    files = null;    
                 }
-            }  else {
-             /// Need to code to delete same image file of same borrower
-            }
+            } else {
+                    
+                    /// Documentation says that mkdri = false is not necessarily an error...
+                }
+                
+            
         }
-
-    }
 
     private String getFileName(final Part part) {
         //final String partHeader = part.getHeader("content-disposition");
