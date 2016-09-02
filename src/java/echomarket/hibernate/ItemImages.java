@@ -3,13 +3,8 @@ package echomarket.hibernate;
 
 import java.util.Date;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -20,7 +15,7 @@ import javax.persistence.Table;
 public class ItemImages implements java.io.Serializable {
 
     private String id;
-    private Borrowers borrowers;
+    private Set Borrowers;
     private String borrowerId;
     private String lenderId;
     private String imageContentType;
@@ -68,8 +63,6 @@ public class ItemImages implements java.io.Serializable {
 
 //    @OneToMany(mappedBy = "item_images", cascade = CascadeType.ALL)
 //    @JoinColumn(name = "user_id")
-    
-
     @Id
     public String getId() {
         return this.id;
@@ -176,19 +169,17 @@ public class ItemImages implements java.io.Serializable {
     }
 
     /**
-     * @return the borrowers
+     * @return the Borrowers
      */
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    public Borrowers getBorrowers() {
-        return borrowers;
+    public Set getBorrowers() {
+        return Borrowers;
     }
 
     /**
-     * @param borrowers the borrowers to set
+     * @param Borrowers the Borrowers to set
      */
-    public void setBorrowers(Borrowers borrowers) {
-        this.borrowers = borrowers;
+    public void setBorrowers(Set Borrowers) {
+        this.Borrowers = Borrowers;
     }
 
-    }
+}
