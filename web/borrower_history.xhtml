@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./echomarketTemplate.xhtml">
+
+    <ui:define name="header"  >
+        <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" /> 
+    </ui:define>
+    <ui:define name="content"  >
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title>#{bundle.borrowerHistory}</title>
+        </h:head>
+        <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
+        <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
+
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
+            <h:inputSecret id="is_active" value="1"   style="display:none;" />
+            <h:inputSecret id="approved" value="1"   style="display:none;" />
+            <h:inputSecret id="userId" value="#{userBean.userId}"   style="display:none;" />
+
+
+            <div style="margin-left:25px;margin-top:5px;float:left;">
+
+                <h:dataTable id="picture"  value="#{bb.borrowerHistory(userBean.userId)}" var="image" >
+                    <h:column rowHeader="">
+
+                        <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                            <h:outputText  id="firstName" value="#{image.firstName}" style="margin-left:10px"/>
+                            <h:outputText  id="itemDescription" value="#{image.itemDescription}" style="margin-left:10px"/>
+                            <h:graphicImage value="#{bb.retrieveBorrowerImage(userBean.userId, image.imageFileName)}" />
+                        </div>
+                    </h:column>
+                </h:dataTable>
+            </div>
+
+
+
+        </h:form>
+    </ui:define>
+    <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+    </ui:define>
+</ui:composition>
+
+
