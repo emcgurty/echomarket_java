@@ -7,6 +7,10 @@
       <column length="40" name="id"/>
       <generator class="assigned"/>
     </id>
+       <set name="itemImages" cascade="all">
+         <key column="borrower_id"/>
+         <one-to-many class="ItemImages"/>
+      </set>
     <property name="userId" type="string">
       <column length="40" name="user_id"/>
     </property>
