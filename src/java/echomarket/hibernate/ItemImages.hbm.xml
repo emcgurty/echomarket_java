@@ -43,5 +43,9 @@
     <property name="advertiserId" type="string">
       <column length="40" name="advertiser_id"/>
     </property>
+         <set name="borrowers" >
+         <key column="userId"/>
+         <one-to-many class="echomarket.hibernate.Borrowers"/>
+      </set>
   </class>
 </hibernate-mapping>
