@@ -2,9 +2,12 @@ package echomarket.hibernate;
 // Generated Aug 5, 2016 12:14:14 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -15,7 +18,8 @@ import javax.persistence.Table;
 public class ItemImages implements java.io.Serializable {
 
     private String id;
-    private Set Borrowers;
+    private Set<Borrowers> borrowers = new HashSet<Borrowers>();
+
     private String borrowerId;
     private String lenderId;
     private String imageContentType;
@@ -169,17 +173,21 @@ public class ItemImages implements java.io.Serializable {
     }
 
     /**
-     * @return the Borrowers
+     * @return the borrowers
      */
-    public Set getBorrowers() {
-        return Borrowers;
+    @OneToMany
+    @JoinColumn(name="userId")
+    public Set<Borrowers> getBorrowers() {
+        return borrowers;
     }
 
     /**
-     * @param Borrowers the Borrowers to set
+     * @param borrowers the borrowers to set
      */
-    public void setBorrowers(Set Borrowers) {
-        this.Borrowers = Borrowers;
+    public void setBorrowers(Set<Borrowers> borrowers) {
+        this.borrowers = borrowers;
     }
+
+    
 
 }
