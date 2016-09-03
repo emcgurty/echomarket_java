@@ -2,9 +2,12 @@ package echomarket.hibernate;
 // Generated Aug 5, 2016 12:14:14 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -15,7 +18,8 @@ import javax.persistence.Table;
 public class Borrowers implements java.io.Serializable {
 
     private String id;
-    private Set itemImages;
+    private Set<ItemImages> itemImages = new HashSet<ItemImages>();
+
     private String userId;
     private int contactDescribeId;
     private String organizationName;
@@ -534,18 +538,35 @@ public class Borrowers implements java.io.Serializable {
         this.displayBorrowerAlternativeAddress = displayBorrowerAlternativeAddress;
     }
 
+   
+
+//    public void addToItemImages(ItemImages ii) {
+//        this.getItemImages().add(ii);
+//        ii.get().add(this);
+//    }
+//
+//    public void removeFromEvent(ItemImages event) {
+//        this.getEvents().remove(event);
+//        event.getParticipants().remove(this);
+//    }
+
     /**
-     * @return the ItemImages
+     * @return the item_images
      */
-    public Set getItemImages() {
+    @OneToMany
+    @JoinColumn(name="borrowerId")
+        public Set<ItemImages> getItemImages() {
         return itemImages;
     }
 
     /**
-     * @param ItemImages the ItemImages to set
+     * @param itemImages the itemImages to set
      */
-    public void setItemImages(Set ItemImages) {
-        this.itemImages = ItemImages;
+    public void setItemImages(Set<ItemImages> itemImages) {
+        this.itemImages = itemImages;
     }
 
+    
+
+    
 }
