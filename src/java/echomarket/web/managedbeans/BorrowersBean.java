@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -184,7 +185,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             }
 
             ItemImages iii = (ItemImages) ii.get(0);
-            iii.setBorrowerId(getAbstId);
+            iii.setId(getId());
+            iii.setBorrowerId(current_user);
             iii.setImageFileName(getFileName(getImageFileName()));
             iii.setImageContentType(getImageFileName().getContentType());
             if (sb.isOpen() == false) {
@@ -1000,42 +1002,41 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         Boolean makeDirectory = files.mkdirs();
         itemImagePath = sPath1 + sPath2 + sPath3 + sPath4;
         files = new File(itemImagePath);
-        
-         if (makeDirectory) {
-             
-             if (files.exists() ) {  
-                 Boolean fileDelete = files.delete();
-             }
-      
-                try {
-                    files = new File(itemImagePath);   /// not sure I have to run it again??
-                    out = new FileOutputStream(files);
-                    filecontent = ui.getInputStream();
-                    int read = 0;
-                    final byte[] bytes = new byte[1024];
-                    while ((read = filecontent.read(bytes)) != -1) {
-                        out.write(bytes, 0, read);
-                    }
 
-                } catch (FileNotFoundException fne) {
-                    LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                            new Object[]{fne.getMessage()});
-                } finally {
-                    if (out != null) {
-                        out.close();
-                    }
-                    if (filecontent != null) {
-                        filecontent.close();
-                    }
-                    files = null;    
+        if (makeDirectory) {
+
+            if (files.exists()) {
+                Boolean fileDelete = files.delete();
+            }
+
+            try {
+                files = new File(itemImagePath);   /// not sure I have to run it again??
+                out = new FileOutputStream(files);
+                filecontent = ui.getInputStream();
+                int read = 0;
+                final byte[] bytes = new byte[1024];
+                while ((read = filecontent.read(bytes)) != -1) {
+                    out.write(bytes, 0, read);
                 }
-            } else {
-                    
-                    /// Documentation says that mkdri = false is not necessarily an error...
+
+            } catch (FileNotFoundException fne) {
+                LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                        new Object[]{fne.getMessage()});
+            } finally {
+                if (out != null) {
+                    out.close();
                 }
-                
-            
+                if (filecontent != null) {
+                    filecontent.close();
+                }
+                files = null;
+            }
+        } else {
+
+            /// Oracle documentation says that mkdri = false is not necessarily an error...
         }
+
+    }
 
     private String getFileName(final Part part) {
         //final String partHeader = part.getHeader("content-disposition");
@@ -1047,6 +1048,44 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             }
         }
         return null;
+    }
+
+    public String retrieveBorrowerImage(String b_itemId, String fileName) {
+        String sPath1 = null;
+        try {
+            sPath1 = new File(".").getCanonicalPath();
+        } catch (IOException ex) {
+            Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String sPath2 = "\\images\\borrower_images\\";
+        String sPath3 = b_itemId;
+        String sPath4 = "\\" + fileName;
+
+        return sPath1 + sPath2 + sPath3 + sPath4;
+
+    }
+
+    public List borrowerHistory(String bid) {
+
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String query = null;
+        try {
+            query = "SELECT b.first_name, i.image_file_name FROM borrowers as b JOIN item_images as i  ON b.user_id = i.borrower_id  where  b.user_id = '" + bid + "'";
+            result = session.createQuery(query)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            System.out.println("Error at line 1062 in BBeans");
+            e.printStackTrace();
+
+        } finally {
+            session = null;
+            tx = null;
+        }
+
+        return result;
     }
 
 }
