@@ -27,22 +27,21 @@
             </div>
             <h:inputSecret id="is_active" value="1"   style="display:none;" />
             <h:inputSecret id="approved" value="1"   style="display:none;" />
-            <h:inputSecret id="userId" value="#{userBean.userId}"   style="display:none;" />
+            <h:inputSecret id="user_id" value="#{userBean.user_id}"   style="display:none;" />
 
 
-            <div style="margin-left:25px;margin-top:5px;float:left;">
 
-                <h:dataTable id="picture"  value="#{bb.borrowerHistory(userBean.userId)}" var="image" >
-                    <h:column rowHeader="">
+            <h:dataTable id="picture"  value="#{bb.borrowerHistory()}" var="image" >
+                <h:column rowHeader="">
 
-                        <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                            <h:outputText  id="firstName" value="#{image.firstName}" style="margin-left:10px"/>
-                            <h:outputText  id="itemDescription" value="#{image.itemDescription}" style="margin-left:10px"/>
-                            <h:graphicImage value="#{bb.retrieveBorrowerImage(userBean.userId, image.imageFileName)}" />
-                        </div>
-                    </h:column>
-                </h:dataTable>
-            </div>
+                    <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                        <h:outputText  id="firstName" value="#{image.firstName}" style="margin-left:10px"/>
+                        <h:outputText  id="itemDescription" value="#{image.itemDescription}" style="margin-left:10px"/>
+                        <h:outputText  id="imageFile" value="#{image.itemImage.imageFileName}" style="margin-left:10px"/>
+                    </div>
+                </h:column>
+            </h:dataTable>
+
 
 
 
