@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -18,10 +20,9 @@ import javax.persistence.Table;
 public class ItemImages implements java.io.Serializable {
 
     private String id;
-    private Set<Borrowers> borrowers = new HashSet<Borrowers>();
-
-    private String borrowerId;
-    private String lenderId;
+    private Borrowers borrowers;
+    private String borrower_id;
+    private String lender_id;
     private String imageContentType;
     private Integer imageHeight;
     private Integer imageWidth;
@@ -49,10 +50,10 @@ public class ItemImages implements java.io.Serializable {
         this.imageFileName = imageFileName;
     }
 
-    public ItemImages(String id, String borrowerId, String lenderId, String imageContentType, Integer imageHeight, Integer imageWidth, Integer isActive, Date dateCreated, Date dateDeleted, Date dateUpdated, String imageFileName, String itemImageCaption, String advertiserId) {
+    public ItemImages(String id, String borrower_id, String lender_id, String imageContentType, Integer imageHeight, Integer imageWidth, Integer isActive, Date dateCreated, Date dateDeleted, Date dateUpdated, String imageFileName, String itemImageCaption, String advertiserId) {
         this.id = id;
-        this.borrowerId = borrowerId;
-        this.lenderId = lenderId;
+        //this.borrower_id = borrower_id;
+        this.lender_id = lender_id;
         this.imageContentType = imageContentType;
         this.imageHeight = imageHeight;
         this.imageWidth = imageWidth;
@@ -76,20 +77,13 @@ public class ItemImages implements java.io.Serializable {
         this.id = id;
     }
 
-    public String getBorrowerId() {
-        return this.borrowerId;
+    
+    public String getlender_id() {
+        return this.lender_id;
     }
 
-    public void setBorrowerId(String borrowerId) {
-        this.borrowerId = borrowerId;
-    }
-
-    public String getLenderId() {
-        return this.lenderId;
-    }
-
-    public void setLenderId(String lenderId) {
-        this.lenderId = lenderId;
+    public void setlender_id(String lender_id) {
+        this.lender_id = lender_id;
     }
 
     public String getImageContentType() {
@@ -172,19 +166,29 @@ public class ItemImages implements java.io.Serializable {
         this.advertiserId = advertiserId;
     }
 
+    
+    public String getBorrower_id() {
+        return borrower_id;
+    }
+
+    /**
+     * @param borrower_id the borrower_id to set
+     */
+    public void setBorrower_id(String borrower_id) {
+        this.borrower_id = borrower_id;
+    }
+
     /**
      * @return the borrowers
      */
-    @OneToMany
-    @JoinColumn(name="userId")
-    public Set<Borrowers> getBorrowers() {
+    public Borrowers getBorrowers() {
         return borrowers;
     }
 
     /**
      * @param borrowers the borrowers to set
      */
-    public void setBorrowers(Set<Borrowers> borrowers) {
+    public void setBorrowers(Borrowers borrowers) {
         this.borrowers = borrowers;
     }
 
