@@ -29,7 +29,7 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class UserBean extends AbstractBean implements Serializable {
 
-    private String userId;
+    private String user_id;
     private String username;
     private String userAlias;
     private String userType;
@@ -141,7 +141,7 @@ public class UserBean extends AbstractBean implements Serializable {
             System.out.println("Create new User failed");
             savedRecord = false;
         } finally {
-            setUserId(current_user_id);
+            setUser_id(current_user_id);
         }
 
         if (savedRecord == true) {
@@ -262,7 +262,7 @@ public class UserBean extends AbstractBean implements Serializable {
         results = null;
 
         if (getp == true) {
-            setUserId(users_Array.getId());
+            setUser_id(users_Array.getId());
             setUserType(users_Array.getUserType());
             setUserAlias(users_Array.getUserAlias());
             setUsername(users_Array.getUsername());
@@ -595,7 +595,7 @@ public class UserBean extends AbstractBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         java.util.Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
 
-        requestMap.put("user_id", getUserId());
+        requestMap.put("user_id", getUser_id());
         requestMap.put("user_alias", getUserAlias());
         requestMap.put("user_type", getUserType());
         requestMap.put("username", getUsername());
@@ -603,17 +603,17 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @return the userId
+     * @return the user_id
      */
-    public String getUserId() {
-        return userId;
+    public String getUser_id() {
+        return user_id;
     }
 
     /**
-     * @param userId the userId to set
+     * @param user_id the user_id to set
      */
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
 }
