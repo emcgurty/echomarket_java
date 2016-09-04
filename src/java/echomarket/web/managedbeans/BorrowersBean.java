@@ -15,7 +15,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,8 +36,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
-    // @ManagedProperty(value="#{userId}")  -- doesn't work
-    private String userId;
+    // @ManagedProperty(value="#{user_id}")  -- doesn't work
+    private String user_id;
     // @ManagedProperty(value="#{user_type}") -- doesn't work
     private String user_type;
     private String userName;
@@ -151,7 +153,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         //String ut = null;  -- just for testing
         try {
 
-            current_user = ubean.getUserId();
+            current_user = ubean.getUser_id();
             //ut = getUser_type();
 
         } catch (Exception e) {
@@ -174,7 +176,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             tx.commit();
         } catch (Exception e) {
         }
-        //public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
+        //public Addresses(String id, String lender_id, String borrower_id, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
 
         if (getImageFileName() != null) {
             try {
@@ -186,7 +188,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setId(getId());
-            iii.setBorrowerId(current_user);
+            iii.setBorrower_id(getAbstId);
             iii.setImageFileName(getFileName(getImageFileName()));
             iii.setImageContentType(getImageFileName().getContentType());
             if (sb.isOpen() == false) {
@@ -201,7 +203,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } else {
 
             ItemImages iii = (ItemImages) ii.get(0);
-            iii.setBorrowerId(getAbstId);
+            iii.setBorrower_id(getAbstId);
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
@@ -215,7 +217,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
             Addresses balt = (Addresses) aadrs.get(0);
-            balt.setBorrowerId(getAbstId);
+            balt.setBorrower_id(getAbstId);
 
             if (sb.isOpen() == false) {
                 sb = hib_session();
@@ -234,7 +236,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         }
 
         Addresses ba = (Addresses) padrs.get(0);
-        ba.setBorrowerId(getAbstId);
+        ba.setBorrower_id(getAbstId);
         if (sb.isOpen() == false) {
             sb = hib_session();
         }
@@ -921,27 +923,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @return the userId
-     */
-    private String getUserId() {
-//         if(getUbean() != null){
-//         this.userId = getUbean().getUserId();
-//         setUserId(this.userId);
-// }
-        this.userId = context().getExternalContext().getApplicationMap().get("user_id").toString();
-
-        return this.userId;
-
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    /**
      * @return the user_type
      */
     private String getUser_type() {
@@ -1065,27 +1046,94 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     }
 
-    public List borrowerHistory(String bid) {
+    public List borrowerHistory() {
+
+        List result = getCurrentBorrower(ubean.getUser_id());
+        Integer result_length = result.size();
+        Borrowers[] bArray = null;
+        List bi_result = null;
+        List image_result = null;
+        Set<ItemImages> ii = null;
+        Borrowers to_Array = null;
+        try {
+            String get_bid = null;
+            for (int i = 0; i < result_length; i++) {
+                to_Array = (Borrowers) result.get(i);
+                get_bid = to_Array.getBorrower_id();
+                image_result = getCurrentBorrowerImage(get_bid);
+                ii = new HashSet<ItemImages>();
+                ii.add((ItemImages) image_result.get(0));
+                to_Array.setItemImages(ii);
+                //result.add(to_Array.getItemImages());
+                System.out.println("Wait");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error at borroerHistory");
+            e.printStackTrace();
+
+        } finally {
+
+        }
+
+        return result;
+    }
+
+    private List getCurrentBorrowerImage(String bid) {
 
         List result = null;
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
         String query = null;
         try {
-            query = "SELECT b.first_name, i.image_file_name FROM borrowers as b JOIN item_images as i  ON b.user_id = i.borrower_id  where  b.user_id = '" + bid + "'";
-            result = session.createQuery(query)
-                    .list();
+            query = "FROM ItemImages as i WHERE i.borrower_id = '" + bid + "'";
+            result = session.createQuery(query).list();
             tx.commit();
         } catch (Exception e) {
-            System.out.println("Error at line 1062 in BBeans");
+            System.out.println("Error in getCurrentBI");
             e.printStackTrace();
 
         } finally {
             session = null;
             tx = null;
         }
-
         return result;
+
+    }
+
+    private List getCurrentBorrower(String bid) {
+
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String query = null;
+        try {
+            query = "FROM Borrowers as b WHERE b.user_id = '" + bid + "'";
+            result = session.createQuery(query).list();
+            tx.commit();
+        } catch (Exception e) {
+            System.out.println("Error in getCurrentB");
+            e.printStackTrace();
+
+        } finally {
+            session = null;
+            tx = null;
+        }
+        return result;
+    }
+
+    /**
+     * @return the user_id
+     */
+    public String getUser_id() {
+        return user_id;
+    }
+
+    /**
+     * @param user_id the user_id to set
+     */
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
 }
