@@ -9,14 +9,14 @@
                 template="./echomarketTemplate.xhtml">
 
     <ui:define name="header"  >
-        <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" /> 
+        <ui:include rendered="true" src="application_header.xhtml" id="borrowersHistoryHeader" /> 
     </ui:define>
     <ui:define name="content"  >
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <title>#{bundle.borrowerHistory}</title>
         </h:head>
-        <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
+        
         <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
 
             <div class="messagecolor">
@@ -40,11 +40,9 @@
 
                         <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
                             <h:column rowHeader="">
-
-                                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                                
                                     <h:outputText  id="imageFileName" value="#{i.imageFileName}" style="margin-left:10px"/>
-
-                                </div>
+                                    <h:graphicImage value="#{bb.retrieveBorrowerImage(history.borrower_id, i.imageFileName)}" />
                             </h:column>
                         </h:dataTable>
 
