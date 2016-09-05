@@ -10,14 +10,14 @@
 
     <h:form>
 
-<!--        <c:choose>
-            <c:when test="${uBean.username == null}">
+        <c:choose>
+            <c:when test="${userBean.username == null}">
                 <h:outputText value="Awaiting user login" />
             </c:when>
             <c:otherwise>
                 <h:outputText value="#{userBean.username}" />
             </c:otherwise>
-        </c:choose>-->
+        </c:choose>
 
 
         <ul id="nav" class="application_menu">
@@ -64,14 +64,14 @@
 
                     <li>
                         <h:commandLink id="borrowListing" action="borrower_listing">
-                           
+
                             <h:outputText value="What's available to borrow"/>
 
                         </h:commandLink>                  
                     </li>
                     <li>
                         <h:commandLink id="borrowHistory" action="borrower_history">
-                            
+
                             <h:outputText value="My borrowing history"/>
 
                         </h:commandLink>                  
@@ -135,32 +135,32 @@
                         <h:commandLink id="login" action="login">
                             <h:outputText value="Login"/>
                         </h:commandLink>                 
-                        
+
                     </li>
-                     <li>
+                    <li>
                         <h:commandLink id="forgotUsername" action="forgotUsername">
                             <h:outputText value="Forgot Username"/>
                         </h:commandLink>                 
-                        
+
                     </li>
-                     <li>
+                    <li>
                         <h:commandLink id="forgotUserPassword" action="forgotUserPassword">
                             <h:outputText value="Forgot Password"/>
                         </h:commandLink>                 
-                        
+
                     </li>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
+
+
+
+
                     <li>
                         <h:commandLink  id="user_logout" value="Log Out">
-                        <f:actionListener  type="echomarket.listeners.EndSession"  /> 
+                            <f:actionListener  type="echomarket.listeners.EndSession"  /> 
                         </h:commandLink>
                     </li>
 
