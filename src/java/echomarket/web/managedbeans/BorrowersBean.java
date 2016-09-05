@@ -975,10 +975,12 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         OutputStream out = null;
         InputStream filecontent = null;
         String itemImagePath = null;
-        String sPath1 = new File(".").getCanonicalPath();
-        String sPath2 = "\\images\\borrower_images\\";
+        //String sPath1 = new File(".").getCanonicalPath();
+        // Just for development purposes....
+        String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web/resources";
+        String sPath2 = "//borrower_images//";
         String sPath3 = bid;
-        String sPath4 = "\\" + getFileName(ui);
+        String sPath4 = "//" + getFileName(ui);
         File files = new File(sPath1 + sPath2 + sPath3);
         Boolean makeDirectory = files.mkdirs();
         itemImagePath = sPath1 + sPath2 + sPath3 + sPath4;
@@ -1032,15 +1034,19 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     public String retrieveBorrowerImage(String b_itemId, String fileName) {
-        String sPath1 = null;
-        try {
-            sPath1 = new File(".").getCanonicalPath();
-        } catch (IOException ex) {
-            Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        String sPath2 = "\\images\\borrower_images\\";
+//        String sPath1 = null;
+//        try {
+//            sPath1 = new File(".").getCanonicalPath();  -- this didn't work
+//        } catch (IOException ex) {
+//            Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//      Look up source for saving to JavaServerFaces/faces/javax.faces.resource
+
+//      Just for development.. which doesn't work....
+        String sPath1 = "C:/Users/emm/Documents/NetBeansProjects/giving_taking/web/resources";
+        String sPath2 = "/borrower_images/";
         String sPath3 = b_itemId;
-        String sPath4 = "\\" + fileName;
+        String sPath4 = "/" + fileName;
 
         return sPath1 + sPath2 + sPath3 + sPath4;
 
