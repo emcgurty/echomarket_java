@@ -31,16 +31,30 @@
 
 
 
-            <h:dataTable id="picture"  value="#{bb.borrowerHistory()}" var="image" >
+            <h:dataTable id="history"  value="#{bb.getCurrentBorrower(userBean.user_id)}" var="history" >
                 <h:column rowHeader="">
 
                     <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                        <h:outputText  id="firstName" value="#{image.firstName}" style="margin-left:10px"/>
-                        <h:outputText  id="itemDescription" value="#{image.itemDescription}" style="margin-left:10px"/>
-                        <h:outputText  id="imageFile" value="#{image.itemImage.imageFileName}" style="margin-left:10px"/>
+                        <h:outputText  id="firstName" value="#{history.firstName}" style="margin-left:10px"/>
+                        <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px"/>
+
+                        <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
+                            <h:column rowHeader="">
+
+                                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                                    <h:outputText  id="imageFileName" value="#{i.imageFileName}" style="margin-left:10px"/>
+
+                                </div>
+                            </h:column>
+                        </h:dataTable>
+
+
+
                     </div>
                 </h:column>
             </h:dataTable>
+
+
 
 
 
