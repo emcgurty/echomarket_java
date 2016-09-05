@@ -1,8 +1,10 @@
 package echomarket.hibernate;
 // Generated Aug 5, 2016 12:14:14 PM by Hibernate Tools 4.3.1
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,16 +15,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
-  regarding using set: http://stackoverflow.com/questions/7711703/displaying-objects-from-a-set-collection-in-datatable-jsf-does-not-work
-  
+ * regarding using set:
+ * http://stackoverflow.com/questions/7711703/displaying-objects-from-a-set-collection-in-datatable-jsf-does-not-work
+ *
  */
 @Entity
 @Table(name = "borrowers")
 public class Borrowers implements java.io.Serializable {
 
-    
     private String borrower_id;
-    private Set<ItemImages> itemImages = new HashSet<ItemImages>();
+    private List<ItemImages> itemImages = new ArrayList<ItemImages>();
+    //private Set<ItemImages> itemImages = new HashSet<ItemImages>();
     private String user_id;
     private int contactDescribeId;
     private String organizationName;
@@ -73,8 +76,7 @@ public class Borrowers implements java.io.Serializable {
     private int displayBorrowerAlternativeAddress;
 
     public Borrowers() {
-        
-        
+
     }
 
     public Borrowers(String id, int contactDescribeId, int displayBorrowerOrganizationName, String firstName, String lastName, int displayBorrowerName, int displayBorrowerAddress, int useWhichContactAddress, Date dateCreated, Date dateUpdated, Date dateDeleted, int approved, int notifyLenders, int displayBorrowerAlternativeAddress) {
@@ -150,8 +152,6 @@ public class Borrowers implements java.io.Serializable {
 //    public Set<ItemImages> getItemImages() {
 //        return ItemImages;
 //    }
-    
-
     public int getContactDescribeId() {
         return this.contactDescribeId;
     }
@@ -540,25 +540,25 @@ public class Borrowers implements java.io.Serializable {
     /**
      * @return the item_images
      */
-    @ManyToMany
-    @JoinColumn(name = "borrower_id")
-    public Set<ItemImages> getItemImages() {
-        return itemImages;
-    }
-
-    /**
-     * @param itemImages the itemImages to set
-     */
-    public void setItemImages(Set<ItemImages> itemImages) {
-        
-        this.itemImages = itemImages;
-    }
-
-    public void addItemImage(ItemImages ii){
-        ii.setBorrowers(this);
-        itemImages.add(ii);
-        
-    }
+//    @ManyToMany
+//    @JoinColumn(name = "borrower_id")
+//    public Set<ItemImages> getItemImages() {
+//        return itemImages;
+//    }
+//
+//    /**
+//     * @param itemImages the itemImages to set
+//     */
+//    public void setItemImages(Set<ItemImages> itemImages) {
+//        
+//        this.itemImages = itemImages;
+//    }
+//
+//    public void addItemImage(ItemImages ii){
+//        ii.setBorrowers(this);
+//        itemImages.add(ii);
+//        
+//    }
     /**
      * @return the borrower_id
      */
@@ -586,6 +586,22 @@ public class Borrowers implements java.io.Serializable {
      */
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    /**
+     * @return the itemImages
+     */
+    @ManyToMany
+    @JoinColumn(name = "borrower_id")
+    public List<ItemImages> getItemImages() {
+        return itemImages;
+    }
+
+    /**
+     * @param itemImages the itemImages to set
+     */
+    public void setItemImages(List<ItemImages> itemImages) {
+        this.itemImages = itemImages;
     }
 
 }
