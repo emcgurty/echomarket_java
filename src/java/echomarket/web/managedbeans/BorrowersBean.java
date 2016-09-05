@@ -1046,40 +1046,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     }
 
-    public List borrowerHistory() {
-
-        List result = getCurrentBorrower(ubean.getUser_id());
-        Integer result_length = result.size();
-        Borrowers[] bArray = null;
-        List bi_result = null;
-        List image_result = null;
-        Set<ItemImages> ii = null;
-        Borrowers to_Array = null;
-        try {
-            String get_bid = null;
-            for (int i = 0; i < result_length; i++) {
-                to_Array = (Borrowers) result.get(i);
-                get_bid = to_Array.getBorrower_id();
-                image_result = getCurrentBorrowerImage(get_bid);
-                ii = new HashSet<ItemImages>();
-                ii.add((ItemImages) image_result.get(0));
-                to_Array.setItemImages(ii);
-                //result.add(to_Array.getItemImages());
-                System.out.println("Wait");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error at borroerHistory");
-            e.printStackTrace();
-
-        } finally {
-
-        }
-
-        return result;
-    }
-
-    private List getCurrentBorrowerImage(String bid) {
+    public List getCurrentBorrowerImage(String bid) {
 
         List result = null;
         Session session = hib_session();
@@ -1101,7 +1068,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     }
 
-    private List getCurrentBorrower(String bid) {
+    public List getCurrentBorrower(String bid) {
 
         List result = null;
         Session session = hib_session();
