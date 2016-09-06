@@ -22,6 +22,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
@@ -189,7 +191,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setId(getId());
             iii.setBorrower_id(getAbstId);
-            iii.setImageFileName(getFileName(getImageFileName()));
+            // Did this becuase graphicImage does not recognize dynmically build attribute library
+            iii.setImageFileName(getAbstId + "_" + getFileName(getImageFileName()));
             iii.setImageContentType(getImageFileName().getContentType());
             if (sb.isOpen() == false) {
                 sb = hib_session();
@@ -975,21 +978,22 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         OutputStream out = null;
         InputStream filecontent = null;
         String itemImagePath = null;
-        //String sPath1 = new File(".").getCanonicalPath();
+        //String sPath1 = new File(".").getCanonicalPath();  -- tested many 
         // Just for development purposes....
-        String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web/resources";
+        String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
         String sPath2 = "//borrower_images//";
-        String sPath3 = bid;
-        String sPath4 = "//" + getFileName(ui);
-        File files = new File(sPath1 + sPath2 + sPath3);
-        Boolean makeDirectory = files.mkdirs();
-        itemImagePath = sPath1 + sPath2 + sPath3 + sPath4;
+        String buildFileName = bid + "_" + getFileName(ui);
+        String sPath3 = buildFileName;
+        File files = new File(sPath1 + sPath2);
+        //Boolean makeDirectory = files.mkdirs();
+        itemImagePath = sPath1 + sPath2 + sPath3;
         files = new File(itemImagePath);
-
-        if (makeDirectory) {
+//   Testing... leaving at true status for the moment... 
+        if (true) {
 
             if (files.exists()) {
-                Boolean fileDelete = files.delete();
+                /// User may be using same image file name but has been editted
+                files.delete();
             }
 
             try {
@@ -1031,25 +1035,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             }
         }
         return null;
-    }
-
-    public String retrieveBorrowerImage(String b_itemId, String fileName) {
-//        String sPath1 = null;
-//        try {
-//            sPath1 = new File(".").getCanonicalPath();  -- this didn't work
-//        } catch (IOException ex) {
-//            Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//      Look up source for saving to JavaServerFaces/faces/javax.faces.resource
-
-//      Just for development.. which doesn't work....
-        String sPath1 = "C:/Users/emm/Documents/NetBeansProjects/giving_taking/web/resources";
-        String sPath2 = "/borrower_images/";
-        String sPath3 = b_itemId;
-        String sPath4 = "/" + fileName;
-
-        return sPath1 + sPath2 + sPath3 + sPath4;
-
     }
 
     public List getCurrentBorrowerImage(String bid) {
