@@ -42,7 +42,7 @@
                             <h:column rowHeader="">
                                 
                                     <h:outputText  id="imageFileName" value="#{i.imageFileName}" style="margin-left:10px"/>
-                                    <h:graphicImage value="#{bb.retrieveBorrowerImage(history.borrower_id, i.imageFileName)}" />
+                                      <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="" />
                             </h:column>
                         </h:dataTable>
 
