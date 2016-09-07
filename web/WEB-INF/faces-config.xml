@@ -96,15 +96,16 @@
         <managed-bean-name>borrowerBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.BorrowersBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <description>Which borrower record to edit, view, delete</description>
+            <property-name>processId</property-name>
+            <property-class>java.lang.String</property-class>
+            <value>#{param['processId']}</value>
+        </managed-property>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>LocaleBean</managed-bean-name>
         <managed-bean-class>LocaleBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>itemImagesBean</managed-bean-name>
-        <managed-bean-class>echomarket.web.managedbeans.ItemImagesBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 </faces-config>
