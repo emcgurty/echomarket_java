@@ -58,7 +58,7 @@
                             </h:dataTable>
                         </c:if>
 
-                        <h:commandButton value="#{history.borrower_id}" onclick="editBorrower('#{history.borrower_id}');">
+                        <h:commandButton value="#{history.borrower_id}"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
                             <f:param id="processId" value="#{history.borrower_id}"  />
                             <h:outputText    />
                         </h:commandButton>    
