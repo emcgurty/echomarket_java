@@ -41,6 +41,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     // @ManagedProperty(value="#{user_id}")  -- doesn't work
     private String user_id;
     // @ManagedProperty(value="#{user_type}") -- doesn't work
+    private String bid;
     private String user_type;
     private String userName;
     private int contactDescribeId;
@@ -97,7 +98,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 //            = new ArrayList<Borrowers>(Arrays.asList(
 //                    getCurrentEditRecord(processId)
 //            ));
-
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
                     new ItemImages(UUID.randomUUID().toString(), null, null, null, null, null, null, hold_date(), hold_date(), hold_date(), "temp", null, null)
@@ -156,13 +156,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return return_string;
     }
 
-    public String ValueChange() {
-        String return_string = null;
-
-        return return_string;
-
-    }
-
+    
     public String saveBorrowerRegistration() throws IOException {
 
         List padrs = getPrimary();
@@ -1121,13 +1115,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 //        ubean.setUserAlias(asdasd);
 //        return "edit_borrower";
 //    }
+    public String getCurrentEditRecord(String bid) {
 
-    public List getCurrentEditRecord(String bid) {
-
-//        FacesContext context = null;
-//        context = FacesContext.getCurrentInstance();
-//        context.getExternalContext().getSessionMap().get("user_action");
-        
         List result = null;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
@@ -1137,7 +1126,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid",bid)
+                    .setParameter("bid", bid)
                     .list();
             tx.commit();
         } catch (Exception e) {
@@ -1145,35 +1134,64 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             hib = null;
             tx = null;
         }
+        // Must be just one record.. will error check later..
+        Borrowers to_Array = (Borrowers) result.get(0);
+        this.bid = bid;
+        this.user_id = to_Array.getUser_id();
+        this.contactDescribeId = to_Array.getContactDescribeId();
+        this.organizationName = to_Array.getOrganizationName();
+        this.displayBorrowerOrganizationName = to_Array.getDisplayBorrowerOrganizationName();
+        this.otherDescribeYourself = to_Array.getOtherDescribeYourself();
+        this.firstName = to_Array.getFirstName();
+        this.mi = to_Array.getMi();
+        this.lastName = to_Array.getLastName();
+        this.displayBorrowerName = to_Array.getDisplayBorrowerName();
+        this.displayBorrowerAddress = to_Array.getDisplayBorrowerAddress();
+        this.homePhone = to_Array.getHomePhone();
+        this.cellPhone = to_Array.getCellPhone();
+        this.alternativePhone = to_Array.getAlternativePhone();
+        this.publicDisplayHomePhone = to_Array.getPublicDisplayHomePhone();
+        this.publicDisplayCellPhone = to_Array.getPublicDisplayCellPhone();
+        this.publicDisplayAlternativePhone= to_Array.getPublicDisplayAlternativePhone();
+        this.useWhichContactAddress = to_Array.getUseWhichContactAddress();
+        this.emailAlternative = to_Array.getEmailAlternative();
+        this.borrowerContactByEmail = to_Array.getBorrowerContactByEmail();
+        this.borrowerContactByHomePhone = to_Array.getBorrowerContactByHomePhone();
+        this.borrowerContactByCellPhone= to_Array.getBorrowerContactByCellPhone();
+        this.borrowerContactByAlternativePhone = to_Array.getBorrowerContactByAlternativePhone();
+        this.borrowerContactByFacebook= to_Array.getBorrowerContactByFacebook();
+        this.borrowerContactByTwitter = to_Array.getBorrowerContactByTwitter();
+        this.borrowerContactByInstagram= to_Array.getBorrowerContactByInstagram();
+        this.borrowerContactByLinkedIn = to_Array.getBorrowerContactByLinkedIn();
+        this.borrowerContactByOtherSocialMedia = to_Array.getBorrowerContactByOtherSocialMedia();
+        this.borrowerContactByOtherSocialMediaAccess = to_Array.getBorrowerContactByOtherSocialMediaAccess();
+        this.categoryId = to_Array.getCategoryId();
+        this.otherItemCategory= to_Array.getOtherItemCategory();
+        this.itemModel= to_Array.getItemModel();
+        this.itemDescription = to_Array.getItemDescription();
+        this.itemConditionId = to_Array.getItemConditionId();
+        this.itemCount = to_Array.getItemCount();
+        this.goodwill = to_Array.getGoodwill();
+        this.age18OrMore = to_Array.getAge18OrMore();
+        this.isActive = to_Array.getIsActive();
+        this.dateCreated = to_Array.getDateCreated();
+        this.dateUpdated = to_Array.getDateUpdated();
+        this.approved = to_Array.getApproved();
+        this.notifyLenders = to_Array.getNotifyLenders();
+        this.receiveLenderNotification = to_Array.getReceiveLenderNotification();
+        this.isCommunity = to_Array.getIsCommunity();
+        this.comment = to_Array.getComment();
+        this.advertiserId = to_Array.getAdvertiserId();
+        this.displayBorrowerAlternativeAddress = to_Array.getDisplayBorrowerAlternativeAddress();
+                
 
-//        Integer size_of_list = result.size();
-//        a_array = new Borrowers[size_of_list];
-//        for (int i = 0; i < size_of_list; i++) {
-//            Borrowers to_Array = (Borrowers) result.get(i);
-//
-//            a_array[i]
-//                    = new Borrowers(to_Array.getBorrower_id(), to_Array.getUser_id(), to_Array.getContactDescribeId(), to_Array.getOrganizationName(), to_Array.getDisplayBorrowerOrganizationName(), to_Array.getOtherDescribeYourself(),
-//                            to_Array.getFirstName(), to_Array.getMi(), to_Array.getLastName(), to_Array.getDisplayBorrowerName(), to_Array.getDisplayBorrowerAddress(), to_Array.getHomePhone(),
-//                            to_Array.getCellPhone(), to_Array.getAlternativePhone(), to_Array.getPublicDisplayHomePhone(), to_Array.getPublicDisplayCellPhone(),
-//                            to_Array.getPublicDisplayAlternativePhone(), to_Array.getUseWhichContactAddress(), to_Array.getEmailAlternative(), to_Array.getBorrowerContactByEmail(),
-//                            to_Array.getBorrowerContactByHomePhone(), to_Array.getBorrowerContactByCellPhone(), to_Array.getBorrowerContactByAlternativePhone(),
-//                            to_Array.getBorrowerContactByFacebook(), to_Array.getBorrowerContactByTwitter(), to_Array.getBorrowerContactByInstagram(), to_Array.getBorrowerContactByLinkedIn(),
-//                            to_Array.getBorrowerContactByOtherSocialMedia(), to_Array.getBorrowerContactByOtherSocialMediaAccess(), to_Array.getCategoryId(), to_Array.getOtherItemCategory(),
-//                            to_Array.getItemModel(), to_Array.getItemDescription(), to_Array.getItemConditionId(), to_Array.getItemCount(), to_Array.getGoodwill(), to_Array.getAge18OrMore(),
-//                            to_Array.getIsActive(), to_Array.getDateCreated(), to_Array.getDateUpdated(), null, to_Array.getApproved(), to_Array.getNotifyLenders(), to_Array.getReceiveLenderNotification(),
-//                            to_Array.getIsCommunity(), null, to_Array.getComment(), to_Array.getAdvertiserId(), to_Array.getDisplayBorrowerAlternativeAddress());
-//        }
-
-        System.out.println(bid);
-
-        return result;
+        return "edit_borrower";
 
     }
 
 //    public ArrayList<Borrowers> getBorrowerList() {
 //        return borrowerList;
 //    }
-
     private Addresses[] getExistingBorrowerAddress(String which) {
 
         List result = null;
@@ -1184,7 +1202,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", processId)
+                    .setParameter("bid", bid)
                     .setParameter("which", which)
                     .list();
             tx.commit();
@@ -1275,6 +1293,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      */
     public void setExisting_alternative(Addresses[] existing_alternative) {
         this.existing_alternative = existing_alternative;
+    }
+
+    /**
+     * @return the bid
+     */
+    public String getBid() {
+        return bid;
     }
 
 }
