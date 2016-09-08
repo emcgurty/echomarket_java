@@ -90,7 +90,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String remoteIp;
     private String comment;
     private String advertiserId;
+    private String processId;
     private Part imageFileName;
+
+//    private final ArrayList<Borrowers> borrowerList
+//            = new ArrayList<Borrowers>(Arrays.asList(
+//                    getCurrentEditRecord(processId)
+//            ));
 
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
@@ -104,6 +110,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     private static ArrayList<Addresses> alternative
             = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, null, "alternative")));
+
+    private Addresses[] existing_primary; //= getExistingBorrowerAddress("primary");
+    private Addresses[] existing_alternative; // = getExistingBorrowerAddress("alternative");
 
     /**
      * @return the picture
@@ -139,6 +148,19 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      */
     public static void setAlternative(ArrayList<Addresses> aAlternative) {
         alternative = aAlternative;
+    }
+
+    public String saveBorrowerEdit() {
+        String return_string = null;
+
+        return return_string;
+    }
+
+    public String ValueChange() {
+        String return_string = null;
+
+        return return_string;
+
     }
 
     public String saveBorrowerRegistration() throws IOException {
@@ -262,7 +284,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @return the contactDescribeId
+     * @return th:dataTableh:dataTablehe contactDescribeId
      */
     public int getContactDescribeId() {
         return contactDescribeId;
@@ -1092,6 +1114,167 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      */
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+//    public String getItemDetail() {
+//        String asdasd =  this.processId;
+//        ubean.setUserAlias(asdasd);
+//        return "edit_borrower";
+//    }
+
+    public List getCurrentEditRecord(String bid) {
+
+//        FacesContext context = null;
+//        context = FacesContext.getCurrentInstance();
+//        context.getExternalContext().getSessionMap().get("user_action");
+        
+        List result = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String[] results = null;
+        Borrowers[] a_array = null;
+        String queryString = "from Borrowers where borrower_id = :bid order by date_created";
+
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("bid",bid)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+        } finally {
+            hib = null;
+            tx = null;
+        }
+
+//        Integer size_of_list = result.size();
+//        a_array = new Borrowers[size_of_list];
+//        for (int i = 0; i < size_of_list; i++) {
+//            Borrowers to_Array = (Borrowers) result.get(i);
+//
+//            a_array[i]
+//                    = new Borrowers(to_Array.getBorrower_id(), to_Array.getUser_id(), to_Array.getContactDescribeId(), to_Array.getOrganizationName(), to_Array.getDisplayBorrowerOrganizationName(), to_Array.getOtherDescribeYourself(),
+//                            to_Array.getFirstName(), to_Array.getMi(), to_Array.getLastName(), to_Array.getDisplayBorrowerName(), to_Array.getDisplayBorrowerAddress(), to_Array.getHomePhone(),
+//                            to_Array.getCellPhone(), to_Array.getAlternativePhone(), to_Array.getPublicDisplayHomePhone(), to_Array.getPublicDisplayCellPhone(),
+//                            to_Array.getPublicDisplayAlternativePhone(), to_Array.getUseWhichContactAddress(), to_Array.getEmailAlternative(), to_Array.getBorrowerContactByEmail(),
+//                            to_Array.getBorrowerContactByHomePhone(), to_Array.getBorrowerContactByCellPhone(), to_Array.getBorrowerContactByAlternativePhone(),
+//                            to_Array.getBorrowerContactByFacebook(), to_Array.getBorrowerContactByTwitter(), to_Array.getBorrowerContactByInstagram(), to_Array.getBorrowerContactByLinkedIn(),
+//                            to_Array.getBorrowerContactByOtherSocialMedia(), to_Array.getBorrowerContactByOtherSocialMediaAccess(), to_Array.getCategoryId(), to_Array.getOtherItemCategory(),
+//                            to_Array.getItemModel(), to_Array.getItemDescription(), to_Array.getItemConditionId(), to_Array.getItemCount(), to_Array.getGoodwill(), to_Array.getAge18OrMore(),
+//                            to_Array.getIsActive(), to_Array.getDateCreated(), to_Array.getDateUpdated(), null, to_Array.getApproved(), to_Array.getNotifyLenders(), to_Array.getReceiveLenderNotification(),
+//                            to_Array.getIsCommunity(), null, to_Array.getComment(), to_Array.getAdvertiserId(), to_Array.getDisplayBorrowerAlternativeAddress());
+//        }
+
+        System.out.println(bid);
+
+        return result;
+
+    }
+
+//    public ArrayList<Borrowers> getBorrowerList() {
+//        return borrowerList;
+//    }
+
+    private Addresses[] getExistingBorrowerAddress(String which) {
+
+        List result = null;
+        Addresses[] a_array = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+
+        String queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("bid", processId)
+                    .setParameter("which", which)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+
+        } finally {
+            hib = null;
+            tx = null;
+        }
+        Integer size_of_list = result.size();
+        a_array = new Addresses[size_of_list];
+        for (int i = 0; i < size_of_list; i++) {
+            Addresses to_Array = (Addresses) result.get(i);
+            //(String id, String lender_id, String borrower_id, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
+            a_array[i] = new Addresses(to_Array.getId(), to_Array.getLender_id(), to_Array.getBorrower_id(), to_Array.getAddressLine1(), to_Array.getAddressLine2(), to_Array.getPostalCode(), to_Array.getCity(), to_Array.getProvince(), to_Array.getUsStateId(), to_Array.getRegion(), to_Array.getCountryId(), to_Array.getAddressType());
+        }
+
+        System.out.println("bid");
+
+        return a_array;
+
+    }
+
+    public List getExistingPicture() {
+
+        List result = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String[] results = null;
+        String queryString = "from ItemImages where borrower_id = :bid ";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("bid", processId)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+        } finally {
+            hib = null;
+            tx = null;
+        }
+
+        System.out.println("bid");
+
+        return result;
+
+    }
+
+    /**
+     * @return the processId
+     */
+    public String getProcessId() {
+//        FacesContext context = null;
+//        context = FacesContext.getCurrentInstance();
+//        context.getExternalContext().getSessionMap().put("user_action", current);
+        return processId;
+    }
+
+    /**
+     * @param processId the processId to set
+     */
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    /**
+     * @return the existing_primary
+     */
+    public Addresses[] getExisting_primary() {
+        return getExistingBorrowerAddress("primary");
+    }
+
+    /**
+     * @param existing_primary the existing_primary to set
+     */
+    public void setExisting_primary(Addresses[] existing_primary) {
+        this.existing_primary = existing_primary;
+    }
+
+    /**
+     * @return the existing_alternative
+     */
+    public Addresses[] getExisting_alternative() {
+        return getExistingBorrowerAddress("alternative");
+    }
+
+    /**
+     * @param existing_alternative the existing_alternative to set
+     */
+    public void setExisting_alternative(Addresses[] existing_alternative) {
+        this.existing_alternative = existing_alternative;
     }
 
 }
