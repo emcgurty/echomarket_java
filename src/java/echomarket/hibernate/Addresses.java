@@ -9,10 +9,10 @@ import javax.persistence.Table;
 @Table(name = "addresses")
 public class Addresses implements java.io.Serializable {
 
-    @Id
+    
     private String id;
-    private String lenderId;
-    private String borrowerId;
+    private String lender_id;
+    private String borrower_id;
     private String addressLine1;
     private String addressLine2;
     private String postalCode;
@@ -31,10 +31,10 @@ public class Addresses implements java.io.Serializable {
         this.addressType = addressType;
     }
 
-    public Addresses(String id, String lenderId, String borrowerId, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
+    public Addresses(String id, String lender_id, String borrower_id, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
         this.id = id;
-        this.lenderId = lenderId;
-        this.borrowerId = borrowerId;
+        this.lender_id = lender_id;
+        this.borrower_id = borrower_id;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.postalCode = postalCode;
@@ -45,29 +45,13 @@ public class Addresses implements java.io.Serializable {
         this.countryId = countryId;
         this.addressType = addressType;
     }
-
+    @Id
     public String getId() {
         return this.id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getLenderId() {
-        return this.lenderId;
-    }
-
-    public void setLenderId(String lenderId) {
-        this.lenderId = lenderId;
-    }
-
-    public String getBorrowerId() {
-        return this.borrowerId;
-    }
-
-    public void setBorrowerId(String borrowerId) {
-        this.borrowerId = borrowerId;
     }
 
     public String getAddressLine1() {
@@ -140,6 +124,34 @@ public class Addresses implements java.io.Serializable {
 
     public void setAddressType(String addressType) {
         this.addressType = addressType;
+    }
+
+    /**
+     * @return the lender_id
+     */
+    public String getLender_id() {
+        return lender_id;
+    }
+
+    /**
+     * @param lender_id the lender_id to set
+     */
+    public void setLender_id(String lender_id) {
+        this.lender_id = lender_id;
+    }
+
+    /**
+     * @return the borrower_id
+     */
+    public String getBorrower_id() {
+        return borrower_id;
+    }
+
+    /**
+     * @param borrower_id the borrower_id to set
+     */
+    public void setBorrower_id(String borrower_id) {
+        this.borrower_id = borrower_id;
     }
 
 }
