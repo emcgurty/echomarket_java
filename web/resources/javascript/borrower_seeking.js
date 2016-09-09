@@ -6,7 +6,25 @@ jQuery(document).ready(function ($) {
     $(window).resize(function () {
         size_of_menu();
     });
+    if ($("input[id$='organization_name']").val()) {
+        $("div[id$='yesNoOrganization']").css("display", "block")
+    }
 
+// Could not get tilde to work 
+// var contactAddressCheck = $("input[type=radio][id~='useWhichContactAddress']");
+    var contactAddressCheck = $("input[type=radio]");
+    findContactAddressValue(contactAddressCheck);
+    function findContactAddressValue(cad) {
+
+        for (var i = 0; i < cad.length; i++) {
+            var id = cad[i].id;
+            if ((id.includes('1')) || (id.includes('2'))) {
+                $("div[id$='buildAlternativeAddress']").css("display", "block");
+                break;
+            }
+
+        }
+    }
 
 
     function validateSelects(input) {
@@ -61,15 +79,13 @@ jQuery(document).ready(function ($) {
     $('select').on('change', function () {
         validateSelects(this);
     });
-
-
     $('input').on('change', function () {
 
         var y_n = null;
         var getOrgNameVal = null;
         if (this.id.includes('useWhichContactAddress')) {
             if ((this.id.includes('1')) || (this.id.includes('2'))) {
-                
+
                 $("div#buildAlternativeAddress").css("display", "block");
             } else {
                 $("div#buildAlternativeAddress").css("display", "none");
@@ -138,7 +154,6 @@ jQuery(document).ready(function ($) {
 
         } else if (this.id.includes('organization_name')) {
             $("div#yesNoOrganization").css("display", "block");
-
         } else if (this.id.includes('itemCount')) {
 
             if (isNaN(this.value)) {
@@ -160,17 +175,14 @@ jQuery(document).ready(function ($) {
             }
 //
         } else if (this.id.includes('imageFileName')) {
-            
+
             readURL(this);
-
-
 //
         } else {
             return false;
         }
 
     });
-
     function readURL(input) {
 
         if (input.files && input.files[0]) {
@@ -186,8 +198,6 @@ jQuery(document).ready(function ($) {
     }
 
 });
-
-
 function showBLegal() {
     var returnResult = validateItem();
     if (returnResult) {
@@ -206,7 +216,6 @@ function ValdateThenShowReview() {
     var validL = checkBLegal();
     if (validL) {
         showReview();
-
     }
 
 }
@@ -240,14 +249,11 @@ function validateItem() {
     var return_value = true;
     var item_id = null;
     var item_value = null;
-
     var getItemInputs = $("input[type=text].items");
-
     for (var i = 0; i < getItemInputs.length; i++) {
         item_id = getItemInputs[i].id;
         item_id = item_id.replace('rb:', '');
         item_value = getItemInputs[i].value;
-
         if (item_id.includes('itemCount')) {
 
             if ((isNaN(item_value)) || (item_value == '')) {
@@ -280,12 +286,10 @@ function validateItem() {
     }
 
     var getItemSelect = $(".items.select");
-
     for (var i = 0; i < getItemSelect.length; i++) {
         item_id = getItemSelect[i].id;
         item_id = item_id.replace('rb:', '');
         item_value = getItemSelect[i].value;
-
         if (item_id.includes('itemConditionId')) {
             if (item_value == -2) {
                 $("span#" + item_id + ".error-message").css("visibility", "visible");
@@ -302,19 +306,14 @@ function validateAlternativeAddress() {
 
 
     var return_value = true;
-
     if ($("div#buildAlternativeAddress").css("display") == 'block') {
 
         var item_id = null;
         var item_value = null;
-
         var getItemInputs = $("input[type=text].alternativeAddress");
-
         for (var i = 0; i < getItemInputs.length; i++) {
             item_id = getChildID(getItemInputs[i].id);
-
             item_value = getItemInputs[i].value;
-
             if (item_id.includes('addressLine1')) {
 
                 if (item_value == '') {
@@ -329,7 +328,7 @@ function validateAlternativeAddress() {
                     try {
                         $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
                     } catch (err) {
-                        //alert(err);
+//alert(err);
                     }
                     $("span#" + item_id + "_alternative.error-message").text("Please provide your City.");
                     return_value = false;
@@ -348,11 +347,9 @@ function validateAlternativeAddress() {
         }
 
         var getItemSelect = $(".alternativeAddress.select");
-
         for (var i = 0; i < getItemSelect.length; i++) {
             item_id = getChildID(getItemSelect[i].id);
             item_value = getItemSelect[i].value;
-
             if (item_id.includes('countryId')) {
                 if (item_value == -2) {
                     $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
@@ -529,13 +526,11 @@ function ValidateContactInformation() {
     var postalCode = null;
     var countryId = null
     var orgName = null;
-
     $("span.error-message").css("visibility", "hidden");
     $("select").each(function () {
         if (this.id.includes('contactDescribeId')) {
 
             cdi = this.value;
-
             foundComponent++;
 //            Cheating here, eventailly need to parse for id
         } else if (this.id == 'rb:primary:0:countryId') {
@@ -547,7 +542,6 @@ function ValidateContactInformation() {
         } else {
         }
     });
-
     foundComponent = 0;
     $("input").each(function () {
 
@@ -559,7 +553,6 @@ function ValidateContactInformation() {
         } else if (this.id == 'rb:organization_name') {
             orgName = this.value;
             foundComponent++;
-
         } else if (this.id == 'rb:firstName') {
             firstName = this.value;
             foundComponent++;
@@ -650,7 +643,6 @@ function displayPhone() {
             return false;
         }
     });
-
     try {
         if (homePhone) {
             $("div#display_homePhone.phone").css("display", "block");
@@ -695,7 +687,6 @@ function checkBLegal() {
     var legal_check = $("input[type=radio]");
     var getValue = false;
     var foundValue = 0;
-
     try {
 
         for (var i = 0; i < legal_check.length; i++) {
@@ -726,7 +717,6 @@ function checkBLegal() {
                 foundValue++;
             } else if (foundValue == 2) {
                 break;
-
             }
         }
 
@@ -745,7 +735,6 @@ function getChildID(parentID) {
         child_id = child_id.substring(lastColon + 1, lengthOfSelectId);
     }
     return child_id;
-
 }
 
 function editBorrower(bid)
