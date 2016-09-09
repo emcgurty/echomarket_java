@@ -18,11 +18,19 @@ jQuery(document).ready(function ($) {
 
         for (var i = 0; i < cad.length; i++) {
             var id = cad[i].id;
-            if ((id.includes('1')) || (id.includes('2'))) {
-                $("div[id$='buildAlternativeAddress']").css("display", "block");
-                break;
-            }
+            if (id.includes('useWhichContactAddress')) {
+                if ((id.includes('1')) || (id.includes('2'))) {
+                    $("div[id$='buildAlternativeAddress']").css("display", "block");
+                    break;
+                }
 
+            } else if (id.includes('borrowerContactByEmail')) {
+                if ((id.includes('1')) || (id.includes('2'))) {
+                    $("div[id$='emailAlternative']").css("display", "block");
+                    break;
+                }
+
+            }
         }
     }
 
@@ -89,6 +97,13 @@ jQuery(document).ready(function ($) {
                 $("div#buildAlternativeAddress").css("display", "block");
             } else {
                 $("div#buildAlternativeAddress").css("display", "none");
+            }
+        } else if (this.id.includes('borrowerContactByEmail')) {
+            if ((this.id.includes('1')) || (this.id.includes('2'))) {
+
+                $("div#emailAlternative").css("display", "block");
+            } else {
+                $("div#emailAlternative").css("display", "none");
             }
         } else if (this.id.includes('displayBorrowerOrganizationName')) {
             y_n = $(this).val();
