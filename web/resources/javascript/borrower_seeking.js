@@ -69,6 +69,7 @@ jQuery(document).ready(function ($) {
         var getOrgNameVal = null;
         if (this.id.includes('useWhichContactAddress')) {
             if ((this.id.includes('1')) || (this.id.includes('2'))) {
+                
                 $("div#buildAlternativeAddress").css("display", "block");
             } else {
                 $("div#buildAlternativeAddress").css("display", "none");
@@ -745,5 +746,14 @@ function getChildID(parentID) {
     }
     return child_id;
 
+}
+
+function editBorrower(bid)
+{
+    var url = "http://localhost:15424/giving_taking/faces/edit_borrower.xhtml?processId=".concat(bid);
+    alert(url);
+    //$(location).attr('href',url);
+    window.location.replace(url);
+    return false;
 }
 
