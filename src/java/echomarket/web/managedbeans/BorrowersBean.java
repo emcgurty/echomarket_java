@@ -1080,7 +1080,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         // Must be just one record.. will error check later..
 
         Borrowers to_Array = (Borrowers) result.get(0);
-        this.bid = bid;
+        this.setBid(bid);
         this.user_id = to_Array.getUser_id();
         this.contactDescribeId = to_Array.getContactDescribeId();
         this.organizationName = to_Array.getOrganizationName();
@@ -1142,7 +1142,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", bid)
+                    .setParameter("bid", getBid())
                     .setParameter("which", which)
                     .list();
             tx.commit();
@@ -1245,6 +1245,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      */
     public String getBid() {
         return bid;
+    }
+
+    /**
+     * @param bid the bid to set
+     */
+    public void setBid(String bid) {
+        this.bid = bid;
     }
 
 }
