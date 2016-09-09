@@ -15,21 +15,24 @@ jQuery(document).ready(function ($) {
     var contactAddressCheck = $("input[type=radio]");
     findContactAddressValue(contactAddressCheck);
     function findContactAddressValue(cad) {
-
+        var foundValue = 0;
         for (var i = 0; i < cad.length; i++) {
             var id = cad[i].id;
             if (id.includes('useWhichContactAddress')) {
                 if ((id.includes('1')) || (id.includes('2'))) {
                     $("div[id$='buildAlternativeAddress']").css("display", "block");
-                    break;
+                    foundValue++;
                 }
 
             } else if (id.includes('borrowerContactByEmail')) {
                 if ((id.includes('1')) || (id.includes('2'))) {
                     $("div[id$='emailAlternative']").css("display", "block");
-                    break;
+                    foundValue++;
                 }
 
+            } else {
+                if (foundValue == 2) {
+                break;
             }
         }
     }
