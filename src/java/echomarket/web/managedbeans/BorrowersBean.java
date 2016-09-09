@@ -94,10 +94,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String processId;
     private Part imageFileName;
 
-//    private final ArrayList<Borrowers> borrowerList
-//            = new ArrayList<Borrowers>(Arrays.asList(
-//                    getCurrentEditRecord(processId)
-//            ));
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
                     new ItemImages(UUID.randomUUID().toString(), null, null, null, null, null, null, hold_date(), hold_date(), hold_date(), "temp", null, null)
@@ -114,16 +110,10 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private Addresses[] existing_primary; //= getExistingBorrowerAddress("primary");
     private Addresses[] existing_alternative; // = getExistingBorrowerAddress("alternative");
 
-    /**
-     * @return the picture
-     */
     public ArrayList<ItemImages> getPicture() {
         return picture;
     }
 
-    /**
-     * @param aPicture the picture to set
-     */
     public static void setPicture(ArrayList<ItemImages> aPicture) {
         picture = aPicture;
     }
@@ -136,16 +126,10 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return alternative;
     }
 
-    /**
-     * @param aPrimary the primary to set
-     */
     public static void setPrimary(ArrayList<Addresses> aPrimary) {
         primary = aPrimary;
     }
 
-    /**
-     * @param aAlternative the alternative to set
-     */
     public static void setAlternative(ArrayList<Addresses> aAlternative) {
         alternative = aAlternative;
     }
@@ -156,7 +140,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return return_string;
     }
 
-    
     public String saveBorrowerRegistration() throws IOException {
 
         List padrs = getPrimary();
@@ -277,94 +260,54 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return "index";
     }
 
-    /**
-     * @return th:dataTableh:dataTablehe contactDescribeId
-     */
     public int getContactDescribeId() {
         return contactDescribeId;
     }
 
-    /**
-     * @param contactDescribeId the contactDescribeId to set
-     */
     public void setContactDescribeId(int contactDescribeId) {
         this.contactDescribeId = contactDescribeId;
     }
 
-    /**
-     * @return the organizationName
-     */
     public String getOrganizationName() {
         return organizationName;
     }
 
-    /**
-     * @param organizationName the organizationName to set
-     */
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
     }
 
-    /**
-     * @return the displayBorrowerOrganizationName
-     */
     public int getDisplayBorrowerOrganizationName() {
         return displayBorrowerOrganizationName;
     }
 
-    /**
-     * @param displayBorrowerOrganizationName the
-     * displayBorrowerOrganizationName to set
-     */
     public void setDisplayBorrowerOrganizationName(int displayBorrowerOrganizationName) {
         this.displayBorrowerOrganizationName = displayBorrowerOrganizationName;
     }
 
-    /**
-     * @return the otherDescribeYourself
-     */
     public String getOtherDescribeYourself() {
         return otherDescribeYourself;
     }
 
-    /**
-     * @param otherDescribeYourself the otherDescribeYourself to set
-     */
     public void setOtherDescribeYourself(String otherDescribeYourself) {
         this.otherDescribeYourself = otherDescribeYourself;
     }
 
-    /**
-     * @return the firstName
-     */
     public String getFirstName() {
         return firstName;
     }
 
-    /**
-     * @param firstName the firstName to set
-     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    /**
-     * @return the mi
-     */
     public String getMi() {
         return mi;
     }
 
-    /**
-     * @param mi the mi to set
-     */
     public void setMi(String mi) {
         this.mi = mi;
     }
 
-    /**
-     * @return the lastName
-     */
     public String getLastName() {
         return lastName;
     }
@@ -1135,6 +1078,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             tx = null;
         }
         // Must be just one record.. will error check later..
+
         Borrowers to_Array = (Borrowers) result.get(0);
         this.bid = bid;
         this.user_id = to_Array.getUser_id();
@@ -1152,22 +1096,22 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.alternativePhone = to_Array.getAlternativePhone();
         this.publicDisplayHomePhone = to_Array.getPublicDisplayHomePhone();
         this.publicDisplayCellPhone = to_Array.getPublicDisplayCellPhone();
-        this.publicDisplayAlternativePhone= to_Array.getPublicDisplayAlternativePhone();
+        this.publicDisplayAlternativePhone = to_Array.getPublicDisplayAlternativePhone();
         this.useWhichContactAddress = to_Array.getUseWhichContactAddress();
         this.emailAlternative = to_Array.getEmailAlternative();
         this.borrowerContactByEmail = to_Array.getBorrowerContactByEmail();
         this.borrowerContactByHomePhone = to_Array.getBorrowerContactByHomePhone();
-        this.borrowerContactByCellPhone= to_Array.getBorrowerContactByCellPhone();
+        this.borrowerContactByCellPhone = to_Array.getBorrowerContactByCellPhone();
         this.borrowerContactByAlternativePhone = to_Array.getBorrowerContactByAlternativePhone();
-        this.borrowerContactByFacebook= to_Array.getBorrowerContactByFacebook();
+        this.borrowerContactByFacebook = to_Array.getBorrowerContactByFacebook();
         this.borrowerContactByTwitter = to_Array.getBorrowerContactByTwitter();
-        this.borrowerContactByInstagram= to_Array.getBorrowerContactByInstagram();
+        this.borrowerContactByInstagram = to_Array.getBorrowerContactByInstagram();
         this.borrowerContactByLinkedIn = to_Array.getBorrowerContactByLinkedIn();
         this.borrowerContactByOtherSocialMedia = to_Array.getBorrowerContactByOtherSocialMedia();
         this.borrowerContactByOtherSocialMediaAccess = to_Array.getBorrowerContactByOtherSocialMediaAccess();
         this.categoryId = to_Array.getCategoryId();
-        this.otherItemCategory= to_Array.getOtherItemCategory();
-        this.itemModel= to_Array.getItemModel();
+        this.otherItemCategory = to_Array.getOtherItemCategory();
+        this.itemModel = to_Array.getItemModel();
         this.itemDescription = to_Array.getItemDescription();
         this.itemConditionId = to_Array.getItemConditionId();
         this.itemCount = to_Array.getItemCount();
@@ -1183,16 +1127,12 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.comment = to_Array.getComment();
         this.advertiserId = to_Array.getAdvertiserId();
         this.displayBorrowerAlternativeAddress = to_Array.getDisplayBorrowerAlternativeAddress();
-                
 
         return "edit_borrower";
 
     }
 
-//    public ArrayList<Borrowers> getBorrowerList() {
-//        return borrowerList;
-//    }
-    private Addresses[] getExistingBorrowerAddress(String which) {
+    private List getExistingBorrowerAddress(String which) {
 
         List result = null;
         Addresses[] a_array = null;
@@ -1212,18 +1152,22 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             hib = null;
             tx = null;
         }
+
         Integer size_of_list = result.size();
-        a_array = new Addresses[size_of_list];
-        for (int i = 0; i < size_of_list; i++) {
-            Addresses to_Array = (Addresses) result.get(i);
-            //(String id, String lender_id, String borrower_id, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
-            a_array[i] = new Addresses(to_Array.getId(), to_Array.getLender_id(), to_Array.getBorrower_id(), to_Array.getAddressLine1(), to_Array.getAddressLine2(), to_Array.getPostalCode(), to_Array.getCity(), to_Array.getProvince(), to_Array.getUsStateId(), to_Array.getRegion(), to_Array.getCountryId(), to_Array.getAddressType());
+        if ((size_of_list == 0) && (which == "alternative")) {
+            return getAlternative();
+        } else if ((size_of_list == 0) && (which == "primary")) {
+            return getPrimary();
+        } else {
+            return result;
         }
 
-        System.out.println("bid");
-
-        return a_array;
-
+//        a_array = new Addresses[size_of_list];
+//        for (int i = 0; i < size_of_list; i++) {
+//            Addresses to_Array = (Addresses) result.get(i);
+//            //(String id, String lender_id, String borrower_id, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
+//            a_array[i] = new Addresses(to_Array.getId(), to_Array.getLender_id(), to_Array.getBorrower_id(), to_Array.getAddressLine1(), to_Array.getAddressLine2(), to_Array.getPostalCode(), to_Array.getCity(), to_Array.getProvince(), to_Array.getUsStateId(), to_Array.getRegion(), to_Array.getCountryId(), to_Array.getAddressType());
+//        }
     }
 
     public List getExistingPicture() {
@@ -1244,9 +1188,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             tx = null;
         }
 
-        System.out.println("bid");
+        Integer size_of_list = result.size();
+        if (size_of_list == 0) {
+            return getPicture();
+        } else {
 
-        return result;
+            return result;
+        }
 
     }
 
@@ -1254,9 +1202,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      * @return the processId
      */
     public String getProcessId() {
-//        FacesContext context = null;
-//        context = FacesContext.getCurrentInstance();
-//        context.getExternalContext().getSessionMap().put("user_action", current);
         return processId;
     }
 
@@ -1270,7 +1215,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     /**
      * @return the existing_primary
      */
-    public Addresses[] getExisting_primary() {
+    public List getExisting_primary() {
         return getExistingBorrowerAddress("primary");
     }
 
@@ -1284,7 +1229,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     /**
      * @return the existing_alternative
      */
-    public Addresses[] getExisting_alternative() {
+    public List getExisting_alternative() {
         return getExistingBorrowerAddress("alternative");
     }
 
