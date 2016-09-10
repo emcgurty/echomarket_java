@@ -12,17 +12,17 @@
 
         <c:choose>
             <c:when test="${userBean.username == null}">
-                <h:outputText value="Awaiting user login" />
+                <c:set var="username" scope="session" value="Friend" />
             </c:when>
             <c:otherwise>
-                <h:outputText value="#{userBean.username}" />
+                <c:set var="username" scope="session"  value="#{userBean.username}" />
             </c:otherwise>
         </c:choose>
 
 
         <ul id="nav" class="application_menu">
             <li class="subs">
-                <a href="#s1">Echo Market</a>
+                <a href="#s1">Echo Market: Welcome <h:outputText value="#{username}!" /></a>
                 <ul>
                     <li>
                         <h:commandLink id="allItemsListing" action="all_items_listing">
@@ -122,45 +122,52 @@
                 </ul>
             </li>
 
+            <c:if test="#{userBean.username == null}" >
+                <li class="subs">
+                    <a href="#s1">Login</a>
+                    <ul>
+                        <li>
+                            <h:commandLink id="register" action="user_registration">
+                                <h:outputText value="Register"/>
 
-            <li class="subs">
-                <a href="#s1">Login</a>
-                <ul>
-                    <li>
-                        <h:commandLink id="register" action="user_registration">
-                            <h:outputText value="Register"/>
+                            </h:commandLink>
 
-                        </h:commandLink>
+                        </li>
 
-                    </li>
+                        <li>
+                            <h:commandLink id="login" action="login">
+                                <h:outputText value="Login"/>
+                            </h:commandLink>                 
 
-                    <li>
-                        <h:commandLink id="login" action="login">
-                            <h:outputText value="Login"/>
-                        </h:commandLink>                 
+                        </li>
+                        <li>
+                            <h:commandLink id="forgotUsername" action="forgotUsername">
+                                <h:outputText value="Forgot Username"/>
+                            </h:commandLink>                 
 
-                    </li>
-                    <li>
-                        <h:commandLink id="forgotUsername" action="forgotUsername">
-                            <h:outputText value="Forgot Username"/>
-                        </h:commandLink>                 
+                        </li>
+                        <li>
+                            <h:commandLink id="forgotUserPassword" action="forgotUserPassword">
+                                <h:outputText value="Forgot Password"/>
+                            </h:commandLink>                 
 
-                    </li>
-                    <li>
-                        <h:commandLink id="forgotUserPassword" action="forgotUserPassword">
-                            <h:outputText value="Forgot Password"/>
-                        </h:commandLink>                 
-
-                    </li>
-                    <li>
-                        <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
-                            <f:actionListener  type="echomarket.listeners.EndSession"  /> 
-                        </h:commandLink>
-                    </li>
+                        </li>
+                   
 
 
-                </ul>
-            </li>
+                    </ul>
+                </li>
+            </c:if>
+
+
+            <c:if test="#{userBean.username != null}" >
+                <li class="subs">
+                    <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
+                        <f:actionListener  type="echomarket.listeners.EndSession"  /> 
+                    </h:commandLink>
+                </li>
+
+            </c:if>
 
         </ul>
 
