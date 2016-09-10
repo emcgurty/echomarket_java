@@ -44,6 +44,22 @@ public class UserBean extends AbstractBean implements Serializable {
     public UserBean() {
     }
 
+    public String Logout() {
+        this.user_id = null;
+        this.username = null;
+        this.userAlias = null;
+        this.userType = null;
+        this.userTypeArray = null;
+        this.password = null;
+        this.firstName = null;
+        this.lastName = null;
+        this.email = null;
+        this.resetCode = null;
+        this.appEmail = null;
+        
+        return "index";
+    }
+
     public String getEmail() {
         return email;
     }
@@ -599,7 +615,7 @@ public class UserBean extends AbstractBean implements Serializable {
         requestMap.put("user_alias", getUserAlias());
         requestMap.put("user_type", getUserType());
         requestMap.put("username", getUsername());
-       // System.out.println("asdasd");
+        // System.out.println("asdasd");
     }
 
     /**
