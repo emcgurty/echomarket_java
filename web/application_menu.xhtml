@@ -54,13 +54,7 @@
             <li class="subs">
                 <a href="#s1">Borrowing</a>
                 <ul>
-                    <li>
-                        <h:commandLink id="borrowerSeeking" action="borrower_seeking">
-                            <h:outputText value="I need to borrow"/>
 
-                        </h:commandLink>
-
-                    </li>
 
                     <li>
                         <h:commandLink id="borrowListing" action="borrower_listing">
@@ -69,20 +63,28 @@
 
                         </h:commandLink>                  
                     </li>
-                    <li>
-                        <h:commandLink id="borrowHistory" action="borrower_history">
+                    <c:if test="#{userBean.username != null}" >
+                        <li>
+                            <h:commandLink id="borrowerSeeking" action="borrower_seeking">
+                                <h:outputText value="I need to borrow"/>
 
-                            <h:outputText value="My borrowing history"/>
+                            </h:commandLink>
 
-                        </h:commandLink>                  
-                    </li>
-                    <li>
-                        <h:commandLink id="borrowerUpdate" action="borrower_update">
-                            <h:outputText value="Change my borrowing requirements"/>
+                        </li>
+                        <li>
+                            <h:commandLink id="borrowHistory" action="borrower_history">
 
-                        </h:commandLink>                  
-                    </li>
+                                <h:outputText value="My borrowing history"/>
 
+                            </h:commandLink>                  
+                        </li>
+                        <li>
+                            <h:commandLink id="borrowerUpdate" action="borrower_update">
+                                <h:outputText value="Change my borrowing requirements"/>
+
+                            </h:commandLink>                  
+                        </li>
+                    </c:if>    
                 </ul>
             </li>
 
@@ -90,31 +92,32 @@
                 <a href="#s1">Lending</a>
                 <ul>
                     <li>
-                        <h:commandLink id="lender_offering" action="lender_offering">
-                            <h:outputText value="I want to lend"/>
-
-                        </h:commandLink>
-
-                    </li>
-
-                    <li>
                         <h:commandLink id="lenderListing" action="lender_listing">
                             <h:outputText value="What's available from lenders"/>
 
                         </h:commandLink>                  
                     </li>
-                    <li>
-                        <h:commandLink id="lenderHistory" action="lender_history">
-                            <h:outputText value="My lending history"/>
+                    <c:if test="#{userBean.username != null}" >
+                        <li>
+                            <h:commandLink id="lender_offering" action="lender_offering">
+                                <h:outputText value="I want to lend"/>
 
-                        </h:commandLink>                  
-                    </li>
-                    <li>
-                        <h:commandLink id="lenderUpdate" action="lender_update">
-                            <h:outputText value="Change my lending requirements"/>
+                            </h:commandLink>
 
-                        </h:commandLink>                  
-                    </li>
+                        </li>
+                        <li>
+                            <h:commandLink id="lenderHistory" action="lender_history">
+                                <h:outputText value="My lending history"/>
+
+                            </h:commandLink>                  
+                        </li>
+                        <li>
+                            <h:commandLink id="lenderUpdate" action="lender_update">
+                                <h:outputText value="Change my lending requirements"/>
+
+                            </h:commandLink>                  
+                        </li>
+                    </c:if>
 
                 </ul>
             </li>
@@ -149,17 +152,8 @@
                         </h:commandLink>                 
 
                     </li>
-
-
-
-
-
-
-
-
-
                     <li>
-                        <h:commandLink  id="user_logout" value="Log Out">
+                        <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
                             <f:actionListener  type="echomarket.listeners.EndSession"  /> 
                         </h:commandLink>
                     </li>
