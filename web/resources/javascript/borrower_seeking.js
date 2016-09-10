@@ -555,14 +555,16 @@ function ValidateContactInformation() {
     var countryId = null
     var orgName = null;
     var uid = null;
+    var this_class = null;
     $("span.error-message").css("visibility", "hidden");
     $("select").each(function () {
         uid = getChildID(this.id);
+        this_class = $(this).attr("class");
         if (this.id.includes('contactDescribeId')) {
             cdi = this.value;
             foundComponent++;
 //            Cheating here, eventailly need to parse for id
-        } else if ((this.id == 'countryId') && (this.class == 'primary')) {
+        } else if ((this.id == 'countryId') && (this_class == 'primary')) {
             countryId = this.value;
             //alert(countryId);
             foundComponent++;
@@ -574,7 +576,7 @@ function ValidateContactInformation() {
     foundComponent = 0;
     $("input").each(function () {
         uid = getChildID(this.id);
-
+        this_class = $(this).attr("class");
         if (uid.includes('otherDescribeYourself')) {
             ocdi = this.value;
             foundComponent++;
@@ -587,13 +589,13 @@ function ValidateContactInformation() {
         } else if (uid == 'lastName') {
             lastName = this.value;
             foundComponent++;
-        } else if ((uid == 'addressLine1') && (this.class == 'primary')) {
+        } else if ((uid == 'addressLine1') && (this_class == 'primary')) {
             addressLine1 = this.value;
             foundComponent++;
-        } else if ((uid == 'city') && (this.class == 'primary')) {
+        } else if ((uid == 'city') && (this_class == 'primary')) {
             city = this.value;
             foundComponent++;
-        } else if ((uid == 'postalCode') && (this.class == 'primary')) {
+        } else if ((uid == 'postalCode') && (this_class == 'primary')) {
             postalCode = this.value;
             foundComponent++;
         } else if (foundComponent == 10) {
