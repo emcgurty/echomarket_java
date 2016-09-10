@@ -6,7 +6,7 @@ jQuery(document).ready(function ($) {
     $(window).resize(function () {
         size_of_menu();
     });
-    if ($("input[id$='organization_name']").val()) {
+    if ($("input[id$='organizationName']").val()) {
         $("div[id$='yesNoOrganization']").css("display", "block")
     }
 
@@ -127,11 +127,11 @@ jQuery(document).ready(function ($) {
             }
 
             if ((y_n == 1) && (getOrgNameVal == "")) {
-                $("span#organization_name.error-message").css("visibility", "visible");
-                $("span#organization_name.error-message").text("Please provide an organization name.");
+                $("span#organizationName.error-message").css("visibility", "visible");
+                $("span#organizationName.error-message").text("Please provide an organization name.");
             } else {
-                $("span#organization_name.error-message").text("");
-                $("span#organization_name.error-message").css("visibility", "hidden");
+                $("span#organizationName.error-message").text("");
+                $("span#organizationName.error-message").css("visibility", "hidden");
             }
         } else if (this.id.includes('publicDisplayHomePhone')) {
             y_n = $(this).val();
@@ -180,7 +180,7 @@ jQuery(document).ready(function ($) {
             }
 
 
-        } else if (this.id.includes('organization_name')) {
+        } else if (this.id.includes('organizationName')) {
             $("div#yesNoOrganization").css("display", "block");
         } else if (this.id.includes('itemCount')) {
 
@@ -554,14 +554,15 @@ function ValidateContactInformation() {
     var postalCode = null;
     var countryId = null
     var orgName = null;
+    var uid = null;
     $("span.error-message").css("visibility", "hidden");
     $("select").each(function () {
+        uid = getChildID(this.id);
         if (this.id.includes('contactDescribeId')) {
-
             cdi = this.value;
             foundComponent++;
 //            Cheating here, eventailly need to parse for id
-        } else if (this.id == 'rb:primary:0:countryId') {
+        } else if ((this.id == 'countryId') && (this.class == 'primary')) {
             countryId = this.value;
             //alert(countryId);
             foundComponent++;
@@ -572,28 +573,27 @@ function ValidateContactInformation() {
     });
     foundComponent = 0;
     $("input").each(function () {
+        uid = getChildID(this.id);
 
-
-        if (this.id.includes('otherDescribeYourself')) {
+        if (uid.includes('otherDescribeYourself')) {
             ocdi = this.value;
-            // alert(ocdi);
             foundComponent++;
-        } else if (this.id == 'rb:organization_name') {
+        } else if (uid == 'organizationName') {
             orgName = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:firstName') {
+        } else if (uid == 'firstName') {
             firstName = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:lastName') {
+        } else if (uid == 'lastName') {
             lastName = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:primary:0:addressLine1') {
+        } else if ((uid == 'addressLine1') && (this.class == 'primary')) {
             addressLine1 = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:primary:0:city') {
+        } else if ((uid == 'city') && (this.class == 'primary')) {
             city = this.value;
             foundComponent++;
-        } else if (this.id == 'rb:primary:0:postalCode') {
+        } else if ((uid == 'postalCode') && (this.class == 'primary')) {
             postalCode = this.value;
             foundComponent++;
         } else if (foundComponent == 10) {
