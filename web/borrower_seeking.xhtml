@@ -475,31 +475,25 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                         <div style="float:left;margin-left:25px;">
-                            <h:outputLabel for="borrower_contact_by_email" value="Which E-Mail Address?:"  >
-
-                                <h:selectOneRadio id="borrower_contact_by_email" value="#{bb.borrowerContactByEmail}"  >
+                            <h:outputLabel for="borrowerContactByEmail" value="Which E-Mail Address?:"  >
+                                <h:selectOneRadio id="borrowerContactByEmail" value="#{bb.borrowerContactByEmail}"  >
                                     <f:selectItem itemValue="3" itemLabel="Your login Email? #{userBean.email}" />
                                     <f:selectItem itemValue="2" itemLabel="An alternative email." />	
                                     <f:selectItem itemValue="1" itemLabel="Either Email." />
                                     <f:selectItem itemValue="0" itemLabel="Neither Email." />	
-                                    <f:ajax event="change" execute="@this"   render="userAlternativeEmailGroup" />
                                 </h:selectOneRadio>    
                             </h:outputLabel>
 
-                            <div style="float:left;margin-left:25px;">
-                                <h:panelGroup id="userAlternativeEmailGroup"  >
-
-                                    <h:outputLabel for="userAlternativeEmail" value="Your Alternative Email:" 
-                                                   rendered="#{bb.borrowerContactByEmail eq '1'  || bb.borrowerContactByEmail eq '2'}"  style="margin-left: 5px; margin-top:5px;">
+                            <div id="emailAlternative" style="display:none;float:left;height:auto;width:inherit;margin-top:10px;"  >    
+                                    <h:outputLabel for="userAlternativeEmail" value="Your Alternative Email:" style="margin-left: 5px; margin-top:5px;">
                                         <h:inputText  value="#{bb.emailAlternative}" id="userAlternativeEmail" style="margin-left: 5px;"/>
                                     </h:outputLabel>
-
-                                </h:panelGroup>              
                             </div>
                         </div>
-
-
                     </div>
+
+
+
 
 
                     <div  class="div_p"  id="display_phone">
