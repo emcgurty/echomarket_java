@@ -83,12 +83,12 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                         <div style="float:left;margin-left:25px">
-                            <h:outputLabel value="#{bundle.OrganizationName}"  for="organization_name" >
-                                <h:inputText  id="organization_name" class="org_name"  value="#{bb.organizationName}" >
+                            <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" >
+                                <h:inputText  id="organizationName" class="org_name"  value="#{bb.organizationName}" >
 
                                 </h:inputText>
                             </h:outputLabel>
-                            <span class="error-message" id="organization_name" ></span>
+                            <span class="error-message" id="organizationName" ></span>
 
                         </div>
                         <div style="float:left;margin">
@@ -162,8 +162,8 @@
                                         <tr>
                                             <td>
                                                 <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
-                                                <h:inputText id="addressLine1" value="#{pa.addressLine1}"
-                                                             style="margin-left: 5px;">
+                                                <h:inputText id="addressLine1" value="#{pa.addressLine1}" 
+                                                             style="margin-left: 5px;" class="primary" >
                                                 </h:inputText>
                                                 <span class="error-message" id="addressLine1" ></span>
                                             </td>
@@ -177,7 +177,7 @@
                                             <td>
                                                 <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
                                                 <h:inputText id="city" value="#{pa.city}"
-                                                             style="margin-left: 5px;">
+                                                             style="margin-left: 5px;" class="primary" >
                                                 </h:inputText>
                                                 <span class="error-message" id="city" ></span>
                                             </td>
@@ -209,14 +209,13 @@
                                         <tr >
                                             <td >
                                                 <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
-                                                <h:inputText id="postalCode" value="#{pa.postalCode}" 
-                                                             style="margin-left: 5px;">
+                                                <h:inputText id="postalCode" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" >
                                                 </h:inputText>
                                                 <span class="error-message" id="postalCode" ></span>
                                             </td>
                                             <td >
                                                 <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
-                                                <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" >
+                                                <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" >
                                                     <f:validator validatorId="selectOneMenuValidator" />  
                                                     <f:selectItems id="country_id" value="#{country.buildCountries()}"  
                                                                    var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
@@ -471,7 +470,7 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                         <div style="float:left;margin-left:25px;">
-                            <h:outputLabel for="borrower_contact_by_email" value="Which E-Mail Address?:"  >
+                            <h:outputLabel for="borrowerContactByEmail" value="Which E-Mail Address?:"  >
                                 <h:selectOneRadio id="borrowerContactByEmail" value="#{bb.borrowerContactByEmail}"  >
                                     <f:selectItem itemValue="3" itemLabel="Your login Email? #{userBean.email}" />
                                     <f:selectItem itemValue="2" itemLabel="An alternative email." />	
@@ -489,8 +488,6 @@
                         </div>
                     </div>
 
-
-                </div>
 
 
                 <div  class="div_p"  id="display_phone">
