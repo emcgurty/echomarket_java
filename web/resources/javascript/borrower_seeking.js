@@ -12,30 +12,40 @@ jQuery(document).ready(function ($) {
 
 // Could not get tilde to work 
 // var contactAddressCheck = $("input[type=radio][id~='useWhichContactAddress']");
-    var contactAddressCheck = $("input[type=radio]");
+// var contactAddressCheck = $("input[type=radio]"); -- didnt work, didn't find all
+    var contactAddressCheck = $("input");
     findContactAddressValue(contactAddressCheck);
     function findContactAddressValue(cad) {
         var foundValue = 0;
         for (var i = 0; i < cad.length; i++) {
+
             var id = cad[i].id;
-            if (id.includes('useWhichContactAddress')) {
-                if ((id.includes('1')) || (id.includes('2'))) {
-                    $("div[id$='buildAlternativeAddress']").css("display", "block");
-                    foundValue++;
+
+            if (cad[i].checked == true) {
+
+                if (id.includes('useWhichContactAddress')) {
+                    if ((id.includes('1')) || (id.includes('2'))) {
+                        $("div[id$='buildAlternativeAddress']").css("display", "block");
+                        foundValue++;
+                    }
+
                 }
 
-            } else if (id.includes('borrowerContactByEmail')) {
-                if ((id.includes('1')) || (id.includes('2'))) {
-                    $("div[id$='emailAlternative']").css("display", "block");
-                    foundValue++;
-                }
+                if (id.includes('borrowerContactByEmail')) {
 
-            } else {
+                    if ((id.includes('1')) || (id.includes('2'))) {
+                        $("div#emailAlternative").css("display", "block");
+
+                        foundValue++;
+                    }
+                }
                 if (foundValue == 2) {
-                break;
+                    break;
+                }
             }
         }
     }
+
 
 
     function validateSelects(input) {
