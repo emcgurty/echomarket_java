@@ -40,6 +40,8 @@ public class UserBean extends AbstractBean implements Serializable {
     private String email;
     private String resetCode;
     private String appEmail;
+    private String userAction;
+    
 
     public UserBean() {
     }
@@ -630,6 +632,20 @@ public class UserBean extends AbstractBean implements Serializable {
      */
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    /**
+     * @return the userAction
+     */
+    public String getUserAction() {
+        return userAction;
+    }
+
+    /**
+     * @param userAction the userAction to set
+     */
+    public void setUserAction(String userAction) {
+        this.userAction = userAction;
     }
 
 }
