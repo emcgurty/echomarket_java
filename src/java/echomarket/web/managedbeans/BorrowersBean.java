@@ -15,15 +15,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
@@ -135,9 +130,111 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     public String saveBorrowerEdit() {
-        String return_string = null;
 
-        return return_string;
+        List padrs = getExisting_primary();
+        List aadrs = getExisting_alternative();
+        List ii = getExistingPicture();
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        Date today_date = new Date();
+        String current_user = null;
+        try {
+            current_user = ubean.getUser_id();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        Borrowers bb = new Borrowers(getBid(), current_user, getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
+                getFirstName(), getMi(), getLastName(), getDisplayBorrowerName(), getDisplayBorrowerAddress(), getHomePhone(),
+                getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
+                getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(),
+                getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(),
+                getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(),
+                getBorrowerContactByOtherSocialMedia(), getBorrowerContactByOtherSocialMediaAccess(), getCategoryId(), getOtherItemCategory(),
+                getItemModel(), getItemDescription(), getItemConditionId(), getItemCount(), getGoodwill(), getAge18OrMore(),
+                getIsActive(), today_date, today_date, null, getApproved(), getNotifyLenders(), getReceiveLenderNotification(),
+                getIsCommunity(), null, getComment(), getAdvertiserId(), getDisplayBorrowerAlternativeAddress());
+
+        sb.update(bb);
+        try {
+            tx.commit();
+        } catch (Exception e) {
+        }
+
+        if (getImageFileName() != null) {
+            try {
+                SaveUserItemImage(getImageFileName(), getBid());
+            } catch (Exception e) {
+                System.out.println("Error in Saving Borrower File");;
+
+            }
+
+            ItemImages iii = (ItemImages) ii.get(0);
+
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+            sb.update(iii);
+            tx.commit();
+
+        } else {
+
+            ItemImages iii = (ItemImages) ii.get(0);
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+            sb.update(iii);
+            tx.commit();
+        }
+
+        if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
+
+            Addresses balt = (Addresses) aadrs.get(0);
+
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+
+            try {
+                sb.update(balt);
+                tx.commit();
+            } catch (Exception e) {
+            } finally {
+            }
+
+        }
+
+        Addresses ba = (Addresses) padrs.get(0);
+
+        if (sb.isOpen() == false) {
+            sb = hib_session();
+        }
+        if (tx.isActive() == false) {
+            tx = sb.beginTransaction();
+        }
+
+        try {
+            sb.update(ba);
+            tx.commit();
+        } catch (Exception e) {
+        } finally {
+            message(
+                    null,
+                    "BorrowerRegistionRecordSaved",
+                    null);
+
+        }
+        return "index";
+
     }
 
     public String saveBorrowerRegistration() throws IOException {
@@ -150,8 +247,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         Date today_date = new Date();
         String getAbstId = getId();
         String current_user = null;
-
-        //String ut = null;  -- just for testing
         try {
 
             current_user = ubean.getUser_id();
@@ -1053,11 +1148,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.user_id = user_id;
     }
 
-//    public String getItemDetail() {
-//        String asdasd =  this.processId;
-//        ubean.setUserAlias(asdasd);
-//        return "edit_borrower";
-//    }
     public String getCurrentEditRecord(String bid) {
 
         List result = null;
