@@ -35,8 +35,6 @@
 
             <h:dataTable id="history"  value="#{bb.getCurrentBorrower(userBean.user_id)}" var="history" >
                 <h:column rowHeader="">
-
-
                     <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
                         <h:outputLabel for="itemDescription" value="Item Description:" >
                             <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px"/>
@@ -47,30 +45,20 @@
 
                         <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
                             <h:column rowHeader="">
-                                <h:outputText  id="imageFileName" value="#{i.imageFileName}" style="margin-left:10px"/>
-                                <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="20" width="20" />
+                                <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" />
                             </h:column>
                         </h:dataTable>
 
-
-                        <h:commandButton value=Edit"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
-                            <f:param id="processId" value="#{history.borrower_id}"  />
-                            <h:outputText    />
+                        <h:commandButton value="Edit"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
                         </h:commandButton>    
 
-                        <h:commandButton value=Delete"  action="#{bb.deleteCurrentRecord(history.borrower_id)}">
-                            <f:param id="processId" value="#{history.borrower_id}"  />
-                            <h:outputText    />
+                        <h:commandButton value="Delete"  action="#{bb.deleteCurrentRecord(history.borrower_id)}">
                         </h:commandButton>    
-
-
-
-
 
                     </div>
                 </h:column>
             </h:dataTable>
-            <!--</c:forEach>-->
+
 
 
 
