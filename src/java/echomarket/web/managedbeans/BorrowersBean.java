@@ -1111,24 +1111,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     public List getCurrentBorrowerImage(String bid) {
-
-        List result = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
-        String query = null;
-        try {
-            query = "FROM ItemImages as i WHERE i.borrower_id = '" + bid + "'";
-            result = session.createQuery(query).list();
-            tx.commit();
-        } catch (Exception e) {
-            System.out.println("Error in getCurrentBI");
-            e.printStackTrace();
-
-        } finally {
-            session = null;
-            tx = null;
-        }
-        return result;
+            ubean.setUserAction(bid);
+            return getExistingPicture();
 
     }
 
@@ -1375,4 +1359,14 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return return_delete_true;
     }
 
+    
+    public String deleteCurrentRecord(String bid)  {
+    // Finish later
+      message(
+                    null,
+                    "DeleteSelecteBorrowe",
+                    null);
+
+    return "index";
+    }
 }
