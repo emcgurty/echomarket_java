@@ -134,6 +134,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         List padrs = getExisting_primary();
         List aadrs = getExisting_alternative();
         List ii = getExistingPicture();
+        List result = null;
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
         Date today_date = new Date();
@@ -162,6 +163,14 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             System.out.println("Error on Update Borrower");
         }
 
+        //// Have to code for case that they remove original picture, and do not replace
+        if (sb.isOpen() == false) {
+            sb = hib_session();
+        }
+        if (tx.isActive() == false) {
+            tx = sb.beginTransaction();
+        }
+
         if (getImageFileName() != null) {
             try {
                 SaveUserItemImage(getImageFileName(), ubean.getUserAction());
@@ -171,12 +180,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             ItemImages iii = (ItemImages) ii.get(0);
 
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
             try {
                 sb.update(iii);
                 tx.commit();
@@ -184,6 +187,29 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 System.out.println("Error in Update Image");
             }
 
+        } else {
+
+            /// Check for exisitg
+            String queryString = "from ItemImages where borrower_id = :bid order by date_created";
+            result = sb.createQuery(queryString)
+                    .setParameter("bid", ubean.getUserAction())
+                    .list();
+            tx.commit();            
+            ItemImages existingImageobj = (ItemImages) result.get(0);
+            String exisitngFileNamestr = existingImageobj.getImageFileName();
+            if (exisitngFileNamestr != null){
+               
+                try {
+                sb.delete(existingImageobj);
+                // Will manage return later
+                Boolean ret_result = DeleteImageFile(exisitngFileNamestr);
+                
+                } catch(Exception e) {
+                    System.out.println("Error on deleting exsitng Image Record");
+                    
+                }
+                }
+                
         }
 
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
@@ -1026,7 +1052,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         InputStream filecontent = null;
         String itemImagePath = null;
         //String sPath1 = new File(".").getCanonicalPath();  -- tested many 
-        // Just for development purposes....
+        // Just for development purposes.... Need to make this into separate function
         String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
         String sPath2 = "//borrower_images//";
         String buildFileName = bid + "_" + getFileName(ui);
@@ -1275,15 +1301,15 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         if (size_of_list == 0) {
             return getPicture();
         } else {
-        ItemImages a_array = (ItemImages) result.get(0);
-        ArrayList<ItemImages> tmp_picture  = new ArrayList<ItemImages>(Arrays.asList(
+            ItemImages a_array = (ItemImages) result.get(0);
+            ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
                     new ItemImages(a_array.getId(), null, a_array.getlender_id(), a_array.getImageContentType(),
-                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
-                        a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
+                            a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
+                            a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
             ));
             setPicture(tmp_picture);
-        
-         return getPicture();
+
+            return getPicture();
         }
 
     }
@@ -1328,6 +1354,25 @@ public class BorrowersBean extends AbstractBean implements Serializable {
      */
     public void setExisting_alternative(Addresses[] existing_alternative) {
         this.existing_alternative = existing_alternative;
+    }
+    
+    private Boolean DeleteImageFile(String fileName) {
+        
+        Boolean return_delete_true = false;
+        String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
+        String sPath2 = "//borrower_images//";
+        String buildFileName = ubean.getUserAction() + "_" + fileName;
+        String sPath3 = buildFileName;
+        File files = new File(sPath1 + sPath2);
+        //Boolean makeDirectory = files.mkdirs();
+        String itemImagePath = sPath1 + sPath2 + sPath3;
+        files = new File(itemImagePath);
+
+            if (files.exists()) {
+                /// User may be using same image file name but has been editted
+                 return_delete_true = files.delete();
+            }
+        return return_delete_true;
     }
 
 }
