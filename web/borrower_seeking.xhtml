@@ -707,13 +707,14 @@
                                          <h:inputFile id="imageFileName" value="#{bb.imageFileName}" />
                                         <span class="file_image_error">&nbsp;</span>
                                     </h:outputLabel>
+                                    <br />
+                                    <input type="button" onclick="removeImage()" alt="Click to remove elected image.."  value="Remove Image" ></input>
                                 </div>    
                                 <br />
                                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                                     <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                                        <img id="imagePreview" height="200" width="200" src="" alt="Uploaded image file" />
-                                    </h:outputLabel> <br />
-                                    <input type="button" onclick="removeImage()" />Remove</input>
+                                        <img id="imagePreview" height="200" width="200" src=""  />
+                                    </h:outputLabel> 
                                 </div>
                                 <br />
                                 <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
