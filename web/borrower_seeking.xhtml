@@ -16,8 +16,9 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <title>#{bundle.borrowerSeeking}</title>
         </h:head>
-        <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
+        
         <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
+            <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
 
             <div class="messagecolor">
                 <h:messages showSummary="true" 
@@ -25,8 +26,8 @@
                             errorStyle="color: #d20005" 
                             infoStyle="color: blue"/>
             </div>
-            <h:inputSecret id="is_active" value="1"   style="display:none;" />
-            <h:inputSecret id="approved" value="1"   style="display:none;" />
+<!--            <h:inputSecret id="is_active" value="0"   style="display:none;" />  Complete registration isActive = 1, no = 2 from menu CommandLink-->
+            <h:inputSecret id="approved" value="0"   style="display:none;" />
 
             <div id="borrower_registration" class="borrower_registration" >
 
