@@ -27,8 +27,7 @@
             </div>
             <h:inputSecret id="is_active" value="1"   style="display:none;" />
             <h:inputSecret id="approved" value="1"   style="display:none;" />
-            <h:inputSecret id="bid" value="#{bb.bid}"   style="display:none;" />
-
+            
             <div id="borrower_registration" class="borrower_registration" >
                 <div class="top" >
                     <div style="margin:10px;margin-top:25px;" >
@@ -428,7 +427,7 @@
                                                                        var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                                                         </f:selectItems>    
                                                     </h:selectOneMenu>
-                                                    <h:message styleClass="error-message" for="countryID"/>
+                                                    <h:message styleClass="error-message" for="countryId"/>
                                                     <span class="error-message" id="countryId_alternative" ></span>
                                                 </td>
                                             </tr>
@@ -475,7 +474,7 @@
                             </h:outputLabel>
 
                             <div id="emailAlternative" style="display:none;float:left;height:auto;width:inherit;margin-top:10px;"  >    
-                                <h:outputLabel for="userAlternativeEmail" value="Your Alternative Email:" 
+                                <h:outputLabel for="emailAlternative" value="Your Alternative Email:" 
                                                style="margin-left: 5px; margin-top:5px;">
                                     <h:inputText  value="#{bb.emailAlternative}" id="emailAlternative" style="margin-left: 5px;"/>
                                 </h:outputLabel>
@@ -686,10 +685,10 @@
 
                     <h:dataTable id="picture"  value="#{bb.getExistingPicture()}" var="image" >
                         <h:column rowHeader="">
+                  
                             <div style="margin-left:25px;margin-top:5px;float:left;">
                                 <h:outputLabel for="imageFileName" value="Image of Item" >    
                                     <h:inputFile id="imageFileName" value="#{image.imageFileName}" />
-                                    <!--                                        <input type="file" id="imageFileName"   />-->
                                     <span class="file_image_error">&nbsp;</span>
                                 </h:outputLabel>
                             </div>    
@@ -697,7 +696,6 @@
                             <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                                 <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
                                     <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="borrower_images" alt="Uploaded image file"   height="200" width="200" />
-                                    <!--                                            <img id="imagePreview" height="200" width="200" src="" alt="Uploaded image file" />-->
                                 </h:outputLabel>
                             </div>
                             <br />
