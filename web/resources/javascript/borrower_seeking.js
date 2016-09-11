@@ -776,3 +776,20 @@ function editBorrower(bid)
     return false;
 }
 
+function removeImage() {
+         var imagePreviewID = $("img[id$=imagePreview]");
+         imagePreviewID.attr('src', '');
+        var imageFileInput = $("img[id$=imageFileName]");
+         imageFileInput.value = '';
+}
+
+
+//Will use when I am ready...
+//function resetFormElement(e) {
+//  e.wrap('<form>').closest('form').get(0).reset();
+//  e.unwrap();
+//
+//  // Prevent form submission
+//  e.stopPropagation();
+//  e.preventDefault();
+//}
