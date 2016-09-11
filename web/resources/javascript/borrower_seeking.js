@@ -777,10 +777,12 @@ function editBorrower(bid)
 }
 
 function removeImage() {
-         var imagePreviewID = $("img[id$=imagePreview]");
-         imagePreviewID.attr('src', '');
-        var imageFileInput = $("img[id$=imageFileName]");
-         imageFileInput.value = '';
+    var imagePreviewID = $("img[id$=imagePreview]");
+    imagePreviewID.attr('src', '');
+    var imageFileInput = $("input[id$=imageFileName]");
+    // imageFileInput.replaceWith( imageFileInput.val('').clone( true ) );
+    // Really bad, disables ImagePreview functionality
+    imageFileInput.val("");
 }
 
 
