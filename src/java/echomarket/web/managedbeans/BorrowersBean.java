@@ -159,7 +159,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         try {
             tx.commit();
         } catch (Exception e) {
-                            System.out.println("Error on Update Borrower");
+            System.out.println("Error on Update Borrower");
         }
 
         if (getImageFileName() != null) {
@@ -180,7 +180,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             try {
                 sb.update(iii);
                 tx.commit();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error in Update Image");
             }
 
@@ -1262,7 +1262,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String queryString = "from ItemImages where borrower_id = :bid ";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", processId)
+                    .setParameter("bid", ubean.getUserAction())
                     .list();
             tx.commit();
         } catch (Exception e) {
@@ -1275,8 +1275,15 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         if (size_of_list == 0) {
             return getPicture();
         } else {
-
-            return result;
+        ItemImages a_array = (ItemImages) result.get(0);
+        ArrayList<ItemImages> tmp_picture  = new ArrayList<ItemImages>(Arrays.asList(
+                    new ItemImages(a_array.getId(), null, a_array.getlender_id(), a_array.getImageContentType(),
+                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
+                        a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
+            ));
+            setPicture(tmp_picture);
+        
+         return getPicture();
         }
 
     }
@@ -1322,6 +1329,5 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     public void setExisting_alternative(Addresses[] existing_alternative) {
         this.existing_alternative = existing_alternative;
     }
-
 
 }
