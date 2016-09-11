@@ -45,25 +45,23 @@
                             <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px"/>
                         </h:outputLabel>
 
-                        <c:set var="img" scope="request" value="#{i.imageFileName}"/>
-                        <h:outputText value="#{img}" /><br />
-                        <h:outputText value="#{!empty i.imageFileName}" /><br />
-                        <h:outputText value="#{i.imageFileName}" /><br />
-                        <c:if test="${!empty i.imageFileName}" >
-                            <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
-                                <h:column rowHeader="">
-                                    <h:outputText  id="imageFileName" value="#{i.imageFileName}" style="margin-left:10px"/>
-                                    <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="20" width="20" />
-                                </h:column>
-                            </h:dataTable>
-                        </c:if>
+                        <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
+                            <h:column rowHeader="">
+                                <h:outputText  id="imageFileName" value="#{i.imageFileName}" style="margin-left:10px"/>
+                                <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="20" width="20" />
+                            </h:column>
+                        </h:dataTable>
 
-                        <h:commandButton value="#{history.borrower_id}"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
+
+                        <h:commandButton value=Edit"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
                             <f:param id="processId" value="#{history.borrower_id}"  />
                             <h:outputText    />
                         </h:commandButton>    
 
-                           
+                        <h:commandButton value=Delete"  action="#{bb.deleteCurrentRecord(history.borrower_id)}">
+                            <f:param id="processId" value="#{history.borrower_id}"  />
+                            <h:outputText    />
+                        </h:commandButton>    
 
 
 
