@@ -690,12 +690,13 @@
                                 <h:outputLabel for="imageFileName" value="Image of Item" >    
                                     <h:inputFile id="imageFileName" value="#{image.imageFileName}" />
                                     <span class="file_image_error">&nbsp;</span>
-                                </h:outputLabel>
+                                </h:outputLabel><br />
+                             <input type="button" onclick="removeImage()" alt="Click to remove elected image.."  value="Remove Image" ></input>
                             </div>    
                             <br />
                             <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                                 <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                                    <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="borrower_images" alt="Uploaded image file"   height="200" width="200" />
+                                    <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="borrower_images" height="200" width="200" />
                                 </h:outputLabel>
                             </div>
                             <br />
