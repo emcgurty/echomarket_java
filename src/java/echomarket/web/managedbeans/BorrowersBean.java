@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,7 +29,7 @@ import org.hibernate.Transaction;
 /// Credit due: https://www.javacodegeeks.com/2015/11/jsf-scopes-tutorial-jsfcdi-session-scope.html
 @Named
 @ManagedBean(name = "bb")
-@SessionScoped
+@RequestScoped
 public class BorrowersBean extends AbstractBean implements Serializable {
 
     @Inject
@@ -36,7 +37,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     // @ManagedProperty(value="#{user_id}")  -- doesn't work
     private String user_id;
     // @ManagedProperty(value="#{user_type}") -- doesn't work
-    private String bid;
     private String user_type;
     private String userName;
     private int contactDescribeId;
@@ -144,7 +144,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             e.printStackTrace();
         }
-        Borrowers bb = new Borrowers(getBid(), current_user, getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
+        Borrowers bb = new Borrowers(ubean.getUserAction(), current_user, getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
                 getFirstName(), getMi(), getLastName(), getDisplayBorrowerName(), getDisplayBorrowerAddress(), getHomePhone(),
                 getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
                 getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(),
@@ -159,14 +159,14 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         try {
             tx.commit();
         } catch (Exception e) {
+                            System.out.println("Error on Update Borrower");
         }
 
         if (getImageFileName() != null) {
             try {
-                SaveUserItemImage(getImageFileName(), getBid());
+                SaveUserItemImage(getImageFileName(), ubean.getUserAction());
             } catch (Exception e) {
                 System.out.println("Error in Saving Borrower File");;
-
             }
 
             ItemImages iii = (ItemImages) ii.get(0);
@@ -177,20 +177,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             if (tx.isActive() == false) {
                 tx = sb.beginTransaction();
             }
-            sb.update(iii);
-            tx.commit();
-
-        } else {
-
-            ItemImages iii = (ItemImages) ii.get(0);
-            if (sb.isOpen() == false) {
-                sb = hib_session();
+            try {
+                sb.update(iii);
+                tx.commit();
+            } catch(Exception e) {
+                System.out.println("Error in Update Image");
             }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-            sb.update(iii);
-            tx.commit();
+
         }
 
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
@@ -229,7 +222,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } finally {
             message(
                     null,
-                    "BorrowerRegistionRecordSaved",
+                    "BorrowerRegistionRecordUpdated",
                     null);
 
         }
@@ -1156,6 +1149,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String[] results = null;
         Borrowers[] a_array = null;
         String queryString = "from Borrowers where borrower_id = :bid order by date_created";
+        ubean.setUserAction(bid);
 
         try {
             result = hib.createQuery(queryString)
@@ -1170,7 +1164,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         // Must be just one record.. will error check later..
 
         Borrowers to_Array = (Borrowers) result.get(0);
-        this.bid = bid;
         this.user_id = to_Array.getUser_id();
         this.contactDescribeId = to_Array.getContactDescribeId();
         this.organizationName = to_Array.getOrganizationName();
@@ -1232,7 +1225,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", getBid())
+                    .setParameter("bid", ubean.getUserAction())
                     .setParameter("which", which)
                     .list();
             tx.commit();
@@ -1330,18 +1323,5 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.existing_alternative = existing_alternative;
     }
 
-    /**
-     * @return the bid
-     */
-    public String getBid() {
-        return bid;
-    }
-
-    /**
-     * @param bid the bid to set
-     */
-    public void setBid(String bid) {
-        this.bid = bid;
-    }
 
 }
