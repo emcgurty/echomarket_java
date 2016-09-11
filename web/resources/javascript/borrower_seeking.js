@@ -18,17 +18,13 @@ jQuery(document).ready(function ($) {
     function findContactAddressValue(cad) {
         var foundValue = 0;
         for (var i = 0; i < cad.length; i++) {
-
             var id = cad[i].id;
-
             if (cad[i].checked == true) {
-
                 if (id.includes('useWhichContactAddress')) {
                     if ((id.includes('1')) || (id.includes('2'))) {
                         $("div[id$='buildAlternativeAddress']").css("display", "block");
                         foundValue++;
                     }
-
                 }
 
                 if (id.includes('borrowerContactByEmail')) {
@@ -55,7 +51,7 @@ jQuery(document).ready(function ($) {
         var select_value = input.value;
         var select_id = getChildID(input.id);
         //        On database all 'Please select' have value -2
-        if (select_value == '-2') {
+        if (select_value == -2) {
 
             $("span#" + select_id + ".error-message").css("visibility", "visible");
             $("span#" + select_id).text("Please make a selection.");
@@ -138,7 +134,7 @@ jQuery(document).ready(function ($) {
             try {
                 var getHomePhone = $("input[class='homePhone']").val();
             } catch (err) {
-                //alert(1);
+                
             }
 
             if ((y_n == 1) && (getHomePhone == "")) {
@@ -153,7 +149,7 @@ jQuery(document).ready(function ($) {
             try {
                 var getCellPhone = $("input[class='cellPhone']").val();
             } catch (err) {
-                //alert(1);
+                
             }
 
             if ((y_n == 1) && (getCellPhone == "")) {
@@ -168,7 +164,7 @@ jQuery(document).ready(function ($) {
             try {
                 var getAlternativePhone = $("input[class='alternativePhone']").val();
             } catch (err) {
-                //alert(1);
+                
             }
 
             if ((y_n == 1) && (getAlternativePhone == "")) {
@@ -356,7 +352,7 @@ function validateAlternativeAddress() {
                     try {
                         $("span#" + item_id + "_alternative.error-message").css("visibility", "visible");
                     } catch (err) {
-//alert(err);
+
                     }
                     $("span#" + item_id + "_alternative.error-message").text("Please provide your City.");
                     return_value = false;
@@ -499,21 +495,21 @@ function size_of_menu() {
     var uli = $("div#user_login");
     var flog = $("div#form_login.top").css("width");
     if (bmw) {
-//        alert("b");
+
         $("div.borrower_registration").css("width", bmw);
         $("div.application_footer").css("width", bmw);
     } else if (imw) {
-//        alert("i");
+
         $("div.application_footer").css("width", imw);
     } else if (lmw) {
-//        alert("l");
+
         $("div.lender_registration").css("width", lmw);
         $("div.application_footer").css("width", lmw);
     } else if (fur) {
-//        alert("f");
+
         $("div.application_footer").css("width", fur);
     } else if (uli) {
-//        alert("f");
+
         $("div.application_footer").css("width", fur);
     } else if (flog) {
         $("div.application_footer").css("width", flog);
@@ -561,9 +557,8 @@ function ValidateContactInformation() {
         uid = getChildID(this.id);
         this_class = $(this).attr("class");
         if (this.id.includes('contactDescribeId')) {
-            cdi = this.value;
-            foundComponent++;
-//            Cheating here, eventailly need to parse for id
+                cdi = this.value;
+                foundComponent++;
         } else if ((this.id == 'countryId') && (this_class == 'primary')) {
             countryId = this.value;
             //alert(countryId);
@@ -604,11 +599,15 @@ function ValidateContactInformation() {
         }
 
     });
-    if ((cdi == '100') && (!(ocdi))) {
+    
+    if ((cdi == 100) && (ocdi == '')) {
         $("span#otherDescribeYourself.error-message").css("visibility", "visible");
         $("span#otherDescribeYourself.error-message").text("Please provide an 'Other' description");
         returnValue = false;
-    } else if ((cdi == '-2') && (ocdi == null)) {
+    } 
+    
+    if (cdi == -2)  {
+    
         $("span#contactDescribeId.error-message").css("visibility", "visible");
         $("span#contactDescribeId.error-message").text("Please make a selection");
         returnValue = false;
