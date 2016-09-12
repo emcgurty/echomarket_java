@@ -133,12 +133,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
 //        List padrs = getExisting_primary();
 //        List aadrs = getExisting_alternative();
-        List ii = this.getPicture();  
+        List ii = this.getPicture();
         List result = null;
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
         Date today_date = new Date();
         String current_user = null;
+        String existingFileNamestr = null;
         try {
             current_user = ubean.getUser_id();
         } catch (Exception e) {
@@ -170,8 +171,43 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         if (tx.isActive() == false) {
             tx = sb.beginTransaction();
         }
+
+        /// Delete existing image file name record becuase maybe be using same name but had editted
+        String queryString = "from ItemImages where borrower_id = :bid ";
+
+        result = sb.createQuery(queryString)
+                .setParameter("bid", ubean.getUserAction())
+                .list();
+        tx.commit();
         
-        if (this.imageFileNamePart != null) {
+        /// Delete the record, get the file name for later delete if exists
+        ItemImages existingImageobj = (ItemImages) result.get(0);
+        existingFileNamestr = existingImageobj.getImageFileName();
+        if (sb.isOpen() == false) {
+            sb = hib_session();
+        }
+        if (tx.isActive() == false) {
+            tx = sb.beginTransaction();
+        }
+        sb.delete(result);
+        tx.commit();
+
+        try {
+            
+            if (existingFileNamestr != null) {
+                // Will manage return later
+                Boolean ret_result = false;
+                ret_result = DeleteImageFile(existingFileNamestr);
+                // if result false provide user information
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error on deleting exsitng Image Record");
+
+        }
+
+        /// Now process editted image information
+            if (this.imageFileNamePart != null) {
             
             try {
                 SaveUserItemImage(getImageFileNamePart(), ubean.getUserAction());
@@ -189,36 +225,13 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 System.out.println("Error in Update Image");
             }
 
-        } else {
-
-            /// Check for exisitg
-            String queryString = "from ItemImages where borrower_id = :bid order by date_created";
-            
-            result = sb.createQuery(queryString)
-                    .setParameter("bid", ubean.getUserAction())
-                    .list();
-            tx.commit();            
-            ItemImages existingImageobj = (ItemImages) result.get(0);
-            String exisitngFileNamestr = existingImageobj.getImageFileName();
-            if (exisitngFileNamestr != null){
-               
-                try {
-                sb.delete(existingImageobj);
-                // Will manage return later
-                Boolean ret_result = DeleteImageFile(exisitngFileNamestr);
-                
-                } catch(Exception e) {
-                    System.out.println("Error on deleting exsitng Image Record");
-                    
-                }
-                }
-                
         }
-
+        
+        
+        
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
 //            Addresses balt = (Addresses) aadrs.get(0);
-
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
@@ -236,7 +249,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         }
 
 //        Addresses ba = (Addresses) padrs.get(0);
-
         if (sb.isOpen() == false) {
             sb = hib_session();
         }
@@ -1114,8 +1126,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     public List getCurrentBorrowerImage(String bid) {
-            ubean.setUserAction(bid);
-            return getExistingPicture();
+        ubean.setUserAction(bid);
+        return getExistingPicture();
 
     }
 
@@ -1342,9 +1354,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     public void setExisting_alternative(Addresses[] existing_alternative) {
         this.existing_alternative = existing_alternative;
     }
-    
+
     private Boolean DeleteImageFile(String fileName) {
-        
+
         Boolean return_delete_true = false;
         String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
         String sPath2 = "//borrower_images//";
@@ -1355,21 +1367,20 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String itemImagePath = sPath1 + sPath2 + sPath3;
         files = new File(itemImagePath);
 
-            if (files.exists()) {
-                /// User may be using same image file name but has been editted
-                 return_delete_true = files.delete();
-            }
+        if (files.exists()) {
+            /// User may be using same image file name but has been editted
+            return_delete_true = files.delete();
+        }
         return return_delete_true;
     }
 
-    
-    public String deleteCurrentRecord(String bid)  {
-    // Finish later
-      message(
-                    null,
-                    "DeleteSelecteBorrowe",
-                    null);
+    public String deleteCurrentRecord(String bid) {
+        // Finish later
+        message(
+                null,
+                "DeleteSelecteBorrowe",
+                null);
 
-    return "index";
+        return "index";
     }
 }
