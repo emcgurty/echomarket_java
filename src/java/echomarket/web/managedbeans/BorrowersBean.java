@@ -146,6 +146,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             e.printStackTrace();
         }
+        /// Need to implement onChange Listener to learn if dirty
         Borrowers bb = new Borrowers(ubean.getUserAction(), current_user, getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
                 getFirstName(), getMi(), getLastName(), getDisplayBorrowerName(), getDisplayBorrowerAddress(), getHomePhone(),
                 getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
@@ -189,7 +190,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         if (tx.isActive() == false) {
             tx = sb.beginTransaction();
         }
-        sb.delete(result);
+        sb.delete((ItemImages)result.get(0));
         tx.commit();
 
         try {
