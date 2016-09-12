@@ -10,10 +10,9 @@
 
 
     <ul id="nav" class="borrower_menu"> 
-        <li class="subs" id="parent_tab_item" ><a   href="#parent_menu_item" onclick=""  
-                                               >
+        <li class="subs" id="parent_tab_item" ><a   href="#parent_menu_item" onclick=""  >
                 Item Registration: </a></li>
-        
+
         <li class="subs" id="tab_item_1" ><a   href="#menu_item_1" onclick="showFormContact();"  
                                                >
                 Borrower Information  ==> </a></li>
@@ -26,17 +25,53 @@
         <li class="subs" id="tab_item_4" ><a   href="#menu_item_3" onclick="showBLegal();" 
                                                >
                 Good Faith ==> </a></li>
-        
+
         <li class="subs" id="save_now" style="float:right;margin-right:15px">
             <a href="#s1" >Save or Delay Registration</a>
-            <ul >
-                <li class="subs">
-                    <a href="">Register my item to borrow</a>
-                </li>
-                <li class="subs">
-                    <a href="">Will complete registration later</a>
-                </li>
-           </ul>
+
+            <c:choose>
+                <c:when test="${userBean.userAction == null}">
+                    <ul >
+                        <li class="subs">
+                            <h:commandLink value="Save Item Registration"  action="#{bb.saveBorrowerRegistration()}">
+                                <f:setPropertyActionListener target="#{bb.isActive}" value="1" />
+<!--                                <f:param id="isActive" value="1"  />-->
+                            </h:commandLink>    
+                            <a href=""></a>
+                        </li>
+                        <li class="subs">
+                            <h:commandLink value="Complete Registration Later"  action="#{bb.saveBorrowerRegistration()}">
+                                <f:setPropertyActionListener target="#{bb.isActive}" value="0" />
+                                <!--<f:param id="isActive" value="0"  />-->
+                            </h:commandLink>    
+                        </li>
+                    </ul>
+                </c:when>
+                <c:otherwise>
+                    <ul >
+                        <li class="subs">
+                            <h:commandLink value="Save Item Registration"  action="#{bb.saveBorrowerEdit()}">
+                                <f:setPropertyActionListener target="#{bb.isActive}" value="1" />
+                                 
+                            </h:commandLink>    
+                        </li>
+                        <li class="subs">
+                            <h:commandLink value="Complete Registration Later"  action="#{bb.saveBorrowerEdit()}">
+                                <f:setPropertyActionListener target="#{bb.isActive}" value="0" />
+                                <!--<f:param id="isActive" value="0"  />-->
+                            </h:commandLink>    
+
+                        </li>
+                    </ul>
+                </c:otherwise>
+            </c:choose>
+
+
+
+
+
+
+
         </li>
     </ul>
 
