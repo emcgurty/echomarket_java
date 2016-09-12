@@ -87,7 +87,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String comment;
     private String advertiserId;
     private String processId;
-    private Part imageFileName;
+    private Part imageFileNamePart;
 
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
@@ -131,9 +131,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     public String saveBorrowerEdit() {
 
-        List padrs = getExisting_primary();
-        List aadrs = getExisting_alternative();
-        List ii = getExistingPicture();
+//        List padrs = getExisting_primary();
+//        List aadrs = getExisting_alternative();
+        List ii = this.getPicture();  
         List result = null;
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
@@ -170,15 +170,17 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         if (tx.isActive() == false) {
             tx = sb.beginTransaction();
         }
-
-        if (getImageFileName() != null) {
+        
+        if (this.imageFileNamePart != null) {
+            
             try {
-                SaveUserItemImage(getImageFileName(), ubean.getUserAction());
+                SaveUserItemImage(getImageFileNamePart(), ubean.getUserAction());
             } catch (Exception e) {
                 System.out.println("Error in Saving Borrower File");;
             }
 
             ItemImages iii = (ItemImages) ii.get(0);
+            iii.setImageFileName(getFileName(getImageFileNamePart()));
 
             try {
                 sb.update(iii);
@@ -191,6 +193,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             /// Check for exisitg
             String queryString = "from ItemImages where borrower_id = :bid order by date_created";
+            
             result = sb.createQuery(queryString)
                     .setParameter("bid", ubean.getUserAction())
                     .list();
@@ -214,7 +217,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
-            Addresses balt = (Addresses) aadrs.get(0);
+//            Addresses balt = (Addresses) aadrs.get(0);
 
             if (sb.isOpen() == false) {
                 sb = hib_session();
@@ -224,7 +227,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             }
 
             try {
-                sb.update(balt);
+                sb.update(this.existing_alternative);
                 tx.commit();
             } catch (Exception e) {
             } finally {
@@ -232,7 +235,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         }
 
-        Addresses ba = (Addresses) padrs.get(0);
+//        Addresses ba = (Addresses) padrs.get(0);
 
         if (sb.isOpen() == false) {
             sb = hib_session();
@@ -242,7 +245,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         }
 
         try {
-            sb.update(ba);
+            sb.update(this.existing_primary);
             tx.commit();
         } catch (Exception e) {
         } finally {
@@ -293,9 +296,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         }
         //public Addresses(String id, String lender_id, String borrower_id, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
 
-        if (getImageFileName() != null) {
+        if (getImageFileNamePart() != null) {
             try {
-                SaveUserItemImage(getImageFileName(), getAbstId);
+                SaveUserItemImage(getImageFileNamePart(), getAbstId);
             } catch (Exception e) {
                 System.out.println("Error in Saving Borrower File");;
 
@@ -305,8 +308,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             iii.setId(getId());
             iii.setBorrower_id(getAbstId);
             // Did this becuase graphicImage does not recognize dynmically build attribute library
-            iii.setImageFileName(getAbstId + "_" + getFileName(getImageFileName()));
-            iii.setImageContentType(getImageFileName().getContentType());
+            iii.setImageFileName(getAbstId + "_" + getFileName(getImageFileNamePart()));
+            iii.setImageContentType(getImageFileNamePart().getContentType());
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
@@ -1036,15 +1039,15 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     /**
      * @return the imageFileName
      */
-    public Part getImageFileName() {
-        return imageFileName;
+    public Part getImageFileNamePart() {
+        return imageFileNamePart;
     }
 
     /**
      * @param imageFileName the imageFileName to set
      */
-    public void setImageFileName(Part imageFileName) {
-        this.imageFileName = imageFileName;
+    public void setImageFileNamePart(Part imageFileName) {
+        this.imageFileNamePart = imageFileName;
     }
 
     private void SaveUserItemImage(Part ui, String bid) throws IOException {
