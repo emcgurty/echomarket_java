@@ -198,16 +198,16 @@ jQuery(document).ready(function ($) {
                 $("span#itemDescription.error-message").css("visibility", "hidden");
             }
 //
-        } else if (this.id.includes('imageFileName')) {
+        } else if (this.id.includes('imageFileNamePart')) {
 
-            readURL(this);
+            displayImage(this);
 //
         } else {
             return false;
         }
 
     });
-    function readURL(input) {
+    function displayImage(input) {
 
         if (input.files && input.files[0]) {
             var reader = new FileReader();
