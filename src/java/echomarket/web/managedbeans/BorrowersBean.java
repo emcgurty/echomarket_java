@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -217,16 +218,28 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             } catch (Exception e) {
                 System.out.println("Error in Saving Borrower File");;
             }
-
-            ItemImages iii = (ItemImages) ii.get(0);
-            iii.setImageFileName(getFileName(getImageFileNamePart()));
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
 
             try {
+                ItemImages iii = (ItemImages) ii.get(0);
+                iii.setId(getId());
+                iii.setBorrower_id(ubean.getUserAction());
+                iii.setImageFileName(ubean.getUserAction() + "_" + getFileName(getImageFileNamePart()));
+                iii.setImageContentType(getImageFileNamePart().getContentType());
+                //ItemImages create_record = new ItemImages(getId(), ubean.getUserAction(), null, getImageFileNamePart().getContentType(), null, null, this.isActive, today_date, null, today_date,  + "_" + getFileName(getImageFileNamePart()), , null);
                 sb.save(iii);
                 tx.commit();
-            } catch (Exception e) {
-                System.out.println("Error in Update Image");
-            }
+            } catch (Exception ex) {
+                  Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                
+                
+                }
 
         }
 
@@ -243,7 +256,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             try {
                 sb.update(this.existing_alternative);
                 tx.commit();
-            } catch (Exception e) {
+            } catch (Exception ex) {
+                  Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
             }
 
@@ -260,7 +274,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         try {
             sb.update(this.existing_primary);
             tx.commit();
-        } catch (Exception e) {
+        } catch (Exception ex) {
+              Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             message(
                     null,
