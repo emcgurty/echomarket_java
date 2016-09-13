@@ -27,6 +27,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 /// Credit due: https://www.javacodegeeks.com/2015/11/jsf-scopes-tutorial-jsfcdi-session-scope.html
+/// Added return "index?faces-redirect=true"; Source: http://stackoverflow.com/questions/3642919/javax-faces-application-viewexpiredexception-view-could-not-be-restored
 @Named
 @ManagedBean(name = "bb")
 @RequestScoped
@@ -180,36 +181,37 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 .setParameter("bid", ubean.getUserAction())
                 .list();
         tx.commit();
-        
+
         /// Delete the record, get the file name for later delete if exists
-        ItemImages existingImageobj = (ItemImages) result.get(0);
-        existingFileNamestr = existingImageobj.getImageFileName();
-        if (sb.isOpen() == false) {
-            sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-            tx = sb.beginTransaction();
-        }
-        sb.delete((ItemImages)result.get(0));
-        tx.commit();
-
-        try {
-            
-            if (existingFileNamestr != null) {
-                // Will manage return later
-                Boolean ret_result = false;
-                ret_result = DeleteImageFile(existingFileNamestr);
-                // if result false provide user information
+        if (result.size() > 0) {
+            ItemImages existingImageobj = (ItemImages) result.get(0);
+            existingFileNamestr = existingImageobj.getImageFileName();
+            if (sb.isOpen() == false) {
+                sb = hib_session();
             }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+            sb.delete((ItemImages) result.get(0));
+            tx.commit();
 
-        } catch (Exception e) {
-            System.out.println("Error on deleting exsitng Image Record");
+            try {
 
+                if (existingFileNamestr != null) {
+                    // Will manage return later
+                    Boolean ret_result = false;
+                    ret_result = DeleteImageFile(existingFileNamestr);
+                    // if result false provide user information
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error on deleting exsitng Image Record");
+
+            }
         }
-
         /// Now process editted image information
-            if (this.imageFileNamePart != null) {
-            
+        if (this.imageFileNamePart != null) {
+
             try {
                 SaveUserItemImage(getImageFileNamePart(), ubean.getUserAction());
             } catch (Exception e) {
@@ -220,16 +222,14 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             iii.setImageFileName(getFileName(getImageFileNamePart()));
 
             try {
-                sb.update(iii);
+                sb.save(iii);
                 tx.commit();
             } catch (Exception e) {
                 System.out.println("Error in Update Image");
             }
 
         }
-        
-        
-        
+
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
 //            Addresses balt = (Addresses) aadrs.get(0);
@@ -268,7 +268,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                     null);
 
         }
-        return "index";
+        return "index?faces-redirect=true";
 
     }
 
@@ -387,7 +387,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                     null);
 
         }
-        return "index";
+        return "index?faces-redirect=true";
     }
 
     public int getContactDescribeId() {
@@ -1361,8 +1361,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         Boolean return_delete_true = false;
         String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
         String sPath2 = "//borrower_images//";
-        String buildFileName = ubean.getUserAction() + "_" + fileName;
-        String sPath3 = buildFileName;
+        String sPath3 = fileName;
         File files = new File(sPath1 + sPath2);
         //Boolean makeDirectory = files.mkdirs();
         String itemImagePath = sPath1 + sPath2 + sPath3;
@@ -1382,6 +1381,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 "DeleteSelecteBorrowe",
                 null);
 
-        return "index";
+        return "index?faces-redirect=true";
     }
 }
