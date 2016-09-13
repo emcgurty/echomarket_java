@@ -59,7 +59,7 @@ public class UserBean extends AbstractBean implements Serializable {
         this.resetCode = null;
         this.appEmail = null;
         
-        return "index";
+        return "index?faces-redirect=true";
     }
 
     public String getEmail() {
@@ -188,7 +188,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 "NewRegistration",
                 new Object[]{fullname});
 
-        return "index";
+        return "index?faces-redirect=true";
 
     }
 
@@ -379,7 +379,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 null,
                 "PasswordChangeSuccess",
                 new Object[]{});
-        return "index";
+        return "index?faces-redirect=true";
     }
 
     public String forgotUserPassword() {
@@ -417,7 +417,7 @@ public class UserBean extends AbstractBean implements Serializable {
                     null,
                     "ForgotUserPasswordSuccess",
                     new Object[]{email});
-            return "index";
+            return "index?faces-redirect=true";
         } else {
             message(
                     null,
