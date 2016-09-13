@@ -42,13 +42,14 @@
                         <h:outputLabel for="itemModel" value="Item Model:" >
                             <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px"/>
                         </h:outputLabel>
-
+                        <c:if test="#{history.imageFileName != null}"  >
                         <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
                             <h:column rowHeader="">
                                 <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" />
                             </h:column>
                         </h:dataTable>
-
+                        </c:if>
+                        <br />
                         <h:commandButton value="Edit"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
                         </h:commandButton>    
 
