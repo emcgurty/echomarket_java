@@ -621,7 +621,7 @@
                             <td style="width:50%;">
                                 <div style="margin-left:25px;margin-top:5px;">
                                     <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
-                                        <h:selectOneMenu id="categoryId" value="#{bb.categoryId}"  style="margin-left:10px">
+                                        <h:selectOneMenu id="categoryId" value="#{bb.categoryId}"  style="margin-left:10px"  class="items select">
                                             <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
                                                            itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
                                             </f:selectItems>
