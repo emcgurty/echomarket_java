@@ -311,16 +311,15 @@ function validateItem() {
 
     var getItemSelect = $(".items.select");
     for (var i = 0; i < getItemSelect.length; i++) {
-        item_id = getItemSelect[i].id;
-        item_id = item_id.replace('rb:', '');
+        item_id = getChildID(getItemSelect[i].id);
         item_value = getItemSelect[i].value;
-        if (item_id.includes('itemConditionId')) {
+//        if (item_id.includes('itemConditionId')) {
             if (item_value == -2) {
+                
                 $("span#" + item_id + ".error-message").css("visibility", "visible");
                 $("span#" + item_id + ".error-message").text("Please make a selection.");
                 return_value = false;
             }
-        }
     }
 
     return return_value;
