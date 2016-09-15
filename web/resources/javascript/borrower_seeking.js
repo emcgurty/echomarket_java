@@ -7,7 +7,7 @@ jQuery(document).ready(function ($) {
         size_of_menu();
     });
     if ($("input[id$='organizationName']").val()) {
-        $("div[id$='yesNoOrganization']").css("display", "block")
+        $("div[id$='yesNoOrganization']").css("display", "block");
     }
 
 // Could not get tilde to work 
@@ -58,7 +58,7 @@ jQuery(document).ready(function ($) {
         } else {
             $("span#" + select_id + ".error-message").css("visibility", "hidden");
             $("span#" + select_id).text("");
-            returnResult = true
+            returnResult = true;
         }
 
         if ((select_id == 'contactDescribeId') && (select_value == '100')) {
@@ -451,6 +451,7 @@ function showItem() {
 }
 
 function showBorrowersContactPreferences() {
+    alert("asdas");
 
     var returnResult = ValidateContactInformation();
     if (returnResult == true) {
