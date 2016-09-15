@@ -765,14 +765,13 @@ function getChildID(parentID) {
     return child_id;
 }
 
-function editBorrower(bid)
-{
-    var url = "http://localhost:15424/giving_taking/faces/edit_borrower.xhtml?processId=".concat(bid);
-    alert(url);
-    //$(location).attr('href',url);
-    window.location.replace(url);
-    return false;
-}
+//function editBorrower(bid)
+//{
+//    var url = "http://localhost:15424/giving_taking/faces/edit_borrower.xhtml?processId=".concat(bid);
+//    //$(location).attr('href',url);
+//    window.location.replace(url);
+//    return false;
+//}
 
 function removeImage() {
     var imagePreviewID = $("img[id$=imagePreview]");
