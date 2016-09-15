@@ -289,7 +289,7 @@ public class UserBean extends AbstractBean implements Serializable {
             message(
                     null,
                     "LogInSuccessful",
-                    null);
+                   new Object[]{username});
             return_string = "index";
         } else if (getp == false) {
             username = null;
