@@ -1157,7 +1157,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         // Must be just one record.. will error check later..
 
         Borrowers to_Array = (Borrowers) result.get(0);
-        this.user_id = to_Array.getUser_id();
         this.contactDescribeId = to_Array.getContactDescribeId();
         this.organizationName = to_Array.getOrganizationName();
         this.displayBorrowerOrganizationName = to_Array.getDisplayBorrowerOrganizationName();
