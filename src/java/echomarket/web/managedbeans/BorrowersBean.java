@@ -36,11 +36,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
-    // @ManagedProperty(value="#{user_id}")  -- doesn't work
-    private String user_id;
-    // @ManagedProperty(value="#{user_type}") -- doesn't work
-    private String user_type;
-    private String userName;
     private int contactDescribeId;
     private String organizationName;
     private int displayBorrowerOrganizationName;
@@ -1029,35 +1024,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         this.displayBorrowerAlternativeAddress = displayBorrowerAlternativeAddress;
     }
 
-    /**
-     * @return the user_type
-     */
-    private String getUser_type() {
-
-        return ubean.getUserType();
-    }
-
-    /**
-     * @param user_type the user_type to set
-     */
-    public void setUser_type(String user_type) {
-        this.user_type = user_type;
-    }
-
-    /**
-     * @return the userName
-     */
-    public String getUserName() {
-        return ubean.getUsername();
-    }
-
-    /**
-     * @param userName the userName to set
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     private static Date hold_date() {
         Date hold_date = new Date();
         return hold_date;
@@ -1166,20 +1132,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             tx = null;
         }
         return result;
-    }
-
-    /**
-     * @return the user_id
-     */
-    public String getUser_id() {
-        return user_id;
-    }
-
-    /**
-     * @param user_id the user_id to set
-     */
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
     }
 
     public String getCurrentEditRecord(String bid) {
@@ -1318,7 +1270,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } else {
             ItemImages a_array = (ItemImages) result.get(0);
             ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(a_array.getId(), null, a_array.getlender_id(), a_array.getImageContentType(),
+                    new ItemImages(a_array.getId(), null, a_array.getLender_id(), a_array.getImageContentType(),
                             a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
                             a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
             ));
