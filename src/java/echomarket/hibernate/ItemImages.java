@@ -78,11 +78,11 @@ public class ItemImages implements java.io.Serializable {
     }
 
     
-    public String getlender_id() {
+    public String getLender_id() {
         return this.lender_id;
     }
 
-    public void setlender_id(String lender_id) {
+    public void setLender_id(String lender_id) {
         this.lender_id = lender_id;
     }
 
