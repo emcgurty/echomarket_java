@@ -99,8 +99,8 @@
                         </div>
                         <div style="float:left;margin">
                             <div id="yesNoOrganization" style="display:none;margin-left:15px;">
-                                <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayBorrowerOrganizationName" >
-                                    <h:selectOneRadio id="displayBorrowerOrganizationName" value="#{ll.displayBorrowerOrganizationName}" layout='lineDirection'>
+                                <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayLenderOrganizationName" >
+                                    <h:selectOneRadio id="displayLenderOrganizationName" value="#{ll.displayLenderOrganizationName}" layout='lineDirection'>
                                         <f:selectItem itemValue="1" itemLabel="Yes" />
                                         <f:selectItem itemValue="0" itemLabel="No" />	
                                     </h:selectOneRadio>    
@@ -145,8 +145,8 @@
 
                         <div style="margin-left: 25px;float:left">
 
-                            <h:outputLabel value="Allow public to see your Name?"  for="displayBorrowerName" >
-                                <h:selectOneRadio id="displayBorrowerName" value="#{ll.displayBorrowerName}" layout="pageDirection" >
+                            <h:outputLabel value="Allow public to see your Name?"  for="displayLenderName" >
+                                <h:selectOneRadio id="displayLenderName" value="#{ll.displayLenderName}" layout="pageDirection" >
                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                 </h:selectOneRadio>    
@@ -172,7 +172,7 @@
                                                 <h:inputText id="addressLine1" value="#{pa.addressLine1}"
                                                              style="margin-left: 5px;" class="primary" >
                                                 </h:inputText>
-                                                
+
                                                 <span class="error-message" id="addressLine1" ></span>
                                             </td>
                                             <td>
@@ -242,8 +242,8 @@
 
                                         <tr >
                                             <td colspan="2">
-                                                <h:outputLabel value="Allow public to see your Registration Address?"  for="displayBorrowerAddress" >
-                                                    <h:selectOneRadio id="displayBorrowerAddress" value="#{ll.displayBorrowerAddress}" layout='lineDirection'>
+                                                <h:outputLabel value="Allow public to see your Registration Address?"  for="displayLenderAddress" >
+                                                    <h:selectOneRadio id="displayLenderAddress" value="#{ll.displayLenderAddress}" layout='lineDirection'>
                                                         <f:selectItem itemValue="1" itemLabel="Yes" />
                                                         <f:selectItem itemValue="0" itemLabel="No" />	
                                                     </h:selectOneRadio>    
@@ -327,7 +327,7 @@
 
                 </div>
 
-            </div>
+          
 
             <div id="form_borrower_preference" class="contact_information" >
 
@@ -454,8 +454,8 @@
                                             </tr>
                                             <tr >
                                                 <td colspan="2">
-                                                    <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayBorrowerAlternativeAddress" >
-                                                        <h:selectOneRadio id="displayBorrowerAlternativeAddress" value="#{ll.displayBorrowerAlternativeAddress}" layout='lineDirection'>
+                                                    <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayLenderAlternativeAddress" >
+                                                        <h:selectOneRadio id="displayLenderAlternativeAddress" value="#{ll.displayLenderAlternativeAddress}" layout='lineDirection'>
                                                             <f:selectItem itemValue="1" itemLabel="Yes" />
                                                             <f:selectItem itemValue="0" itemLabel="No" />	
                                                         </h:selectOneRadio>    
@@ -693,7 +693,8 @@
                                                     </h:outputLabel>            
                                                 </h:panelGroup>-->
 
-
+                        </div>
+                    </div>
                             <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                                 <div style="margin:20px;float:right;" >
                                     <a onclick="showItem();" style="color:crimson;font-style:italic"  >Continue to 'Item to Lend'</a>
@@ -702,7 +703,7 @@
 
 
                         </div>
-
+                    </div>
                         <div id="form_item" class="contact_information" style="display:none;">
                             <div  class="div_p" id="menu_item_3" >
                                 <div style="margin:10px;" >
@@ -744,8 +745,8 @@
                                 <tr class="even">
                                     <td colspan='2'>
                                         <div style="margin-left:25px;margin-top:5px;">
-                                            <h:outputLabel value="#{bundle.BasedOn}"  for="notifyLenders" >
-                                                <h:selectOneRadio id="notifyLenders" value="#{ll.notifyLenders}"  >
+                                            <h:outputLabel value="#{bundle.BasedOn}"  for="notifyBorrowers" >
+                                                <h:selectOneRadio id="notifyBorrowers" value="#{ll.notifyBorrowers}"  >
                                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
@@ -832,15 +833,12 @@
 
                         <div id="form_monetary" class="contact_information" >
 
-                            <div id="form_legal" class="contact_information" >
-
                                 <div class="top" >
                                     <div style="margin:10px;margin-top:25px;" >
                                         <h:outputText value="#{userBean.username}: LENDER ITEM REGISTRATION"  />
                                         <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
                                     </div>
                                 </div>       
-
 
                                 <table class="personal">
                                     <tr>
