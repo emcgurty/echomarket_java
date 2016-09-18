@@ -30,30 +30,16 @@
             <h:inputSecret id="approved" value="0"   style="display:none;" />
 
             <div id="lender_registration" class="lender_registration" >
-
+                <ui:include rendered="true" src="lender_header.xhtml" id="LenderHeader"/>
                 <div id="form_contact_information" class="contact_information" >
-                    <ui:include rendered="true" src="lender_header.xhtml" id="LenderHeader"/>
-
-                    <div class="top" >
-                        <div style="margin:10px;margin-top:25px;" >
-                            <h:outputText value="#{userBean.username}: LENDER ITEM REGISTRATION"  />
-                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
-                        </div> 
-                    </div> 
-
-                    <div class="top review" style="display:none;">
-                        <div style="margin:10px;margin-top:25px;" >
-                            <h:outputText value="#{userBean.username}: LENDER ITEM REGISTRATION"  />
-                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div review" value="Save Borrower Item Registration"  />
-                        </div> 
-                    </div> 
 
                     <div  class="div_p" id="menu_item_1" >
                         <div style="margin:10px;" >
-                            <h:outputText value="Borrower Information..." />
+                            <h:outputText value="Lender Information..." />
                             <a href="#menu_item_2" class="right_div" onclick="showBorrowersContactPreferences();">Continue to 'Contact Preferences'</a>
                         </div>
                     </div>
+
                     <div  class="div_p" >
                         <div style="margin:10px;" >
                             <h:outputText value="Yourself generally, your affiliation" />
@@ -124,7 +110,6 @@
                             <h:outputLabel value="First Name:" for="firstName" ><span class="required_fields">*</span>
                                 <br />
                                 <h:inputText  id="firstName" value="#{ll.firstName}"  maxlength="24" size="24"  />
-
                             </h:outputLabel>
                             <span class="error-message" id="firstName" ></span>
                         </div>
@@ -144,14 +129,12 @@
                         </div>
 
                         <div style="margin-left: 25px;float:left">
-
                             <h:outputLabel value="Allow public to see your Name?"  for="displayLenderName" >
                                 <h:selectOneRadio id="displayLenderName" value="#{ll.displayLenderName}" layout="pageDirection" >
                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                 </h:selectOneRadio>    
                             </h:outputLabel> 
-
                         </div>
                     </div>
 
@@ -327,12 +310,8 @@
 
                 </div>
 
-          
-
-            <div id="form_borrower_preference" class="contact_information" >
 
                 <div id="form_borrower_preference" class="contact_information" style="display:block">
-                    <ui:include rendered="true" src="lender_header.xhtml" id="lenderHeader" />
 
                     <div  class="div_p" id="menu_item_2" >
                         <div style="margin:10px;" >
@@ -363,9 +342,6 @@
 
                             <div id="buildAlternativeAddress" style="display:none;float:left;height:auto;width:inherit;margin-top:10px;"  >    
                                 <h:dataTable id="alternative"  value="#{ll.alternative}" var="pa" >
-
-                                    >
-
                                     <h:column  rowHeader="Alternative Address" id="buildAlternativeAddress" >
                                         <table id="buildAlternativeAddressTable" stlye="margin-left:10px;">
                                             <thead>
@@ -500,681 +476,734 @@
                         </div>
                     </div>
 
-
-                </div>
-
-
-                <div  class="div_p"  >
-                    <div style="margin:10px;" >
-                        <h:outputText value="Contact Option: By Phone..." />
-
-                    </div>
-                </div>
-                <div style="float:left;margin-left:25px;display:block;" >
-                    <div style="margin-left:25px;float:left;display:none;" id="display_homePhone" class="phone" >
-                        <h:outputLabel value="Can lenders call you at your home phone?:"  for="borrowerContactByHomePhone" >
-                            <h:selectOneRadio id="borrowerContactByHomePhone" value="#{ll.borrowerContactByHomePhone}"  >
-                                <f:selectItem itemValue="1" itemLabel="Yes" />
-                                <f:selectItem itemValue="0" itemLabel="No" />	
-                            </h:selectOneRadio>    
-                        </h:outputLabel> 
-                    </div>
-                    <div style="margin-left:25px;float:left;display:none;" id="display_cellPhone" class="phone" >
-                        <h:outputLabel value="... by your cell phone?:"  for="borrowerContactByCellPhone" >
-                            <h:selectOneRadio id="borrowerContactByCellPhone" value="#{ll.borrowerContactByCellPhone}"  >
-                                <f:selectItem itemValue="1" itemLabel="Yes" />
-                                <f:selectItem itemValue="0" itemLabel="No" />	
-                            </h:selectOneRadio>    
-                        </h:outputLabel>
-
-                    </div>
-                    <div style="margin-left:25px;float:left;display:none;" id="display_alternativePhone" class="phone" >
-                        <h:outputLabel value="... by your alternative phone?:"  for="borrowerContactByAlternativePhone" >
-                            <h:selectOneRadio id="borrowerContactByAlternativePhone" value="#{ll.borrowerContactByAlternativePhone}"  >
-                                <f:selectItem itemValue="1" itemLabel="Yes" />
-                                <f:selectItem itemValue="0" itemLabel="No" />	
-                            </h:selectOneRadio>    
-
-                        </h:outputLabel>
-
-                    </div>
-                </div>
-
-                <div  class="div_p"  >
-                    <div style="margin:10px;" >
-                        <h:outputText value="Contact Option: By Social Media..." />
-
-                    </div>
-                </div>
-
-                <div style="float:left;margin-left:25px;">
-
-                    <table  style="margin-left:15px;">
-                        <tr>
-                            <td>
-                                <h:outputLabel value="Your Facebook Account:" for="borrowerContactByFacebook" >
-                                    <h:inputText  id="borrowerContactByFacebook" value="#{ll.borrowerContactByFacebook}" style="margin-left:5px;" /> 
-                                </h:outputLabel>
-                            </td>
-                            <td>
-                                <h:outputLabel value="Your LinkedIn Account:" for="borrowerContactByLinkedIn" >
-                                    <h:inputText  id="borrowerContactByLinkedIn" value="#{ll.borrowerContactByLinkedIn}" style="margin-left:5px;" /> 
-                                </h:outputLabel>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h:outputLabel value="Your Twitter Account:" for="borrowerContactByTwitter" >
-                                    <h:inputText  id="borrowerContactByTwitter" value="#{ll.borrowerContactByTwitter}" style="margin-left:5px;" />
-                                </h:outputLabel>
-                            </td>
-                            <td>
-                                <h:outputLabel value="Your Instagram Account:" for="borrowerContactByInstagram" >
-                                    <h:inputText id="borrowerContactByInstagram" value="#{ll.borrowerContactByInstagram}" style="margin-left:5px;" />
-                                </h:outputLabel>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h:outputLabel value="Other Social Media:" for="borrowerContactByOtherSocialMedia" >
-                                    <h:inputText  id="borrowerContactByOtherSocialMedia" value="#{ll.borrowerContactByOtherSocialMedia}" style="margin-left:5px;" />
-                                </h:outputLabel>
-                            </td>
-
-                            <td>
-                                <h:outputLabel value="Other Social Media Access:" for="borrowerContactByOtherSocialMediaAccess" >
-                                    <h:inputText  id="borrowerContactByOtherSocialMediaAccess" value="#{ll.borrowerContactByOtherSocialMediaAccess}" style="margin-left:5px;" />
-                                </h:outputLabel>
-                            </td>
-                        </tr>
-                    </table>
-
-                </div>
-
-
-                <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                    <div style="margin:10px;float:right;" >
-                        <a onclick="showLenderToBorrower();" style="color:crimson;font-style:italic"  >Continue to 'Transfer: Lender To Borrower'</a>
-                    </div>
-                </div>
-            </div>
-            <div id="form_item" class="contact_information" >
-
-
-                <div class="top" >
-                    <div style="margin:10px;margin-top:25px;" >
-                        <h:outputText value="#{userBean.username}: LENDER ITEM REGISTRATION"  />
-                        <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
-                    </div>
-                </div>
-
-                <div  class="div_p"  >
-                    <div style="margin:10px;" >
-                        <h:outputText value="How would like a borrower to receive your item?" />
-                    </div>
-                </div>
-
-                <div style="float:left;width:92%;padding-left: 25px;padding-top: 5px;margin-left:25px;background-color:#CFBDAE;">
-
-                    <div  class="div_p" id="menu_item_3" >
+                    <div  class="div_p"  id="display_phone">
                         <div style="margin:10px;" >
-                            <h:outputText value="The Item you would like to borrow" />
-                            <a href="#menu_item_3" class="right_div" onclick="showBLegal();">Continue to 'Good Faith'</a>
+                            <h:outputText value="Contact Option: By Phone..." />
+
+                        </div>
+                    </div>
+                    <div style="float:left;margin-left:25px;display:block;" >
+                        <div style="margin-left:25px;float:left;display:none;" id="display_homePhone" class="phone" >
+                            <h:outputLabel value="Can lenders call you at your home phone?:"  for="borrowerContactByHomePhone" >
+                                <h:selectOneRadio id="borrowerContactByHomePhone" value="#{ll.borrowerContactByHomePhone}"  >
+                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel> 
+                        </div>
+                        <div style="margin-left:25px;float:left;display:none;" id="display_cellPhone" class="phone" >
+                            <h:outputLabel value="... by your cell phone?:"  for="borrowerContactByCellPhone" >
+                                <h:selectOneRadio id="borrowerContactByCellPhone" value="#{ll.borrowerContactByCellPhone}"  >
+                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel>
+
+                        </div>
+                        <div style="margin-left:25px;float:left;display:none;" id="display_alternativePhone" class="phone" >
+                            <h:outputLabel value="... by your alternative phone?:"  for="borrowerContactByAlternativePhone" >
+                                <h:selectOneRadio id="borrowerContactByAlternativePhone" value="#{ll.borrowerContactByAlternativePhone}"  >
+                                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                                    <f:selectItem itemValue="0" itemLabel="No" />	
+                                </h:selectOneRadio>    
+
+                            </h:outputLabel>
+
                         </div>
                     </div>
 
                     <div  class="div_p"  >
                         <div style="margin:10px;" >
-                            <h:outputText value="Item Detail..." />
-
-
-                            <div style="margin-left:25px;margin-top:5px;float:left;">
-
-                                <div id="borrowerReturnsToWhichAddressGroup" >    
-                                    <h:outputLabel value="Borrower returns to your...:" for="BReturnsToWhichAddress">
-                                        <h:selectOneRadio id="BReturnsToWhichAddress" value="#{ll.BReturnsToWhichAddress}"  >
-                                            <f:selectItem itemValue="3" itemLabel="... your Registration Address?" />
-                                            <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
-                                            <f:selectItem itemValue="1" itemLabel="Either address is fine." />
-                                            <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
-                                        </h:selectOneRadio>    
-                                    </h:outputLabel>
-                                </div>
-
-                                <h:outputLabel for="lenderThirdPartyChoiceB2l" value="Will meet with borrower at an agreed location?:"  >
-                                    <h:selectOneRadio id="lenderThirdPartyChoiceB2l" value="#{ll.lenderThirdPartyChoiceB2l}" >
-                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                    </h:selectOneRadio>    
-                                </h:outputLabel>  
-
-
-
-                            </div>
-
-
-                            <div style="margin-left:25px;margin-top:5px;float:left;">
-
-                                <h:outputLabel for="willPickUpPreferredLocationB2l" value="Will pick up at borrower's location?:"  >
-                                    <h:selectOneRadio id="willPickUpPreferredLocationB2l" value="#{ll.willPickUpPreferredLocationB2l}" >
-                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                    </h:selectOneRadio>    
-                                </h:outputLabel>                        
-
-                            </div>
-
-                            <div style="margin-left:25px;margin-top:5px;float:left;">
-
-                                <h:outputLabel for="thirdPartyPresenceB2l" value="Would you like a third-party present during transfer from borrower?:"  >
-                                    <h:selectOneRadio id="thirdPartyPresenceB2l" value="#{ll.thirdPartyPresenceB2l}" >
-                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                        <f:ajax event="change" execute="@this"   render="thirdPartyPresentChoice" />
-                                    </h:selectOneRadio>    
-                                </h:outputLabel>                        
-                            </div>
-
-
-                            <!--                    <h:panelGroup id="thirdPartyPresentChoice">
-                                                    <h:outputLabel for="lenderThirdPartyChoiceL2b" value="Your choice?:"  rendered="#{ll.thirdPartyPresenceB2l == '1'}">
-                                                        <h:selectOneRadio id="lenderThirdPartyChoiceL2b" value="#{ll.lenderThirdPartyChoiceL2b}" >
-                                                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                            <f:selectItem itemValue="0" itemLabel="No" />	
-                                                        </h:selectOneRadio>    
-                                                    </h:outputLabel>                        
-                            
-                            
-                                                    <h:outputLabel for="agreedThirdPartyChoiceB2l" value="Mutually agreed?:"   rendered="#{ll.thirdPartyPresenceB2l == '1'}">
-                                                        <h:selectOneRadio id="agreedThirdPartyChoiceB2l" value="#{ll.agreedThirdPartyChoiceB2l}" >
-                                                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                            <f:selectItem itemValue="0" itemLabel="No" />	
-                                                        </h:selectOneRadio>    
-                                                    </h:outputLabel>            
-                                                </h:panelGroup>-->
+                            <h:outputText value="Contact Option: By Social Media..." />
 
                         </div>
                     </div>
-                            <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-                                <div style="margin:20px;float:right;" >
-                                    <a onclick="showItem();" style="color:crimson;font-style:italic"  >Continue to 'Item to Lend'</a>
-                                </div>
-                            </div>
+
+                    <div style="float:left;margin-left:25px;">
+
+                        <table  style="margin-left:15px;">
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Your Facebook Account:" for="borrowerContactByFacebook" >
+                                        <h:inputText  id="borrowerContactByFacebook" value="#{ll.borrowerContactByFacebook}" style="margin-left:5px;" /> 
+                                    </h:outputLabel>
+                                </td>
+                                <td>
+                                    <h:outputLabel value="Your LinkedIn Account:" for="borrowerContactByLinkedIn" >
+                                        <h:inputText  id="borrowerContactByLinkedIn" value="#{ll.borrowerContactByLinkedIn}" style="margin-left:5px;" /> 
+                                    </h:outputLabel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Your Twitter Account:" for="borrowerContactByTwitter" >
+                                        <h:inputText  id="borrowerContactByTwitter" value="#{ll.borrowerContactByTwitter}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+                                <td>
+                                    <h:outputLabel value="Your Instagram Account:" for="borrowerContactByInstagram" >
+                                        <h:inputText id="borrowerContactByInstagram" value="#{ll.borrowerContactByInstagram}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Other Social Media:" for="borrowerContactByOtherSocialMedia" >
+                                        <h:inputText  id="borrowerContactByOtherSocialMedia" value="#{ll.borrowerContactByOtherSocialMedia}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+
+                                <td>
+                                    <h:outputLabel value="Other Social Media Access:" for="borrowerContactByOtherSocialMediaAccess" >
+                                        <h:inputText  id="borrowerContactByOtherSocialMediaAccess" value="#{ll.borrowerContactByOtherSocialMediaAccess}" style="margin-left:5px;" />
+                                    </h:outputLabel>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
 
 
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin:10px;float:right;" >
+                            <a onclick="showLenderToBorrower();" style="color:crimson;font-style:italic"  >Continue to 'Transfer: Lender To Borrower'</a>
                         </div>
                     </div>
-                        <div id="form_item" class="contact_information" style="display:none;">
-                            <div  class="div_p" id="menu_item_3" >
-                                <div style="margin:10px;" >
-                                    <h:outputText value="The Item you would like to lend" />
-                                    <a href="#menu_item_6" class="right_div" onclick="showMonetary();">Continue to 'Lending Terms: Monetary'</a>
-                                </div>
-                            </div>
 
-                            <table >
-                                <tr class="odd">
-                                    <td style="width:50%;">
-                                        <div style="margin-left:25px;margin-top:5px;">
-                                            <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
-                                                <h:selectOneMenu id="categoryId" value="#{ll.categoryId}"  style="margin-left:10px"  class="items select">
-                                                    <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
-                                                                   itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
-                                                    </f:selectItems>
-
-                                                </h:selectOneMenu>
-                                            </h:outputLabel>  
-                                            <br /><span class="error-message" id="categoryId" ></span>
-                                        </div>
-                                    </td>
-                                    <td style="width:50%;">
+                </div>      
 
 
-                                        <div id="other_category" style="display:none;">    
-                                            <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
-                                                <h:inputText  value="#{ll.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"/>
+                <div id="form_lender_to_borrower" class="contact_information" >
 
-                                            </h:outputLabel>    
-                                            <span class="error-message" id="otherItemCategory" ></span>
-                                        </div>
+                    <div  class="div_p" id="menu_item_3" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Item Transfer Preferences from Lender to Borrowers..." />
+                            <a href="#menu_item_4" class="right_div" onclick="showBorrowerToLender()();">Continue to 'Transfer: Borrower to Lender'</a>
+                        </div>
+                    </div>
 
-                                    </td>
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="How would like a borrower to receive your item?" />
+                        </div>
+                    </div>
 
-                                </tr>
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
 
-                                <tr class="even">
-                                    <td colspan='2'>
-                                        <div style="margin-left:25px;margin-top:5px;">
-                                            <h:outputLabel value="#{bundle.BasedOn}"  for="notifyBorrowers" >
-                                                <h:selectOneRadio id="notifyBorrowers" value="#{ll.notifyBorrowers}"  >
-                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                    <f:selectItem itemValue="0" itemLabel="No" />	
-                                                </h:selectOneRadio>    
-                                            </h:outputLabel>                                     
+                        <div id="BComesToWhichAddressGroup" >    
+                            <h:outputLabel value="Borrower comes to which address?:" for="BComesToWhichAddress">
+                                <h:selectOneRadio id="BComesToWhichAddress" value="#{ll.BComesToWhichAddress}"  >
+                                    <f:selectItem itemValue="3" itemLabel="... your Registration Address?" />
+                                    <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
+                                    <f:selectItem itemValue="1" itemLabel="Either address is fine." />
+                                    <f:selectItem itemValue="0" itemLabel="Neither, no pick up at any address please." />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel>
+                        </div>
+                    </div>
 
-                                        </div></td>
-                                </tr>
+                    <div style="margin-left:25px;margin-top:5px;float:left;">                    
+                        <h:outputLabel for="meetBorrowerAtAgreedL2B" value="Will meet with borrower at an agreed location?:"  >
+                            <h:selectOneRadio id="meetBorrowerAtAgreedL2B" value="#{ll.meetBorrowerAtAgreedL2B}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
+                    </div>
 
-                                <tr class="odd">
-                                    <td style="width:50%">
-                                        <div style="margin-left:25px;margin-top:5px;">
-                                            <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
-                                                <h:inputText  id="itemDescription" value="#{ll.itemDescription}" class="items"  style="margin-left:10px"/>
-                                            </h:outputLabel>
-                                            <span class="error-message" id="itemDescription" ></span>
-                                        </div></td>
-                                    <td style="width:50%">
-                                        <div style="margin-left:25px;margin-top:5px;">
-                                            <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
-                                                <h:selectOneMenu id="itemConditionId" value="#{ll.itemConditionId}"  style="margin-left:10px" class="items select">
-                                                    <f:validator validatorId="selectOneMenuValidator" />  
-                                                    <f:selectItems id="item_condtion" value="#{itemc.buildItemConditionsArray()}"  
-                                                                   var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
-                                                                   >   
-                                                    </f:selectItems>    
-                                                </h:selectOneMenu>
-                                            </h:outputLabel>
-                                            <br /> <span class="error-message" id="itemConditionId" ></span>
-                                        </div></td>
-                                </tr>
+                    <div style="margin-left:25px;margin-top:5px;float:left;">                    
+                        <h:outputLabel for="willDeliverToBorrowerPreferredL2B" value="Will deliver to borrower preferred location?:"  >
+                            <h:selectOneRadio id="willDeliverToBorrowerPreferredL2B" value="#{ll.willDeliverToBorrowerPreferredL2B}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
+                    </div>
 
-                                <tr class="even">
-                                    <td  style="width:50%;">
-                                        <div style="margin-left:25px;margin-top:5px;">
-                                            <h:outputLabel for="itemModel" value="#{bundle.ItemModel}" >
-                                                <h:inputText id="itemModel" value="#{ll.itemModel}"  style="margin-left:10px"/>
-                                            </h:outputLabel>
-                                        </div></td>
-                                    <td  style="width:50%;">
-                                        <div style="margin-left:25px;margin-top:5px;">
-                                            <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
-                                                <h:inputText  id="itemCount" value="#{ll.itemCount}" size="2" maxlength="2" required="true" class="items"  style="margin-left:10px"/>
-                                            </h:outputLabel>
-                                            <span class="error-message" id="itemCount" ></span>
-                                        </div></td>
-                                </tr>
-                            </table>
-                            <br />
-                            <div style="margin-left:25px;margin-top:5px;float:left;">
+                    <div style="margin-left:25px;margin-top:5px;float:left;">                    
+                        <h:outputLabel for="thirdPartyPresenceL2B" value="Would you like a third-party present during transfer to borrower?:"  >
+                            <h:selectOneRadio id="thirdPartyPresenceL2B" value="#{ll.thirdPartyPresenceL2B}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
+                    </div>
 
-                                <h:dataTable id="picture"  value="#{ll.picture}" var="image" >
-                                    <h:column rowHeader="">
-                                        <div style="margin-left:25px;margin-top:5px;float:left;">
-                                            <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
-                                                <h:inputFile id="imageFileNamePart" value="#{ll.imageFileNamePart}" />
-                                                <span class="file_image_error">&nbsp;</span>
-                                            </h:outputLabel>
-                                            <br />
-                                            <input type="button" onclick="removeImage()" alt="Click to remove elected image.."  value="Remove Image" ></input>
-                                        </div>    
-                                        <br />
-                                        <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-                                            <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                                                <img id="imagePreview" height="200" width="200" src=""  />
-                                            </h:outputLabel>
-                                        </div>
-                                        <br />
-                                        <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                                            <h:outputLabel for="itemImageCaption" value="If you'd like, provide a caption for your item image:" >
-                                                <h:inputText  id="itemImageCaption" value="#{image.itemImageCaption}" size="50" maxlength="50" style="margin-left:10px"/>
-                                            </h:outputLabel>
-                                        </div>
-                                    </h:column>
-                                </h:dataTable>
-                            </div>
 
-                            <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                                <div style="margin:10px;float:right;" >
-                                    <a onclick="showBLegal();" style="color:crimson;font-style:italic"  >Continue to 'Good Faith'</a>
-                                </div>
-                            </div>
+                    <div id="thirdPartyPresenceL2BGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
+                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceL2B">
+                            <h:selectOneRadio id="lenderThirdPartyChoiceL2B" value="#{ll.lenderThirdPartyChoiceL2B}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
+                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceL2B">
+                            <h:selectOneRadio id="agreedThirdPartyChoiceL2B" value="#{ll.agreedThirdPartyChoiceL2B}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
 
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin:10px;float:right;" >
+                            <a onclick="showBorrowerToLender();" style="color:crimson;font-style:italic"  >Continue to 'Transfer: Borrower to Lender'</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="form_borrower_to_lender" class="contact_information" >
+
+                    <div  class="div_p" id="menu_item_4" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Item Transfer: Borrower return to Lender..." />
+                            <a href="#menu_item_5" class="right_div" onclick="showItem()();">Continue to 'Item to Lend'</a>
+                        </div>
+                    </div>
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="How would like the borrower to return your item?" />
+                        </div>
+                    </div>
+
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+
+                        <div id="borrowerReturnsToWhichAddressGroup" >    
+                            <h:outputLabel value="Borrower returns to your...:" for="BReturnsToWhichAddress">
+                                <h:selectOneRadio id="BReturnsToWhichAddress" value="#{ll.BReturnsToWhichAddress}"  >
+                                    <f:selectItem itemValue="3" itemLabel="... your Registration Address?" />
+                                    <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
+                                    <f:selectItem itemValue="1" itemLabel="Either address is fine." />
+                                    <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel>
                         </div>
 
-                        <div id="form_monetary" class="contact_information" >
+                        <h:outputLabel for="meetBorrowerAtAgreedB2L" value="Will meet with borrower at an agreed location?:"  >
+                            <h:selectOneRadio id="meetBorrowerAtAgreedB2L" value="#{ll.meetBorrowerAtAgreedB2L}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
 
-                                <div class="top" >
-                                    <div style="margin:10px;margin-top:25px;" >
-                                        <h:outputText value="#{userBean.username}: LENDER ITEM REGISTRATION"  />
-                                        <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
-                                    </div>
-                                </div>       
 
-                                <table class="personal">
-                                    <tr>
-                                        <td>
-                                            <div style="display:inline-table;margin-top:5px;margin-left:25px;">
+                        <h:outputLabel for="willPickUpPreferredLocationB2l" value="Will pick up at borrower's location?:"  >
+                            <h:selectOneRadio id="willPickUpPreferredLocationB2l" value="#{ll.willPickUpPreferredLocationB2l}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>                        
 
-                                                <h:outputLabel for="forFree" value="For Free?"  >
-                                                    <h:selectOneRadio id="forFree" value="#{ll.forFree}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
+                    </div>
 
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                &nbsp;
-                                            </div></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
-                                                <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
-                                                    <h:selectOneRadio id="smallFee" value="#{ll.smallFee}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
-                                                <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
-                                                    <h:inputText id="smallFeeAmount" value="#{ll.smallFeeAmount}" />
-                                                </h:outputLabel>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
 
-                                                <h:outputLabel for="availableForPurchase" value="Item may be available for small purchase amount?:"  >
-                                                    <h:selectOneRadio id="availableForPurchase" value="#{ll.availableForPurchase}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
-                                                <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
-                                                    <h:inputText id="availableForPurchaseAmount" value="#{ll.availableForPurchaseAmount}" />
-                                                </h:outputLabel>
+                        <h:outputLabel for="thirdPartyPresenceB2l" value="Would you like a third-party present during transfer from borrower?:"  >
+                            <h:selectOneRadio id="thirdPartyPresenceB2l" value="#{ll.thirdPartyPresenceB2l}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
+                            </h:selectOneRadio>    
+                        </h:outputLabel>                        
+                    </div>
 
-                                                <h:outputLabel for="availableForDonation" value="Item may be available for donation?:"  >
-                                                    <h:selectOneRadio id="availableForDonation" value="#{ll.availableForDonation}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
+                    <div id="thirdPartyPresenceB2lGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
+                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceB2L">
+                            <h:selectOneRadio id="lenderThirdPartyChoiceB2L" value="#{ll.lenderThirdPartyChoiceB2L}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
+                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceB2L">
+                            <h:selectOneRadio id="agreedThirdPartyChoiceB2L" value="#{ll.agreedThirdPartyChoiceB2L}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
 
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
-                                                <h:outputLabel for="donateAnonymous" value="If yes, would you like to anonymously donate?:"  >
-                                                    <h:selectOneRadio id="donateAnonymous" value="#{ll.donateAnonymous}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
-
-                                                <h:outputLabel for="trade" value="Would you be interesting in trading?:"  >
-                                                    <h:selectOneRadio id="trade" value="#{ll.trade}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
+                    </div>
 
 
 
-                                            </div></td>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
-                                                <h:outputLabel for="tradeItem" value="If yes, what would you like in exchange?" >
-                                                    <h:inputText id="tradeItem" value="#{ll.tradeItem}"  />
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a onclick="showItem();" style="color:crimson;font-style:italic"  >Continue to 'Item to Lend'</a>
+                        </div>
+                    </div>
 
-                                                </h:outputLabel>
-                                            </div></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
+                </div>
 
-                                                <h:outputLabel for="securityDeposit" value="Do you require a security deposit?:"  >
-                                                    <h:selectOneRadio id="securityDeposit" value="#{ll.securityDeposit}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
+                <div id="form_item" class="contact_information" style="display:none;">
+                    <div  class="div_p" id="menu_item_5" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="The Item you would like to lend" />
+                            <a href="#menu_item_6" class="right_div" onclick="showMonetary();">Continue to 'Lending Terms: Monetary'</a>
+                        </div>
+                    </div>
 
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="margin-top:5px;margin-left:25px;">
-                                                <h:outputLabel for="securityDepositAmount" value="If yes, please provide the security deposit amount:" >
-                                                    <h:inputText id="securityDepositAmount" value="#{ll.securityDepositAmount}" />
-                                                    <span class="security_deposit_amount_error">&nbsp;</span>
-                                                </h:outputLabel>
-                                            </div></td>
-                                    </tr>
-                                </table>
+                    <table >
+                        <tr class="odd">
+                            <td style="width:50%;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
+                                        <h:selectOneMenu id="categoryId" value="#{ll.categoryId}"  style="margin-left:10px"  class="items select">
+                                            <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
+                                                           itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
+                                            </f:selectItems>
 
-                                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-                                    <div style="margin:20px;float:right;" >
-                                        <a onclick="showDuration();" style="color:crimson;font-style:italic"  >Continue to 'Terms of Lending: Duration'</a>
-                                    </div>
+                                        </h:selectOneMenu>
+                                    </h:outputLabel>  
+                                    <br /><span class="error-message" id="categoryId" ></span>
+                                </div>
+                            </td>
+                            <td style="width:50%;">
+
+
+                                <div id="other_category" style="display:none;">    
+                                    <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
+                                        <h:inputText  value="#{ll.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"/>
+
+                                    </h:outputLabel>    
+                                    <span class="error-message" id="otherItemCategory" ></span>
                                 </div>
 
+                            </td>
 
-                            </div>
+                        </tr>
 
-                            <div id="form_duration" class="contact_information" >
-
-                                <ui:include rendered="true" src="lender_header.xhtml" id="LenderHeader"/>
-
-                                <div  class="div_p" id="menu_item_7" >
-                                    <div style="margin:10px;" >
-                                        <h:outputText value="Terms of Lending: Duration..." />
-                                        <a href="#menu_item_8" class="right_div" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
-                                    </div>
-                                </div>    
-
-                                <div style="float:left;width:33%;margin-left:25px;">
-
-
-                                    <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  >
-                                        <h:selectOneRadio id="agreedNumberOfDays" value="#{ll.agreedNumberOfDays}" layout='lineDirection'>
+                        <tr class="even">
+                            <td colspan='2'>
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel value="#{bundle.BasedOn}"  for="notifyBorrowers" >
+                                        <h:selectOneRadio id="notifyBorrowers" value="#{ll.notifyBorrowers}"  >
                                             <f:selectItem itemValue="1" itemLabel="Yes" />
                                             <f:selectItem itemValue="0" itemLabel="No" />	
                                         </h:selectOneRadio>    
+                                    </h:outputLabel>                                     
+
+                                </div></td>
+                        </tr>
+
+                        <tr class="odd">
+                            <td style="width:50%">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
+                                        <h:inputText  id="itemDescription" value="#{ll.itemDescription}" class="items"  style="margin-left:10px"/>
                                     </h:outputLabel>
-
-                                </div>
-
-
-                                <div style="float:left;">
-                                    <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:"  >
-                                        <h:selectOneRadio id="agreedNumberOfHours" value="#{ll.agreedNumberOfHours}" layout='lineDirection'>
-                                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                                            <f:selectItem itemValue="0" itemLabel="No" />	
-                                        </h:selectOneRadio>    
+                                    <span class="error-message" id="itemDescription" ></span>
+                                </div></td>
+                            <td style="width:50%">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
+                                        <h:selectOneMenu id="itemConditionId" value="#{ll.itemConditionId}"  style="margin-left:10px" class="items select">
+                                            <f:validator validatorId="selectOneMenuValidator" />  
+                                            <f:selectItems id="item_condtion" value="#{itemc.buildItemConditionsArray()}"  
+                                                           var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
+                                                           >   
+                                            </f:selectItems>    
+                                        </h:selectOneMenu>
                                     </h:outputLabel>
+                                    <br /> <span class="error-message" id="itemConditionId" ></span>
+                                </div></td>
+                        </tr>
 
-
-
-
-                                </div>
-                                <div style="float:left;margin-left:40px;">
-
-                                    <h:outputLabel for="indefiniteDuration" value="Indefinite?"  >
-                                        <h:selectOneRadio id="indefiniteDuration" value="#{ll.indefiniteDuration}" layout='lineDirection'>
-                                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                                            <f:selectItem itemValue="0" itemLabel="No" />	
-                                        </h:selectOneRadio>    
+                        <tr class="even">
+                            <td  style="width:50%;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="itemModel" value="#{bundle.ItemModel}" >
+                                        <h:inputText id="itemModel" value="#{ll.itemModel}"  style="margin-left:10px"/>
                                     </h:outputLabel>
+                                </div></td>
+                            <td  style="width:50%;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
+                                        <h:inputText  id="itemCount" value="#{ll.itemCount}" size="2" maxlength="2" required="true" class="items"  style="margin-left:10px"/>
+                                    </h:outputLabel>
+                                    <span class="error-message" id="itemCount" ></span>
+                                </div></td>
+                        </tr>
+                    </table>
+                    <br />
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
 
-
-                                </div>
-
-                                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-                                    <div style="margin:20px;float:right;" >
-                                        <a href="#menu_item_8" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div id="form_conditions" class="contact_information" >
-
-                                <ui:include rendered="true" src="lender_header.xhtml" id="LenderHeader"/>
-
-                                <div  class="div_p" id="menu_item_8" >
-                                    <div style="margin:10px;" >
-                                        <h:outputText value="Terms of Lending: Conditions..." />
-                                        <a href="#menu_item_9" class="right_div" onclick="showLegal();">Continue to 'Good Faith'</a>
-                                    </div>
-                                </div>    
-
-                                <table class="personal" >
-                                    <tr>
-                                        <td style="vertical-align:top;">
-                                            <div style="margin-left:25px;margin-top:5px;">
-
-                                                <h:outputLabel for="presentDuringBorrowingPeriod" value="Would you like to be present during borrowing period?"  >
-                                                    <h:selectOneRadio id="presentDuringBorrowingPeriod" value="#{ll.presentDuringBorrowingPeriod}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
-
-                                            </div>
-                                        </td>
-                                        <td style="vertical-align:top;">
-
-                                            <div style="display:block;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
-                                                <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
-
-                                                    <h:outputLabel for="entirePeriod" value="During the entire lending period?:"  >
-                                                        <h:selectOneRadio id="entirePeriod" value="#{ll.entirePeriod}" layout='lineDirection'>
-                                                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                            <f:selectItem itemValue="0" itemLabel="No" />	
-                                                        </h:selectOneRadio>    
-                                                    </h:outputLabel>
-
-                                                </div>
-                                                <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
-
-                                                    <h:outputLabel for="partialPeriod" value="During lending period partially?:"  >
-                                                        <h:selectOneRadio id="partialPeriod" value="#{ll.partialPeriod}" layout='lineDirection'>
-                                                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                            <f:selectItem itemValue="0" itemLabel="No" />	
-                                                        </h:selectOneRadio>    
-                                                    </h:outputLabel>
-
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align:top;">
-                                            <div style="margin-left:25px;margin-top:5px;">
-                                                <h:outputLabel for="provideProperUseTraining" value="Would you like to provide item proper-use training?"  >
-                                                    <h:selectOneRadio id="provideProperUseTraining" value="#{ll.provideProperUseTraining}" layout='lineDirection'>
-                                                        <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                        <f:selectItem itemValue="0" itemLabel="No" />	
-                                                    </h:selectOneRadio>    
-                                                </h:outputLabel>
-
-                                            </div>
-                                        </td>
-                                        <td style="vertical-align:top;">
-                                            <div style="margin-left:15px;margin-top:5px;">
-                                                <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
-                                                    <h:inputTextarea id="specificConditions"  value="#{ll.specificConditions}"  cols="40" rows="10" />
-                                                </h:outputLabel>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                </table>
-
-
-                                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-                                    <div style="margin:20px;float:right;" >
-                                        <a href="#menu_item_9" onclick="showLegal();">Continue to 'Good Faith'</a>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div id="form_legal" class="contact_information" >
-
-
+                        <h:dataTable id="picture"  value="#{ll.picture}" var="image" >
+                            <h:column rowHeader="">
                                 <div style="margin-left:25px;margin-top:5px;float:left;">
-                                    <p >
-                                        Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
-                                    </p>
-
-                                    <p >
-                                        Once a borrower or lender has been introduced, Echo Market will play no mediating role in that event.
-                                    </p>
-
-                                    <p >
-                                        In the aftermath of that event, Echo Market will offer a 'Satisfaction Survey' to both the borrower and the lender.
-                                        If satisfaction is found poor, Echo Market will then seek more information to determine the continuance of either the borrower or lender participation.
-                                    </p>
-
-                                    <p >
-                                        Otherwise, thanks for seeking to borrow with Echo Market.  All the Very Best!
-                                    </p>
+                                    <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
+                                        <h:inputFile id="imageFileNamePart" value="#{ll.imageFileNamePart}" />
+                                        <span class="file_image_error">&nbsp;</span>
+                                    </h:outputLabel>
+                                    <br />
+                                    <input type="button" onclick="removeImage()" alt="Click to remove elected image.."  value="Remove Image" ></input>
+                                </div>    
+                                <br />
+                                <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
+                                    <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
+                                        <img id="imagePreview" height="200" width="200" src=""  />
+                                    </h:outputLabel>
                                 </div>
-
-                                <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
-                                    <ul >
-                                        <li style="margin:5px;">
-                                            <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill" ><span class="required_fields">*</span>
-                                                <h:selectOneRadio id="goodwill"  value="#{ll.goodwill}"  >
-                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                    <f:selectItem itemValue="0" itemLabel="No" />	
-                                                </h:selectOneRadio>    
-                                            </h:outputLabel>                                     
-                                            <span class="error-message" id="goodwill_span" ></span>
-                                        </li>
-                                        <li style="margin:5px;">
-                                            <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore"  ><span class="required_fields">*</span>
-                                                <h:selectOneRadio  id="age18OrMore" value="#{ll.age18OrMore}" required="#{ll.age18OrMore == 1}" >
-                                                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                    <f:selectItem itemValue="0" itemLabel="No" />	
-                                                </h:selectOneRadio>    
-                                            </h:outputLabel>                                     
-                                            <span class="error-message" id="age18OrMore_span" ></span>
-                                        </li>
-                                    </ul>
+                                <br />
+                                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                                    <h:outputLabel for="itemImageCaption" value="If you'd like, provide a caption for your item image:" >
+                                        <h:inputText  id="itemImageCaption" value="#{image.itemImageCaption}" size="50" maxlength="50" style="margin-left:10px"/>
+                                    </h:outputLabel>
                                 </div>
+                            </h:column>
+                        </h:dataTable>
+                    </div>
 
-                                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-                                    <div style="margin:20px;float:right;" >
-                                        <a onclick="ValdateThenShowReview();" style="color:crimson;font-style:italic">Review Registration</a>
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin:10px;float:right;" >
+                            <a onclick="showBLegal();" style="color:crimson;font-style:italic"  >Continue to 'Good Faith'</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="form_monetary" class="contact_information" >
+
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.username}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                        </div>
+                    </div>       
+
+                    <table class="personal">
+                        <tr>
+                            <td>
+                                <div style="display:inline-table;margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="forFree" value="For Free?"  >
+                                        <h:selectOneRadio id="forFree" value="#{ll.forFree}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    &nbsp;
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
+                                        <h:selectOneRadio id="smallFee" value="#{ll.smallFee}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
+                                        <h:inputText id="smallFeeAmount" value="#{ll.smallFeeAmount}" />
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="availableForPurchase" value="Item may be available for small purchase amount?:"  >
+                                        <h:selectOneRadio id="availableForPurchase" value="#{ll.availableForPurchase}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
+                                        <h:inputText id="availableForPurchaseAmount" value="#{ll.availableForPurchaseAmount}" />
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="availableForDonation" value="Item may be available for donation?:"  >
+                                        <h:selectOneRadio id="availableForDonation" value="#{ll.availableForDonation}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="donateAnonymous" value="If yes, would you like to anonymously donate?:"  >
+                                        <h:selectOneRadio id="donateAnonymous" value="#{ll.donateAnonymous}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="trade" value="Would you be interesting in trading?:"  >
+                                        <h:selectOneRadio id="trade" value="#{ll.trade}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+
+
+                                </div></td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="tradeItem" value="If yes, what would you like in exchange?" >
+                                        <h:inputText id="tradeItem" value="#{ll.tradeItem}"  />
+
+                                    </h:outputLabel>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="securityDeposit" value="Do you require a security deposit?:"  >
+                                        <h:selectOneRadio id="securityDeposit" value="#{ll.securityDeposit}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="securityDepositAmount" value="If yes, please provide the security deposit amount:" >
+                                        <h:inputText id="securityDepositAmount" value="#{ll.securityDepositAmount}" />
+                                        <span class="security_deposit_amount_error">&nbsp;</span>
+                                    </h:outputLabel>
+                                </div></td>
+                        </tr>
+                    </table>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a onclick="showDuration();" style="color:crimson;font-style:italic"  >Continue to 'Terms of Lending: Duration'</a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="form_duration" class="contact_information" >
+
+                    <div  class="div_p" id="menu_item_7" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Terms of Lending: Duration..." />
+                            <a href="#menu_item_8" class="right_div" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
+                        </div>
+                    </div>    
+
+                    <div style="float:left;width:33%;margin-left:25px;">
+
+
+                        <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  >
+                            <h:selectOneRadio id="agreedNumberOfDays" value="#{ll.agreedNumberOfDays}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+
+                    </div>
+
+
+                    <div style="float:left;">
+                        <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:"  >
+                            <h:selectOneRadio id="agreedNumberOfHours" value="#{ll.agreedNumberOfHours}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+
+
+
+
+                    </div>
+                    <div style="float:left;margin-left:40px;">
+
+                        <h:outputLabel for="indefiniteDuration" value="Indefinite?"  >
+                            <h:selectOneRadio id="indefiniteDuration" value="#{ll.indefiniteDuration}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+
+
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a href="#menu_item_8" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="form_conditions" class="contact_information" >
+
+                    <div  class="div_p" id="menu_item_8" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Terms of Lending: Conditions..." />
+                            <a href="#menu_item_9" class="right_div" onclick="showLegal();">Continue to 'Good Faith'</a>
+                        </div>
+                    </div>    
+
+                    <table class="personal" >
+                        <tr>
+                            <td style="vertical-align:top;">
+                                <div style="margin-left:25px;margin-top:5px;">
+
+                                    <h:outputLabel for="presentDuringBorrowingPeriod" value="Would you like to be present during borrowing period?"  >
+                                        <h:selectOneRadio id="presentDuringBorrowingPeriod" value="#{ll.presentDuringBorrowingPeriod}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td style="vertical-align:top;">
+
+                                <div style="display:block;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
+                                    <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+
+                                        <h:outputLabel for="entirePeriod" value="During the entire lending period?:"  >
+                                            <h:selectOneRadio id="entirePeriod" value="#{ll.entirePeriod}" layout='lineDirection'>
+                                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                <f:selectItem itemValue="0" itemLabel="No" />	
+                                            </h:selectOneRadio>    
+                                        </h:outputLabel>
+
+                                    </div>
+                                    <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+
+                                        <h:outputLabel for="partialPeriod" value="During lending period partially?:"  >
+                                            <h:selectOneRadio id="partialPeriod" value="#{ll.partialPeriod}" layout='lineDirection'>
+                                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                <f:selectItem itemValue="0" itemLabel="No" />	
+                                            </h:selectOneRadio>    
+                                        </h:outputLabel>
+
                                     </div>
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="provideProperUseTraining" value="Would you like to provide item proper-use training?"  >
+                                        <h:selectOneRadio id="provideProperUseTraining" value="#{ll.provideProperUseTraining}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
 
-                            </div>
+                                </div>
+                            </td>
+                            <td style="vertical-align:top;">
+                                <div style="margin-left:15px;margin-top:5px;">
+                                    <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
+                                        <h:inputTextarea id="specificConditions"  value="#{ll.specificConditions}"  cols="40" rows="10" />
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a href="#menu_item_9" onclick="showLegal();">Continue to 'Good Faith'</a>
                         </div>
+                    </div>
 
-                        </h:form>
-                        </ui:define>
-                        <ui:define name="footer"  >
-                            <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
-                        </ui:define>
-                        </ui:composition>
+                </div>
+
+                <div id="form_legal" class="contact_information" >
+
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+                        <p >
+                            Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
+                        </p>
+
+                        <p >
+                            Once a borrower or lender has been introduced, Echo Market will play no mediating role in that event.
+                        </p>
+
+                        <p >
+                            In the aftermath of that event, Echo Market will offer a 'Satisfaction Survey' to both the borrower and the lender.
+                            If satisfaction is found poor, Echo Market will then seek more information to determine the continuance of either the borrower or lender participation.
+                        </p>
+
+                        <p >
+                            Otherwise, thanks for seeking to borrow with Echo Market.  All the Very Best!
+                        </p>
+                    </div>
+
+                    <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
+                        <ul >
+                            <li style="margin:5px;">
+                                <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill" ><span class="required_fields">*</span>
+                                    <h:selectOneRadio id="goodwill"  value="#{ll.goodwill}"  >
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>                                     
+                                <span class="error-message" id="goodwill_span" ></span>
+                            </li>
+                            <li style="margin:5px;">
+                                <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore"  ><span class="required_fields">*</span>
+                                    <h:selectOneRadio  id="age18OrMore" value="#{ll.age18OrMore}" required="#{ll.age18OrMore == 1}" >
+                                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                                        <f:selectItem itemValue="0" itemLabel="No" />	
+                                    </h:selectOneRadio>    
+                                </h:outputLabel>                                     
+                                <span class="error-message" id="age18OrMore_span" ></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a onclick="ValdateThenShowReview();" style="color:crimson;font-style:italic">Review Registration</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+    <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+    </ui:define>
+</ui:composition>
 
 
