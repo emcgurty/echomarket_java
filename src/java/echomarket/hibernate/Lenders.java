@@ -44,7 +44,7 @@ public class Lenders implements java.io.Serializable {
     private String borrowerContactByOtherSocialMedia;
     private String borrowerContactByOtherSocialMediaAccess;
     private Integer BComesToWhichAddress;
-    private Integer meetBorrowerAtAgreedL2b;
+    private Integer meetBorrowerAtAgreedL2B;
     private Integer willDeliverToBorrowerPreferredL2b;
     private Integer thirdPartyPresenceL2b;
     private Integer lenderThirdPartyChoiceL2b;
@@ -147,7 +147,7 @@ public class Lenders implements java.io.Serializable {
         this.borrowerContactByOtherSocialMedia = borrowerContactByOtherSocialMedia;
         this.borrowerContactByOtherSocialMediaAccess = borrowerContactByOtherSocialMediaAccess;
         this.BComesToWhichAddress = BComesToWhichAddress;
-        this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
+        this.meetBorrowerAtAgreedL2B = meetBorrowerAtAgreedL2b;
         this.willDeliverToBorrowerPreferredL2b = willDeliverToBorrowerPreferredL2b;
         this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
         this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
@@ -425,11 +425,11 @@ public class Lenders implements java.io.Serializable {
     }
 
     public Integer getMeetBorrowerAtAgreedL2b() {
-        return this.meetBorrowerAtAgreedL2b;
+        return this.meetBorrowerAtAgreedL2B;
     }
 
-    public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2b) {
-        this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
+    public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2B) {
+        this.meetBorrowerAtAgreedL2B = meetBorrowerAtAgreedL2B;
     }
 
     public Integer getWillDeliverToBorrowerPreferredL2b() {
