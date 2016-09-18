@@ -64,7 +64,7 @@ public class LenderBean extends AbstractBean implements Serializable {
     private String borrowerContactByOtherSocialMedia;
     private String borrowerContactByOtherSocialMediaAccess;
     private Integer BComesToWhichAddress;
-    private Integer meetBorrowerAtAgreedL2b;
+    private Integer meetBorrowerAtAgreedL2B;
     private Integer willDeliverToBorrowerPreferredL2b;
     private Integer thirdPartyPresenceL2b;
     private Integer lenderThirdPartyChoiceL2b;
@@ -1334,14 +1334,14 @@ public class LenderBean extends AbstractBean implements Serializable {
      * @return the meetBorrowerAtAgreedL2b
      */
     public Integer getMeetBorrowerAtAgreedL2b() {
-        return meetBorrowerAtAgreedL2b;
+        return meetBorrowerAtAgreedL2B;
     }
 
     /**
      * @param meetBorrowerAtAgreedL2b the meetBorrowerAtAgreedL2b to set
      */
     public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2b) {
-        this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
+        this.meetBorrowerAtAgreedL2B = meetBorrowerAtAgreedL2b;
     }
 
     /**
