@@ -112,8 +112,8 @@
         <property name="thirdPartyPresenceB2l" type="java.lang.Integer">
             <column name="thirdPartyPresenceB2L"/>
         </property>
-        <property name="lenderThirdPartyChoiceB2l" type="int">
-            <column name="lenderThirdPartyChoiceB2L" not-null="true"/>
+        <property name="lenderThirdPartyChoiceB2l" type="java.lang.Integer">
+            <column name="lenderThirdPartyChoiceB2L" />
         </property>
         <property name="agreedThirdPartyChoiceB2l" type="java.lang.Integer">
             <column name="agreedThirdPartyChoiceB2L"/>
