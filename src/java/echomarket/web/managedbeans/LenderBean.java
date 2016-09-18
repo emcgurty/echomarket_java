@@ -64,16 +64,16 @@ public class LenderBean extends AbstractBean implements Serializable {
     private String borrowerContactByOtherSocialMedia;
     private String borrowerContactByOtherSocialMediaAccess;
     private Integer BComesToWhichAddress;
-    private Integer meetBorrowerAtAgreedL2B;
+    private Integer meetBorrowerAtAgreedL2b;
     private Integer willDeliverToBorrowerPreferredL2b;
     private Integer thirdPartyPresenceL2b;
+    private Integer lenderThirdPartyChoiceB2l;
     private Integer lenderThirdPartyChoiceL2b;
     private Integer agreedThirdPartyChoiceL2b;
     private Integer BReturnsToWhichAddress;
     private Integer meetBorrowerAtAgreedB2l;
     private Integer willPickUpPreferredLocationB2l;
     private Integer thirdPartyPresenceB2l;
-    private int lenderThirdPartyChoiceB2l;
     private Integer agreedThirdPartyChoiceB2l;
     private Integer borrowerChoice;
     private Integer categoryId;
@@ -182,7 +182,7 @@ public class LenderBean extends AbstractBean implements Serializable {
                 getDisplayLenderAddress(), getDisplayLenderAlternativeAddress(), getHomePhone(),getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(), 
                 getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(), 
                 getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(), 
-                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2B(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
+                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
                 getLenderThirdPartyChoiceL2b(), getAgreedThirdPartyChoiceL2b(), getBReturnsToWhichAddress(), getMeetBorrowerAtAgreedB2l(), getWillPickUpPreferredLocationB2l(),  getThirdPartyPresenceB2l(), 
                 getLenderThirdPartyChoiceB2l(), getAgreedThirdPartyChoiceB2l(), getBorrowerChoice(), getCategoryId(), getOtherItemCategory(), getItemModel(),  getItemDescription(), getItemCount(), getForFree(), 
                 getAvailableForPurchase(), getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(), 
@@ -340,7 +340,7 @@ public class LenderBean extends AbstractBean implements Serializable {
                 getDisplayLenderAddress(), getDisplayLenderAlternativeAddress(), getHomePhone(),getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(), 
                 getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(), 
                 getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(), 
-                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2B(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
+                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
                 getLenderThirdPartyChoiceL2b(), getAgreedThirdPartyChoiceL2b(), getBReturnsToWhichAddress(), getMeetBorrowerAtAgreedB2l(), getWillPickUpPreferredLocationB2l(),  getThirdPartyPresenceB2l(), 
                 getLenderThirdPartyChoiceB2l(), getAgreedThirdPartyChoiceB2l(), getBorrowerChoice(), getCategoryId(), getOtherItemCategory(), getItemModel(),  getItemDescription(), getItemCount(), getForFree(), 
                 getAvailableForPurchase(), getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(), 
@@ -1331,49 +1331,7 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     
-    /**
-     * @return the willDeliverToBorrowerPreferredL2b
-     */
-    public Integer getWillDeliverToBorrowerPreferredL2b() {
-        return willDeliverToBorrowerPreferredL2b;
-    }
-
-    /**
-     * @param willDeliverToBorrowerPreferredL2b the willDeliverToBorrowerPreferredL2b to set
-     */
-    public void setWillDeliverToBorrowerPreferredL2b(Integer willDeliverToBorrowerPreferredL2b) {
-        this.willDeliverToBorrowerPreferredL2b = willDeliverToBorrowerPreferredL2b;
-    }
-
-    /**
-     * @return the thirdPartyPresenceL2b
-     */
-    public Integer getThirdPartyPresenceL2b() {
-        return thirdPartyPresenceL2b;
-    }
-
-    /**
-     * @param thirdPartyPresenceL2b the thirdPartyPresenceL2b to set
-     */
-    public void setThirdPartyPresenceL2b(Integer thirdPartyPresenceL2b) {
-        this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
-    }
-
-    /**
-     * @return the lenderThirdPartyChoiceL2b
-     */
-    public Integer getLenderThirdPartyChoiceL2b() {
-        return lenderThirdPartyChoiceL2b;
-    }
-
-    /**
-     * @param lenderThirdPartyChoiceL2b the lenderThirdPartyChoiceL2b to set
-     */
-    public void setLenderThirdPartyChoiceL2b(Integer lenderThirdPartyChoiceL2b) {
-        this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
-    }
-
-    /**
+       /**
      * @return the agreedThirdPartyChoiceL2b
      */
     public Integer getAgreedThirdPartyChoiceL2b() {
@@ -1441,20 +1399,6 @@ public class LenderBean extends AbstractBean implements Serializable {
      */
     public void setThirdPartyPresenceB2l(Integer thirdPartyPresenceB2l) {
         this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
-    }
-
-    /**
-     * @return the lenderThirdPartyChoiceB2l
-     */
-    public int getLenderThirdPartyChoiceB2l() {
-        return lenderThirdPartyChoiceB2l;
-    }
-
-    /**
-     * @param lenderThirdPartyChoiceB2l the lenderThirdPartyChoiceB2l to set
-     */
-    public void setLenderThirdPartyChoiceB2l(int lenderThirdPartyChoiceB2l) {
-        this.lenderThirdPartyChoiceB2l = lenderThirdPartyChoiceB2l;
     }
 
     /**
@@ -1838,15 +1782,71 @@ public class LenderBean extends AbstractBean implements Serializable {
     /**
      * @return the meetBorrowerAtAgreedL2B
      */
-    public Integer getMeetBorrowerAtAgreedL2B() {
-        return meetBorrowerAtAgreedL2B;
+    public Integer getMeetBorrowerAtAgreedL2b() {
+        return meetBorrowerAtAgreedL2b;
     }
 
     /**
      * @param meetBorrowerAtAgreedL2B the meetBorrowerAtAgreedL2B to set
      */
-    public void setMeetBorrowerAtAgreedL2B(Integer meetBorrowerAtAgreedL2B) {
-        this.meetBorrowerAtAgreedL2B = meetBorrowerAtAgreedL2B;
+    public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2B) {
+        this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2B;
+    }
+
+    /**
+     * @return the willDeliverToBorrowerPreferredL2B
+     */
+    public Integer getWillDeliverToBorrowerPreferredL2b() {
+        return willDeliverToBorrowerPreferredL2b;
+    }
+
+    /**
+     * @param willDeliverToBorrowerPreferredL2B the willDeliverToBorrowerPreferredL2B to set
+     */
+    public void setWillDeliverToBorrowerPreferredL2b(Integer willDeliverToBorrowerPreferredL2B) {
+        this.willDeliverToBorrowerPreferredL2b = willDeliverToBorrowerPreferredL2B;
+    }
+
+    /**
+     * @return the thirdPartyPresenceL2b
+     */
+    public Integer getThirdPartyPresenceL2b() {
+        return thirdPartyPresenceL2b;
+    }
+
+    /**
+     * @param thirdPartyPresenceL2b the thirdPartyPresenceL2b to set
+     */
+    public void setThirdPartyPresenceL2b(Integer thirdPartyPresenceL2b) {
+        this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
+    }
+
+    /**
+     * @return the lenderThirdPartyChoiceB2l
+     */
+    public Integer getLenderThirdPartyChoiceB2l() {
+        return lenderThirdPartyChoiceB2l;
+    }
+
+    /**
+     * @param lenderThirdPartyChoiceB2l the lenderThirdPartyChoiceB2l to set
+     */
+    public void setLenderThirdPartyChoiceB2l(Integer lenderThirdPartyChoiceB2l) {
+        this.lenderThirdPartyChoiceB2l = lenderThirdPartyChoiceB2l;
+    }
+
+    /**
+     * @return the lenderThirdPartyChoiceL2b
+     */
+    public Integer getLenderThirdPartyChoiceL2b() {
+        return lenderThirdPartyChoiceL2b;
+    }
+
+    /**
+     * @param lenderThirdPartyChoiceL2b the lenderThirdPartyChoiceL2b to set
+     */
+    public void setLenderThirdPartyChoiceL2b(Integer lenderThirdPartyChoiceL2b) {
+        this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
     }
 
  
