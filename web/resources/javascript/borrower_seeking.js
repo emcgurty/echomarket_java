@@ -17,11 +17,13 @@ jQuery(document).ready(function ($) {
     findContactAddressValue(contactAddressCheck);
     function findContactAddressValue(cad) {
         var foundValue = 0;
+        var y_n = 0;
         for (var i = 0; i < cad.length; i++) {
             var id = cad[i].id;
             if (cad[i].checked == true) {
                 if (id.includes('useWhichContactAddress')) {
-                    if ((id.includes('1')) || (id.includes('2'))) {
+                    y_n = $(this).val();
+                    if ((y_n == 1) || (y_n == 2)) {
                         $("div[id$='buildAlternativeAddress']").css("display", "block");
                         foundValue++;
                     }
@@ -29,13 +31,33 @@ jQuery(document).ready(function ($) {
 
                 if (id.includes('borrowerContactByEmail')) {
 
-                    if ((id.includes('1')) || (id.includes('2'))) {
+                    y_n = $(this).val();
+                    if ((y_n == 1) || (y_n == 2)) {
                         $("div#emailAlternative").css("display", "block");
 
                         foundValue++;
                     }
                 }
-                if (foundValue == 2) {
+                if (id.includes('thirdPartyPresenceL2b')) {
+                    y_n = $(this).val();
+                    if (y_n == 1) {
+                        $("div#thirdPartyPresenceL2BGroup").css("display", "block");
+
+                        foundValue++;
+                    }
+                }
+                if (id.includes('thirdPartyPresenceB2l')) {
+                    y_n = $(this).val();
+                    if (y_n == 1) {
+                        $("div#thirdPartyPresenceB2lGroup").css("display", "block");
+
+                        foundValue++;
+                    }
+                }
+
+
+
+                if (foundValue == 4) {
                     break;
                 }
             }
@@ -101,18 +123,36 @@ jQuery(document).ready(function ($) {
         var y_n = null;
         var getOrgNameVal = null;
         if (this.id.includes('useWhichContactAddress')) {
-            if ((this.id.includes('1')) || (this.id.includes('2'))) {
+            y_n = $(this).val();
+            if ((y_n == 1) || (y_n == 2)) {
+
 
                 $("div#buildAlternativeAddress").css("display", "block");
             } else {
                 $("div#buildAlternativeAddress").css("display", "none");
             }
         } else if (this.id.includes('borrowerContactByEmail')) {
-            if ((this.id.includes('1')) || (this.id.includes('2'))) {
+            y_n = $(this).val();
+            if ((y_n == 1) || (y_n == 2)) {
+
 
                 $("div#emailAlternative").css("display", "block");
             } else {
                 $("div#emailAlternative").css("display", "none");
+            }
+        } else if (this.id.includes('thirdPartyPresenceL2b')) {
+            y_n = $(this).val();
+            if (y_n == 1) {
+                $("div#thirdPartyPresenceL2BGroup").css("display", "block");
+            } else {
+                $("div#thirdPartyPresenceL2BGroup").css("display", "none");
+            }
+        } else if (this.id.includes('thirdPartyPresenceB2l')) {
+            y_n = $(this).val();
+            if (y_n == 1) {
+                $("div#thirdPartyPresenceB2lGroup").css("display", "block");
+            } else {
+                $("div#thirdPartyPresenceB2lGroup").css("display", "none");
             }
         } else if (this.id.includes('displayBorrowerOrganizationName')) {
             y_n = $(this).val();
@@ -134,7 +174,7 @@ jQuery(document).ready(function ($) {
             try {
                 var getHomePhone = $("input[class='homePhone']").val();
             } catch (err) {
-                
+
             }
 
             if ((y_n == 1) && (getHomePhone == "")) {
@@ -149,7 +189,7 @@ jQuery(document).ready(function ($) {
             try {
                 var getCellPhone = $("input[class='cellPhone']").val();
             } catch (err) {
-                
+
             }
 
             if ((y_n == 1) && (getCellPhone == "")) {
@@ -164,7 +204,7 @@ jQuery(document).ready(function ($) {
             try {
                 var getAlternativePhone = $("input[class='alternativePhone']").val();
             } catch (err) {
-                
+
             }
 
             if ((y_n == 1) && (getAlternativePhone == "")) {
@@ -314,12 +354,12 @@ function validateItem() {
         item_id = getChildID(getItemSelect[i].id);
         item_value = getItemSelect[i].value;
 //        if (item_id.includes('itemConditionId')) {
-            if (item_value == -2) {
-                
-                $("span#" + item_id + ".error-message").css("visibility", "visible");
-                $("span#" + item_id + ".error-message").text("Please make a selection.");
-                return_value = false;
-            }
+        if (item_value == -2) {
+
+            $("span#" + item_id + ".error-message").css("visibility", "visible");
+            $("span#" + item_id + ".error-message").text("Please make a selection.");
+            return_value = false;
+        }
     }
 
     return return_value;
@@ -451,7 +491,7 @@ function showItem() {
 }
 
 function showBorrowersContactPreferences() {
-    
+
     var returnResult = ValidateContactInformation();
     if (returnResult == true) {
         displayPhone();
@@ -556,8 +596,8 @@ function ValidateContactInformation() {
         uid = getChildID(this.id);
         this_class = $(this).attr("class");
         if (this.id.includes('contactDescribeId')) {
-                cdi = this.value;
-                foundComponent++;
+            cdi = this.value;
+            foundComponent++;
         } else if ((this.id == 'countryId') && (this_class == 'primary')) {
             countryId = this.value;
             //alert(countryId);
@@ -598,15 +638,15 @@ function ValidateContactInformation() {
         }
 
     });
-    
+
     if ((cdi == 100) && (ocdi == '')) {
         $("span#otherDescribeYourself.error-message").css("visibility", "visible");
         $("span#otherDescribeYourself.error-message").text("Please provide an 'Other' description");
         returnValue = false;
-    } 
-    
-    if (cdi == -2)  {
-    
+    }
+
+    if (cdi == -2) {
+
         $("span#contactDescribeId.error-message").css("visibility", "visible");
         $("span#contactDescribeId.error-message").text("Please make a selection");
         returnValue = false;
