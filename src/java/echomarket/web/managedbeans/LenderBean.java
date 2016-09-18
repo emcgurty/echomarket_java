@@ -182,7 +182,7 @@ public class LenderBean extends AbstractBean implements Serializable {
                 getDisplayLenderAddress(), getDisplayLenderAlternativeAddress(), getHomePhone(),getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(), 
                 getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(), 
                 getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(), 
-                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
+                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2B(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
                 getLenderThirdPartyChoiceL2b(), getAgreedThirdPartyChoiceL2b(), getBReturnsToWhichAddress(), getMeetBorrowerAtAgreedB2l(), getWillPickUpPreferredLocationB2l(),  getThirdPartyPresenceB2l(), 
                 getLenderThirdPartyChoiceB2l(), getAgreedThirdPartyChoiceB2l(), getBorrowerChoice(), getCategoryId(), getOtherItemCategory(), getItemModel(),  getItemDescription(), getItemCount(), getForFree(), 
                 getAvailableForPurchase(), getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(), 
@@ -340,7 +340,7 @@ public class LenderBean extends AbstractBean implements Serializable {
                 getDisplayLenderAddress(), getDisplayLenderAlternativeAddress(), getHomePhone(),getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(), 
                 getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(), 
                 getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(), 
-                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
+                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2B(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
                 getLenderThirdPartyChoiceL2b(), getAgreedThirdPartyChoiceL2b(), getBReturnsToWhichAddress(), getMeetBorrowerAtAgreedB2l(), getWillPickUpPreferredLocationB2l(),  getThirdPartyPresenceB2l(), 
                 getLenderThirdPartyChoiceB2l(), getAgreedThirdPartyChoiceB2l(), getBorrowerChoice(), getCategoryId(), getOtherItemCategory(), getItemModel(),  getItemDescription(), getItemCount(), getForFree(), 
                 getAvailableForPurchase(), getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(), 
@@ -1330,20 +1330,7 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.BComesToWhichAddress = BComesToWhichAddress;
     }
 
-    /**
-     * @return the meetBorrowerAtAgreedL2b
-     */
-    public Integer getMeetBorrowerAtAgreedL2b() {
-        return meetBorrowerAtAgreedL2B;
-    }
-
-    /**
-     * @param meetBorrowerAtAgreedL2b the meetBorrowerAtAgreedL2b to set
-     */
-    public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2b) {
-        this.meetBorrowerAtAgreedL2B = meetBorrowerAtAgreedL2b;
-    }
-
+    
     /**
      * @return the willDeliverToBorrowerPreferredL2b
      */
@@ -1846,6 +1833,20 @@ public class LenderBean extends AbstractBean implements Serializable {
      */
     public void setPublicDisplayAlternativePhone(Integer publicDisplayAlternativePhone) {
         this.publicDisplayAlternativePhone = publicDisplayAlternativePhone;
+    }
+
+    /**
+     * @return the meetBorrowerAtAgreedL2B
+     */
+    public Integer getMeetBorrowerAtAgreedL2B() {
+        return meetBorrowerAtAgreedL2B;
+    }
+
+    /**
+     * @param meetBorrowerAtAgreedL2B the meetBorrowerAtAgreedL2B to set
+     */
+    public void setMeetBorrowerAtAgreedL2B(Integer meetBorrowerAtAgreedL2B) {
+        this.meetBorrowerAtAgreedL2B = meetBorrowerAtAgreedL2B;
     }
 
  
