@@ -451,8 +451,7 @@ function showItem() {
 }
 
 function showBorrowersContactPreferences() {
-    alert("asdas");
-
+    
     var returnResult = ValidateContactInformation();
     if (returnResult == true) {
         displayPhone();
