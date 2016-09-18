@@ -316,7 +316,7 @@
                     <div  class="div_p" id="menu_item_2" >
                         <div style="margin:10px;" >
                             <h:outputText value="Contact Preferences ...Choose at least one..." />
-                            <a href="#menu_item_3" class="right_div" onclick="showItem()();">Continue to 'The Item to Borrow'</a>
+                            <a href="#menu_item_3" class="right_div" onclick="showLenderToBorrower()();">Continue to 'Transfer: Lender to Borrower'</a>
                         </div>
                     </div>
 
@@ -578,7 +578,7 @@
                     <div  class="div_p" id="menu_item_3" >
                         <div style="margin:10px;" >
                             <h:outputText value="Item Transfer Preferences from Lender to Borrowers..." />
-                            <a href="#menu_item_4" class="right_div" onclick="showBorrowerToLender()();">Continue to 'Transfer: Borrower to Lender'</a>
+                            <a href="#menu_item_4" class="right_div" onclick="showBorrowerToLender()();">Continue to 'Transfer: Borrower Return to Lender'</a>
                         </div>
                     </div>
 
@@ -603,8 +603,8 @@
                     </div>
 
                     <div style="margin-left:25px;margin-top:5px;float:left;">                    
-                        <h:outputLabel for="meetBorrowerAtAgreedL2B" value="Will meet with borrower at an agreed location?:"  >
-                            <h:selectOneRadio id="meetBorrowerAtAgreedL2B" value="#{ll.meetBorrowerAtAgreedL2B}" >
+                        <h:outputLabel for="meetBorrowerAtAgreedL2b" value="Will meet with borrower at an agreed location?:"  >
+                            <h:selectOneRadio id="meetBorrowerAtAgreedL2b" value="#{ll.meetBorrowerAtAgreedL2b}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio>    
@@ -612,8 +612,8 @@
                     </div>
 
                     <div style="margin-left:25px;margin-top:5px;float:left;">                    
-                        <h:outputLabel for="willDeliverToBorrowerPreferredL2B" value="Will deliver to borrower preferred location?:"  >
-                            <h:selectOneRadio id="willDeliverToBorrowerPreferredL2B" value="#{ll.willDeliverToBorrowerPreferredL2B}" >
+                        <h:outputLabel for="willDeliverToBorrowerPreferredL2b" value="Will deliver to borrower preferred location?:"  >
+                            <h:selectOneRadio id="willDeliverToBorrowerPreferredL2b" value="#{ll.willDeliverToBorrowerPreferredL2b}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio>    
@@ -621,8 +621,8 @@
                     </div>
 
                     <div style="margin-left:25px;margin-top:5px;float:left;">                    
-                        <h:outputLabel for="thirdPartyPresenceL2B" value="Would you like a third-party present during transfer to borrower?:"  >
-                            <h:selectOneRadio id="thirdPartyPresenceL2B" value="#{ll.thirdPartyPresenceL2B}" >
+                        <h:outputLabel for="thirdPartyPresenceL2b" value="Would you like a third-party present during transfer to borrower?:"  >
+                            <h:selectOneRadio id="thirdPartyPresenceL2b" value="#{ll.thirdPartyPresenceL2b}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio>    
@@ -631,14 +631,14 @@
 
 
                     <div id="thirdPartyPresenceL2BGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
-                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceL2B">
-                            <h:selectOneRadio id="lenderThirdPartyChoiceL2B" value="#{ll.lenderThirdPartyChoiceL2B}" >
+                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceL2b">
+                            <h:selectOneRadio id="lenderThirdPartyChoiceL2b" value="#{ll.lenderThirdPartyChoiceL2b}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio> 
                         </h:outputLabel>
-                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceL2B">
-                            <h:selectOneRadio id="agreedThirdPartyChoiceL2B" value="#{ll.agreedThirdPartyChoiceL2B}" >
+                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceL2b">
+                            <h:selectOneRadio id="agreedThirdPartyChoiceL2b" value="#{ll.agreedThirdPartyChoiceL2b}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio> 
@@ -683,8 +683,8 @@
                             </h:outputLabel>
                         </div>
 
-                        <h:outputLabel for="meetBorrowerAtAgreedB2L" value="Will meet with borrower at an agreed location?:"  >
-                            <h:selectOneRadio id="meetBorrowerAtAgreedB2L" value="#{ll.meetBorrowerAtAgreedB2L}" >
+                        <h:outputLabel for="meetBorrowerAtAgreedB2l" value="Will meet with borrower at an agreed location?:"  >
+                            <h:selectOneRadio id="meetBorrowerAtAgreedB2l" value="#{ll.meetBorrowerAtAgreedB2l}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio>    
@@ -712,14 +712,14 @@
                     </div>
 
                     <div id="thirdPartyPresenceB2lGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
-                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceB2L">
-                            <h:selectOneRadio id="lenderThirdPartyChoiceB2L" value="#{ll.lenderThirdPartyChoiceB2L}" >
+                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceB2l">
+                            <h:selectOneRadio id="lenderThirdPartyChoiceB2l" value="#{ll.lenderThirdPartyChoiceB2l}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio> 
                         </h:outputLabel>
-                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceB2L">
-                            <h:selectOneRadio id="agreedThirdPartyChoiceB2L" value="#{ll.agreedThirdPartyChoiceB2L}" >
+                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceB2l">
+                            <h:selectOneRadio id="agreedThirdPartyChoiceB2l" value="#{ll.agreedThirdPartyChoiceB2l}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio> 
@@ -866,12 +866,12 @@
 
                 <div id="form_monetary" class="contact_information" >
 
-                    <div class="top" >
-                        <div style="margin:10px;margin-top:25px;" >
-                            <h:outputText value="#{userBean.username}: LENDER ITEM REGISTRATION"  />
-                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
+                    <div  class="div_p" id="menu_item_6" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Lending Terms: Monetary" />
+                            <a href="#menu_item_7" class="right_div" onclick="showDuration();">Continue to 'Lending Terms: Duration'</a>
                         </div>
-                    </div>       
+                    </div>
 
                     <table class="personal">
                         <tr>
