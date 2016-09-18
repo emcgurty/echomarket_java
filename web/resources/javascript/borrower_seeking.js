@@ -22,47 +22,42 @@ jQuery(document).ready(function ($) {
             var id = cad[i].id;
             if (cad[i].checked == true) {
                 if (id.includes('useWhichContactAddress')) {
-                    y_n = $(this).val();
-                    if ((y_n == 1) || (y_n == 2)) {
+                    if ((id.includes('1')) || (id.includes('2'))) {
                         $("div[id$='buildAlternativeAddress']").css("display", "block");
                         foundValue++;
                     }
                 }
+            }
+           if (id.includes('borrowerContactByEmail')) {
 
-                if (id.includes('borrowerContactByEmail')) {
+               if ((id.includes('1')) || (id.includes('2'))) {
+                    $("div#emailAlternative").css("display", "block");
 
-                    y_n = $(this).val();
-                    if ((y_n == 1) || (y_n == 2)) {
-                        $("div#emailAlternative").css("display", "block");
-
-                        foundValue++;
-                    }
+                    foundValue++;
                 }
-                if (id.includes('thirdPartyPresenceL2b')) {
-                    y_n = $(this).val();
-                    if (y_n == 1) {
-                        $("div#thirdPartyPresenceL2BGroup").css("display", "block");
+            }
+            if (id.includes('thirdPartyPresenceL2b')) {
+                
+                if (id.includes('0')) {
+                    $("div#thirdPartyPresenceL2BGroup").css("display", "block");
 
-                        foundValue++;
-                    }
+                    foundValue++;
                 }
-                if (id.includes('thirdPartyPresenceB2l')) {
-                    y_n = $(this).val();
-                    if (y_n == 1) {
-                        $("div#thirdPartyPresenceB2lGroup").css("display", "block");
+            }
+            if (id.includes('thirdPartyPresenceB2l')) {
+                if (id.includes('0')) {
+                    $("div#thirdPartyPresenceB2lGroup").css("display", "block");
 
-                        foundValue++;
-                    }
+                    foundValue++;
                 }
+            }
 
-
-
-                if (foundValue == 4) {
-                    break;
-                }
+            if (foundValue == 4) {
+                break;
             }
         }
     }
+    
 
 
 
@@ -142,6 +137,7 @@ jQuery(document).ready(function ($) {
             }
         } else if (this.id.includes('thirdPartyPresenceL2b')) {
             y_n = $(this).val();
+            
             if (y_n == 1) {
                 $("div#thirdPartyPresenceL2BGroup").css("display", "block");
             } else {
@@ -149,6 +145,7 @@ jQuery(document).ready(function ($) {
             }
         } else if (this.id.includes('thirdPartyPresenceB2l')) {
             y_n = $(this).val();
+            
             if (y_n == 1) {
                 $("div#thirdPartyPresenceB2lGroup").css("display", "block");
             } else {
@@ -600,7 +597,7 @@ function ValidateContactInformation() {
             foundComponent++;
         } else if ((this.id == 'countryId') && (this_class == 'primary')) {
             countryId = this.value;
-            //alert(countryId);
+            
             foundComponent++;
         } else if (foundComponent == 2) {
             return false;
