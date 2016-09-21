@@ -231,11 +231,10 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 sb.save(iii);
                 tx.commit();
             } catch (Exception ex) {
-                  Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
-                
-                
-                }
+
+            }
 
         }
 
@@ -253,7 +252,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 sb.update(this.existing_alternative);
                 tx.commit();
             } catch (Exception ex) {
-                  Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
             }
 
@@ -271,7 +270,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             sb.update(this.existing_primary);
             tx.commit();
         } catch (Exception ex) {
-              Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             message(
                     null,
@@ -382,7 +381,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         Addresses ba = (Addresses) padrs.get(0);
         ba.setBorrower_id(getAbstId);
-        
+
         if (sb.isOpen() == false) {
             sb = hib_session();
         }
@@ -1118,7 +1117,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     public List getCurrentBorrower(String bid) {
-
+        System.out.println("getCurrent Borrower Called");
         List result = null;
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
@@ -1132,9 +1131,11 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             e.printStackTrace();
 
         } finally {
-            session = null;
             tx = null;
+            session.close();
+
         }
+
         return result;
     }
 
@@ -1155,8 +1156,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             tx.commit();
         } catch (Exception e) {
         } finally {
-            hib = null;
+
             tx = null;
+            hib.close();
         }
         // Must be just one record.. will error check later..
 
@@ -1228,8 +1230,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } catch (Exception e) {
 
         } finally {
-            hib = null;
             tx = null;
+            hib.close();
         }
 
         Integer size_of_list = result.size();
@@ -1263,8 +1265,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             tx.commit();
         } catch (Exception e) {
         } finally {
-            hib = null;
             tx = null;
+            hib.close();
         }
 
         Integer size_of_list = result.size();
