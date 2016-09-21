@@ -18,7 +18,7 @@
 
             <title>#{bundle.LenderSeeking}</title>
         </h:head>
-        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
+
         <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
 
             <div class="messagecolor">
@@ -30,9 +30,14 @@
             <h:inputSecret id="approved" value="0"   style="display:none;" />
 
             <div id="lender_registration" class="lender_registration" >
-                <ui:include rendered="true" src="lender_header.xhtml" id="LenderHeader"/>
+            <ui:include rendered="true" src="lender_menu.xhtml" id="LenderMenu" /> 
                 <div id="form_contact_information" class="contact_information" >
-
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
                     <div  class="div_p" id="menu_item_1" >
                         <div style="margin:10px;" >
                             <h:outputText value="Lender Information..." />
@@ -312,7 +317,12 @@
 
 
                 <div id="form_borrower_preference" class="contact_information" style="display:block">
-
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
                     <div  class="div_p" id="menu_item_2" >
                         <div style="margin:10px;" >
                             <h:outputText value="Contact Preferences ...Choose at least one..." />
@@ -462,7 +472,7 @@
                                     <f:selectItem itemValue="2" itemLabel="An alternative email." />	
                                     <f:selectItem itemValue="1" itemLabel="Either Email." />
                                     <f:selectItem itemValue="0" itemLabel="Neither Email." />	
-                                    
+
                                 </h:selectOneRadio>    
                             </h:outputLabel>
 
@@ -484,7 +494,7 @@
                     </div>
                     <div style="float:left;margin-left:25px;display:block;" >
                         <div style="margin-left:25px;float:left;display:none;" id="display_homePhone" class="phone" >
-                            <h:outputLabel value="Can lenders call you at your home phone?:"  for="borrowerContactByHomePhone" >
+                            <h:outputLabel value="Can borrowers call you at your home phone?:"  for="borrowerContactByHomePhone" >
                                 <h:selectOneRadio id="borrowerContactByHomePhone" value="#{ll.borrowerContactByHomePhone}"  >
                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                     <f:selectItem itemValue="0" itemLabel="No" />	
@@ -574,7 +584,12 @@
 
 
                 <div id="form_lender_to_borrower" class="contact_information" >
-
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
                     <div  class="div_p" id="menu_item_3" >
                         <div style="margin:10px;" >
                             <h:outputText value="Item Transfer Preferences from Lender to Borrowers..." />
@@ -655,7 +670,12 @@
                 </div>
 
                 <div id="form_borrower_to_lender" class="contact_information" >
-
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
                     <div  class="div_p" id="menu_item_4" >
                         <div style="margin:10px;" >
                             <h:outputText value="Item Transfer: Borrower return to Lender..." />
@@ -738,7 +758,12 @@
                 </div>
 
                 <div id="form_item" class="contact_information" style="display:none;">
-                    <div  class="div_p" id="menu_item_5" >
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div> <div  class="div_p" id="menu_item_5" >
                         <div style="margin:10px;" >
                             <h:outputText value="The Item you would like to lend" />
                             <a href="#menu_item_6" class="right_div" onclick="showMonetary();">Continue to 'Lending Terms: Monetary'</a>
@@ -778,7 +803,7 @@
                         <tr class="even">
                             <td colspan='2'>
                                 <div style="margin-left:25px;margin-top:5px;">
-                                    <h:outputLabel value="#{bundle.BasedOn}"  for="notifyBorrowers" >
+                                    <h:outputLabel value="#{bundle.BasedOnL}"  for="notifyBorrowers" >
                                         <h:selectOneRadio id="notifyBorrowers" value="#{ll.notifyBorrowers}"  >
                                             <f:selectItem itemValue="1" itemLabel="Yes" />
                                             <f:selectItem itemValue="0" itemLabel="No" />	
@@ -865,7 +890,12 @@
                 </div>
 
                 <div id="form_monetary" class="contact_information" >
-
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
                     <div  class="div_p" id="menu_item_6" >
                         <div style="margin:10px;" >
                             <h:outputText value="Lending Terms: Monetary" />
@@ -1012,7 +1042,12 @@
 
                 <div id="form_duration" class="contact_information" >
 
-                    <div  class="div_p" id="menu_item_7" >
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>  <div  class="div_p" id="menu_item_7" >
                         <div style="margin:10px;" >
                             <h:outputText value="Terms of Lending: Duration..." />
                             <a href="#menu_item_8" class="right_div" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
@@ -1066,7 +1101,12 @@
 
                 <div id="form_conditions" class="contact_information" >
 
-                    <div  class="div_p" id="menu_item_8" >
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>   <div  class="div_p" id="menu_item_8" >
                         <div style="margin:10px;" >
                             <h:outputText value="Terms of Lending: Conditions..." />
                             <a href="#menu_item_9" class="right_div" onclick="showLegal();">Continue to 'Good Faith'</a>
@@ -1147,7 +1187,12 @@
 
                 <div id="form_legal" class="contact_information" >
 
-
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
                     <div style="margin-left:25px;margin-top:5px;float:left;">
                         <p >
                             Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
