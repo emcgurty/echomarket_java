@@ -224,6 +224,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 ItemImages iii = (ItemImages) ii.get(0);
                 iii.setId(getId());
                 iii.setBorrower_id(ubean.getUserAction());
+                iii.setLender_id("NA");
                 iii.setImageFileName(ubean.getUserAction() + "_" + getFileName(getImageFileNamePart()));
                 iii.setImageContentType(getImageFileNamePart().getContentType());
                 //ItemImages create_record = new ItemImages(getId(), ubean.getUserAction(), null, getImageFileNamePart().getContentType(), null, null, this.isActive, today_date, null, today_date,  + "_" + getFileName(getImageFileNamePart()), , null);
@@ -330,6 +331,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setId(getId());
             iii.setBorrower_id(getAbstId);
+            iii.setLender_id("NA");
             // Did this becuase graphicImage does not recognize dynmically build attribute library
             iii.setImageFileName(getAbstId + "_" + getFileName(getImageFileNamePart()));
             iii.setImageContentType(getImageFileNamePart().getContentType());
@@ -346,6 +348,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setBorrower_id(getAbstId);
+            iii.setLender_id("NA");
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
@@ -379,6 +382,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         Addresses ba = (Addresses) padrs.get(0);
         ba.setBorrower_id(getAbstId);
+        
         if (sb.isOpen() == false) {
             sb = hib_session();
         }
