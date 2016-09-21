@@ -21,7 +21,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
@@ -177,21 +176,21 @@ public class LenderBean extends AbstractBean implements Serializable {
             e.printStackTrace();
         }
         /// Need to implement onChange Listener to learn if dirty
-        
-        Lenders bb = new Lenders(ubean.getUserAction(), current_user, getContactDescribeId(), getOtherDescribeYourself(), getFirstName(), getMi(), getLastName(), getDisplayLenderName(), 
-                getDisplayLenderAddress(), getDisplayLenderAlternativeAddress(), getHomePhone(),getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(), 
-                getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(), 
-                getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(), 
-                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
-                getLenderThirdPartyChoiceL2b(), getAgreedThirdPartyChoiceL2b(), getBReturnsToWhichAddress(), getMeetBorrowerAtAgreedB2l(), getWillPickUpPreferredLocationB2l(),  getThirdPartyPresenceB2l(), 
-                getLenderThirdPartyChoiceB2l(), getAgreedThirdPartyChoiceB2l(), getBorrowerChoice(), getCategoryId(), getOtherItemCategory(), getItemModel(),  getItemDescription(), getItemCount(), getForFree(), 
-                getAvailableForPurchase(), getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(), 
-                getAgreedNumberOfDays(), getAgreedNumberOfHours(), getIndefiniteDuration(), getPresentDuringBorrowingPeriod(), getEntirePeriod(), getPartialPeriod(), getProvideProperUseTraining(),  
-                getSpecificConditions(), getGoodwill(), getAge18OrMore(), getIsActive(), today_date, null, null, getOrganizationName(), getDisplayLenderOrganizationName(), getApproved(), getNotifyBorrowers(), 
+
+        Lenders bb = new Lenders(ubean.getUserAction(), current_user, getContactDescribeId(), getOtherDescribeYourself(), getFirstName(), getMi(), getLastName(), getDisplayLenderName(),
+                getDisplayLenderAddress(), getDisplayLenderAlternativeAddress(), getHomePhone(), getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
+                getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(),
+                getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(),
+                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(),
+                getLenderThirdPartyChoiceL2b(), getAgreedThirdPartyChoiceL2b(), getBReturnsToWhichAddress(), getMeetBorrowerAtAgreedB2l(), getWillPickUpPreferredLocationB2l(), getThirdPartyPresenceB2l(),
+                getLenderThirdPartyChoiceB2l(), getAgreedThirdPartyChoiceB2l(), getBorrowerChoice(), getCategoryId(), getOtherItemCategory(), getItemModel(), getItemDescription(), getItemCount(), getForFree(),
+                getAvailableForPurchase(), getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(),
+                getAgreedNumberOfDays(), getAgreedNumberOfHours(), getIndefiniteDuration(), getPresentDuringBorrowingPeriod(), getEntirePeriod(), getPartialPeriod(), getProvideProperUseTraining(),
+                getSpecificConditions(), getGoodwill(), getAge18OrMore(), getIsActive(), today_date, null, null, getOrganizationName(), getDisplayLenderOrganizationName(), getApproved(), getNotifyBorrowers(),
                 getReceiveBorrowerNotifications(), getItemConditionId(), getSecurityDepositAmount(), getSecurityDeposit(), getIsCommunity(), null, getComment(), getAdvertiserId());
 
-        sb.update(bb);
         try {
+            sb.update(bb);
             tx.commit();
         } catch (Exception e) {
             System.out.println("Error on Update Lender");
@@ -200,16 +199,19 @@ public class LenderBean extends AbstractBean implements Serializable {
         //// Have to code for case that they remove original picture, and do not replace
         if (sb.isOpen() == false) {
             sb = hib_session();
+        } else {
+            sb.flush();
+            sb.clear();
         }
         if (tx.isActive() == false) {
             tx = sb.beginTransaction();
         }
 
         /// Delete existing image file name record becuase maybe be using same name but had editted
-        String queryString = "from ItemImages where borrower_id = :bid ";
+        String queryString = "from ItemImages where lender_id = :lid ";
 
         result = sb.createQuery(queryString)
-                .setParameter("bid", ubean.getUserAction())
+                .setParameter("lid", ubean.getUserAction())
                 .list();
         tx.commit();
 
@@ -246,7 +248,7 @@ public class LenderBean extends AbstractBean implements Serializable {
             try {
                 SaveUserItemImage(getImageFileNamePart(), ubean.getUserAction());
             } catch (Exception e) {
-                System.out.println("Error in Saving Lender File");;
+                System.out.println("Error in Saving Lender File");
             }
             if (sb.isOpen() == false) {
                 sb = hib_session();
@@ -256,9 +258,10 @@ public class LenderBean extends AbstractBean implements Serializable {
             }
 
             try {
-             ItemImages iii = (ItemImages) ii.get(0);
+                ItemImages iii = (ItemImages) ii.get(0);
                 iii.setId(getId());
                 iii.setLender_id(ubean.getUserAction());
+                iii.setBorrower_id("NA");
                 iii.setImageFileName(ubean.getUserAction() + "_" + getFileName(getImageFileNamePart()));
                 iii.setImageContentType(getImageFileNamePart().getContentType());
                 //ItemImages create_record = new ItemImages(getId(), ubean.getUserAction(), null, getImageFileNamePart().getContentType(), null, null, this.isActive, today_date, null, today_date,  + "_" + getFileName(getImageFileNamePart()), , null);
@@ -306,6 +309,8 @@ public class LenderBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            tx = null;
+            sb.close();
             message(
                     null,
                     "LenderRegistionRecordUpdated",
@@ -335,37 +340,71 @@ public class LenderBean extends AbstractBean implements Serializable {
             System.out.println("Testing inject vs session Map");
             e.printStackTrace();
         }
-        Lenders  bb = new Lenders(getAbstId, current_user, 
-                getContactDescribeId(), getOtherDescribeYourself(), getFirstName(), getMi(), getLastName(), getDisplayLenderName(), 
-                getDisplayLenderAddress(), getDisplayLenderAlternativeAddress(), getHomePhone(),getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(), 
-                getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(), 
-                getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(), 
-                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(), 
-                getLenderThirdPartyChoiceL2b(), getAgreedThirdPartyChoiceL2b(), getBReturnsToWhichAddress(), getMeetBorrowerAtAgreedB2l(), getWillPickUpPreferredLocationB2l(),  getThirdPartyPresenceB2l(), 
-                getLenderThirdPartyChoiceB2l(), getAgreedThirdPartyChoiceB2l(), getBorrowerChoice(), getCategoryId(), getOtherItemCategory(), getItemModel(),  getItemDescription(), getItemCount(), getForFree(), 
-                getAvailableForPurchase(), getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(), 
-                getAgreedNumberOfDays(), getAgreedNumberOfHours(), getIndefiniteDuration(), getPresentDuringBorrowingPeriod(), getEntirePeriod(), getPartialPeriod(), getProvideProperUseTraining(),  
-                getSpecificConditions(), getGoodwill(), getAge18OrMore(), getIsActive(), today_date, today_date, null, getOrganizationName(), getDisplayLenderOrganizationName(), getApproved(), getNotifyBorrowers(), 
-                getReceiveBorrowerNotifications(), getItemConditionId(), getSecurityDepositAmount(), getSecurityDeposit(), getIsCommunity(), null, getComment(), getAdvertiserId());
+        ///  getNine becuase database was unpredictably failing on these fields when null... 
+        Lenders bb;
+        bb = new Lenders(getAbstId, current_user,
+                getContactDescribeId(),
+                getOtherDescribeYourself(),
+                getFirstName(),
+                getMi(),
+                getLastName(),
+                getDisplayLenderName(),
+                getDisplayLenderAddress(),
+                getDisplayLenderAlternativeAddress(),
+                getHomePhone(), getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
+                getPublicDisplayAlternativePhone(), getUseWhichContactAddress(), getEmailAlternative(), getBorrowerContactByEmail(), getBorrowerContactByHomePhone(), getBorrowerContactByCellPhone(), getBorrowerContactByAlternativePhone(),
+                getBorrowerContactByFacebook(), getBorrowerContactByTwitter(), getBorrowerContactByInstagram(), getBorrowerContactByLinkedIn(), getBorrowerContactByOtherSocialMedia(),
+                getBorrowerContactByOtherSocialMediaAccess(), getBComesToWhichAddress(), getMeetBorrowerAtAgreedL2b(), getWillDeliverToBorrowerPreferredL2b(), getThirdPartyPresenceL2b(),
+                getNine(getLenderThirdPartyChoiceL2b()),
+                getNine(getAgreedThirdPartyChoiceL2b()),
+                getNine(getBReturnsToWhichAddress()),
+                getNine(getMeetBorrowerAtAgreedB2l()),
+                getNine(getWillPickUpPreferredLocationB2l()),
+                getNine(getThirdPartyPresenceB2l()),
+                getNine(getLenderThirdPartyChoiceB2l()),
+                getNine(getAgreedThirdPartyChoiceB2l()),
+                getBorrowerChoice(), getCategoryId(),
+                getOtherItemCategory(), getItemModel(), getItemDescription(),
+                getItemCount(),
+                getForFree(),
+                getAvailableForPurchase(),
+                getAvailableForPurchaseAmount(), getSmallFee(), getSmallFeeAmount(), getAvailableForDonation(), getDonateAnonymous(), getTrade(), getTradeItem(),
+                getAgreedNumberOfDays(),
+                getAgreedNumberOfHours(),
+                getIndefiniteDuration(),
+                getPresentDuringBorrowingPeriod(),
+                getEntirePeriod(),
+                getPartialPeriod(),
+                getProvideProperUseTraining(),
+                getSpecificConditions(),
+                getGoodwill(), getAge18OrMore(),
+                getIsActive(), today_date, today_date, null,
+                getOrganizationName(), getDisplayLenderOrganizationName(),
+                getApproved(), getNotifyBorrowers(),
+                getReceiveBorrowerNotifications(),
+                getItemConditionId(), getSecurityDepositAmount(), getSecurityDeposit(), getIsCommunity(), null, getComment(), getAdvertiserId());
 
-        sb.save(bb);
         try {
+            sb.save(bb);
             tx.commit();
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            System.out.println("Error in Saving Lender File");
+            Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         //public Addresses(String id, String lender_id, String borrower_id, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String region, String countryId, String addressType) {
 
         if (getImageFileNamePart() != null) {
             try {
                 SaveUserItemImage(getImageFileNamePart(), getAbstId);
-            } catch (Exception e) {
-                System.out.println("Error in Saving Lender File");;
-
+            } catch (Exception ex) {
+                System.out.println("Error in Saving Lender Image File");
+                Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setId(getId());
             iii.setLender_id(getAbstId);
+            iii.setBorrower_id("NA");
             // Did this becuase graphicImage does not recognize dynmically build attribute library
             iii.setImageFileName(getAbstId + "_" + getFileName(getImageFileNamePart()));
             iii.setImageContentType(getImageFileNamePart().getContentType());
@@ -382,14 +421,20 @@ public class LenderBean extends AbstractBean implements Serializable {
 
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setLender_id(getAbstId);
+            iii.setBorrower_id("NA");
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
             if (tx.isActive() == false) {
                 tx = sb.beginTransaction();
             }
-            sb.save(iii);
-            tx.commit();
+            try {
+                sb.save(iii);
+                tx.commit();
+            } catch (Exception ex) {
+                System.out.println("Error in Saving Lender Image");
+                Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
@@ -407,7 +452,9 @@ public class LenderBean extends AbstractBean implements Serializable {
             try {
                 sb.save(balt);
                 tx.commit();
-            } catch (Exception e) {
+            } catch (Exception ex) {
+                System.out.println("Error in Saving Lender Alternative Address");
+                Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
             }
 
@@ -425,8 +472,12 @@ public class LenderBean extends AbstractBean implements Serializable {
         try {
             sb.save(ba);
             tx.commit();
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            System.out.println("Error in Saving Lender Primary Address");
+            Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            tx = null;
+            sb.close();
             message(
                     null,
                     "LenderRegistionRecordSaved",
@@ -452,7 +503,6 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.organizationName = organizationName;
     }
 
-    
     public String getOtherDescribeYourself() {
         return otherDescribeYourself;
     }
@@ -488,7 +538,6 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.lastName = lastName;
     }
 
-   
     /**
      * @return the homePhone
      */
@@ -566,7 +615,7 @@ public class LenderBean extends AbstractBean implements Serializable {
         return publicDisplayAlternativePhone;
     }
 
-        /**
+    /**
      * @return the categoryId
      */
     public Integer getCategoryId() {
@@ -748,7 +797,6 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.approved = approved;
     }
 
-    
     /**
      * @return the isCommunity
      */
@@ -819,8 +867,6 @@ public class LenderBean extends AbstractBean implements Serializable {
     public void setDisplayLenderAlternativeAddress(int displayLenderAlternativeAddress) {
         this.displayLenderAlternativeAddress = displayLenderAlternativeAddress;
     }
-
-    
 
     private static Date hold_date() {
         Date hold_date = new Date();
@@ -913,48 +959,56 @@ public class LenderBean extends AbstractBean implements Serializable {
 
     public List getCurrentLender(String bid) {
 
+        System.out.println("called");
         List result = null;
+//        if (ubean.getActionTaken() == null) {
+
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
         String query = null;
         try {
             query = "FROM Lenders as b WHERE b.user_id = '" + bid + "'";
             result = session.createQuery(query).list();
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
-            System.out.println("Error in getCurrentB");
+            System.out.println("Error in getCurrentL");
             e.printStackTrace();
 
         } finally {
-            session = null;
-            tx = null;
+            //tx = null;
+            session.close();
+            
+//            ubean.setActionTaken(result);
         }
+//        }
         return result;
     }
 
-        public String getCurrentEditRecord(String bid) {
+    public String getCurrentEditRecord(String lid) {
 
         List result = null;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         String[] results = null;
         Lenders[] a_array = null;
-        String queryString = "from Lenders where lender_id = :bid order by date_created";
-        ubean.setUserAction(bid);
+        String queryString = "from Lenders where lender_id = :lid order by date_created";
+        ubean.setUserAction(lid);
 
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", bid)
+                    .setParameter("lid", lid)
                     .list();
-            tx.commit();
-        } catch (Exception e) {
+            //tx.commit();
+        } catch (Exception ex) {
+            Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            hib = null;
             tx = null;
+            hib.close();
         }
         // Must be just one record.. will error check later..
 
         Lenders to_Array = (Lenders) result.get(0);
+
         this.setContactDescribeId(to_Array.getContactDescribeId());
         this.setOrganizationName(to_Array.getOrganizationName());
         this.setDisplayLenderOrganizationName(to_Array.getDisplayLenderOrganizationName());
@@ -999,9 +1053,44 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.setIsCommunity(to_Array.getIsCommunity());
         this.setComment(to_Array.getComment());
         this.setAdvertiserId(to_Array.getAdvertiserId());
-        this.displayLenderAlternativeAddress = to_Array.getDisplayLenderAlternativeAddress();
+        this.setDisplayLenderAlternativeAddress(to_Array.getDisplayLenderAlternativeAddress());
+        this.setForFree(to_Array.getForFree());
+        this.setAvailableForPurchase(to_Array.getAvailableForPurchase());
+        this.setAvailableForPurchaseAmount(to_Array.getAvailableForPurchaseAmount());
+        this.setSmallFee(to_Array.getSmallFee());
+        this.setSmallFeeAmount(to_Array.getSmallFeeAmount());
+        this.setAvailableForDonation(to_Array.getAvailableForDonation());
+        this.setDonateAnonymous(to_Array.getDonateAnonymous());
+        this.setTrade(to_Array.getTrade());
+        this.setTradeItem(to_Array.getTradeItem());
+        this.setAgreedNumberOfDays(to_Array.getAgreedNumberOfDays());
+        this.setAgreedNumberOfHours(to_Array.getAgreedNumberOfHours());
+        this.setIndefiniteDuration(to_Array.getIndefiniteDuration());
+        this.setPresentDuringBorrowingPeriod(to_Array.getPresentDuringBorrowingPeriod());
+        this.setEntirePeriod(to_Array.getEntirePeriod());
+        this.setPartialPeriod(to_Array.getPartialPeriod());
+        this.setProvideProperUseTraining(to_Array.getProvideProperUseTraining());
+        this.setSpecificConditions(to_Array.getSpecificConditions());
+        this.setSecurityDepositAmount(to_Array.getSecurityDepositAmount());
+        this.setSecurityDeposit(to_Array.getSecurityDeposit());
+        this.setRemoteIp(to_Array.getRemoteIp());
 
-        return "edit_borrower";
+        this.setAgreedThirdPartyChoiceB2l(to_Array.getAgreedThirdPartyChoiceB2l());
+        this.setAgreedThirdPartyChoiceL2b(to_Array.getAgreedThirdPartyChoiceL2b());
+        this.setBorrowerChoice(to_Array.getBorrowerChoice());
+        this.setBorrowerContactByAlternativePhone(to_Array.getBorrowerContactByAlternativePhone());
+        this.setBReturnsToWhichAddress(to_Array.getBReturnsToWhichAddress());
+        this.setLenderThirdPartyChoiceB2l(to_Array.getLenderThirdPartyChoiceB2l());
+        this.setLenderThirdPartyChoiceL2b(to_Array.getLenderThirdPartyChoiceL2b());
+        this.setMeetBorrowerAtAgreedB2l(to_Array.getMeetBorrowerAtAgreedB2l());
+        this.setMeetBorrowerAtAgreedL2b(to_Array.getMeetBorrowerAtAgreedL2b());
+        this.setThirdPartyPresenceB2l(to_Array.getThirdPartyPresenceB2l());
+        this.setThirdPartyPresenceL2b(to_Array.getThirdPartyPresenceL2b());
+        this.setUseWhichContactAddress(to_Array.getUseWhichContactAddress());
+        this.setWillDeliverToBorrowerPreferredL2b(to_Array.getWillDeliverToBorrowerPreferredL2b());
+        this.setWillPickUpPreferredLocationB2l(to_Array.getWillPickUpPreferredLocationB2l());
+
+        return "edit_lender";
 
     }
 
@@ -1012,10 +1101,10 @@ public class LenderBean extends AbstractBean implements Serializable {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
 
-        String queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
+        String queryString = "from Addresses where lender_id = :lid AND address_type = :which";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", ubean.getUserAction())
+                    .setParameter("lid", ubean.getUserAction())
                     .setParameter("which", which)
                     .list();
             tx.commit();
@@ -1049,10 +1138,10 @@ public class LenderBean extends AbstractBean implements Serializable {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         String[] results = null;
-        String queryString = "from ItemImages where borrower_id = :bid ";
+        String queryString = "from ItemImages where lender_id = :lid ";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", ubean.getUserAction())
+                    .setParameter("lid", ubean.getUserAction())
                     .list();
             tx.commit();
         } catch (Exception e) {
@@ -1226,7 +1315,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param borrowerContactByAlternativePhone the borrowerContactByAlternativePhone to set
+     * @param borrowerContactByAlternativePhone the
+     * borrowerContactByAlternativePhone to set
      */
     public void setBorrowerContactByAlternativePhone(Integer borrowerContactByAlternativePhone) {
         this.borrowerContactByAlternativePhone = borrowerContactByAlternativePhone;
@@ -1296,7 +1386,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param borrowerContactByOtherSocialMedia the borrowerContactByOtherSocialMedia to set
+     * @param borrowerContactByOtherSocialMedia the
+     * borrowerContactByOtherSocialMedia to set
      */
     public void setBorrowerContactByOtherSocialMedia(String borrowerContactByOtherSocialMedia) {
         this.borrowerContactByOtherSocialMedia = borrowerContactByOtherSocialMedia;
@@ -1310,7 +1401,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param borrowerContactByOtherSocialMediaAccess the borrowerContactByOtherSocialMediaAccess to set
+     * @param borrowerContactByOtherSocialMediaAccess the
+     * borrowerContactByOtherSocialMediaAccess to set
      */
     public void setBorrowerContactByOtherSocialMediaAccess(String borrowerContactByOtherSocialMediaAccess) {
         this.borrowerContactByOtherSocialMediaAccess = borrowerContactByOtherSocialMediaAccess;
@@ -1330,8 +1422,7 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.BComesToWhichAddress = BComesToWhichAddress;
     }
 
-    
-       /**
+    /**
      * @return the agreedThirdPartyChoiceL2b
      */
     public Integer getAgreedThirdPartyChoiceL2b() {
@@ -1381,7 +1472,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param willPickUpPreferredLocationB2l the willPickUpPreferredLocationB2l to set
+     * @param willPickUpPreferredLocationB2l the willPickUpPreferredLocationB2l
+     * to set
      */
     public void setWillPickUpPreferredLocationB2l(Integer willPickUpPreferredLocationB2l) {
         this.willPickUpPreferredLocationB2l = willPickUpPreferredLocationB2l;
@@ -1605,7 +1697,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param presentDuringBorrowingPeriod the presentDuringBorrowingPeriod to set
+     * @param presentDuringBorrowingPeriod the presentDuringBorrowingPeriod to
+     * set
      */
     public void setPresentDuringBorrowingPeriod(Integer presentDuringBorrowingPeriod) {
         this.presentDuringBorrowingPeriod = presentDuringBorrowingPeriod;
@@ -1675,7 +1768,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param displayLenderOrganizationName the displayLenderOrganizationName to set
+     * @param displayLenderOrganizationName the displayLenderOrganizationName to
+     * set
      */
     public void setDisplayLenderOrganizationName(Integer displayLenderOrganizationName) {
         this.displayLenderOrganizationName = displayLenderOrganizationName;
@@ -1703,7 +1797,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param receiveBorrowerNotifications the receiveBorrowerNotifications to set
+     * @param receiveBorrowerNotifications the receiveBorrowerNotifications to
+     * set
      */
     public void setReceiveBorrowerNotifications(Integer receiveBorrowerNotifications) {
         this.receiveBorrowerNotifications = receiveBorrowerNotifications;
@@ -1773,7 +1868,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param publicDisplayAlternativePhone the publicDisplayAlternativePhone to set
+     * @param publicDisplayAlternativePhone the publicDisplayAlternativePhone to
+     * set
      */
     public void setPublicDisplayAlternativePhone(Integer publicDisplayAlternativePhone) {
         this.publicDisplayAlternativePhone = publicDisplayAlternativePhone;
@@ -1801,7 +1897,8 @@ public class LenderBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param willDeliverToBorrowerPreferredL2B the willDeliverToBorrowerPreferredL2B to set
+     * @param willDeliverToBorrowerPreferredL2B the
+     * willDeliverToBorrowerPreferredL2B to set
      */
     public void setWillDeliverToBorrowerPreferredL2b(Integer willDeliverToBorrowerPreferredL2B) {
         this.willDeliverToBorrowerPreferredL2b = willDeliverToBorrowerPreferredL2B;
@@ -1849,6 +1946,13 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
     }
 
- 
-  
+    private Integer getNine(Integer option) {
+
+        if (option == null) {
+            return -9;
+        } else {
+            return option;
+        }
+    }
+
 }
