@@ -46,6 +46,7 @@
                                              
                         <h:dataTable id="image"  value="#{ll.getCurrentLenderImage(history.lender_id)}" var="i" >
                             <h:column rowHeader="">
+                                <h:outputText value="#{i.imageFileName}" />
                                 <h:graphicImage name="#{i.imageFileName}" library="lender_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
                             </h:column>
                         </h:dataTable>
