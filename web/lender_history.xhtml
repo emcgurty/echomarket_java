@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./echomarketTemplate.xhtml">
+
+    <ui:define name="header"  >
+        <ui:include rendered="true" src="application_header.xhtml" id="lenderHistoryHeader" /> 
+    </ui:define>
+    <ui:define name="content"  >
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title>#{bundle.lenderHistory}</title>
+        </h:head>
+
+        <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
+
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
+
+            <div class="top" >
+                <div style="margin:10px;margin-top:25px;" >
+                    <h:outputText value="#{userBean.username}: Items Sought"  />
+
+                </div> 
+            </div> 
+
+            <h:dataTable id="history"  value="#{ll.getCurrentLender(userBean.user_id)}" var="history" >
+                <h:column rowHeader="">
+                    <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                        <h:outputLabel for="itemDescription" value="Item Description:" >
+                            <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
+                        </h:outputLabel>
+                        <br />
+                        <h:outputLabel for="itemModel" value="Item Model:" >
+                            <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
+                        </h:outputLabel>
+                                             
+                        <h:dataTable id="image"  value="#{ll.getCurrentLenderImage(history.lender_id)}" var="i" >
+                            <h:column rowHeader="">
+                                <h:graphicImage name="#{i.imageFileName}" library="lender_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
+                            </h:column>
+                        </h:dataTable>
+                     
+                        <br />
+                        <h:commandButton value="Edit"  action="#{ll.getCurrentEditRecord(history.lender_id)}">
+                        </h:commandButton>    
+
+                        <h:commandButton value="Delete"  action="#{ll.deleteCurrentRecord(history.lender_id)}">
+                        </h:commandButton>    
+
+                    </div>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="lendersFooter" /> 
+    </ui:define>
+</ui:composition>
+
+
