@@ -466,9 +466,11 @@
 
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                         <div style="float:left;margin-left:25px;">
+                            <c:set var="emailLabel" scope="view" value="Your Login Email"/>
+                            <c:set var="emailOutput" scope="view" value="${emailLabel  += userBean.email}"/>
                             <h:outputLabel for="borrowerContactByEmail" value="Which E-Mail Address?:"  >
                                 <h:selectOneRadio id="borrowerContactByEmail" value="#{ll.borrowerContactByEmail}"  >
-                                    <f:selectItem itemValue="3" itemLabel="Your login Email? #{userBean.email}" />
+                                    <f:selectItem itemValue="3" itemLabel="${emailOutput}" /> 
                                     <f:selectItem itemValue="2" itemLabel="An alternative email." />	
                                     <f:selectItem itemValue="1" itemLabel="Either Email." />
                                     <f:selectItem itemValue="0" itemLabel="Neither Email." />	
