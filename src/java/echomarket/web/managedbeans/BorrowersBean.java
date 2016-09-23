@@ -1132,7 +1132,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         } finally {
             tx = null;
-            session.close();
+            session = null;
 
         }
 
@@ -1158,7 +1158,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } finally {
 
             tx = null;
-            hib.close();
+            hib = null ;
         }
         // Must be just one record.. will error check later..
 
@@ -1231,7 +1231,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         } finally {
             tx = null;
-            hib.close();
+            hib = null;
         }
 
         Integer size_of_list = result.size();
@@ -1266,7 +1266,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } catch (Exception e) {
         } finally {
             tx = null;
-            hib.close();
+            hib = null;
         }
 
         Integer size_of_list = result.size();
@@ -1275,7 +1275,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } else {
             ItemImages a_array = (ItemImages) result.get(0);
             ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(a_array.getId(), null, a_array.getLender_id(), a_array.getImageContentType(),
+                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), null, a_array.getImageContentType(),
                             a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
                             a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
             ));
