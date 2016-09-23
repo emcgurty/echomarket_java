@@ -1158,7 +1158,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } finally {
 
             tx = null;
-            hib = null ;
+            hib = null;
         }
         // Must be just one record.. will error check later..
 
@@ -1346,8 +1346,8 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         return return_delete_true;
     }
 
-    public String deleteCurrentRecord(String bid) {
-        
+    public String deleteCurrentRecord(String bid, String itemDesc) {
+
         List result = null;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
@@ -1355,25 +1355,30 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         String queryString = "from Borrowers where borrower_id = :bid";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", ubean.getUserAction())
+                    .setParameter("bid", bid)
                     .list();
-            hib.delete(result);
-            tx.commit();
             
+            if (result.size() > 0) {
+                
+                hib.delete((Borrowers) result.get(0));
+                tx.commit();
+            } else {
+            }
+
         } catch (Exception ex) {
             System.out.println("Error in deleting borrower record");
             Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
 
-        result = null;
-        tx= null;
-        hib = null;
-        
-        message(
-                null,
-                "DeleteSelecteBorrower",
-                null);
+            result = null;
+            tx = null;
+            hib = null;
+
+            message(
+                    null,
+                    "DeleteSelecteBorrower",
+                    new Object[]{itemDesc});
         }
-        return "index?faces-redirect=true";
+        return "borrower_history";
     }
 }
