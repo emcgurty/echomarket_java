@@ -5,6 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 template="./echomarketTemplate.xhtml">
 
@@ -32,9 +33,17 @@
 
                 </div> 
             </div> 
-            <c:set var="currentLenderHistory"  value="#{bb.getCurrentLender(userBean.user_id)}" />
-            <c:if test="#{currentLenderHistory.size() > 0}" >
-                <h:dataTable id="history"  value="#{ll.getCurrentLender(userBean.user_id)}" var="history" >
+            <c:set var="currentLenderHistory"  value="#{ll.getCurrentLender(userBean.user_id)}"  scope="request"/>
+            <h:outputText id="a1"  value="${currentLenderHistory}" />
+            <h:outputText id="a2"  value="Liz" /><br />
+            <h:outputText id="a3"  value="${not empty ll.getCurrentLender(userBean.user_id)}}" />
+             <h:outputText id="a4"  value="Lidfdz" /><br />
+             <h:outputText id="a33"  value="${not empty currentLenderHistory}" />
+              <h:outputText id="a44"  value="Liasddfdz" /><br />
+             <!--<c:if test="${not empty ll.getCurrentLender(userBean.user_id)}" >-->
+               
+               
+                 <h:dataTable id="history"  value="#{ll.getCurrentLender(userBean.user_id)}" var="history" rendered="${not empty currentLenderHistory}" >
                     <h:column rowHeader="">
                         <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
                             <h:outputLabel for="itemDescription" value="Item Description:" >
@@ -61,8 +70,9 @@
                         </div>
                     </h:column>
                 </h:dataTable>
-            </c:if>
-            <c:if test="#{currentBorrowerHistory.size() == 0}" >
+            <!--</c:if>-->
+            <!--<c:if test="#{currentBorrowerHistory.size() == 0}" >-->
+                            <c:if test="${fn:length(currentBorrowerHistory) == 0}" >
                 <div class="top" style="display:block;">
                     <div style="margin:10px;margin-top:25px;" >
                         <h:outputText value="No Lender History Records Found" />
