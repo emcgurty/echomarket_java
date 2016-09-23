@@ -1161,7 +1161,7 @@ public class LenderBean extends AbstractBean implements Serializable {
         } else {
             ItemImages a_array = (ItemImages) result.get(0);
             ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(a_array.getId(), null, a_array.getLender_id(), a_array.getImageContentType(),
+                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), a_array.getLender_id(), a_array.getImageContentType(),
                             a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
                             a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
             ));
@@ -1959,6 +1959,42 @@ public class LenderBean extends AbstractBean implements Serializable {
         } else {
             return option;
         }
+    }
+    
+    public String deleteCurrentRecord(String lid, String itemDesc) {
+
+        List result = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+
+        String queryString = "from Lenders where lender_id = :lid";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("lid", lid)
+                    .list();
+            
+            if (result.size() > 0) {
+                
+                hib.delete((Lenders) result.get(0));
+                tx.commit();
+            } else {
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error in deleting lender record");
+            Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            result = null;
+            tx = null;
+            hib = null;
+
+            message(
+                    null,
+                    "DeleteSelecteLender",
+                    new Object[]{itemDesc});
+        }
+        return "lender_history";
     }
     
 
