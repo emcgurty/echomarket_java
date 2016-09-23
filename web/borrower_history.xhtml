@@ -32,34 +32,43 @@
 
                 </div> 
             </div> 
+            <c:set var="currentBorrowerHistory"  value="#{bb.getCurrentBorrower(userBean.user_id)}" />
+            <c:if test="#{currentBorrowerHistory.size() > 0}" >
+                <h:dataTable id="history"  value="#{bb.getCurrentBorrower(userBean.user_id)}" var="history" >
+                    <h:column rowHeader="">
+                        <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                            <h:outputLabel for="itemDescription" value="Item Description:" >
+                                <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
+                            </h:outputLabel>
+                            <br />
+                            <h:outputLabel for="itemModel" value="Item Model:" >
+                                <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
+                            </h:outputLabel>
 
-            <h:dataTable id="history"  value="#{bb.getCurrentBorrower(userBean.user_id)}" var="history" >
-                <h:column rowHeader="">
-                    <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                        <h:outputLabel for="itemDescription" value="Item Description:" >
-                            <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
-                        </h:outputLabel>
-                        <br />
-                        <h:outputLabel for="itemModel" value="Item Model:" >
-                            <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
-                        </h:outputLabel>
-                                             
-                        <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
-                            <h:column rowHeader="">
-                                <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
-                            </h:column>
-                        </h:dataTable>
-                     
-                        <br />
-                        <h:commandButton value="Edit"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
-                        </h:commandButton>    
+                            <h:dataTable id="image"  value="#{bb.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
+                                <h:column rowHeader="">
+                                    <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
+                                </h:column>
+                            </h:dataTable>
 
-                        <h:commandButton value="Delete"  action="#{bb.deleteCurrentRecord(history.borrower_id)}">
-                        </h:commandButton>    
+                            <br />
+                            <h:commandButton value="Edit"  action="#{bb.getCurrentEditRecord(history.borrower_id)}">
+                            </h:commandButton>    
 
+                            <h:commandButton value="Delete"  action="#{bb.deleteCurrentRecord(history.borrower_id,history.itemDescription )}">
+                            </h:commandButton>    
+
+                        </div>
+                    </h:column>
+                </h:dataTable>
+            </c:if>
+            <c:if test="#{currentBorrowerHistory.size() == 0}" >
+                <div class="top" style="display:block;">
+                    <div style="margin:10px;margin-top:25px;" >
+                        <h:outputText value="No Borrower History Records Found" />
                     </div>
-                </h:column>
-            </h:dataTable>
+                </div>
+            </c:if>
         </h:form>
     </ui:define>
     <ui:define name="footer"  >
