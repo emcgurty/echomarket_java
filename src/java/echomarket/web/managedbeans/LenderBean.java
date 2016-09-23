@@ -964,7 +964,7 @@ public class LenderBean extends AbstractBean implements Serializable {
 
     public List getCurrentLender(String bid) {
 
-        System.out.println("called");
+//        System.out.println("called");
         List result = null;
 //        if (ubean.getActionTaken() == null) {
 
