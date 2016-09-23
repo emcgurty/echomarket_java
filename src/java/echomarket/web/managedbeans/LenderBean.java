@@ -310,7 +310,7 @@ public class LenderBean extends AbstractBean implements Serializable {
             Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             tx = null;
-            sb.close();
+            sb = null;
             message(
                     null,
                     "LenderRegistionRecordUpdated",
@@ -477,7 +477,12 @@ public class LenderBean extends AbstractBean implements Serializable {
             Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             tx = null;
-            sb.close();
+            try {
+                sb = null;
+            } catch (Exception ex) {
+                System.out.println("Error in Closing Hibernate Session after all transactions on Save new Lender Record");
+                Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
             message(
                     null,
                     "LenderRegistionRecordSaved",
@@ -969,15 +974,15 @@ public class LenderBean extends AbstractBean implements Serializable {
         try {
             query = "FROM Lenders as b WHERE b.user_id = '" + bid + "'";
             result = session.createQuery(query).list();
-            //tx.commit();
+            tx.commit();
         } catch (Exception e) {
             System.out.println("Error in getCurrentL");
             e.printStackTrace();
 
         } finally {
-            //tx = null;
-            session.close();
-            
+            tx = null;
+            session = null;
+
 //            ubean.setActionTaken(result);
         }
 //        }
@@ -998,12 +1003,12 @@ public class LenderBean extends AbstractBean implements Serializable {
             result = hib.createQuery(queryString)
                     .setParameter("lid", lid)
                     .list();
-            //tx.commit();
+            tx.commit();
         } catch (Exception ex) {
             Logger.getLogger(LenderBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             tx = null;
-            hib.close();
+            hib = null;
         }
         // Must be just one record.. will error check later..
 
@@ -1156,7 +1161,7 @@ public class LenderBean extends AbstractBean implements Serializable {
         } else {
             ItemImages a_array = (ItemImages) result.get(0);
             ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), null, a_array.getImageContentType(),
+                    new ItemImages(a_array.getId(), null, a_array.getLender_id(), a_array.getImageContentType(),
                             a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
                             a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
             ));
@@ -1946,6 +1951,7 @@ public class LenderBean extends AbstractBean implements Serializable {
         this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
     }
 
+    /// 
     private Integer getNine(Integer option) {
 
         if (option == null) {
@@ -1954,5 +1960,6 @@ public class LenderBean extends AbstractBean implements Serializable {
             return option;
         }
     }
+    
 
 }
