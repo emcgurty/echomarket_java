@@ -1275,7 +1275,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         } else {
             ItemImages a_array = (ItemImages) result.get(0);
             ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), null, a_array.getImageContentType(),
+                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), a_array.getLender_id(), a_array.getImageContentType(),
                             a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
                             a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
             ));
@@ -1347,12 +1347,33 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     }
 
     public String deleteCurrentRecord(String bid) {
-        // Finish later
+        
+        List result = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+
+        String queryString = "from Borrowers where borrower_id = :bid";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("bid", ubean.getUserAction())
+                    .list();
+            hib.delete(result);
+            tx.commit();
+            
+        } catch (Exception ex) {
+            System.out.println("Error in deleting borrower record");
+            Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+        result = null;
+        tx= null;
+        hib = null;
+        
         message(
                 null,
-                "DeleteSelecteBorrowe",
+                "DeleteSelecteBorrower",
                 null);
-
+        }
         return "index?faces-redirect=true";
     }
 }
