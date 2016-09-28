@@ -211,6 +211,7 @@ a:link, a:visited {
     color: #045491;
     font-weight : bold;
     text-decoration: none;
+    font-size:  14px;
 }
 
 a:link:hover, a:visited:hover  {
@@ -235,4 +236,14 @@ a:link:hover, a:visited:hover  {
     font-family: 'New Century Schoolbook', serif;
     font-style: oblique;
     text-decoration: overline;
+}
+
+
+.index_text {
+
+    color: indigo;
+    font-family: Verdana, "Verdana CE", Arial, "Arial CE", "Helvetica CE", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+
 }
