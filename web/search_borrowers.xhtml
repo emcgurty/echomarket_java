@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.10.2.js" type="text/javascript" ></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript" ></script>
+        <h:outputScript library="javascript" name="item_search.js"  />
+    </h:head>
+
+
+    <h:form id="search">
+        <div class="top" >
+            <p>
+                <span class="logo_white" >Echo Market: Your Goodwill Resource For Lending, Borrowing, Donating or Trading Items</span>
+            </p>
+            <p>
+                ITEM SEARCH <a href="#" onclick="submitSearch();" style="color:white;clear:both; float:right;padding-right:4px;">Fingers Crossed! Submit search.</a>
+            </p>
+            <!--                <% if session[:notice] />
+                            <p style='color:red;'><%= session[:notice]/></p>
+                            <% end />-->
+        </div>
+
+        <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+
+            <h:outputLabel value="Items to borrower or items to lend?:"  for="lender_or_borrower" >
+                <h:selectOneRadio id="lender_or_borrower" value="#{search.lender_or_borrower}" layout='lineDirection'>
+                    <f:selectItem itemValue="1" itemLabel="Search what lenders have offered...:" />
+                    <f:selectItem itemValue="2" itemLabel="Search what borrowewe have sought...:" />
+
+                </h:selectOneRadio>    
+            </h:outputLabel>   
+
+
+        </div>
+
+        <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+            <label>By Date Created Range:</label>
+            
+            <table class="search">
+                <tr>
+                    <td style="text-align:left;font-size:12px;width:40%;">Start Date</td>
+                    <td style="text-align:left;font-size:12px;width:20%;">- through - </td>
+                    <td style="text-align:left;font-size:12px;width:40%;">End Date</td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:inputText  id="start_date" value="#{search.start_date}"    />
+
+                    </td>
+                    <td></td>
+                    <td>
+                        <h:inputText  id="end_date" value="#{search.end_date}"    />
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="error" style="width:100%;" id="start_date_error">error</span></td>
+                    <td></td>
+                    <td><span class="error" style="width:100%;" id="end_date_error">error</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div  style="clear:both;float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+
+            <h:outputLabel value="By Item Description or Model:" for="keyword" >
+                <h:inputText  id="keyword" value="#{search.keyword}"    />
+            </h:outputLabel>
+
+            <span class="radius" style="float:left;">Use one singular noun or verb to describe an item, you can use a partial word.</span>
+        </div>
+
+        <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+
+            <h:outputLabel for="categoryId" value="By Item category:" >
+                <h:selectOneMenu id="categoryId" value="#{search.categoryId}"  style="margin-left:10px"  class="items select" styleClass="border: solid 1px #E5E5E5;
+                                 background: #BDAEC6;
+                                 padding: 1px;
+                                 font-size:16px;
+                                 width:92%;
+                                 -moz-box-shadow: 0px 0px 8px #f0f0f0;
+                                 -webkit-box-shadow: 0px 0px 8px #f0f0f0;">
+                    <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
+                                   itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
+                    </f:selectItems>
+
+                </h:selectOneMenu>
+            </h:outputLabel>  
+
+        </div>
+
+        <div  class="location" style="float:left;">
+            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+                <h:outputLabel value="By Postal Code Location:" for="postal_code" >
+                    <h:inputText  id="postal_code" value="#{search.postal_code}"    />
+                </h:outputLabel>
+
+
+                <span class="radius" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
+            </div>
+
+            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+                <h:outputLabel value="Within Radius: Select number of miles from your entered postal code."  for="zip_code_radius" >
+                    <h:selectOneRadio id="zip_code_radius" value="#{search.zip_code_radius}" layout='lineDirection'>
+                        <f:selectItem itemValue="1" itemLabel="One Mile:" />
+                        <f:selectItem itemValue="5" itemLabel="Five Miles:" />
+                        <f:selectItem itemValue="10" itemLabel="Ten Miles:" />
+                        <f:selectItem itemValue="25" itemLabel="25 Miles:" />
+                    </h:selectOneRadio>    
+                </h:outputLabel>   
+
+
+
+                <span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit Postal Code Location.</span>
+                <span class="error" id="postal_code_error"></span>
+            </div>
+
+        </div>
+
+        <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
+            <span class="error" id="echo_market_search_error"></span>
+
+        </div>
+
+        <!--        <% unless session[:community_id].blank? />
+                <% @lc = Lender.count(:conditions =>   ["user_id = ?", session[:user_id]]) />
+                <% @bc = Borrower.count(:conditions => ["user_id = ?", session[:user_id]]) />
+                <% else />
+                <% @lc = Lender.count(:conditions =>   ["is_active = 1 and is_community = 0"]) />
+                <% @bc = Borrower.count(:conditions => ["is_active = 1 and is_community = 0"]) />
+                <% end />
+        
+                <% if @s_get_items.blank? />
+        
+                <div class="bottom_flash">
+                    <% if @search.id.blank? />
+                    <p style="color:#ccff99;">	Your search result will be displayed below.</p>
+                    <%  else  />
+                    <p style="color:#ccff99;">	Your search did not locate any records.</p>
+                    <% end />
+        
+                </div>
+        
+                <% else />
+                <div class="bottom_flash">
+                    <p style="color:red;float:left;">
+                        Your search for above criteria produced the following results.
+                    </p>
+                </div>
+        
+                <table class="personal" >
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Model</th>
+                        <th>Condition</th>
+                        <th>Postal Code</th>
+                        <th>Detail</th>
+                    </tr>
+        
+                    <% @s_get_items.each do |isq| />
+                    <% if isq.address_type != 'alternative' />
+                    <tr>
+                        <td> <%= (isq.category_type.blank? ? "No Item Category provided" : isq.category_type) /> </td>
+                        <td> <%= (isq.item_description.blank? ? "No Item descrition provided": isq.item_description) /></td>
+                        <td> <%= (isq.item_model.blank? ? "No Item model provided": isq.item_model) /></td>
+                        <td> <%= (isq.condition == "Please select" ? "No Item Condition provided" : isq.condition) />
+        
+                        </td>
+                        <td>
+                            <% if @search.lender_or_borrower == 2 />	
+                            <%= (isq.postal_code.blank? ? "Postal code not provided": isq.postal_code) />
+        
+                            <% elsif @search.lender_or_borrower == 1 />	
+        
+                            <%= (isq.postal_code.blank? ? "Postal code not provided": isq.postal_code) />
+        
+                            <% end />
+                        </td>
+                        <td> 
+        
+                            <% if @search.lender_or_borrower == 2 />
+                            <h:commandLink value="More..." action="borrower_item_detail" />
+                            <% else />
+                            <h:commandLink value="More..." action="lender_item_detail" />
+        
+                            <% end /> </td>
+        
+                    </tr>
+        
+        
+                </table>-->
+        <!--<% end />
+        <% if session[:user_id].blank? />-->
+<!--        <div class="bottom_flash">
+            <p class="offering">
+                <span class="logo_white" >Create Your Own Echo Market Community</span>
+            </p>
+
+            <h:commandLink value="Just what I was hoping for... I want to create my Echo Market Community now" action="index" />
+            <p style="color:indigo;font-size:16px;font-weight:normal;margin-bottom:3px;">
+                Register as a Community before May, 2015, and Echo Market will provide Five-Point Customization for free.
+            </p>
+
+            <h:commandLink value="Registered as lender or borrower..." action="index" />
+
+
+        </div>	
+
+        <div class="bottom_flash">
+
+            <h:commandLink value="Echo Market FREE advertising... Place your ad here!"  action="index" />
+
+
+
+        </div>-->
+
+    </h:form>
+</ui:composition>
+
+
+
