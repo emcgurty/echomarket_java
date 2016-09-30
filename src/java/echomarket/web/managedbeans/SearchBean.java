@@ -3,6 +3,7 @@ package echomarket.web.managedbeans;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
@@ -150,6 +151,14 @@ public class SearchBean extends AbstractBean implements Serializable {
      */
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+    
+    public List getSearchResults() {
+        
+        List result = null;
+        
+        return result;
+        
     }
 
 }
