@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-//    alert("is loaded");
+
     var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";
     var cache = {};
     var cache_placeholder = '';
@@ -16,119 +16,126 @@ $(document).ready(function () {
         dateFormat: "yy-mm-dd"
     });
 
-//
-//    $("input[name='search:zip_code_radius']").bind('change', function () {
-//        var test_is_checked = $("input[name='search:zip_code_radius']:checked").val();
-//        if (test_is_checked) {
-//            $("input#search:postal_code").trigger('change');
-//        }
-//
-//    });
-//
-//    $("input#search:end_date.hasDatepicker").bind('change', function () {
-//
-//        $("#start_date_error").css("visibility", "hidden");
-//        $("#end_date_error").css("visibility", "hidden");
-//        $("#start_date_error").text("");
-//        $("#end_date_error").text("");
-//
-//        var start_date_value = $("input#search:start_date.hasDatepicker").val();
-//        var end_date_value = $(this).val();
-//
-//        if ((start_date_value == '') && (end_date_value != '')) {
-//            $("#start_date_error").text("Now please provide a Start Date.");
-//
-//            $("#start_date_error").css("visibility", "visible");
-//        } else if (start_date_value > end_date_value) {
-//            $("#start_date_error").text("Please provide a Start Date earlier than your End Date.");
-//
-//            $("#start_date_error").css("visibility", "visible");
-//        }
-//
-//    });
-//
-//    $("input#search:start_date.hasDatepicker").bind('change', function () {
-//
-//        $("#end_date_error").css("visibility", "hidden");
-//        $("#start_date_error").css("visibility", "hidden");
-//        $("#start_date_error").text("");
-//        $("#end_date_error").text("");
-//
-//        var start_date_value = $(this).val();
-//        var end_date_value = $("input#search_end_date.hasDatepicker").val();
-//
-//        if ((end_date_value == '') && (start_date_value != '')) {
-//            $("#end_date_error").text("Now please provide an End Date.");
-//
-//            $("#end_date_error").css("visibility", "visible");
-//        } else if (start_date_value > end_date_value) {
-//            $("#end_date_error").text("Please provide an End Date later than your Start Date.");
-//
-//            $("#end_date_error").css("visibility", "visible");
-//        }
-//
-//    });
 
-//    $("input[name='search[postal_code]']").bind('change', function () {
-//        alert("postal code change");
-//        var distance = $("input[name='search[zip_code_radius]']:checked").val();
-//
-//
-//        if (distance) {
-//            ///Get zip code
-//            var zipcode = $("input[name='search[postal_code]']").val().substring(0, 5);
-//
-//            if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
-//
-//                cache_placeholder = zipcode + distance;
-//                alert(cache_placeholder);
-//                // Clear error
-//
-//                // Check cache
-//                alert(cache);
-//                if (cache_placeholder in cache) {
-//
-//                    handleResp(cache[zipcode]);
-//
-//                } else {
-//                    // Build url
-//
-//                    var url = "https://www.zipcodeapi.com/rest/" + clientKey + "/radius.json/" + zipcode + "/" + distance + "/mile";
-//
-//                    $.ajax({
-//                        "url": url,
-//                        "dataType": "json"
-//                    }).done(function (data) {
-//
-//                        alert("okay next you should see data");
-//                        alert(data);
-//                        handleResp(data);
-//
-//                        // Store in cache
-//                        cache[cache_placeholder] = data;
-//                    }).fail(function (data) {
-//                        alert("FAIL");
-//                        if (data.responseText && (json = $.parseJSON(data.responseText))) {
-//                            // Store in cache
-//                            cache[cache_placeholder] = json;
-//
-//                            // Check for error
-//                            if (json.error_msg)
-//                                errorDiv.text(json.error_msg);
-//                        } else {
-//                            errorDiv.text('Request failed.');
-//                        }
-//                    });
-//                }
-//            }
-//        }
-//
-//    });
 
-    $("input#search:start_date.hasDatepicker").trigger('change');
-    $("input#search:end_date.hasDatepicker").trigger('change');
-    $("input#search:postal_code").trigger('change');
-    $("input#search:zip_code_radius").trigger('change');
+    $("input[name='search:zip_code_radius']").bind('change', function () {
+        var test_is_checked = $("input[name='search:zip_code_radius']:checked").val();
+        alert(test_is_checked);
+        if (test_is_checked) {
+            $("input[name='search:postal_code']").trigger('change');
+        }
+
+    });
+
+    $("input[id$='end_date']").bind('change', function () {
+        $("span#start_date_error").css("visibility", "hidden");
+        $("span#end_date_error").css("visibility", "hidden");
+        $("span#start_date_error").text("");
+        $("span#end_date_error").text("");
+
+        var start_date_value = $("input[id$='start_date']").val();
+        var end_date_value = $(this).val();
+
+        if ((start_date_value == '') && (end_date_value != '')) {
+            $("span#start_date_error").text("Now please provide a Start Date.");
+            $("span#start_date_error").css("visibility", "visible");
+        } else if (start_date_value > end_date_value) {
+            $("span#start_date_error").text("Please provide a Start Date earlier than your End Date.");
+
+            $("span#start_date_error").css("visibility", "visible");
+        }
+
+    });
+
+    $("input[id$='start_date']").bind('change', function () {
+
+        $("#end_date_error").css("visibility", "hidden");
+        $("#start_date_error").css("visibility", "hidden");
+        $("#start_date_error").text("");
+        $("#end_date_error").text("");
+
+        var start_date_value = $(this).val();
+        var end_date_value = $("input[id$='end_date']").val();
+
+        if ((end_date_value == '') && (start_date_value != '')) {
+            $("#end_date_error").text("Now please provide an End Date.");
+
+            $("#end_date_error").css("visibility", "visible");
+        } else if (start_date_value > end_date_value) {
+            $("#end_date_error").text("Please provide an End Date later than your Start Date.");
+
+            $("#end_date_error").css("visibility", "visible");
+        }
+
+    });
+
+    $("input[name='search:postal_code']").bind('change', function () {
+        alert("postal code change");
+        $("span#postal_code_location_error").text("");
+        $("span#postal_code_location_error").css("visibility", "hidden");
+        alert("11");
+        ///Get zip code
+        var zipcode = $(this).val().substring(0, 5);
+        if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
+            var distance = $("input[name='search:zip_code_radius']:checked").val();
+            if (distance) {
+
+                cache_placeholder = zipcode + distance;
+                alert(cache_placeholder);
+                // Clear error
+
+                // Check cache
+                alert(cache);
+                if (cache_placeholder in cache) {
+                    handleResp(cache[zipcode]);
+                } else {
+                    // Build url
+                    var url = "https://www.zipcodeapi.com/rest/" + clientKey + "/radius.json/" + zipcode + "/" + distance + "/mile";
+
+                    $.ajax({
+                        "url": url,
+                        "dataType": "json"
+                    }).done(function (data) {
+
+                        alert("okay next you should see data");
+                        alert(data);
+                        handleResp(data);
+
+                        // Store in cache
+                        cache[cache_placeholder] = data;
+                    }).fail(function (data) {
+                        alert("FAIL");
+                        if (data.responseText && (json = $.parseJSON(data.responseText))) {
+                            // Store in cache
+                            cache[cache_placeholder] = json;
+
+                            // Check for error
+                            if (json.error_msg)
+                                errorDiv.text(json.error_msg);
+                        } else {
+                            errorDiv.text('Request failed.');
+                        }
+                    });
+                }
+            } else {
+//                $("span#postal_code_location_error").text("No additional zip codes found within selected radius.");
+//                $("span#postal_code_location_error").css("visibility", "visible");
+
+            }
+        } else {
+            alert("1asd1");
+            $("span#postal_code_location_error").text("Please provide a five-digit postal code");
+            $("span#postal_code_location_error").css("visibility", "visible");
+
+
+        }
+
+    });
+
+    $("input[id$='start_date']").trigger('change');
+    $("input[id$='end_date']").trigger('change');
+    $("input[name='search:postal_code']").trigger('change');
+    $("input[name='search:zip_code_radius']").trigger('change');
 
     function handleResp(data) {
         alert("function within function?");
@@ -147,7 +154,7 @@ $(document).ready(function () {
                     alert(mystr);
                 });
 
-                var set_hidden_field = $("input#search:found_zip_codes");
+                var set_hidden_field = $("input[name='search:found_zip_codes']");
                 alert(set_hidden_field);
                 if (set_hidden_field) {
                     alert("Setting hidden");
@@ -186,29 +193,29 @@ function submitSearch() {
         }
 
         if (id.includes('keyword')) {
-           
-            if (cad[i].value) {7
+
+            if (cad[i].value) {
                 kw = cad[i].value;
             }
-           
+
         } else if (id.includes('postal_code')) {
-           
+
             if (cad[i].value) {
                 pc = cad[i].value;
             }
-           
+
         } else if (id.includes('start_date')) {
-           
+
             if (cad[i].value) {
                 sd = cad[i].value;
             }
-           
+
         } else if (id.includes('end_date')) {
-           
+
             if (cad[i].value) {
                 ed = cad[i].value;
             }
-            
+
         }
     }
 
@@ -217,11 +224,11 @@ function submitSearch() {
     for (i = 0; i < cads.length; i++) {
         id = cads[i].id;
         if (id.includes('categoryId')) {
-            
+
             if (cads[i].value) {
                 ct = cads[i].value;
             }
-            
+
         }
     }
 
