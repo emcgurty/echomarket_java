@@ -55,7 +55,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <h:inputText  id="start_date" value="#{search.start_date}"    />
+                            <h:inputText  id="start_date" value="#{search.start_date}"   />
 
                         </td>
                         <td></td>
@@ -64,9 +64,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="error" style="width:100%;" id="start_date_error">error</span></td>
+                        <td><span class="error_message" id="start_date_error"></span></td>
                         <td></td>
-                        <td><span class="error" style="width:100%;" id="end_date_error">error</span></td>
+                        <td><span class="error_message" id="end_date_error"></span></td>
                     </tr>
                 </table>
             </div>
@@ -74,7 +74,7 @@
             <div  style="clear:both;float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
 
                 <h:outputLabel value="By Item Description or Model:" for="keyword" >
-                    <h:inputText  id="keyword" value="#{search.keyword}"    />
+                    <h:inputText  id="keyword" value="#{search.keyword}"   class="search" />
                 </h:outputLabel>
 
                 <span class="radius" style="float:left;">Use one singular noun or verb to describe an item, you can use a partial word.</span>
@@ -96,11 +96,11 @@
             <div  class="location" style="float:left;">
                 <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
                     <h:outputLabel value="By Postal Code Location:" for="postal_code" >
-                        <h:inputText  id="postal_code" value="#{search.postal_code}"    />
-                        <h:inputText  id="found_zip_codes" value="#{search.found_zip_codes}"    />
-
+                        <h:inputText  id="postal_code" value="#{search.postal_code}" class="search"  />
+                        <h:inputSecret  id="found_zip_codes" value="#{search.found_zip_codes}" class="search"   />
+                        <br />
+                        <span class="error_meesage" id="postal_code_location_error"></span>
                     </h:outputLabel>
-
 
                     <span class="radius" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
                 </div>
@@ -118,13 +118,13 @@
 
 
                     <span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit Postal Code Location.</span>
-                    <span class="error" id="postal_code_error"></span>
+                    <span class="error_message" id="postal_code_error"></span>
                 </div>
 
             </div>
 
             <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
-                <span class="error" id="echo_market_search_error"></span>
+                <span class="error_message" id="echo_market_search_error"></span>
 
             </div>
 
@@ -222,6 +222,10 @@
                     </div>-->
 
         </h:form>
+    </ui:define>
+    
+        <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
     </ui:define>
 </ui:composition>
 
