@@ -1,7 +1,9 @@
 $(document).ready(function () {
 
-
+    
+    // Can't test unitl I go live...
     var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";
+    
     var cache = {};
     var cache_placeholder = '';
     var container = $("div.location");
@@ -70,10 +72,10 @@ $(document).ready(function () {
     });
 
     $("input[name='search:postal_code']").bind('change', function () {
-        alert("postal code change");
+      
         $("span#postal_code_location_error").text("");
         $("span#postal_code_location_error").css("visibility", "hidden");
-        alert("11");
+      
         ///Get zip code
         var zipcode = $(this).val().substring(0, 5);
         if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
@@ -91,7 +93,7 @@ $(document).ready(function () {
                 } else {
                     // Build url
                     var url = "https://www.zipcodeapi.com/rest/" + clientKey + "/radius.json/" + zipcode + "/" + distance + "/mile";
-
+                    
                     $.ajax({
                         "url": url,
                         "dataType": "json"
