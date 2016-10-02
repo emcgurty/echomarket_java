@@ -28,16 +28,16 @@ jQuery(document).ready(function ($) {
                     }
                 }
             }
-           if (id.includes('borrowerContactByEmail')) {
+            if (id.includes('borrowerContactByEmail')) {
 
-               if ((id.includes('1')) || (id.includes('2'))) {
+                if ((id.includes('1')) || (id.includes('2'))) {
                     $("div#emailAlternative").css("display", "block");
 
                     foundValue++;
                 }
             }
             if (id.includes('thirdPartyPresenceL2b')) {
-                
+
                 if (id.includes('0')) {
                     $("div#thirdPartyPresenceL2BGroup").css("display", "block");
 
@@ -57,7 +57,7 @@ jQuery(document).ready(function ($) {
             }
         }
     }
-    
+
 
 
 
@@ -137,7 +137,7 @@ jQuery(document).ready(function ($) {
             }
         } else if (this.id.includes('thirdPartyPresenceL2b')) {
             y_n = $(this).val();
-            
+
             if (y_n == 1) {
                 $("div#thirdPartyPresenceL2BGroup").css("display", "block");
             } else {
@@ -145,7 +145,7 @@ jQuery(document).ready(function ($) {
             }
         } else if (this.id.includes('thirdPartyPresenceB2l')) {
             y_n = $(this).val();
-            
+
             if (y_n == 1) {
                 $("div#thirdPartyPresenceB2lGroup").css("display", "block");
             } else {
@@ -528,27 +528,33 @@ function size_of_menu() {
 //    var ah = $("div.application_header").css("width");
 //    var center_without_menu = ah - rap - lap;
     var fur = $("div#form_user_registration").css("width");
-    var uli = $("div#user_login");
+    var uli = $("div#user_login").css("width");
     var flog = $("div#form_login.top").css("width");
+    var div_top = $("div#content.center_content").css("width");
     if (bmw) {
 
         $("div.borrower_registration").css("width", bmw);
         $("div.application_footer").css("width", bmw);
     } else if (imw) {
-
+        
         $("div.application_footer").css("width", imw);
     } else if (lmw) {
-
+        
         $("div.lender_registration").css("width", lmw);
         $("div.application_footer").css("width", lmw);
     } else if (fur) {
-
+        
         $("div.application_footer").css("width", fur);
     } else if (uli) {
-
+        
         $("div.application_footer").css("width", fur);
     } else if (flog) {
+        
         $("div.application_footer").css("width", flog);
+    } else {
+        
+        $("div.application_footer").css("width", div_top);
+
     }
 
 
@@ -597,7 +603,7 @@ function ValidateContactInformation() {
             foundComponent++;
         } else if ((this.id == 'countryId') && (this_class == 'primary')) {
             countryId = this.value;
-            
+
             foundComponent++;
         } else if (foundComponent == 2) {
             return false;
