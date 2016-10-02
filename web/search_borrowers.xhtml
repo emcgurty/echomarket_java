@@ -21,22 +21,19 @@
             </h:head>
 
             <div class="top" >
+                <div style="margin:10px;margin-top:25px;margin-right:15px;" >
+                    <h:outputText value="BORROWER OR LENDER ITEM SEARCH"  />
+                    <h:commandLink  class="right_div" style="margin-right:65px;" value="Fingers Crossed! Submit search." action="#{search.getSearchResults}" onclick="submitSearch();"  />
+                </div> 
+            </div> 
 
-                <p>
-                    ITEM SEARCH 
-                    <a href="#" onclick="submitSearch();" style="color:indigo;clear:both; float:right;padding-right:4px;">Fingers Crossed! Submit search.</a>
-                </p>
-                <!--                <% if session[:notice] />
-                                <p style='color:red;'><%= session[:notice]/></p>
-                                <% end />-->
-            </div>
 
-            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: azure; width:90%; padding: 10px;">
 
-                <h:outputLabel value="Items to borrower or items to lend?:"  for="lender_or_borrower" >
+                <h:outputLabel value="SEARCH items to borrow or items to lend?:"  for="lender_or_borrower" >
                     <h:selectOneRadio id="lender_or_borrower" value="#{search.lender_or_borrower}" layout='lineDirection'>
-                        <f:selectItem itemValue="1" itemLabel="Search what lenders have offered...:" />
-                        <f:selectItem itemValue="2" itemLabel="Search what borrowers have sought...:" />
+                        <f:selectItem itemValue="1" itemLabel="What LENDERS have offered?:" />
+                        <f:selectItem itemValue="2" itemLabel="What BORROWERS have sought...:" />
 
                     </h:selectOneRadio>    
                 </h:outputLabel>   
@@ -44,7 +41,30 @@
 
             </div>
 
-            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
+
+            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: white; width:45%; padding: 10px;">
+
+                <h:outputLabel value="By Item Description or Model:" for="keyword" >
+                    <h:inputText  id="keyword" value="#{search.keyword}"   class="search" style="margin-left:10px;" />
+                </h:outputLabel>
+                <br />
+                <span class="radius" >Use one singular noun or verb to describe an item, you can use a partial word.</span>
+            </div>
+
+            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: white; width:45%; padding: 10px;">
+
+                <h:outputLabel for="categoryId" value="By Item category:" >
+                    <h:selectOneMenu id="categoryId" value="#{search.categoryId}"  style="margin-left:10px;" >
+                        <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
+                                       itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
+                        </f:selectItems>
+
+                    </h:selectOneMenu>
+                </h:outputLabel>  
+
+            </div>
+
+            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: azure; width:90%; padding: 10px;">
                 <label>By Date Created Range:</label>
 
                 <table class="search">
@@ -64,49 +84,28 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="error_message" id="start_date_error"></span></td>
+                        <td><span class="error-message" id="start_date_error"></span></td>
                         <td></td>
-                        <td><span class="error_message" id="end_date_error"></span></td>
+                        <td><span class="error-message" id="end_date_error"></span></td>
                     </tr>
                 </table>
             </div>
 
-            <div  style="clear:both;float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
-
-                <h:outputLabel value="By Item Description or Model:" for="keyword" >
-                    <h:inputText  id="keyword" value="#{search.keyword}"   class="search" />
-                </h:outputLabel>
-
-                <span class="radius" style="float:left;">Use one singular noun or verb to describe an item, you can use a partial word.</span>
-            </div>
-
-            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #F3EBF4; width:45%; border-bottom: solid 1px indigo;padding:2px;">
-
-                <h:outputLabel for="categoryId" value="By Item category:" >
-                    <h:selectOneMenu id="categoryId" value="#{search.categoryId}"  >
-                        <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
-                                       itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
-                        </f:selectItems>
-
-                    </h:selectOneMenu>
-                </h:outputLabel>  
-
-            </div>
-
             <div  class="location" style="float:left;">
-                <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
-                    <h:outputLabel value="By Postal Code Location:" for="postal_code" >
-                        <h:inputText  id="postal_code" value="#{search.postal_code}" class="search"  />
-                        <h:inputSecret  id="found_zip_codes" value="#{search.found_zip_codes}" class="search" />
+                <div  style="float:left;margin-top:5px;margin-left:15px;background-color: white; width:45%; padding: 10px;">
+                    <h:outputLabel value="By Postal Code Location:" for="postal_code"  >
+                        <h:inputText  id="postal_code" value="#{search.postal_code}" class="search"  style="margin-left:10px;" />
                         <br />
-                        <span class="error_meesage" id="postal_code_location_error"></span>
+                        <span class="error-message" id="postal_code_location_error"></span>
                     </h:outputLabel>
 
                     <span class="radius" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
                 </div>
 
-                <div  style="float:left;margin-top:5px;margin-left:15px;background-color: #ECF4ED; width:45%; border-bottom: solid 1px indigo;padding:2px;">
-                    <h:outputLabel value="Within Radius: Select number of miles from your entered postal code."  for="zip_code_radius" >
+                <div  style="float:left;margin-top:5px;margin-left:15px;background-color: white; width:45%; padding: 10px;">
+                    <h:outputLabel value="Within Radius:"  for="zip_code_radius" >
+                        <br />
+                        <h:outputLabel value="Select number of miles from your entered postal code."   />
                         <h:selectOneRadio id="zip_code_radius" value="#{search.zip_code_radius}" layout='lineDirection'>
                             <f:selectItem itemValue="1" itemLabel="One Mile:" />
                             <f:selectItem itemValue="5" itemLabel="Five Miles:" />
@@ -115,16 +114,17 @@
                         </h:selectOneRadio>    
                     </h:outputLabel>   
 
+                    <h:outputLabel value="Postal Codes found within radius:" for="postal_code" >
+                        <h:inputText  id="found_zip_codes" value="#{search.found_zip_codes}" class="search" style="margin-left:10px;" />
+                    </h:outputLabel>
 
-
-                    <span class="radius" style="float:left;">For the moment only available for United States zip codes, and you must provide a 5-digit Postal Code Location.</span>
-                    <span class="error_message" id="postal_code_error"></span>
+                    <span class="error-message" id="postal_code_error"></span>
                 </div>
 
             </div>
 
-            <div  style="float:left;margin-top:5px;width:76%;margin-left:15px;" >
-                <span class="error_message" id="echo_market_search_error"></span>
+            <div  style="float:left;margin-top:5px;width:100%;margin-left:15px;" >
+                <span class="error-message" id="echo_market_search_error"></span>
 
             </div>
 
@@ -223,8 +223,8 @@
 
         </h:form>
     </ui:define>
-    
-        <ui:define name="footer"  >
+
+    <ui:define name="footer"  >
         <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
     </ui:define>
 </ui:composition>
