@@ -238,6 +238,12 @@ a:link:hover, a:visited:hover  {
     text-decoration: overline;
 }
 
+span.radius {
+    color: indigo;
+    font-family: 'New Century Schoolbook', serif;
+    font-style: oblique;
+    
+}
 
 .index_text {
 
