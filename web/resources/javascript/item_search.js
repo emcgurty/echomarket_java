@@ -6,8 +6,9 @@ $(document).ready(function () {
     
     var cache = {};
     var cache_placeholder = '';
-    var container = $("div.location");
-    var errorDiv = container.find("span#echo_market_search_error");
+    //var container = $("div.location");
+    var errorDiv = $("span#echo_market_search_error");
+    //container.find("span#echo_market_search_error");
 
 
     $("input[id$='start_date']").datepicker({
@@ -22,7 +23,7 @@ $(document).ready(function () {
 
     $("input[name='search:zip_code_radius']").bind('change', function () {
         var test_is_checked = $("input[name='search:zip_code_radius']:checked").val();
-        alert(test_is_checked);
+//        alert(test_is_checked);
         if (test_is_checked) {
             $("input[name='search:postal_code']").trigger('change');
         }
@@ -72,10 +73,13 @@ $(document).ready(function () {
     });
 
     $("input[name='search:postal_code']").bind('change', function () {
-      
+//      alert("chapge postal");
         $("span#postal_code_location_error").text("");
         $("span#postal_code_location_error").css("visibility", "hidden");
-      
+        
+        errorDiv.css("visibility", "hidden");
+        errorDiv.text("");
+              
         ///Get zip code
         var zipcode = $(this).val().substring(0, 5);
         if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
@@ -83,11 +87,11 @@ $(document).ready(function () {
             if (distance) {
 
                 cache_placeholder = zipcode + distance;
-                alert(cache_placeholder);
+//                alert(cache_placeholder);
                 // Clear error
 
                 // Check cache
-                alert(cache);
+//                alert(cache);
                 if (cache_placeholder in cache) {
                     handleResp(cache[zipcode]);
                 } else {
@@ -99,22 +103,24 @@ $(document).ready(function () {
                         "dataType": "json"
                     }).done(function (data) {
 
-                        alert("okay next you should see data");
-                        alert(data);
+//                        alert("okay next you should see data");
+//                        alert(data);
                         handleResp(data);
 
                         // Store in cache
                         cache[cache_placeholder] = data;
                     }).fail(function (data) {
-                        alert("FAIL");
+//                        alert("FAIL");
                         if (data.responseText && (json = $.parseJSON(data.responseText))) {
                             // Store in cache
                             cache[cache_placeholder] = json;
 
                             // Check for error
                             if (json.error_msg)
+                                errorDiv.css("visibility", "visible");
                                 errorDiv.text(json.error_msg);
                         } else {
+                            errorDiv.css("visibility", "visible");
                             errorDiv.text('Request failed.');
                         }
                     });
@@ -125,9 +131,10 @@ $(document).ready(function () {
 
             }
         } else {
-            alert("1asd1");
+          if (zipcode.length != 0) {
             $("span#postal_code_location_error").text("Please provide a five-digit postal code");
             $("span#postal_code_location_error").css("visibility", "visible");
+        }
 
 
         }
@@ -140,27 +147,28 @@ $(document).ready(function () {
     $("input[name='search:zip_code_radius']").trigger('change');
 
     function handleResp(data) {
-        alert("function within function?");
+//        alert("function within function?");
         var mystr = "";
 
         if (data) {
-            alert(data);
+//            alert(data);
             if (data.error_msg) {
+                errorDiv.css("visibility", "visible");
                 errorDiv.text(data.error_msg);
-                alert(data.error_msg);
+//                alert(data.error_msg);
 
             } else {
 
                 $.each(data.zip_codes, function (i, zip) {
                     mystr = mystr + "'" + zip.zip_code + "',";
-                    alert(mystr);
+//                    alert(mystr);
                 });
 
                 var set_hidden_field = $("input[name='search:found_zip_codes']");
-                alert(set_hidden_field);
+//                alert(set_hidden_field);
                 if (set_hidden_field) {
-                    alert("Setting hidden");
-                    alert(mystr);
+//                    alert("Setting hidden");
+//                    alert(mystr);
                     set_hidden_field.value(mystr.chomp(","));
                 } else {
 
@@ -174,6 +182,7 @@ $(document).ready(function () {
 });
 
 function submitSearch() {
+    var returnValue = true;
     var choose_l_or_b = null;
     var sd = null;
     var ed = null;
@@ -238,22 +247,24 @@ function submitSearch() {
 
     if (!(choose_l_or_b)) {
         $("span#echo_market_search_error").text("From the above option 'Items to Borrow or items to Lend?', you need to choose to either search for what is being offered or what is needed.");
-        $("span#echo_market_search_error").css("color", "red");
         $("span#echo_market_search_error").css("visibility", "visible");
+        returnValue = false;
 
     } else if ((kw == null) && (pc == null) && (sd == null) && (ed == null) && (ct == -2)) {
         $("span#echo_market_search_error").text("You have to provide at least one search criteria.");
-        $("span#echo_market_search_error").css("color", "red");
         $("span#echo_market_search_error").css("visibility", "visible");
+        returnValue = false;
 
     } else if (((sd != null) && (ed == null)) || ((sd == null) && (ed != null))) {
         $("span#echo_market_search_error").text("If you want to do a Date Create search, you have to provide both a Start Date and an End Date.");
-        $("span#echo_market_search_error").css("color", "red");
         $("span#echo_market_search_error").css("visibility", "visible");
+        returnValue = false;
 
     } else {
 
 //        $("form.items_listing").submit();
     }
+    
+    return returnValue;
 
 }
