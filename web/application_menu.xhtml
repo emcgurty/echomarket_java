@@ -22,7 +22,8 @@
 
         <ul id="nav" class="application_menu">
             <li class="subs">
-                <a href="#s1">Echo Market: Welcome <h:outputText value="#{username}!" /></a>
+                
+                <h:commandLink id="index" action="index" value="Echo Market: Welcome #{username}!" hreflang="#s1"/>
                 <ul>
                     <li>
                         <h:commandLink id="allItemsListing" action="all_items_listing">
