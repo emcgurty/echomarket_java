@@ -1,6 +1,5 @@
-$.noConflict();
-jQuery(document).ready(function ($) {
-    alert("In registration");
+$(document).ready(function ($) {
+    
 
     size_of_menu();
     $(window).resize(function () {
@@ -10,14 +9,14 @@ jQuery(document).ready(function ($) {
         alert("select change");
     });
     $('input').on('change', function () {
-        alert("input change");
+//        alert("input change");
         if (this.id.includes('registrationType')) {
-            alert("Okay");
+//            alert("Okay");
             var y_n = $(this).val();
             if (y_n == 5){
 
                 $("div#communityNameDiv").css("display", "block");
-                $("div#onePersonReg").css("display", "none");
+                $("div#onePersonReg").css("display", "block");
             } else {
                 $("div#communityNameDiv").css("display", "none");
                 $("div#onePersonReg").css("display", "block");
