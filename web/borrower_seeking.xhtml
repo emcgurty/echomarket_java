@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -9,16 +11,18 @@
                 template="./echomarketTemplate.xhtml">
 
     <ui:define name="header"  >
-        <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" /> 
-    </ui:define>
+        <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" /> </ui:define>
     <ui:define name="content"  >
-        <h:head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-             <h:outputScript library="javascript" name="borrower_seeking.js"  />
-            <title>#{bundle.borrowerSeeking}</title>
-        </h:head>
-        
+
+
         <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
+            <h:head>
+                <h:outputScript library="javascript" name="borrower_seeking.js"  />
+<!--                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
+                <title>#{bundle.borrowerSeeking}</title>
+            </h:head>
+
             <ui:include rendered="true" src="borrower_menu.xhtml" id="borrowersMenu" /> 
 
             <div class="messagecolor">
@@ -39,7 +43,7 @@
                             <h:commandLink  action="#{bb.saveBorrowerRegistration()}"  class="right_div" value="Save Borrower Item Registration"  />
                         </div> 
                     </div> 
-                    
+
                     <div class="top review" style="display:none;">
                         <div style="margin:10px;margin-top:25px;" >
                             <h:outputText value="#{userBean.username}: BORROWER ITEM REGISTRATION"  />
@@ -486,9 +490,9 @@
                             </h:outputLabel>
 
                             <div id="emailAlternative" style="display:none;float:left;height:auto;width:inherit;margin-top:10px;"  >    
-                                    <h:outputLabel for="emailAlternative" value="Your Alternative Email:" style="margin-left: 5px; margin-top:5px;">
-                                        <h:inputText  value="#{bb.emailAlternative}" id="emailAlternative" style="margin-left: 5px;"/>
-                                    </h:outputLabel>
+                                <h:outputLabel for="emailAlternative" value="Your Alternative Email:" style="margin-left: 5px; margin-top:5px;">
+                                    <h:inputText  value="#{bb.emailAlternative}" id="emailAlternative" style="margin-left: 5px;"/>
+                                </h:outputLabel>
                             </div>
                         </div>
                     </div>
@@ -615,7 +619,7 @@
 
                         </div>
                     </div>
-                    
+
                     <table >
                         <tr class="odd">
                             <td style="width:50%;">
@@ -700,12 +704,12 @@
                     </table>
                     <br />
                     <div style="margin-left:25px;margin-top:5px;float:left;">
-                        
+
                         <h:dataTable id="picture"  value="#{bb.picture}" var="image" >
                             <h:column rowHeader="">
                                 <div style="margin-left:25px;margin-top:5px;float:left;">
                                     <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
-                                         <h:inputFile id="imageFileNamePart" value="#{bb.imageFileNamePart}" />
+                                        <h:inputFile id="imageFileNamePart" value="#{bb.imageFileNamePart}" />
                                         <span class="file_image_error">&nbsp;</span>
                                     </h:outputLabel>
                                     <br />
