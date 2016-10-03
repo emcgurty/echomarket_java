@@ -5,7 +5,8 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                template="./echomarketTemplate.xhtml">
+                template="./echomarketTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="indexHeader" /> 
@@ -20,25 +21,30 @@
                     <p><span class="index_text" >Your goodwill resource for lending, borrowing and even trading or donating some of life's necessities.</span></p>
                     <p><span class="index_text" >Folks borrowing or lending as individuals or members within a Sharing Community.</span></p>
                     <p><span class="index_text" >In order to seek an item to borrow or offer an item to lend, you must be registered with Echo Market.</span></p>
-                    <p><span class="index_text" >Otherwise, you may search the Echo Market for items sought to borrow...</span></p>
+                    <p><span class="index_text" >Otherwise, go ahead and search the Echo Market for items to borrow, or items to lend...</span></p>
                     <h:commandLink id="borrow" action="search_borrowers" immediate="true">
                         <h:outputText value="#{bundle.BorrowerSearch}"/>
                     </h:commandLink>
                     <br />
-                    <p><span class="index_text">Or, search for items offered to lend...</span></p>
-                    <h:commandLink id="lend" action="lender_search" immediate="true">
-                        <h:outputText value="#{bundle.LenderSearch}"/>
-                    </h:commandLink>
+                    
 
                 </div>
-       
+                 </div>
+         </h:form>
             <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
-                <ui:include rendered="true" src="b_login.xhtml" id="B_Login" /> 
+                <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
+                <c:set var="userType" value="#{userBean.userType}"  />
+                <c:if test="#{userLoggedIn}" >
+                <ui:include rendered="true" src="b_login.xhtml" id="B_Login"  /> 
+                </c:if>
+                <c:if test="#{not userLoggedIn}" >
+                <ui:include rendered="true" src="b_history.xhtml" id="B_history"  /> 
+                </c:if>
             </div>
 
-            </div>
+           
 
-        </h:form>
+      
 
     </ui:define>
 
