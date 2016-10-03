@@ -41,7 +41,8 @@ public class UserBean extends AbstractBean implements Serializable {
     private String resetCode;
     private String appEmail;
     private String userAction;
-    
+    private String registrationType;
+    private String communityName;
 
     public UserBean() {
     }
@@ -58,7 +59,7 @@ public class UserBean extends AbstractBean implements Serializable {
         this.email = null;
         this.resetCode = null;
         this.appEmail = null;
-        
+
         return "index?faces-redirect=true";
     }
 
@@ -284,12 +285,13 @@ public class UserBean extends AbstractBean implements Serializable {
             setUserType(users_Array.getUserType());
             setUserAlias(users_Array.getUserAlias());
             setUsername(users_Array.getUsername());
+            setEmail(users_Array.getEmail());
             setSessionVariables();
 
             message(
                     null,
                     "LogInSuccessful",
-                   new Object[]{username});
+                    new Object[]{username});
             return_string = "index";
         } else if (getp == false) {
             username = null;
@@ -648,4 +650,45 @@ public class UserBean extends AbstractBean implements Serializable {
         this.userAction = userAction;
     }
 
+    /**
+     * @return the registrationType
+     */
+    public String getRegistrationType() {
+        return registrationType;
+    }
+
+    /**
+     * @param registrationType the registrationType to set
+     */
+    public void setRegistrationType(String registrationType) {
+        this.registrationType = registrationType;
+    }
+
+    /**
+     * @return the communityName
+     */
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    /**
+     * @param communityName the communityName to set
+     */
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String userNameLabel(Integer IsCommunity) {
+        
+        if (IsCommunity == 1) {
+            return "Community UserName:";
+        } else {
+           return "UserName:"; 
+            
+        }
+            
+        
+        
+    }
+    
 }
