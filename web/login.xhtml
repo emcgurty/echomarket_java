@@ -14,7 +14,8 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form  id="user_login">
+        <ui:include rendered="true" src="b_login.xhtml" id="LoginBody" /> 
+<!--        <h:form  id="user_login">
 
             <f:metadata>
                 <f:viewParam name="reset_code" id="reset_code" value="#{userBean.resetCode}" />
@@ -94,7 +95,7 @@
                     </tr>
                 </table>
             </div>
-        </h:form>
+        </h:form>-->
 
     </ui:define>
 
