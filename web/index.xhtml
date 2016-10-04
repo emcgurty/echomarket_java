@@ -15,6 +15,7 @@
 
     <ui:define name="content"  >
         <h:form id="index_options">
+            <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
             <div class="top" id="index_div" style="font-size:20px;margin-left:5px;border-top:#3B5998 double thin;">
                 <div style="position:relative;float:left;width:45%;margin-left:25px;margin-top:5px;margin-bottom:5px;"   >
                     <p>Welcome to the Echo Market!</p>
@@ -41,10 +42,6 @@
                 <ui:include rendered="true" src="b_history.xhtml" id="B_history"  /> 
                 </c:if>
             </div>
-
-           
-
-      
 
     </ui:define>
 
