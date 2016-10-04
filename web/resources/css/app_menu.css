@@ -1,0 +1,80 @@
+#nav_v2 {
+    display: none;
+}
+
+/*top level elements */
+#nav, #nav ul {
+    list-style:none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+#nav {
+    height: 22px;
+    padding: 10px 0 10px 5px;
+    position: relative;
+}
+
+#nav > li {
+    float: left;
+    height: 22px;
+    padding-right: 6px;
+    position: relative;
+    text-align: left;
+}
+#nav > li > a {
+    display: block;
+    
+}
+#nav > li:hover > a, #nav > a:hover {
+    margin-right: -8px;
+    padding: 0 9px 0 11px;
+    position: relative;
+    z-index: 1;
+}
+#nav > li.subs:hover > a {
+    z-index: 2;
+}
+
+/*top items separator */
+#nav > li:after {
+    background-color: pink;  /*  #405791; Color of the dividers */
+    content: "";
+    height: -17px;
+    left: 1px;
+    position: absolute;
+    top: 2px;
+    width: 1px;
+    
+}
+#nav > li:first-child:after {
+    background-color: transparent;
+}
+/*submenu */
+#nav ul {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(100, 100, 100, 0.4);
+/*    * border: 1px solid rgb(100, 100, 100);*/
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    display: none;
+    left: -1px;
+    margin-top: 2px;
+    min-width: 200px;
+    padding: 6px 0;
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+}
+#nav li:hover ul {
+    display: block;
+}
+#nav ul li a {
+
+}
+#nav ul li a:hover {
+    background-color: #6D84B4;
+    border-bottom: 1px solid yellow;  
+    border-top: 1px solid #3B5998;
+    color: #FFFFFF;
+}
