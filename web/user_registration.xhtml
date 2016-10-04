@@ -19,7 +19,7 @@
             <title>#{bundle.EchoMarketTitle}</title>
         </h:head>
         <h:form id="user_registration" >
-
+            <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
             <div class="messagecolor">
                 <h:messages showSummary="true" 
                             showDetail="false"
@@ -56,31 +56,31 @@
                 <div id="communityNameDiv" style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;display:none;" >
                     <p>
                         In registering as a Borrowing and Lending Community, on completed Registration and then later Login Echo Market will be exclusively yours. In registering, you will become the designated Community Leader with permitted privileges like adding borrowers and lenders, planning Community Meetings, ...
-                        
-                        
+
+
                     </p>
-                    
-                    
+
+
                     <h:outputLabel for="communityName"  value="#{bundle.communityName}">       
                         <h:inputText id="communityName" size="24" value="#{userBean.communityName}" style="margin-left:5px">
                         </h:inputText>
                     </h:outputLabel>
-                    
+
                     <span style="color:indigo;font-size:12px;">Required Community name, displayed only to members.</span>
                     <br />
                     <span class="error-message" id="communityName"></span>
                     <br />
                 </div>
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
+
+
+
                 <div id="onePersonReg" style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;display:none;" >
                     <table style="width:100%;margin-left: 50px" align="center" id="user_registration_table">
 
