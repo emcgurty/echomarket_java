@@ -1,5 +1,4 @@
-$.noConflict();
-jQuery(document).ready(function ($) {
+$(document).ready(function () {
 
     size_of_menu();
     showFormContact();
@@ -148,7 +147,7 @@ jQuery(document).ready(function ($) {
             } else {
                 $("div#thirdPartyPresenceB2lGroup").css("display", "none");
             }
-        
+
         } else if (this.id.includes('displayBorrowerOrganizationName')) {
             y_n = $(this).val();
             try {
@@ -804,7 +803,51 @@ function removeImage() {
     imageFileInput.val("");
 }
 
+function size_of_menu() {
 
+    var bmw = $("ul#nav.borrower_menu").css("width");
+    var lmw = $("ul#nav.lender_menu").css("width");
+    var imw = $("div#index_div").css("width");
+    //    var rap = $("div#right.app_panel").css("width");
+    //    var lap = $("div#left.app_panel").css("width");
+    //    var ah = $("div.application_header").css("width");
+    //    var center_without_menu = ah  rap  lap;
+    var fur = $("div#form_user_registration").css("width");
+    var uli = $("div#user_login").css("width");
+    var flog = $("div#form_login.top").css("width");
+    var div_top = $("div#content.center_content").css("width");
+    if (bmw) {
+
+        $("div.borrower_registration").css("width", bmw);
+        $("div.application_footer").css("width", bmw);
+    } else if (imw) {
+
+
+        $("div.application_footer").css("width", imw);
+    } else if (lmw) {
+
+
+        $("div.lender_registration").css("width", lmw);
+        $("div.application_footer").css("width", lmw);
+    } else if (fur) {
+
+        $("div.application_footer").css("width", fur);
+    } else if (uli) {
+
+        $("div.application_footer").css("width", fur);
+    } else if (flog) {
+
+        $("div.application_footer").css("width", flog);
+    } else {
+
+        $("div.application_footer").css("width", div_top);
+
+    }
+
+
+
+    return true;
+}
 //Will use when I am ready...
 //function resetFormElement(e) {
 //  e.wrap('<form>').closest('form').get(0).reset();
