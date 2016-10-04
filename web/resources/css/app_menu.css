@@ -38,7 +38,7 @@
 
 /*top items separator */
 #nav > li:after {
-    background-color: pink;  /*  #405791; Color of the dividers */
+    
     content: "";
     height: -17px;
     left: 1px;
@@ -52,11 +52,7 @@
 }
 /*submenu */
 #nav ul {
-    background-color: #FFFFFF;
-    border: 1px solid rgba(100, 100, 100, 0.4);
-/*    * border: 1px solid rgb(100, 100, 100);*/
-    border-radius: 0 0 3px 3px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    
     display: none;
     left: -1px;
     margin-top: 2px;
@@ -73,8 +69,5 @@
 
 }
 #nav ul li a:hover {
-    background-color: #6D84B4;
-    border-bottom: 1px solid yellow;  
-    border-top: 1px solid #3B5998;
-    color: #FFFFFF;
+    
 }
