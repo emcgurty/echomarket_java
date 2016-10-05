@@ -73,15 +73,15 @@
                     <p>
                         <h:commandLink  action="#{userBean.loginUser()}" id="user_login" value="Login" />
                         <br />
-                        <h:commandLink  action="forgotUsername" id="forgot_username" value="Forgot Username"  >
+                        <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username"  >
                             <f:ajax />
                         </h:commandLink>
                         <h:outputText value=" | " />
-                        <h:commandLink  action="forgotUserPassword" id="forgot_password" value="Forgot Password"   >
+                        <h:commandLink  action="#{userBean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password"   >
                             <f:ajax />
                         </h:commandLink>
                         <h:outputText value=" | " />
-                        <h:commandLink  action="user_registration" id="register" value="Register"   >
+                        <h:commandLink  action="#{userBean.load_user_registration()}" id="register" value="Register"   >
                             <f:ajax />
                         </h:commandLink>
                     </p>     
