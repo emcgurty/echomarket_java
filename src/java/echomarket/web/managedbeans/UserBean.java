@@ -691,4 +691,27 @@ public class UserBean extends AbstractBean implements Serializable {
         
     }
     
+    /// Added these becuase footer was not being loaded..
+    
+    public String login() {
+        
+        return "login";
+    }
+    
+    public String load_forgotUserPassword() {
+        
+        return "forgotUserPassword";
+    }
+    
+    public String load_forgotUsername() {
+        
+        return "forgotUsername";
+    }
+    
+    
+    public String load_user_registration() {
+        
+        return "user_registration";
+    }
+    
 }
