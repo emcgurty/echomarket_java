@@ -20,7 +20,7 @@
         </c:choose>
 
 
-        <ul id="nav" class="application_menu">
+        <ul id="nav" class="menu">
             <li class="subs">
                 
                 <h:commandLink id="index" action="index" value="Echo Market: Welcome #{username}!" hreflang="#s1"/>
@@ -128,7 +128,7 @@
                     <a href="#s1">Login</a>
                     <ul>
                         <li>
-                            <h:commandLink id="register" action="user_registration">
+                            <h:commandLink id="register" action="#{userBean.user_registration()}">
                                 <h:outputText value="Register"/>
 
                             </h:commandLink>
@@ -136,19 +136,19 @@
                         </li>
 
                         <li>
-                            <h:commandLink id="login" action="login">
+                            <h:commandLink id="login" action="#{userBean.login()}">
                                 <h:outputText value="Login"/>
                             </h:commandLink>                 
 
                         </li>
                         <li>
-                            <h:commandLink id="forgotUsername" action="forgotUsername">
+                            <h:commandLink id="forgotUsername" action="#{userBean.load_forgotUsername()}">
                                 <h:outputText value="Forgot Username"/>
                             </h:commandLink>                 
 
                         </li>
                         <li>
-                            <h:commandLink id="forgotUserPassword" action="forgotUserPassword">
+                            <h:commandLink id="forgotUserPassword" action="#{userBean.load_forgotUserPassword()}">
                                 <h:outputText value="Forgot Password"/>
                             </h:commandLink>                 
 
