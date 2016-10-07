@@ -15,11 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
 
-/**
- * <p>
- * Managed bean for the <code>/bookstore.xhtml</code> page.</p>
- */
-@ManagedBean(name="selectedOption", eager = false)
+@ManagedBean(name="selectedOption")
 @RequestScoped
 public class SelectedOptionBean  {
 
