@@ -23,10 +23,10 @@
             <column length="24" name="last_name" not-null="true"/>
         </property>
         <property name="displayLenderName" type="int">
-            <column name="displayLenderName" not-null="true"/>
+            <column name="displayLenderName" />
         </property>
         <property name="displayLenderAddress" type="int">
-            <column name="displayLenderAddress" not-null="true"/>
+            <column name="displayLenderAddress" />
         </property>
         <property name="homePhone" type="string">
             <column length="20" name="home_phone"/>
@@ -47,7 +47,7 @@
             <column name="public_display_alternative_phone"/>
         </property>
         <property name="useWhichContactAddress" type="int">
-            <column name="useWhichContactAddress" not-null="true"/>
+            <column name="useWhichContactAddress" />
         </property>
         <property name="emailAlternative" type="string">
             <column length="50" name="email_alternative"/>
@@ -212,7 +212,7 @@
             <column name="displayLenderOrganizationName"/>
         </property>
         <property name="approved" type="int">
-            <column name="approved" not-null="true"/>
+            <column name="approved" />
         </property>
         <property name="notifyBorrowers" type="java.lang.Integer">
             <column name="notify_borrowers"/>
@@ -245,7 +245,7 @@
             <column length="40" name="advertiser_id"/>
         </property>
         <property name="displayLenderAlternativeAddress" type="int">
-            <column name="displayLenderAlternativeAddress" not-null="true"/>
+            <column name="displayLenderAlternativeAddress" />
         </property>
     </class>
 </hibernate-mapping>
