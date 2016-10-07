@@ -3,7 +3,7 @@
 <!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
   <class catalog="echomarket" name="echomarket.hibernate.Contacts" optimistic-lock="version" table="contacts">
-    <id name="contactId" type="string">
+    <id name="contact_id" type="string">
       <column length="40" name="contact_id"/>
       <generator class="assigned"/>
     </id>
@@ -22,7 +22,7 @@
     <property name="dateCreated" type="timestamp">
       <column length="19" name="date_created" not-null="true"/>
     </property>
-    <property name="userId" type="string">
+    <property name="user_id" type="string">
       <column length="40" name="user_id"/>
     </property>
   </class>
