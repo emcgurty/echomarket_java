@@ -118,6 +118,7 @@ public class Lenders implements java.io.Serializable {
     }
 
     public Lenders(String id, String user_id, int contactDescribeId, String otherDescribeYourself, String firstName, String mi, String lastName, int displayLenderName, int displayLenderAddress, int displayLenderAlternativeAddress, String homePhone, String cellPhone, String alternativePhone, Integer publicDisplayHomePhone, Integer publicDisplayCellPhone, Integer publicDisplayAlternativePhone, int useWhichContactAddress, String emailAlternative, Integer borrowerContactByEmail, Integer borrowerContactByHomePhone, Integer borrowerContactByCellPhone, Integer borrowerContactByAlternativePhone, String borrowerContactByFacebook, String borrowerContactByTwitter, String borrowerContactByInstagram, String borrowerContactByLinkedIn, String borrowerContactByOtherSocialMedia, String borrowerContactByOtherSocialMediaAccess, Integer BComesToWhichAddress, Integer meetBorrowerAtAgreedL2b, Integer willDeliverToBorrowerPreferredL2b, Integer thirdPartyPresenceL2b, Integer lenderThirdPartyChoiceL2b, Integer agreedThirdPartyChoiceL2b, Integer BReturnsToWhichAddress, Integer meetBorrowerAtAgreedB2l, Integer willPickUpPreferredLocationB2l, Integer thirdPartyPresenceB2l, int lenderThirdPartyChoiceB2l, Integer agreedThirdPartyChoiceB2l, Integer borrowerChoice, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemCount, Integer forFree, Integer availableForPurchase, BigDecimal availableForPurchaseAmount, Integer smallFee, BigDecimal smallFeeAmount, Integer availableForDonation, Integer donateAnonymous, Integer trade, String tradeItem, Integer agreedNumberOfDays, Integer agreedNumberOfHours, Integer indefiniteDuration, Integer presentDuringBorrowingPeriod, Integer entirePeriod, Integer partialPeriod, Integer provideProperUseTraining, String specificConditions, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, Date dateUpdated, Date dateDeleted, String organizationName, Integer displayLenderOrganizationName, int approved, Integer notifyBorrowers, Integer receiveBorrowerNotifications, int itemConditionId, BigDecimal securityDepositAmount, Integer securityDeposit, Integer isCommunity, String remoteIp, String comment, String advertiserId) {
+        try {
         this.lender_id = id;
         this.user_id = user_id;
         this.contactDescribeId = contactDescribeId;
@@ -200,6 +201,10 @@ public class Lenders implements java.io.Serializable {
         this.remoteIp = remoteIp;
         this.comment = comment;
         this.advertiserId = advertiserId;
+        } catch(Exception ex) {
+            System.out.println("bad");
+            
+        }
     }
 
 /**
