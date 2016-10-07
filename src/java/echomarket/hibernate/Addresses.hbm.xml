@@ -7,10 +7,10 @@
       <column length="40" name="id"/>
       <generator class="assigned"/>
     </id>
-    <property name="lenderId" type="string">
+    <property name="lender_id" type="string">
       <column length="40" name="lender_id"/>
     </property>
-    <property name="borrowerId" type="string">
+    <property name="borrower_id" type="string">
       <column length="40" name="borrower_id"/>
     </property>
     <property name="addressLine1" type="string">
