@@ -10,42 +10,36 @@ import java.util.Date;
 public class Contacts  implements java.io.Serializable {
 
 
-     private String contactId;
+     private String contact_id;
      private String subject;
      private String remoteIp;
      private String email;
      private String comments;
      private Date dateCreated;
-     private String userId;
+     private String user_id;
 
     public Contacts() {
     }
 
 	
     public Contacts(String contactId, String subject, String email, String comments, Date dateCreated) {
-        this.contactId = contactId;
+        this.contact_id = contactId;
         this.subject = subject;
         this.email = email;
         this.comments = comments;
         this.dateCreated = dateCreated;
     }
-    public Contacts(String contactId, String subject, String remoteIp, String email, String comments, Date dateCreated, String userId) {
-       this.contactId = contactId;
+    public Contacts(String contactId, String subject, String remoteIp, String email, String comments, Date dateCreated, String user_id) {
+       this.contact_id = contactId;
        this.subject = subject;
        this.remoteIp = remoteIp;
        this.email = email;
        this.comments = comments;
        this.dateCreated = dateCreated;
-       this.userId = userId;
+       this.user_id = user_id;
     }
    
-    public String getContactId() {
-        return this.contactId;
-    }
     
-    public void setContactId(String contactId) {
-        this.contactId = contactId;
-    }
     public String getSubject() {
         return this.subject;
     }
@@ -81,16 +75,35 @@ public class Contacts  implements java.io.Serializable {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
-    public String getUserId() {
-        return this.userId;
+
+    /**
+     * @return the contact_id
+     */
+    public String getContact_id() {
+        return contact_id;
+    }
+
+    /**
+     * @param contact_id the contact_id to set
+     */
+    public void setContact_id(String contact_id) {
+        this.contact_id = contact_id;
+    }
+
+    /**
+     * @return the user_id
+     */
+    public String getUser_id() {
+        return user_id;
+    }
+
+    /**
+     * @param user_id the user_id to set
+     */
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
     
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-
-
 
 }
 
