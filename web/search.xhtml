@@ -40,7 +40,7 @@
             </div> 
 
 
-            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: azure; width:90%; padding: 10px;">
+            <div  style="float:left;margin-top:5px;margin-left:15px;background-color: azure; width:90%; padding: 10px;font-weight: 700">
 
                 <h:outputLabel value="SEARCH items to borrow or items to lend?:"  for="lenderOrBorrower" >
                     <h:selectOneRadio id="lenderOrBorrower"  value="#{search.lenderOrBorrower}" layout='lineDirection' required="false">
@@ -142,6 +142,23 @@
 
             </div>
 
+            
+            <h:dataTable id="item_search"  value="#{search.searchResultList}" var="var_search" >
+            <h:column rowHeader="">
+                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                    <h:outputLabel for="itemDescription" value="Item Description:" >
+                        <h:outputText  id="itemDescription" value="#{var_search.itemDescription}" style="margin-left:10px;color:black;"/>
+                    </h:outputLabel>
+                    <br />
+                    <h:outputLabel for="itemModel" value="Item Model:" >
+                        <h:outputText  id="itemModel" value="#{var_search.itemModel}" style="margin-left:10px;color:black;"/>
+                    </h:outputLabel>
+                    <br />
+
+                </div>
+            </h:column>
+        </h:dataTable>
+            
 
 
         </h:form>
