@@ -704,8 +704,8 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     
     public String load_forgotUsername() {
-        
-        return "forgotUsername";
+        this.userAction = "forgotUsername";
+        return "index";
     }
     
     
