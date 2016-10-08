@@ -27,21 +27,29 @@
                         <h:outputText value="#{bundle.BorrowerSearch}"/>
                     </h:commandLink>
                     <br />
-                    
+
 
                 </div>
-                 </div>
-         </h:form>
-            <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
-                <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
-                <c:set var="userType" value="#{userBean.userType}"  />
-                <c:if test="#{userLoggedIn}" >
-                <ui:include rendered="true" src="b_login.xhtml" id="B_Login"  /> 
-                </c:if>
-                <c:if test="#{not userLoggedIn}" >
-                <ui:include rendered="true" src="b_history.xhtml" id="B_history"  /> 
-                </c:if>
             </div>
+        </h:form>
+        <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
+            <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
+            <c:set var="userType" value="#{userBean.userType}"  />
+            <c:set var="userAction" value="#{userBean.userAction}"  />
+            <h:outputText value="#{userAction}" />
+            
+
+            <c:if test="#{userLoggedIn}" >
+                <ui:include rendered="true" src="b_login.xhtml" id="B_Login"  /> 
+            </c:if>
+            <c:if test="#{not userLoggedIn and userAction != 'forgotUsername'}" >
+                <ui:include rendered="true" src="b_history.xhtml" id="B_history"  /> 
+            </c:if>
+
+            <c:if test="#{not userLoggedIn and userAction == 'forgotUsername'}" >
+                <ui:include rendered="true" src="forgotUsername.xhtml" id="user_forgot"  /> 
+            </c:if>
+        </div>
 
     </ui:define>
 
