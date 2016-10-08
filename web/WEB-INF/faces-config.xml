@@ -93,6 +93,10 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
+        <managed-bean-name>searchBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.SearchesBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope></managed-bean>
+    <managed-bean>
         <managed-bean-name>borrowerBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.BorrowersBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
