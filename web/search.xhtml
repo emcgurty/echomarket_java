@@ -34,7 +34,7 @@
             <div class="top" >
                 <div style="margin:10px;margin-top:25px;margin-right:15px;" >
                     <h:outputText value="BORROWER OR LENDER ITEM SEARCH"  />
-                    <h:commandLink  action="#{search.SearchResults()}"  class="right_div" value="Fingers Crossed! Submit search." />
+                    <h:commandLink  action="#{search.SearchResults()}"  class="right_div" value="Fingers Crossed! Submit search." onclick=""/>
 
                 </div> 
             </div> 
@@ -42,12 +42,12 @@
 
             <div  style="float:left;margin-top:5px;margin-left:15px;background-color: azure; width:90%; padding: 10px;">
 
-                <h:outputLabel value="SEARCH items to borrow or items to lend?:"  for="lender_or_borrower" >
-                    <h:selectOneRadio id="lender_or_borrower"  value="#{search.lenderOrBorrower}" layout='lineDirection'>
+                <h:outputLabel value="SEARCH items to borrow or items to lend?:"  for="lenderOrBorrower" >
+                    <h:selectOneRadio id="lenderOrBorrower"  value="#{search.lenderOrBorrower}" layout='lineDirection' required="false">
                         <f:selectItem itemValue="1" itemLabel="What have LENDERS offered:" />
                         <f:selectItem itemValue="2" itemLabel="What have BORROWERS sought:" />
-
                     </h:selectOneRadio>    
+                    <h:message styleClass="error-message" for="lenderOrBorrower"/>
                 </h:outputLabel>   
 
 
@@ -57,7 +57,8 @@
             <div  style="float:left;margin-top:5px;margin-left:15px;background-color: white; width:45%; padding: 10px;">
 
                 <h:outputLabel value="By Item Description or Model:" for="keyword" >
-                    <h:inputText  id="keyword"  value="#{search.keyword}" class="search" style="margin-left:10px;" />
+                    <h:inputText  id="keyword"  value="#{search.keyword}" class="search" style="margin-left:10px;" required="false"/>
+                    <h:message styleClass="error-message" for="keyword"/>
                 </h:outputLabel>
                 <br />
                 <span class="radius" >Use one singular noun or verb to describe an item, you can use a partial word.</span>
@@ -66,10 +67,10 @@
             <div  style="float:left;margin-top:5px;margin-left:15px;background-color: white; width:45%; padding: 10px;">
 
                 <h:outputLabel for="categoryId" value="By Item category:" >
-                   <h:selectOneMenu id="categoryId"  value="#{search.categoryId}" style="margin-left:10px;" >
+                    <h:selectOneMenu id="categoryId"  value="#{search.categoryId}" style="margin-left:10px;" required="false">
                         <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c" itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
                         </f:selectItems>
-
+                        <h:message styleClass="error-message" for="categoryId"/>
                     </h:selectOneMenu>
                 </h:outputLabel>  
 
@@ -86,12 +87,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <h:inputText  id="start_date" value="#{search.startDate}"   />
-
+                            <h:inputText  id="startDate" value="#{search.startDate}"   required="false"/>
+                            <h:message styleClass="error-message" for="startDate"/>
                         </td>
                         <td></td>
                         <td>
-                            <h:inputText  id="end_date" value="#{search.endDate}"    />
+                            <h:inputText  id="endDate" value="#{search.endDate}"    required="false"/>
+                            <h:message styleClass="error-message" for="endDate"/>
                         </td>
                     </tr>
                     <tr>
@@ -104,9 +106,10 @@
 
             <div  class="location" style="float:left;">
                 <div  style="float:left;margin-top:5px;margin-left:15px;background-color: white; width:45%; padding: 10px;">
-                    <h:outputLabel value="By Postal Code Location:" for="postal_code"  >
-                        <h:inputText  id="postal_code" class="search"  value="#{search.postalCode}" style="margin-left:10px;" />
+                    <h:outputLabel value="By Postal Code Location:" for="postalCode"  >
+                        <h:inputText  id="postalCode" class="search"  value="#{search.postalCode}" style="margin-left:10px;" required="false"/>
                         <br />
+                        <h:message styleClass="error-message" for="postalCode"/>
                         <span class="error-message" id="postal_code_location_error"></span>
                     </h:outputLabel>
 
@@ -117,16 +120,17 @@
                     <h:outputLabel value="Within Radius:"  for="zip_code_radius" >
                         <br />
                         <h:outputLabel value="Select number of miles from your entered postal code."   />
-                        <h:selectOneRadio id="zip_code_radius"  layout='lineDirection'>
+                        <h:selectOneRadio id="zip_code_radius"  layout='lineDirection' required="false">
                             <f:selectItem itemValue="1" itemLabel="One Mile:" />
                             <f:selectItem itemValue="5" itemLabel="Five Miles:" />
                             <f:selectItem itemValue="10" itemLabel="Ten Miles:" />
                             <f:selectItem itemValue="25" itemLabel="25 Miles:" />
+
                         </h:selectOneRadio>    
                     </h:outputLabel>   
 
                     <h:outputLabel value="Postal Codes found within radius:" for="postal_code" >
-                        <h:inputText  id="found_zip_codes" value="#{search.found_zip_codes}" class="search" style="margin-left:10px;" />
+                        <h:inputText  id="found_zip_codes" value="#{search.found_zip_codes}" class="search" style="margin-left:10px;" required="false"/>
                     </h:outputLabel>
                     <span class="error-message" id="postal_code_error"></span>
                 </div>
