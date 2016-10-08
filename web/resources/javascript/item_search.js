@@ -11,11 +11,11 @@ $(document).ready(function () {
     //container.find("span#echo_market_search_error");
 
 
-    $("input[id$='start_date']").datepicker({
+    $("input[id$='startDate']").datepicker({
         dateFormat: "yy-mm-dd"
     });
 
-    $("input[id$='end_date']").datepicker({
+    $("input[id$='endDate']").datepicker({
         dateFormat: "yy-mm-dd"
     });
 
@@ -30,13 +30,13 @@ $(document).ready(function () {
 
     });
 
-    $("input[id$='end_date']").bind('change', function () {
+    $("input[id$='endDate']").bind('change', function () {
         $("span#start_date_error").css("visibility", "hidden");
         $("span#end_date_error").css("visibility", "hidden");
         $("span#start_date_error").text("");
         $("span#end_date_error").text("");
 
-        var start_date_value = $("input[id$='start_date']").val();
+        var start_date_value = $("input[id$='startDate']").val();
         var end_date_value = $(this).val();
 
         if ((start_date_value == '') && (end_date_value != '')) {
@@ -50,7 +50,7 @@ $(document).ready(function () {
 
     });
 
-    $("input[id$='start_date']").bind('change', function () {
+    $("input[id$='startDate']").bind('change', function () {
 
         $("#end_date_error").css("visibility", "hidden");
         $("#start_date_error").css("visibility", "hidden");
@@ -58,7 +58,7 @@ $(document).ready(function () {
         $("#end_date_error").text("");
 
         var start_date_value = $(this).val();
-        var end_date_value = $("input[id$='end_date']").val();
+        var end_date_value = $("input[id$='endDate']").val();
 
         if ((end_date_value == '') && (start_date_value != '')) {
             $("#end_date_error").text("Now please provide an End Date.");
@@ -72,7 +72,7 @@ $(document).ready(function () {
 
     });
 
-    $("input[name='search:postal_code']").bind('change', function () {
+    $("input[name='search:postalCcode']").bind('change', function () {
 //      alert("chapge postal");
         $("span#postal_code_location_error").text("");
         $("span#postal_code_location_error").css("visibility", "hidden");
@@ -265,6 +265,7 @@ function submitSearch() {
 //        $("form.items_listing").submit();
     }
     
-    return returnValue;
+//    return returnValue;  Just for debuggung
+    return true;
 
 }
