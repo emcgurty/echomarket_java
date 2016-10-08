@@ -1,15 +1,16 @@
 $(document).ready(function () {
+    var remove_div_css = $("div#nav.dumby").css("background", "white");
+    remove_div_css.css("height", "0px");
+    remove_div_css.css("padding", "0px");
+    remove_div_css.css("border-bottom", "#3B5998 double medium");
 
     size_of_menu();
     $(window).resize(function () {
         size_of_menu();
     });
 
-    var remove_div_css = $("div#nav.dumby").css("background", "white");
-    remove_div_css.css("height", "0px");
-    remove_div_css.css("padding", "0px");
-    remove_div_css.css("border-bottom", "#3B5998 double medium");
-    
+
+
 
 });
 function size_of_menu() {
