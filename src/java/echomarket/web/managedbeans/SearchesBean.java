@@ -1,18 +1,16 @@
 package echomarket.web.managedbeans;
 
-import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.Id;
 
 @Named
 @ManagedBean(name = "search")
@@ -24,22 +22,22 @@ public class SearchesBean extends AbstractBean implements Serializable {
     private String found_zip_codes;
     private String keyword;
     private String postalCode;
-    private Date createdAt;
-    private Date updatedAt;
     private Integer categoryId;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private Integer lenderOrBorrower;
     private int isCommunity;
     private String user_id;
     private Integer zipCodeRadius;
     private String remoteIp;
 
+
     /**
      * @return the found_zip_codes
      */
     public String getFound_zip_codes() {
         return this.found_zip_codes;
+
     }
 
     /**
@@ -52,41 +50,60 @@ public class SearchesBean extends AbstractBean implements Serializable {
     public String SearchResults() {
 
         // Build query string
-        String queryString = null;
-
-        if (getFound_zip_codes() != null) {
-            queryString = " postal_code in ('" + this.found_zip_codes + "')";
+        
+        String queryString = "";
+        String forceString = this.found_zip_codes;
+        if (forceString.matches(".*\\d.*")) {
+            queryString = " postal_code in (\'" + forceString + "\')";
+        } else {
+            forceString = this.postalCode;
+            if (forceString.matches(".*\\d.*")) {
+                queryString = " postal_code like \'" + forceString + "%\'";
+            }
         }
-
-        if (getPostalCode() != null) {
-            queryString = " postal_code like '" + this.postalCode + "%'";
-        }
-
         try {
-            if ((this.startDate != null) && (this.endDate != null)) {
-                if (queryString != null) {
+            
+            Date sd = new Date();
+            try {
+                sd = ConvertDate(this.startDate);
+            } catch (Exception ex) {
+               Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+            }
+
+            Date ed = new Date();
+            try {
+                ed = ConvertDate(this.endDate);
+            } catch (Exception ex) {
+               Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+            }
+
+            if ((sd != null) || (ed != null)) {
+                if (queryString.length() > 0) {
                     queryString = queryString + " OR ";
                 }
-                queryString = queryString + " ( date_created > '" + this.startDate + "' AND date_created < '" + addDays(this.endDate, 1) + "' ) ";
+                queryString = queryString + " ( date_created > \'" + sd + "\' AND date_created < \'" + addDays(ed, 1) + "\' ) ";
+                
             }
         } catch (Exception ex) {
 
-            Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
 
         }
-
-        if (this.postalCode != null) {
-            if (queryString != null) {
+        forceString = this.keyword;
+        if (forceString.isEmpty() == false) {
+        if (queryString.length() > 0) {
                 queryString = queryString + " OR ";
             }
-            queryString = queryString + " (item_description like '%" + this.keyword + "%' OR item_model like '%" + this.keyword + "%')";
+            queryString = queryString + " (item_description like \'%" + forceString + "%\' OR item_model like \'%" + forceString + "%\')";
+            
         }
 
-        if ((this.categoryId != null)) {
-            if (queryString != null) {
+        if ((this.categoryId != -2)) {
+            if (queryString.length() > 0) {
                 queryString = queryString + " OR ";
             }
-            queryString = queryString + " category_id = '" + this.categoryId + "' ";
+            queryString = queryString + " category_id = \'" + this.categoryId + "\' ";
+            
         }
 
         System.out.println(queryString);
@@ -105,11 +122,26 @@ public class SearchesBean extends AbstractBean implements Serializable {
             cal.setTime(date);
             cal.add(Calendar.DATE, days); //minus number would decrement the days
         } catch (Exception ex) {
+            Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
             return today;
         } finally {
             return cal.getTime();
         }
     }
+
+    private Date ConvertDate(String strDate) {
+
+        Date convert_date = new Date();
+        try {
+            convert_date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
+        } catch (ParseException ex) {
+            Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+            convert_date = null;
+
+        } 
+          return convert_date;
+        }
+    
 
     /**
      * @return the keyword
@@ -140,34 +172,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @return the createdAt
-     */
-    public Date getCreatedAt() {
-        return this.createdAt;
-    }
-
-    /**
-     * @param createdAt the createdAt to set
-     */
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     * @return the updatedAt
-     */
-    public Date getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    /**
-     * @param updatedAt the updatedAt to set
-     */
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    /**
      * @return the categoryId
      */
     public Integer getCategoryId() {
@@ -184,28 +188,28 @@ public class SearchesBean extends AbstractBean implements Serializable {
     /**
      * @return the startDate
      */
-    public Date getStartDate() {
+    public String getStartDate() {
         return this.startDate;
     }
 
     /**
      * @param startDate the startDate to set
      */
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
     /**
      * @return the endDate
      */
-    public Date getEndDate() {
+    public String getEndDate() {
         return this.endDate;
     }
 
     /**
      * @param endDate the endDate to set
      */
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
