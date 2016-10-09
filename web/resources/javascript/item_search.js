@@ -266,6 +266,6 @@ function submitSearch() {
     }
     
 //    return returnValue;  Just for debuggung
-    return true;
+    return returnValue;
 
 }
