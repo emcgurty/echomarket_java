@@ -34,8 +34,9 @@ public class SearchesBean extends AbstractBean implements Serializable {
     private Integer lenderOrBorrower;
     private int isCommunity;
     private String user_id;
-    private Integer zipCodeRadius;
+    private Integer zip_code_radius;
     private String remoteIp;
+    private String searchCriteria;
 
     /**
      * @return the found_zip_codes
@@ -56,6 +57,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
 
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
+        String foo = null;
         String whichDatabase = "";
         List address_list;
         // Build query string
@@ -72,10 +74,12 @@ public class SearchesBean extends AbstractBean implements Serializable {
 
                 for (int i = 0; i < address_list.size(); i++) {
                     Addresses cArray = (Addresses) address_list.get(i);
-                    buildPC = cArray.getBorrower_id() + ",";
+                    buildPC = buildPC + cArray.getBorrower_id() + ",";
                 }
-                buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                queryString = " borrower_id in (\'" + buildPC + "\')";
+                if (!buildPC.equals(foo)) {
+                    buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                    queryString = " borrower_id in (\'" + buildPC + "\')";
+                }
             } else {
                 queryString = " postal_code in (\'" + forceString + "\') AND borrower_id =  NULL";
                 whichDatabase = "from Addresses  where " + queryString;
@@ -83,36 +87,44 @@ public class SearchesBean extends AbstractBean implements Serializable {
                 tx.commit();
                 for (int i = 0; i < address_list.size(); i++) {
                     Addresses cArray = (Addresses) address_list.get(i);
-                    buildPC = cArray.getLender_id() + ",";
+                    buildPC = buildPC + cArray.getLender_id() + ",";
                 }
-                buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                queryString = " lender_id in (\'" + buildPC + "\')";
+                if (!buildPC.equals(foo)) {
+                    buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                    queryString = " lender_id in (\'" + buildPC + "\')";
+                }
             }
 
         } else {
             forceString = this.postalCode;
-            if (this.lenderOrBorrower == 2) {
-                queryString = " postal_code like (\'" + forceString + "%\') AND lender_id =  NULL";
-                whichDatabase = "from Addresses  where " + queryString;
-                address_list = sb.createQuery(whichDatabase).list();
-                tx.commit();
-                for (int i = 0; i < address_list.size(); i++) {
-                    Addresses cArray = (Addresses) address_list.get(i);
-                    buildPC = cArray.getBorrower_id() + ",";
+            if (forceString.matches(".*\\d.*")) {
+                if (this.lenderOrBorrower == 2) {
+                    queryString = " postal_code like (\'" + forceString + "%\') AND lender_id =  NULL";
+                    whichDatabase = "from Addresses  where " + queryString;
+                    address_list = sb.createQuery(whichDatabase).list();
+                    tx.commit();
+                    for (int i = 0; i < address_list.size(); i++) {
+                        Addresses cArray = (Addresses) address_list.get(i);
+                        buildPC = buildPC + cArray.getBorrower_id() + ",";
+                    }
+                    if (!buildPC.equals(foo)) {
+                        buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                        queryString = " borrower_id in (\'" + buildPC + "\')";
+                    }
+                } else {
+                    queryString = " postal_code like (\'" + forceString + "%\') AND borrower_id =  NULL";
+                    whichDatabase = "from Addresses  where " + queryString;
+                    address_list = sb.createQuery(whichDatabase).list();
+                    tx.commit();
+                    for (int i = 0; i < address_list.size(); i++) {
+                        Addresses cArray = (Addresses) address_list.get(i);
+                        buildPC = buildPC + cArray.getBorrower_id() + ",";
+                    }
+                    if (!buildPC.equals(foo)) {
+                        buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                        queryString = " lender_id in (\'" + buildPC + "\')";
+                    }
                 }
-                buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                queryString = " borrower_id in (\'" + buildPC + "\')";
-            } else {
-                queryString = " postal_code like (\'" + forceString + "%\') AND borrower_id =  NULL";
-                whichDatabase = "from Addresses  where " + queryString;
-                address_list = sb.createQuery(whichDatabase).list();
-                tx.commit();
-                for (int i = 0; i < address_list.size(); i++) {
-                    Addresses cArray = (Addresses) address_list.get(i);
-                    buildPC = cArray.getBorrower_id() + ",";
-                }
-                buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                queryString = " lender_id in (\'" + buildPC + "\')";
             }
         }
 
@@ -141,9 +153,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
 
             }
         } catch (Exception ex) {
-
             Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
-
         }
         forceString = this.keyword;
         if (forceString.isEmpty() == false) {
@@ -172,12 +182,109 @@ public class SearchesBean extends AbstractBean implements Serializable {
         } else {
             whichDatabase = "from Lenders where " + queryString;
         }
-
-        setSearchResultList(sb.createQuery(whichDatabase).list());
-        tx.commit();
-        tx = null;
+        this.searchCriteria = whichDatabase;
+        try {
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+            setSearchResultList(sb.createQuery(whichDatabase).list());
+            tx.commit();
+        } catch (Exception ex) {
+            Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+        } finally {
+            tx = null;
+            sb = null;
+            //Build pretty search criteria
+            setSearchCriteria(buildSearchCriteria());
+        }
 
         return "search";
+
+    }
+
+    private String buildSearchCriteria() {
+
+        String build = "";
+        String foo = null;
+        String hold = null;
+        Integer num = null;
+
+        if (this.lenderOrBorrower == 1) {
+            build = "Retrieve from LENDER records all items";
+        } else {
+            build = "Retrieve from BORROWER records all items";
+        }
+
+        hold = this.keyword;
+        if (!hold.equals(foo)) {
+            build = build + " containing the keyword, " + hold + ", in either the item description or item model,";
+        }
+
+        num = this.categoryId;
+        if (num != -2) {
+            Session hib = hib_session();
+            Transaction tx = hib.beginTransaction();
+            List results = null;
+            String queryString = "from Categories where category_id = :cat";
+            results = hib.createQuery(queryString).setParameter("cat", num).list();
+            tx.commit();
+            Categories cat_Array = new Categories();
+            cat_Array = (Categories) results.get(0);
+            build = build + " in Category, " + cat_Array.getCategoryType() + ",";
+            hib = null;
+            tx = null;
+        }
+
+        Date sd = new Date();
+        try {
+            sd = ConvertDate(this.startDate);
+        } catch (Exception ex) {
+            Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+        }
+
+        Date ed = new Date();
+        try {
+            ed = ConvertDate(this.endDate);
+        } catch (Exception ex) {
+            Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+        }
+
+        if ((sd != null) || (ed != null)) {
+            build = build + "created between the dates, " + this.startDate + " and " + this.endDate + ".";
+        }
+
+        return build;
+    }
+
+    private String buildRadiusPhrase(String h, Integer n) {
+
+        String phrase = null;
+
+        switch (n) {
+            case 1:
+                phrase = " within a one mile radius of " + h;
+                break;
+
+            case 5:
+                phrase = " within a five mile radius of " + h;
+                break;
+
+            case 10:
+                phrase = " within a ten mile radius of " + h;
+                break;
+
+            case 25:
+                phrase = " within a twenty-five mile radius of " + h;
+                break; // optional
+
+            default: // Optional
+
+        }
+
+        return phrase;
 
     }
 
@@ -322,20 +429,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @return the zipCodeRadius
-     */
-    public Integer getZipCodeRadius() {
-        return this.zipCodeRadius;
-    }
-
-    /**
-     * @param zipCodeRadius the zipCodeRadius to set
-     */
-    public void setZipCodeRadius(Integer zipCodeRadius) {
-        this.zipCodeRadius = zipCodeRadius;
-    }
-
-    /**
      * @return the remoteIp
      */
     public String getRemoteIp() {
@@ -361,6 +454,34 @@ public class SearchesBean extends AbstractBean implements Serializable {
      */
     public void setSearchResultList(List searchResultList) {
         this.searchResultList = searchResultList;
+    }
+
+    /**
+     * @return the searchCriteria
+     */
+    public String getSearchCriteria() {
+        return searchCriteria;
+    }
+
+    /**
+     * @param searchCriteria the searchCriteria to set
+     */
+    public void setSearchCriteria(String searchCriteria) {
+        this.searchCriteria = searchCriteria;
+    }
+
+    /**
+     * @return the zip_code_radius
+     */
+    public Integer getZip_code_radius() {
+        return zip_code_radius;
+    }
+
+    /**
+     * @param zip_code_radius the zip_code_radius to set
+     */
+    public void setZip_code_radius(Integer zip_code_radius) {
+        this.zip_code_radius = zip_code_radius;
     }
 
 }
