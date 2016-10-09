@@ -4,6 +4,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 template="./echomarketTemplate.xhtml">
@@ -139,26 +140,51 @@
 
             <div  style="float:left;margin-top:5px;width:100%;margin-left:15px;" >
                 <span class="error-message" id="echo_market_search_error"></span>
-
             </div>
 
-            
-            <h:dataTable id="item_search"  value="#{search.searchResultList}" var="var_search" >
-            <h:column rowHeader="">
-                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                    <h:outputLabel for="itemDescription" value="Item Description:" >
-                        <h:outputText  id="itemDescription" value="#{var_search.itemDescription}" style="margin-left:10px;color:black;"/>
-                    </h:outputLabel>
-                    <br />
-                    <h:outputLabel for="itemModel" value="Item Model:" >
-                        <h:outputText  id="itemModel" value="#{var_search.itemModel}" style="margin-left:10px;color:black;"/>
-                    </h:outputLabel>
-                    <br />
 
+
+            <c:set var="currentSearchResult"  value="#{search.searchResultList}" />
+            <c:set var="currentSearchCriteria"  value="#{search.searchCriteria }" />
+            <h:outputText  id="asd" value="#{currentSearchCriteria}" style="margin-left:10px;color:black;"/>
+            <div  style="float:left;margin-top:5px;width:100%;margin-left:15px;" >
+                <h:outputLabel value="The results of your search criteria:" for="searchCriteria" rendered="${fn:length(currentSearchResult) > 0}" >
+                    <h:outputText id="searchCriteria"  value="${currentSearchCriteria}" rendered="${fn:length(currentSearchResult) > 0}" />
+                </h:outputLabel>
+            </div>
+            <h:dataTable id="item_search"  value="#{search.searchResultList}" var="var_search"  rendered="${fn:length(currentSearchResult) > 0}" >
+                <h:column rowHeader="">
+                    <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                        <h:outputLabel for="itemDescription" value="Item Description:" >
+                            <h:outputText  id="itemDescription" value="#{var_search.itemDescription}" style="margin-left:10px;color:black;"/>
+                        </h:outputLabel>
+                        <br />
+                        <h:outputLabel for="itemModel" value="Item Model:" >
+                            <h:outputText  id="itemModel" value="#{var_search.itemModel}" style="margin-left:10px;color:black;"/>
+                        </h:outputLabel>
+                        <br />
+
+                    </div>
+                </h:column>
+            </h:dataTable>
+
+
+            <h:panelGroup id="noRecordsFound" style="float:left;margin-top:5px;width:100%;margin-left:15px;" rendered="${currentSearchCriteria == null}" >
+                <div  style="float:left;margin-top:5px;width:100%;margin-left:25px;font-size:14x;color:#d20005 " >
+                    <h:outputLabel value="The results of your search criteria:" for="searchCriteria2"  />
+                    <h:outputText id="searchCriteria2"  value="${currentSearchCriteria}"  />
+                    
+                    <div  style="float:left;margin-top:5px;width:100%;margin-left:25px " >
+                        <h:outputText value="Sorry, no Items were found." class="error-message"/>
+                    </div>
                 </div>
-            </h:column>
-        </h:dataTable>
-            
+
+            </h:panelGroup>
+
+
+
+
+
 
 
         </h:form>
