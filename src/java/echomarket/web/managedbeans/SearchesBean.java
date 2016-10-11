@@ -37,6 +37,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
     private Integer zip_code_radius;
     private String remoteIp;
     private String searchCriteria;
+    private Boolean displayResults;
 
     /**
      * @return the found_zip_codes
@@ -71,27 +72,30 @@ public class SearchesBean extends AbstractBean implements Serializable {
                 whichDatabase = "from Addresses  where " + queryString;
                 address_list = sb.createQuery(whichDatabase).list();
                 tx.commit();
-
-                for (int i = 0; i < address_list.size(); i++) {
-                    Addresses cArray = (Addresses) address_list.get(i);
-                    buildPC = buildPC + cArray.getBorrower_id() + ",";
-                }
-                if (!buildPC.equals(foo)) {
-                    buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                    queryString = " borrower_id in (\'" + buildPC + "\')";
+                if (address_list.size() > 0) {
+                    for (int i = 0; i < address_list.size(); i++) {
+                        Addresses cArray = (Addresses) address_list.get(i);
+                        buildPC = buildPC + cArray.getBorrower_id() + ",";
+                    }
+                    if (!(buildPC.isEmpty())) {
+                        buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                        queryString = " borrower_id in (\'" + buildPC + "\')";
+                    }
                 }
             } else {
                 queryString = " postal_code in (\'" + forceString + "\') AND borrower_id =  NULL";
                 whichDatabase = "from Addresses  where " + queryString;
                 address_list = sb.createQuery(whichDatabase).list();
                 tx.commit();
-                for (int i = 0; i < address_list.size(); i++) {
-                    Addresses cArray = (Addresses) address_list.get(i);
-                    buildPC = buildPC + cArray.getLender_id() + ",";
-                }
-                if (!buildPC.equals(foo)) {
-                    buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                    queryString = " lender_id in (\'" + buildPC + "\')";
+                if (address_list.size() > 0) {
+                    for (int i = 0; i < address_list.size(); i++) {
+                        Addresses cArray = (Addresses) address_list.get(i);
+                        buildPC = buildPC + cArray.getLender_id() + ",";
+                    }
+                    if (!(buildPC.isEmpty())) {
+                        buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                        queryString = " lender_id in (\'" + buildPC + "\')";
+                    }
                 }
             }
 
@@ -103,26 +107,30 @@ public class SearchesBean extends AbstractBean implements Serializable {
                     whichDatabase = "from Addresses  where " + queryString;
                     address_list = sb.createQuery(whichDatabase).list();
                     tx.commit();
-                    for (int i = 0; i < address_list.size(); i++) {
-                        Addresses cArray = (Addresses) address_list.get(i);
-                        buildPC = buildPC + cArray.getBorrower_id() + ",";
-                    }
-                    if (!buildPC.equals(foo)) {
-                        buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                        queryString = " borrower_id in (\'" + buildPC + "\')";
+                    if (address_list.size() > 0) {
+                        for (int i = 0; i < address_list.size(); i++) {
+                            Addresses cArray = (Addresses) address_list.get(i);
+                            buildPC = buildPC + cArray.getBorrower_id() + ",";
+                        }
+                        if (!(buildPC.isEmpty())) {
+                            buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                            queryString = " borrower_id in (\'" + buildPC + "\')";
+                        }
                     }
                 } else {
                     queryString = " postal_code like (\'" + forceString + "%\') AND borrower_id =  NULL";
                     whichDatabase = "from Addresses  where " + queryString;
                     address_list = sb.createQuery(whichDatabase).list();
                     tx.commit();
-                    for (int i = 0; i < address_list.size(); i++) {
-                        Addresses cArray = (Addresses) address_list.get(i);
-                        buildPC = buildPC + cArray.getBorrower_id() + ",";
-                    }
-                    if (!buildPC.equals(foo)) {
-                        buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-                        queryString = " lender_id in (\'" + buildPC + "\')";
+                    if (address_list.size() > 0) {
+                        for (int i = 0; i < address_list.size(); i++) {
+                            Addresses cArray = (Addresses) address_list.get(i);
+                            buildPC = buildPC + cArray.getBorrower_id() + ",";
+                        }
+                        if (!(buildPC.isEmpty())) {
+                            buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
+                            queryString = " lender_id in (\'" + buildPC + "\')";
+                        }
                     }
                 }
             }
@@ -173,16 +181,13 @@ public class SearchesBean extends AbstractBean implements Serializable {
         }
         System.out.println(queryString);
         // Okay now let's build the query
-        sb = hib_session();
-        tx = sb.beginTransaction();
-
         if (this.lenderOrBorrower == 2) {
             whichDatabase = "from Borrowers where " + queryString;
             System.out.println(whichDatabase);
         } else {
             whichDatabase = "from Lenders where " + queryString;
         }
-        this.searchCriteria = whichDatabase;
+
         try {
             if (sb.isOpen() == false) {
                 sb = hib_session();
@@ -199,6 +204,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
             sb = null;
             //Build pretty search criteria
             setSearchCriteria(buildSearchCriteria());
+            setDisplayResults(true);
         }
 
         return "search";
@@ -219,7 +225,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
         }
 
         hold = this.keyword;
-        if (!hold.equals(foo)) {
+        if (!(hold.equals(foo))) {
             build = build + " containing the keyword, " + hold + ", in either the item description or item model,";
         }
 
@@ -482,6 +488,25 @@ public class SearchesBean extends AbstractBean implements Serializable {
      */
     public void setZip_code_radius(Integer zip_code_radius) {
         this.zip_code_radius = zip_code_radius;
+    }
+
+    /**
+     * @return the displayResults
+     */
+    public Boolean getDisplayResults() {
+        if (this.searchCriteria == null) {
+            return false; }
+        else {
+            return true;
+        }
+    }
+
+    /**
+     * @param displayResults the displayResults to set
+     */
+    public void setDisplayResults(Boolean displayResults) {
+        
+        this.displayResults = displayResults;
     }
 
 }
