@@ -5,7 +5,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                >
 
 
     <h:form id="index_options">
@@ -30,8 +30,7 @@
 
     <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
         <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
-        <c:set var="userType" value="#{userBean.userType}"  />
-
+        
         <c:if test="#{userLoggedIn}" >
             <c:choose>
                 <c:when test="#{userBean.userAction == 'forgotUserPassword'}">
@@ -46,7 +45,21 @@
             </c:choose>
         </c:if>
         <c:if test="#{not userLoggedIn}" >
-            <ui:include rendered="true" src="b_history.xhtml" id="B_history"  /> 
+            <c:choose>
+                <c:when test="#{userBean.parseUserType('borrower')}">
+                    <ui:include rendered="true" src="b_history.xhtml" id="B_history"  /> 
+                </c:when>
+                <c:when test="#{userBean.parseUserType('lender')}">
+                    <ui:include rendered="true" src="l_history.xhtml" id="L_history"  /> 
+                </c:when>
+                
+                <c:otherwise>
+                    <div>
+                        <p>Your registration type was not found.</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+            
         </c:if>
 
     </div>
