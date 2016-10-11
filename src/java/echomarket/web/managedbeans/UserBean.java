@@ -44,9 +44,6 @@ public class UserBean extends AbstractBean implements Serializable {
     private String registrationType;
     private String communityName;
 
-    public UserBean() {
-    }
-
     public String Logout() {
         this.user_id = null;
         this.username = null;
@@ -419,13 +416,17 @@ public class UserBean extends AbstractBean implements Serializable {
                     null,
                     "ForgotUserPasswordSuccess",
                     new Object[]{email});
-            return "index?faces-redirect=true";
+            this.username = null;
+            this.userAction = "login";
+            return "index";
         } else {
             message(
                     null,
                     "ForgotUserPasswordFailed",
                     new Object[]{email});
-            return "login";
+            this.username = null;
+            this.userAction = "login";
+            return "index";
         }
     }
 
@@ -439,14 +440,17 @@ public class UserBean extends AbstractBean implements Serializable {
                     "FoundUsername",
                     new Object[]{results});
             results = null;
-            return "login";
-        } else {
+            this.username = null;
+            this.userAction = "login";
+            return "index";
+          } else {
             message(
                     null,
                     "UserNameNotFound",
                     null);
             results = null;
-            return "forgotUsername";
+            this.userAction = "login";
+            return "index";
         }
     }
 
@@ -679,39 +683,37 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public String userNameLabel(Integer IsCommunity) {
-        
+
         if (IsCommunity == 1) {
             return "Community UserName:";
         } else {
-           return "UserName:"; 
-            
+            return "UserName:";
+
         }
-            
-        
-        
+
     }
-    
-    /// Added these becuase footer was not being loaded..
-    
-    public String login() {
-        
-        return "login";
+
+    public String load_login() {
+        this.username = null;
+        this.userAction = "login";
+        return "index?faces-redirect=true";
     }
-    
+
     public String load_forgotUserPassword() {
-        
-        return "forgotUserPassword";
+        this.username = null;
+        this.userAction = "forgotUserPassword";
+        return "index?faces-redirect=true";
     }
-    
+
     public String load_forgotUsername() {
+        this.username = null;
         this.userAction = "forgotUsername";
-        return "index";
+        return "index?faces-redirect=true";
     }
-    
-    
+
     public String load_user_registration() {
-        
+
         return "user_registration";
     }
-    
+
 }
