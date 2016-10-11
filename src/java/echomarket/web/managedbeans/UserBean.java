@@ -199,6 +199,10 @@ public class UserBean extends AbstractBean implements Serializable {
         this.setPassword("");
     }
 
+    public Boolean parseUserType(String whichType) {
+        
+        return this.userType.contains(whichType);
+    }
     private String[] buildTypeList() {
 
         Session hib = hib_session();
