@@ -73,11 +73,11 @@
                     <p>
                         <h:commandLink  action="#{userBean.loginUser()}" id="user_login" value="Login" />
                         <br />
-                        <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username"  >
+                        <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
                             <f:ajax />
                         </h:commandLink>
                         <h:outputText value=" | " />
-                        <h:commandLink  action="#{userBean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password"   >
+                        <h:commandLink  action="#{userBean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password" immediate="false"   >
                             <f:ajax />
                         </h:commandLink>
                         <h:outputText value=" | " />
@@ -88,6 +88,6 @@
                 </td> 
             </tr>
         </table>
-        <!--</div>-->
+
     </h:form>
 </ui:composition>
