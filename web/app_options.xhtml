@@ -40,17 +40,17 @@
                     <ui:include src="forgotUsername.xhtml" id="forgotUsername"  /> 
                 </c:when>
                 <c:otherwise>
-                    <ui:include  src="b_login.xhtml" id="B_Login"  /> 
+                    <ui:include  src="b_login.xhtml" id="body_login"  /> 
                 </c:otherwise>
             </c:choose>
         </c:if>
         <c:if test="#{not userLoggedIn}" >
             <c:choose>
                 <c:when test="#{userBean.parseUserType('borrower')}">
-                    <ui:include rendered="true" src="b_history.xhtml" id="B_history"  /> 
+                    <ui:include rendered="true" src="b_history.xhtml" id="b_history"  /> 
                 </c:when>
                 <c:when test="#{userBean.parseUserType('lender')}">
-                    <ui:include rendered="true" src="l_history.xhtml" id="L_history"  /> 
+                    <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
                 </c:when>
                 
                 <c:otherwise>
