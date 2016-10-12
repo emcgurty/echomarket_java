@@ -9,7 +9,7 @@
 
 
 
-    <h:form  id="user_login">
+    <h:form  id="form_user_login">
 
         <f:metadata>
             <f:viewParam name="reset_code" id="reset_code" value="#{userBean.resetCode}" />
@@ -71,7 +71,7 @@
             <tr>
                 <td style="padding-bottom: 15px;">  
                     <p>
-                        <h:commandLink  action="#{userBean.loginUser()}" id="user_login" value="Login" />
+                        <h:commandLink  action="#{userBean.loginUser()}" id="user_login_command" value="Login" />
                         <br />
                         <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
                             <f:ajax />
@@ -80,8 +80,13 @@
                         <h:commandLink  action="#{userBean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password" immediate="false"   >
                             <f:ajax />
                         </h:commandLink>
+                        <br />
+                        
+                        <h:commandLink  action="#{userBean.load_user_registration()}" id="i_register" value="Individual or Organization Registration"   >
+                            <f:ajax />
+                        </h:commandLink>
                         <h:outputText value=" | " />
-                        <h:commandLink  action="#{userBean.load_user_registration()}" id="register" value="Register"   >
+                        <h:commandLink  action="#{userBean.load_community_registration()}" id="c_register" value="Community Registration"   >
                             <f:ajax />
                         </h:commandLink>
                     </p>     
