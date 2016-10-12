@@ -6,13 +6,13 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./echomarketTemplate.xhtml"
-
-                >
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
 
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="registrationHeader" /> 
     </ui:define>
+
     <ui:define name="content">
         <h:head>
             <h:outputScript library="javascript" name="registration.js"  />
@@ -27,188 +27,23 @@
                             infoStyle="color: blue"/>
             </div>
 
-
-
             <div  class="top" id="form_user_registration" style="width:75%;align-content: center;">
                 <div style="margin:10px;" >
-                    <h:outputText value="User Registration" />
+                    <h:outputText value="Individual or Organization Registration" />
                     <h:commandLink  action="#{userBean.registerUser()}" id="add_registration" value="Register" class="right_div">
-                        <!--                <f:actionListener  type="echo_market.listeners.UserActionListener"  />-->
                     </h:commandLink>
                 </div>
 
+                <div id="individualNameGroup" style="float:left;margin:10px;margin-top:25px;width:75%;"  >
+                    <div style="float:left;width:100%;" >
+                        <h:outputLabel value="In registering as a Borrowing and Lending Individual.."  style="float:left;width:100%;margin-left:25px;margin-top:15px;margin-bottom:15px;"/>              
+                    </div>
+                    <ui:include src="individual_registration_detail.xhtml" />
 
-                <div style="float:left;margin:10px;margin-top:25px;width:75%;" >
-
-                    <h:outputLabel for="registrationType" value="#{bundle.registrationType}" >
-                        <h:selectOneRadio id="registrationType" value="#{userBean.registrationType}"  layout="pageDirection" >
-                            <f:selectItem itemValue="1" itemLabel="As a Guest" />
-                            <f:selectItem itemValue="2" itemLabel="As a Borrower" />	
-                            <f:selectItem itemValue="3" itemLabel="As a Lender" />	
-                            <f:selectItem itemValue="4" itemLabel="As a Borrower and a Lender" />	
-                            <f:selectItem itemValue="5" itemLabel="As a Borrowing and Lending Community" />	
-                        </h:selectOneRadio> 
-
-                    </h:outputLabel>                               
-
-                </div>     
-
-                <div id="communityNameDiv" style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;display:none;" >
-                    <p>
-                        In registering as a Borrowing and Lending Community, on completed Registration and then later Login Echo Market will be exclusively yours. In registering, you will become the designated Community Leader with permitted privileges like adding borrowers and lenders, planning Community Meetings, ...
-
-
-                    </p>
-
-
-                    <h:outputLabel for="communityName"  value="#{bundle.communityName}">       
-                        <h:inputText id="communityName" size="24" value="#{userBean.communityName}" style="margin-left:5px">
-                        </h:inputText>
-                    </h:outputLabel>
-
-                    <span style="color:indigo;font-size:12px;">Required Community name, displayed only to members.</span>
-                    <br />
-                    <span class="error-message" id="communityName"></span>
-                    <br />
                 </div>
 
 
 
-
-
-
-
-
-
-
-                <div id="onePersonReg" style="float:left;margin-top:5px;margin-bottom:0px;padding:0;width:90%;display:none;" >
-                    <table style="width:100%;margin-left: 50px" align="center" id="user_registration_table">
-
-                        <tr >
-                            <td style="width:50%;padding-bottom: 15px;">
-                                <h:outputLabel for="username" value="#{bundle.username}" >       
-                                    <h:inputText id="username"
-                                                 value="#{userBean.username}"
-                                                 size="16"
-                                                 required="true"
-                                                 requiredMessage="#{bundle.ReqUserName}"
-                                                 style="margin-left:5px">
-
-
-                                    </h:inputText>
-                                </h:outputLabel>
-                            </td>
-                            <td style="width:50%;  padding-bottom: 15px;">
-
-                                <h:outputLabel for="user_alias"  value="#{bundle.userAlias}">       
-                                    <h:inputText id="user_alias"
-                                                 size="16"
-                                                 value="#{userBean.userAlias}"
-                                                 title="#{bundle.userAlias}"
-                                                 required="true"
-                                                 requiredMessage="#{bundle.ReqUserAlias}"
-                                                 style="margin-left:5px">
-
-
-                                    </h:inputText>
-                                </h:outputLabel>
-                            </td>
-                        </tr>
-                        <tr style="margin:15px;">
-                            <td style="width:50%;padding-bottom: 15px;">
-
-                                <h:outputLabel for="firstName"  value="#{bundle.firstName}">       
-                                    <h:inputText id="firstName"
-                                                 size="16"
-                                                 value="#{userBean.firstName}"
-
-                                                 required="true"
-                                                 requiredMessage="#{bundle.ReqFirstName}" style="margin-left:5px">
-
-
-                                    </h:inputText>
-                                </h:outputLabel>
-                            </td>
-                            <td style="width:50%;padding-bottom: 15px;">
-                                <h:outputLabel for="lastName"  value="#{bundle.lastName}" >       
-                                    <h:inputText id="lastName"
-                                                 size="16"
-                                                 value="#{userBean.lastName}"
-                                                 required="true"
-                                                 requiredMessage="#{bundle.ReqLastName}" style="margin-left:5px">
-
-
-                                    </h:inputText>
-                                </h:outputLabel>
-
-                            </td>
-                        </tr>
-                        <tr >
-                            <td style="width:50%;padding-bottom: 15px;">
-                                <f:event listener="#{userBean.validatePassword}" type="postValidate" />
-
-
-                                <h:outputLabel for="password" value="#{bundle.password}" >       
-                                    <h:inputSecret id="password"
-                                                   size="16"
-                                                   value="#{userBean.password}"
-                                                   title="#{bundle.password}"
-                                                   required="true"
-                                                   requiredMessage="#{bundle.ReqPassword}"
-                                                   style="margin-left:5px">
-
-
-                                    </h:inputSecret>
-                                </h:outputLabel>
-
-                            </td>
-                            <td style="width:50%;padding-bottom: 15px;">
-                                <h:outputLabel for="confirmPassword" value="#{bundle.confirmPassword}" >       
-                                    <h:inputSecret id="confirmPassword"
-                                                   size="16"
-                                                   title="#{bundle.confirmPassword}"
-                                                   required="true"
-                                                   requiredMessage="#{bundle.ReqConfirmPassword}"
-                                                   style="margin-left:5px">
-
-
-                                    </h:inputSecret>
-                                </h:outputLabel>
-                            </td>
-                        </tr>
-                        <tr  >
-                            <td colspan="2" style="width:100%;padding-bottom: 15px;">
-                                <h:outputLabel for="email" value="#{bundle.email}" >       
-                                    <h:inputText id="email"
-                                                 size="16"
-                                                 value="#{userBean.email}"
-                                                 title="#{bundle.email}"
-                                                 required="true"
-                                                 requiredMessage="#{bundle.ReqEmail}"
-                                                 validatorMessage="#{bundle.ValidEmail}" 
-                                                 style="margin-left:5px">
-                                        <f:validateRegex
-                                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                    </h:inputText>
-                                </h:outputLabel>
-
-                            </td>
-                        </tr >
-                        <tr >
-                            <td colspan="2" style="width:100%;padding-bottom: 15px;">
-
-                                <h:outputLabel for="userTypeArray" value="#{bundle.userType}" >
-                                    <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate...">
-                                        <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
-                                                       itemLabel="#{c.purposeType}" itemValue="#{c.purposeShort}"   >   
-                                        </f:selectItems>
-                                    </h:selectManyCheckbox>
-                                </h:outputLabel>   
-                            </td>
-                        </tr>
-
-                    </table>
-                </div>
             </div>
         </h:form>
 
