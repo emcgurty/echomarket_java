@@ -42,7 +42,7 @@ public class Users implements java.io.Serializable {
 
     //create_record = new Users(assign_id, firstName, lastName, username, userAlias, password, email, userType );
     // THis constructor is used to create new, non-activated user
-    public Users(String id,String firstName, String lastName, String userName, String userAlias, String password, String email, String userType) {
+    public Users(String id,String firstName, String lastName, String userName, String userAlias, String password, String email, String userType, Integer isCommunity) {
         String local_password = password;
         this.id = id;
         this.username = userName;
@@ -57,6 +57,7 @@ public class Users implements java.io.Serializable {
         // Later make sure this is unique in database
         this.resetCode = BuildRandomValue();
         this.activatedAt = null;
+        this.isCommunity = isCommunity;
 
     }
 
