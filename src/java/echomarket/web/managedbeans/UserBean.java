@@ -43,6 +43,7 @@ public class UserBean extends AbstractBean implements Serializable {
     private String userAction;
     private String registrationType;
     private String communityName;
+    private Integer isCommunity;
 
     public String Logout() {
         this.user_id = null;
@@ -147,7 +148,7 @@ public class UserBean extends AbstractBean implements Serializable {
             }
             current_user_id = getId();
             setUserType(hold_userTypeBuild);
-            create_record = new Users(current_user_id, firstName, lastName, username, userAlias, password, email, getUserType());
+            create_record = new Users(current_user_id, firstName, lastName, username, userAlias, password, email, getUserType(), getIsCommunity());
             hib.save(create_record);
             ac = create_record.getResetCode();
             tx.commit();
@@ -186,7 +187,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 "NewRegistration",
                 new Object[]{fullname});
 
-        return "index?faces-redirect=true";
+        return "index";
 
     }
 
@@ -200,9 +201,10 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public Boolean parseUserType(String whichType) {
-        
+
         return this.userType.contains(whichType);
     }
+
     private String[] buildTypeList() {
 
         Session hib = hib_session();
@@ -447,7 +449,7 @@ public class UserBean extends AbstractBean implements Serializable {
             this.username = null;
             this.userAction = "login";
             return "index";
-          } else {
+        } else {
             message(
                     null,
                     "UserNameNotFound",
@@ -716,8 +718,26 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public String load_user_registration() {
-
         return "user_registration";
+    }
+
+    public String load_community_registration() {
+        return "community_registration";
+
+    }
+
+    /**
+     * @return the isCommunity
+     */
+    public Integer getIsCommunity() {
+        return isCommunity;
+    }
+
+    /**
+     * @param isCommunity the isCommunity to set
+     */
+    public void setIsCommunity(Integer isCommunity) {
+        this.isCommunity = isCommunity;
     }
 
 }
