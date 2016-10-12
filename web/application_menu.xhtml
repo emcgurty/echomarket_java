@@ -8,7 +8,7 @@
         <h:outputStylesheet library="css" name="menu_nav.css"/>
     </h:head>
 
-    <h:form>
+    <h:form id="application_menu">
 
         <c:choose>
             <c:when test="${userBean.username == null}">
@@ -22,7 +22,7 @@
 
         <ul id="nav" class="menu">
             <li class="subs">
-                
+
                 <h:commandLink id="index" action="index" value="Echo Market: Welcome #{username}!" hreflang="#s1"/>
                 <ul>
                     <li>
@@ -55,8 +55,6 @@
             <li class="subs">
                 <a href="#s1">Borrowing</a>
                 <ul>
-
-
                     <li>
                         <h:commandLink id="borrowListing" action="borrower_listing">
 
@@ -127,13 +125,6 @@
                 <li class="subs">
                     <a href="#s1">Login</a>
                     <ul>
-                        <li>
-                            <h:commandLink id="register" action="#{userBean.load_user_registration()}">
-                                <h:outputText value="Register"/>
-
-                            </h:commandLink>
-
-                        </li>
 
                         <li>
                             <h:commandLink id="login" action="#{userBean.load_login()}">
@@ -153,14 +144,29 @@
                             </h:commandLink>                 
 
                         </li>
-                   
-
 
                     </ul>
-                </li>
-            </c:if>
+                </li>   
+            
+            <li class="subs">   
+                <a href="#s1">Register</a>                      
+                <ul>
+                    <li>
+                        <h:commandLink id="ir" action="#{userBean.load_user_registration()}">
+                            <h:outputText value="As an Individual or Organization"/>
+                        </h:commandLink>
 
+                    </li>
 
+                    <li>
+                        <h:commandLink id="cr" action="#{userBean.load_community_registration()}">
+                            <h:outputText value="As a Community!"/>
+                        </h:commandLink>
+                    </li>
+                </ul>
+
+            </li>
+</c:if>
             <c:if test="#{userBean.username != null}" >
                 <li class="subs">
                     <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
