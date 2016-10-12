@@ -177,11 +177,11 @@ public class SendEmail implements java.io.Serializable {
         return true;
     }
 
-    private Integer getUserId() {
+    private Integer getuser_id() {
         return user_id;
     }
 
-    private void setUserId(Integer id) {
+    private void setuser_id(Integer id) {
         this.user_id = id;
     }
 
