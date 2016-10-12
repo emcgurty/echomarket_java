@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    
+
     // Can't test unitl I go live...
     var clientKey = "js-rhQ4Mz8kbmEhRFpXMEUwAAPdCWIeFX17fRc1rklCH0UyGjwtXqZy1OLDKuRqrSyG";
     
@@ -182,6 +182,7 @@ $(document).ready(function () {
 });
 
 function submitSearch() {
+    
     var returnValue = true;
     var choose_l_or_b = null;
     var sd = null;
@@ -196,7 +197,7 @@ function submitSearch() {
 
     for (i = 0; i < cad.length; i++) {
         id = cad[i].id;
-        if (id.includes('lender_or_borrower')) {
+        if (id.includes('lenderOrBorrower')) {
             if (cad[i].checked == true) {
                 choose_l_or_b = cad[i].value;
 
@@ -209,19 +210,19 @@ function submitSearch() {
                 kw = cad[i].value;
             }
 
-        } else if (id.includes('postal_code')) {
+        } else if (id.includes('postalCode')) {
 
             if (cad[i].value) {
                 pc = cad[i].value;
             }
 
-        } else if (id.includes('start_date')) {
+        } else if (id.includes('startDate')) {
 
             if (cad[i].value) {
                 sd = cad[i].value;
             }
 
-        } else if (id.includes('end_date')) {
+        } else if (id.includes('endDate')) {
 
             if (cad[i].value) {
                 ed = cad[i].value;
@@ -265,7 +266,7 @@ function submitSearch() {
 //        $("form.items_listing").submit();
     }
     
-//    return returnValue;  Just for debuggung
+ 
     return returnValue;
 
 }
