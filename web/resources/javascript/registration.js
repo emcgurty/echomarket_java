@@ -1,32 +1,28 @@
 $(document).ready(function ($) {
-    
 
-    size_of_menu();
-    $(window).resize(function () {
-        size_of_menu();
-    });
+    
     $('select').on('change', function () {
         alert("select change");
     });
     $('input').on('change', function () {
-//        alert("input change");
-        if (this.id.includes('registrationType')) {
-//            alert("Okay");
-            var y_n = $(this).val();
-            if (y_n == 5){
-
-                $("div#communityNameDiv").css("display", "block");
-                $("div#onePersonReg").css("display", "block");
-            } else {
-                $("div#communityNameDiv").css("display", "none");
-                $("div#onePersonReg").css("display", "block");
-            }
-        }
+//       alert("input change");
+//       Below no longer needed.  Need to code for client side validation
+//        if (this.id.includes('registrationType')) {
+//            
+//            var y_n = $(this).val();
+//            if (y_n == 5) {
+//
+//                $("div#individualNameGroup").css("display", "none");
+//                $("div#communityNameGroup").css("display", "block");
+//
+//
+//            } else {
+//                $("div#individualNameGroup").css("display", "block");
+//                $("div#communityNameGroup").css("display", "none");
+//            }
+//        }
     });
-    
-    function size_of_menu() {
 
-    }
 
 });
 
