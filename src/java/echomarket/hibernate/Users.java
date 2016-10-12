@@ -35,6 +35,7 @@ public class Users implements java.io.Serializable {
     private Integer roleId;
     private String firstName;
     private String lastName;
+    private Integer isCommunity;
 
     public Users() {
     }
@@ -235,6 +236,20 @@ public class Users implements java.io.Serializable {
         String uuid = UUID.randomUUID().toString();
         return uuid;
 
+    }
+
+    /**
+     * @return the isCommunity
+     */
+    public Integer getIsCommunity() {
+        return isCommunity;
+    }
+
+    /**
+     * @param isCommunity the isCommunity to set
+     */
+    public void setIsCommunity(Integer isCommunity) {
+        this.isCommunity = isCommunity;
     }
 
 }
