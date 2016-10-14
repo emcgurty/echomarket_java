@@ -11,11 +11,13 @@
 
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="registrationHeader" /> 
+        
     </ui:define>
 
     <ui:define name="content">
         <h:head>
             <h:outputScript library="javascript" name="registration.js"  />
+                
             <title>#{bundle.EchoMarketTitle}</title>
         </h:head>
         <h:form id="user_registration" >
