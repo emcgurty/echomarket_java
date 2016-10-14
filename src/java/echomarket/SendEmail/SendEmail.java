@@ -26,6 +26,7 @@ public class SendEmail implements java.io.Serializable {
     private Integer user_id;
     private String whichEmail;
     private String username;
+    private String commmunityName;
     private String password;
     private String user_alias;
     private String user_email;
@@ -53,6 +54,11 @@ public class SendEmail implements java.io.Serializable {
             /// then random argument is the password
             this.password = random;
             sendRegistrationEmail(sess);
+        } else if ("commmunity_registration" == this.whichEmail) {
+            /// then random argument is the password
+            this.password = random;
+            this.commmunityName = rc;
+            sendCommunityRegistrationEmail(sess);
         } else if ("forgotPassword" == this.whichEmail) {
             //SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, returnApplicationAddress(), returnApplicationPwd(), null, reset_code);
             // random is user_id
@@ -84,6 +90,27 @@ public class SendEmail implements java.io.Serializable {
         return buildMessage;
     }
 
+    private String BuildCommunityRegistrationMessage() {
+
+        ResourceBundle bundle = ResourceBundle.getBundle(
+                "echomarket.web.messages.Messages",
+                FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        String url_string = bundle.getString("ActivationUrl");
+        Object paramArray[] = new Object[2];
+        paramArray[0] = this.getResetCode();
+        url_string = MessageFormat.format(url_string, paramArray);
+        String buildMessage = "<html><h1>Your Community account has been created.</h1>"
+                + "<p> Your Community Name: " + this.commmunityName + "</p>"
+                + "<p> User Name: " + this.username + "</p>"
+                + "<p> Password:  " + this.password + "</p>"
+                + "<h2> Visit this url to activate your account: </h2>"
+                + "<p><a href='url'>" + url_string + "</a></p>"
+                + "<p>  Thank you,</p>"
+                + "<p>  www.echomarket.org</p>"
+                + "<p>  PS: If you received this email in error, please disregard it.</p></html>";
+        return buildMessage;
+    }
+    
     private String BuildForgotPasswordMessage() {
 
         ResourceBundle bundle = ResourceBundle.getBundle(
@@ -150,6 +177,32 @@ public class SendEmail implements java.io.Serializable {
         return true;
     }
 
+    private Boolean sendCommunityRegistrationEmail(Session sess) {
+
+        try {
+            // Create a default MimeMessage object.
+            Message message = new MimeMessage(sess);
+            message.setContent(BuildCommunityRegistrationMessage(), "text/html; charset=utf-8");
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(getApplication_email_address()));
+
+            // Set To: header field of the header.
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(getUser_email()));
+
+            // Set Subject: header field
+            message.setSubject("Thank you for Registering at the Echo Market.");
+
+            // Send message
+            Transport.send(message);
+
+            System.out.println("Sent message successfully....");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
     private Boolean sendForgotPasswordEmail(Session sess) {
 
         try {
@@ -275,6 +328,20 @@ public class SendEmail implements java.io.Serializable {
      */
     private void setResetCode(String rc) {
         this.reset_code = rc;
+    }
+
+    /**
+     * @return the commmunityName
+     */
+    private String getCommmunityName() {
+        return commmunityName;
+    }
+
+    /**
+     * @param commmunityName the commmunityName to set
+     */
+    private void setCommmunityName(String commmunityName) {
+        this.commmunityName = commmunityName;
     }
 
 }
