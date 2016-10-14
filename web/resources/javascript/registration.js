@@ -1,8 +1,12 @@
 $(document).ready(function ($) {
 
-    
+// size_of_menu();
+//    $(window).resize(function () {
+//        size_of_menu();
+//    })
+//    
     $('select').on('change', function () {
-        alert("select change");
+//        alert("select change");
     });
     $('input').on('change', function () {
 //       alert("input change");
@@ -22,10 +26,18 @@ $(document).ready(function ($) {
 //            }
 //        }
     });
-
+   
 
 });
 
+//function size_of_menu() {
+//    
+//    var nav_menu = $("div#nav").css("width");
+//
+//    $("div.application_footer").css("width", nav_menu);
+//    
+//    return true;
+//}
 
 
 function getChildID(parentID) {
