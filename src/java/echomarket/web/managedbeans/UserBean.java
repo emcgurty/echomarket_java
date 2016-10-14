@@ -6,6 +6,7 @@ import echomarket.hibernate.Purpose;
 import echomarket.hibernate.Users;
 import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
+import echomarket.hibernate.Communities;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
@@ -122,6 +123,7 @@ public class UserBean extends AbstractBean implements Serializable {
         String test_mb = getAppEmail();
         List result = null;
         Users create_record = null;
+        Communities comm = null;
         List tmp = null;
         String hold_userTypeBuild = "";
         String fullname = firstName + " " + lastName;
@@ -132,26 +134,17 @@ public class UserBean extends AbstractBean implements Serializable {
         Transaction tx = hib.beginTransaction();
         String current_user_id = null;
         try {
-            if (hib.isOpen() == false) {
-                hib = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = hib.beginTransaction();
-            }
-            ///  I am pursuing this effort in getting from established arrays, rather than making Where Database calls
+             ///  I am pursuing this effort in getting from established arrays, rather than making Where Database calls
             for (String userTypeArray1 : getUserTypeArray()) {
-//                holdUserType = getEchomarket_types().indexOf(userTypeArray1);
-//                tmp = getEchomarket_types_stored();
-//                Object get_tmp_value = tmp.get(holdUserType);
                 hold_userTypeBuild = hold_userTypeBuild + userTypeArray1 + ";";
 
             }
             current_user_id = getId();
             setUserType(hold_userTypeBuild);
-            create_record = new Users(current_user_id, firstName, lastName, username, userAlias, password, email, getUserType(), getIsCommunity());
+            create_record = new Users(current_user_id, firstName, lastName, username, userAlias, password, email, getUserType(), isCommunity);
             hib.save(create_record);
             ac = create_record.getResetCode();
-            tx.commit();
+            //tx.commit();
             savedRecord = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,20 +156,27 @@ public class UserBean extends AbstractBean implements Serializable {
 
         if (savedRecord == true) {
 
-            if (hib.isOpen() == false) {
-                hib = hib_session();
-            }
 
-            if (tx.isActive() == false) {
-                tx = hib.beginTransaction();
+            if (this.communityName != null) {
+                comm = new Communities(current_user_id, this.communityName, this.firstName, this.lastName, "NA", "NA","NA" , "-9", "-9");
+                hib.save(comm);
+//                tx.commit();
+            
             }
-
+            
             List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
             Map a_array = (Map) results.get(0);
+            tx.commit();
 
             try {
-                SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
-                se = null;
+                if(this.communityName == null) {
+                    SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
+                    se = null;
+                } else {
+                    SendEmail se = new SendEmail("community_registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, this.communityName); 
+                    se = null;
+                }
+                
             } catch (Exception e) {
                 System.out.println("Send Mail Failed");
             }
@@ -718,11 +718,14 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public String load_user_registration() {
-        return "user_registration";
+        this.isCommunity = 0;
+        this.communityName = null;
+        return "user_registration?faces-redirect=true";
     }
 
     public String load_community_registration() {
-        return "community_registration";
+        this.isCommunity = 1;
+        return "community_registration?faces-redirect=true";
 
     }
 
