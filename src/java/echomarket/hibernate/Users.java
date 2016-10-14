@@ -44,6 +44,7 @@ public class Users implements java.io.Serializable {
     // THis constructor is used to create new, non-activated user
     public Users(String id,String firstName, String lastName, String userName, String userAlias, String password, String email, String userType, Integer isCommunity) {
         String local_password = password;
+        Date today = new Date();
         this.id = id;
         this.username = userName;
         this.email = email;
@@ -58,6 +59,7 @@ public class Users implements java.io.Serializable {
         this.resetCode = BuildRandomValue();
         this.activatedAt = null;
         this.isCommunity = isCommunity;
+        this.createdAt = today;
 
     }
 
