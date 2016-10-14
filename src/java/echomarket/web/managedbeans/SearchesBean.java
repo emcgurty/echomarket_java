@@ -177,8 +177,11 @@ public class SearchesBean extends AbstractBean implements Serializable {
                 queryString = queryString + " OR ";
             }
             queryString = queryString + " category_id = \'" + this.categoryId + "\' ";
-
         }
+
+        String isCommunityQuery = " AND (is_community = " + ubean.getIsCommunity() + ") ";
+        queryString = queryString + isCommunityQuery;
+        
         System.out.println(queryString);
         // Okay now let's build the query
         if (this.lenderOrBorrower == 2) {
