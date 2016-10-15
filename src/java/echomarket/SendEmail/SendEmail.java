@@ -39,7 +39,6 @@ public class SendEmail implements java.io.Serializable {
 
     public SendEmail(String whichEmail, String username, String user_alias,
             String user_email, String app_email, String app_password, String random, String rc) {
-
         
         this.whichEmail = whichEmail;
         this.username = username;
@@ -50,14 +49,15 @@ public class SendEmail implements java.io.Serializable {
         this.reset_code = rc;
         Session sess = establishSession();
 
+        String threeChars = this.whichEmail.substring(0,3);
         if ("registration" == this.whichEmail) {
             /// then random argument is the password
             this.password = random;
             sendRegistrationEmail(sess);
-        } else if ("commmunity_registration" == this.whichEmail) {
+        
+        } else if ("Com".equals(threeChars)) {
             /// then random argument is the password
             this.password = random;
-            this.commmunityName = rc;
             sendCommunityRegistrationEmail(sess);
         } else if ("forgotPassword" == this.whichEmail) {
             //SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, returnApplicationAddress(), returnApplicationPwd(), null, reset_code);
@@ -77,7 +77,7 @@ public class SendEmail implements java.io.Serializable {
                 FacesContext.getCurrentInstance().getViewRoot().getLocale());
         String url_string = bundle.getString("ActivationUrl");
         Object paramArray[] = new Object[2];
-        paramArray[0] = this.getResetCode();
+        paramArray[0] = getResetCode();
         url_string = MessageFormat.format(url_string, paramArray);
         String buildMessage = "<html><h1>Your account has been created.</h1>"
                 + "<p> User Name: " + this.username + "</p>"
@@ -97,10 +97,10 @@ public class SendEmail implements java.io.Serializable {
                 FacesContext.getCurrentInstance().getViewRoot().getLocale());
         String url_string = bundle.getString("ActivationUrl");
         Object paramArray[] = new Object[2];
-        paramArray[0] = this.getResetCode();
+        paramArray[0] = getResetCode();
         url_string = MessageFormat.format(url_string, paramArray);
         String buildMessage = "<html><h1>Your Community account has been created.</h1>"
-                + "<p> Your Community Name: " + this.commmunityName + "</p>"
+                + "<p>" + this.whichEmail + "</p>"
                 + "<p> User Name: " + this.username + "</p>"
                 + "<p> Password:  " + this.password + "</p>"
                 + "<h2> Visit this url to activate your account: </h2>"
