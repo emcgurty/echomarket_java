@@ -40,6 +40,7 @@ public class UserBean extends AbstractBean implements Serializable {
     private String lastName;
     private String email;
     private String resetCode;
+    private String reset_code;
     private String appEmail;
     private String userAction;
     private String registrationType;
@@ -134,14 +135,14 @@ public class UserBean extends AbstractBean implements Serializable {
         Transaction tx = hib.beginTransaction();
         String current_user_id = null;
         try {
-             ///  I am pursuing this effort in getting from established arrays, rather than making Where Database calls
+            ///  I am pursuing this effort in getting from established arrays, rather than making Where Database calls
             for (String userTypeArray1 : getUserTypeArray()) {
                 hold_userTypeBuild = hold_userTypeBuild + userTypeArray1 + ";";
 
             }
             current_user_id = getId();
             setUserType(hold_userTypeBuild);
-            create_record = new Users(current_user_id, firstName, lastName, username, userAlias, password, email, getUserType(), isCommunity);
+            create_record = new Users(current_user_id, this.firstName, this.lastName, this.username, this.userAlias, this.password, this.email, getUserType(), this.isCommunity);
             hib.save(create_record);
             ac = create_record.getResetCode();
             //tx.commit();
@@ -151,32 +152,31 @@ public class UserBean extends AbstractBean implements Serializable {
             System.out.println("Create new User failed");
             savedRecord = false;
         } finally {
-            setUser_id(current_user_id);
+            //setUser_id(current_user_id);
         }
 
         if (savedRecord == true) {
 
-
             if (this.communityName != null) {
-                comm = new Communities(current_user_id, this.communityName, this.firstName, this.lastName, "NA", "NA","NA" , "-9", "-9");
+                comm = new Communities(current_user_id, this.communityName, this.firstName, this.lastName, "NA", "NA", "NA", "-9", "-9");
                 hib.save(comm);
 //                tx.commit();
-            
+
             }
-            
+
             List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
             Map a_array = (Map) results.get(0);
             tx.commit();
 
             try {
-                if(this.communityName == null) {
+                if (this.communityName == null) {
                     SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
                     se = null;
                 } else {
-                    SendEmail se = new SendEmail("community_registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, this.communityName); 
+                    SendEmail se = new SendEmail("Community: " + this.communityName, username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
                     se = null;
                 }
-                
+
             } catch (Exception e) {
                 System.out.println("Send Mail Failed");
             }
@@ -201,8 +201,11 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public Boolean parseUserType(String whichType) {
-
-        return this.userType.contains(whichType);
+        if (this.userType != null) {
+            return this.userType.contains(whichType);
+        } else {
+            return false;
+        }
     }
 
     private String[] buildTypeList() {
@@ -244,6 +247,7 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public String loginUser() {
+
         Boolean act_results = false;
         // getResetCode learned from url
         if (getResetCode() != null) {
@@ -289,6 +293,7 @@ public class UserBean extends AbstractBean implements Serializable {
             setUserAlias(users_Array.getUserAlias());
             setUsername(users_Array.getUsername());
             setEmail(users_Array.getEmail());
+            setIsCommunity(users_Array.getIsCommunity());
             setSessionVariables();
 
             message(
@@ -629,6 +634,10 @@ public class UserBean extends AbstractBean implements Serializable {
         requestMap.put("user_alias", getUserAlias());
         requestMap.put("user_type", getUserType());
         requestMap.put("username", getUsername());
+        if (getIsCommunity() != 1) {
+            requestMap.put("is_community", getIsCommunity());
+
+        }
         // System.out.println("asdasd");
     }
 
@@ -741,6 +750,25 @@ public class UserBean extends AbstractBean implements Serializable {
      */
     public void setIsCommunity(Integer isCommunity) {
         this.isCommunity = isCommunity;
+    }
+
+    public String build_resetCode() {
+
+        return "index";
+    }
+
+    /**
+     * @return the reset_code
+     */
+    private String getReset_code() {
+        return reset_code;
+    }
+
+    /**
+     * @param reset_code the reset_code to set
+     */
+    private void setReset_code(String reset_code) {
+        this.reset_code = reset_code;
     }
 
 }
