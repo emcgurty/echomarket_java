@@ -3,15 +3,18 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
                 template="./echomarketTemplate.xhtml"
                 >
+
+
 
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
     </ui:define>
 
     <ui:define name="content">
-         <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+        <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
         <ui:include rendered="true" src="b_login.xhtml" id="LoginBody" /> 
 
     </ui:define>
