@@ -7,20 +7,17 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
+          
 
-
-    <h:form  id="form_user_login">
-
-        <f:metadata>
-            <f:viewParam name="reset_code" id="reset_code" value="#{userBean.resetCode}" />
-        </f:metadata>     
+    <h:form  id="user_login" >
+        
         <div class="messagecolor">
             <h:messages showSummary="true" 
                         showDetail="false"
                         errorStyle="color: #d20005" 
                         infoStyle="color: blue"/>
         </div>
-
+                 
         <table style="width:100%;margin-left: 5px" align="center" id="user_login_table">
             <tr >
                 <td style="padding-top: 15px;padding-bottom: 15px;">
@@ -66,6 +63,7 @@
                         </h:outputLabel>
                         <h:message for="password" errorClass="error" />
                     </h:panelGroup>
+                
                 </td>
             </tr>
             <tr>
@@ -81,7 +79,7 @@
                             <f:ajax />
                         </h:commandLink>
                         <br />
-                        
+
                         <h:commandLink  action="#{userBean.load_user_registration()}" id="i_register" value="Individual or Organization Registration"   >
                             <f:ajax />
                         </h:commandLink>
