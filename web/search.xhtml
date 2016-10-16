@@ -35,7 +35,8 @@
             <div class="top" >
                 <div style="margin:10px;margin-top:25px;margin-right:15px;" >
                     <h:outputText value="BORROWER OR LENDER ITEM SEARCH"  />
-                    <h:commandLink  action="#{search.SearchResults()}"  class="right_div" value="Fingers Crossed! Submit search." onclick=""/>
+                    
+                    <h:commandLink  action="#{search.SearchResults()}"  class="right_div" value="Fingers Crossed! Submit search." onclick="if(!submitSearch()){return false;}"/>
 
                 </div> 
             </div> 
@@ -44,7 +45,7 @@
             <div  style="float:left;margin-top:5px;margin-left:15px;background-color: azure; width:90%; padding: 10px;font-weight: 700">
 
                 <h:outputLabel value="SEARCH items to borrow or items to lend?:"  for="lenderOrBorrower" >
-                    <h:selectOneRadio id="lenderOrBorrower"  value="#{search.lenderOrBorrower}" layout='lineDirection' required="false">
+                    <h:selectOneRadio id="lenderOrBorrower"  value="#{search.lenderOrBorrower}" layout='lineDirection' required="true">
                         <f:selectItem itemValue="1" itemLabel="What have LENDERS offered:" />
                         <f:selectItem itemValue="2" itemLabel="What have BORROWERS sought:" />
                     </h:selectOneRadio>    
@@ -169,7 +170,7 @@
             </h:dataTable>
 
 
-            <h:panelGroup id="noRecordsFound" style="float:left;margin-top:5px;width:100%;margin-left:15px;" rendered="${currentSearchCriteria == null}" >
+            <h:panelGroup id="noRecordsFound" rendered="${search.displayResults}" >
                 <div  style="float:left;margin-top:5px;width:100%;margin-left:25px;font-size:14x;color:#d20005 " >
                     <h:outputLabel value="The results of your search criteria:" for="searchCriteria2"  />
                     <h:outputText id="searchCriteria2"  value="${currentSearchCriteria}"  />
@@ -180,11 +181,6 @@
                 </div>
 
             </h:panelGroup>
-
-
-
-
-
 
 
         </h:form>
