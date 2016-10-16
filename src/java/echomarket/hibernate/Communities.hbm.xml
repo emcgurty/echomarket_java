@@ -3,33 +3,12 @@
 <!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
   <class catalog="echomarket" name="echomarket.hibernate.Communities" optimistic-lock="version" table="communities">
-    <id name="id" type="string">
-      <column length="40" name="id"/>
-      <generator class="assigned"/>
-    </id>
+    <id name="community_id" type="string">
+            <column length="40" name="community_id"/>
+            <generator class="assigned"/>
+        </id>
     <property name="communityName" type="string">
       <column length="50" name="community_name" not-null="true"/>
-    </property>
-    <property name="cryptedPassword" type="string">
-      <column length="40" name="crypted_password"/>
-    </property>
-    <property name="salt" type="string">
-      <column length="40" name="salt"/>
-    </property>
-    <property name="rememberToken" type="string">
-      <column name="remember_token"/>
-    </property>
-    <property name="rememberTokenExpiresAt" type="timestamp">
-      <column length="19" name="remember_token_expires_at"/>
-    </property>
-    <property name="activationCode" type="string">
-      <column length="40" name="activation_code"/>
-    </property>
-    <property name="resetCode" type="string">
-      <column length="40" name="reset_code"/>
-    </property>
-    <property name="activatedAt" type="timestamp">
-      <column length="19" name="activated_at"/>
     </property>
     <property name="approved" type="java.lang.Integer">
       <column name="approved"/>
@@ -87,9 +66,6 @@
     </property>
     <property name="dateDeleted" type="timestamp">
       <column length="19" name="date_deleted" not-null="true"/>
-    </property>
-    <property name="userType" type="string">
-      <column length="10" name="user_type"/>
     </property>
     <property name="region" type="string">
       <column length="40" name="region"/>
