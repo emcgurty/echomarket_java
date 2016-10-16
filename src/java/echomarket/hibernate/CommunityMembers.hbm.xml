@@ -28,6 +28,9 @@
     <property name="isActive" type="java.lang.Integer">
       <column name="is_active"/>
     </property>
+    <property name="email" type="string">
+      <column length="50" name="email"/>
+    </property>
     <property name="dateCreated" type="timestamp">
       <column length="19" name="date_created" not-null="true"/>
     </property>
