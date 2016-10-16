@@ -1131,7 +1131,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         } finally {
             tx = null;
-            session = null;
+            //session = null;
 
         }
 
