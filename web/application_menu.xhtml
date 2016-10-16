@@ -121,7 +121,7 @@
                 </ul>
             </li>
 
-            <c:if test="#{userBean.username == null}" >
+            <c:if test="#{userBean.user_id == null}" >
                 <li class="subs">
                     <a href="#s1">Login</a>
                     <ul>
@@ -147,27 +147,54 @@
 
                     </ul>
                 </li>   
-            
-            <li class="subs">   
-                <a href="#s1">Register</a>                      
-                <ul>
-                    <li>
-                        <h:commandLink id="ir" action="#{userBean.load_user_registration()}">
-                            <h:outputText value="As an Individual or Organization"/>
-                        </h:commandLink>
 
-                    </li>
+                <li class="subs">   
+                    <a href="#s1">Register</a>                      
+                    <ul>
+                        <li>
+                            <h:commandLink id="ir" action="#{userBean.load_user_registration()}">
+                                <h:outputText value="As an Individual or Organization"/>
+                            </h:commandLink>
 
-                    <li>
-                        <h:commandLink id="cr" action="#{userBean.load_community_registration()}">
-                            <h:outputText value="As a Community!"/>
-                        </h:commandLink>
-                    </li>
-                </ul>
+                        </li>
 
-            </li>
-</c:if>
-            <c:if test="#{userBean.username != null}" >
+                        <li>
+                            <h:commandLink id="cr" action="#{userBean.load_community_registration()}">
+                                <h:outputText value="As a Community!"/>
+                            </h:commandLink>
+                        </li>
+                    </ul>
+
+                </li>
+            </c:if>
+
+            <c:if test="#{userBean.isCommunity == 1}" >
+                <li class="subs">
+                    <a href="#s1">Community</a>
+                    <ul>
+
+                        <li>
+                            <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}">
+                                <h:outputText value="Community Detail"/>
+                            </h:commandLink>                 
+
+                        </li>
+                        <li>
+                            <h:commandLink id="members" action="#{communitiesBean.load_community_members()}">
+                                <h:outputText value="Community Members"/>
+                            </h:commandLink>                 
+
+                        </li>
+
+
+                    </ul>
+                </li>   
+
+
+            </c:if>
+
+
+            <c:if test="#{userBean.user_id != null}" >
                 <li class="subs">
                     <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
                         <f:actionListener  type="echomarket.listeners.EndSession"  /> 
