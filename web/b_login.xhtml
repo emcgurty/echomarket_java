@@ -7,17 +7,17 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-          
+
 
     <h:form  id="user_login" >
-        
+
         <div class="messagecolor">
             <h:messages showSummary="true" 
                         showDetail="false"
                         errorStyle="color: #d20005" 
                         infoStyle="color: blue"/>
         </div>
-                 
+
         <table style="width:100%;margin-left: 5px" align="center" id="user_login_table">
             <tr >
                 <td style="padding-top: 15px;padding-bottom: 15px;">
@@ -63,13 +63,14 @@
                         </h:outputLabel>
                         <h:message for="password" errorClass="error" />
                     </h:panelGroup>
-                
+
                 </td>
             </tr>
             <tr>
                 <td style="padding-bottom: 15px;">  
                     <p>
                         <h:commandLink  action="#{userBean.loginUser()}" id="user_login_command" value="Login" />
+                        <br />
                         <br />
                         <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
                             <f:ajax />
@@ -79,7 +80,7 @@
                             <f:ajax />
                         </h:commandLink>
                         <br />
-
+                        <br />
                         <h:commandLink  action="#{userBean.load_user_registration()}" id="i_register" value="Individual or Organization Registration"   >
                             <f:ajax />
                         </h:commandLink>
