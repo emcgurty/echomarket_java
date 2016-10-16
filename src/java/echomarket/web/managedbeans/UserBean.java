@@ -7,6 +7,7 @@ import echomarket.hibernate.Users;
 import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
+import echomarket.hibernate.CommunityMembers;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
@@ -124,6 +125,7 @@ public class UserBean extends AbstractBean implements Serializable {
         List result = null;
         Users create_record = null;
         Communities comm = null;
+        CommunityMembers comm_mem = null;
         List tmp = null;
         String hold_userTypeBuild = "";
         String fullname = this.firstName + " " + this.lastName;
@@ -155,11 +157,13 @@ public class UserBean extends AbstractBean implements Serializable {
         }
 
         if (savedRecord == true) {
-
+            Date today_date = new Date();
             if (this.communityName != null) {
                 comm = new Communities(current_user_id, this.communityName, this.firstName, this.lastName, "NA", "NA", "NA", "-9", "-9");
                 hib.save(comm);
-//                tx.commit();
+                
+                comm_mem = new CommunityMembers(getId(), current_user_id, "NA", this.firstName, null, this.lastName, this.userAlias,1, today_date, today_date, 1);
+                hib.save(comm_mem);
 
             }
 
