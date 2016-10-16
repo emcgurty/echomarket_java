@@ -9,9 +9,8 @@ import java.util.Date;
  */
 public class CommunityMembers  implements java.io.Serializable {
 
-
-     private String id;
-     private String communityId;
+     private String community_member_id;
+     private String community_id;
      private String remoteIp;
      private String firstName;
      private String mi;
@@ -26,17 +25,17 @@ public class CommunityMembers  implements java.io.Serializable {
     public CommunityMembers() {
     }
 
-	
+  
     public CommunityMembers(String id, String communityId, Date dateCreated, Date dateUpdated, Date dateDeleted) {
-        this.id = id;
-        this.communityId = communityId;
+        this.community_member_id = id;
+        this.community_id = communityId;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateUpdated;
         this.dateDeleted = dateDeleted;
     }
     public CommunityMembers(String id, String communityId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer isCreator) {
-       this.id = id;
-       this.communityId = communityId;
+       this.community_member_id = id;
+       this.community_id = communityId;
        this.remoteIp = remoteIp;
        this.firstName = firstName;
        this.mi = mi;
@@ -49,20 +48,7 @@ public class CommunityMembers  implements java.io.Serializable {
        this.isCreator = isCreator;
     }
    
-    public String getId() {
-        return this.id;
-    }
-    
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getCommunityId() {
-        return this.communityId;
-    }
-    
-    public void setCommunityId(String communityId) {
-        this.communityId = communityId;
-    }
+       
     public String getRemoteIp() {
         return this.remoteIp;
     }
@@ -132,6 +118,34 @@ public class CommunityMembers  implements java.io.Serializable {
     
     public void setIsCreator(Integer isCreator) {
         this.isCreator = isCreator;
+    }
+
+    /**
+     * @return the community_member_id
+     */
+    public String getCommunity_member_id() {
+        return community_member_id;
+    }
+
+    /**
+     * @param community_member_id the community_member_id to set
+     */
+    public void setCommunity_member_id(String community_member_id) {
+        this.community_member_id = community_member_id;
+    }
+
+    /**
+     * @return the community_id
+     */
+    public String getCommunity_id() {
+        return community_id;
+    }
+
+    /**
+     * @param community_id the community_id to set
+     */
+    public void setCommunity_id(String community_id) {
+        this.community_id = community_id;
     }
 
 
