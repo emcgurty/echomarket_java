@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="./echomarketTemplate.xhtml"         >
+    <ui:define name="header"  >
+        <ui:include rendered="true" src="application_header.xhtml" id="communityHeader" /> 
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form  id="form_community_members"  >
+            <h:head>
+                <!--<h:outputScript library="javascript" name="community.js"  />-->
+                <h:outputStylesheet library="css" name="member.css"/>
+                <title>#{bundle.communityMemberTitle}</title>
+            </h:head>
+
+            <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
+
+            <div  class="top" id="form_community_members">
+
+                <div class="top" >
+                    <div style="margin:10px;margin-top:25px;" >
+                        <h:outputText value="#{communitiesBean.communityName}: Community Members" />
+                        <h:commandLink  action="#{communitiesBean.saveCommunityMembers()}" class="right_div" value="Save Community Members">
+                        </h:commandLink>
+
+                    </div> 
+                </div> 
+
+
+                <h:dataTable value="#{communitiesBean.buildCommunityMembersList()}" var="member" 
+                             styleClass="member-table"
+                             headerClass="member-table-header"
+                             rowClasses="member-table-odd-row,member-table-even-row"
+                             >
+
+                    <h:column >
+                        <f:facet name="header" >First Name</f:facet>
+                        <h:inputText value="#{member.firstName}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Last Name</f:facet>
+                            #{member.lastName}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Alias</f:facet>
+                            #{member.alias}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Email</f:facet>
+                            #{member.email}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Is Active?</f:facet>
+                            #{member.isActive}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Action</f:facet>
+                        <h:commandLink value="Edit" action="#{communitiesBean.editAction(member)}" />
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="CommunityMemberFooter" /> 
+    </ui:define>
+
+</ui:composition>
