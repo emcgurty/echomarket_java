@@ -19,8 +19,6 @@ import javax.servlet.http.Part;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-/// Credit due: https://www.javacodegeeks.com/2015/11/jsf-scopes-tutorial-jsfcdi-session-scope.html
-/// Added return "index?faces-redirect=true"; Source: http://stackoverflow.com/questions/3642919/javax-faces-application-viewexpiredexception-view-could-not-be-restored
 @Named
 @ManagedBean(name = "community")
 @RequestScoped
@@ -28,6 +26,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
+
     private String communityName;
     private Integer approved;
     private String firstName;
@@ -47,6 +46,31 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     private Integer isActive;
     private Integer isSaved;
     private String remoteIp;
+
+    public List buildCommunityMembersList() {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String queryString = null;
+        List result = null;
+
+        if (ubean.getIsCommunity() == 1) {
+            queryString = "FROM CommunityMembers where community_id = :cid";
+            try {
+                result = hib.createQuery(queryString)
+                        .setParameter("cid", ubean.getUser_id())
+                        .list();
+                tx.commit();
+
+            } catch (Exception ex) {
+                Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+
+            } finally {
+                tx = null;
+            }
+        }
+        return result;
+
+    }
 
     public String load_community_detail() {
 
@@ -99,8 +123,30 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     }
 
     public String load_community_members() {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String queryString = null;
+        List result = null;
+        Communities comm_Array = new Communities();
+        
+            queryString = "FROM Communities where community_id = :cid";
+            try {
+                result = hib.createQuery(queryString)
+                        .setParameter("cid", ubean.getUser_id())
+                        .list();
+                tx.commit();
 
-        return "index";
+                if (result.size() > 0) {
+
+                    comm_Array = (Communities) result.get(0);
+                    this.communityName = comm_Array.getCommunityName();
+
+                } else {
+                }
+            } catch(Exception ex) {}
+            
+        tx = null;
+        return "community_members.xhtml?faces-redirect=true";
     }
 
     public String saveCommunityDetail() {
@@ -113,21 +159,20 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
                 this.postalCode, this.city, this.province,
                 this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, 1, today_date, today_date, today_date, this.region, "NA");
 
-        
         try {
             sb.update(comm);
             tx.commit();
-            
+
             message(
-                null,
-                "CommunityDetailRecordSaved",
-                null);
+                    null,
+                    "CommunityDetailRecordSaved",
+                    null);
         } catch (Exception ex) {
             Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
             message(
-                null,
-                "CommunityDetailRecordWasNotSaved",
-                null);
+                    null,
+                    "CommunityDetailRecordWasNotSaved",
+                    null);
         }
         sb = null;
         tx = null;
@@ -400,5 +445,62 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     public void setRegion(String region) {
         this.region = region;
     }
+    
+    	public static class Member{
+
+		private String firstName;
+                private String lastName;
+		private Boolean editable;
+
+		public Member(String fn, String ln) {
+			this.firstName = fn;
+			this.firstName = fn;
+			
+		}
+
+        /**
+         * @return the firstName
+         */
+        public String getFirstName() {
+            return firstName;
+        }
+
+        /**
+         * @param firstName the firstName to set
+         */
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        /**
+         * @return the lastName
+         */
+        public String getLastName() {
+            return lastName;
+        }
+
+        /**
+         * @param lastName the lastName to set
+         */
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        /**
+         * @return the editable
+         */
+        public Boolean getEditable() {
+            return editable;
+        }
+
+        /**
+         * @param editable the editable to set
+         */
+        public void setEditable(Boolean editable) {
+            this.editable = editable;
+        }
+
+		
+	}
 
 }
