@@ -3,11 +3,11 @@
 <!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
   <class catalog="echomarket" name="echomarket.hibernate.CommunityMembers" optimistic-lock="version" table="community_members">
-    <id name="id" type="string">
-      <column length="40" name="id"/>
+    <id name="community_member_id" type="string">
+      <column length="40" name="community_member_id"/>
       <generator class="assigned"/>
     </id>
-    <property name="communityId" type="string">
+    <property name="community_id" type="string">
       <column length="40" name="community_id" not-null="true"/>
     </property>
     <property name="remoteIp" type="string">
