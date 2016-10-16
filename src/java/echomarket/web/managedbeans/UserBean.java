@@ -40,7 +40,6 @@ public class UserBean extends AbstractBean implements Serializable {
     private String lastName;
     private String email;
     private String resetCode;
-    private String reset_code;
     private String appEmail;
     private String userAction;
     private String registrationType;
@@ -127,7 +126,7 @@ public class UserBean extends AbstractBean implements Serializable {
         Communities comm = null;
         List tmp = null;
         String hold_userTypeBuild = "";
-        String fullname = firstName + " " + lastName;
+        String fullname = this.firstName + " " + this.lastName;
         String ac = null;
         Integer holdUserType = null;
         Boolean savedRecord = false;
@@ -295,6 +294,7 @@ public class UserBean extends AbstractBean implements Serializable {
             setEmail(users_Array.getEmail());
             setIsCommunity(users_Array.getIsCommunity());
             setSessionVariables();
+            
 
             message(
                     null,
@@ -367,8 +367,6 @@ public class UserBean extends AbstractBean implements Serializable {
         List results = ValidateUserNameResetCode();
         if (results != null) {
             Users userArray = (Users) results.get(0);
-            //this.user_id = Integer.toString(userArray.getId());
-            //// Update the user to generate reset_code
             Session hib = hib_session();
             Transaction tx = hib.beginTransaction();
             Users uu = (Users) hib.get(Users.class, userArray.getId());
@@ -382,7 +380,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
             tx.commit();
-
+            tx = null;
         }
         //PasswordChangeSuccess
         message(
@@ -526,6 +524,7 @@ public class UserBean extends AbstractBean implements Serializable {
         String queryString = "from Users where username = :un and reset_code = :rc";
         List results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", getResetCode()).list();
         tx.commit();
+        tx = null;
         if (results.size() == 1) {
             return results;
         } else {
@@ -757,18 +756,6 @@ public class UserBean extends AbstractBean implements Serializable {
         return "index";
     }
 
-    /**
-     * @return the reset_code
-     */
-    private String getReset_code() {
-        return reset_code;
-    }
-
-    /**
-     * @param reset_code the reset_code to set
-     */
-    private void setReset_code(String reset_code) {
-        this.reset_code = reset_code;
-    }
+    
 
 }
