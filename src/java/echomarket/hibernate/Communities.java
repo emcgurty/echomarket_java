@@ -10,15 +10,8 @@ import java.util.Date;
 public class Communities  implements java.io.Serializable {
 
 
-     private String id;
+     private String community_id;
      private String communityName;
-     private String cryptedPassword;
-     private String salt;
-     private String rememberToken;
-     private Date rememberTokenExpiresAt;
-     private String activationCode;
-     private String resetCode;
-     private Date activatedAt;
      private Integer approved;
      private String firstName;
      private String mi;
@@ -38,7 +31,6 @@ public class Communities  implements java.io.Serializable {
      private Date dateCreated;
      private Date dateUpdated;
      private Date dateDeleted;
-     private String userType;
      private String region;
      private String remoteIp;
 
@@ -47,7 +39,7 @@ public class Communities  implements java.io.Serializable {
 
 	
     public Communities(String id, String communityName, String firstName, String lastName, String addressLine1, String postalCode, String city, String usStateId, String countryId) {
-        this.id = id;
+        this.community_id = id;
         this.communityName = communityName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,16 +51,9 @@ public class Communities  implements java.io.Serializable {
         this.dateCreated = new Date();
     
     }
-    public Communities(String id, String communityName, String cryptedPassword, String salt, String rememberToken, Date rememberTokenExpiresAt, String activationCode, String resetCode, Date activatedAt, Integer approved, String firstName, String mi, String lastName, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String countryId, String homePhone, String cellPhone, String email, Integer isActive, Integer isSaved, Date dateCreated, Date dateUpdated, Date dateDeleted, String userType, String region, String remoteIp) {
-       this.id = id;
+    public Communities(String id, String communityName, Integer approved, String firstName, String mi, String lastName, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String countryId, String homePhone, String cellPhone, String email, Integer isActive, Integer isSaved, Date dateCreated, Date dateUpdated, Date dateDeleted, String region, String remoteIp) {
+       this.community_id = id;
        this.communityName = communityName;
-       this.cryptedPassword = cryptedPassword;
-       this.salt = salt;
-       this.rememberToken = rememberToken;
-       this.rememberTokenExpiresAt = rememberTokenExpiresAt;
-       this.activationCode = activationCode;
-       this.resetCode = resetCode;
-       this.activatedAt = activatedAt;
        this.approved = approved;
        this.firstName = firstName;
        this.mi = mi;
@@ -88,74 +73,36 @@ public class Communities  implements java.io.Serializable {
        this.dateCreated = dateCreated;
        this.dateUpdated = dateUpdated;
        this.dateDeleted = dateDeleted;
-       this.userType = userType;
        this.region = region;
        this.remoteIp = remoteIp;
     }
    
-    public String getId() {
-        return this.id;
+        
+/**
+     * @return the community_id
+     */
+    public String getCommunity_id() {
+        return community_id;
     }
-    
-    public void setId(String id) {
-        this.id = id;
+
+    /**
+     * @param community_id the community_id to set
+     */
+    public void setCommunity_id(String community_id) {
+        this.community_id = community_id;
     }
+
+    /**
+     * @return the communityName
+     */
     public String getCommunityName() {
-        return this.communityName;
+        return communityName;
     }
-    
+
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
     }
-    public String getCryptedPassword() {
-        return this.cryptedPassword;
-    }
     
-    public void setCryptedPassword(String cryptedPassword) {
-        this.cryptedPassword = cryptedPassword;
-    }
-    public String getSalt() {
-        return this.salt;
-    }
-    
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-    public String getRememberToken() {
-        return this.rememberToken;
-    }
-    
-    public void setRememberToken(String rememberToken) {
-        this.rememberToken = rememberToken;
-    }
-    public Date getRememberTokenExpiresAt() {
-        return this.rememberTokenExpiresAt;
-    }
-    
-    public void setRememberTokenExpiresAt(Date rememberTokenExpiresAt) {
-        this.rememberTokenExpiresAt = rememberTokenExpiresAt;
-    }
-    public String getActivationCode() {
-        return this.activationCode;
-    }
-    
-    public void setActivationCode(String activationCode) {
-        this.activationCode = activationCode;
-    }
-    public String getResetCode() {
-        return this.resetCode;
-    }
-    
-    public void setResetCode(String resetCode) {
-        this.resetCode = resetCode;
-    }
-    public Date getActivatedAt() {
-        return this.activatedAt;
-    }
-    
-    public void setActivatedAt(Date activatedAt) {
-        this.activatedAt = activatedAt;
-    }
     public Integer getApproved() {
         return this.approved;
     }
@@ -289,13 +236,7 @@ public class Communities  implements java.io.Serializable {
     public void setDateDeleted(Date dateDeleted) {
         this.dateDeleted = dateDeleted;
     }
-    public String getUserType() {
-        return this.userType;
-    }
     
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
     public String getRegion() {
         return this.region;
     }
@@ -310,6 +251,8 @@ public class Communities  implements java.io.Serializable {
     public void setRemoteIp(String remoteIp) {
         this.remoteIp = remoteIp;
     }
+
+    
 
 
 
