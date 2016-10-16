@@ -21,6 +21,7 @@ public class CommunityMembers  implements java.io.Serializable {
      private Date dateUpdated;
      private Date dateDeleted;
      private Integer isCreator;
+     private String email;
 
     public CommunityMembers() {
     }
@@ -33,7 +34,7 @@ public class CommunityMembers  implements java.io.Serializable {
         this.dateUpdated = dateUpdated;
         this.dateDeleted = dateDeleted;
     }
-    public CommunityMembers(String id, String communityId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer isCreator) {
+    public CommunityMembers(String id, String communityId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Date dateCreated, Date dateUpdated, Integer isCreator) {
        this.community_member_id = id;
        this.community_id = communityId;
        this.remoteIp = remoteIp;
@@ -44,7 +45,6 @@ public class CommunityMembers  implements java.io.Serializable {
        this.isActive = isActive;
        this.dateCreated = dateCreated;
        this.dateUpdated = dateUpdated;
-       this.dateDeleted = dateDeleted;
        this.isCreator = isCreator;
     }
    
@@ -146,6 +146,20 @@ public class CommunityMembers  implements java.io.Serializable {
      */
     public void setCommunity_id(String community_id) {
         this.community_id = community_id;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 
