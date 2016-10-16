@@ -95,7 +95,8 @@
     <managed-bean>
         <managed-bean-name>searchBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.SearchesBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope></managed-bean>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
     <managed-bean>
         <managed-bean-name>borrowerBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.BorrowersBean</managed-bean-class>
@@ -118,18 +119,18 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     
-     <navigation-rule>
-	<from-view-id>index.xhtml</from-view-id>
-	<navigation-case>
-		<from-action>#{communitiesBean.load_community_detail()}</from-action>
-		<from-outcome>community_detail.xhtml?faces-redirect=true</from-outcome>
-		<to-view-id>community_detail.xhtml</to-view-id>
-	</navigation-case>
-<!--	<navigation-case>
-		<from-action>"#{communitiesBean.load_community_memebere()}"</from-action>
-		<from-outcome>community_members</from-outcome>
-		<to-view-id>community_memeber.xhtml</to-view-id>
-	</navigation-case>-->
+    <navigation-rule>
+        <from-view-id>index.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{communitiesBean.load_community_detail()}</from-action>
+            <from-outcome>community_detail.xhtml?faces-redirect=true</from-outcome>
+            <to-view-id>community_detail.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{communitiesBean.load_community_members()}</from-action>
+            <from-outcome>community_members.xhtml?faces-redirect=true</from-outcome>
+            <to-view-id>community_members.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
 </faces-config>
