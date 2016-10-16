@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./echomarketTemplate.xhtml"         >
+    <ui:define name="header"  >
+        <ui:include rendered="true" src="application_header.xhtml" id="communityHeader" /> 
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form  id="form_community_detail"  >
+            <h:head>
+                <h:outputScript library="javascript" name="community.js"  />
+                <title>#{bundle.communityTitle}</title>
+            </h:head>
+
+            <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
+
+
+            <div  class="top" id="form_community_detail">
+
+                <div class="top" >
+                    <div style="margin:10px;margin-top:25px;" >
+                        <h:outputText value="#{communitiesBean.communityName}: Community Detail" />
+                        <h:commandLink  action="#{communitiesBean.saveCommunityDetail()}" class="right_div" value="Save Community Detail">
+                        </h:commandLink>
+                        
+                    </div> 
+                </div> 
+
+                <div class="top" >
+                    <div style="margin:10px;margin-top:25px;" >
+                        <h:outputText value="#{bundle.addMembers}" />
+                        <h:commandLink  action="#{communitiesBean.load_community_members()}" class="right_div" value="Let's add Members">
+                        </h:commandLink>
+                        
+                    </div> 
+                </div> 
+                <table style="width:75%;margin-left: 50px" align="center" id="community_detail_table">
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputLabel for="communityName"  value="#{bundle.communityName}"><span id="communityName" class="required_fields">*</span>       
+                                <h:inputText id="communityName"
+                                             value="#{communitiesBean.communityName}"
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqUserName}" style="margin-left:10px">
+                                </h:inputText>
+                            </h:outputLabel>
+                            <span class="error-message" id="communityName" ></span>
+                        </td>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="email"  value="#{bundle.c_detail_email}"><span id="email" class="required_fields">*</span>       
+                                <h:inputText id="email"
+                                             value="#{communitiesBean.email}"
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqEmail}" style="margin-left:10px">
+                                </h:inputText>
+                            </h:outputLabel>
+
+                        </td>
+                    </tr>
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputLabel for="firstName"  value="#{bundle.c_firstName}"><span id="firstName" class="required_fields">*</span>       
+                                <h:inputText id="firstName"
+                                             value="#{communitiesBean.firstName}"
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqFirstName}" style="margin-left:10px">
+                                </h:inputText>
+                            </h:outputLabel>
+                            <span class="error-message" id="firstName" ></span>
+                        </td>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputLabel for="lastName"  value="#{bundle.c_lastName}"><span id="lastName" class="required_fields">*</span>       
+                                <h:inputText id="lastName"
+                                             value="#{communitiesBean.lastName}"
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqLastName}" style="margin-left:10px">
+                                </h:inputText>
+                            </h:outputLabel>
+                            <span class="error-message" id="lastName" ></span>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputLabel for="addressLine1"  value="#{bundle.AddressLine1}"><span id="addressLine1" class="required_fields">*</span>       
+                                <h:inputText id="addressLine1"
+                                             value="#{communitiesBean.addressLine1}"
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left:10px">
+                                </h:inputText>
+                            </h:outputLabel>
+                            <span class="error-message" id="addressLine1" ></span>
+                        </td>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputLabel for="addressLine2"  value="#{bundle.AddressLine2}">       
+                                <h:inputText id="addressLine2"
+                                             value="#{communitiesBean.addressLine2}"
+                                             >
+                                </h:inputText>
+                            </h:outputLabel>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
+                            <h:inputText id="city" value="#{communitiesBean.city}"
+                                         style="margin-left: 5px;"  >
+                            </h:inputText>
+                            <span class="error-message" id="city" ></span>
+                        </td>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+
+                            <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
+                            <h:selectOneMenu id="usStates" value="#{communitiesBean.usStateId}" style="margin-left: 5px;">
+                                <f:validator validatorId="selectOneMenuValidator" />  
+                                <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
+                                               var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
+                                               >   
+                                </f:selectItems>    
+                            </h:selectOneMenu>
+                            <h:message styleClass="error-message" for="usStates"/>
+                            <span class="error-message" id="usStates" ></span>                   
+                        </td>
+                    </tr>
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="province" value="#{bundle.Province}"/>
+                            <h:inputText id="province" value="#{communitiesBean.province}" style="margin-left: 5px;">
+                            </h:inputText>
+
+                        </td>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="region" value="#{bundle.Region}"/>
+                            <h:inputText id="region" value="#{communitiesBean.region}" style="margin-left: 5px;">
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
+                            <h:inputText id="postalCode" value="#{communitiesBean.postalCode}" 
+                                         style="margin-left: 5px;" >
+                            </h:inputText>
+                            <span class="error-message" id="postalCode" ></span>
+                        </td>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="countryId" value="#{bundle.Country}"/><span id="countryId" class="required_fields">*</span>
+                            <h:selectOneMenu id="countryId" value="#{communitiesBean.countryId}" style="margin-left: 5px;"  >
+                                <f:validator validatorId="selectOneMenuValidator" />  
+                                <f:selectItems id="country_id" value="#{country.buildCountries()}"  
+                                               var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
+                                </f:selectItems>    
+                            </h:selectOneMenu>
+                            <span class="error-message" id="countryId" ></span>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="cellPhone" value="#{bundle.c_cellPhone}"/>
+                            <h:inputText id="cellPhone" value="#{communitiesBean.cellPhone}" 
+                                         style="margin-left: 5px;">
+                            </h:inputText>
+
+                        </td>
+                        <td style="padding-top: 15px;padding-bottom: 15px;">
+                            <h:outputLabel for="homePhone" value="#{bundle.c_communityPhone}"/>
+                            <h:inputText id="homePhone" value="#{communitiesBean.homePhone}" 
+                                         style="margin-left: 5px;">
+                            </h:inputText>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="CommunityDetailFooter" /> 
+    </ui:define>
+
+</ui:composition>
