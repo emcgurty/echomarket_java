@@ -51,14 +51,40 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     public void editAction(CommunityMembers cmid) {
 
         this.editWhichRecord = cmid.getCommunity_member_id();
-        
 
     }
-    
+
     public void addAction() {
 
         //this.editWhichRecord = cmid;
         //return "community_members.xhtml?faces-redirect=true";
+    }
+
+    public void saveMember(CommunityMembers cm) {
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        Date today_date = new Date();
+        String newMemberName = cm.getFirstName() + " " + cm.getLastName();
+        CommunityMembers comm = new CommunityMembers(getId(), ubean.getUser_id(), "NA", cm.getFirstName(), "NA", cm.getLastName(), cm.getAlias(), cm.getIsActive(), today_date, today_date, 0);
+
+        try {
+            sb.save(comm);
+            tx.commit();
+
+            message(
+                    null,
+                    "NewMemberRecordSaved",
+                    new Object[]{newMemberName});
+        } catch (Exception ex) {
+            Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+            message(
+                    null,
+                    "NewMemberRecordWasNotSaved",
+                     new Object[]{newMemberName});
+        }
+        sb = null;
+        tx = null;
+        
 
     }
 
