@@ -162,9 +162,6 @@ public class CommunityMembers  implements java.io.Serializable {
         this.email = email;
     }
 
-
-
-
 }
 
 
