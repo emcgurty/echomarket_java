@@ -48,9 +48,16 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     private String remoteIp;
     private String editWhichRecord;
 
-    public void editAction(CommunityMembers mem) {
+    public void editAction(CommunityMembers cmid) {
 
-        this.editWhichRecord = mem.getCommunity_member_id();
+        this.editWhichRecord = cmid.getCommunity_member_id();
+        
+
+    }
+    
+    public void addAction() {
+
+        //this.editWhichRecord = cmid;
         //return "community_members.xhtml?faces-redirect=true";
 
     }
