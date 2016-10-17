@@ -132,5 +132,9 @@
             <to-view-id>community_members.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-    
+    <managed-bean>
+        <managed-bean-name>communityMembersBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.CommunityMembersBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>
