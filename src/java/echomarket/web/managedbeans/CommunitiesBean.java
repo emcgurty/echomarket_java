@@ -2,6 +2,7 @@ package echomarket.web.managedbeans;
 
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import echomarket.hibernate.Communities;
+import echomarket.hibernate.CommunityMembers;
 import java.io.IOException;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
@@ -26,7 +27,6 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
-
     private String communityName;
     private Integer approved;
     private String firstName;
@@ -46,6 +46,39 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     private Integer isActive;
     private Integer isSaved;
     private String remoteIp;
+    private String editWhichRecord;
+
+    public void editAction(CommunityMembers mem) {
+
+        this.editWhichRecord = mem.getCommunity_member_id();
+        //return "community_members.xhtml?faces-redirect=true";
+
+    }
+
+    public List editCurrentMemberList() {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String queryString = null;
+        List result = null;
+
+        if (ubean.getIsCommunity() == 1) {
+            queryString = "FROM CommunityMembers where community_member_id = :cid";
+            try {
+                result = hib.createQuery(queryString)
+                        .setParameter("cid", this.editWhichRecord)
+                        .list();
+                tx.commit();
+
+            } catch (Exception ex) {
+                Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+
+            } finally {
+                tx = null;
+            }
+        }
+        return result;
+
+    }
 
     public List buildCommunityMembersList() {
         Session hib = hib_session();
@@ -128,23 +161,24 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         String queryString = null;
         List result = null;
         Communities comm_Array = new Communities();
-        
-            queryString = "FROM Communities where community_id = :cid";
-            try {
-                result = hib.createQuery(queryString)
-                        .setParameter("cid", ubean.getUser_id())
-                        .list();
-                tx.commit();
 
-                if (result.size() > 0) {
+        queryString = "FROM Communities where community_id = :cid";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("cid", ubean.getUser_id())
+                    .list();
+            tx.commit();
 
-                    comm_Array = (Communities) result.get(0);
-                    this.communityName = comm_Array.getCommunityName();
+            if (result.size() > 0) {
 
-                } else {
-                }
-            } catch(Exception ex) {}
-            
+                comm_Array = (Communities) result.get(0);
+                this.communityName = comm_Array.getCommunityName();
+
+            } else {
+            }
+        } catch (Exception ex) {
+        }
+
         tx = null;
         return "community_members.xhtml?faces-redirect=true";
     }
@@ -445,62 +479,19 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     public void setRegion(String region) {
         this.region = region;
     }
-    
-    	public static class Member{
 
-		private String firstName;
-                private String lastName;
-		private Boolean editable;
+    /**
+     * @return the editWhichRecord
+     */
+    public String getEditWhichRecord() {
+        return editWhichRecord;
+    }
 
-		public Member(String fn, String ln) {
-			this.firstName = fn;
-			this.firstName = fn;
-			
-		}
-
-        /**
-         * @return the firstName
-         */
-        public String getFirstName() {
-            return firstName;
-        }
-
-        /**
-         * @param firstName the firstName to set
-         */
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-
-        /**
-         * @return the lastName
-         */
-        public String getLastName() {
-            return lastName;
-        }
-
-        /**
-         * @param lastName the lastName to set
-         */
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-
-        /**
-         * @return the editable
-         */
-        public Boolean getEditable() {
-            return editable;
-        }
-
-        /**
-         * @param editable the editable to set
-         */
-        public void setEditable(Boolean editable) {
-            this.editable = editable;
-        }
-
-		
-	}
+    /**
+     * @param editWhichRecord the editWhichRecord to set
+     */
+    public void setEditWhichRecord(String editWhichRecord) {
+        this.editWhichRecord = editWhichRecord;
+    }
 
 }
