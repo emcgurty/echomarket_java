@@ -33,7 +33,7 @@
                 <div class="top" >
                     <div style="margin:10px;margin-top:25px;" >
                         <h:outputText value="#{communitiesBean.communityName}: Community Members" />
-                        <h:commandLink  action="#{communitiesBean.saveCommunityMembers()}" class="right_div" value="Save Community Members">
+                        <h:commandLink  action="#{communitiesBean.saveCommunityMembers()}" class="right_div" value="Edit Community Registration">
                         </h:commandLink>
 
                     </div> 
@@ -49,13 +49,13 @@
 
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
-                         <h:outputText value="#{member.firstName}"  />
-                        
+                        <h:outputText value="#{member.firstName}"  />
+
                     </h:column>
                     <h:column>
                         <f:facet name="header">Last Name</f:facet>
                         <h:outputText value="#{member.lastName}" />
-                        
+
                     </h:column>
                     <h:column>
                         <f:facet name="header">Alias</f:facet>
@@ -68,36 +68,67 @@
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
                         <h:outputText value="#{member.isActive  == 1 ? 'Is Active' : 'Not Active'}" style="color: #045491; font-weight: bold;"/>
-<!--                        <h:selectBooleanCheckbox value="#{member.isActive  == 1 ? true : false}" id="isActive">
-                            <h:outputText value="Is Active?" style="color: #045491; font-weight: bold;"/>
-                        </h:selectBooleanCheckbox>-->
+
                     </h:column>
                     <h:column>
 
                         <f:facet name="header">Action</f:facet>
 
-                        <h:commandLink value="Edit" action="#{communitiesBean.editAction(member)}" />
-                        
-                    </h:column>
-                    
-                    
-                </h:dataTable>
-                
-                
-                <h:dataTable value="#{communitiesBean.editCurrentMemberList()}" id="one_member" var="one_mem" 
-                             styleClass="member-table"
-                             headerClass="member-table-header"
-                             rowClasses="member-table-odd-row,member-table-even-row"
-                             style="margin: 25px;"
-                             >
+                        <h:commandLink value="Edit" action="#{communitiesBean.editAction(member)}"/>
 
-                    <h:column >
-                        <f:facet name="header" >First Name</f:facet>
-                         <h:inputText value="#{one_mem.firstName}"  />
-                        
                     </h:column>
-                    
+
+
                 </h:dataTable>
+
+                <div id="editMemberDiv" style="float:left;margin: 5px;">
+
+                    <h:dataTable value="#{communitiesBean.editCurrentMemberList()}" id="one_member" var="one_mem" 
+
+                                 >
+
+                        <h:column rowHeader="">
+                            <h:outputLabel for="firstName" value="#{bundle.m_firstName}"/><span id="firstName" class="required_fields">*</span>
+                            <br />
+                            <h:inputText id="firstName" value="#{one_mem.firstName}" style="margin-left: 5px;" class="cm" >
+                            </h:inputText>
+                            <span class="error-message" id="firstName" ></span>
+                            <br /><br />
+                            <h:outputLabel for="lastName" value="#{bundle.m_lastName}" /><span id="lastName" class="required_fields">*</span>
+                            <br />
+                            <h:inputText id="lastName" value="#{one_mem.lastName}" style="margin-left: 5px;" class="cm" >
+                            </h:inputText>
+                            <span class="error-message" id="lastName" ></span>
+                            <br /><br />
+                            <h:outputLabel for="alias" value="#{bundle.m_alias}"/><span id="alias" class="required_fields">*</span>
+                            <br />
+                            <h:inputText id="alias" value="#{one_mem.alias}"
+                                         style="margin-left: 5px;" class="cm" >
+                            </h:inputText>
+                            <span class="error-message" id="alias" ></span>
+                            <br /><br />
+                            <h:outputLabel for="email" value="#{bundle.m_email}"/><span id="alias" class="required_fields">*</span>
+                            <br />
+                            <h:inputText id="email" value="#{one_mem.email}" style="margin-left: 5px;">
+                            </h:inputText>
+                            <span class="error-message" id="email" ></span>
+                            <br /><br />
+                            <h:outputLabel for="isActive" value="#{bundle.m_isActive}" style="align-content: left;"/>
+                            <br />
+                            <h:selectBooleanCheckbox value="#one_mem.isActive  == 1 ? true : false}" id="isActive">
+                                <h:outputText value="Is Active?" style="color: #045491; font-weight: bold;"/>
+                            </h:selectBooleanCheckbox>
+                            <br /><br />
+                            <h:commandLink value="Save Member" action="#{communitiesBean.saveMember(one_member)}" />    
+                            <!--Similar call as above yet not working-->
+<!--                        <h:commandLink value="Edit" action="#{communitiesBean.editAction(member)}"/>-->
+                        </h:column>
+
+                    </h:dataTable>
+                </div>
+                <h:commandLink value="Add Member" action="#{communitiesBean.addAction()}" onclick="if (!hideeditMemberDiv()) {
+                            return false;
+                        }"/>    
             </div>
         </h:form>
     </ui:define>
