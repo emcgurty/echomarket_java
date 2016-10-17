@@ -14,7 +14,7 @@
     <ui:define name="content">
         <h:form  id="form_community_members"  >
             <h:head>
-                <!--<h:outputScript library="javascript" name="community.js"  />-->
+                <h:outputScript library="javascript" name="community.js"  />`
                 <h:outputStylesheet library="css" name="member.css"/>
                 <title>#{bundle.communityMemberTitle}</title>
             </h:head>
@@ -40,36 +40,63 @@
                 </div> 
 
 
-                <h:dataTable value="#{communitiesBean.buildCommunityMembersList()}" var="member" 
+                <h:dataTable value="#{communitiesBean.buildCommunityMembersList()}" id="member" var="member" 
                              styleClass="member-table"
                              headerClass="member-table-header"
                              rowClasses="member-table-odd-row,member-table-even-row"
+                             style="margin: 25px;"
                              >
 
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
-                        <h:inputText value="#{member.firstName}" />
+                         <h:outputText value="#{member.firstName}"  />
+                        
                     </h:column>
                     <h:column>
                         <f:facet name="header">Last Name</f:facet>
-                            #{member.lastName}
+                        <h:outputText value="#{member.lastName}" />
+                        
                     </h:column>
                     <h:column>
                         <f:facet name="header">Alias</f:facet>
-                            #{member.alias}
+                        <h:outputText value="#{member.alias}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Email</f:facet>
-                            #{member.email}
+                        <h:outputText value="#{member.email}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
-                            #{member.isActive}
+                        <h:outputText value="#{member.isActive  == 1 ? 'Is Active' : 'Not Active'}" style="color: #045491; font-weight: bold;"/>
+<!--                        <h:selectBooleanCheckbox value="#{member.isActive  == 1 ? true : false}" id="isActive">
+                            <h:outputText value="Is Active?" style="color: #045491; font-weight: bold;"/>
+                        </h:selectBooleanCheckbox>-->
                     </h:column>
                     <h:column>
+
                         <f:facet name="header">Action</f:facet>
+
                         <h:commandLink value="Edit" action="#{communitiesBean.editAction(member)}" />
+                        
                     </h:column>
+                    
+                    
+                </h:dataTable>
+                
+                
+                <h:dataTable value="#{communitiesBean.editCurrentMemberList()}" id="one_member" var="one_mem" 
+                             styleClass="member-table"
+                             headerClass="member-table-header"
+                             rowClasses="member-table-odd-row,member-table-even-row"
+                             style="margin: 25px;"
+                             >
+
+                    <h:column >
+                        <f:facet name="header" >First Name</f:facet>
+                         <h:inputText value="#{one_mem.firstName}"  />
+                        
+                    </h:column>
+                    
                 </h:dataTable>
             </div>
         </h:form>
