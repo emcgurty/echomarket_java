@@ -12,125 +12,127 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form  id="form_community_members"  >
-            <h:head>
-                <h:outputScript library="javascript" name="community.js"  />`
-                <h:outputStylesheet library="css" name="member.css"/>
-                <title>#{bundle.communityMemberTitle}</title>
-            </h:head>
 
-            <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+        <h:head>
+            <h:outputScript library="javascript" name="community.js"  />`
+            <h:outputStylesheet library="css" name="member.css"/>
+            <title>#{bundle.communityMemberTitle}</title>
+        </h:head>
 
-            <div class="messagecolor">
-                <h:messages showSummary="true" 
-                            showDetail="false"
-                            errorStyle="color: #d20005" 
-                            infoStyle="color: blue"/>
-            </div>
+        <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
 
-            <div  class="top" id="form_community_members">
+        <div class="messagecolor">
+            <h:messages showSummary="true" 
+                        showDetail="false"
+                        errorStyle="color: #d20005" 
+                        infoStyle="color: blue"/>
+        </div>
 
+        <div  class="top" id="form_community_members">
+            <h:form id="member_build" >
                 <div class="top" >
                     <div style="margin:10px;margin-top:25px;" >
-                        <h:outputText value="#{communitiesBean.communityName}: Community Members" />
-                        <h:commandLink  action="#{communitiesBean.saveCommunityMembers()}" class="right_div" value="Edit Community Registration">
-                        </h:commandLink>
+                        <h:outputText value="#{communityMembersBean.editable} : Community Members" />
 
                     </div> 
                 </div> 
 
-
-                <h:dataTable value="#{communitiesBean.buildCommunityMembersList()}" id="member" var="member" 
+                <h:dataTable value="#{communityMembersBean.buildCommunityMembersList()}" id="member" var="member" 
                              styleClass="member-table"
                              headerClass="member-table-header"
                              rowClasses="member-table-odd-row,member-table-even-row"
                              style="margin: 25px;"
+                             rendered="#{communityMembersBean.editable != 3}"
                              >
 
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
-                        <h:outputText value="#{member.firstName}"  />
+                        <h:outputText value="#{member.firstName}" rendered="#{member.editable == 0}" />
+                        <h:inputText value="#{communityMembersBean.firstName}" rendered="#{member.editable == 1}" />
 
                     </h:column>
                     <h:column>
                         <f:facet name="header">Last Name</f:facet>
-                        <h:outputText value="#{member.lastName}" />
+                        <h:outputText value="#{member.lastName}" rendered="#{member.editable == 0}" />
+                        <h:inputText value="#{communityMembersBean.lastName}" rendered="#{member.editable == 1}" />
 
                     </h:column>
                     <h:column>
                         <f:facet name="header">Alias</f:facet>
-                        <h:outputText value="#{member.alias}" />
+                        <h:outputText value="#{member.alias}" rendered="#{member.editable == 0}" />
+                        <h:inputText value="#{communityMembersBean.alias}" rendered="#{member.editable == 1}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Email</f:facet>
-                        <h:outputText value="#{member.email}" />
+                        <h:outputText value="#{member.email}" rendered="#{member.editable == 0}" />
+                        <h:inputText value="#{communityMembersBean.email}" rendered="#{member.editable == 1}" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
-                        <h:outputText value="#{member.isActive  == 1 ? 'Is Active' : 'Not Active'}" style="color: #045491; font-weight: bold;"/>
+                        <h:outputText value="#{member.isActive  == 1 ? 'Yes' : 'No'}" style="color: #045491; font-weight: bold;" rendered="#{member.editable == 0}" />
+                        <h:inputHidden value="#{communityMembersBean.isActive}" id="isActive" rendered="#{member.editable == 0}" />
+                        <h:selectBooleanCheckbox
+                            id="isActive_boolean" rendered="#{member.editable == 1}"  
+                            value="#{communityMembersBean.isActive_boolean}" />
 
                     </h:column>
                     <h:column>
-
                         <f:facet name="header">Action</f:facet>
 
-                        <h:commandLink value="Edit" action="#{communitiesBean.editAction(member)}"/>
+                        <h:commandLink value="Edit" action="#{communityMembersBean.editAction(member)}" rendered="#{member.editable == 0}" />
+                        <br />
+                        <h:commandLink value="Add Member" action="#{communityMembersBean.addAction()}" />    
+                        <br />
+                        <h:commandLink value="Update" action="#{communityMembersBean.updateAction(member)}" rendered="#{member.editable == 1}" />
+                        <br />
+                        
+
+                    </h:column>
+                </h:dataTable>
+
+                <h:dataTable value="communityMembersBean.existing_member" id="existing_member" var="new" 
+                             styleClass="member-table"
+                             headerClass="member-table-header"
+                             rowClasses="member-table-odd-row,member-table-even-row"
+                             style="margin: 25px;"
+                             rendered="#{communityMembersBean.editable == 3}" >
+                    >
+
+                                        <h:column >
+                        <f:facet name="header" >First Name</f:facet>
+                        <h:inputText value="#{communityMembersBean.efirstName}"  />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Last Name</f:facet>
+                        <h:inputText value="#{communityMembersBean.elastName}"  />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Alias</f:facet>
+                        <h:inputText value="#{communityMembersBean.ealias}"  />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Email</f:facet>
+                        <h:inputText value="#{communityMembersBean.eemail}"  />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Is Active?</f:facet>
+                        
+                        <h:inputHidden value="#{communityMembersBean.isActive}" id="isActive"  />
+                        <h:selectBooleanCheckbox
+                            id="isActive_boolean" value="#{communityMembersBean.isActive_boolean}" />
 
                     </h:column>
 
-
+                    <h:column >
+                        <h:commandLink value="Save New Member" action="#{communityMembersBean.saveAction()}"  />
+                    </h:column>
                 </h:dataTable>
 
-                <div id="editMemberDiv" style="float:left;margin: 5px;">
+            </h:form>
+        </div>
 
-                    <h:dataTable value="#{communitiesBean.editCurrentMemberList()}" id="one_member" var="one_mem" 
-
-                                 >
-
-                        <h:column rowHeader="">
-                            <h:outputLabel for="firstName" value="#{bundle.m_firstName}"/><span id="firstName" class="required_fields">*</span>
-                            <br />
-                            <h:inputText id="firstName" value="#{one_mem.firstName}" style="margin-left: 5px;" class="cm" >
-                            </h:inputText>
-                            <span class="error-message" id="firstName" ></span>
-                            <br /><br />
-                            <h:outputLabel for="lastName" value="#{bundle.m_lastName}" /><span id="lastName" class="required_fields">*</span>
-                            <br />
-                            <h:inputText id="lastName" value="#{one_mem.lastName}" style="margin-left: 5px;" class="cm" >
-                            </h:inputText>
-                            <span class="error-message" id="lastName" ></span>
-                            <br /><br />
-                            <h:outputLabel for="alias" value="#{bundle.m_alias}"/><span id="alias" class="required_fields">*</span>
-                            <br />
-                            <h:inputText id="alias" value="#{one_mem.alias}"
-                                         style="margin-left: 5px;" class="cm" >
-                            </h:inputText>
-                            <span class="error-message" id="alias" ></span>
-                            <br /><br />
-                            <h:outputLabel for="email" value="#{bundle.m_email}"/><span id="alias" class="required_fields">*</span>
-                            <br />
-                            <h:inputText id="email" value="#{one_mem.email}" style="margin-left: 5px;">
-                            </h:inputText>
-                            <span class="error-message" id="email" ></span>
-                            <br /><br />
-                            <h:outputLabel for="isActive" value="#{bundle.m_isActive}" style="align-content: left;"/>
-                            <br />
-                            <h:selectBooleanCheckbox value="#one_mem.isActive  == 1 ? true : false}" id="isActive">
-                                <h:outputText value="Is Active?" style="color: #045491; font-weight: bold;"/>
-                            </h:selectBooleanCheckbox>
-                            <br /><br />
-                            <h:commandLink value="Save Member" action="#{communitiesBean.saveMember(one_member)}" />    
-                            <!--Similar call as above yet not working-->
-<!--                        <h:commandLink value="Edit" action="#{communitiesBean.editAction(member)}"/>-->
-                        </h:column>
-
-                    </h:dataTable>
-                </div>
-                <h:commandLink value="Add Member" action="#{communitiesBean.addAction()}" onclick="if (!hideeditMemberDiv()) {
-                            return false;
-                        }"/>    
-            </div>
-        </h:form>
     </ui:define>
 
     <ui:define name="footer"  >
