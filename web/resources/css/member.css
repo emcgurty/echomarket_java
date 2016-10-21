@@ -1,12 +1,13 @@
 .member-table{
 	member-collapse:collapse;
+        align-content: center;
 }
 
 .member-table-header{
 	text-align:center;
-	background:none repeat scroll 0 0 #E5E5E5;
+	background:none repeat scroll 0 0 #b5d3d3;
 	member-bottom:1px solid #BBBBBB;
-	padding:16px;
+	padding:8px;
 }
 
 .member-table-odd-row{
@@ -17,11 +18,11 @@
 
 .member-table-even-row{
 	text-align:center;
-	background:none repeat scroll 0 0 #F9F9F9;
+	background:none repeat scroll 0 0 #FAF0E6;
 	member-top:1px solid #BBBBBB;
 }
 
-.member-background { 
+/*.member-background { 
   background-color: #ffffff;
   font-family: sans-serif;
   font-size: 12pt;
@@ -70,4 +71,4 @@
 
 .member-row-odd { 
   background-color: #eaf1f8;
-}
+}*/
