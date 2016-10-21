@@ -1,27 +1,21 @@
 package echomarket.web.managedbeans;
 
-import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.CommunityMembers;
-import java.io.IOException;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.Part;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "community")
+@ManagedBean(name = "cBean")
 @RequestScoped
 public class CommunitiesBean extends AbstractBean implements Serializable {
 
@@ -46,98 +40,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     private Integer isActive;
     private Integer isSaved;
     private String remoteIp;
-    private String editWhichRecord;
-
-    public void editAction(CommunityMembers cmid) {
-
-        this.editWhichRecord = cmid.getCommunity_member_id();
-
-    }
-
-    public void addAction() {
-
-        //this.editWhichRecord = cmid;
-        //return "community_members.xhtml?faces-redirect=true";
-    }
-
-    public void saveMember(CommunityMembers cm) {
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
-        Date today_date = new Date();
-        String newMemberName = cm.getFirstName() + " " + cm.getLastName();
-        CommunityMembers comm = new CommunityMembers(getId(), ubean.getUser_id(), "NA", cm.getFirstName(), "NA", cm.getLastName(), cm.getAlias(), cm.getIsActive(), today_date, today_date, 0);
-
-        try {
-            sb.save(comm);
-            tx.commit();
-
-            message(
-                    null,
-                    "NewMemberRecordSaved",
-                    new Object[]{newMemberName});
-        } catch (Exception ex) {
-            Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-            message(
-                    null,
-                    "NewMemberRecordWasNotSaved",
-                     new Object[]{newMemberName});
-        }
-        sb = null;
-        tx = null;
-        
-
-    }
-
-    public List editCurrentMemberList() {
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
-        String queryString = null;
-        List result = null;
-
-        if (ubean.getIsCommunity() == 1) {
-            queryString = "FROM CommunityMembers where community_member_id = :cid";
-            try {
-                result = hib.createQuery(queryString)
-                        .setParameter("cid", this.editWhichRecord)
-                        .list();
-                tx.commit();
-
-            } catch (Exception ex) {
-                Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-
-            } finally {
-                tx = null;
-            }
-        }
-        return result;
-
-    }
-
-    public List buildCommunityMembersList() {
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
-        String queryString = null;
-        List result = null;
-
-        if (ubean.getIsCommunity() == 1) {
-            queryString = "FROM CommunityMembers where community_id = :cid";
-            try {
-                result = hib.createQuery(queryString)
-                        .setParameter("cid", ubean.getUser_id())
-                        .list();
-                tx.commit();
-
-            } catch (Exception ex) {
-                Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-
-            } finally {
-                tx = null;
-            }
-        }
-        return result;
-
-    }
-
+    
     public String load_community_detail() {
 
         Session hib = hib_session();
@@ -188,33 +91,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         return "community_detail.xhtml?faces-redirect=true";
     }
 
-    public String load_community_members() {
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
-        String queryString = null;
-        List result = null;
-        Communities comm_Array = new Communities();
 
-        queryString = "FROM Communities where community_id = :cid";
-        try {
-            result = hib.createQuery(queryString)
-                    .setParameter("cid", ubean.getUser_id())
-                    .list();
-            tx.commit();
-
-            if (result.size() > 0) {
-
-                comm_Array = (Communities) result.get(0);
-                this.communityName = comm_Array.getCommunityName();
-
-            } else {
-            }
-        } catch (Exception ex) {
-        }
-
-        tx = null;
-        return "community_members.xhtml?faces-redirect=true";
-    }
 
     public String saveCommunityDetail() {
 
@@ -513,18 +390,5 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         this.region = region;
     }
 
-    /**
-     * @return the editWhichRecord
-     */
-    public String getEditWhichRecord() {
-        return editWhichRecord;
-    }
-
-    /**
-     * @param editWhichRecord the editWhichRecord to set
-     */
-    public void setEditWhichRecord(String editWhichRecord) {
-        this.editWhichRecord = editWhichRecord;
-    }
 
 }
