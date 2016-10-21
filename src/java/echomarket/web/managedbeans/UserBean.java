@@ -128,7 +128,15 @@ public class UserBean extends AbstractBean implements Serializable {
         CommunityMembers comm_mem = null;
         List tmp = null;
         String hold_userTypeBuild = "";
+        String commName = null;
         String fullname = this.firstName + " " + this.lastName;
+        try {
+            if (this.communityName != null) {
+                commName = this.communityName;
+            }
+        } catch (Exception ex) {
+        }
+
         String ac = null;
         Integer holdUserType = null;
         Boolean savedRecord = false;
@@ -161,8 +169,8 @@ public class UserBean extends AbstractBean implements Serializable {
             if (this.communityName != null) {
                 comm = new Communities(current_user_id, this.communityName, this.firstName, this.lastName, "NA", "NA", "NA", "-9", "-9");
                 hib.save(comm);
-                
-                comm_mem = new CommunityMembers(getId(), current_user_id, "NA", this.firstName, null, this.lastName, this.userAlias,1, today_date, today_date, 1);
+
+                comm_mem = new CommunityMembers(getId(), current_user_id, current_user_id, "NA", this.firstName, this.lastName, this.userAlias, this.email   ,1, today_date, today_date, 1);
                 hib.save(comm_mem);
 
             }
@@ -184,11 +192,19 @@ public class UserBean extends AbstractBean implements Serializable {
                 System.out.println("Send Mail Failed");
             }
         }
+        if (commName == null) {
+            message(
+                    null,
+                    "NewRegistration",
+                    new Object[]{fullname});
+        } else {
 
-        message(
-                null,
-                "NewRegistration",
-                new Object[]{fullname});
+            message(
+                    null,
+                    "NewCommunityRegistration",
+                    new Object[]{fullname, commName});
+
+        }
 
         return "index";
 
@@ -263,7 +279,7 @@ public class UserBean extends AbstractBean implements Serializable {
         String return_string = null;
         Boolean getp = false;
         String queryString = "from Users where username = :un   and activated_at != null";
-        results = hib.createQuery(queryString).setParameter("un", username).list();
+        results = hib.createQuery(queryString).setParameter("un", this.username).list();
         tx.commit();
         Users users_Array = new Users();
 
@@ -277,10 +293,14 @@ public class UserBean extends AbstractBean implements Serializable {
             PasswordEncryptionService pes = new PasswordEncryptionService();
             try {
                 getp = pes.authenticate(password, crypted_password, salt);
+
             } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
             } catch (InvalidKeySpecException ex) {
-                Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
 
         } else {
@@ -291,14 +311,16 @@ public class UserBean extends AbstractBean implements Serializable {
         results = null;
 
         if (getp == true) {
-            setUser_id(users_Array.getId());
+            setUser_id(users_Array.getUser_id());
             setUserType(users_Array.getUserType());
             setUserAlias(users_Array.getUserAlias());
             setUsername(users_Array.getUsername());
             setEmail(users_Array.getEmail());
             setIsCommunity(users_Array.getIsCommunity());
+            if (users_Array.getIsCommunity()  == 1 ) {
+                setCommunityName(this.communityName);
+            }
             setSessionVariables();
-            
 
             message(
                     null,
@@ -336,7 +358,7 @@ public class UserBean extends AbstractBean implements Serializable {
         results = session.createQuery(queryString).setParameter("rc", getResetCode()).list();
         tx.commit();
         Users users_Array = (Users) results.get(0);
-        String user_id = users_Array.getId();
+        String u_id = users_Array.getUser_id();
         users_Array = null;
 
         // Should return only one row
@@ -346,9 +368,10 @@ public class UserBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == false) {
                 tx = session.beginTransaction();
+
             }
 
-            Users uu = (Users) session.get(Users.class, user_id);
+            Users uu = (Users) session.get(Users.class, u_id);
             uu.setActivatedAt(ndate);
             uu.setResetCode(null);
             tx.commit();
@@ -373,15 +396,19 @@ public class UserBean extends AbstractBean implements Serializable {
             Users userArray = (Users) results.get(0);
             Session hib = hib_session();
             Transaction tx = hib.beginTransaction();
-            Users uu = (Users) hib.get(Users.class, userArray.getId());
+            Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
             uu.setResetCode(null);
             PasswordEncryptionService pes = new PasswordEncryptionService();
             try {
                 uu.setCryptedPassword(pes.getEncryptedPassword(password, uu.getSalt()));
+
             } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
             } catch (InvalidKeySpecException ex) {
-                Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
             tx.commit();
             tx = null;
@@ -402,7 +429,7 @@ public class UserBean extends AbstractBean implements Serializable {
             //// Update the user to generate reset_code
             Session hib = hib_session();
             Transaction tx = hib.beginTransaction();
-            Users uu = (Users) hib.get(Users.class, userArray.getId());
+            Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
             buildReset_Code = uu.BuildRandomValue();
             uu.setResetCode(buildReset_Code);
             tx.commit();
@@ -420,7 +447,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
             try {
                 //  SendEmail .... You indicated that you forgot your user password, follow this link to change it
-                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, a_array.getKey_text(), a_array.getValue_text(), userArray.getId(), buildReset_Code);
+                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, a_array.getKey_text(), a_array.getValue_text(), userArray.getUser_id(), buildReset_Code);
                 se = null;
             } catch (Exception e) {
                 System.out.println("Send Mail Failed");
@@ -488,10 +515,14 @@ public class UserBean extends AbstractBean implements Serializable {
             PasswordEncryptionService pes = new PasswordEncryptionService();
             try {
                 auth_pw = pes.authenticate(pw, crypted_password, salt);
+
             } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
             } catch (InvalidKeySpecException ex) {
-                Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -759,7 +790,5 @@ public class UserBean extends AbstractBean implements Serializable {
 
         return "index";
     }
-
-    
 
 }
