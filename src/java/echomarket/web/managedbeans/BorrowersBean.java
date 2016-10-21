@@ -84,6 +84,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String advertiserId;
     private String processId;
     private Part imageFileNamePart;
+    
 
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
@@ -239,7 +240,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
 
         if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
 
-//            Addresses balt = (Addresses) aadrs.get(0);
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
