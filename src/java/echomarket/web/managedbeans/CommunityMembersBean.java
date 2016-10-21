@@ -1,5 +1,6 @@
 package echomarket.web.managedbeans;
 
+import echomarket.hibernate.Communities;
 import echomarket.hibernate.CommunityMembers;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
@@ -7,7 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+//import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
@@ -15,7 +17,7 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "communityMembersBean")
-@RequestScoped
+@SessionScoped
 public class CommunityMembersBean extends AbstractBean implements Serializable {
 
     @Inject
@@ -30,11 +32,19 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     private Integer isActive;
     private Integer isCreator;
     private String email;
-    private Boolean editable;
+    private Integer editable;
     private String editWhichRecord;
-    private CommunityMembers[] existing_member; 
+    private CommunityMembers[] existing_member;
+    private String isActive_boolean;
+    
+    private String efirstName;
+    private String elastName;
+    private String ealias;
+    private Integer eisActive;
+    private String eemail;
 
-    private List getExistingMember() {
+
+    private List getExistingMemberList() {
 
         List result = null;
         CommunityMembers[] a_array = null;
@@ -45,7 +55,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         queryString = "FROM CommunityMembers where community_member_id = :cid";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("cid", this.editWhichRecord)
+                    .setParameter("cid", this.getEditWhichRecord())
                     .list();
             tx.commit();
 
@@ -56,26 +66,37 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             tx = null;
         }
 
-         return result;
+        return result;
+    }
+
+    
+
+    public String load_community_members() {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String queryString = null;
+        List result = null;
+
+        queryString = "FROM Communities where community_id = :cid";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("cid", ubean.getUser_id())
+                    .list();
+
+            if (result.size() > 0) {
+//                For each record in result set editable to 0
+//               comm_Array = (Communities) result.get(0);
+//               queryString = comm_Array.getCommunityName();
+            } else {
+            }
+        } catch (Exception ex) {
         }
 
-
-    public void editAction(CommunityMembers cmid) {
-
-        this.editWhichRecord = cmid.getCommunity_member_id();
-
-    }
-
-    public String addAction() {
-
-        return "index";
-        //this.editWhichRecord = cmid;
-        //return "community_members.xhtml?faces-redirect=true";
-    }
-
-    public String goToIndex() {
-
-        return "index";
+        tx = null;
+//        this.communityName = queryString;
+//        return "community_members.xhtml?faces-redirect=true";
+        this.editable = 0;
+        return "community_members.xhtml?faces-redirect=true";
     }
 
     public String getCName() {
@@ -83,60 +104,109 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         return ubean.getCommunityName();
     }
 
-    public String saveMember() {
+    public String editAction(CommunityMembers cmid) {
+
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        cmid.setEditable(1);
+        this.firstName = cmid.getFirstName();
+        this.lastName = cmid.getLastName();
+        this.alias = cmid.getAlias();
+        this.community_member_id = cmid.getCommunity_member_id();
+        this.email = cmid.getEmail();
+
+        if (cmid.getIsActive() == 1) {
+            setIsActive_boolean("true");
+        } else {
+            setIsActive_boolean("false");
+        }
+
+        hib.update(cmid);
+        tx.commit();
+
+        tx = null;
+        return null;
+
+    }
+
+    public String addAction() {
+        this.editable = 3;
+        this.efirstName = null;
+        this.elastName = null;
+        this.ealias = null;
+        this.eemail = null;
+        this.eisActive = 1;
+        this.isActive_boolean = "true";
+        return "community_members";
+      
+    }
+     public String saveAction() {
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
         Date today_date = new Date();
-//        String newMemberName = cm.getFirstName() + " " + cm.getLastName();
-//        CommunityMembers comm = new CommunityMembers(getId(), ubean.getUser_id(), "NA", cm.getFirstName(), "NA", cm.getLastName(), cm.getAlias(), cm.getIsActive(), today_date, today_date, 0);
+        String newMemberName = getEfirstName() + " " + getElastName();
+        String asd = this.isActive_boolean;
+        Integer holdia = 0;
+        if ("true".equals(asd)) {
+            holdia = 1;
+        }
+        CommunityMembers comm = new CommunityMembers(getId(), ubean.getUser_id(), ubean.getUser_id(), "NA", getEfirstName(), getElastName(), getEalias(), getEemail(), holdia, today_date, today_date, 0);
 
-//        try {
-//            sb.update(comm);
-//            tx.commit();
-//
-//            message(
-//                    null,
-//                    "NewMemberRecordSaved",
-//                    new Object[]{newMemberName});
-//        } catch (Exception ex) {
-//            Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-//            message(
-//                    null,
-//                    "NewMemberRecordWasNotSaved",
-//                     new Object[]{newMemberName});
-//        }
+        try {
+            sb.save(comm);
+            tx.commit();
+
+            message(
+                    null,
+                    "NewMemberRecordSaved",
+                    new Object[]{newMemberName});
+
+        } catch (Exception ex) {
+            Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMEBER NOT SAVED", ex);
+            message(
+                    null,
+                    "NewMemberRecordWasNotSaved",
+                    new Object[]{newMemberName});
+        }
         sb = null;
         tx = null;
+        this.editable = -1;
+        return "community_members.xhtml?faces-redirect=true";
 
-        return null;
     }
+    public String updateAction(CommunityMembers cm) {
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        Date today_date = new Date();
+        String newMemberName = getFirstName() + " " + getLastName();
+        String asd = this.isActive_boolean;
+        Integer holdia = 0;
+        if ("true".equals(asd)) {
+            holdia = 1;
+        }
+        CommunityMembers comm = new CommunityMembers(cm.getCommunity_member_id(), cm.getCommunity_id(), cm.getUser_id(), "NA", getFirstName(), getLastName(), getAlias(), getEmail(), holdia, today_date, today_date, 0);
 
-//    public List editCurrentMemberList() {
-//        Session hib = hib_session();
-//        Transaction tx = hib.beginTransaction();
-//        String queryString = null;
-//        List result = null;
-//
-////        if (ubean.getIsCommunity() == 1) {
-//        queryString = "FROM CommunityMembers where community_member_id = :cid";
-//        try {
-//            result = hib.createQuery(queryString)
-//                    .setParameter("cid", this.editWhichRecord)
-//                    .list();
-//            tx.commit();
-//
-//        } catch (Exception ex) {
-//            Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-//
-//        } finally {
-//            tx = null;
-//        }
-////        }
-//        List<CommunityMembers> cm_a = result.get(0);
-//        setExisting_member(cm_a);
-//        return result;
-//
-//    }
+        try {
+            sb.update(comm);
+            tx.commit();
+
+            message(
+                    null,
+                    "NewMemberRecordSaved",
+                    new Object[]{newMemberName});
+
+        } catch (Exception ex) {
+            Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMEBER NOT SAVED", ex);
+            message(
+                    null,
+                    "NewMemberRecordWasNotSaved",
+                    new Object[]{newMemberName});
+        }
+        sb = null;
+        tx = null;
+        return "community_members.xhtml?faces-redirect=true";
+
+    }
 
     public List buildCommunityMembersList() {
         Session hib = hib_session();
@@ -144,7 +214,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         String queryString = null;
         List result = null;
 
-//        if (ubean.getIsCommunity() == 1) {
         queryString = "FROM CommunityMembers where community_id = :cid";
         try {
             result = hib.createQuery(queryString)
@@ -153,12 +222,14 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             tx.commit();
 
         } catch (Exception ex) {
-            Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+            System.out.println("ERROR IN build Community Member list");
+            System.out.println(ex);
 
         } finally {
             tx = null;
         }
-//        }
+
         return result;
 
     }
@@ -264,14 +335,14 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     /**
      * @return the editable
      */
-    public Boolean getEditable() {
+    public Integer getEditable() {
         return editable;
     }
 
     /**
      * @param editable the editable to set
      */
-    public void setEditable(Boolean editable) {
+    public void setEditable(Integer editable) {
         this.editable = editable;
     }
 
@@ -303,18 +374,116 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         this.isCreator = isCreator;
     }
 
-  /**
+    /**
      * @return the existing_alternative
      */
-    public List getExisting_alternative() {
-        return getExistingMember();
+    public List getExisting_member() {
+        return getExistingMemberList();
     }
 
     /**
      * @param existing_alternative the existing_alternative to set
      */
-    public void setExisting_alternative(CommunityMembers[] cm) {
-        this.existing_member = cm;
+    public void setExisting_member(CommunityMembers[] cm) {
+        this.setExisting_member(cm);
+    }
+
+    /**
+     * @return the editWhichRecord
+     */
+    public String getEditWhichRecord() {
+        return editWhichRecord;
+    }
+
+    /**
+     * @param editWhichRecord the editWhichRecord to set
+     */
+    public void setEditWhichRecord(String editWhichRecord) {
+        this.editWhichRecord = editWhichRecord;
+    }
+
+    /**
+     * @return the isActive_boolean
+     */
+    public String getIsActive_boolean() {
+        return isActive_boolean;
+    }
+
+    /**
+     * @param isActive_boolean the isActive_boolean to set
+     */
+    public void setIsActive_boolean(String isActive_boolean) {
+        this.isActive_boolean = isActive_boolean;
+    }
+
+    /**
+     * @return the efirstName
+     */
+    public String getEfirstName() {
+        return efirstName;
+    }
+
+    /**
+     * @param efirstName the efirstName to set
+     */
+    public void setEfirstName(String efirstName) {
+        this.efirstName = efirstName;
+    }
+
+    /**
+     * @return the elastName
+     */
+    public String getElastName() {
+        return elastName;
+    }
+
+    /**
+     * @param elastName the elastName to set
+     */
+    public void setElastName(String elastName) {
+        this.elastName = elastName;
+    }
+
+    /**
+     * @return the ealias
+     */
+    public String getEalias() {
+        return ealias;
+    }
+
+    /**
+     * @param ealias the ealias to set
+     */
+    public void setEalias(String ealias) {
+        this.ealias = ealias;
+    }
+
+    /**
+     * @return the eisActive
+     */
+    public Integer getEisActive() {
+        return eisActive;
+    }
+
+    /**
+     * @param eisActive the eisActive to set
+     */
+    public void setEisActive(Integer eisActive) {
+        this.eisActive = eisActive;
+    }
+
+    /**
+     * @return the eemail
+     */
+    public String getEemail() {
+        return eemail;
+    }
+
+    /**
+     * @param eemail the eemail to set
+     */
+    public void setEemail(String eemail) {
+        this.eemail = eemail;
     }
 
 }
