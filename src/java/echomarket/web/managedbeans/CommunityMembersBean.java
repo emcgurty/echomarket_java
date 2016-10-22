@@ -35,13 +35,12 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     private String editWhichRecord;
     private CommunityMembers[] existing_member;
     private String isActive_boolean;
-    
+
     private String efirstName;
     private String elastName;
     private String ealias;
     private Integer eisActive;
     private String eemail;
-
 
     private List getExistingMemberList() {
 
@@ -62,13 +61,16 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
 
         } finally {
-            tx = null;
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+            }
         }
 
         return result;
     }
-
-    
 
     public String load_community_members() {
         Session hib = hib_session();
@@ -89,9 +91,17 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             } else {
             }
         } catch (Exception ex) {
+            Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+            }
         }
 
-        tx = null;
 //        this.communityName = queryString;
 //        return "community_members.xhtml?faces-redirect=true";
         this.editable = 0;
@@ -103,7 +113,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         return ubean.getCommunityName();
     }
 
-    public String editAction(CommunityMembers cmid) {
+    public void editAction(CommunityMembers cmid) {
 
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
@@ -120,15 +130,25 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             setIsActive_boolean("false");
         }
 
-        hib.update(cmid);
-        tx.commit();
+        try {
+            hib.update(cmid);
+            tx.commit();
+        } catch (Exception ex) {
+            Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+            }
+        }
 
-        tx = null;
-        return null;
-
+        //http://stackoverflow.com/questions/8744162/difference-between-returning-null-and-from-a-jsf-action
+        //return "";
     }
 
-    public String addAction() {
+    public void addAction() {
         this.editable = 3;
         this.efirstName = null;
         this.elastName = null;
@@ -136,12 +156,13 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         this.eemail = null;
         this.eisActive = 1;
         this.isActive_boolean = "true";
-        return "community_members";
-      
+        //return "community_members";
+
     }
-     public String saveAction() {
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
+
+    public void saveAction() {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
         Date today_date = new Date();
         String newMemberName = getEfirstName() + " " + getElastName();
         String asd = this.isActive_boolean;
@@ -152,7 +173,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         CommunityMembers comm = new CommunityMembers(getId(), ubean.getUser_id(), ubean.getUser_id(), "NA", getEfirstName(), getElastName(), getEalias(), getEemail(), holdia, today_date, today_date, 0);
 
         try {
-            sb.save(comm);
+            hib.save(comm);
             tx.commit();
 
             message(
@@ -166,16 +187,23 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                     null,
                     "NewMemberRecordWasNotSaved",
                     new Object[]{newMemberName});
+        } finally {
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+            }
         }
-        sb = null;
-        tx = null;
+
         this.editable = -1;
-        return "community_members.xhtml?faces-redirect=true";
+        //return "community_members.xhtml?faces-redirect=true";
 
     }
-    public String updateAction(CommunityMembers cm) {
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
+
+    public void updateAction(CommunityMembers cm) {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
         Date today_date = new Date();
         String newMemberName = getFirstName() + " " + getLastName();
         String asd = this.isActive_boolean;
@@ -186,7 +214,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         CommunityMembers comm = new CommunityMembers(cm.getCommunity_member_id(), cm.getCommunity_id(), cm.getUser_id(), "NA", getFirstName(), getLastName(), getAlias(), getEmail(), holdia, today_date, today_date, 0);
 
         try {
-            sb.update(comm);
+            hib.update(comm);
             tx.commit();
 
             message(
@@ -200,11 +228,16 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                     null,
                     "NewMemberRecordWasNotSaved",
                     new Object[]{newMemberName});
+        } finally {
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+            }
         }
-        sb = null;
-        tx = null;
-        return "community_members.xhtml?faces-redirect=true";
 
+        //return "community_members.xhtml?faces-redirect=true";
     }
 
     public List buildCommunityMembersList() {
@@ -226,7 +259,12 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             System.out.println(ex);
 
         } finally {
-            tx = null;
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+            }
         }
 
         return result;
