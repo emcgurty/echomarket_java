@@ -28,21 +28,41 @@
                         infoStyle="color: blue"/>
         </div>
 
-        <div  class="top" id="form_community_members">
+        <div  id="form_community_members">
+        
             <h:form id="member_build" >
-                <div class="top" >
+                <div >
                     <div style="margin:10px;margin-top:25px;" >
-                        <h:outputText value="#{communityMembersBean.editable} : Community Members" />
-
+                        <h:outputText value="#{communityMembersBean.getCName()} : Community Members" style="color:black;font-weight:bold;"/>
+                    </div>    
+                    <div style="float:left;margin:15px;margin-top:10px;" >
+                        <h:outputText value="View, Update, de-Activate or Add Members..." style="color:black;font-weight:bold;"/>
+                        <br /><br />
+                        <c:if test="#{communityMembersBean.editable != 3}" >
+                            <h:outputText value="To add, please entered the number of New Member and then click 'Add Member'..." style="color:indigo;font-weight:normal;"/>
+                            <br />
+                            <h:outputLabel for="howManyRecords" value="Number of new members? Please enter a value between 1 and 25." style="color:indigo;font-weight:normal;" >
+                                <h:inputText id="howManyRecords"  value="#{communityMembersBean.howManyRecords}"  style="margin-left:5px;"/>
+                            </h:outputLabel>
+                            <span class="error-message" id="howManyRecords" ></span>
+                            <br />
+                            <h:commandLink value="Add Member" action="#{communityMembersBean.addAction()}"  style="margin-left:15px;"/>    
+                        </c:if>
+                        <c:if test="#{communityMembersBean.editable == 3}" >
+                            <h:outputText value="Adding Member...Each field is required." />
+                            <br />
+                            <h:outputText value="Incomplete rows will be ignored." />    
+                            <h:commandLink value="Save New Member(s)" action="#{communityMembersBean.saveAction()}" class="div_right" />    
+                        </c:if>
                     </div> 
                 </div> 
 
                 <h:dataTable value="#{communityMembersBean.buildCommunityMembersList()}" id="member" var="member" 
+                             
                              styleClass="member-table"
                              headerClass="member-table-header"
                              rowClasses="member-table-odd-row,member-table-even-row"
-                             style="margin: 25px;"
-                             rendered="#{communityMembersBean.editable != 3}"
+                                                          rendered="#{communityMembersBean.editable != 3}"
                              >
 
                     <h:column >
@@ -65,7 +85,15 @@
                     <h:column>
                         <f:facet name="header">Email</f:facet>
                         <h:outputText value="#{member.email}" rendered="#{member.editable == 0}" />
-                        <h:inputText value="#{communityMembersBean.email}" rendered="#{member.editable == 1}" />
+                        <h:inputText value="#{communityMembersBean.email}" rendered="#{member.editable == 1}" 
+                                     size="16"
+                                     required="true"
+                                     requiredMessage="#{bundle.ReqEmail}"
+                                     validatorMessage="#{bundle.ValidEmail}" 
+                                     >
+                            <f:validateRegex
+                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </h:inputText>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
@@ -80,58 +108,64 @@
                         <f:facet name="header">Action</f:facet>
 
                         <h:commandLink value="Edit" action="#{communityMembersBean.editAction(member)}" rendered="#{member.editable == 0}" />
-                        <br />
-                        <h:commandLink value="Add Member" action="#{communityMembersBean.addAction()}" />    
-                        <br />
                         <h:commandLink value="Update" action="#{communityMembersBean.updateAction(member)}" rendered="#{member.editable == 1}" />
                         <br />
-                        
+
 
                     </h:column>
                 </h:dataTable>
-
-                <h:dataTable value="communityMembersBean.existing_member" id="existing_member" var="new" 
+                <!--<c:set var="count"  value="-1" scope="view" />-->
+                <h:dataTable value="#{communityMembersBean.existing_member}" id="new_rows" var="new" 
                              styleClass="member-table"
                              headerClass="member-table-header"
                              rowClasses="member-table-odd-row,member-table-even-row"
                              style="margin: 25px;"
-                             rendered="#{communityMembersBean.editable == 3}" >
-                    >
+                             rendered="#{communityMembersBean.editable == 3}" 
 
-                                        <h:column >
+                             >
+                    >
+                    <!--<c:set var="count" value="${count + 1}" scope="view"/>-->
+
+                    <h:column >
                         <f:facet name="header" >First Name</f:facet>
-                        <h:inputText value="#{communityMembersBean.efirstName}"  />
+                        <h:inputText id="firstName" value="#{new.firstName}"  />
 
                     </h:column>
                     <h:column>
                         <f:facet name="header">Last Name</f:facet>
-                        <h:inputText value="#{communityMembersBean.elastName}"  />
+                        <h:inputText id="lastName"  value="#{new.lastName}" />
 
                     </h:column>
                     <h:column>
                         <f:facet name="header">Alias</f:facet>
-                        <h:inputText value="#{communityMembersBean.ealias}"  />
+                        <h:inputText id="alias"   value="#{new.alias}"  />
                     </h:column>
                     <h:column>
                         <f:facet name="header">Email</f:facet>
-                        <h:inputText value="#{communityMembersBean.eemail}"  />
+                          <h:inputText id="email"
+                                     size="16"
+                                     value="#{new.email}"
+                                     required="true"
+                                     requiredMessage="#{bundle.ReqEmail}"
+                                     validatorMessage="#{bundle.ValidEmail}" 
+                                     >
+                            <f:validateRegex
+                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </h:inputText>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
-                        
-                        <h:inputHidden value="#{communityMembersBean.isActive}" id="isActive"  />
-                        <h:selectBooleanCheckbox
-                            id="isActive_boolean" value="#{communityMembersBean.isActive_boolean}" />
-
+                        <h:selectOneRadio id="isActive" value="#{new.isActive}" layout="pageDirection" >
+                            <f:selectItem itemValue="1" itemLabel="Yes?" />
+                            <f:selectItem itemValue="0" itemLabel="No?" />	
+                        </h:selectOneRadio>    
                     </h:column>
 
-                    <h:column >
-                        <h:commandLink value="Save New Member" action="#{communityMembersBean.saveAction()}"  />
-                    </h:column>
                 </h:dataTable>
 
             </h:form>
         </div>
+        
 
     </ui:define>
 
