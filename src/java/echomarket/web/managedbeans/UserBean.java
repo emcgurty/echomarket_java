@@ -170,7 +170,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 comm = new Communities(current_user_id, this.communityName, this.firstName, this.lastName, "NA", "NA", "NA", "-9", "-9");
                 hib.save(comm);
 
-                comm_mem = new CommunityMembers(getId(), current_user_id, current_user_id, "NA", this.firstName, this.lastName, this.userAlias, this.email   ,1, today_date, today_date, 1);
+                comm_mem = new CommunityMembers(getId(), current_user_id, current_user_id, "NA", this.firstName, this.lastName, this.userAlias, this.email, 1, today_date, today_date, 1);
                 hib.save(comm_mem);
 
             }
@@ -306,8 +306,7 @@ public class UserBean extends AbstractBean implements Serializable {
         } else {
             getp = false;
         }
-        hib = null;
-        tx = null;
+
         results = null;
 
         if (getp == true) {
@@ -317,9 +316,35 @@ public class UserBean extends AbstractBean implements Serializable {
             setUsername(users_Array.getUsername());
             setEmail(users_Array.getEmail());
             setIsCommunity(users_Array.getIsCommunity());
-            if (users_Array.getIsCommunity()  == 1 ) {
-                setCommunityName(this.communityName);
+            if (users_Array.getIsCommunity() == 1) {
+                if (hib.isOpen() == false) {
+                    hib = hib_session();
+                }
+
+                if (tx.isActive() == false) {
+                    tx = hib.beginTransaction();
+                }
+
+                try {
+                    queryString = "FROM Communities WHERE community_id = :cid";
+                    results = hib.createQuery(queryString).setParameter("cid", users_Array.getUser_id()).list();
+                    tx.commit();
+                    Communities cc = (Communities) results.get(0);
+                    setCommunityName(cc.getCommunityName());
+                } catch (Exception ex) {
+                } finally {
+                    if (hib.isOpen() == true) {
+                        hib.close();
+                    }
+
+                    if (tx.isActive() == true) {
+                        tx = null;
+                    }
+                    results = null;
+                }
+
             }
+
             setSessionVariables();
 
             message(
@@ -327,7 +352,8 @@ public class UserBean extends AbstractBean implements Serializable {
                     "LogInSuccessful",
                     new Object[]{username});
             return_string = "index";
-        } else if (getp == false) {
+        } else if (getp
+                == false) {
             username = null;
             userAlias = null;
             setUserType(null);
