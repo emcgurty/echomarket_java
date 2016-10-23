@@ -28,6 +28,7 @@ public class CommunityMembers implements java.io.Serializable {
     private Integer isCreator;
     private String email;
     private Integer editable;
+    private Integer rowIndex;
 
     public CommunityMembers() {
     }
@@ -55,7 +56,26 @@ public class CommunityMembers implements java.io.Serializable {
         this.dateUpdated = dateUpdated;
         this.isCreator = isCreator;
         this.editable = 0;
+    
     }
+    
+    public CommunityMembers(String community_member_id, String community_id, String user_id, String firstName, String lastName, String alias, String email, Integer isActive, Date dateCreated, Date dateUpdated, Integer isCreator, Integer rowIndex) {
+        this.community_member_id = community_member_id;
+        this.community_id = community_id;
+        this.user_id = user_id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.alias = alias;
+        this.email = email;
+        this.isActive = isActive;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+        this.isCreator = isCreator;
+        this.editable = 0;
+        this.rowIndex = rowIndex;
+    
+    }
+    
 
     public String getRemoteIp() {
         return this.remoteIp;
@@ -206,6 +226,20 @@ public class CommunityMembers implements java.io.Serializable {
      */
     public void setEditable(Integer editable) {
         this.editable = editable;
+    }
+
+    /**
+     * @return the rowIndex
+     */
+    public Integer getRowIndex() {
+        return rowIndex;
+    }
+
+    /**
+     * @param rowIndex the rowIndex to set
+     */
+    public void setRowIndex(Integer rowIndex) {
+        this.rowIndex = rowIndex;
     }
 
 }
