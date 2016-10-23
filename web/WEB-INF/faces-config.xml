@@ -128,8 +128,8 @@
         </navigation-case>
         <navigation-case>
             <from-action>#{communitiesBean.load_community_members()}</from-action>
-            <from-outcome>community_members.xhtml?faces-redirect=true</from-outcome>
-            <to-view-id>community_members.xhtml</to-view-id>
+            <from-outcome>build_community_members.xhtml?faces-redirect=true</from-outcome>
+            <to-view-id>build_community_members.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <managed-bean>
