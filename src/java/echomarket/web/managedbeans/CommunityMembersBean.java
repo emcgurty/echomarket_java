@@ -170,7 +170,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             /// Will eventually use Hibernate to check for duplicates.
             if (cm.getAlias() != null && cm.getEmail() != null && cm.getFirstName() != null && cm.getLastName() != null) {
                 
-                comm = new CommunityMembers(new_uuid, ubean.getUser_id(), new_uuid, "NA", cm.getFirstName(), cm.getLastName(), cm.getAlias(), cm.getEmail(), cm.getIsActive(), hold_date(), hold_date(), 0);
+                comm = new CommunityMembers(new_uuid, ubean.getUser_id(), new_uuid, "NA", cm.getFirstName(), cm.getLastName(), cm.getAlias(), cm.getEmail(), cm.getIsActive(), hold_date(), hold_date(), cm.getIsCreator());
 
                 try {
                     hib.save(comm);
@@ -285,7 +285,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         String queryString = null;
         List result = null;
 
-        queryString = "FROM CommunityMembers where community_id = :cid and isCreator = 0";
+        queryString = "FROM CommunityMembers where community_id = :cid";
         try {
             result = hib.createQuery(queryString)
                     .setParameter("cid", ubean.getUser_id())
