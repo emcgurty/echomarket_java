@@ -39,7 +39,11 @@
                         <h:outputText value="View, Update, de-Activate or Add Members..." style="color:black;font-weight:bold;"/>
                         <br /><br />
                         <c:if test="#{communityMembersBean.editable != 3}" >
-                            <h:outputText value="To add, please entered the number of New Member and then click 'Add Member'..." style="color:indigo;font-weight:normal;"/>
+                            <h:outputText value="To add, please entered the number of New Members and then click 'Add Member'..." style="color:indigo;font-weight:normal;"/>
+                            <br />
+                            <h:outputText value="Members with the same first name, last name and alias are considered duplicates..." style="color:indigo;font-weight:normal;"/>
+                            <br />
+                            <h:outputText value="Distinguish a parent and child with the same name by their alias..." style="color:indigo;font-weight:normal;"/>
                             <br />
                             <h:outputLabel for="howManyRecords" value="Number of new members? Please enter a value between 1 and 25." style="color:indigo;font-weight:normal;" >
                                 <h:inputText id="howManyRecords"  value="#{communityMembersBean.howManyRecords}"  style="margin-left:5px;"/>
@@ -52,7 +56,7 @@
                             <h:outputText value="Adding Member...Each field is required." />
                             <br />
                             <h:outputText value="Incomplete rows will be ignored." />    
-                            <h:commandLink value="Save New Member(s)" action="#{communityMembersBean.saveAction()}" class="div_right" />    
+                            <h:commandLink value="Save New Member(s)" action="#{communityMembersBean.saveAction()}" style="margin-left: 5px;" />    
                         </c:if>
                     </div> 
                 </div> 
@@ -114,22 +118,20 @@
 
                     </h:column>
                 </h:dataTable>
-                <!--<c:set var="count"  value="-1" scope="view" />-->
+                
                 <h:dataTable value="#{communityMembersBean.existing_member}" id="new_rows" var="new" 
                              styleClass="member-table"
                              headerClass="member-table-header"
                              rowClasses="member-table-odd-row,member-table-even-row"
                              style="margin: 25px;"
                              rendered="#{communityMembersBean.editable == 3}" 
-
                              >
-                    >
-                    <!--<c:set var="count" value="${count + 1}" scope="view"/>-->
+                    
 
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
                         <h:inputText id="firstName" value="#{new.firstName}"  />
-
+                        
                     </h:column>
                     <h:column>
                         <f:facet name="header">Last Name</f:facet>
@@ -142,16 +144,14 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Email</f:facet>
-                          <h:inputText id="email"
+                          <h:inputText id="email"  
                                      size="16"
                                      value="#{new.email}"
-                                     required="true"
-                                     requiredMessage="#{bundle.ReqEmail}"
-                                     validatorMessage="#{bundle.ValidEmail}" 
-                                     >
-                            <f:validateRegex
-                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                                                          >
+                            
                         </h:inputText>
+                        <br />
+                        <span class="error-message" id="email#{new.rowIndex}" ></span>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
