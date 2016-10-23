@@ -29,7 +29,7 @@
         </div>
 
         <div  id="form_community_members">
-        
+
             <h:form id="member_build" >
                 <div >
                     <div style="margin:10px;margin-top:25px;" >
@@ -61,12 +61,49 @@
                     </div> 
                 </div> 
 
-                <h:dataTable value="#{communityMembersBean.buildCommunityMembersList()}" id="member" var="member" 
-                             
+                <h:dataTable value="#{communityMembersBean.buildCommunityMemberCreators()}" id="creator" var="creator" 
+
                              styleClass="member-table"
                              headerClass="member-table-header"
                              rowClasses="member-table-odd-row,member-table-even-row"
-                                                          rendered="#{communityMembersBean.editable != 3}"
+                             >
+
+                    <h:column >
+                        <f:facet name="header" >First Name</f:facet>
+                        <h:outputText value="#{creator.firstName}"  />
+
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Last Name</f:facet>
+                        <h:outputText value="#{creator.lastName}"  />
+
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Alias</f:facet>
+                        <h:outputText value="#{creator.alias}"  />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Email</f:facet>
+                        <h:outputText value="#{member.email}"  />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Is Active?</f:facet>
+                        <h:outputText value="#{member.isActive  == 1 ? 'Yes' : 'No'}" style="color: #045491; font-weight: bold;" />
+                    </h:column>
+
+
+                </h:dataTable>
+
+                <h:dataTable value="#{communityMembersBean.buildCommunityMembersList()}" id="member" var="member" 
+
+                             styleClass="member-table"
+                             headerClass="member-table-header"
+                             rowClasses="member-table-odd-row,member-table-even-row"
+                             rendered="#{communityMembersBean.editable != 3}"
                              >
 
                     <h:column >
@@ -118,7 +155,7 @@
 
                     </h:column>
                 </h:dataTable>
-                
+
                 <h:dataTable value="#{communityMembersBean.existing_member}" id="new_rows" var="new" 
                              styleClass="member-table"
                              headerClass="member-table-header"
@@ -126,12 +163,12 @@
                              style="margin: 25px;"
                              rendered="#{communityMembersBean.editable == 3}" 
                              >
-                    
+
 
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
                         <h:inputText id="firstName" value="#{new.firstName}"  />
-                        
+
                     </h:column>
                     <h:column>
                         <f:facet name="header">Last Name</f:facet>
@@ -144,11 +181,11 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Email</f:facet>
-                          <h:inputText id="email"  
+                        <h:inputText id="email"  
                                      size="16"
                                      value="#{new.email}"
-                                                                          >
-                            
+                                     >
+
                         </h:inputText>
                         <br />
                         <span class="error-message" id="email#{new.rowIndex}" ></span>
@@ -160,12 +197,18 @@
                             <f:selectItem itemValue="0" itemLabel="No?" />	
                         </h:selectOneRadio>    
                     </h:column>
-
+                    <h:column>
+                        <f:facet name="header">Creator Privilege?</f:facet>
+                        <h:selectOneRadio id="isCreator" value="#{new.isCreator}" layout="pageDirection" >
+                            <f:selectItem itemValue="1" itemLabel="Yes?" />
+                            <f:selectItem itemValue="0" itemLabel="No?" />	
+                        </h:selectOneRadio>    
+                    </h:column>
                 </h:dataTable>
 
             </h:form>
         </div>
-        
+
 
     </ui:define>
 
