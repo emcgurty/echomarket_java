@@ -17,9 +17,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 public class Users implements java.io.Serializable {
-
-    @Id
-    private String id;
+    
+    private String user_id;
     private String username;
     private String email;
     private Date createdAt;
@@ -45,7 +44,7 @@ public class Users implements java.io.Serializable {
     public Users(String id,String firstName, String lastName, String userName, String userAlias, String password, String email, String userType, Integer isCommunity) {
         String local_password = password;
         Date today = new Date();
-        this.id = id;
+        this.user_id = id;
         this.username = userName;
         this.email = email;
         this.userAlias = userAlias;
@@ -64,7 +63,7 @@ public class Users implements java.io.Serializable {
     }
 
     public Users(String id,String username, String email, String userAlias, String userType, int isRapid, String firstName, String lastName) {
-        this.id = id;
+        this.user_id = id;
         this.username = username;
         this.email = email;
         this.userAlias = userAlias;
@@ -73,15 +72,7 @@ public class Users implements java.io.Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    
     public String getUsername() {
         return this.username;
     }
@@ -253,6 +244,21 @@ public class Users implements java.io.Serializable {
      */
     public void setIsCommunity(Integer isCommunity) {
         this.isCommunity = isCommunity;
+    }
+
+    /**
+     * @return the user_id
+     */
+    @Id
+    public String getUser_id() {
+        return user_id;
+    }
+
+    /**
+     * @param user_id the user_id to set
+     */
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
 }
