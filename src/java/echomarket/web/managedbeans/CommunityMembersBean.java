@@ -244,14 +244,48 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
         //return "community_members.xhtml?faces-redirect=true";
     }
+//buildCommunityMemberCreators
+    
+    public List buildCommunityMemberCreators() {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String queryString = null;
+        List result = null;
 
+        queryString = "FROM CommunityMembers where community_id = :cid and isCreator = 1";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("cid", ubean.getUser_id())
+                    .list();
+            tx.commit();
+
+        } catch (Exception ex) {
+            Logger.getLogger(CommunityMembersBean.class
+                    .getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+            System.out.println("ERROR IN build Community Member list");
+            System.out.println(ex);
+
+        } finally {
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+            }
+        }
+
+        return result;
+
+    }
+    
+    
     public List buildCommunityMembersList() {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         String queryString = null;
         List result = null;
 
-        queryString = "FROM CommunityMembers where community_id = :cid";
+        queryString = "FROM CommunityMembers where community_id = :cid and isCreator = 0";
         try {
             result = hib.createQuery(queryString)
                     .setParameter("cid", ubean.getUser_id())
