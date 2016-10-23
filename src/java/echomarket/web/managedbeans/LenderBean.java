@@ -983,9 +983,7 @@ public class LenderBean extends AbstractBean implements Serializable {
             tx = null;
             session = null;
 
-//            ubean.setActionTaken(result);
         }
-//        }
         return result;
     }
 
