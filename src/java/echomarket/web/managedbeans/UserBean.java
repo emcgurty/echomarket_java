@@ -184,7 +184,7 @@ public class UserBean extends AbstractBean implements Serializable {
                     SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
                     se = null;
                 } else {
-                    SendEmail se = new SendEmail("Community: " + this.communityName, username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
+                    SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKey_text(), a_array.getValue_text(), this.password, ac);
                     se = null;
                 }
 
@@ -196,13 +196,13 @@ public class UserBean extends AbstractBean implements Serializable {
             message(
                     null,
                     "NewRegistration",
-                    new Object[]{fullname});
+                    new Object[]{fullname, this.email});
         } else {
 
             message(
                     null,
                     "NewCommunityRegistration",
-                    new Object[]{fullname, commName});
+                    new Object[]{fullname, commName, this.email});
 
         }
 
