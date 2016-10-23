@@ -43,5 +43,12 @@
     <property name="isCreator" type="java.lang.Integer">
       <column name="is_creator"/>
     </property>
+    <property name="user_id" type="string">
+      <column length="40" name="user_id" not-null="true" />
+    </property>
+    <property name="editable" type="java.lang.Integer">
+      <column name="editable"/>
+    </property>
+    
   </class>
 </hibernate-mapping>
