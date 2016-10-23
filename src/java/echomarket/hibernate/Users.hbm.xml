@@ -3,8 +3,8 @@
 <!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class catalog="echomarket" name="echomarket.hibernate.Users" optimistic-lock="version" table="users">
-        <id name="id" type="string">
-            <column length="40" name="id"/>
+        <id name="user_id" type="string">
+            <column length="40" name="user_id"/>
             <generator class="assigned"/>
         </id>
         <property name="username" type="string">
