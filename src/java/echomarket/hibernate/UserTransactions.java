@@ -11,7 +11,7 @@ public class UserTransactions  implements java.io.Serializable {
 
 
      private Integer id;
-     private Integer userId;
+     private Integer user_id;
      private Integer ledgerLineId;
      private Long lineItemAmount;
      private Date createdAt;
@@ -26,8 +26,8 @@ public class UserTransactions  implements java.io.Serializable {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-    public UserTransactions(Integer userId, Integer ledgerLineId, Long lineItemAmount, Date createdAt, Date updatedAt, Integer ledgerId) {
-       this.userId = userId;
+    public UserTransactions(Integer user_id, Integer ledgerLineId, Long lineItemAmount, Date createdAt, Date updatedAt, Integer ledgerId) {
+       this.user_id = user_id;
        this.ledgerLineId = ledgerLineId;
        this.lineItemAmount = lineItemAmount;
        this.createdAt = createdAt;
@@ -42,12 +42,12 @@ public class UserTransactions  implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-    public Integer getUserId() {
-        return this.userId;
+    public Integer getuser_id() {
+        return this.user_id;
     }
     
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setuser_id(Integer user_id) {
+        this.user_id = user_id;
     }
     public Integer getLedgerLineId() {
         return this.ledgerLineId;
