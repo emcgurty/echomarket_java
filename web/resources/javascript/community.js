@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $('input').on('change', function () {
+        $('input').on('change', function () {
 
         var current_value = null;
         $("span.error-message").css("visibility", "hidden");
@@ -28,7 +28,9 @@ $(document).ready(function () {
             }
 
 
-        }
+        } 
+        
+        
     });
 
     function isEmail(email) {
