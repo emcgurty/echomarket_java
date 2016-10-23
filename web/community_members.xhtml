@@ -41,12 +41,10 @@
                         <c:if test="#{communityMembersBean.editable != 3}" >
                             <h:outputText value="To add, please entered the number of New Members and then click 'Add Member'..." style="color:indigo;font-weight:normal;"/>
                             <br />
-                            <h:outputText value="Members with the same first name, last name and alias are considered duplicates..." style="color:indigo;font-weight:normal;"/>
+                            <h:outputText value="Members with the same first name, last name and alias are considered duplicates. Distinguish a parent and child with the same name by their alias" style="color:indigo;font-weight:normal;"/>
                             <br />
-                            <h:outputText value="Distinguish a parent and child with the same name by their alias..." style="color:indigo;font-weight:normal;"/>
-                            <br />
-                            <h:outputLabel for="howManyRecords" value="Number of new members? Please enter a value between 1 and 25." style="color:indigo;font-weight:normal;" >
-                                <h:inputText id="howManyRecords"  value="#{communityMembersBean.howManyRecords}"  style="margin-left:5px;"/>
+                            <h:outputLabel for="howManyRecords" value="Number of new members? Please enter a value between 1 and 25." style="color:crimson;font-weight:normal;" >
+                                <h:inputText id="howManyRecords"  value="#{communityMembersBean.howManyRecords}"  style="margin-left:5px;" maxlength="2"/>
                             </h:outputLabel>
                             <span class="error-message" id="howManyRecords" ></span>
                             <br />
@@ -68,6 +66,10 @@
                              rowClasses="member-table-odd-row,member-table-even-row"
                              >
 
+                     <f:facet name="header">
+                                <h:outputText value="Designated Community Creators" />
+                            </f:facet>
+
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
                         <h:outputText value="#{creator.firstName}"  />
@@ -87,12 +89,14 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Email</f:facet>
-                        <h:outputText value="#{member.email}"  />
+                        <h:outputText value="#{creator.email}"  />
 
                     </h:column>
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
-                        <h:outputText value="#{member.isActive  == 1 ? 'Yes' : 'No'}" style="color: #045491; font-weight: bold;" />
+                        <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{creator.isActive == 1}"/>
+                        <h:outputText value="No" style="color: crimson; font-weight: bold;" rendered="#{creator.isActive == 0}"/>
+
                     </h:column>
 
 
@@ -105,6 +109,10 @@
                              rowClasses="member-table-odd-row,member-table-even-row"
                              rendered="#{communityMembersBean.editable != 3}"
                              >
+                     <f:facet name="header">
+                                <h:outputText value="Community Members" />
+                         </f:facet>
+
 
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
@@ -138,13 +146,29 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
-                        <h:outputText value="#{member.isActive  == 1 ? 'Yes' : 'No'}" style="color: #045491; font-weight: bold;" rendered="#{member.editable == 0}" />
-                        <h:inputHidden value="#{communityMembersBean.isActive}" id="isActive" rendered="#{member.editable == 0}" />
-                        <h:selectBooleanCheckbox
-                            id="isActive_boolean" rendered="#{member.editable == 1}"  
-                            value="#{communityMembersBean.isActive_boolean}" />
+                        <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.isActive == 1)  &amp;&amp; (member.editable == 0)}" />
+                        <h:outputText value="No" style="color: red; font-weight: bold;" rendered="#{(member.isActive == 0)  &amp;&amp; (member.editable == 0)}" />
+
+                        <h:selectOneRadio id="isActive" value="#{member.isActive}" layout="pageDirection" rendered="#{member.editable == 1}"  >
+                            <f:selectItem itemValue="1" itemLabel="Yes?" />
+                            <f:selectItem itemValue="0" itemLabel="No?" />	
+                        </h:selectOneRadio>    
 
                     </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Is Creator?</f:facet>
+                        <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.isCreator == 1)  &amp;&amp; (member.editable == 0)}" />
+                        <h:outputText value="No" style="color: red; font-weight: bold;" rendered="#{(member.isCreator == 0)  &amp;&amp; (member.editable == 0)}" />
+
+                        <h:selectOneRadio id="isCreator" value="#{member.isCreator}" layout="pageDirection" rendered="#{member.editable == 1}"  >
+                            <f:selectItem itemValue="1" itemLabel="Yes?" />
+                            <f:selectItem itemValue="0" itemLabel="No?" />	
+                        </h:selectOneRadio>    
+
+                    </h:column>
+
+
                     <h:column>
                         <f:facet name="header">Action</f:facet>
 
@@ -164,7 +188,9 @@
                              rendered="#{communityMembersBean.editable == 3}" 
                              >
 
-
+                     <f:facet name="header">
+                                <h:outputText value="New Community Members" />
+                            </f:facet>
                     <h:column >
                         <f:facet name="header" >First Name</f:facet>
                         <h:inputText id="firstName" value="#{new.firstName}"  />
