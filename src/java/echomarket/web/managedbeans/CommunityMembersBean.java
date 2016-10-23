@@ -72,14 +72,16 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         Transaction tx = hib.beginTransaction();
         String queryString = null;
         List result = null;
+        Boolean isCreatorRights = false;
 
-        queryString = "FROM Communities where community_id = :cid";
+        queryString = "FROM CommunityMembers where community_id = :cid AND is_creator = 1";
         try {
             result = hib.createQuery(queryString)
                     .setParameter("cid", ubean.getUser_id())
                     .list();
 
             if (result.size() > 0) {
+                isCreatorRights = true;
 //               For each record in result set editable to 0
 //               comm_Array = (Communities) result.get(0);
 //               queryString = comm_Array.getCommunityName();
@@ -96,10 +98,18 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                 tx = null;
             }
         }
-
-        this.editable = 0;
         
-        return "community_members.xhtml?faces-redirect=true";
+        if (isCreatorRights == true) {
+            this.editable = 0;
+            return "community_members.xhtml?faces-redirect=true";
+        } else {
+            message(
+                    null,
+                    "MustBeCommunityCreatorAddMember",
+                    null);
+            return "index";
+            
+        }
     }
 
     public String getCName() {
