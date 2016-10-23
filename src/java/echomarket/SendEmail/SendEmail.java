@@ -164,7 +164,7 @@ public class SendEmail implements java.io.Serializable {
                     InternetAddress.parse(getUser_email()));
 
             // Set Subject: header field
-            message.setSubject("Thank you for Registering at the Echo Market.");
+            message.setSubject("Thank you for Registering at EchoMarket.");
 
             // Send message
             Transport.send(message);
@@ -191,7 +191,7 @@ public class SendEmail implements java.io.Serializable {
                     InternetAddress.parse(getUser_email()));
 
             // Set Subject: header field
-            message.setSubject("Thank you for Registering at the Echo Market.");
+            message.setSubject("Thank you for Registering at EchoMarket.");
 
             // Send message
             Transport.send(message);
