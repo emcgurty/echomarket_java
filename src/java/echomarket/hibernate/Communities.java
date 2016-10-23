@@ -43,7 +43,7 @@ public class Communities  implements java.io.Serializable {
     }
 
 	
-    public Communities(String id, String communityName, String firstName, String lastName, String addressLine1, String postalCode, String city, String usStateId, String countryId) {
+    public Communities(String id, String communityName, String firstName, String lastName, String addressLine1, String postalCode, String city, String usStateId, String countryId ) {
         this.community_id = id;
         this.communityName = communityName;
         this.firstName = firstName;
@@ -54,6 +54,7 @@ public class Communities  implements java.io.Serializable {
         this.usStateId = usStateId;
         this.countryId = countryId;
         this.dateCreated = new Date();
+        this.isActive = 1;
     
     }
     public Communities(String id, String communityName, Integer approved, String firstName, String mi, String lastName, String addressLine1, String addressLine2, String postalCode, String city, String province, String usStateId, String countryId, String homePhone, String cellPhone, String email, Integer isActive, Integer isSaved, Date dateCreated, Date dateUpdated, Date dateDeleted, String region, String remoteIp) {
