@@ -31,7 +31,7 @@
                 <div class="top" >
                     <div style="margin:10px;margin-top:25px;" >
                         <h:outputText value="#{communitiesBean.communityName}: Community Detail" />
-                        <h:commandLink  action="#{communitiesBean.saveCommunityDetail()}" class="right_div" value="Save Community Detail">
+                        <h:commandLink  action="#{communitiesBean.saveCommunityDetail()}" class="right_div" value="Save Community Details">
                         </h:commandLink>
                         
                     </div> 
@@ -40,7 +40,7 @@
                 <div class="top" >
                     <div style="margin:10px;margin-top:25px;" >
                         <h:outputText value="#{bundle.addMembers}" />
-                        <h:commandLink  action="#{communitiesBean.load_community_members()}" class="right_div" value="Let's add Members">
+                        <h:commandLink  action="#{communityMembersBean.load_community_members()}" class="right_div" immediate="true"   value="Let's add Members">
                         </h:commandLink>
                         
                     </div> 
