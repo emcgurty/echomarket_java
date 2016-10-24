@@ -80,6 +80,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                     .list();
             /// Don't understand why I have to use commit??
             tx.commit();
+            
+
         } catch (Exception ex) {
             Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
             // return with message
@@ -119,6 +121,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                     }
                     if (tx.isActive() == true) {
                         tx = null;
+                         try {
+                    hib = null;
+                } catch(Exception ex) {}
                     }
 
                     isCreatorRights = true;
@@ -128,7 +133,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             if (isCreatorRights == true) {
                 this.editable = 0;
                 tx = null;
-                
+                try {
+                    hib = null;
+                } catch(Exception ex) {}
                 return "community_members.xhtml?faces-redirect=true";
             } else {
                 message(
@@ -151,25 +158,28 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         cmid.setEditable(1);
-//        this.firstName = cmid.getFirstName();
-//        this.lastName = cmid.getLastName();
-//        this.alias = cmid.getAlias();
-//        this.community_member_id = cmid.getCommunity_member_id();
-//        this.email = cmid.getEmail();
-//
-//        try {
-//            hib.update(cmid);
-//            tx.commit();
-//        } catch (Exception ex) {
-//            Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//            if (hib.isOpen() == true) {
-//                hib.close();
-//            }
-//            if (tx.isActive() == true) {
-//                tx = null;
-//            }
-//        }
+        this.firstName = cmid.getFirstName();
+        this.lastName = cmid.getLastName();
+        this.alias = cmid.getAlias();
+        this.community_member_id = cmid.getCommunity_member_id();
+        this.email = cmid.getEmail();
+
+        try {
+            hib.update(cmid);
+            tx.commit();
+        } catch (Exception ex) {
+            Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            if (tx.isActive() == true) {
+                tx = null;
+                 try {
+                    hib = null;
+                } catch(Exception ex) {}
+            }
+        }
 
         //http://stackoverflow.com/questions/8744162/difference-between-returning-null-and-from-a-jsf-action
         //return "";
@@ -222,6 +232,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         }
         if (tx.isActive() == true) {
             tx = null;
+             try {
+                    hib = null;
+                } catch(Exception ex) {}
         }
 
         this.editable = 0;
@@ -263,6 +276,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == true) {
                 tx = null;
+                 try {
+                    hib = null;
+                } catch(Exception ex) {}
             }
         }
 
@@ -295,6 +311,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == true) {
                 tx = null;
+                 try {
+                    hib = null;
+                } catch(Exception ex) {}
             }
         }
 
@@ -327,6 +346,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == true) {
                 tx = null;
+                 try {
+                    hib = null;
+                } catch(Exception ex) {}
             }
         }
 
