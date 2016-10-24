@@ -66,6 +66,24 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
     }
 
+    public CommunityMembers[] listCMAlias() {
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        String queryString = "from CommunityMembers where community_id = :cid order by alias";
+        List result = hib.createQuery(queryString)
+                .setParameter("cid", ubean.getUser_id())
+                .list();
+        tx.commit();
+        CommunityMembers[] cmArray = null;
+        Integer size_of_result = result.size();
+        cmArray = new CommunityMembers[size_of_result];
+        for (int i = 0; i < size_of_result; i++) {
+            CommunityMembers to_Array = (CommunityMembers) result.get(i);
+            cmArray[i] = new CommunityMembers(to_Array.getUser_id(), to_Array.getAlias());
+        }
+        return cmArray;
+    }
+
     public String load_community_members() {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
@@ -80,7 +98,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                     .list();
             /// Don't understand why I have to use commit??
             tx.commit();
-            
 
         } catch (Exception ex) {
             Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,9 +138,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                     }
                     if (tx.isActive() == true) {
                         tx = null;
-                         try {
-                    hib = null;
-                } catch(Exception ex) {}
+                        try {
+                            hib = null;
+                        } catch (Exception ex) {
+                        }
                     }
 
                     isCreatorRights = true;
@@ -135,7 +153,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                 tx = null;
                 try {
                     hib = null;
-                } catch(Exception ex) {}
+                } catch (Exception ex) {
+                }
                 return "community_members.xhtml?faces-redirect=true";
             } else {
                 message(
@@ -175,9 +194,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == true) {
                 tx = null;
-                 try {
+                try {
                     hib = null;
-                } catch(Exception ex) {}
+                } catch (Exception ex) {
+                }
             }
         }
 
@@ -232,9 +252,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         }
         if (tx.isActive() == true) {
             tx = null;
-             try {
-                    hib = null;
-                } catch(Exception ex) {}
+            try {
+                hib = null;
+            } catch (Exception ex) {
+            }
         }
 
         this.editable = 0;
@@ -276,9 +297,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == true) {
                 tx = null;
-                 try {
+                try {
                     hib = null;
-                } catch(Exception ex) {}
+                } catch (Exception ex) {
+                }
             }
         }
 
@@ -311,9 +333,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == true) {
                 tx = null;
-                 try {
+                try {
                     hib = null;
-                } catch(Exception ex) {}
+                } catch (Exception ex) {
+                }
             }
         }
 
@@ -346,9 +369,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (tx.isActive() == true) {
                 tx = null;
-                 try {
+                try {
                     hib = null;
-                } catch(Exception ex) {}
+                } catch (Exception ex) {
+                }
             }
         }
 
