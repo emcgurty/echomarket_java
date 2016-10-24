@@ -243,7 +243,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
     public void cancelAction() {
 
-        this.editable = 0;
+        load_community_members();
     }
 
     public void updateAction(CommunityMembers cm) {
