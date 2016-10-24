@@ -210,12 +210,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         Transaction tx = hib.beginTransaction();
         Date today_date = new Date();
         String newMemberName = getFirstName() + " " + getLastName();
-        String asd = this.isActive_boolean;
-        Integer holdia = 0;
-        if ("true".equals(asd)) {
-            holdia = 1;
-        }
-        CommunityMembers comm = new CommunityMembers(cm.getCommunity_member_id(), cm.getCommunity_id(), cm.getUser_id(), "NA", getFirstName(), getLastName(), getAlias(), getEmail(), holdia, today_date, today_date, 0);
+        
+        CommunityMembers comm = new CommunityMembers(cm.getCommunity_member_id(), cm.getCommunity_id(), cm.getUser_id(), "NA", getFirstName(), getLastName(), getAlias(), getEmail(), getIsActive(), getIsCreator(), cm.getDateCreated());
 
         try {
             hib.update(comm);
@@ -223,7 +219,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
             message(
                     null,
-                    "NewMemberRecordSaved",
+                    "MemberRecordUpdated",
                     new Object[]{newMemberName});
 
         } catch (Exception ex) {
@@ -231,7 +227,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
                     .getName()).log(Level.SEVERE, "COMMUNITY MEMEBER NOT SAVED", ex);
             message(
                     null,
-                    "NewMemberRecordWasNotSaved",
+                    "MemberRecordNotUpdated",
                     new Object[]{newMemberName});
         } finally {
             if (hib.isOpen() == true) {
