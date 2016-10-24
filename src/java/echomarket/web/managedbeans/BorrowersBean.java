@@ -79,6 +79,7 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private int notifyLenders;
     private Integer receiveLenderNotification;
     private Integer isCommunity;
+    private String alias;
     private String remoteIp;
     private String comment;
     private String advertiserId;
@@ -1379,5 +1380,19 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                     new Object[]{itemDesc});
         }
         return "borrower_history";
+    }
+
+    /**
+     * @return the alias
+     */
+    public String getAlias() {
+        return alias;
+    }
+
+    /**
+     * @param alias the alias to set
+     */
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }
