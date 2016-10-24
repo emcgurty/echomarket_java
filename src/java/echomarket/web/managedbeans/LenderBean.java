@@ -112,6 +112,7 @@ public class LenderBean extends AbstractBean implements Serializable {
     private BigDecimal securityDepositAmount;
     private Integer securityDeposit;
     private Integer isCommunity;
+    private String alias;
     private String remoteIp;
     private String comment;
     private String advertiserId;
@@ -1993,6 +1994,20 @@ public class LenderBean extends AbstractBean implements Serializable {
                     new Object[]{itemDesc});
         }
         return "lender_history";
+    }
+
+    /**
+     * @return the alias
+     */
+    public String getAlias() {
+        return alias;
+    }
+
+    /**
+     * @param alias the alias to set
+     */
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
     
 
