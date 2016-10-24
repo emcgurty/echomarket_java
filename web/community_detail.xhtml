@@ -30,7 +30,7 @@
 
                 <div class="top" >
                     <div style="margin:10px;margin-top:25px;" >
-                        <h:outputText value="#{communitiesBean.communityName}: Community Detail" />
+                        <h:outputText value="#{communityMembersBean.getCName()}: Community Detail" />
                         <h:commandLink  action="#{communitiesBean.saveCommunityDetail()}" class="right_div" value="Save Community Details">
                         </h:commandLink>
                         
@@ -109,8 +109,7 @@
 
                             <h:outputLabel for="addressLine2"  value="#{bundle.AddressLine2}">       
                                 <h:inputText id="addressLine2"
-                                             value="#{communitiesBean.addressLine2}"
-                                             >
+                                             value="#{communitiesBean.addressLine2}" style="margin-left:10px"  >
                                 </h:inputText>
                             </h:outputLabel>
                         </td>
@@ -120,7 +119,9 @@
 
                             <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
                             <h:inputText id="city" value="#{communitiesBean.city}"
-                                         style="margin-left: 5px;"  >
+                                         
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqCity}" style="margin-left:10px" >
                             </h:inputText>
                             <span class="error-message" id="city" ></span>
                         </td>
@@ -155,7 +156,8 @@
                         <td style="padding-top: 15px;padding-bottom: 15px;">
                             <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
                             <h:inputText id="postalCode" value="#{communitiesBean.postalCode}" 
-                                         style="margin-left: 5px;" >
+                                             required="true"
+                                             requiredMessage="#{bundle.ReqPostalCode}" style="margin-left:10px" >
                             </h:inputText>
                             <span class="error-message" id="postalCode" ></span>
                         </td>
