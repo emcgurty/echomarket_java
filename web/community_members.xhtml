@@ -36,7 +36,7 @@
                         <h:outputText value="#{communityMembersBean.getCName()} : Community Members" style="color:black;font-weight:bold;"/>
                     </div>    
                     <div style="float:left;margin:15px;margin-top:10px;" >
-                        <h:outputText value="View, Update, de-Activate or Add Members..." style="color:black;font-weight:bold;"/>
+                        <h:outputText value="View, Update, or Add Members..." style="color:black;font-weight:bold;"/>
                         <br /><br />
                         <c:if test="#{communityMembersBean.editable != 3}" >
                             <h:outputText value="To add, please entered the number of New Members and then click 'Add Member'..." style="color:indigo;font-weight:normal;"/>
@@ -172,7 +172,8 @@
                     
                     <h:column>
                         <f:facet name="header">Date Created</f:facet>
-                        <h:commandLink value="#{member.dateCreated}" action="" style="color: green; font-weight: lighter;" />
+                        <!--  Eventually want to sort by date created, or toggle between date created, date updated.<h:commandLink value="#{member.dateCreated}" action="" style="color: green; font-weight: lighter;" />-->
+                        <h:outputText value="#{member.dateCreated}" style="color: green; font-weight: lighter;" />                       
 
                     </h:column>
 
@@ -182,6 +183,8 @@
 
                         <h:commandLink value="Edit" action="#{communityMembersBean.editAction(member)}" rendered="#{member.editable == 0}" />
                         <h:commandLink value="Update" action="#{communityMembersBean.updateAction(member)}" rendered="#{member.editable == 1}" />
+                        <h:outputText value=" | " style="color: green; font-weight: lighter;" rendered="#{member.editable == 1}" />
+                        <h:commandLink value="Cancel" action="#{communityMembersBean.cancelAction()}" rendered="#{member.editable == 1}" />
                         <br />
 
 
