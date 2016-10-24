@@ -59,6 +59,23 @@ public class CommunityMembers implements java.io.Serializable {
     
     }
     
+     /// Update constructor
+    public CommunityMembers(String community_member_id, String community_id, String user_id,  String remoteIp, String firstName, String lastName, String alias, String email, Integer isActive, Integer isCreator, Date dc) {
+        this.community_member_id = community_member_id;
+        this.community_id = community_id;
+        this.user_id = user_id;
+        this.remoteIp = remoteIp;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.alias = alias;
+        this.email = email;
+        this.isActive = isActive;
+        this.dateUpdated = new Date();
+        this.dateCreated = dc;
+        this.isCreator = isCreator;
+        this.editable = 0;
+    
+    }
     public CommunityMembers(String community_member_id, String community_id, String user_id, String firstName, String lastName, String alias, String email, Integer isActive, Date dateCreated, Date dateUpdated, Integer isCreator, Integer rowIndex) {
         this.community_member_id = community_member_id;
         this.community_id = community_id;
