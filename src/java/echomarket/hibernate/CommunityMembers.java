@@ -33,6 +33,11 @@ public class CommunityMembers implements java.io.Serializable {
     public CommunityMembers() {
     }
 
+    public CommunityMembers(String user_id, String alias) {
+        this.user_id = user_id;
+        this.alias = alias;
+    }
+    
     public CommunityMembers(String community_member_id, String community_id, Date dateCreated, Date dateUpdated, Date dateDeleted) {
         this.community_member_id = community_member_id;
         this.community_id = community_id;
