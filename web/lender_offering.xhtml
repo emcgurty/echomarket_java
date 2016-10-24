@@ -39,6 +39,23 @@
                             <h:commandLink  action="#{ll.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
                         </div> 
                     </div>
+                 
+                       <c:if test="#{userBean.isCommunity == 1}" >
+                        <div  class="div_p" id="community_alias" >
+                            <div style="margin:10px;" >
+                                <h:outputText value="Please choose your Community alias:" />
+                                <h:selectOneMenu id="alias" value="#{ll.alias}" style="margin-left: 5px;">
+                                    <f:selectItems value="#{communityMembersBean.listCMAlias()}"  
+                                                   var="c" itemValue="#{c.user_id}" itemLabel="#{c.alias}" 
+                                                   >   
+                                    </f:selectItems>    
+                                </h:selectOneMenu>
+
+                            </div>
+                        </div>
+                    </c:if>
+                    
+                    
                     <div  class="div_p" id="menu_item_1" >
                         <div style="margin:10px;" >
                             <h:outputText value="Lender Information..." />
