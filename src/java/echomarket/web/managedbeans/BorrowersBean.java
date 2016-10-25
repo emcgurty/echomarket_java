@@ -26,8 +26,6 @@ import javax.servlet.http.Part;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-/// Credit due: https://www.javacodegeeks.com/2015/11/jsf-scopes-tutorial-jsfcdi-session-scope.html
-/// Added return "index?faces-redirect=true"; Source: http://stackoverflow.com/questions/3642919/javax-faces-application-viewexpiredexception-view-could-not-be-restored
 @Named
 @ManagedBean(name = "bb")
 @RequestScoped
@@ -85,7 +83,6 @@ public class BorrowersBean extends AbstractBean implements Serializable {
     private String advertiserId;
     private String processId;
     private Part imageFileNamePart;
-    
 
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
@@ -127,24 +124,168 @@ public class BorrowersBean extends AbstractBean implements Serializable {
         alternative = aAlternative;
     }
 
+    public Boolean notifyLenders() {
+        // Not complete
+        return true;
+    }
+
+    private String doesImageExist() {
+
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        List result = null;
+        String existingImageFileId = null;
+
+        String queryString = "from ItemImages where borrower_id = :bid ";
+
+        result = sb.createQuery(queryString)
+                .setParameter("bid", ubean.getUserAction())
+                .list();
+        try {
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("Error on Update Borrower");
+        } finally {
+            if (sb != null) {
+                sb.close();
+            }
+            tx = null;
+            sb = null;
+
+        }
+        if (result.size() > 0) {
+            ItemImages existingImageobj = (ItemImages) result.get(0);
+            existingImageFileId = existingImageobj.getImageFileName();
+        }
+
+        result = null;
+        return existingImageFileId;
+    }
+
+    private Boolean processAddress(Addresses[] address) {
+
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        Boolean b_return = false;
+           try {
+                sb.update(address);
+                tx.commit();
+                b_return = true;
+            } catch (Exception ex) {
+                tx.rollback();
+                Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                 if (sb != null) {
+                    sb.close();
+                }
+                 tx = null;
+                 sb = null;
+
+            }
+        
+        return b_return;
+    }
+    
+    private Boolean sendNotification(String notification_type) {
+
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        
+        return true;
+    }
+
+    
+    private Boolean deleteExistingUserImage(String iid) {
+
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        List result = null;
+        Boolean retResult = false;
+
+        /// Delete existing image file name record becuase maybe be using same name but had editted
+        String queryString = "from ItemImages where image_id = :iid ";
+
+        result = sb.createQuery(queryString)
+                .setParameter("iid", iid)
+                .list();
+        try {
+            if (result.size() > 0) {
+                sb.delete((ItemImages) result.get(0));
+            }
+            tx.commit();
+            retResult = true;
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("Error on Retreiving Image by Id");
+        } finally {
+            if (sb != null) {
+                sb.close();
+            }
+            tx = null;
+            sb = null;
+
+        }
+
+        return retResult;
+
+    }
+
+    private Boolean processNewFileImage() {
+
+        Boolean b_return = false;
+        List ii = this.getPicture();
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+
+        try {
+            SaveUserItemImage(getImageFileNamePart(), ubean.getUserAction());
+        } catch (Exception ex) {
+            Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error in Saving Borrower File");;
+        }
+
+        ItemImages iii = (ItemImages) ii.get(0);
+        iii.setId(getId());
+        iii.setBorrower_id(ubean.getUserAction());
+        iii.setLender_id("NA");
+        iii.setImageFileName(ubean.getUserAction() + "_" + getFileName(getImageFileNamePart()));
+        iii.setImageContentType(getImageFileNamePart().getContentType());
+
+        try {
+            sb.save(iii);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("Error on Retreiving Image by Id");
+        } finally {
+            b_return = true;
+            if (sb != null) {
+                sb.close();
+            }
+            tx = null;
+            sb = null;
+        }
+
+        return b_return;
+
+    }
+
     public String saveBorrowerEdit() {
 
-//        List padrs = getExisting_primary();
-//        List aadrs = getExisting_alternative();
-        List ii = this.getPicture();
         List result = null;
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
         Date today_date = new Date();
         String current_user = null;
-        String existingFileNamestr = null;
+        Boolean bret = false;
+
         try {
             current_user = ubean.getUser_id();
         } catch (Exception e) {
-
             e.printStackTrace();
         }
-        /// Need to implement onChange Listener to learn if dirty
+        /// Need to implement onChange Listener to learn if dirty??
         Borrowers bb = new Borrowers(ubean.getUserAction(), current_user, getContactDescribeId(), getOrganizationName(), getDisplayBorrowerOrganizationName(), getOtherDescribeYourself(),
                 getFirstName(), getMi(), getLastName(), getDisplayBorrowerName(), getDisplayBorrowerAddress(), getHomePhone(),
                 getCellPhone(), getAlternativePhone(), getPublicDisplayHomePhone(), getPublicDisplayCellPhone(),
@@ -156,128 +297,54 @@ public class BorrowersBean extends AbstractBean implements Serializable {
                 getIsActive(), today_date, today_date, null, getApproved(), getNotifyLenders(), getReceiveLenderNotification(),
                 getIsCommunity(), null, getComment(), getAdvertiserId(), getDisplayBorrowerAlternativeAddress());
 
-        sb.update(bb);
         try {
-            tx.commit();
-        } catch (Exception e) {
-            System.out.println("Error on Update Borrower");
-        }
-
-        //// Have to code for case that they remove original picture, and do not replace
-        if (sb.isOpen() == false) {
-            sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-            tx = sb.beginTransaction();
-        }
-
-        /// Delete existing image file name record becuase maybe be using same name but had editted
-        String queryString = "from ItemImages where borrower_id = :bid ";
-
-        result = sb.createQuery(queryString)
-                .setParameter("bid", ubean.getUserAction())
-                .list();
-        tx.commit();
-
-        /// Delete the record, get the file name for later delete if exists
-        if (result.size() > 0) {
-            ItemImages existingImageobj = (ItemImages) result.get(0);
-            existingFileNamestr = existingImageobj.getImageFileName();
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-            sb.delete((ItemImages) result.get(0));
-            tx.commit();
-
-            try {
-
-                if (existingFileNamestr != null) {
-                    // Will manage return later
-                    Boolean ret_result = false;
-                    ret_result = DeleteImageFile(existingFileNamestr);
-                    // if result false provide user information
-                }
-
-            } catch (Exception e) {
-                System.out.println("Error on deleting exsitng Image Record");
-
-            }
-        }
-        /// Now process editted image information
-        if (this.imageFileNamePart != null) {
-
-            try {
-                SaveUserItemImage(getImageFileNamePart(), ubean.getUserAction());
-            } catch (Exception e) {
-                System.out.println("Error in Saving Borrower File");;
-            }
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-
-            try {
-                ItemImages iii = (ItemImages) ii.get(0);
-                iii.setId(getId());
-                iii.setBorrower_id(ubean.getUserAction());
-                iii.setLender_id("NA");
-                iii.setImageFileName(ubean.getUserAction() + "_" + getFileName(getImageFileNamePart()));
-                iii.setImageContentType(getImageFileNamePart().getContentType());
-                //ItemImages create_record = new ItemImages(getId(), ubean.getUserAction(), null, getImageFileNamePart().getContentType(), null, null, this.isActive, today_date, null, today_date,  + "_" + getFileName(getImageFileNamePart()), , null);
-                sb.save(iii);
-                tx.commit();
-            } catch (Exception ex) {
-                Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-
-            }
-
-        }
-
-        if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1)) {
-
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-
-            try {
-                sb.update(this.existing_alternative);
-                tx.commit();
-            } catch (Exception ex) {
-                Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-            }
-
-        }
-
-//        Addresses ba = (Addresses) padrs.get(0);
-        if (sb.isOpen() == false) {
-            sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-            tx = sb.beginTransaction();
-        }
-
-        try {
-            sb.update(this.existing_primary);
+            sb.update(bb);
             tx.commit();
         } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error on Update Borrower");
             Logger.getLogger(BorrowersBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            message(
+            if (sb != null) {
+                sb.close();
+            }
+            String strRetId = doesImageExist();
+            if (strRetId != null) {
+                bret = deleteExistingUserImage(strRetId);
+            }
+            if ((bret == true) && (this.imageFileNamePart != null)) {
+                bret = processNewFileImage();
+            }
+            // if process image successful, proceed...
+            if ((getUseWhichContactAddress() == 2) || (getUseWhichContactAddress() == 1) && (bret == true)) {
+                    bret = processAddress(this.existing_alternative);
+            }
+                
+            if (bret == true) {
+                    bret = processAddress(this.existing_primary);
+            }
+  
+            if ((bret == true) && (this.notifyLenders == 1)) {
+                bret = sendNotification("lenders");
+            }
+            
+           if (bret == true) { 
+               tx = null;
+               sb = null;
+               message(
                     null,
                     "BorrowerRegistionRecordUpdated",
                     null);
-
+           } else {
+               message(
+                    null,
+                    "BorrowerRegistionRecordNotUpdated",
+                    null);
+               
+           }
         }
+
+
         return "index?faces-redirect=true";
 
     }
@@ -1357,9 +1424,9 @@ public class BorrowersBean extends AbstractBean implements Serializable {
             result = hib.createQuery(queryString)
                     .setParameter("bid", bid)
                     .list();
-            
+
             if (result.size() > 0) {
-                
+
                 hib.delete((Borrowers) result.get(0));
                 tx.commit();
             } else {
