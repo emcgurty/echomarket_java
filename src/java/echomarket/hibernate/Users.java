@@ -17,12 +17,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 public class Users implements java.io.Serializable {
-    
+      
     private String user_id;
     private String username;
     private String email;
-    private Date createdAt;
-    private Date updatedAt;
+    private Date dateCreated;
+    private Date dateUpdated;
     private String remoteIp;
     private byte[] cryptedPassword;
     private byte[] salt;
@@ -30,18 +30,14 @@ public class Users implements java.io.Serializable {
     private Date activatedAt;
     private String userAlias;
     private String userType;
-    private int isRapid;
     private Integer roleId;
-    private String firstName;
-    private String lastName;
-    private Integer isCommunity;
-
+    
     public Users() {
     }
 
     //create_record = new Users(assign_id, firstName, lastName, username, userAlias, password, email, userType );
-    // THis constructor is used to create new, non-activated user
-    public Users(String id,String firstName, String lastName, String userName, String userAlias, String password, String email, String userType, Integer isCommunity) {
+    // This constructor is used to create new, non-activated user
+    public Users(String id, String userName, String userAlias, String password, String email, String userType) {
         String local_password = password;
         Date today = new Date();
         this.user_id = id;
@@ -49,28 +45,22 @@ public class Users implements java.io.Serializable {
         this.email = email;
         this.userAlias = userAlias;
         this.userType = userType;
-        this.isRapid = 0;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.salt = passTheSalt();
         this.cryptedPassword = passThePepper(password);
         // Later make sure this is unique in database
         this.resetCode = BuildRandomValue();
         this.activatedAt = null;
-        this.isCommunity = isCommunity;
-        this.createdAt = today;
+        this.dateCreated = today;
 
     }
-
-    public Users(String id,String username, String email, String userAlias, String userType, int isRapid, String firstName, String lastName) {
+    
+    public Users(String id,String username, String email, String userAlias, String userType) {
         this.user_id = id;
         this.username = username;
         this.email = email;
         this.userAlias = userAlias;
         this.userType = userType;
-        this.isRapid = isRapid;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.dateUpdated = new Date();
     }
     
     public String getUsername() {
@@ -89,20 +79,12 @@ public class Users implements java.io.Serializable {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
-        return this.createdAt;
+    public Date getdateCreated() {
+        return this.getDateCreated();
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setdateCreated(Date dateCreated) {
+        this.setDateCreated(dateCreated);
     }
 
     public String getRemoteIp() {
@@ -161,36 +143,12 @@ public class Users implements java.io.Serializable {
         this.userType = userType;
     }
 
-    public int getIsRapid() {
-        return this.isRapid;
-    }
-
-    public void setIsRapid(int isRapid) {
-        this.isRapid = isRapid;
-    }
-
     public Integer getRoleId() {
         return this.roleId;
     }
 
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     private byte[] passThePepper(String password) {
@@ -233,20 +191,6 @@ public class Users implements java.io.Serializable {
     }
 
     /**
-     * @return the isCommunity
-     */
-    public Integer getIsCommunity() {
-        return isCommunity;
-    }
-
-    /**
-     * @param isCommunity the isCommunity to set
-     */
-    public void setIsCommunity(Integer isCommunity) {
-        this.isCommunity = isCommunity;
-    }
-
-    /**
      * @return the user_id
      */
     @Id
@@ -259,6 +203,34 @@ public class Users implements java.io.Serializable {
      */
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    /**
+     * @return the dateCreated
+     */
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    /**
+     * @param dateCreated the dateCreated to set
+     */
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    /**
+     * @return the dateUpdated
+     */
+    public Date getDateUpdated() {
+        return dateUpdated;
+    }
+
+    /**
+     * @param dateUpdated the dateUpdated to set
+     */
+    public void setDateUpdated(Date dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 
 }
