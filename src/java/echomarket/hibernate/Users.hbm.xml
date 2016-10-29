@@ -13,11 +13,11 @@
         <property name="email" type="string">
             <column length="100" name="email" not-null="true"/>
         </property>
-        <property name="createdAt" type="timestamp">
-            <column length="19" name="created_at"/>
+        <property name="dateCreated" type="timestamp">
+            <column length="19" name="date_created"/>
         </property>
-        <property name="updatedAt" type="timestamp">
-            <column length="19" name="updated_at"/>
+        <property name="dateUpdated" type="timestamp">
+            <column length="19" name="date_updated"/>
         </property>
         <property name="remoteIp" type="string">
             <column length="24" name="remote_ip"/>
@@ -40,20 +40,9 @@
         <property name="userType" type="string">
             <column length="40" name="user_type"/>
         </property>
-        <property name="isRapid" type="int">
-            <column name="is_rapid" not-null="true"/>
-        </property>
         <property name="roleId" type="java.lang.Integer">
-            <column name="roleId"/>
+            <column name="role_id"/>
         </property>
-        <property name="firstName" type="string">
-            <column length="14" name="firstName" not-null="true"/>
-        </property>
-        <property name="lastName" type="string">
-            <column length="14" name="lastName" not-null="true"/>
-        </property>
-        <property name="isCommunity" type="java.lang.Integer">
-            <column name="is_community"/>
-        </property>
+        
     </class>
 </hibernate-mapping>
