@@ -1,0 +1,81 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>        
+    </h:head>
+
+
+    <ul id="nav" class="user_detail_menu"> 
+        <li class="subs" id="parent_tab_item" ><a   href="#parent_menu_item" onclick=""  >
+                User Dashboard: </a></li>
+
+        <li class="subs" id="tab_item_1" ><a   href="#menu_item_1" onclick="showFormContact();"  
+                                               >
+                Login Information  ==> </a></li>
+
+        <li class="subs" id="tab_item_1" ><a   href="#menu_item_2" onclick="showFormContact();"  
+                                               >
+                Your Name, Address, Email....  ==> </a></li>
+        <li class="subs" id="tab_item_2" ><a   href="#menu_item_3" onclick="showBorrowersContactPreferences();" 
+                                               >
+                Contact Preferences  ==> </a></li>
+
+        <li class="subs" id="tab_item_4" ><a   href="#menu_item_4" onclick="showBLegal();" 
+                                               >
+                Good Faith ==> </a></li>
+
+
+        <li class="subs" id="tab_item_4" ><a   href="#menu_item_5" onclick="showBLegal();" 
+                                               >
+                Borrowing History ==> </a></li>
+
+        <li class="subs" id="tab_item_4" ><a   href="#menu_item_6" onclick="showBLegal();" 
+                                               >
+                Lending History ==> </a></li>
+
+
+        <c:choose>
+            <c:when test="${userBean.userAction == null}">
+                <ul >
+                    <li class="subs">
+                        <h:commandLink value="Save Item Registration"  action="#{bb.saveBorrowerRegistration()}">
+                            <f:setPropertyActionListener target="#{bb.isActive}" value="1" />
+                            <!--                                <f:param id="isActive" value="1"  />-->
+                        </h:commandLink>    
+                        <a href=""></a>
+                    </li>
+                    <li class="subs">
+                        <h:commandLink value="Complete Registration Later"  action="#{bb.saveBorrowerRegistration()}">
+                            <f:setPropertyActionListener target="#{bb.isActive}" value="0" />
+                            <!--<f:param id="isActive" value="0"  />-->
+                        </h:commandLink>    
+                    </li>
+                </ul>
+            </c:when>
+            <c:otherwise>
+                <ul >
+                    <li class="subs">
+                        <h:commandLink value="Save Item Registration"  action="#{bb.saveBorrowerEdit()}">
+                            <f:setPropertyActionListener target="#{bb.isActive}" value="1" />
+
+                        </h:commandLink>    
+                    </li>
+                    <li class="subs">
+                        <h:commandLink value="Complete Registration Later"  action="#{bb.saveBorrowerEdit()}">
+                            <f:setPropertyActionListener target="#{bb.isActive}" value="0" />
+                            <!--<f:param id="isActive" value="0"  />-->
+                        </h:commandLink>    
+
+                    </li>
+                </ul>
+            </c:otherwise>
+        </c:choose>
+
+    </ul>
+
+
+
+</ui:composition>
