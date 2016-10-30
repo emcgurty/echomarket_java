@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
   <class catalog="echomarket" name="echomarket.hibernate.Addresses" optimistic-lock="version" table="addresses">
-    <id name="id" type="string">
-      <column length="40" name="id"/>
+    <id name="addressId" type="string">
+      <column length="40" name="address_id"/>
       <generator class="assigned"/>
     </id>
-    <property name="lender_id" type="string">
-      <column length="40" name="lender_id"/>
-    </property>
-    <property name="borrower_id" type="string">
-      <column length="40" name="borrower_id"/>
+    <property name="participantId" type="string">
+      <column length="40" name="participant_id" not-null="true"/>
     </property>
     <property name="addressLine1" type="string">
       <column length="24" name="address_line_1"/>
@@ -20,7 +17,7 @@
       <column length="24" name="address_line_2"/>
     </property>
     <property name="postalCode" type="string">
-      <column length="24" name="postal_code"/>
+      <column length="24" name="postal_code" not-null="true"/>
     </property>
     <property name="city" type="string">
       <column length="24" name="city"/>
@@ -38,7 +35,7 @@
       <column length="3" name="country_id"/>
     </property>
     <property name="addressType" type="string">
-      <column length="13" name="address_type" not-null="true"/>
+      <column length="13" name="address_type"/>
     </property>
   </class>
 </hibernate-mapping>
