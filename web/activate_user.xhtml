@@ -10,7 +10,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form  id="form_aactivate"  >
+        <h:form  id="form_activate"  >
             <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
             <f:metadata>
                 <f:viewParam name="reset_code" id="resetCode" value="#{userBean.resetCode}" />
@@ -24,7 +24,7 @@
             </div>
 
             <f:event listener="#{userBean.validatePassword}" type="postValidate" />
-            <div  class="top" id="form_ats">
+            <div  class="top" id="activate_div">
 
                 <table style="width:75%;margin-left: 50px" align="center" id="activate_table">
                     <tr >
