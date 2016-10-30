@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Purpose;
@@ -13,10 +8,6 @@ import javax.enterprise.context.RequestScoped;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-/**
- *
- * @author emm
- */
 @Named(value = "purposeBean")
 @RequestScoped
 public class PurposeBean extends AbstractBean implements Serializable {
@@ -60,6 +51,7 @@ public class PurposeBean extends AbstractBean implements Serializable {
 
         }
         tx.commit();
+        tx = null;
 
         return result;
     }
