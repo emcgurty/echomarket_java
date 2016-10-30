@@ -1,77 +1,75 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-  <class catalog="echomarket" name="echomarket.hibernate.Communities" optimistic-lock="version" table="communities">
-    <id name="community_id" type="string">
-            <column length="40" name="community_id"/>
-            <generator class="assigned"/>
+    <class name="echomarket.hibernate.Communities" table="communities" catalog="echomarket" optimistic-lock="version">
+        <id name="communityId" type="string">
+            <column name="community_id" length="40" />
+            <generator class="assigned" />
         </id>
-    <property name="communityName" type="string">
-      <column length="50" name="community_name" not-null="true"/>
-    </property>
-    <property name="approved" type="java.lang.Integer">
-      <column name="approved"/>
-    </property>
-    <property name="firstName" type="string">
-      <column length="24" name="first_name" not-null="true"/>
-    </property>
-    <property name="mi" type="string">
-      <column length="1" name="mi"/>
-    </property>
-    <property name="lastName" type="string">
-      <column length="24" name="last_name" not-null="true"/>
-    </property>
-    <property name="addressLine1" type="string">
-      <column length="24" name="address_line_1" not-null="true"/>
-    </property>
-    <property name="addressLine2" type="string">
-      <column length="24" name="address_line_2"/>
-    </property>
-    <property name="postalCode" type="string">
-      <column length="24" name="postal_code" not-null="true"/>
-    </property>
-    <property name="city" type="string">
-      <column length="24" name="city" not-null="true"/>
-    </property>
-    <property name="province" type="string">
-      <column length="24" name="province"/>
-    </property>
-    <property name="usStateId" type="string">
-      <column length="2" name="us_state_id" not-null="true"/>
-    </property>
-    <property name="countryId" type="string">
-      <column length="2" name="country_id" not-null="true"/>
-    </property>
-    <property name="homePhone" type="string">
-      <column length="20" name="home_phone"/>
-    </property>
-    <property name="cellPhone" type="string">
-      <column length="20" name="cell_phone"/>
-    </property>
-    <property name="email" type="string">
-      <column length="100" name="email"/>
-    </property>
-    <property name="isActive" type="java.lang.Integer">
-      <column name="is_active"/>
-    </property>
-    <property name="isSaved" type="java.lang.Integer">
-      <column name="is_saved"/>
-    </property>
-    <property name="dateCreated" type="timestamp">
-      <column length="19" name="date_created" not-null="true"/>
-    </property>
-    <property name="dateUpdated" type="timestamp">
-      <column length="19" name="date_updated" not-null="true"/>
-    </property>
-    <property name="dateDeleted" type="timestamp">
-      <column length="19" name="date_deleted" not-null="true"/>
-    </property>
-    <property name="region" type="string">
-      <column length="40" name="region"/>
-    </property>
-    <property name="remoteIp" type="string">
-      <column length="24" name="remote_ip"/>
-    </property>
-  </class>
+        <property name="communityName" type="string">
+            <column name="community_name" length="50" not-null="true" />
+        </property>
+        <property name="approved" type="java.lang.Integer">
+            <column name="approved" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="first_name" length="24" not-null="true" />
+        </property>
+        <property name="mi" type="string">
+            <column name="mi" length="1" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="last_name" length="24" not-null="true" />
+        </property>
+        <property name="addressLine1" type="string">
+            <column name="address_line_1" length="24" not-null="true" />
+        </property>
+        <property name="addressLine2" type="string">
+            <column name="address_line_2" length="24" />
+        </property>
+        <property name="postalCode" type="string">
+            <column name="postal_code" length="24" not-null="true" />
+        </property>
+        <property name="city" type="string">
+            <column name="city" length="24" not-null="true" />
+        </property>
+        <property name="province" type="string">
+            <column name="province" length="24" />
+        </property>
+        <property name="usStateId" type="string">
+            <column name="us_state_id" length="2" not-null="true" />
+        </property>
+        <property name="countryId" type="string">
+            <column name="country_id" length="2" not-null="true" />
+        </property>
+        <property name="homePhone" type="string">
+            <column name="home_phone" length="20" />
+        </property>
+        <property name="cellPhone" type="string">
+            <column name="cell_phone" length="20" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="100" />
+        </property>
+        <property name="isActive" type="java.lang.Integer">
+            <column name="is_active" />
+        </property>
+        <property name="dateCreated" type="timestamp">
+            <column name="date_created" length="19" not-null="true" />
+        </property>
+        <property name="dateUpdated" type="timestamp">
+            <column name="date_updated" length="19" not-null="true" />
+        </property>
+        <property name="dateDeleted" type="timestamp">
+            <column name="date_deleted" length="19" not-null="true" />
+        </property>
+        <property name="region" type="string">
+            <column name="region" length="40" />
+        </property>
+        <property name="remoteIp" type="string">
+            <column name="remote_ip" length="24" />
+        </property>
+    </class>
 </hibernate-mapping>

@@ -1,5 +1,5 @@
 package echomarket.hibernate;
-// Generated Aug 5, 2016 12:14:14 PM by Hibernate Tools 4.3.1
+// Generated Oct 29, 2016 11:54:05 AM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;

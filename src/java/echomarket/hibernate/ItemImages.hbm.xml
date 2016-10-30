@@ -1,48 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class catalog="echomarket" name="echomarket.hibernate.ItemImages" optimistic-lock="version" table="item_images">
-        <id name="id" type="string">
-            <column length="40" name="id"/>
-            <generator class="assigned"/>
+    <class name="echomarket.hibernate.ItemImages" table="item_images" catalog="echomarket" optimistic-lock="version">
+        <id name="itemImagesId" type="string">
+            <column name="item_images_id" length="40" />
+            <generator class="assigned" />
         </id>
-        <property name="borrower_id" type="string">
-            <column length="40" name="borrower_id" not-null="true"/>
-        </property>
-        <property name="lender_id" type="string">
-            <column length="40" name="lender_id"/>
+        <property name="participantId" type="string">
+            <column name="participant_id" length="40" not-null="true" />
         </property>
         <property name="imageContentType" type="string">
-            <column length="20" name="image_content_type"/>
+            <column name="image_content_type" length="20" />
         </property>
         <property name="imageHeight" type="java.lang.Integer">
-            <column name="image_height"/>
+            <column name="image_height" />
         </property>
         <property name="imageWidth" type="java.lang.Integer">
-            <column name="image_width"/>
-        </property>
-        <property name="isActive" type="java.lang.Integer">
-            <column name="is_active"/>
-        </property>
-        <property name="dateCreated" type="timestamp">
-            <column length="19" name="date_created" not-null="true"/>
-        </property>
-        <property name="dateDeleted" type="timestamp">
-            <column length="19" name="date_deleted" not-null="true"/>
-        </property>
-        <property name="dateUpdated" type="timestamp">
-            <column length="19" name="date_updated" not-null="true"/>
+            <column name="image_width" />
         </property>
         <property name="imageFileName" type="string">
-            <column length="150" name="image_file_name" not-null="true"/>
+            <column name="image_file_name" length="150" not-null="true" />
         </property>
         <property name="itemImageCaption" type="string">
-            <column length="50" name="item_image_caption"/>
+            <column name="item_image_caption" length="50" />
         </property>
-        <property name="advertiserId" type="string">
-            <column length="40" name="advertiser_id"/>
+        <property name="dateCreated" type="timestamp">
+            <column name="date_created" length="19" not-null="true" />
         </property>
-
+        <property name="dateDeleted" type="timestamp">
+            <column name="date_deleted" length="19" not-null="true" />
+        </property>
+        <property name="dateUpdated" type="timestamp">
+            <column name="date_updated" length="19" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

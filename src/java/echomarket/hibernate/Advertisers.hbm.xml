@@ -1,50 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-  <class catalog="echomarket" name="echomarket.hibernate.Advertisers" optimistic-lock="version" table="advertisers">
-    <id name="id" type="string">
-      <column length="40" name="id"/>
-      <generator class="assigned"/>
-    </id>
-    <property name="title" type="string">
-      <column length="50" name="title" not-null="true"/>
-    </property>
-    <property name="categoryId" type="int">
-      <column name="category_id" not-null="true"/>
-    </property>
-    <property name="categoryOther" type="string">
-      <column length="50" name="category_other"/>
-    </property>
-    <property name="description" type="string">
-      <column length="50" name="description"/>
-    </property>
-    <property name="advertiserUrl" type="string">
-      <column length="50" name="advertiser_url" not-null="true"/>
-    </property>
-    <property name="advertiserEmail" type="string">
-      <column length="50" name="advertiser_email" not-null="true"/>
-    </property>
-    <property name="approved" type="int">
-      <column name="approved" not-null="true"/>
-    </property>
-    <property name="dateCreated" type="timestamp">
-      <column length="19" name="date_created" not-null="true"/>
-    </property>
-    <property name="dateUpdated" type="timestamp">
-      <column length="19" name="date_updated"/>
-    </property>
-    <property name="dateDeleted" type="timestamp">
-      <column length="19" name="date_deleted"/>
-    </property>
-    <property name="isActive" type="string">
-      <column length="3" name="is_active" not-null="true"/>
-    </property>
-    <property name="isActivated" type="java.lang.Integer">
-      <column name="is_activated"/>
-    </property>
-    <property name="remoteIp" type="string">
-      <column length="50" name="remote_ip"/>
-    </property>
-  </class>
+    <class name="echomarket.hibernate.Advertisers" table="advertisers" catalog="echomarket" optimistic-lock="version">
+        <id name="id" type="string">
+            <column name="id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="title" type="string">
+            <column name="title" length="50" not-null="true" />
+        </property>
+        <property name="categoryId" type="int">
+            <column name="category_id" not-null="true" />
+        </property>
+        <property name="categoryOther" type="string">
+            <column name="category_other" length="50" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" length="50" />
+        </property>
+        <property name="advertiserUrl" type="string">
+            <column name="advertiser_url" length="50" not-null="true" />
+        </property>
+        <property name="advertiserEmail" type="string">
+            <column name="advertiser_email" length="50" not-null="true" />
+        </property>
+        <property name="approved" type="int">
+            <column name="approved" not-null="true" />
+        </property>
+        <property name="dateCreated" type="timestamp">
+            <column name="date_created" length="19" not-null="true" />
+        </property>
+        <property name="dateUpdated" type="timestamp">
+            <column name="date_updated" length="19" />
+        </property>
+        <property name="dateDeleted" type="timestamp">
+            <column name="date_deleted" length="19" />
+        </property>
+        <property name="isActive" type="string">
+            <column name="is_active" length="3" not-null="true" />
+        </property>
+        <property name="isActivated" type="java.lang.Integer">
+            <column name="is_activated" />
+        </property>
+        <property name="remoteIp" type="string">
+            <column name="remote_ip" length="50" />
+        </property>
+    </class>
 </hibernate-mapping>

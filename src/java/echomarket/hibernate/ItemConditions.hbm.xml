@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 5, 2016 12:14:15 PM by Hibernate Tools 4.3.1 -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-  <class catalog="echomarket" name="echomarket.hibernate.ItemConditions" optimistic-lock="version" table="item_conditions">
-    <id name="id" type="int">
-      <column name="id"/>
-      <generator class="assigned"/>
-    </id>
-    <property name="condition" type="string">
-      <column length="50" name="condition" not-null="true"/>
-    </property>
-  </class>
+    <class name="echomarket.hibernate.ItemConditions" table="item_conditions" catalog="echomarket" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="condition" type="string">
+            <column name="condition" length="50" not-null="true" />
+        </property>
+    </class>
 </hibernate-mapping>

@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="echomarket.hibernate.LenderTransfer" table="lender_transfer" catalog="echomarket" optimistic-lock="version">
+        <id name="lenderTransferId" type="string">
+            <column name="lender_transfer_id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="lenderId" type="string">
+            <column name="lender_id" length="40" not-null="true" />
+        </property>
+        <property name="itemId" type="string">
+            <column name="item_id" length="40" not-null="true" />
+        </property>
+        <property name="userId" type="string">
+            <column name="user_id" length="40" />
+        </property>
+        <property name="participantId" type="string">
+            <column name="participant_id" length="40" />
+        </property>
+        <property name="borrowerComesToWhichAddress" type="java.lang.Integer">
+            <column name="borrower_comes_to_which_address" />
+        </property>
+        <property name="meetBorrowerAtAgreedL2b" type="java.lang.Integer">
+            <column name="meetBorrowerAtAgreedL2B" />
+        </property>
+        <property name="meetBorrowerAtAgreedB2l" type="java.lang.Integer">
+            <column name="meetBorrowerAtAgreedB2L" />
+        </property>
+        <property name="willDeliverToBorrower" type="java.lang.Integer">
+            <column name="will_deliver_to_borrower" />
+        </property>
+        <property name="thirdPartyPresenceL2b" type="java.lang.Integer">
+            <column name="thirdPartyPresenceL2B" />
+        </property>
+        <property name="thirdPartyPresenceB2l" type="java.lang.Integer">
+            <column name="thirdPartyPresenceB2L" />
+        </property>
+        <property name="lenderThirdPartyChoice" type="java.lang.Integer">
+            <column name="lender_third_party_choice" />
+        </property>
+        <property name="borrowerThirdPartyChoice" type="java.lang.Integer">
+            <column name="borrower_third_party_choice" />
+        </property>
+        <property name="agreedThirdPartyChoiceL2b" type="java.lang.Integer">
+            <column name="agreedThirdPartyChoiceL2B" />
+        </property>
+        <property name="agreedThirdPartyChoiceB2l" type="java.lang.Integer">
+            <column name="agreedThirdPartyChoiceB2L" />
+        </property>
+        <property name="borrowerReturnsToWhichAddress" type="java.lang.Integer">
+            <column name="borrower_returns_to_which_address" />
+        </property>
+        <property name="willPickUpPreferredLocationB2l" type="java.lang.Integer">
+            <column name="willPickUpPreferredLocationB2L" />
+        </property>
+        <property name="lenderThirdPartyChoiceB2l" type="java.lang.Integer">
+            <column name="lenderThirdPartyChoiceB2L" />
+        </property>
+        <property name="borrowerChoice" type="java.lang.Integer">
+            <column name="borrower_choice" />
+        </property>
+        <property name="forFree" type="java.lang.Integer">
+            <column name="for_free" />
+        </property>
+        <property name="availableForPurchase" type="java.lang.Integer">
+            <column name="available_for_purchase" />
+        </property>
+        <property name="availableForPurchaseAmount" type="big_decimal">
+            <column name="available_for_purchase_amount" precision="10" />
+        </property>
+        <property name="smallFee" type="java.lang.Integer">
+            <column name="small_fee" />
+        </property>
+        <property name="smallFeeAmount" type="big_decimal">
+            <column name="small_fee_amount" precision="10" />
+        </property>
+        <property name="availableForDonation" type="java.lang.Integer">
+            <column name="available_for_donation" />
+        </property>
+        <property name="donateAnonymous" type="java.lang.Integer">
+            <column name="donate_anonymous" />
+        </property>
+        <property name="trade" type="java.lang.Integer">
+            <column name="trade" />
+        </property>
+        <property name="tradeItem" type="string">
+            <column name="trade_item" length="50" />
+        </property>
+        <property name="agreedNumberOfDays" type="java.lang.Integer">
+            <column name="agreed_number_of_days" />
+        </property>
+        <property name="agreedNumberOfHours" type="java.lang.Integer">
+            <column name="agreed_number_of_hours" />
+        </property>
+        <property name="indefiniteDuration" type="java.lang.Integer">
+            <column name="indefinite_duration" />
+        </property>
+        <property name="presentDuringBorrowingPeriod" type="java.lang.Integer">
+            <column name="present_during_borrowing_period" />
+        </property>
+        <property name="entirePeriod" type="java.lang.Integer">
+            <column name="entire_period" />
+        </property>
+        <property name="partialPeriod" type="java.lang.Integer">
+            <column name="partial_period" />
+        </property>
+        <property name="provideProperUseTraining" type="java.lang.Integer">
+            <column name="provide_proper_use_training" />
+        </property>
+        <property name="specificConditions" type="string">
+            <column name="specific_conditions" />
+        </property>
+        <property name="securityDepositAmount" type="big_decimal">
+            <column name="security_deposit_amount" precision="10" />
+        </property>
+        <property name="securityDeposit" type="java.lang.Integer">
+            <column name="security_deposit" />
+        </property>
+        <property name="remoteIp" type="string">
+            <column name="remote_ip" length="50" />
+        </property>
+        <property name="comment" type="string">
+            <column name="comment" />
+        </property>
+        <property name="dateCreated" type="timestamp">
+            <column name="date_created" length="19" not-null="true" />
+        </property>
+        <property name="dateUpdated" type="timestamp">
+            <column name="date_updated" length="19" not-null="true" />
+        </property>
+        <property name="dateDeleted" type="timestamp">
+            <column name="date_deleted" length="19" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
