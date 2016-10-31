@@ -11,6 +11,9 @@
         <property name="participantId" type="string">
             <column name="participant_id" length="40" />
         </property>
+        <property name="itemId" type="string">
+            <column name="item_id" length="40" />
+        </property>
         <property name="useWhichContactAddress" type="int">
             <column name="use_which_contact_address" not-null="true" />
         </property>
