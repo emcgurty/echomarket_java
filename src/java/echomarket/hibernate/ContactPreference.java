@@ -12,6 +12,7 @@ public class ContactPreference  implements java.io.Serializable {
 
      private String contactPreferenceId;
      private String participantId;
+     private String itemId;
      private int useWhichContactAddress;
      private String contactByChat;
      private String contactByEmail;
