@@ -64,7 +64,7 @@
                     </li>
                     <c:if test="#{userBean.username != null}" >
                         <li>
-                            <h:commandLink id="borrowerSeeking" action="borrower_seeking">
+                            <h:commandLink id="borrowerSeeking" action="#{bb.load_borrower_seeking()}">
                                 <h:outputText value="I need to borrow"/>
 
                             </h:commandLink>
