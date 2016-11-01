@@ -106,7 +106,7 @@ div.contact_information {
     display:block;
     background-color: #ffffff;
     color: #000033;
-    width:inherit;
+    width:100%;
     padding: inherit;
     align-content: left;
 
