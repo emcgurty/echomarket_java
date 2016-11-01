@@ -1,38 +1,49 @@
 package echomarket.web.managedbeans;
 
+import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Purpose;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.inject.Inject;
 import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-@Named(value = "cpb")
+@Named
+@ManagedBean(name = "cpb")
 @RequestScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
-     private String contactPreferenceId;
-     private String participantId;
-     private String itemId;
-     private int useWhichContactAddress;
-     private String contactByChat;
-     private String contactByEmail;
-     private Integer contactByHomePhone;
-     private Integer contactByCellPhone;
-     private Integer contactByAlternativePhone;
-     private String contactByFacebook;
-     private String contactByTwitter;
-     private String contactByInstagram;
-     private String contactByLinkedIn;
-     private String contactByOtherSocialMedia;
-     private String contactByOtherSocialMediaAccess;
-     
+   
+    @Inject
+    UserBean ubean;
+    private String contactPreferenceId;
+    private String participantId;
+    private String itemId;
+    private int useWhichContactAddress;
+    private String contactByChat;
+    private String contactByEmail;
+    private Integer contactByHomePhone;
+    private Integer contactByCellPhone;
+    private Integer contactByAlternativePhone;
+    private String contactByFacebook;
+    private String contactByTwitter;
+    private String contactByInstagram;
+    private String contactByLinkedIn;
+    private String contactByOtherSocialMedia;
+    private String contactByOtherSocialMediaAccess;
+    private static ArrayList<Addresses> alternative
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), "NA", null, "NA", "NA", null, "99", null, "99", "alternative")));
 
     public ContactPreferenceBean() {
     }
-      
+
     @Id
     public String getContactPreferenceId() {
         return contactPreferenceId;
@@ -235,9 +246,49 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     }
 
     /**
-     * @param contactByOtherSocialMediaAccess the contactByOtherSocialMediaAccess to set
+     * @param contactByOtherSocialMediaAccess the
+     * contactByOtherSocialMediaAccess to set
      */
     public void setContactByOtherSocialMediaAccess(String contactByOtherSocialMediaAccess) {
         this.contactByOtherSocialMediaAccess = contactByOtherSocialMediaAccess;
     }
+
+    private List getAddress() {
+
+        List result = null;
+        Addresses[] a_array = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+
+        String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
+        try {
+            result = hib.createQuery(queryString)
+                    .setParameter("bid", ubean.getUser_id())
+                    .setParameter("which", "alternative")
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+
+        } finally {
+            tx = null;
+            hib = null;
+        }
+
+        Integer size_of_list = result.size();
+        if (size_of_list == 0) {
+            return getAlternative();
+        } else {
+            return result;
+        }
+
+    }
+    
+    public ArrayList<Addresses> getAlternative() {
+        return getAlternative();
+    }
+
+    public static void setAlternative(ArrayList<Addresses> aAlternative) {
+        alternative = aAlternative;
+    }
+
 }
