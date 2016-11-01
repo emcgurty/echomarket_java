@@ -1,0 +1,134 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <div id="form_login_information" class="contact_information" >
+        
+    <div class="top" >
+        <div style="margin:10px;margin-top:25px;" >
+            <h:outputText value="#{userBean.username}: USER DETAIL"  />
+            <h:commandLink  action="#{userBean.updateUserLogin()}"  class="right_div" value="Save Login Update"  rendered="#{userBean.editable == 1}" />
+            <h:commandLink  action="#{userBean.editUserLogin()}"  class="right_div" value="Edit Login Information"  rendered="#{userBean.editable == 0}" />
+        </div> 
+        <div style="margin:10px;" >
+            <h:outputText value="Login Information..." />
+            <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Continue to 'Name, Address, Email..'"  />
+        </div>
+    </div> 
+
+    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+        <div style="margin-left: 25px;float:left">
+            <table style="width:100%;margin-left: 50px" align="center" id="user_registration_table">
+
+                <tr >
+                    <td style="width:50%;padding-bottom: 15px;">
+                        <h:outputLabel for="username" value="#{bundle.username}" >       
+                            <h:inputText id="username"
+                                         value="#{userBean.username}"
+                                         size="16"
+                                         required="true"
+                                         requiredMessage="#{bundle.ReqUserName}"
+                                         style="margin-left:5px" rendered="#{userBean.editable == 1}">
+
+
+                            </h:inputText>
+                            <h:outputText 
+                                value="#{userBean.username}"
+                                style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                        </h:outputLabel>
+                    </td>
+                    <td style="width:50%;  padding-bottom: 15px;">
+
+                        <h:outputLabel for="user_alias"  value="#{bundle.userAlias}">       
+                            <h:inputText id="user_alias"
+                                         size="16"
+                                         value="#{userBean.userAlias}"
+                                         title="#{bundle.userAlias}"
+                                         required="true"
+                                         requiredMessage="#{bundle.ReqUserAlias}"
+                                         style="margin-left:5px" rendered="#{userBean.editable == 1}">
+                            </h:inputText>
+                            <h:outputText 
+                                value="#{userBean.userAlias}"
+                                style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                        </h:outputLabel>
+                    </td>
+                </tr>
+                <tr >
+                    <td style="width:50%;padding-bottom: 15px;">
+                        <f:event listener="#{userBean.validatePassword}" type="postValidate" />
+                        <h:outputLabel for="password" value="#{bundle.password}" >       
+                            <h:inputSecret id="password"
+                                           size="16"
+                                           value="#{userBean.password}"
+                                           title="#{bundle.password}"
+                                           required="true"
+                                           requiredMessage="#{bundle.ReqPassword}"
+                                           style="margin-left:5px" 
+                                           rendered="#{userBean.editable == 1}" >
+                            </h:inputSecret>
+                            <h:outputText value="********"
+                                          style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                        </h:outputLabel>
+
+                    </td>
+                    <td style="width:50%;padding-bottom: 15px;">
+                        <h:outputLabel for="confirmPassword" value="#{bundle.confirmPassword}" >       
+                            <h:inputSecret id="confirmPassword"
+                                           size="16"
+                                           title="#{bundle.confirmPassword}"
+                                           required="true"
+                                           requiredMessage="#{bundle.ReqConfirmPassword}"
+                                           style="margin-left:5px" rendered="#{userBean.editable == 1}" >
+                            </h:inputSecret>
+                            <h:outputText value="********"
+                                          style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                        </h:outputLabel>
+                    </td>
+                </tr>
+                <tr  >
+                    <td colspan="2" style="width:100%;padding-bottom: 15px;">
+                        <h:outputLabel for="email" value="#{bundle.email}" >       
+                            <h:inputText id="email"
+                                         size="16"
+                                         value="#{userBean.email}"
+                                         title="#{bundle.email}"
+                                         required="true"
+                                         requiredMessage="#{bundle.ReqEmail}"
+                                         validatorMessage="#{bundle.ValidEmail}" 
+                                         style="margin-left:5px" rendered="#{userBean.editable == 1}">
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+
+                            </h:inputText>
+                            <h:outputText value="#{userBean.email}"
+                                          style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                        </h:outputLabel>
+
+                    </td>
+                </tr >
+                <tr >
+                    <td colspan="2" style="width:100%;padding-bottom: 15px;">
+                        <h:outputLabel for="userTypeArray" value="#{bundle.userType}" rendered="#{userBean.editable == 1}">
+                            <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate..." rendered="#{userBean.editable == 1}">
+                                <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
+                                               itemLabel="#{c.purposeType}" itemValue="#{c.purposeShort}"   >   
+                                </f:selectItems>
+                            </h:selectManyCheckbox>
+                        </h:outputLabel>
+                        <h:outputLabel for="userTypeArray0" value="Participation:" rendered="#{userBean.editable == 0}">
+                            <h:outputText id="userTypeArray0" value="#{userBean.userType}"
+                                          style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                        </h:outputLabel>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+</ui:composition>
