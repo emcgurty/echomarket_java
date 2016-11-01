@@ -20,7 +20,14 @@ import org.hibernate.Transaction;
 @RequestScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
-   
+    public static ArrayList<Addresses> getParticpant_alternative() {
+        return particpant_alternative;
+    }
+
+    public static void setParticpant_alternative(ArrayList<Addresses> aParticpant_alternative) {
+        particpant_alternative = aParticpant_alternative;
+    }
+
     @Inject
     UserBean ubean;
     private String contactPreferenceId;
@@ -38,7 +45,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     private String contactByLinkedIn;
     private String contactByOtherSocialMedia;
     private String contactByOtherSocialMediaAccess;
-    private static ArrayList<Addresses> alternative
+    private static ArrayList<Addresses> particpant_alternative
             = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), "NA", null, "NA", "NA", null, "99", null, "99", "alternative")));
 
     public ContactPreferenceBean() {
@@ -49,9 +56,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         return contactPreferenceId;
     }
 
-    /**
-     * @param contactPreferenceId the contactPreferenceId to set
-     */
     public void setContactPreferenceId(String contactPreferenceId) {
         this.contactPreferenceId = contactPreferenceId;
     }
@@ -102,7 +106,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByChat
      */
     public String getContactByChat() {
-        return contactByChat;
+        if (contactByChat == null) {
+            return "Not provided";
+        } else {
+            return contactByChat;
+        }
     }
 
     /**
@@ -116,7 +124,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByEmail
      */
     public String getContactByEmail() {
-        return contactByEmail;
+        if (contactByEmail == null) {
+            return "Not provided";
+        } else {
+            return contactByEmail;
+        }
+
     }
 
     /**
@@ -186,7 +199,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByTwitter
      */
     public String getContactByTwitter() {
-        return contactByTwitter;
+         if (contactByTwitter == null) {
+            return "Not provided";
+        } else {
+            return contactByTwitter;
+        }
     }
 
     /**
@@ -200,7 +217,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByInstagram
      */
     public String getContactByInstagram() {
-        return contactByInstagram;
+        if (contactByInstagram == null) {
+            return "Not provided";
+        } else {
+            return contactByInstagram;
+        }
     }
 
     /**
@@ -214,7 +235,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByLinkedIn
      */
     public String getContactByLinkedIn() {
-        return contactByLinkedIn;
+        if (contactByLinkedIn == null) {
+            return "Not provided";
+        } else {
+            return contactByLinkedIn;
+        }
     }
 
     /**
@@ -228,7 +253,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByOtherSocialMedia
      */
     public String getContactByOtherSocialMedia() {
-        return contactByOtherSocialMedia;
+        if (contactByOtherSocialMedia == null) {
+            return "Not provided";
+        } else {
+            return contactByOtherSocialMedia;
+        }
     }
 
     /**
@@ -242,7 +271,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByOtherSocialMediaAccess
      */
     public String getContactByOtherSocialMediaAccess() {
-        return contactByOtherSocialMediaAccess;
+        if (contactByOtherSocialMediaAccess == null) {
+            return "Not provided";
+        } else {
+            return contactByOtherSocialMediaAccess;
+        }
+
     }
 
     /**
@@ -253,7 +287,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         this.contactByOtherSocialMediaAccess = contactByOtherSocialMediaAccess;
     }
 
-    private List getAddress() {
+    public List getAddress() {
 
         List result = null;
         Addresses[] a_array = null;
@@ -276,19 +310,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
         Integer size_of_list = result.size();
         if (size_of_list == 0) {
-            return getAlternative();
+            return getParticpant_alternative();
         } else {
             return result;
         }
 
-    }
-    
-    public ArrayList<Addresses> getAlternative() {
-        return getAlternative();
-    }
-
-    public static void setAlternative(ArrayList<Addresses> aAlternative) {
-        alternative = aAlternative;
     }
 
 }
