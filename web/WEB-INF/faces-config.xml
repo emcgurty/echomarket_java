@@ -133,8 +133,18 @@
         </navigation-case>
     </navigation-rule>
     <managed-bean>
-        <managed-bean-name>communityMembersBean</managed-bean-name>
-        <managed-bean-class>echomarket.web.managedbeans.CommunityMembersBean</managed-bean-class>
+        <managed-bean-name>participantBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.ParticipantBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>itemdBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.ItemBean</managed-bean-class>
+    
+        <managed-bean-scope>request</managed-bean-scope></managed-bean>
+    <managed-bean>
+        <managed-bean-name>contactPreferenceBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.ContactPreferenceBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 </faces-config>
