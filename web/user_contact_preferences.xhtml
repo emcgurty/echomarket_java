@@ -1,0 +1,337 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <div id="form_contact_preference" class="contact_information" >
+
+        <div class="top" >
+            <div style="margin:10px;margin-top:25px;" >
+                <h:outputText value="#{userBean.username}: USER DETAIL"  />
+                <h:commandLink  action="#{userBean.updateCP()}"  class="right_div" value="Save Contact Preferences Update"  rendered="#{userBean.editable == 5}" />
+                <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 4}" />
+            </div> 
+            <div style="margin:10px;" >
+                <h:outputText value="Contact Preferences" />
+                <h:commandLink  action="#{userBean.editBH()}"  class="right_div" value="Continue to 'Borrowing History'"  />
+            </div>
+        </div> 
+
+        <div  class="div_p"  >
+            <div style="margin:10px;" >
+                <h:outputText value="Contact Option: By Address.." />
+            </div>
+        </div>
+
+        <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+            <div style="float:left;margin-left:25px">
+                <div id="postalWithContactAddress" >    
+                    <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
+                        <h:selectOneRadio id="useWhichContactAddress" value="#{cpb.useWhichContactAddress}" rendered="#{userBean.editable == 5}" >
+                            <f:selectItem itemValue="3" itemLabel="Use your Registration Address?" />
+                            <f:selectItem itemValue="2" itemLabel="Use an Alternative Address?" />	
+                            <f:selectItem itemValue="1" itemLabel="Either address is fine." />
+                            <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
+                        </h:selectOneRadio>    
+                        <c:if test="#{userBean.editable == 4}" >
+                            <c:choose>
+                                <c:when test="#{cpb.useWhichContactAddress == 0}">
+                                    <c:set var="whichAddress" value="Neither, no address contact"/>
+                                </c:when>
+                                <c:when test="#{cpb.useWhichContactAddress == 1}">
+                                    <c:set var="whichAddress" value="Either address is fine"/>
+                                </c:when>
+                                <c:when test="#{cpb.useWhichContactAddress == 2}">
+                                    <c:set var="whichAddress" value="Use your Alternative Address"/>
+                                </c:when>
+                                <c:when test="#{cpb.useWhichContactAddress == 3}">
+                                    <c:set var="whichAddress" value="Use your Registration Address"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="whichAddress" value="No preference provided"/>
+                                </c:otherwise>
+                            </c:choose>
+                            <h:outputText id="useWhichContactAddressString"   value="#{whichAddress}" />
+                        </c:if>
+                    </h:outputLabel>
+                </div>
+
+                <div id="buildAlternativeAddress" style="float:left;height:auto;width:inherit;margin-top:10px;"  >    
+                    <h:dataTable id="participant_alternative"  value="#{cpb.getAddress()}" var="pa" >
+
+                        <h:column  rowHeader="Alternative Address" id="buildAlternativeAddress" >
+                            <table id="buildAlternativeAddressTable" stlye="margin-left:10px;">
+                                <thead>
+                                    <tr colspan="2" style="text-align: center">
+                                        <h:outputLabel value="Alternative Address" style="text-align: center;margin-left:5px;"/>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>
+                                        <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span class="required_fields">*</span>
+                                        <h:inputText id="addressLine1" value="#{pa.addressLine1}" 
+                                                     style="margin-left: 5px;" class="alternativeAddress"  rendered="#{userBean.editable == 5}" >
+                                        </h:inputText>
+                                        <h:outputText id="addressLine1o" value="#{pa.addressLine1}"  rendered="#{userBean.editable == 4}" />
+                                        <span class="error-message" id="addressLine1_alternative" ></span>
+                                    </td>
+                                    <td>
+                                        <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                                        <h:inputText id="addressLine2" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 5}" />
+                                        <h:outputText id="addressLine2o" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 4}" />
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td>
+                                        <h:outputLabel for="city" value="#{bundle.City}"/><span class="required_fields">*</span>
+                                        <h:inputText id="city" value="#{pa.city}" style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 5}" />
+                                        <h:outputText id="cityo" value="#{pa.city}" style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 4}" />
+                                        <span class="error-message" id="city_alternative" ></span>
+                                    </td>
+                                    <td>
+                                        <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
+                                        <h:selectOneMenu id="usStates" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 5}" >
+                                            <f:validator validatorId="selectOneMenuValidator" />  
+                                            <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
+                                                           var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
+                                                           >   
+                                            </f:selectItems>    
+                                        </h:selectOneMenu>
+                                        <h:message styleClass="error-message" for="usStates"/>
+                                        <span class="error-message" id="usStates" ></span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <h:outputLabel for="province" value="#{bundle.Province}"/>
+                                        <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 5}" />
+                                        <h:outputText id="provinceo" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 4}" />
+
+                                    </td>
+                                    <td>
+                                        <h:outputLabel for="region" value="#{bundle.Region}"/>
+                                        <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 5}" />
+                                        <h:outputText id="regiono" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 4}" />
+
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td >
+                                        <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span class="required_fields">*</span>
+                                        <h:inputText id="postalCode" value="#{pa.postalCode}" 
+                                                     style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 5}" />
+                                        <h:outputText id="postalCodeo" value="#{pa.postalCode}" 
+                                                      style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 4}" />
+
+                                        <h:message styleClass="error-message" for="postalCode"/>
+                                        <span class="error-message" id="postalCode_alternative" ></span>
+                                    </td>
+                                    <td >
+                                        <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                                        <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" class="alternativeAddress select" rendered="#{userBean.editable == 5}" >
+
+                                            <f:selectItems id="country_id" value="#{country.buildCountries()}"  
+                                                           var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
+                                            </f:selectItems>    
+                                        </h:selectOneMenu>
+                                        <h:message styleClass="error-message" for="countryId"/>
+                                        <span class="error-message" id="countryId_alternative" ></span>
+                                    </td>
+                                </tr>
+
+                                <tr >
+                                    <td colspan="2">
+
+                                    </td>
+                                </tr>
+                               
+                            </table>
+                        </h:column>
+                    </h:dataTable>
+
+                </div>
+            </div>
+        </div>
+
+        <div  class="div_p"  >
+            <div style="margin:10px;" >
+                <h:outputText value="Contact Option: By Email..." />
+            </div>
+        </div>
+
+
+        <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+            <div style="float:left;margin-left:25px;">
+                <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
+                    <h:selectOneRadio id="contactByEmail" value="#{cpb.contactByEmail}"  rendered="#{userBean.editable == 5}" >
+                        <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
+                        <f:selectItem itemValue="2" itemLabel="An alternative email." />	
+                        <f:selectItem itemValue="1" itemLabel="Either Email." />
+                        <f:selectItem itemValue="0" itemLabel="Neither Email." />	
+                    </h:selectOneRadio>    
+                    <c:if test="#{userBean.editable == 4}" >
+                        <c:choose>
+                            <c:when test="#{cpb.contactByEmail == 0}">
+                                <c:set var="cbe" value="Neither email address"/>
+                            </c:when>
+                            <c:when test="#{cpb.contactByEmail== 1}">
+                                <c:set var="cbe" value="Either email address"/>
+                            </c:when>
+                            <c:when test="#{cpb.contactByEmail == 2}">
+                                <c:set var="cbe" value="Alternative email address"/>
+                            </c:when>
+                            <c:when test="#{cpb.contactByEmail== 3}">
+                                <c:set var="cbe" value="Login email address"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="cbe" value="No preference provided"/>
+                            </c:otherwise>
+                        </c:choose>
+                        <h:outputText id="contactByEmailString"   value="#{cbe}" />
+                    </c:if>   
+                </h:outputLabel>
+
+                
+            </div>
+        </div>
+
+        <div  class="div_p"  id="display_phone">
+            <div style="margin:10px;" >
+                <h:outputText value="Contact Option: By Phone..." />
+            </div>
+        </div>
+        <div style="float:left;margin-left:25px;display:block;" >
+            <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
+                <h:outputLabel value="Can lenders call you at your home phone?:"  for="contactByHomePhone" >
+                    <h:selectOneRadio id="contactByHomePhone" value="#{cpb.contactByHomePhone}"  rendered="#{userBean.editable == 5}" >
+                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                        <f:selectItem itemValue="0" itemLabel="No" />	
+                    </h:selectOneRadio>    
+                    <c:if test="#{userBean.editable == 4}" >
+                        <c:choose>
+                            <c:when test="#{cpb.contactByHomePhone == 0}">
+                                <c:set var="yn" value="No"/>
+                            </c:when>
+                            <c:when test="#{cpb.contactByHomePhone== 1}">
+                                <c:set var="yn" value="Yes"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="yn" value="No preference provided"/>
+                            </c:otherwise>
+                        </c:choose>
+                        <h:outputText id="contactByHomePhoneString"   value="#{yn}" />
+                    </c:if>   
+
+                </h:outputLabel> 
+            </div>
+            <div style="margin-left:25px;float:left;" id="display_cellPhone" class="phone" >
+                <h:outputLabel value="... by your cell phone?:"  for="contactByCellPhone" >
+                    <h:selectOneRadio id="contactByCellPhone" value="#{cpb.contactByCellPhone}"  rendered="#{userBean.editable == 5}">
+                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                        <f:selectItem itemValue="0" itemLabel="No" />	
+                    </h:selectOneRadio>    
+                    <c:if test="#{userBean.editable == 4}" >
+                        <c:choose>
+                            <c:when test="#{cpb.contactByCellPhone == 0}">
+                                <c:set var="yn" value="No"/>
+                            </c:when>
+                            <c:when test="#{cpb.contactByCellPhone== 1}">
+                                <c:set var="yn" value="Yes"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="yn" value="No preference provided"/>
+                            </c:otherwise>
+                        </c:choose>
+                        <h:outputText id="contactByCellPhoneString"   value="#{yn}" />
+                    </c:if>   
+                </h:outputLabel>
+
+            </div>
+            <div style="margin-left:25px;float:left;" id="display_alternativePhone" class="phone" >
+                <h:outputLabel value="... by your alternative phone?:"  for="contactByAlternativePhone" >
+                    <h:selectOneRadio id="contactByAlternativePhone" value="#{cpb.contactByAlternativePhone}"  rendered="#{userBean.editable == 5}"  >
+                        <f:selectItem itemValue="1" itemLabel="Yes" />
+                        <f:selectItem itemValue="0" itemLabel="No" />	
+                    </h:selectOneRadio>    
+                    <c:if test="#{userBean.editable == 4}" >
+                        <c:choose>
+                            <c:when test="#{cpb.contactByAlternativePhone == 0}">
+                                <c:set var="yn" value="No"/>
+                            </c:when>
+                            <c:when test="#{cpb.contactByAlternativePhone== 1}">
+                                <c:set var="yn" value="Yes"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="yn" value="No preference provided"/>
+                            </c:otherwise>
+                        </c:choose>
+                        <h:outputText id="contactByAlternativePhoneString"   value="#{yn}" />
+                    </c:if>   
+                </h:outputLabel>
+
+            </div>
+        </div>
+
+        <div  class="div_p"  >
+            <div style="margin:10px;" >
+                <h:outputText value="Contact Option: By Social Media..." />
+            </div>
+        </div>
+
+        <div style="float:left;margin-left:25px;">
+
+            <table  style="margin-left:15px;">
+                <tr>
+                    <td>
+                        <h:outputLabel value="Your Facebook Account:" for="contactByFacebook" >
+                            <h:inputText  id="contactByFacebook" value="#{cpb.contactByFacebook}" style="margin-left:5px;"  rendered="#{userBean.editable == 5}" /> 
+                            <h:outputText  id="contactByFacebooko" value="#{cpb.contactByFacebook}" style="margin-left:5px;"  rendered="#{userBean.editable == 4}" /> 
+                        </h:outputLabel>
+                    </td>
+                    <td>
+                        <h:outputLabel value="Your LinkedIn Account:" for="contactByLinkedIn" >
+                            <h:inputText  id="contactByLinkedIn" value="#{cpb.contactByLinkedIn}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  /> 
+                            <h:outputText  id="contactByLinkedIno" value="#{cpb.contactByLinkedIn}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  /> 
+                        </h:outputLabel>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:outputLabel value="Your Twitter Account:" for="contactByTwitter" >
+                            <h:inputText  id="contactByTwitter" value="#{cpb.contactByTwitter}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
+                            <h:outputText   value="#{cpb.contactByTwitter}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  />
+                        </h:outputLabel>
+                    </td>
+                    <td>
+                        <h:outputLabel value="Your Instagram Account:" for="contactByInstagram" >
+                            <h:inputText id="contactByInstagramo" value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
+                            <h:outputText value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  />                                
+                        </h:outputLabel>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:outputLabel value="Other Social Media:" for="contactByOtherSocialMedia" >
+                            <h:inputText  id="contactByOtherSocialMedia" value="#{cpb.contactByOtherSocialMedia}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
+                            <h:outputText  value="#{cpb.contactByOtherSocialMedia}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  />
+                        </h:outputLabel>
+                    </td>
+
+                    <td>
+                        <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess" >
+                            <h:inputText  id="contactByOtherSocialMediaAccess" value="#{cpb.contactByOtherSocialMediaAccess}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
+                            <h:outputText  value="#{cpb.contactByOtherSocialMediaAccess}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  /> 
+                        </h:outputLabel>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+
+    </div>
+
+</ui:composition>
