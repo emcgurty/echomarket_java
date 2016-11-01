@@ -51,7 +51,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
         Transaction tx = session.beginTransaction();
 
         try {
-            result = session.createQuery("from ContactDescribes Where purposeType = :pt ORDER BY optionValue")
+            result = session.createQuery("FROM ContactDescribes Where purposeType  = :pt ORDER BY optionValue")
                     .setParameter("pt", purpose)
                     .list();
         } catch (Exception e) {
@@ -63,21 +63,6 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
 
         return result;
     }
-
-//    /**
-//     * @return the id
-//     */
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    /**
-//     * @param id the id to set
-//     */
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
-
     /**
      * @return the borrowerOrLender
      */
