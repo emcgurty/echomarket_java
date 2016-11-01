@@ -1,13 +1,13 @@
 package echomarket.web.managedbeans;
 
-import echomarket.hibernate.PasswordEncryptionService;
 import echomarket.hibernate.PasswordValidator;
 import echomarket.hibernate.Purpose;
 import echomarket.hibernate.Users;
 import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
-import echomarket.hibernate.CommunityMembers;
+import echomarket.hibernate.Participant;
+import echomarket.hibernate.PasswordEncryptionService;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
@@ -37,8 +37,6 @@ public class UserBean extends AbstractBean implements Serializable {
     private String userType;
     private List<String> userTypeArray;
     private String password;
-    private String firstName;
-    private String lastName;
     private String email;
     private String resetCode;
     private String appEmail;
@@ -46,6 +44,7 @@ public class UserBean extends AbstractBean implements Serializable {
     private String registrationType;
     private String communityName;
     private Integer isCommunity;
+    private Integer editable;
 
     public String Logout() {
         this.user_id = null;
@@ -54,11 +53,10 @@ public class UserBean extends AbstractBean implements Serializable {
         this.userType = null;
         this.userTypeArray = null;
         this.password = null;
-        this.firstName = null;
-        this.lastName = null;
         this.email = null;
         this.resetCode = null;
         this.appEmail = null;
+        this.isCommunity = null;
 
         return "index?faces-redirect=true";
     }
@@ -71,14 +69,6 @@ public class UserBean extends AbstractBean implements Serializable {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getUserAlias() {
         return userAlias;
     }
@@ -88,19 +78,14 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public String getUserType() {
+        if (this.editable == 1)
         return userType;
+        else
+        return userType.replace(";", " ").toUpperCase();     
     }
 
     public void setUserType(String ut) {
         this.userType = ut;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getUsername() {
@@ -125,11 +110,11 @@ public class UserBean extends AbstractBean implements Serializable {
         List result = null;
         Users create_record = null;
         Communities comm = null;
-        CommunityMembers comm_mem = null;
+        Participant participant = null;
         List tmp = null;
         String hold_userTypeBuild = "";
         String commName = null;
-        String fullname = this.firstName + " " + this.lastName;
+        String fullname = this.username;
         try {
             if (this.communityName != null) {
                 commName = this.communityName;
@@ -151,7 +136,13 @@ public class UserBean extends AbstractBean implements Serializable {
             }
             current_user_id = getId();
             setUserType(hold_userTypeBuild);
-            create_record = new Users(current_user_id, this.firstName, this.lastName, this.username, this.userAlias, this.password, this.email, getUserType(), this.isCommunity);
+            // Should do a look-up for id on 'creator'
+            if (this.communityName != null) {
+                create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, this.userType, 2);
+            } else {
+                create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, this.userType, -1);
+            }
+
             hib.save(create_record);
             ac = create_record.getResetCode();
             //tx.commit();
@@ -165,26 +156,23 @@ public class UserBean extends AbstractBean implements Serializable {
         }
 
         if (savedRecord == true) {
-            Date today_date = new Date();
+
             if (this.communityName != null) {
-                comm = new Communities(current_user_id, this.communityName, this.firstName, this.lastName, "NA", "NA", "NA", "-9", "-9");
+                comm = new Communities(current_user_id, this.communityName, 0, "NA", "?", "NA", "NA", "NA", "NA", "NA", "NA", "99", "99", "NA", "NA", this.email, 1, "NA", "NA");
                 hib.save(comm);
-
-                comm_mem = new CommunityMembers(getId(), current_user_id, current_user_id, "NA", this.firstName, this.lastName, this.userAlias, this.email, 1, today_date, today_date, 1);
-                hib.save(comm_mem);
-
+                //participant = new Participant(getId(), current_user_id, -9, 0, "NA", "NA", "NA", 0, 0, 0, 1);
+                //hib.save(participant);
             }
-
             List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
             Map a_array = (Map) results.get(0);
             tx.commit();
 
             try {
                 if (this.communityName == null) {
-                    SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKey_text(), a_array.getValue_text(), password, ac);
+                    SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKeyText(), a_array.getValueText(), password, ac);
                     se = null;
                 } else {
-                    SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKey_text(), a_array.getValue_text(), this.password, ac);
+                    SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKeyText(), a_array.getValueText(), this.password, ac);
                     se = null;
                 }
 
@@ -213,8 +201,6 @@ public class UserBean extends AbstractBean implements Serializable {
     public void resetForm() {
 
         this.setUsername("");
-        this.setFirstName("");
-        this.setLastName("");
         this.setEmail("");
         this.setPassword("");
     }
@@ -287,6 +273,7 @@ public class UserBean extends AbstractBean implements Serializable {
         if (results.size() == 1) {
 
             users_Array = (Users) results.get(0);
+            results = null;
             byte[] salt = users_Array.getSalt();
             byte[] crypted_password = users_Array.getCryptedPassword();
 
@@ -307,60 +294,35 @@ public class UserBean extends AbstractBean implements Serializable {
             getp = false;
         }
 
-        results = null;
-
         if (getp == true) {
             setUser_id(users_Array.getUser_id());
             setUserType(users_Array.getUserType());
             setUserAlias(users_Array.getUserAlias());
             setUsername(users_Array.getUsername());
             setEmail(users_Array.getEmail());
-            setIsCommunity(users_Array.getIsCommunity());
-            if (users_Array.getIsCommunity() == 1) {
-                if (hib.isOpen() == false) {
-                    hib = hib_session();
-                }
-
-                if (tx.isActive() == false) {
-                    tx = hib.beginTransaction();
-                }
-
-                try {
-                    queryString = "FROM Communities WHERE community_id = :cid";
-                    results = hib.createQuery(queryString).setParameter("cid", users_Array.getUser_id()).list();
-                    tx.commit();
-                    Communities cc = (Communities) results.get(0);
-                    setCommunityName(cc.getCommunityName());
-                } catch (Exception ex) {
-                } finally {
-                    if (hib.isOpen() == true) {
-                        hib.close();
-                    }
-
-                    if (tx.isActive() == true) {
-                        tx = null;
-                    }
-                    results = null;
-                }
-
+            if (users_Array.getRoleId() == 2) {
+                setIsCommunity(1);
             }
 
-            setSessionVariables();
-
+            //setSessionVariables();
             message(
                     null,
                     "LogInSuccessful",
-                    new Object[]{username});
-            return_string = "index";
-        } else if (getp
-                == false) {
-            username = null;
-            userAlias = null;
+                    new Object[]{this.username});
+
+            Boolean hasComplete = completeParticipantRecord(this.user_id);
+            if ((act_results == true) && (hasComplete == true)) {
+                return_string = "index";
+            } else {
+                this.editable = 0;
+                return_string = "user_detail";
+            }
+        } else if (getp == false) {
+            this.username = null;
+            this.userAlias = null;
             setUserType(null);
-            password = null;
-            firstName = null;
-            lastName = null;
-            email = null;
+            this.password = null;
+            this.email = null;
             setResetCode(null);
 
             message(
@@ -426,7 +388,7 @@ public class UserBean extends AbstractBean implements Serializable {
             uu.setResetCode(null);
             PasswordEncryptionService pes = new PasswordEncryptionService();
             try {
-                uu.setCryptedPassword(pes.getEncryptedPassword(password, uu.getSalt()));
+                uu.setCryptedPassword(pes.getEncryptedPassword(this.password, uu.getSalt()));
 
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(UserBean.class
@@ -473,7 +435,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
             try {
                 //  SendEmail .... You indicated that you forgot your user password, follow this link to change it
-                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, a_array.getKey_text(), a_array.getValue_text(), userArray.getUser_id(), buildReset_Code);
+                SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, a_array.getKeyText(), a_array.getValueText(), userArray.getUser_id(), buildReset_Code);
                 se = null;
             } catch (Exception e) {
                 System.out.println("Send Mail Failed");
@@ -686,19 +648,19 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     private void setSessionVariables() {
-        /// Actually not necessary in @Inject success.... just retaining for now
-        FacesContext context = FacesContext.getCurrentInstance();
-        java.util.Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
+//        /// Actually not necessary in @Inject success.... just retaining for now
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        java.util.Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
+//
+//        requestMap.put("user_id", getUser_id());
+//        requestMap.put("user_alias", getUserAlias());
+//        requestMap.put("user_type", getUserType());
+//        requestMap.put("username", getUsername());
+//        if (getIsCommunity() != 1) {
+//            requestMap.put("is_community", getIsCommunity());
+//
+//        }
 
-        requestMap.put("user_id", getUser_id());
-        requestMap.put("user_alias", getUserAlias());
-        requestMap.put("user_type", getUserType());
-        requestMap.put("username", getUsername());
-        if (getIsCommunity() != 1) {
-            requestMap.put("is_community", getIsCommunity());
-
-        }
-        // System.out.println("asdasd");
     }
 
     /**
@@ -760,9 +722,9 @@ public class UserBean extends AbstractBean implements Serializable {
     public String userNameLabel(Integer IsCommunity) {
 
         if (IsCommunity == 1) {
-            return "Community UserName:";
+            return "Community Username:";
         } else {
-            return "UserName:";
+            return "Username:";
 
         }
 
@@ -812,9 +774,79 @@ public class UserBean extends AbstractBean implements Serializable {
         this.isCommunity = isCommunity;
     }
 
-    public String build_resetCode() {
+    private Boolean completeParticipantRecord(String user_id) {
 
-        return "index";
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        List results = hib.createQuery("from Participant WHERE user_id = :uid")
+                .setParameter("uid", user_id)
+                .list();
+        tx.commit();
+        if (results.size() == 0) {
+            results = null;
+            tx = null;
+            return false;
+        } else {
+            results = null;
+            tx = null;
+            return true;
+
+        }
+
+    }
+    
+    /**
+     * @return the editable
+     */
+    public Integer getEditable() {
+        return editable;
     }
 
+    /**
+     * @param editable the editable to set
+     */
+    public void setEditable(Integer editable) {
+        this.editable = editable;
+    }
+    
+    public void updateUserLogin() {
+        
+        this.editable = 0;
+        
+    }
+   
+    public String load_ud(Integer which){
+        
+        this.editable = which;
+        
+        return "user_detail.xhtml?faces-redirect=true";
+        
+    }
+    
+    public void editUserLogin() {
+        
+        this.editable = 1;
+  
+    }
+    
+    public void updateNAE() {
+          
+         this.editable = 3;  
+    }
+    
+    public void editNAE() {
+          
+         this.editable = 2;  
+    }
+       
+    
+    public void updateCP() {
+          
+         this.editable = 5;  
+    }
+    
+    public void editCP() {
+          
+         this.editable = 4;  
+    }
 }
