@@ -31,7 +31,39 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     public ContactDescribesBean() {
     }
 
-     public ContactDescribes[] buildContactDArray(String whichpurpose) {
+        public String getOneCD(String cd) {
+
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String returnCD = null;
+
+        try {
+            result = session.createQuery("from ContactDescibes WHERE id = :cd")
+                    .setParameter("cd", cd)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            System.out.println("Error at line 42 in CD Bean");
+            e.printStackTrace();
+
+        }
+        if (result.size() > 0) {
+            ContactDescribes returnedCDName = (ContactDescribes) result.get(0);
+            returnCD = returnedCDName.getBorrowerOrLenderText();
+            returnedCDName= null;
+        } else {
+            returnCD = "State not found";
+        }
+        
+        tx = null;
+        session = null;
+        result = null;
+        return returnCD;
+    }
+        
+        
+        public ContactDescribes[] buildContactDArray(String whichpurpose) {
         ContactDescribes[] cdArray = null;
         List cd_list = null;
         cd_list = cd_list(whichpurpose);
