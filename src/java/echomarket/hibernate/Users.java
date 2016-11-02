@@ -45,9 +45,11 @@ public class Users implements java.io.Serializable {
         this.resetCode = BuildRandomValue();
         this.activatedAt = null;
         this.roleId = roleId;
+        this.dateCreated = new Date();
+           
+        
     }
-    // This constructor is used for updates
-
+    // This constructor is used for non-password updates
     public Users(String id, String username, String email, String userAlias, String userType) {
         this.user_id = id;
         this.username = username;
