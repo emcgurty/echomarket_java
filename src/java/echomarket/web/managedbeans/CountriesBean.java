@@ -21,11 +21,17 @@ public class CountriesBean extends AbstractBean implements Serializable {
  public String getOneCountry(String one_country) {
 
         List result = null;
-        Session session = hib_session();
+        Session session = null;
+        Transaction tx = null;
         String returnCountry = null;
+        
+        try {
+            session = hib_session();
+            tx = session.beginTransaction();
+        } catch(Exception ex){}
 
         try {
-            result = session.createQuery("from Countries WHERE counry_id = :one_country")
+            result = session.createQuery("from Countries WHERE country_id = :one_country")
                     .setParameter("one_country", one_country)
                     .list();
         } catch (Exception e) {
@@ -63,11 +69,12 @@ public class CountriesBean extends AbstractBean implements Serializable {
 
         List result = null;
         Session session = hib_session();
+        Transaction tx = session.beginTransaction();
         
         try {
-            result = session.createQuery("from Countries ORDER BY id").list();
+            result = session.createQuery("from Countries ORDER BY country_id").list();
         } catch (Exception e) {
-            System.out.println("Error at line 42 in Country Bean");
+            System.out.println("Error at line 68 in Country Bean");
             e.printStackTrace();
         }
         
