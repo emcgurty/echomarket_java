@@ -1,6 +1,5 @@
 package echomarket.web.managedbeans;
 
-
 import echomarket.hibernate.UsStates;
 import java.io.Serializable;
 import java.util.List;
@@ -20,33 +19,58 @@ public class UsStatesBean extends AbstractBean implements Serializable {
     /**
      * Creates a new instance of PurposeBean
      */
-    
     private String id;
     private String stateName;
-
 
     public UsStatesBean() {
     }
 
-    
-    public UsStates[] buildUsStates() {
-        UsStates[] purposeArray = null;
-        List purpose_list = null;
-        purpose_list = purpose_list();
-        int size_of_list = purpose_list.size();
-        purposeArray = new UsStates[size_of_list];
-        for (int i = 0; i < size_of_list; i++) {
-            UsStates to_Array = (UsStates) purpose_list.get(i);
-            purposeArray[i] = new UsStates(to_Array.getId(), to_Array.getStateName());
-        }
-        return purposeArray;
-    }
-
-    private List purpose_list() {
+    public String getOneState(String one_state) {
 
         List result = null;
         Session session = hib_session();
-        Transaction tx = session.beginTransaction();
+        String returnState = null;
+
+        try {
+            result = session.createQuery("from UsStates WHERE id = :one_state")
+                    .setParameter("one_state", one_state)
+                    .list();
+        } catch (Exception e) {
+            System.out.println("Error at line 52 in US Bean");
+            e.printStackTrace();
+
+        }
+        if (result.size() > 0) {
+            UsStates returnedStateName = (UsStates) result.get(0);
+            returnState = returnedStateName.getStateName();
+            returnedStateName= null;
+        } else {
+            returnState = "State not found";
+        }
+        
+        session = null;
+        result = null;
+        return returnState;
+    }
+
+    public UsStates[] buildUsStates() {
+        UsStates[] purposeArray = null;
+        List us_list = null;
+        us_list = us_list();
+        int size_of_list = us_list.size();
+        purposeArray = new UsStates[size_of_list];
+        for (int i = 0; i < size_of_list; i++) {
+            UsStates to_Array = (UsStates) us_list.get(i);
+            purposeArray[i] = new UsStates(to_Array.getId(), to_Array.getStateName());
+        }
+        us_list = null;
+        return purposeArray;
+    }
+
+    private List us_list() {
+
+        List result = null;
+        Session session = hib_session();
 
         try {
             result = session.createQuery("from UsStates ORDER BY id").list();
@@ -55,7 +79,8 @@ public class UsStatesBean extends AbstractBean implements Serializable {
             e.printStackTrace();
 
         }
-        tx.commit();
+
+        session = null;
 
         return result;
     }
