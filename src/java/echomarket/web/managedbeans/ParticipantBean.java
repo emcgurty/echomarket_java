@@ -746,7 +746,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
                     .setParameter("bid", ubean.getUserAction())
                     .setParameter("which", which)
                     .list();
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
 
         } finally {
