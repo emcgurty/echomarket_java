@@ -39,7 +39,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
         String returnCD = null;
 
         try {
-            result = session.createQuery("from ContactDescibes WHERE id = :cd")
+            result = session.createQuery("from ContactDescribes WHERE id = :cd")
                     .setParameter("cd", cd)
                     .list();
             tx.commit();
@@ -53,7 +53,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
             returnCD = returnedCDName.getBorrowerOrLenderText();
             returnedCDName= null;
         } else {
-            returnCD = "State not found";
+            returnCD = "Contact Description not found";
         }
         
         tx = null;
