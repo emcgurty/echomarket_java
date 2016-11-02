@@ -51,9 +51,9 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(UUID.randomUUID().toString(), null, null, null, null, null, null, hold_date(), hold_date(), hold_date(), "temp", null, null)
+                    new ItemImages(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, "temp", null)
             ));
-
+    
     public ArrayList<ItemImages> getPicture() {
         return picture;
     }
@@ -79,7 +79,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
             tx.rollback();
             Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error on Update Borrower");
+            System.out.println("Error on Update Item");
         } finally {
             if (sb != null) {
                 sb.close();
@@ -575,13 +575,13 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (size_of_list == 0) {
             return getPicture();
         } else {
-            ItemImages a_array = (ItemImages) result.get(0);
-            ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), a_array.getLender_id(), a_array.getImageContentType(),
-                            a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
-                            a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
-            ));
-            setPicture(tmp_picture);
+//            ItemImages a_array = (ItemImages) result.get(0);
+////            ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
+////                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), a_array.getLender_id(), a_array.getImageContentType(),
+////                            a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
+////                            a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
+////            ));
+//            setPicture(tmp_picture);
 
             return getPicture();
         }
