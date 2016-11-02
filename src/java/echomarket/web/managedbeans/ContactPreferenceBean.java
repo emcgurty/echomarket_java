@@ -185,7 +185,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByFacebook
      */
     public String getContactByFacebook() {
-        return contactByFacebook;
+        if (contactByFacebook == null) {
+            return "Not provided";
+        } else {
+            return contactByFacebook;
+        }
+              
     }
 
     /**
