@@ -241,7 +241,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     public String getOrganizationName() {
-        return organizationName;
+        if (organizationName != null) {
+            return organizationName;
+        } else {
+            return "Not provided";
+        }
+        
     }
 
     public void setOrganizationName(String organizationName) {
@@ -249,7 +254,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     public String getOtherDescribeYourself() {
-        return otherDescribeYourself;
+        if (otherDescribeYourself != null) {
+            return otherDescribeYourself;
+        } else {
+            return "Not provided";
+        }
     }
 
     public void setOtherDescribeYourself(String otherDescribeYourself) {
@@ -265,7 +274,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     public String getMi() {
-        return mi;
+        if (mi == null) return " ";
+        else return mi;
     }
 
     public void setMi(String mi) {
