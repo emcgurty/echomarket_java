@@ -45,6 +45,7 @@ public class UserBean extends AbstractBean implements Serializable {
     private String communityName;
     private Integer isCommunity;
     private Integer editable;
+    private Integer roleId;
 
     public String Logout() {
         this.user_id = null;
@@ -57,6 +58,7 @@ public class UserBean extends AbstractBean implements Serializable {
         this.resetCode = null;
         this.appEmail = null;
         this.isCommunity = null;
+        this.roleId = null;
 
         return "index?faces-redirect=true";
     }
@@ -78,10 +80,11 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public String getUserType() {
-        if (this.editable == 1)
-        return userType;
-        else
-        return userType.replace(";", " ").toUpperCase();     
+        if (this.editable == 1) {
+            return userType;
+        } else {
+            return userType.replace(";", " ").toUpperCase();
+        }
     }
 
     public void setUserType(String ut) {
@@ -107,14 +110,12 @@ public class UserBean extends AbstractBean implements Serializable {
     public String registerUser() {
 
         String test_mb = getAppEmail();
-        List result = null;
         Users create_record = null;
         Communities comm = null;
         Participant participant = null;
-        List tmp = null;
-        String hold_userTypeBuild = "";
         String commName = null;
         String fullname = this.username;
+        String ac = null;  // holds reset_code
         try {
             if (this.communityName != null) {
                 commName = this.communityName;
@@ -122,80 +123,93 @@ public class UserBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
         }
 
-        String ac = null;
-        Integer holdUserType = null;
         Boolean savedRecord = false;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         String current_user_id = null;
         try {
-            ///  I am pursuing this effort in getting from established arrays, rather than making Where Database calls
-            for (String userTypeArray1 : getUserTypeArray()) {
-                hold_userTypeBuild = hold_userTypeBuild + userTypeArray1 + ";";
-
-            }
             current_user_id = getId();
-            setUserType(hold_userTypeBuild);
             // Should do a look-up for id on 'creator'
             if (this.communityName != null) {
-                create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, this.userType, 2);
+                create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 2);
             } else {
-                create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, this.userType, -1);
+                create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), -1);
             }
+        } catch (Exception ex) {
+        }
 
+        try {
             hib.save(create_record);
+            tx.commit();
             ac = create_record.getResetCode();
-            //tx.commit();
             savedRecord = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Create new User failed");
-            savedRecord = false;
+        } catch (Exception ex) {
+            tx.rollback();
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error on Update User");
+            message(
+                    null,
+                    "LoginNotUpdated",
+                    new Object[]{this.username, this.email});
         } finally {
-            //setUser_id(current_user_id);
+
+            tx = null;
+            hib = null;
+            create_record = null;
         }
 
         if (savedRecord == true) {
+
+            hib = hib_session();
+            tx = hib.beginTransaction();
 
             if (this.communityName != null) {
                 comm = new Communities(current_user_id, this.communityName, 0, "NA", "?", "NA", "NA", "NA", "NA", "NA", "NA", "99", "99", "NA", "NA", this.email, 1, "NA", "NA");
                 hib.save(comm);
                 //participant = new Participant(getId(), current_user_id, -9, 0, "NA", "NA", "NA", 0, 0, 0, 1);
                 //hib.save(participant);
-            }
-            List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
-            Map a_array = (Map) results.get(0);
-            tx.commit();
+                try {
+                    tx.commit();
+                    savedRecord = true;
+                } catch (Exception ex) {
+                    tx.rollback();
+                    Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Error on Update User");
 
-            try {
-                if (this.communityName == null) {
-                    SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKeyText(), a_array.getValueText(), password, ac);
-                    se = null;
-                } else {
-                    SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKeyText(), a_array.getValueText(), this.password, ac);
-                    se = null;
+                } finally {
+                    tx = null;
+                    hib = null;
                 }
 
-            } catch (Exception e) {
-                System.out.println("Send Mail Failed");
             }
-        }
-        if (commName == null) {
-            message(
-                    null,
-                    "NewRegistration",
-                    new Object[]{fullname, this.email});
-        } else {
 
-            message(
-                    null,
-                    "NewCommunityRegistration",
-                    new Object[]{fullname, commName, this.email});
+            if (savedRecord == true) {
 
+                savedRecord = sendActivationEmail(ac);
+            }
+            if (savedRecord == true) {
+                if (commName == null) {
+                    message(
+                            null,
+                            "NewRegistration",
+                            new Object[]{fullname, this.email});
+                } else {
+
+                    message(
+                            null,
+                            "NewCommunityRegistration",
+                            new Object[]{fullname, commName, this.email});
+                }
+            } else {
+                message(
+                        null,
+                        "NewRegistrationFailed",
+                        new Object[]{fullname});
+
+            }
         }
 
         return "index";
-
     }
 
     public void resetForm() {
@@ -733,7 +747,7 @@ public class UserBean extends AbstractBean implements Serializable {
     public String load_login() {
         this.username = null;
         this.userAction = "login";
-        return "index?faces-redirect=true";
+        return "index";
     }
 
     public String load_forgotUserPassword() {
@@ -794,7 +808,7 @@ public class UserBean extends AbstractBean implements Serializable {
         }
 
     }
-    
+
     /**
      * @return the editable
      */
@@ -808,45 +822,154 @@ public class UserBean extends AbstractBean implements Serializable {
     public void setEditable(Integer editable) {
         this.editable = editable;
     }
-    
-    public void updateUserLogin() {
-        
-        this.editable = 0;
-        
+
+    public String updateUserLogin() {
+
+        Boolean updateSuccess = false;
+        String resetCodeString = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+        Users uu = new Users(this.user_id, this.username, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
+        hib.update(uu);
+        try {
+            tx.commit();
+            resetCodeString = uu.getResetCode();
+            updateSuccess = true;
+        } catch (Exception ex) {
+            tx.rollback();
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error on Update User");
+            message(
+                    null,
+                    "LoginNotUpdated",
+                    new Object[]{this.username, this.email});
+        } finally {
+            if (hib.isOpen() == true) {
+                hib.close();
+            }
+            tx = null;
+            hib = null;
+        }
+        if (updateSuccess == true) {
+
+            sendActivationEmail(resetCodeString);
+            message(
+                    null,
+                    "LoginUpdated",
+                    new Object[]{this.username, this.email});
+        } else {
+            message(
+                    null,
+                    "LoginUpdateFailed",
+                    new Object[]{this.username, this.email});
+
+        }
+
+        return "index";
+
     }
-   
-    public String load_ud(Integer which){
-        
+
+    public String load_ud(Integer which) {
+
         this.editable = which;
-        
+
         return "user_detail.xhtml?faces-redirect=true";
-        
+
     }
-    
+
     public void editUserLogin() {
-        
+
         this.editable = 1;
-  
+
     }
-    
+
     public void updateNAE() {
-          
-         this.editable = 3;  
+
+        this.editable = 3;
     }
-    
+
     public void editNAE() {
-          
-         this.editable = 2;  
+
+        this.editable = 2;
     }
-       
-    
+
     public void updateCP() {
-          
-         this.editable = 5;  
+
+        this.editable = 5;
     }
-    
+
     public void editCP() {
-          
-         this.editable = 4;  
+
+        this.editable = 4;
     }
+
+    private String parseUserTypeArray() {
+
+        String hold_userTypeBuild = "";
+        for (String userTypeArray1 : getUserTypeArray()) {
+            hold_userTypeBuild = hold_userTypeBuild + userTypeArray1 + ";";
+        }
+        return hold_userTypeBuild;
+
+    }
+
+    /**
+     * @return the roleId
+     */
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    /**
+     * @param roleId the roleId to set
+     */
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+
+    private Boolean sendActivationEmail(String resetCodeString) {
+
+        Session hib = null;
+        Transaction tx = null;
+        try {
+            hib = hib_session();
+            tx = hib.beginTransaction();
+        } catch (Exception ex) {
+        }
+
+        
+        List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
+        Map a_array = (Map) results.get(0);
+
+        try {
+//            tx.commit();
+        } catch (Exception ex) {
+  //          tx.rollback();
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error on Register User");
+        } finally {
+            if (hib != null) {
+                hib.close();
+            }
+            tx = null;
+            hib = null;
+
+        }
+
+        try {
+            if (this.communityName == null) {
+                SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKeyText(), a_array.getValueText(), password, resetCodeString);
+                se = null;
+            } else {
+                SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKeyText(), a_array.getValueText(), this.password, resetCodeString);
+                se = null;
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println("Send Mail Failed");
+            return false;
+        }
+
+    }
+
 }
