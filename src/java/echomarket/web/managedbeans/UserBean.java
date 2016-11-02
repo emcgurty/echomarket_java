@@ -964,6 +964,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKeyText(), a_array.getValueText(), this.password, resetCodeString);
                 se = null;
             }
+            a_array = null;
             return true;
         } catch (Exception e) {
             System.out.println("Send Mail Failed");
