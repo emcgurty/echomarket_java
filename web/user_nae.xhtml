@@ -198,15 +198,15 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <h:outputLabel for="province" value="#{bundle.Province}">
+                                            <h:outputLabel for="province" value="#{bundle.Province}"  />
                                                 <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
                                                 <h:outputText value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
 
                                         </td>
                                         <td>
-                                            <h:outputLabel for="region" value="#{bundle.Region}"/>
+                                            <h:outputLabel for="region" value="#{bundle.Region}" />
                                             <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
-                                            <h:outputText value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
+                                            <h:outputText value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
 
                                         </td>
                                     </tr>
