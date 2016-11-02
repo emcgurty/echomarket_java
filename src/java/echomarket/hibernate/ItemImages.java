@@ -25,7 +25,7 @@ public class ItemImages  implements java.io.Serializable {
     }
 
 	
-    public ItemImages(String itemImagesId, String participantId, String imageFileName, Date dateCreated, Date dateDeleted, Date dateUpdated) {
+    public ItemImages(String itemImagesId, String participantId, String imageFileName) {
         this.itemImagesId = itemImagesId;
         this.participantId = participantId;
         this.imageFileName = imageFileName;
@@ -33,7 +33,7 @@ public class ItemImages  implements java.io.Serializable {
         this.dateDeleted = dateDeleted;
         this.dateUpdated = dateUpdated;
     }
-    public ItemImages(String itemImagesId, String participantId, String imageContentType, Integer imageHeight, Integer imageWidth, String imageFileName, String itemImageCaption, Date dateCreated, Date dateDeleted, Date dateUpdated) {
+    public ItemImages(String itemImagesId, String participantId, String imageContentType, Integer imageHeight, Integer imageWidth, String imageFileName, String itemImageCaption) {
        this.itemImagesId = itemImagesId;
        this.participantId = participantId;
        this.imageContentType = imageContentType;
@@ -41,9 +41,7 @@ public class ItemImages  implements java.io.Serializable {
        this.imageWidth = imageWidth;
        this.imageFileName = imageFileName;
        this.itemImageCaption = itemImageCaption;
-       this.dateCreated = dateCreated;
-       this.dateDeleted = dateDeleted;
-       this.dateUpdated = dateUpdated;
+       
     }
    
     public String getItemImagesId() {
