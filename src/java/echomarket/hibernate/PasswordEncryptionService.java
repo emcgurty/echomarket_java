@@ -1,5 +1,5 @@
 package echomarket.hibernate;
-
+/// Credit: https://www.javacodegeeks.com/2012/05/secure-password-storage-donts-dos-and.html
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
