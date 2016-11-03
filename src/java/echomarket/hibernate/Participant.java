@@ -39,6 +39,18 @@ public class Participant implements java.io.Serializable {
     public Participant() {
     }
 
+    /// User agreement
+        public Participant(String participantId, String userId, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, String remoteIp) {
+        this.participantId = participantId;
+        this.userId = userId;
+        this.goodwill = goodwill;
+        this.age18OrMore = age18OrMore;
+        this.isActive = isActive;
+        this.dateCreated = new Date();
+        this.remoteIp = remoteIp;
+        this.approved = 1;
+    }
+    
     public Participant(String participantId, String userId, int contactDescribeId, int displayOrganization, String firstName, String lastName, String alias, int displayName, int displayAddress, int approved, int isCreator) {
         this.participantId = participantId;
         this.userId = userId;
