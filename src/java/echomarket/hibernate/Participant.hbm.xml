@@ -15,34 +15,34 @@
             <column name="community_id" length="40" />
         </property>
         <property name="contactDescribeId" type="int">
-            <column name="contact_describe_id" not-null="true" />
+            <column name="contact_describe_id"  />
         </property>
         <property name="organizationName" type="string">
             <column name="organization_name" length="50" />
         </property>
         <property name="displayOrganization" type="int">
-            <column name="display_organization" not-null="true" />
+            <column name="display_organization"  />
         </property>
         <property name="otherDescribeYourself" type="string">
             <column name="other_describe_yourself" length="24" />
         </property>
         <property name="firstName" type="string">
-            <column name="first_name" length="24" not-null="true" />
+            <column name="first_name" length="24" />
         </property>
         <property name="mi" type="string">
             <column name="mi" length="1" />
         </property>
         <property name="lastName" type="string">
-            <column name="last_name" length="24" not-null="true" />
+            <column name="last_name" length="24"  />
         </property>
         <property name="alias" type="string">
-            <column name="alias" length="24" not-null="true" />
+            <column name="alias" length="24"  />
         </property>
         <property name="displayName" type="int">
-            <column name="display_name" not-null="true" />
+            <column name="display_name"  />
         </property>
         <property name="displayAddress" type="int">
-            <column name="display_address" not-null="true" />
+            <column name="display_address"  />
         </property>
         <property name="homePhone" type="string">
             <column name="home_phone" length="20" />
@@ -87,10 +87,10 @@
             <column name="date_created" length="19" not-null="true" />
         </property>
         <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19" not-null="true" />
+            <column name="date_updated" length="19"  />
         </property>
         <property name="dateDeleted" type="timestamp">
-            <column name="date_deleted" length="19" not-null="true" />
+            <column name="date_deleted" length="19"  />
         </property>
         <property name="remoteIp" type="string">
             <column name="remote_ip" length="50" />
