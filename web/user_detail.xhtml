@@ -18,12 +18,13 @@
             <h:head>
                 <h:outputScript library="javascript" name="user_detail.js"  />
                 <h:outputScript library="javascript" name="borrower_seeking.js"  rendered="#{(userBean.editable == 3) }"/>
-                <h:outputScript library="javascript" name="user_detail.js"  rendered="#{(userBean.editable == -1) }"/>
+                <h:outputScript library="javascript" name="user_detail.js"  />
                 <title>#{bundle.userDetailTitle}</title>
             </h:head>
 
             <ui:include rendered="true" src="user_detail_menu.xhtml" id="UserDetailMenu" /> 
             <h:outputText value="#{userBean.editable}" /><br />
+            <h:inputHidden id="editable" value="#{userBean.editable}" /><br />
             <h:outputText  value="#{(userBean.editable == 0) or (userBean.editable == 1) }" /><br />
             <h:outputText  value="#{(userBean.editable == 2) || (userBean.editable == 3) }" />
             <div class="message.color">
