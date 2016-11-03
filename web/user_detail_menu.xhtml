@@ -11,16 +11,18 @@
     <ul id="nav" class="user_detail_menu"> 
         <li class="subs" id="parent_tab_item" ><a   href="#parent_menu_item" onclick=""  >
                 User Dashboard: </a></li>
-
+        <li class="subs" id="tab_item_0" >
+            <h:commandLink  action="#{userBean.load_ud(-1)}"  value="EchoMarket Agreement"  rendered="#{userBean.editable == -1}" />
+        </li>
         <li class="subs" id="tab_item_1" >
-            <h:commandLink  action="#{userBean.load_ud(0)}"  value="Login Information"   />
+            <h:commandLink  action="#{userBean.load_ud(0)}"  value="Login Information"  rendered="#{userBean.editable != -1}" />
         </li>
 
-        <li class="subs" id="tab_item_1" >
-            <h:commandLink  action="#{userBean.load_ud(3)}"  value="Your Name, Address, Email.."   />
-        </li>
         <li class="subs" id="tab_item_2" >
-            <h:commandLink  action="#{userBean.load_ud(5)}"  value="Contact Preferences"   />
+            <h:commandLink  action="#{userBean.load_ud(3)}"  value="Your Name, Address, Email.."  rendered="#{userBean.editable != -1}" />
+        </li>
+        <li class="subs" id="tab_item_3" >
+            <h:commandLink  action="#{userBean.load_ud(5)}"  value="Contact Preferences"  rendered="#{userBean.editable != -1}" />
         </li>
         <li class="subs" id="tab_item_4" ><a   href="#menu_item_4" onclick="showBHistory();" 
                                                >
