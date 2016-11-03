@@ -17,13 +17,15 @@
         <h:form id="user_detail" style="border-bottom-color: indigo; border-bottom-style: double;">
             <h:head>
                 <h:outputScript library="javascript" name="user_detail.js"  />
+                <h:outputScript library="javascript" name="borrower_seeking.js"  rendered="#{(userBean.editable == 3) }"/>
+                <h:outputScript library="javascript" name="user_detail.js"  rendered="#{(userBean.editable == -1) }"/>
                 <title>#{bundle.userDetailTitle}</title>
             </h:head>
 
             <ui:include rendered="true" src="user_detail_menu.xhtml" id="UserDetailMenu" /> 
             <h:outputText value="#{userBean.editable}" /><br />
             <h:outputText  value="#{(userBean.editable == 0) or (userBean.editable == 1) }" /><br />
-             <h:outputText  value="#{(userBean.editable == 2) || (userBean.editable == 3) }" />
+            <h:outputText  value="#{(userBean.editable == 2) || (userBean.editable == 3) }" />
             <div class="message.color">
                 <h:messages showSummary="true" 
                             showDetail="false"
@@ -33,21 +35,24 @@
 
             <div id="borrower_registration" style="width:inherit;" >
 
-                 <c:choose>
-                <c:when test="#{(userBean.editable == 0) or (userBean.editable == 1) }">
-                    <ui:include src="user_login_update.xhtml" id="login_update"   />
-                </c:when>
-                <c:when test="#{(userBean.editable == 2) or (userBean.editable == 3) }">
-                    <ui:include src="user_nae.xhtml" id="name_address_email" />
-                </c:when>
-                <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
-                    <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
-                </c:when>     
-                <c:otherwise>
-                    <ui:include  src="user_detail.xhtml" id="ud"  /> 
-                </c:otherwise>
-            </c:choose>
-                
+                <c:choose>
+                     <c:when test="#{userBean.editable == -1 }">
+                        <ui:include src="user_agreement.xhtml" id="user_agreement"   />
+                    </c:when>
+                    <c:when test="#{(userBean.editable == 0) or (userBean.editable == 1) }">
+                        <ui:include src="user_login_update.xhtml" id="login_update"   />
+                    </c:when>
+                    <c:when test="#{(userBean.editable == 2) or (userBean.editable == 3) }">
+                        <ui:include src="user_nae.xhtml" id="name_address_email" />
+                    </c:when>
+                    <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
+                        <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
+                    </c:when>     
+                    <c:otherwise>
+                        <ui:include  src="user_detail.xhtml" id="ud"  /> 
+                    </c:otherwise>
+                </c:choose>
+
             </div>
 
         </h:form>
