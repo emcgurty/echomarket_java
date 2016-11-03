@@ -12,6 +12,8 @@ import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -229,12 +231,20 @@ public class UserBean extends AbstractBean implements Serializable {
 
     private String[] buildTypeList() {
 
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
+        Session hib;
+        Transaction tx;
+        hib = null;
+        tx = null;
+        
+        try {
+            hib = hib_session();
+            tx = hib.beginTransaction();
+        } catch(Exception ex) {
+        }
+        
         String[] results = null;
         String queryString = "from Purpose order by purpose_order";
         List rl = hib.createQuery(queryString).list();
-        tx.commit();
         results = new String[rl.size()];
 
         for (int i = 0; i < rl.size(); i++) {
@@ -243,17 +253,27 @@ public class UserBean extends AbstractBean implements Serializable {
             results[i] = tmp;
         }
 
+        hib = null;
+        tx = null;
         return results;
     }
 
     private String[] buildTypeListStored() {
 
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
+        Session hib;
+        Transaction tx;
+        hib = null;
+        tx = null;
+        
+        try {
+            hib = hib_session();
+            tx = hib.beginTransaction();
+        } catch(Exception ex) {
+        }
+        
         String[] results = null;
         String queryString = "from Purpose order by purpose_order";
         List rl = hib.createQuery(queryString).list();
-        tx.commit();
         results = new String[rl.size()];
 
         for (int i = 0; i < rl.size(); i++) {
@@ -261,7 +281,9 @@ public class UserBean extends AbstractBean implements Serializable {
             String tmp = p_a.getPurposeShort();
             results[i] = tmp;
         }
-
+        hib =null;
+        tx = null;
+        
         return results;
     }
 
@@ -623,7 +645,8 @@ public class UserBean extends AbstractBean implements Serializable {
      * @return the userTypeArray
      */
     public List<String> getUserTypeArray() {
-        return userTypeArray;
+        ArrayList<String> uta = new  ArrayList<String>(Arrays.asList(this.userType.split(";")));
+        return uta;
     }
 
     /**
