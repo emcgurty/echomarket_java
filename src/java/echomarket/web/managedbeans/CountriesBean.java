@@ -11,25 +11,30 @@ import org.hibernate.Transaction;
 @ManagedBean(name = "country")
 @RequestScoped
 public class CountriesBean extends AbstractBean implements Serializable {
-    
+
     private String countryId;
     private String countryName;
 
     public CountriesBean() {
     }
 
- public String getOneCountry(String one_country) {
+    public String getOneCountry(String one_country) {
 
+        String returnCountry = null;
         List result = null;
         Session session = null;
         Transaction tx = null;
-        String returnCountry = null;
-        
+
         try {
             session = hib_session();
             tx = session.beginTransaction();
-        } catch(Exception ex){}
-
+        } catch (Exception ex) {
+            message(
+                    null,
+                    "ApplicationError",
+                    new Object[]{ex});
+            return "index";
+        }
         try {
             result = session.createQuery("from Countries WHERE country_id = :one_country")
                     .setParameter("one_country", one_country)
@@ -42,43 +47,56 @@ public class CountriesBean extends AbstractBean implements Serializable {
         if (result.size() > 0) {
             Countries returnedCountryName = (Countries) result.get(0);
             returnCountry = returnedCountryName.getCountryName();
-            returnedCountryName= null;
+            returnedCountryName = null;
         } else {
             returnCountry = "Country Not Found";
         }
-        
+
         session = null;
         result = null;
         return returnCountry;
-    }    
- 
+    }
+
     public Countries[] buildCountries() {
         Countries[] purposeArray = null;
-        List country_list = null;
-        country_list = country_list();
-        int size_of_list = country_list.size();
+        List countrylist = null;
+        countrylist = country_list();
+        int size_of_list = countrylist.size();
         purposeArray = new Countries[size_of_list];
         for (int i = 0; i < size_of_list; i++) {
-            Countries to_Array = (Countries) country_list.get(i);
+            Countries to_Array = (Countries) countrylist.get(i);
             purposeArray[i] = new Countries(to_Array.getCountryId(), to_Array.getCountryName());
         }
+        countrylist = null;
         return purposeArray;
     }
 
     private List country_list() {
 
         List result = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
+        Session session = null;
+        Transaction tx =  null;
         
+        try {
+            session = hib_session();
+            tx = session.beginTransaction();
+        } catch(Exception ex){
+             message(
+                    null,
+                    "ApplicationError",
+                    new Object[] {ex}); 
+             
+        }
+
         try {
             result = session.createQuery("from Countries ORDER BY country_id").list();
         } catch (Exception e) {
             System.out.println("Error at line 68 in Country Bean");
             e.printStackTrace();
         }
-        
+
         session = null;
+        tx = null;
         return result;
     }
 
