@@ -58,13 +58,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     private String processId;
 
     private static ArrayList<Addresses> primary
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), "NA","NA", null, "NA", "NA", null, "99", null, "99", "primary")));
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), "", "", null, "", "", null, null, null, null, "primary")));
 
     private static ArrayList<Addresses> alternative
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), "NA","NA", null, "NA", "NA", null, "99", null, "99",  "alternative")));
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), "", "", null, "", "", null, null, null, null, "alternative")));
 
-    private Addresses[] existing_primary; 
-    private Addresses[] existing_alternative; 
+    private Addresses[] existing_primary;
+    private Addresses[] existing_alternative;
 
     public ArrayList<Addresses> getPrimary() {
         return primary;
@@ -86,6 +86,112 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         // Not complete
         return true;
     }
+
+    public String updateNAE() {
+
+//        List padrs = getPrimary();
+//        List aadrs = getAlternative();
+//        Session sb = hib_session();
+//        Transaction tx = sb.beginTransaction();
+//        Date today_date = new Date();
+//        String current_user = null;
+//        current_user = ubean.getUser_id();
+//        Boolean bret = false;
+//        String pid = getID();
+//        
+//        //(String participantId, String userId, String communityId, int contactDescribeId, String organizationName, int displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, int displayName, int displayAddress, String homePhone, String cellPhone, String alternativePhone, String emailAlternative, Integer displayHomePhone, Integer displayCellPhone, Integer displayAlternativePhone, Integer displayAlternativeAddress, Integer goodwill, Integer age18OrMore, Integer isActive, Integer editable, Integer isCreator, Date dateCreated, Date dateUpdated, Date dateDeleted, String remoteIp, int approved) {
+//        if (isCommunity) 
+//        
+//        Participant part = new Participant(pid, ubean.getUser_id(), 
+//                
+//                else 
+//        Participant part = new Participant(pid, ubean.getUser_id(), 
+//        );
+//
+//        try {
+//            sb.saveOrUpdate(part);
+//            tx.commit();
+//        } catch (Exception ex) {
+//            tx.rollback();
+//            System.out.println("Error in Save/Update Particpant");
+//            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            if (sb != null) {
+//                sb.close();
+//            }
+//            
+//            
+//            Addresses balt = (Addresses) aadrs.get(0);
+//            balt.setParticipantId(participantId);
+//
+//            if (sb.isOpen() == false) {
+//                sb = hib_session();
+//            }
+//            if (tx.isActive() == false) {
+//                tx = sb.beginTransaction();
+//            }
+//
+//            try {
+//                sb.save(balt);
+//                tx.commit();
+//            } catch (Exception e) {
+//            } finally {
+//            }
+//
+//        }
+//
+//        Addresses ba = (Addresses) padrs.get(0);
+//        ba.setParticipantId(participantId);
+//
+//        if (sb.isOpen() == false) {
+//            sb = hib_session();
+//        }
+//        if (tx.isActive() == false) {
+//            tx = sb.beginTransaction();
+//        }
+//
+//        try {
+//            sb.save(ba);
+//            tx.commit();
+//        } catch (Exception e) {
+//        } finally {
+//            message(
+//                    null,
+//                    "BorrowerRegistionRecordSaved",
+//                    null);
+//
+//         
+//        }
+//sb = null;
+//tx = null;
+        ubean.setEditable(3);
+        return "user_detail";
+
+    }
+
+    public String userAgreement() {
+
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
+        
+        Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
+        try {
+            sb.save(part);
+            tx.commit();
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in Save/Update Particpant");
+            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (sb != null) {
+                sb.close();
+            }
+
+            ubean.setEditable(0);
+            return "user_detail";
+        }
+    }
+    
 
     private Boolean processAddress(Addresses[] address) {
 
@@ -139,31 +245,31 @@ public class ParticipantBean extends AbstractBean implements Serializable {
             if (sb != null) {
                 sb.close();
             }
-            
-                bret = processAddress(this.existing_alternative);
-                bret = processAddress(this.existing_primary);
-            }
 
-            if (bret == true) {
-                tx = null;
-                sb = null;
-                message(
-                        null,
-                        "ParticipantRecordUpdated",
-                        null);
-            } else {
-                message(
-                        null,
-                        "ParticipantRecordNotUpdated",
-                        null);
+            bret = processAddress(this.existing_alternative);
+            bret = processAddress(this.existing_primary);
+        }
 
-            }
-        
+        if (bret == true) {
+            tx = null;
+            sb = null;
+            message(
+                    null,
+                    "ParticipantRecordUpdated",
+                    null);
+        } else {
+            message(
+                    null,
+                    "ParticipantRecordNotUpdated",
+                    null);
+
+        }
+
         return "index?faces-redirect=true";
 
     }
 
-    public String saveParticipantRegistration()  {
+    public String saveParticipantRegistration() {
 
         List padrs = getPrimary();
         List aadrs = getAlternative();
@@ -175,7 +281,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         try {
 
             current_user = ubean.getUser_id();
-            
 
         } catch (Exception e) {
             System.out.println("Testing inject vs session Map");
@@ -189,24 +294,22 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         } catch (Exception e) {
         }
 
-           Addresses balt = (Addresses) aadrs.get(0);
-           balt.setParticipantId(getAbstId);
+        Addresses balt = (Addresses) aadrs.get(0);
+        balt.setParticipantId(getAbstId);
 
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
+        if (sb.isOpen() == false) {
+            sb = hib_session();
+        }
+        if (tx.isActive() == false) {
+            tx = sb.beginTransaction();
+        }
 
-            try {
-                sb.save(balt);
-                tx.commit();
-            } catch (Exception e) {
-            } finally {
-            }
-
-        
+        try {
+            sb.save(balt);
+            tx.commit();
+        } catch (Exception e) {
+        } finally {
+        }
 
         Addresses ba = (Addresses) padrs.get(0);
         ba.setParticipantId(getAbstId);
@@ -241,12 +344,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     public String getOrganizationName() {
-        if (organizationName != null) {
+        if ((organizationName != null) || (ubean.getEditable() == 3)) {
             return organizationName;
         } else {
             return "Not provided";
         }
-        
+
     }
 
     public void setOrganizationName(String organizationName) {
@@ -254,7 +357,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     public String getOtherDescribeYourself() {
-        if (otherDescribeYourself != null) {
+        if ((otherDescribeYourself != null) || (ubean.getEditable() == 3)) {
             return otherDescribeYourself;
         } else {
             return "Not provided";
@@ -274,8 +377,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     public String getMi() {
-        if (mi == null) return " ";
-        else return mi;
+        if (mi == null) {
+            return " ";
+        } else {
+            return mi;
+        }
     }
 
     public void setMi(String mi) {
@@ -542,8 +648,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         this.processId = processId;
     }
 
-    
-
     public String deleteCurrentRecord(String bid, String itemDesc) {
 
         List result = null;
@@ -781,6 +885,5 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     public Integer getDisplayAlternativeAddress() {
         return displayAlternativeAddress;
     }
-
 
 }
