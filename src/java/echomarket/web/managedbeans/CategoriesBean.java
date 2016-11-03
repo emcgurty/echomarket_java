@@ -50,8 +50,16 @@ public class CategoriesBean extends AbstractBean implements Serializable {
     private List cat_list() {
 
         List result = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
+        Session session;
+        Transaction tx;
+        session = null;
+        tx = null;
+        
+        try {
+            session = hib_session();
+            tx = session.beginTransaction();
+        } catch(Exception ex) {
+        }
 
         try {
             result = session.createQuery("from Categories Order By id").list();
@@ -60,7 +68,8 @@ public class CategoriesBean extends AbstractBean implements Serializable {
             e.printStackTrace();
 
         }
-        tx.commit();
+        session = null;
+        tx = null;
 
         return result;
     }
