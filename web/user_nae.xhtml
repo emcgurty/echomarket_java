@@ -7,16 +7,17 @@
     >
 
     <div id="form_NAE" class="contact_information" >
-
+        <c:set var="states_list" value="#{uss.buildUsStates()}"   rendered="#{userBean.editable == 3}" />    
+        <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 3}" />    
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.username}: USER DETAIL"  />
-                <h:commandLink  action="#{userBean.updateNAE()}"  class="right_div" value="Save Name, Adddress, Email...Update"  onclick="showNAE();" rendered="#{userBean.editable == 3}" />
-                <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Edit Name, Address, Email...Information"  onclick="showNAE();" rendered="#{userBean.editable == 2}" />
+                <h:commandLink  action="#{participant.updateNAE()}"  class="right_div" value="Save Name, Adddress, Email...Update"   rendered="#{userBean.editable == 3}" />
+                <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Edit Name, Address, Email...Information"   rendered="#{userBean.editable == 2}" />
             </div> 
             <div style="margin:10px;" >
                 <h:outputText value="Participant Name, Address, Email Information..." />
-                <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Continue to 'Contact Preferences'"  onclick="showCP();" />
+                <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Continue to 'Item Transfer Contact Preferences'"  onclick="showCP();" />
             </div>
         </div> 
 
@@ -31,6 +32,7 @@
 
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                     <div style="float:left;margin-left:25px">
+                         <h:inputHidden value="#{participant.participantId}" id="participantId"/>
                         <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
                             <br />
                             <h:selectOneMenu id="contactDescribeId" value="#{participant.contactDescribeId}" rendered="#{userBean.editable == 3}" >
@@ -151,7 +153,7 @@
 
                 <div  class="div_p"  >
                     <div style="margin:10px;" >
-                        <h:outputText value="Your Registration Address..." />
+                        <h:outputText value="Your Primary Address..." />
                     </div>
                 </div>
 
@@ -159,6 +161,7 @@
                     <div style="margin-left: 15px;float:left">
                         <h:dataTable value="#{participant.primary}" id="primary"   var="pa"           >    
                             <h:column rowHeader="">
+                            
                                 <table >
                                     <tr>
                                         <td>
@@ -183,17 +186,16 @@
                                             <span class="error-message" id="city" ></span>
                                         </td>
                                         <td>
-                                            <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
-                                            <h:selectOneMenu id="usStates" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" >
+                                            <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                                            
+                                            <h:selectOneMenu id="usStateId" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" >
                                                 <f:validator validatorId="selectOneMenuValidator" />  
-                                                <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
-                                                               var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
-                                                               >   
+                                                <f:selectItems id="us_state_id_select" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
                                                 </f:selectItems>    
                                             </h:selectOneMenu>
                                             <h:outputText value="#{uss.getOneState(pa.usStateId)}" rendered="#{userBean.editable == 2}" />
-                                            <h:message styleClass="error-message" for="usStates"/>
-                                            <span class="error-message" id="usStates" ></span>
+                                            <h:message styleClass="error-message" for="usStateId"/>
+                                            <span class="error-message" id="us_state_id" ></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -221,10 +223,11 @@
                                             <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
                                             <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 3}" >
                                                 <f:validator validatorId="selectOneMenuValidator" />  
-                                                <f:selectItems id="country_id" value="#{country.buildCountries()}"  
+                                                <f:selectItems id="country_id" value="#{country_list}"  
                                                                var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                                                 </f:selectItems>    
                                             </h:selectOneMenu>
+                                            
                                             <h:outputText value="#{country.getOneCountry(pa.countryId)}" style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
                                             <span class="error-message" id="countryId" ></span>
                                         </td>
@@ -238,8 +241,8 @@
 
                                     <tr >
                                         <td colspan="2">
-                                            <h:outputLabel value="Allow public to see your Registration Address?"  for="displayAddress" >
-                                                <h:selectOneRadio id="displayAddress" value="#{participant.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 2}">
+                                            <h:outputLabel value="Allow public to see your Primary Address?"  for="displayAddress" >
+                                                <h:selectOneRadio id="displayAddress" value="#{participant.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 3}">
                                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
@@ -266,6 +269,12 @@
                         </h:dataTable>
                     </div>
                 </div>    
+                
+                <div  class="div_p"  >
+                    <div style="margin:10px;" >
+                        <h:outputText value="An Alternative Address...(Optional. Fields with asterisk are required if pursued.)" />
+                    </div>
+                </div>
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                     <div style="margin-left: 15px;float:left">
                         <h:dataTable value="#{participant.alternative}" id="alternative"   var="pa"           >    
@@ -294,17 +303,15 @@
                                             <span class="error-message" id="city" ></span>
                                         </td>
                                         <td>
-                                            <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
-                                            <h:selectOneMenu id="usStates" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}">
+                                            <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                                            <h:selectOneMenu id="usStateId" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}">
                                                 <f:validator validatorId="selectOneMenuValidator" />  
-                                                <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
-                                                               var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
-                                                               >   
+                                                <f:selectItems id="us_state_id" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
                                                 </f:selectItems>    
                                                 <h:outputText value="#{uss.getOneState(pa.usStateId)}" style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />    
                                             </h:selectOneMenu>
 
-                                            <h:message styleClass="error-message" for="usStates"/>
+                                            <h:message styleClass="error-message" for="usStateId"/>
                                             <span class="error-message" id="usStates" ></span>
                                         </td>
                                     </tr>
@@ -333,8 +340,7 @@
                                             <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
                                             <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 3}"  >
                                                 <f:validator validatorId="selectOneMenuValidator" />  
-                                                <f:selectItems id="country_id" value="#{country.buildCountries()}"  
-                                                               var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
+                                                <f:selectItems id="country_id" value="#{country_list}"  var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                                                 </f:selectItems>    
                                             </h:selectOneMenu>
                                             <h:outputText value="#{country.getOneCountry(pa.countryId)}" rendered="#{userBean.editable == 2}" />
@@ -425,7 +431,7 @@
                                     </h:outputLabel>
                                     <div style="float:left" >
                                         <h:outputLabel value=".. to see your Cell Phone Number?"  for="displayCellPhone" >
-                                            <h:selectOneRadio id="displayCellPhone" value="#{participant.displayCellPhone}" rendered="#{userBean.editable == 2}" >
+                                            <h:selectOneRadio id="displayCellPhone" value="#{participant.displayCellPhone}" rendered="#{userBean.editable == 3}" >
                                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                                 <f:selectItem itemValue="0" itemLabel="No" />	
                                             </h:selectOneRadio>    
@@ -453,7 +459,7 @@
                                     </h:outputLabel>
                                     <div style="float:left" >
                                         <h:outputLabel value="... to see your Alternative Phone Number?"  for="displayAlternativePhone" >
-                                            <h:selectOneRadio id="displayAlternativePhone" value="#{participant.displayAlternativePhone}" rendered="#{userBean.editable == 2}" >
+                                            <h:selectOneRadio id="displayAlternativePhone" value="#{participant.displayAlternativePhone}" rendered="#{userBean.editable == 3}" >
                                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                                 <f:selectItem itemValue="0" itemLabel="No" />	
                                             </h:selectOneRadio>    
