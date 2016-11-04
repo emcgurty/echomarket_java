@@ -21,6 +21,7 @@ public class UsStatesBean extends AbstractBean implements Serializable {
      */
     private String id;
     private String stateName;
+    private Boolean us_built;
 
     public UsStatesBean() {
     }
@@ -28,8 +29,20 @@ public class UsStatesBean extends AbstractBean implements Serializable {
     public String getOneState(String one_state) {
 
         List result = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
+        Session session = null;
+        Transaction tx = null;
+
+        try {
+            session = hib_session();
+            tx = session.beginTransaction();
+        } catch (Exception ex) {
+            message(
+                    null,
+                    "ApplicationError",
+                    new Object[]{ex});
+            return "index";
+        }
+
         String returnState = null;
 
         try {
@@ -45,11 +58,11 @@ public class UsStatesBean extends AbstractBean implements Serializable {
         if (result.size() > 0) {
             UsStates returnedStateName = (UsStates) result.get(0);
             returnState = returnedStateName.getStateName();
-            returnedStateName= null;
+            returnedStateName = null;
         } else {
             returnState = "State not found";
         }
-        
+
         tx = null;
         session = null;
         result = null;
@@ -57,43 +70,50 @@ public class UsStatesBean extends AbstractBean implements Serializable {
     }
 
     public UsStates[] buildUsStates() {
-    
+
+        
         UsStates[] purposeArray = null;
-        List us_list = null;
-        us_list = us_list();
-        int size_of_list = us_list.size();
+        List uslist = null;
+        uslist = us_list();
+        int size_of_list = uslist.size();
         purposeArray = new UsStates[size_of_list];
         for (int i = 0; i < size_of_list; i++) {
-            UsStates to_Array = (UsStates) us_list.get(i);
+            UsStates to_Array = (UsStates) uslist.get(i);
             purposeArray[i] = new UsStates(to_Array.getId(), to_Array.getStateName());
         }
-        us_list = null;
+        
+        uslist = null;
         return purposeArray;
     }
 
     private List us_list() {
 
+        
+        System.out.println("US LIST CALL");
+        
         List result = null;
         Session session = null;
-        Transaction tx = null;
-        
+        Transaction tx;
+        tx = null;
+
         try {
             session = hib_session();
             tx = session.beginTransaction();
-        } catch(Exception ex){}
+        } catch (Exception ex) {
+            System.out.println("Error at line 100 in US Bean");
+            ex.printStackTrace();
+        }
 
         try {
-            result = session.createQuery("from UsStates ORDER BY id").list();
-            tx.commit();
-        } catch (Exception e) {
+            result = session.createQuery("FROM UsStates ORDER BY id").list();
+            } catch (Exception e) {
             System.out.println("Error at line 52 in US Bean");
             e.printStackTrace();
 
         }
         session = null;
         tx = null;
-        session = null;
-
+        
         return result;
     }
 
@@ -123,6 +143,20 @@ public class UsStatesBean extends AbstractBean implements Serializable {
      */
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    /**
+     * @return the us_built
+     */
+    public Boolean getUs_built() {
+        return us_built;
+    }
+
+    /**
+     * @param us_built the us_built to set
+     */
+    public void setUs_built(Boolean us_built) {
+        this.us_built = us_built;
     }
 
 }
