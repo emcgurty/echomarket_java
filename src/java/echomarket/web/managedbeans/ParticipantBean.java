@@ -86,7 +86,36 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         // Not complete
         return true;
     }
+ 
+    public String getUserDefinedAlternativeEmail(String pid) {
+        Session sb;
+        Transaction tx;
+        sb = null;
+        tx = null;
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        List result = null;
+        String alt_email = null;
+        try {
+            String query = "FROM Participant WHERE participant_id = :pid ";
+            result = sb.createQuery(query)
+                    .setParameter("pid", pid)
+                    .list();
+            Participant part = (Participant) result.get(0);
+            alt_email = part.getEmailAlternative();
+        } catch (Exception e) {
+            System.out.println("Error in getCurrentB");
+            e.printStackTrace();
 
+        } finally {
+            tx = null;
+            sb = null;
+
+        }
+
+        return alt_email;
+    }
+    
     public String updateNAE() {
 
         List padrs = getPrimary();
@@ -586,14 +615,14 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         try {
             query = "FROM Participant as b WHERE b.user_id = '" + bid + "'";
             result = session.createQuery(query).list();
-            tx.commit();
+            
         } catch (Exception e) {
             System.out.println("Error in getCurrentB");
             e.printStackTrace();
 
         } finally {
             tx = null;
-            //session = null;
+            session = null;
 
         }
 
