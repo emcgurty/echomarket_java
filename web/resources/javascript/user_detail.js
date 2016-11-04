@@ -51,7 +51,16 @@ function checkLegal() {
                     }
                 }
                 foundValue++;
-
+            } else if (id.includes('questionAltAddress')) {
+                if (legal_check[i].value == 1) {
+                    if (legal_check[i].checked == false) {
+                        $("div#addressAlternative").css("display", "none");
+                    } else {
+                        $("div#addressAlternative").css("display", "block");
+                        getValue = true;
+                    }
+                }
+                foundValue++;
 
             } else if (foundValue == 3) {
                 break;
