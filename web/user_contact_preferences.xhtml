@@ -10,11 +10,11 @@
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.username}: USER DETAIL"  />
-                <h:commandLink  action="#{userBean.updateCP()}"  class="right_div" value="Save Contact Preferences Update"  rendered="#{userBean.editable == 5}" />
+                <h:commandLink  action="#{userBean.updateCP()}"  class="right_div" value="Save Item Transfer Contact Preferences Update"  rendered="#{userBean.editable == 5}" />
                 <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 4}" />
             </div> 
             <div style="margin:10px;" >
-                <h:outputText value="Contact Preferences" />
+                <h:outputText value="Item Transfer Contact Preferences" />
                 <h:commandLink  action="#{userBean.editBH()}"  class="right_div" value="Continue to 'Borrowing History'"  />
             </div>
         </div> 
@@ -30,8 +30,8 @@
                 <div id="postalWithContactAddress" >    
                     <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
                         <h:selectOneRadio id="useWhichContactAddress" value="#{cpb.useWhichContactAddress}" rendered="#{userBean.editable == 5}" >
-                            <f:selectItem itemValue="3" itemLabel="Use your Registration Address?" />
-                            <f:selectItem itemValue="2" itemLabel="Use an Alternative Address?" />	
+                            <f:selectItem itemValue="3" itemLabel="Use your Primary Address?" />
+                            <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?" />	
                             <f:selectItem itemValue="1" itemLabel="Either address is fine." />
                             <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
                         </h:selectOneRadio>    
@@ -47,7 +47,7 @@
                                     <c:set var="whichAddress" value="Use your Alternative Address"/>
                                 </c:when>
                                 <c:when test="#{cpb.useWhichContactAddress == 3}">
-                                    <c:set var="whichAddress" value="Use your Registration Address"/>
+                                    <c:set var="whichAddress" value="Use your Primary Address"/>
                                 </c:when>
                                 <c:otherwise>
                                     <c:set var="whichAddress" value="No preference provided"/>
@@ -147,7 +147,7 @@
 
                                     </td>
                                 </tr>
-                               
+
                             </table>
                         </h:column>
                     </h:dataTable>
@@ -190,11 +190,18 @@
                                 <c:set var="cbe" value="No preference provided"/>
                             </c:otherwise>
                         </c:choose>
-                        <h:outputText id="contactByEmailString"   value="#{cbe}" />
-                    </c:if>   
+                    <h:outputText id="contactByEmailString"   value="#{cbe}" />
+                    
+                    </c:if>  
+                      <div id="emailAlternative" style="display:none;float:left;height:auto;width:inherit;margin-top:10px;"  >    
+                        <h:outputLabel for="emailAlternative" value="Your Alternative Email:" style="margin-left: 5px; margin-top:5px;">
+                            <h:inputText  value="#{cpb.emailAlternative}" id="emailAlternative" style="margin-left: 5px;"/>
+                        </h:outputLabel>
+                    </div>  
+
                 </h:outputLabel>
 
-                
+
             </div>
         </div>
 
