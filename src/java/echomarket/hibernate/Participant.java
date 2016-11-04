@@ -1,7 +1,11 @@
 package echomarket.hibernate;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-
+@Entity
+@Table(name = "participant")
 public class Participant implements java.io.Serializable {
 
     private String participantId;
@@ -77,7 +81,7 @@ public class Participant implements java.io.Serializable {
         this.remoteIp = remoteIp;
         
     }
-
+    @Id
     public String getParticipantId() {
         return this.participantId;
     }
