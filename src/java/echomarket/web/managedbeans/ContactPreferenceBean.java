@@ -1,12 +1,16 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Addresses;
+import echomarket.hibernate.ContactPreference;
 import echomarket.hibernate.Purpose;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
@@ -46,7 +50,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     private String contactByOtherSocialMedia;
     private String contactByOtherSocialMediaAccess;
     private static ArrayList<Addresses> particpant_alternative
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), "NA", null, "NA", "NA", null, "99", null, "99", "alternative")));
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, null, null, "99", null, "99", "alternative")));
 
     public ContactPreferenceBean() {
     }
@@ -287,6 +291,32 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      */
     public void setContactByOtherSocialMediaAccess(String contactByOtherSocialMediaAccess) {
         this.contactByOtherSocialMediaAccess = contactByOtherSocialMediaAccess;
+    }
+
+    public String updateCP() {
+
+        Session sb;
+        Transaction tx;
+        sb = null;
+        tx = null;
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        //public ContactPreference() {
+        ContactPreference part = new ContactPreference(getId(), ubean.getUser_id(), useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
+
+        try {
+            sb.update(part);
+            tx.commit();
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in Save/Update Contact Preferences");
+            Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            sb = null;
+            tx = null;
+        }
+        ubean.setEditable(4);
+        return "user_detail";
     }
 
     public List getAddress() {
