@@ -289,6 +289,8 @@ public class UserBean extends AbstractBean implements Serializable {
 
     public String loginUser() {
 
+        // debugging
+        this.password = "Emcgurty123!";
         Boolean act_results = false;
         // getResetCode learned from url
         if (getResetCode() != null) {
