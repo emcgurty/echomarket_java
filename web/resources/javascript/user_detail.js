@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     $(".contact_information").css("display", "block");
-    
+
     $('input').on('change', function () {
         checkLegal();
 
@@ -11,12 +11,10 @@ $(document).ready(function () {
 
 function checkLegal() {
 
-    
     var legal_check = $("input[type=radio]");
     var getValue = false;
     var foundValue = 0;
     try {
-
         for (var i = 0; i < legal_check.length; i++) {
             var id = legal_check[i].id;
             if (id.includes('age18OrMore')) {
@@ -43,7 +41,19 @@ function checkLegal() {
                     }
                 }
                 foundValue++;
-            } else if (foundValue == 2) {
+            } else if (id.includes('questionAltEmail')) {
+                if (legal_check[i].value == 1) {
+                    if (legal_check[i].checked == false) {
+                        $("div#emailAlternative").css("display", "none");
+                    } else {
+                        $("div#emailAlternative").css("display", "block");
+                        getValue = true;
+                    }
+                }
+                foundValue++;
+
+
+            } else if (foundValue == 3) {
                 break;
             }
         }
