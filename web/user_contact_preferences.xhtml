@@ -10,7 +10,7 @@
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.username}: USER DETAIL"  />
-                <h:commandLink  action="#{userBean.updateCP()}"  class="right_div" value="Save Item Transfer Contact Preferences Update"  rendered="#{userBean.editable == 5}" />
+                <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Save Item Transfer Contact Preferences Update"  rendered="#{userBean.editable == 5}" />
                 <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 4}" />
             </div> 
             <div style="margin:10px;" >
@@ -168,7 +168,7 @@
                 <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
                     <h:selectOneRadio id="contactByEmail" value="#{cpb.contactByEmail}"  rendered="#{userBean.editable == 5}" >
                         <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
-                        <f:selectItem itemValue="2" itemLabel="An alternative email." />	
+                        <f:selectItem itemValue="2" itemLabel="Your alternative email. (#{participant.getUserDefinedAlternativeEmail(ubean.getUser_Id())})" />	
                         <f:selectItem itemValue="1" itemLabel="Either Email." />
                         <f:selectItem itemValue="0" itemLabel="Neither Email." />	
                     </h:selectOneRadio>    
@@ -193,11 +193,7 @@
                     <h:outputText id="contactByEmailString"   value="#{cbe}" />
                     
                     </c:if>  
-                      <div id="emailAlternative" style="display:none;float:left;height:auto;width:inherit;margin-top:10px;"  >    
-                        <h:outputLabel for="emailAlternative" value="Your Alternative Email:" style="margin-left: 5px; margin-top:5px;">
-                            <h:inputText  value="#{cpb.emailAlternative}" id="emailAlternative" style="margin-left: 5px;"/>
-                        </h:outputLabel>
-                    </div>  
+                      
 
                 </h:outputLabel>
 
