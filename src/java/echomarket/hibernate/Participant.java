@@ -50,25 +50,9 @@ public class Participant implements java.io.Serializable {
         this.remoteIp = remoteIp;
         this.approved = 1;
     }
-    
-    public Participant(String participantId, String userId, int contactDescribeId, int displayOrganization, String firstName, String lastName, String alias, int displayName, int displayAddress, int approved, int isCreator) {
-        this.participantId = participantId;
-        this.userId = userId;
-        this.contactDescribeId = contactDescribeId;
-        this.displayOrganization = displayOrganization;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.alias = alias;
-        this.displayName = displayName;
-        this.displayAddress = displayAddress;
-        this.dateCreated = new Date();
-        this.dateUpdated = new Date();
-        this.approved = approved;
-        this.isCreator = isCreator;
-        this.isActive = 1;
-    }
-
-    public Participant(String participantId, String userId, String communityId, int contactDescribeId, String organizationName, int displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, int displayName, int displayAddress, String homePhone, String cellPhone, String alternativePhone, String emailAlternative, Integer displayHomePhone, Integer displayCellPhone, Integer displayAlternativePhone, Integer displayAlternativeAddress, Integer goodwill, Integer age18OrMore, Integer isActive, Integer editable, Integer isCreator, Date dateCreated, Date dateUpdated, Date dateDeleted, String remoteIp, int approved) {
+    // Update 
+    public Participant(String participantId, String communityId, int contactDescribeId, String organizationName, int displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, int displayName, int displayAddress, String homePhone, String cellPhone, 
+            String alternativePhone, String emailAlternative, Integer displayHomePhone, Integer displayCellPhone, Integer displayAlternativePhone, Integer displayAlternativeAddress, String remoteIp) {
         this.participantId = participantId;
         this.userId = userId;
         this.communityId = communityId;
@@ -90,16 +74,8 @@ public class Participant implements java.io.Serializable {
         this.displayCellPhone = displayCellPhone;
         this.displayAlternativePhone = displayAlternativePhone;
         this.displayAlternativeAddress = displayAlternativeAddress;
-        this.goodwill = goodwill;
-        this.age18OrMore = age18OrMore;
-        this.isActive = isActive;
-        this.editable = editable;
-        this.isCreator = isCreator;
-        this.dateCreated = dateCreated;
-        this.dateUpdated = dateUpdated;
-        this.dateDeleted = dateDeleted;
         this.remoteIp = remoteIp;
-        this.approved = approved;
+        
     }
 
     public String getParticipantId() {
