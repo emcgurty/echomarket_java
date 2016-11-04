@@ -889,7 +889,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     private List getExistingAddress(String which) {
 
         List result = null;
-        Addresses[] a_array = null;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
 
@@ -899,7 +898,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
                     .setParameter("bid", ubean.getUserAction())
                     .setParameter("which", which)
                     .list();
-            //tx.commit();
+            
         } catch (Exception e) {
 
         } finally {
