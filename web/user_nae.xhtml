@@ -12,11 +12,11 @@
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.username}: USER DETAIL"  />
-                <h:commandLink  action="#{participant.updateNAE()}"  class="right_div" value="Save Name, Adddress, Email...Update"   rendered="#{userBean.editable == 3}" />
-                <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Edit Name, Address, Email...Information"   rendered="#{userBean.editable == 2}" />
+                <h:commandLink  action="#{participant.updateNAE()}"  class="right_div" value="Save EchoMarket partipicant information"   rendered="#{userBean.editable == 3}" />
+                <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Edit EchoMarket participant information"   rendered="#{userBean.editable == 2}" />
             </div> 
             <div style="margin:10px;" >
-                <h:outputText value="Participant Name, Address, Email Information..." />
+                <h:outputText value="EchoMarket participant information..." />
                 <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Continue to 'Item Transfer Contact Preferences'"  onclick="showCP();" />
             </div>
         </div> 
@@ -165,6 +165,7 @@
                             <h:outputText  id="registration_email" value="#{userBean.getEmail()}" style="margin-left: 5px;" />
                         </h:outputLabel>
                     </div>
+
                     <div style="margin-left: 25px;float:left">
                         <h:outputLabel value="Would you like to provide an alternative email address?"  for="questionAltEmail" rendered="#{userBean.editable == 3}" >
                             <h:selectOneRadio id="questionAltEmail" layout='lineDirection'  rendered="#{userBean.editable == 3}" >
@@ -186,23 +187,6 @@
                             <h:outputText  value="#{participant.emailAlternative}"  style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 </div>     
 
@@ -291,12 +275,6 @@
 
                                     <tr >
                                         <td colspan="2">
-
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td colspan="2">
                                             <h:outputLabel value="Allow public to see your Primary Address?"  for="displayAddress" >
                                                 <h:selectOneRadio id="displayAddress" value="#{participant.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 3}">
                                                     <f:selectItem itemValue="1" itemLabel="Yes" />
@@ -325,7 +303,16 @@
                         </h:dataTable>
                     </div>
                 </div>    
-
+                
+                <div style="margin-left: 25px;float:left">
+                    <h:outputLabel value="Would you like to provide an alternative address?"  for="questionAltAddress" rendered="#{userBean.editable == 3}" >
+                        <h:selectOneRadio id="questionAltAddress" layout='lineDirection'  rendered="#{userBean.editable == 3}" >
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />	
+                        </h:selectOneRadio>
+                    </h:outputLabel>
+                </div>
+                  <div id="addressAlternative" style="margin-left: 25px;float:left;display:none;"  >
                 <div  class="div_p"  >
                     <div style="margin:5px;" >
                         <h:outputText value="An Alternative Address...(Optional. Fields with asterisk are required if pursued.)" />
@@ -440,6 +427,7 @@
                         </h:dataTable>
                     </div>
                 </div>    
+                  </div>
                 <div  class="div_p"  >
                     <div style="margin:10px;" >
                         <h:outputText value="Your Phone Access..." />
