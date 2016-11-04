@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -25,8 +26,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     @Inject
     UserBean ubean;
     private String participantId;
-    private String userId;
-    private String communityId;
     private int contactDescribeId;
     private String organizationName;
     private int displayOrganization;
@@ -58,10 +57,10 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     private String processId;
 
     private static ArrayList<Addresses> primary
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), "", "", null, "", "", null, null, null, null, "primary")));
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "primary")));
 
     private static ArrayList<Addresses> alternative
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), "", "", null, "", "", null, null, null, null, "alternative")));
+            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "alternative")));
 
     private Addresses[] existing_primary;
     private Addresses[] existing_alternative;
@@ -86,7 +85,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         // Not complete
         return true;
     }
- 
+
     public String getUserDefinedAlternativeEmail(String pid) {
         Session sb;
         Transaction tx;
@@ -115,11 +114,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         return alt_email;
     }
-    
+
     public String updateNAE() {
 
         List padrs = getPrimary();
         List aadrs = getAlternative();
+        String reqPO = null;
         Session sb;
         Transaction tx;
         sb = null;
@@ -127,9 +127,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         sb = hib_session();
         tx = sb.beginTransaction();
 
-        Participant part = new Participant(participantId, null, contactDescribeId, organizationName, displayOrganization, otherDescribeYourself, firstName, mi, lastName, "NA", displayName, displayAddress, homePhone, cellPhone, 
-         alternativePhone, emailAlternative, displayHomePhone, displayCellPhone,  displayAlternativePhone, displayAlternativeAddress, "NA");
-        
+        Participant part = new Participant(participantId, null, contactDescribeId, organizationName, displayOrganization, otherDescribeYourself, firstName, mi, lastName, "NA", displayName, displayAddress, homePhone, cellPhone,
+                alternativePhone, emailAlternative, displayHomePhone, displayCellPhone, displayAlternativePhone, displayAlternativeAddress, "NA");
+
         try {
             sb.update(part);
             tx.commit();
@@ -143,8 +143,30 @@ public class ParticipantBean extends AbstractBean implements Serializable {
             }
 
             Addresses balt = (Addresses) aadrs.get(0);
-            balt.setParticipantId(getParticipantId());
+            reqPO = balt.getPostalCode();
+            if (reqPO != null) {
+                balt.setParticipantId(getParticipantId());
 
+                if (sb.isOpen() == false) {
+                    sb = hib_session();
+                }
+                if (tx.isActive() == false) {
+                    tx = sb.beginTransaction();
+                }
+
+                try {
+                    sb.save(balt);
+                    tx.commit();
+                } catch (Exception e) {
+                } finally {
+                }
+            }
+        }
+
+        Addresses ba = (Addresses) padrs.get(0);
+        reqPO = ba.getPostalCode();
+        if (reqPO != null) {
+            ba.setParticipantId(getParticipantId());
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
@@ -153,34 +175,16 @@ public class ParticipantBean extends AbstractBean implements Serializable {
             }
 
             try {
-                sb.save(balt);
+                sb.save(ba);
                 tx.commit();
             } catch (Exception e) {
             } finally {
+                message(
+                        null,
+                        "BorrowerRegistionRecordSaved",
+                        null);
+
             }
-
-        }
-
-        Addresses ba = (Addresses) padrs.get(0);
-        ba.setParticipantId(getParticipantId());
-
-        if (sb.isOpen() == false) {
-            sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-            tx = sb.beginTransaction();
-        }
-
-        try {
-            sb.save(ba);
-            tx.commit();
-        } catch (Exception e) {
-        } finally {
-            message(
-                    null,
-                    "BorrowerRegistionRecordSaved",
-                    null);
-
         }
         sb = null;
         tx = null;
@@ -615,7 +619,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         try {
             query = "FROM Participant as b WHERE b.user_id = '" + bid + "'";
             result = session.createQuery(query).list();
-            
+
         } catch (Exception e) {
             System.out.println("Error in getCurrentB");
             e.printStackTrace();
@@ -924,6 +928,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     /**
      * @return the participantId
      */
+    @Id
     public String getParticipantId() {
         return participantId;
     }
