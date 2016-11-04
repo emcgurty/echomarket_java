@@ -89,94 +89,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
     public String updateNAE() {
 
-//        List padrs = getPrimary();
-//        List aadrs = getAlternative();
-//        Session sb = hib_session();
-//        Transaction tx = sb.beginTransaction();
-//        Date today_date = new Date();
-//        String current_user = null;
-//        current_user = ubean.getUser_id();
-//        Boolean bret = false;
-//        String pid = getID();
-//        
-//        //(String participantId, String userId, String communityId, int contactDescribeId, String organizationName, int displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, int displayName, int displayAddress, String homePhone, String cellPhone, String alternativePhone, String emailAlternative, Integer displayHomePhone, Integer displayCellPhone, Integer displayAlternativePhone, Integer displayAlternativeAddress, Integer goodwill, Integer age18OrMore, Integer isActive, Integer editable, Integer isCreator, Date dateCreated, Date dateUpdated, Date dateDeleted, String remoteIp, int approved) {
-//        if (isCommunity) 
-//        
-//        Participant part = new Participant(pid, ubean.getUser_id(), 
-//                
-//                else 
-//        Participant part = new Participant(pid, ubean.getUser_id(), 
-//        );
-//
-//        try {
-//            sb.saveOrUpdate(part);
-//            tx.commit();
-//        } catch (Exception ex) {
-//            tx.rollback();
-//            System.out.println("Error in Save/Update Particpant");
-//            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//            if (sb != null) {
-//                sb.close();
-//            }
-//            
-//            
-//            Addresses balt = (Addresses) aadrs.get(0);
-//            balt.setParticipantId(participantId);
-//
-//            if (sb.isOpen() == false) {
-//                sb = hib_session();
-//            }
-//            if (tx.isActive() == false) {
-//                tx = sb.beginTransaction();
-//            }
-//
-//            try {
-//                sb.save(balt);
-//                tx.commit();
-//            } catch (Exception e) {
-//            } finally {
-//            }
-//
-//        }
-//
-//        Addresses ba = (Addresses) padrs.get(0);
-//        ba.setParticipantId(participantId);
-//
-//        if (sb.isOpen() == false) {
-//            sb = hib_session();
-//        }
-//        if (tx.isActive() == false) {
-//            tx = sb.beginTransaction();
-//        }
-//
-//        try {
-//            sb.save(ba);
-//            tx.commit();
-//        } catch (Exception e) {
-//        } finally {
-//            message(
-//                    null,
-//                    "BorrowerRegistionRecordSaved",
-//                    null);
-//
-//         
-//        }
-//sb = null;
-//tx = null;
-        ubean.setEditable(3);
-        return "user_detail";
+        List padrs = getPrimary();
+        List aadrs = getAlternative();
+        Session sb;
+        Transaction tx;
+        sb = null;
+        tx = null;
+        sb = hib_session();
+        tx = sb.beginTransaction();
 
-    }
-
-    public String userAgreement() {
-
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
+        Participant part = new Participant(participantId, null, contactDescribeId, organizationName, displayOrganization, otherDescribeYourself, firstName, mi, lastName, "NA", displayName, displayAddress, homePhone, cellPhone, 
+         alternativePhone, emailAlternative, displayHomePhone, displayCellPhone,  displayAlternativePhone, displayAlternativeAddress, "NA");
         
-        Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
         try {
-            sb.save(part);
+            sb.update(part);
             tx.commit();
         } catch (Exception ex) {
             tx.rollback();
@@ -187,11 +113,85 @@ public class ParticipantBean extends AbstractBean implements Serializable {
                 sb.close();
             }
 
-            ubean.setEditable(0);
-            return "user_detail";
+            Addresses balt = (Addresses) aadrs.get(0);
+            balt.setParticipantId(getParticipantId());
+
+            if (sb.isOpen() == false) {
+                sb = hib_session();
+            }
+            if (tx.isActive() == false) {
+                tx = sb.beginTransaction();
+            }
+
+            try {
+                sb.save(balt);
+                tx.commit();
+            } catch (Exception e) {
+            } finally {
+            }
+
         }
+
+        Addresses ba = (Addresses) padrs.get(0);
+        ba.setParticipantId(getParticipantId());
+
+        if (sb.isOpen() == false) {
+            sb = hib_session();
+        }
+        if (tx.isActive() == false) {
+            tx = sb.beginTransaction();
+        }
+
+        try {
+            sb.save(ba);
+            tx.commit();
+        } catch (Exception e) {
+        } finally {
+            message(
+                    null,
+                    "BorrowerRegistionRecordSaved",
+                    null);
+
+        }
+        sb = null;
+        tx = null;
+        ubean.setEditable(3);
+        return "user_detail";
+
     }
-    
+
+    public String userAgreement() {
+
+        if ((goodwill != 1) || (age18OrMore != 1)) {
+            message(
+                    null,
+                    "threeStrikesYourOut",
+                    null);
+            ubean.setEditable(-1);
+
+        } else {
+            Session sb = hib_session();
+            Transaction tx = sb.beginTransaction();
+
+            Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
+            try {
+                sb.save(part);
+                tx.commit();
+            } catch (Exception ex) {
+                tx.rollback();
+                System.out.println("Error in Save/Update Particpant");
+                Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+
+                sb = null;
+                tx = null;
+                ubean.setEditable(0);
+
+            }
+        }
+
+        return "user_detail";
+    }
 
     private Boolean processAddress(Addresses[] address) {
 
@@ -204,7 +204,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
             b_return = true;
         } catch (Exception ex) {
             tx.rollback();
-            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ParticipantBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (sb != null) {
                 sb.close();
@@ -240,7 +242,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error on Update Participant");
-            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ParticipantBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (sb != null) {
                 sb.close();
@@ -669,7 +673,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         } catch (Exception ex) {
             System.out.println("Error in deleting borrower record");
-            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ParticipantBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } finally {
 
             result = null;
@@ -884,6 +890,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
      */
     public Integer getDisplayAlternativeAddress() {
         return displayAlternativeAddress;
+    }
+
+    /**
+     * @return the participantId
+     */
+    public String getParticipantId() {
+        return participantId;
+    }
+
+    /**
+     * @param participantId the participantId to set
+     */
+    public void setParticipantId(String participantId) {
+        this.participantId = participantId;
     }
 
 }
