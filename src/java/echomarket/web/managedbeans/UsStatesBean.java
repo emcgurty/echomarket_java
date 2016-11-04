@@ -38,8 +38,8 @@ public class UsStatesBean extends AbstractBean implements Serializable {
             session = hib_session();
             tx = session.beginTransaction();
         } catch (Exception ex) {
-           // This error is always called and I do not know why..
-           message(
+            // This error is always called and I do not know why..
+            message(
                     null,
                     "ApplicationError",
                     new Object[]{ex});
@@ -52,12 +52,16 @@ public class UsStatesBean extends AbstractBean implements Serializable {
             result = session.createQuery("from UsStates WHERE id = :one_state")
                     .setParameter("one_state", one_state)
                     .list();
-            tx.commit();
+
         } catch (Exception e) {
             System.out.println("Error at line 36 in US Bean");
             e.printStackTrace();
 
+        } finally {
+            tx = null;
+            session = null;
         }
+
         if (result.size() > 0) {
             UsStates returnedStateName = (UsStates) result.get(0);
             returnState = returnedStateName.getStateName();
@@ -66,15 +70,12 @@ public class UsStatesBean extends AbstractBean implements Serializable {
             returnState = "State not found";
         }
 
-        tx = null;
-        session = null;
         result = null;
         return returnState;
     }
 
     public UsStates[] buildUsStates() {
 
-        
         UsStates[] purposeArray = null;
         List uslist = null;
         uslist = us_list();
@@ -84,16 +85,15 @@ public class UsStatesBean extends AbstractBean implements Serializable {
             UsStates to_Array = (UsStates) uslist.get(i);
             purposeArray[i] = new UsStates(to_Array.getId(), to_Array.getStateName());
         }
-        
+
         uslist = null;
         return purposeArray;
     }
 
     private List us_list() {
 
-        
         System.out.println("US LIST CALL");
-        
+
         List result = null;
         Session session = null;
         Transaction tx;
@@ -109,14 +109,14 @@ public class UsStatesBean extends AbstractBean implements Serializable {
 
         try {
             result = session.createQuery("FROM UsStates ORDER BY id").list();
-            } catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error at line 52 in US Bean");
             e.printStackTrace();
 
         }
         session = null;
         tx = null;
-        
+
         return result;
     }
 
