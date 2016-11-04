@@ -106,11 +106,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByChat
      */
     public String getContactByChat() {
-        if (contactByChat == null) {
-            return "Not provided";
-        } else {
-            return contactByChat;
-        }
+
+        return contactByChat;
+
     }
 
     /**
@@ -124,12 +122,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByEmail
      */
     public String getContactByEmail() {
-        if (contactByEmail == null) {
-            return "Not provided";
-        } else {
-            return contactByEmail;
-        }
-
+        return contactByEmail;
     }
 
     /**
@@ -185,12 +178,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByFacebook
      */
     public String getContactByFacebook() {
-        if (contactByFacebook == null) {
-            return "Not provided";
-        } else {
+        if ((contactByFacebook != null) || (ubean.getEditable() == 5)) {
             return contactByFacebook;
+        } else {
+            return "Not provided";
         }
-              
+
     }
 
     /**
@@ -204,11 +197,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByTwitter
      */
     public String getContactByTwitter() {
-         if (contactByTwitter == null) {
-            return "Not provided";
-        } else {
+        if ((contactByTwitter != null) || (ubean.getEditable() == 5)) {
             return contactByTwitter;
+        } else {
+            return "Not provided";
         }
+
     }
 
     /**
@@ -222,11 +216,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByInstagram
      */
     public String getContactByInstagram() {
-        if (contactByInstagram == null) {
-            return "Not provided";
-        } else {
+        if ((contactByInstagram != null) || (ubean.getEditable() == 5)) {
             return contactByInstagram;
+        } else {
+            return "Not provided";
         }
+
     }
 
     /**
@@ -240,11 +235,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByLinkedIn
      */
     public String getContactByLinkedIn() {
-        if (contactByLinkedIn == null) {
-            return "Not provided";
-        } else {
+        if ((contactByLinkedIn != null) || (ubean.getEditable() == 5)) {
             return contactByLinkedIn;
+        } else {
+            return "Not provided";
         }
+
     }
 
     /**
@@ -258,11 +254,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByOtherSocialMedia
      */
     public String getContactByOtherSocialMedia() {
-        if (contactByOtherSocialMedia == null) {
-            return "Not provided";
-        } else {
+        if ((contactByOtherSocialMedia != null) || (ubean.getEditable() == 5)) {
             return contactByOtherSocialMedia;
+        } else {
+            return "Not provided";
         }
+
     }
 
     /**
@@ -276,10 +273,10 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
      * @return the contactByOtherSocialMediaAccess
      */
     public String getContactByOtherSocialMediaAccess() {
-        if (contactByOtherSocialMediaAccess == null) {
-            return "Not provided";
-        } else {
+        if ((contactByOtherSocialMediaAccess != null) || (ubean.getEditable() == 5)) {
             return contactByOtherSocialMediaAccess;
+        } else {
+            return "Not provided";
         }
 
     }
@@ -294,10 +291,18 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     public List getAddress() {
 
-        List result = null;
         Addresses[] a_array = null;
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
+        List result = null;
+        Session hib;
+        Transaction tx;
+        hib = null;
+        tx = null;
+
+        try {
+            hib = hib_session();
+            tx = hib.beginTransaction();
+        } catch (Exception ex) {
+        }
 
         String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
         try {
@@ -305,7 +310,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
                     .setParameter("bid", ubean.getUser_id())
                     .setParameter("which", "alternative")
                     .list();
-            tx.commit();
+
         } catch (Exception e) {
 
         } finally {
