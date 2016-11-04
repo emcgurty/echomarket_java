@@ -25,14 +25,14 @@
             <div style="margin-left: 25px;float:left">
 
                 <div  class="div_p" >
-                    <div style="margin:10px;" >
+                    <div style="margin:5px;" >
                         <h:outputText value="Yourself generally, your affiliation" />
                     </div>
                 </div>
 
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                     <div style="float:left;margin-left:25px">
-                         <h:inputHidden value="#{participant.participantId}" id="participantId"/>
+                        <h:inputHidden value="#{participant.participantId}" id="participantId"/>
                         <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
                             <br />
                             <h:selectOneMenu id="contactDescribeId" value="#{participant.contactDescribeId}" rendered="#{userBean.editable == 3}" >
@@ -92,7 +92,7 @@
                 </div>
 
                 <div  class="div_p"  >
-                    <div style="margin:10px;" >
+                    <div style="margin:5px;" >
                         <h:outputText value="Your Name..." />
 
                     </div>
@@ -151,8 +151,64 @@
                     </div>
                 </div>
 
+
                 <div  class="div_p"  >
-                    <div style="margin:10px;" >
+                    <div style="margin:5px;" >
+                        <h:outputText value="Your Email Address..." />
+                    </div>
+                </div>
+
+                <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+
+                    <div style="margin-left: 25px;float:left">
+                        <h:outputLabel value="Your registration email:" for="registration_email" >
+                            <h:outputText  id="registration_email" value="#{userBean.getEmail()}" style="margin-left: 5px;" />
+                        </h:outputLabel>
+                    </div>
+                    <div style="margin-left: 25px;float:left">
+                        <h:outputLabel value="Would you like to provide an alternative email address?"  for="questionAltEmail" rendered="#{userBean.editable == 3}" >
+                            <h:selectOneRadio id="questionAltEmail" layout='lineDirection'  rendered="#{userBean.editable == 3}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>
+                        </h:outputLabel>
+                    </div>
+
+                    <div id="emailAlternative" style="margin-left: 25px;float:left;display:none;"  >
+                        <h:outputLabel value="Your alternative email address:"  for="emailAlternative" >
+                            <h:inputText  id="emailAlternative" value="#{participant.emailAlternative}" maxlength="50" size="25" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
+                            <span class="error-message" id="emailAlternative" ></span>
+                        </h:outputLabel>
+                    </div>
+
+                    <div id="emailAlternativeRO" style="margin: 10px;float:left;"  >
+                        <h:outputLabel value="Your alternative email address:"  for="emailAlternativeRO" rendered="#{userBean.editable == 2}">
+                            <h:outputText  value="#{participant.emailAlternative}"  style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
+                        </h:outputLabel>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>     
+
+
+                <div  class="div_p"  >
+                    <div style="margin:5px;" >
                         <h:outputText value="Your Primary Address..." />
                     </div>
                 </div>
@@ -161,7 +217,7 @@
                     <div style="margin-left: 15px;float:left">
                         <h:dataTable value="#{participant.primary}" id="primary"   var="pa"           >    
                             <h:column rowHeader="">
-                            
+
                                 <table >
                                     <tr>
                                         <td>
@@ -187,7 +243,7 @@
                                         </td>
                                         <td>
                                             <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
-                                            
+
                                             <h:selectOneMenu id="usStateId" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" >
                                                 <f:validator validatorId="selectOneMenuValidator" />  
                                                 <f:selectItems id="us_state_id_select" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
@@ -201,8 +257,8 @@
                                     <tr>
                                         <td>
                                             <h:outputLabel for="province" value="#{bundle.Province}"  />
-                                                <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
-                                                <h:outputText value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
+                                            <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
+                                            <h:outputText value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
 
                                         </td>
                                         <td>
@@ -227,7 +283,7 @@
                                                                var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                                                 </f:selectItems>    
                                             </h:selectOneMenu>
-                                            
+
                                             <h:outputText value="#{country.getOneCountry(pa.countryId)}" style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
                                             <span class="error-message" id="countryId" ></span>
                                         </td>
@@ -269,9 +325,9 @@
                         </h:dataTable>
                     </div>
                 </div>    
-                
+
                 <div  class="div_p"  >
-                    <div style="margin:10px;" >
+                    <div style="margin:5px;" >
                         <h:outputText value="An Alternative Address...(Optional. Fields with asterisk are required if pursued.)" />
                     </div>
                 </div>
