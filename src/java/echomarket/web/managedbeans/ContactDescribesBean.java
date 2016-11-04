@@ -5,8 +5,6 @@
  */
 package echomarket.web.managedbeans;
 
-
-
 import echomarket.hibernate.ContactDescribes;
 import java.io.Serializable;
 import java.util.List;
@@ -31,7 +29,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     public ContactDescribesBean() {
     }
 
-        public String getOneCD(String cd) {
+    public String getOneCD(String cd) {
 
         List result = null;
         Session session = hib_session();
@@ -42,7 +40,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
             result = session.createQuery("from ContactDescribes WHERE id = :cd")
                     .setParameter("cd", cd)
                     .list();
-            tx.commit();
+
         } catch (Exception e) {
             System.out.println("Error at line 42 in CD Bean");
             e.printStackTrace();
@@ -51,19 +49,18 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
         if (result.size() > 0) {
             ContactDescribes returnedCDName = (ContactDescribes) result.get(0);
             returnCD = returnedCDName.getBorrowerOrLenderText();
-            returnedCDName= null;
+            returnedCDName = null;
         } else {
             returnCD = "Contact Description not found";
         }
-        
+
         tx = null;
         session = null;
         result = null;
         return returnCD;
     }
-        
-        
-        public ContactDescribes[] buildContactDArray(String whichpurpose) {
+
+    public ContactDescribes[] buildContactDArray(String whichpurpose) {
         ContactDescribes[] cdArray = null;
         List cd_list = null;
         cd_list = cd_list(whichpurpose);
@@ -79,22 +76,34 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     private List cd_list(String purpose) {
 
         List result = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
+        Session session;
+        Transaction tx;
+        session = null;
+        tx = null;
+
+        try {
+            session = hib_session();
+            tx = session.beginTransaction();
+        } catch (Exception ex) {
+            System.out.println("Error at line 87 in CDBeans");
+            ex.printStackTrace();
+        }
 
         try {
             result = session.createQuery("FROM ContactDescribes Where purposeType  = :pt ORDER BY optionValue")
                     .setParameter("pt", purpose)
                     .list();
-        } catch (Exception e) {
+        } catch (Exception ex) {
             System.out.println("Error at line 57 in CDBeans");
-            e.printStackTrace();
+            ex.printStackTrace();
 
         }
-        tx.commit();
+        session = null;
+        tx = null;
 
         return result;
     }
+
     /**
      * @return the borrowerOrLender
      */
