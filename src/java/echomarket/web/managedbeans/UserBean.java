@@ -235,13 +235,13 @@ public class UserBean extends AbstractBean implements Serializable {
         Transaction tx;
         hib = null;
         tx = null;
-        
+
         try {
             hib = hib_session();
             tx = hib.beginTransaction();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
         }
-        
+
         String[] results = null;
         String queryString = "from Purpose order by purpose_order";
         List rl = hib.createQuery(queryString).list();
@@ -264,13 +264,13 @@ public class UserBean extends AbstractBean implements Serializable {
         Transaction tx;
         hib = null;
         tx = null;
-        
+
         try {
             hib = hib_session();
             tx = hib.beginTransaction();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
         }
-        
+
         String[] results = null;
         String queryString = "from Purpose order by purpose_order";
         List rl = hib.createQuery(queryString).list();
@@ -281,9 +281,9 @@ public class UserBean extends AbstractBean implements Serializable {
             String tmp = p_a.getPurposeShort();
             results[i] = tmp;
         }
-        hib =null;
+        hib = null;
         tx = null;
-        
+
         return results;
     }
 
@@ -346,13 +346,28 @@ public class UserBean extends AbstractBean implements Serializable {
                     "LogInSuccessful",
                     new Object[]{this.username});
 
-            Boolean hasComplete = completeParticipantRecord(this.user_id);
-            if ((act_results == true) && (hasComplete == true)) {
-                return_string = "index";
-            } else {
-                this.editable = 0;
+            List hasComplete = completeParticipantRecord(this.user_id);
+            Integer hs = hasComplete.size();
+            if ((act_results == false) && (hs == 0)) {
+                this.editable = -1;
                 return_string = "user_detail";
+
+            } else if ((act_results == false) && (hs > 0)) {
+                Participant part = (Participant) hasComplete.get(0);
+                Integer gw = part.getGoodwill();
+                Integer i18 = part.getAge18OrMore();
+                String un = part.getFirstName();
+                if ((act_results == false) && (gw == 1) && (i18 == 1) && (un == null)) {
+                    this.editable = 3;
+                    return_string = "user_detail";
+                } else if ((act_results == true) && (gw != 1) && (i18 != 1) && (un != null)) {
+                    return_string = "index";
+                }
+            } else {
+                    return_string = "index";
+                
             }
+
         } else if (getp == false) {
             this.username = null;
             this.userAlias = null;
@@ -645,7 +660,7 @@ public class UserBean extends AbstractBean implements Serializable {
      * @return the userTypeArray
      */
     public List<String> getUserTypeArray() {
-        ArrayList<String> uta = new  ArrayList<String>(Arrays.asList(this.userType.split(";")));
+        ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(";")));
         return uta;
     }
 
@@ -811,24 +826,16 @@ public class UserBean extends AbstractBean implements Serializable {
         this.isCommunity = isCommunity;
     }
 
-    private Boolean completeParticipantRecord(String user_id) {
+    private List completeParticipantRecord(String user_id) {
 
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         List results = hib.createQuery("from Participant WHERE user_id = :uid")
                 .setParameter("uid", user_id)
                 .list();
-        tx.commit();
-        if (results.size() == 0) {
-            results = null;
-            tx = null;
-            return false;
-        } else {
-            results = null;
-            tx = null;
-            return true;
-
-        }
+        tx = null;
+        hib = null;
+        return results;
 
     }
 
@@ -860,7 +867,9 @@ public class UserBean extends AbstractBean implements Serializable {
             updateSuccess = true;
         } catch (Exception ex) {
             tx.rollback();
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(UserBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error on Update User");
             message(
                     null,
@@ -909,6 +918,7 @@ public class UserBean extends AbstractBean implements Serializable {
     public void updateNAE() {
 
         this.editable = 3;
+
     }
 
     public void editNAE() {
@@ -960,15 +970,15 @@ public class UserBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
         }
 
-        
         List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
         Map a_array = (Map) results.get(0);
 
         try {
 //            tx.commit();
         } catch (Exception ex) {
-  //          tx.rollback();
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            //          tx.rollback();
+            Logger.getLogger(UserBean.class
+                    .getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error on Register User");
         } finally {
             if (hib != null) {
