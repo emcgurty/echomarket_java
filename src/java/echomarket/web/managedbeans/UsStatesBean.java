@@ -29,14 +29,17 @@ public class UsStatesBean extends AbstractBean implements Serializable {
     public String getOneState(String one_state) {
 
         List result = null;
-        Session session = null;
-        Transaction tx = null;
+        Session session;
+        Transaction tx;
+        session = null;
+        tx = null;
 
         try {
             session = hib_session();
             tx = session.beginTransaction();
         } catch (Exception ex) {
-            message(
+           // This error is always called and I do not know why..
+           message(
                     null,
                     "ApplicationError",
                     new Object[]{ex});
