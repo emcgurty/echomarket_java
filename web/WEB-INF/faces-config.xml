@@ -147,4 +147,14 @@
         <managed-bean-class>echomarket.web.managedbeans.ContactPreferenceBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>lenderTransferBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.LenderTransferBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>lenderItemConditionsBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.LenderItemConditionsBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>
