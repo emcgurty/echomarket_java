@@ -99,8 +99,8 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     private Boolean sendNotification(String notification_type) {
 
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
+//        Session sb = hib_session();
+//        Transaction tx = sb.beginTransaction();
 
         return true;
     }
@@ -182,8 +182,8 @@ public class ItemBean extends AbstractBean implements Serializable {
     public String saveItemEdit() {
 
         List result = null;
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
+        //Session sb = hib_session();
+        //Transaction tx = sb.beginTransaction();
         Boolean bret = false;
         String strRetId = doesImageExist();
         if (strRetId != null) {
@@ -198,8 +198,8 @@ public class ItemBean extends AbstractBean implements Serializable {
         }
 
         if (bret == true) {
-            tx = null;
-            sb = null;
+//            tx = null;
+//            sb = null;
             message(
                     null,
                     "ItemRecordUpdated",
