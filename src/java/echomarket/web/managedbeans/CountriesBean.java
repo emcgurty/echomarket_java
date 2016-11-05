@@ -39,10 +39,15 @@ public class CountriesBean extends AbstractBean implements Serializable {
             result = session.createQuery("from Countries WHERE country_id = :one_country")
                     .setParameter("one_country", one_country)
                     .list();
+            tx.commit();
         } catch (Exception e) {
             System.out.println("Error at line 28 in Country Bean");
             e.printStackTrace();
 
+        } finally {
+            //session.close();
+            session = null;
+            tx = null;
         }
         if (result.size() > 0) {
             Countries returnedCountryName = (Countries) result.get(0);
@@ -52,8 +57,6 @@ public class CountriesBean extends AbstractBean implements Serializable {
             returnCountry = "Country Not Found";
         }
 
-        session = null;
-        result = null;
         return returnCountry;
     }
 
@@ -75,28 +78,30 @@ public class CountriesBean extends AbstractBean implements Serializable {
 
         List result = null;
         Session session = null;
-        Transaction tx =  null;
-        
+        Transaction tx = null;
+
         try {
             session = hib_session();
             tx = session.beginTransaction();
-        } catch(Exception ex){
-             message(
+        } catch (Exception ex) {
+            message(
                     null,
                     "ApplicationError",
-                    new Object[] {ex}); 
-             
+                    new Object[]{ex});
+
         }
 
         try {
             result = session.createQuery("from Countries ORDER BY country_id").list();
+            tx.commit();
         } catch (Exception e) {
             System.out.println("Error at line 68 in Country Bean");
             e.printStackTrace();
+        } finally {
+            //session.close();
+            session = null;
+            tx = null;
         }
-
-        session = null;
-        tx = null;
         return result;
     }
 
