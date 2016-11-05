@@ -12,15 +12,15 @@ public class HibernateUtil {
         if (sessionFactory == null) {
             // loads configuration and mappings
             Configuration configuration = new Configuration().configure();
-            System.out.println("Passed line 19 in HIb Util");
+            System.out.println("Passed line 19 in Hib Util");
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
-            System.out.println("Passed line 21 in HIb Util"); 
+            System.out.println("Passed line 21 in Hib Util"); 
             // builds a session factory from the service registry
             try {
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
             } catch(Exception e)          {
-                System.out.println("Error at line 25 in Hib UTIL");
+                System.out.println("Error at line 22 in Hib UTIL");
                 e.printStackTrace();
                 
             }
