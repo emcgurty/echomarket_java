@@ -6,6 +6,7 @@ import echomarket.hibernate.Users;
 import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
+import echomarket.hibernate.HibernateUtil;
 import echomarket.hibernate.Participant;
 import echomarket.hibernate.PasswordEncryptionService;
 import javax.faces.bean.ManagedBean;
@@ -172,6 +173,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 //hib.save(participant);
                 try {
                     tx.commit();
+                    Boolean txw = tx.wasCommitted();
                     savedRecord = true;
                 } catch (Exception ex) {
                     tx.rollback();
@@ -179,7 +181,7 @@ public class UserBean extends AbstractBean implements Serializable {
                     System.out.println("Error on Update User");
 
                 } finally {
-                    tx = null;
+                    hib = null;
                     hib = null;
                 }
 
@@ -231,6 +233,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
     private String[] buildTypeList() {
 
+        List rl = null;
         Session hib;
         Transaction tx;
         hib = null;
@@ -240,11 +243,26 @@ public class UserBean extends AbstractBean implements Serializable {
             hib = hib_session();
             tx = hib.beginTransaction();
         } catch (Exception ex) {
+            System.out.println("Error at line 242 in UserBean");
+            ex.printStackTrace();
         }
 
         String[] results = null;
         String queryString = "from Purpose order by purpose_order";
-        List rl = hib.createQuery(queryString).list();
+        try {
+            rl = hib.createQuery(queryString).list();
+            tx.commit();
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error at line 250 in US Bean");
+            ex.printStackTrace();
+        } finally {
+            try {
+                hib.close();
+            } catch (Exception ex) {
+            }
+            tx = null;
+        }
         results = new String[rl.size()];
 
         for (int i = 0; i < rl.size(); i++) {
@@ -253,8 +271,6 @@ public class UserBean extends AbstractBean implements Serializable {
             results[i] = tmp;
         }
 
-        hib = null;
-        tx = null;
         return results;
     }
 
@@ -274,6 +290,7 @@ public class UserBean extends AbstractBean implements Serializable {
         String[] results = null;
         String queryString = "from Purpose order by purpose_order";
         List rl = hib.createQuery(queryString).list();
+        tx.commit();
         results = new String[rl.size()];
 
         for (int i = 0; i < rl.size(); i++) {
@@ -305,6 +322,12 @@ public class UserBean extends AbstractBean implements Serializable {
         String queryString = "from Users where username = :un   and activated_at != null";
         results = hib.createQuery(queryString).setParameter("un", this.username).list();
         tx.commit();
+        try {
+            hib.close();
+        } catch (Exception ex) {
+            System.out.println("Error at line 319 in UserLogin");
+            ex.printStackTrace();
+        }
         Users users_Array = new Users();
 
         //  Must return only one record
@@ -366,8 +389,8 @@ public class UserBean extends AbstractBean implements Serializable {
                     return_string = "index";
                 }
             } else {
-                    return_string = "index";
-                
+                return_string = "index";
+
             }
 
         } else if (getp == false) {
@@ -485,6 +508,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
             results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
             Map a_array = (Map) results.get(0);
+            tx.commit();
 
             try {
                 //  SendEmail .... You indicated that you forgot your user password, follow this link to change it
@@ -835,6 +859,7 @@ public class UserBean extends AbstractBean implements Serializable {
         List results = hib.createQuery("from Participant WHERE user_id = :uid")
                 .setParameter("uid", user_id)
                 .list();
+        tx.commit();
         tx = null;
         hib = null;
         return results;
@@ -973,6 +998,7 @@ public class UserBean extends AbstractBean implements Serializable {
         }
 
         List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
+        tx.commit();
         Map a_array = (Map) results.get(0);
 
         try {
