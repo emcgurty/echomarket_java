@@ -1,0 +1,315 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./echomarketTemplate.xhtml">
+
+            <div class="messagecolor">
+                <h:messages showSummary="true" 
+                            showDetail="false"
+                            errorStyle="color: #d20005" 
+                            infoStyle="color: blue"/>
+            </div>
+            <h:inputHidden id="approved" value="0"   />
+
+            <div id="lender_registration" class="lender_registration" >
+            <ui:include rendered="true" src="lender_menu.xhtml" id="LenderMenu" /> 
+
+                <div id="form_monetary" class="contact_information" >
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{lenderItemConditionsBean.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
+                    <div  class="div_p" id="menu_item_6" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Lending Terms: Monetary" />
+                            <a href="#menu_item_7" class="right_div" onclick="showDuration();">Continue to 'Lending Terms: Duration'</a>
+                        </div>
+                    </div>
+
+                    <table class="personal">
+                        <tr>
+                            <td>
+                                <div style="display:inline-table;margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="forFree" value="For Free?"  >
+                                        <h:selectOneRadio id="forFree" value="#{lenderItemConditionsBean.forFree}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    &nbsp;
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
+                                        <h:selectOneRadio id="smallFee" value="#{lenderItemConditionsBean.smallFee}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
+                                        <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" />
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="availableForPurchase" value="Item may be available for small purchase amount?:"  >
+                                        <h:selectOneRadio id="availableForPurchase" value="#{lenderItemConditionsBean.availableForPurchase}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
+                                        <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}" />
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="availableForDonation" value="Item may be available for donation?:"  >
+                                        <h:selectOneRadio id="availableForDonation" value="#{lenderItemConditionsBean.availableForDonation}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="donateAnonymous" value="If yes, would you like to anonymously donate?:"  >
+                                        <h:selectOneRadio id="donateAnonymous" value="#{lenderItemConditionsBean.donateAnonymous}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="trade" value="Would you be interesting in trading?:"  >
+                                        <h:selectOneRadio id="trade" value="#{lenderItemConditionsBean.trade}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+
+
+                                </div></td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="tradeItem" value="If yes, what would you like in exchange?" >
+                                        <h:inputText id="tradeItem" value="#{lenderItemConditionsBean.tradeItem}"  />
+
+                                    </h:outputLabel>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+
+                                    <h:outputLabel for="securityDeposit" value="Do you require a security deposit?:"  >
+                                        <h:selectOneRadio id="securityDeposit" value="#{lenderItemConditionsBean.securityDeposit}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div style="margin-top:5px;margin-left:25px;">
+                                    <h:outputLabel for="securityDepositAmount" value="If yes, please provide the security deposit amount:" >
+                                        <h:inputText id="securityDepositAmount" value="#{lenderItemConditionsBean.securityDepositAmount}" />
+                                        <span class="security_deposit_amount_error">&nbsp;</span>
+                                    </h:outputLabel>
+                                </div></td>
+                        </tr>
+                    </table>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a onclick="showDuration();" style="color:crimson;font-style:italic"  >Continue to 'Terms of Lending: Duration'</a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="form_duration" class="contact_information" >
+
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{lenderItemConditionsBean.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>  <div  class="div_p" id="menu_item_7" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Terms of Lending: Duration..." />
+                            <a href="#menu_item_8" class="right_div" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
+                        </div>
+                    </div>    
+
+                    <div style="float:left;width:33%;margin-left:25px;">
+
+
+                        <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  >
+                            <h:selectOneRadio id="agreedNumberOfDays" value="#{lenderItemConditionsBean.agreedNumberOfDays}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+
+                    </div>
+
+
+                    <div style="float:left;">
+                        <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:"  >
+                            <h:selectOneRadio id="agreedNumberOfHours" value="#{lenderItemConditionsBean.agreedNumberOfHours}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+
+
+
+
+                    </div>
+                    <div style="float:left;margin-left:40px;">
+
+                        <h:outputLabel for="indefiniteDuration" value="Indefinite?"  >
+                            <h:selectOneRadio id="indefiniteDuration" value="#{lenderItemConditionsBean.indefiniteDuration}" layout='lineDirection'>
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>
+
+
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a href="#menu_item_8" onclick="showConditions();">Continue to 'Terms of Lending: Conditions'</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="form_conditions" class="contact_information" >
+
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{lenderItemConditionsBean.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>   <div  class="div_p" id="menu_item_8" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Terms of Lending: Conditions..." />
+                            <a href="#menu_item_9" class="right_div" onclick="showLegal();">Continue to 'Good Faith'</a>
+                        </div>
+                    </div>    
+
+                    <table class="personal" >
+                        <tr>
+                            <td style="vertical-align:top;">
+                                <div style="margin-left:25px;margin-top:5px;">
+
+                                    <h:outputLabel for="presentDuringBorrowingPeriod" value="Would you like to be present during borrowing period?"  >
+                                        <h:selectOneRadio id="presentDuringBorrowingPeriod" value="#{lenderItemConditionsBean.presentDuringBorrowingPeriod}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td style="vertical-align:top;">
+
+                                <div style="display:block;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
+                                    <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+
+                                        <h:outputLabel for="entirePeriod" value="During the entire lending period?:"  >
+                                            <h:selectOneRadio id="entirePeriod" value="#{lenderItemConditionsBean.entirePeriod}" layout='lineDirection'>
+                                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                <f:selectItem itemValue="0" itemLabel="No" />	
+                                            </h:selectOneRadio>    
+                                        </h:outputLabel>
+
+                                    </div>
+                                    <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+
+                                        <h:outputLabel for="partialPeriod" value="During lending period partially?:"  >
+                                            <h:selectOneRadio id="partialPeriod" value="#{lenderItemConditionsBean.partialPeriod}" layout='lineDirection'>
+                                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                                <f:selectItem itemValue="0" itemLabel="No" />	
+                                            </h:selectOneRadio>    
+                                        </h:outputLabel>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;">
+                                <div style="margin-left:25px;margin-top:5px;">
+                                    <h:outputLabel for="provideProperUseTraining" value="Would you like to provide item proper-use training?"  >
+                                        <h:selectOneRadio id="provideProperUseTraining" value="#{lenderItemConditionsBean.provideProperUseTraining}" layout='lineDirection'>
+                                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                                            <f:selectItem itemValue="0" itemLabel="No" />	
+                                        </h:selectOneRadio>    
+                                    </h:outputLabel>
+
+                                </div>
+                            </td>
+                            <td style="vertical-align:top;">
+                                <div style="margin-left:15px;margin-top:5px;">
+                                    <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
+                                        <h:inputTextarea id="specificConditions"  value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" />
+                                    </h:outputLabel>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+
+
+              
+                </div>
+              
+            </div>
+
+
+</ui:composition>
+
+
