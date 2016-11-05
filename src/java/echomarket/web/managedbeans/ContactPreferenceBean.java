@@ -340,12 +340,16 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
                     .setParameter("bid", ubean.getUser_id())
                     .setParameter("which", "alternative")
                     .list();
-
+            tx.commit();
         } catch (Exception e) {
+            System.out.println("Error at line 344 in CP Bean");
+            e.printStackTrace();
 
         } finally {
-            tx = null;
+//            hib.close();
             hib = null;
+            tx = null;
+
         }
 
         Integer size_of_list = result.size();
