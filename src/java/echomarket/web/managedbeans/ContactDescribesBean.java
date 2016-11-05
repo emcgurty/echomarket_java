@@ -40,12 +40,19 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
             result = session.createQuery("from ContactDescribes WHERE id = :cd")
                     .setParameter("cd", cd)
                     .list();
+            tx.commit();
 
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Error at line 42 in CD Bean");
             e.printStackTrace();
 
+        } finally {
+//            session.close();
+            session = null;
+            tx = null;
         }
+
         if (result.size() > 0) {
             ContactDescribes returnedCDName = (ContactDescribes) result.get(0);
             returnCD = returnedCDName.getBorrowerOrLenderText();
@@ -54,9 +61,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
             returnCD = "Contact Description not found";
         }
 
-        tx = null;
-        session = null;
-        result = null;
+         result = null;
         return returnCD;
     }
 
@@ -93,7 +98,9 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
             result = session.createQuery("FROM ContactDescribes Where purposeType  = :pt ORDER BY optionValue")
                     .setParameter("pt", purpose)
                     .list();
+            tx.commit();
         } catch (Exception ex) {
+            tx.rollback();
             System.out.println("Error at line 57 in CDBeans");
             ex.printStackTrace();
 
