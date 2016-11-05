@@ -16,6 +16,7 @@ public class PurposeBean extends AbstractBean implements Serializable {
 
     public PurposeBean() {
     }
+
     private String getPurposeType() {
         return purposeType;
     }
@@ -23,7 +24,7 @@ public class PurposeBean extends AbstractBean implements Serializable {
     private void setPurposeType(String purposeType) {
         this.purposeType = purposeType;
     }
-    
+
     public Purpose[] buildPurposeArray() {
         Purpose[] purposeArray = null;
         List purpose_list = null;
@@ -44,23 +45,24 @@ public class PurposeBean extends AbstractBean implements Serializable {
         Transaction tx;
         session = null;
         tx = null;
-        
+
         try {
             session = hib_session();
             tx = session.beginTransaction();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
         }
-        
 
         try {
             result = session.createQuery("from Purpose ORDER BY purpose_order").list();
+            tx.commit();
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Error at line 57 in PurposeBeans");
             e.printStackTrace();
 
         }
 
-        session  =null;
+        session = null;
         tx = null;
 
         return result;
