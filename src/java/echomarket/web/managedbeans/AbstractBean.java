@@ -83,9 +83,7 @@ public abstract class AbstractBean implements Serializable {
 
     }
 
-    protected void message(
-            String clientId,
-            String key) {
+    protected void message( String clientId, String key) {
         // Look up the requested message text
         String text = "";
 
