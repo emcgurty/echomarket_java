@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./echomarketTemplate.xhtml">
+
+    <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
+
+        <div class="messagecolor">
+            <h:messages showSummary="true" 
+                        showDetail="false"
+                        errorStyle="color: #d20005" 
+                        infoStyle="color: blue"/>
+        </div>
+        <h:inputHidden id="approved" value="0"   />
+
+        <div id="lender_registration" class="lender_registration" >
+            <ui:include rendered="true" src="lender_menu.xhtml" id="LenderMenu" /> 
+            <div id="form_contact_information" class="contact_information" >
+                <div class="top" >
+                    <div style="margin:10px;margin-top:25px;" >
+                        <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                        <h:commandLink  action="#{lenderTransferBean.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                    </div> 
+                </div>
+
+                <c:if test="#{userBean.isCommunity == 1}" >
+                    <div  class="div_p" id="community_alias" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Please choose your Community alias:" />
+                            <h:selectOneMenu id="alias" value="#{lenderTransferBean.alias}" style="margin-left: 5px;">
+                                <f:selectItems value="#{communityMembersBean.listCMAlias()}"  
+                                               var="c" itemValue="#{c.user_id}" itemLabel="#{c.alias}" 
+                                               >   
+                                </f:selectItems>    
+                            </h:selectOneMenu>
+
+                        </div>
+                    </div>
+                </c:if>
+
+
+                <div id="form_lender_to_borrower" class="contact_information" >
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{lenderTransferBean.saveLenderTransfer()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
+                    <div  class="div_p" id="menu_item_3" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Item Transfer Preferences from Lender to Borrowers..." />
+                            <a href="#menu_item_4" class="right_div" onclick="showBorrowerToLender()();">Continue to 'Transfer: Borrower Return to Lender'</a>
+                        </div>
+                    </div>
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="How would like a borrower to receive your item?" />
+                        </div>
+                    </div>
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+
+                        <div id="BComesToWhichAddressGroup" >    
+                            <h:outputLabel value="Borrower comes to which address?:" for="borrowerComesToWhichAddress">
+                                <h:selectOneRadio id="borrowerComesToWhichAddress" value="#{lenderTransferBean.borrowerComesToWhichAddress}"  >
+                                    <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
+                                    <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
+                                    <f:selectItem itemValue="1" itemLabel="Either address is fine." />
+                                    <f:selectItem itemValue="0" itemLabel="Neither, no pick up at any address please." />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel>
+                        </div>
+                    </div>
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">                    
+                        <h:outputLabel for="meetBorrowerAtAgreedL2b" value="Will meet with borrower at an agreed location?:"  >
+                            <h:selectOneRadio id="meetBorrowerAtAgreedL2b" value="#{lenderTransferBean.meetBorrowerAtAgreedL2b}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
+                    </div>
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">                    
+                        <h:outputLabel for="willDeliverToBorrowerPreferredL2b" value="Will deliver to borrower preferred location?:"  >
+                            <h:selectOneRadio id="willDeliverToBorrowerPreferredL2b" value="#{lenderTransferBean.willDeliverToBorrower}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
+                    </div>
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">                    
+                        <h:outputLabel for="thirdPartyPresenceL2b" value="Would you like a third-party present during transfer to borrower?:"  >
+                            <h:selectOneRadio id="thirdPartyPresenceL2b" value="#{lenderTransferBean.thirdPartyPresenceL2b}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
+                    </div>
+
+
+                    <div id="thirdPartyPresenceL2BGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
+                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceL2b">
+                            <h:selectOneRadio id="lenderThirdPartyChoiceL2b" value="#{lenderTransferBean.lenderThirdPartyChoiceL2b}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
+                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceL2b">
+                            <h:selectOneRadio id="agreedThirdPartyChoiceL2b" value="#{lenderTransferBean.agreedThirdPartyChoiceL2b}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
+
+                    </div>
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                        <div style="margin:10px;float:right;" >
+                            <a onclick="showBorrowerToLender();" style="color:crimson;font-style:italic"  >Continue to 'Transfer: Borrower to Lender'</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="form_borrower_to_lender" class="contact_information" >
+                    <div class="top" >
+                        <div style="margin:10px;margin-top:25px;" >
+                            <h:outputText value="#{userBean.userAlias}: LENDER ITEM REGISTRATION"  />
+                            <h:commandLink  action="#{lenderTransferBean.saveLenderRegistration()}"  class="right_div" value="Save Lender Item Registration"  />
+                        </div> 
+                    </div>
+                    <div  class="div_p" id="menu_item_4" >
+                        <div style="margin:10px;" >
+                            <h:outputText value="Item Transfer: Borrower return to Lender..." />
+                            <a href="#menu_item_5" class="right_div" onclick="showItem()();">Continue to 'Item to Lend'</a>
+                        </div>
+                    </div>
+
+                    <div  class="div_p"  >
+                        <div style="margin:10px;" >
+                            <h:outputText value="How would like the borrower to return your item?" />
+                        </div>
+                    </div>
+
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+
+                        <div id="borrowerReturnsToWhichAddressGroup" >    
+                            <h:outputLabel value="Borrower returns to your...:" for="borrowerReturnsToWhichAddress">
+                                <h:selectOneRadio id="borrowerReturnsToWhichAddress" value="#{lenderTransferBean.borrowerReturnsToWhichAddress}"  >
+                                    <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
+                                    <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
+                                    <f:selectItem itemValue="1" itemLabel="Either address is fine." />
+                                    <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
+                                </h:selectOneRadio>    
+                            </h:outputLabel>
+                        </div>
+
+                        <h:outputLabel for="meetBorrowerAtAgreedB2l" value="Will meet with borrower at an agreed location?:"  >
+                            <h:selectOneRadio id="meetBorrowerAtAgreedB2l" value="#{lenderTransferBean.meetBorrowerAtAgreedB2l}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>  
+
+                        <h:outputLabel for="willPickUpPreferredLocationB2l" value="Will pick up at borrower's location?:"  >
+                            <h:selectOneRadio id="willPickUpPreferredLocationB2l" value="#{lenderTransferBean.willPickUpPreferredLocationB2l}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                        </h:outputLabel>                        
+
+                    </div>
+
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+
+                        <h:outputLabel for="thirdPartyPresenceB2l" value="Would you like a third-party present during transfer from borrower?:"  >
+                            <h:selectOneRadio id="thirdPartyPresenceB2l" value="#{lenderTransferBean.thirdPartyPresenceB2l}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+
+                            </h:selectOneRadio>    
+                        </h:outputLabel>                        
+                    </div>
+
+                    <div id="thirdPartyPresenceB2lGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
+                        <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceB2l">
+                            <h:selectOneRadio id="lenderThirdPartyChoiceB2l" value="#{lenderTransferBean.lenderThirdPartyChoiceB2l}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
+                        <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceB2l">
+                            <h:selectOneRadio id="agreedThirdPartyChoiceB2l" value="#{lenderTransferBean.agreedThirdPartyChoiceB2l}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio> 
+                        </h:outputLabel>
+
+                    </div>
+
+
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                        <div style="margin:20px;float:right;" >
+                            <a onclick="showItem();" style="color:crimson;font-style:italic"  >Continue to 'Item to Lend'</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+    </h:form>
+
+</ui:composition>
+
+
