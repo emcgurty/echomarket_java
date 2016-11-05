@@ -63,6 +63,7 @@ public class CategoriesBean extends AbstractBean implements Serializable {
 
         try {
             result = session.createQuery("from Categories Order By id").list();
+            tx.commit();
         } catch (Exception e) {
             System.out.println("Error line 74 CatBean");
             e.printStackTrace();
