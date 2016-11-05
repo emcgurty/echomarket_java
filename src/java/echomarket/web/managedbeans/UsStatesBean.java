@@ -8,17 +8,10 @@ import javax.faces.bean.ManagedBean;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-/**
- *
- * @author emm
- */
 @ManagedBean(name = "uss")
 @RequestScoped
 public class UsStatesBean extends AbstractBean implements Serializable {
 
-    /**
-     * Creates a new instance of PurposeBean
-     */
     private String id;
     private String stateName;
     private Boolean us_built;
@@ -38,7 +31,8 @@ public class UsStatesBean extends AbstractBean implements Serializable {
             session = hib_session();
             tx = session.beginTransaction();
         } catch (Exception ex) {
-            // This error is always called and I do not know why..
+            System.out.println("Error at line 33 in US Bean");
+            ex.printStackTrace();
             message(
                     null,
                     "ApplicationError",
@@ -52,14 +46,18 @@ public class UsStatesBean extends AbstractBean implements Serializable {
             result = session.createQuery("from UsStates WHERE id = :one_state")
                     .setParameter("one_state", one_state)
                     .list();
+            tx.commit();
 
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Error at line 36 in US Bean");
             e.printStackTrace();
 
         } finally {
-            tx = null;
+            //session.close();
             session = null;
+            tx = null;
+
         }
 
         if (result.size() > 0) {
@@ -93,29 +91,33 @@ public class UsStatesBean extends AbstractBean implements Serializable {
     private List us_list() {
 
         System.out.println("US LIST CALL");
-
         List result = null;
-        Session session = null;
-        Transaction tx;
-        tx = null;
 
+        Session session = hib_session();
+        Transaction tx = null;
         try {
-            session = hib_session();
             tx = session.beginTransaction();
-        } catch (Exception ex) {
-            System.out.println("Error at line 100 in US Bean");
-            ex.printStackTrace();
-        }
 
-        try {
-            result = session.createQuery("FROM UsStates ORDER BY id").list();
-        } catch (Exception e) {
-            System.out.println("Error at line 52 in US Bean");
-            e.printStackTrace();
+            try {
+                result = session.createQuery("FROM UsStates ORDER BY id").list();
+                tx.commit();
+            } catch (Exception e) {
+                System.out.println("Error at line 99 in US Bean");
+                e.printStackTrace();
+                if (tx != null) {
+                    tx.rollback();
+                }
 
+            }
+
+        } catch (RuntimeException e) {
+                System.out.println("Error at line 96 in US Bean");
+                e.printStackTrace();
+        } finally {
+            if (session.isOpen() == true) session.close();
+            session = null;
+            tx = null;
         }
-        session = null;
-        tx = null;
 
         return result;
     }
