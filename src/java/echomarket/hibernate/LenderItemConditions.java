@@ -2,8 +2,6 @@ package echomarket.hibernate;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Id;
-
 
 public class LenderItemConditions implements java.io.Serializable {
 
@@ -67,11 +65,6 @@ public class LenderItemConditions implements java.io.Serializable {
 
     }
 
-
-    /**
-     * @return the lender_item_condition_id
-     */
-    @Id
     public String getLender_item_condition_id() {
         return lender_item_condition_id;
     }
