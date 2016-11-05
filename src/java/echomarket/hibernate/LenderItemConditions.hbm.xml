@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="echomarket.hibernate.LenderItemConditions" table="lender_item_conditions" catalog="echomarket" optimistic-lock="version">
+        <id name="lender_item_condition_id" type="string">
+            <column name="lender_item_condition_id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <property name="itemId" type="string">
+            <column name="item_id" length="40" not-null="true" />
+        </property>
+        <property name="participantId" type="string">
+            <column name="participant_id" length="40" />
+        </property>
+        <property name="forFree" type="java.lang.Integer">
+            <column name="for_free" />
+        </property>
+        <property name="availableForPurchase" type="java.lang.Integer">
+            <column name="available_for_purchase" />
+        </property>
+        <property name="availableForPurchaseAmount" type="big_decimal">
+            <column name="available_for_purchase_amount" precision="10" />
+        </property>
+        <property name="smallFee" type="java.lang.Integer">
+            <column name="small_fee" />
+        </property>
+        <property name="smallFeeAmount" type="big_decimal">
+            <column name="small_fee_amount" precision="10" />
+        </property>
+        <property name="availableForDonation" type="java.lang.Integer">
+            <column name="available_for_donation" />
+        </property>
+        <property name="donateAnonymous" type="java.lang.Integer">
+            <column name="donate_anonymous" />
+        </property>
+        <property name="trade" type="java.lang.Integer">
+            <column name="trade" />
+        </property>
+        <property name="tradeItem" type="string">
+            <column name="trade_item" length="50" />
+        </property>
+        <property name="agreedNumberOfDays" type="java.lang.Integer">
+            <column name="agreed_number_of_days" />
+        </property>
+        <property name="agreedNumberOfHours" type="java.lang.Integer">
+            <column name="agreed_number_of_hours" />
+        </property>
+        <property name="indefiniteDuration" type="java.lang.Integer">
+            <column name="indefinite_duration" />
+        </property>
+        <property name="presentDuringBorrowingPeriod" type="java.lang.Integer">
+            <column name="present_during_borrowing_period" />
+        </property>
+        <property name="entirePeriod" type="java.lang.Integer">
+            <column name="entire_period" />
+        </property>
+        <property name="partialPeriod" type="java.lang.Integer">
+            <column name="partial_period" />
+        </property>
+        <property name="provideProperUseTraining" type="java.lang.Integer">
+            <column name="provide_proper_use_training" />
+        </property>
+        <property name="specificConditions" type="string">
+            <column name="specific_conditions" />
+        </property>
+        <property name="securityDepositAmount" type="big_decimal">
+            <column name="security_deposit_amount" precision="10" />
+        </property>
+        <property name="securityDeposit" type="java.lang.Integer">
+            <column name="security_deposit" />
+        </property>
+        <property name="remoteIp" type="string">
+            <column name="remote_ip" length="50" />
+        </property>
+        <property name="comment" type="string">
+            <column name="comment" />
+        </property>
+        <property name="dateCreated" type="timestamp">
+            <column name="date_created" length="19" not-null="true" />
+        </property>
+        <property name="dateUpdated" type="timestamp">
+            <column name="date_updated" length="19" not-null="true" />
+        </property>
+        <property name="dateDeleted" type="timestamp">
+            <column name="date_deleted" length="19" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
