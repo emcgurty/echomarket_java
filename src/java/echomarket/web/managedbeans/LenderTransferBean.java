@@ -1,7 +1,11 @@
 package echomarket.web.managedbeans;
 
+import echomarket.hibernate.LenderTransfer;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
@@ -10,8 +14,6 @@ import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-//See for https://github.com/lovelle/jquery-chat
-
 @Named
 @ManagedBean
 @RequestScoped
@@ -19,36 +21,66 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
-     private String lenderTransferId;
-     private String lenderId;
-     private String itemId;
-     private String userId;
-     private String participantId;
-     private Integer borrowerComesToWhichAddress;
-     private Integer meetBorrowerAtAgreedL2b;
-     private Integer meetBorrowerAtAgreedB2l;
-     private Integer willDeliverToBorrower;
-     private Integer thirdPartyPresenceL2b;
-     private Integer thirdPartyPresenceB2l;
-     private Integer lenderThirdPartyChoice;
-     private Integer borrowerThirdPartyChoice;
-     private Integer agreedThirdPartyChoiceL2b;
-     private Integer agreedThirdPartyChoiceB2l;
-     private Integer borrowerReturnsToWhichAddress;
-     private Integer willPickUpPreferredLocationB2l;
-     private Integer lenderThirdPartyChoiceB2l;
-     private Integer borrowerChoice;
-     private String remoteIp;
-     private String comment;
-
+    private String lenderTransferId;
+    private String lenderId;
+    private String itemId;
+    private String userId;
+    private String participantId;
+    private Integer borrowerComesToWhichAddress;
+    private Integer meetBorrowerAtAgreedL2b;
+    private Integer meetBorrowerAtAgreedB2l;
+    private Integer willDeliverToBorrower;
+    private Integer thirdPartyPresenceL2b;
+    private Integer thirdPartyPresenceB2l;
+    private Integer borrowerThirdPartyChoice;
+    private Integer agreedThirdPartyChoiceL2b;
+    private Integer agreedThirdPartyChoiceB2l;
+    private Integer borrowerReturnsToWhichAddress;
+    private Integer willPickUpPreferredLocationB2l;
+    private Integer lenderThirdPartyChoiceB2l;
+    private Integer lenderThirdPartyChoiceL2b;
+    private Integer borrowerChoice;
+    private String remoteIp;
+    private String comment;
 
     public LenderTransferBean() {
     }
 
     public String saveLenderTransfer() {
-        return "index";
-        
+        Session sb;
+        Transaction tx;
+        sb = null;
+        tx = null;
+        sb = hib_session();
+        tx = sb.beginTransaction();
+
+        LenderTransfer lt = new LenderTransfer(getId(), "NA", "NA", ubean.getUser_id(), ubean.getUser_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
+
+        try {
+            sb.save(lt);
+            tx.commit();
+            message(null, "LenderTransferSaved", null);
+            ubean.setEditable(8);
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in saveLenderItemCon");
+            Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+            message(null, "LenderTransferNotSaved", null);
+            ubean.setEditable(9);
+        } finally {
+            if (sb != null) {
+                sb.close();
+            }
+
+        }
+        sb = null;
+        tx = null;
+
+        ubean.setEditable(8);
+        return "user_detail";
+
     }
+
     /**
      * @return the lenderTransferId
      */
@@ -204,21 +236,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
     }
 
-    /**
-     * @return the lenderThirdPartyChoice
-     */
-    public Integer getLenderThirdPartyChoice() {
-        return lenderThirdPartyChoice;
-    }
-
-    /**
-     * @param lenderThirdPartyChoice the lenderThirdPartyChoice to set
-     */
-    public void setLenderThirdPartyChoice(Integer lenderThirdPartyChoice) {
-        this.lenderThirdPartyChoice = lenderThirdPartyChoice;
-    }
-
-    /**
+       /**
      * @return the borrowerThirdPartyChoice
      */
     public Integer getBorrowerThirdPartyChoice() {
@@ -268,7 +286,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to set
+     * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to
+     * set
      */
     public void setBorrowerReturnsToWhichAddress(Integer borrowerReturnsToWhichAddress) {
         this.borrowerReturnsToWhichAddress = borrowerReturnsToWhichAddress;
@@ -282,7 +301,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @param willPickUpPreferredLocationB2l the willPickUpPreferredLocationB2l to set
+     * @param willPickUpPreferredLocationB2l the willPickUpPreferredLocationB2l
+     * to set
      */
     public void setWillPickUpPreferredLocationB2l(Integer willPickUpPreferredLocationB2l) {
         this.willPickUpPreferredLocationB2l = willPickUpPreferredLocationB2l;
@@ -344,7 +364,18 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.comment = comment;
     }
 
+    /**
+     * @return the lenderThirdPartyChoiceL2b
+     */
+    public Integer getLenderThirdPartyChoiceL2b() {
+        return lenderThirdPartyChoiceL2b;
+    }
 
-    
+    /**
+     * @param lenderThirdPartyChoiceL2b the lenderThirdPartyChoiceL2b to set
+     */
+    public void setLenderThirdPartyChoiceL2b(Integer lenderThirdPartyChoiceL2b) {
+        this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
+    }
 
 }
