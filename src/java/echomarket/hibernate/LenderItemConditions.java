@@ -6,6 +6,7 @@ import java.util.Date;
 public class LenderItemConditions implements java.io.Serializable {
 
     private String lender_item_condition_id;
+    private String itemId;
     private String participantId;
     private Integer forFree;
     private Integer availableForPurchase;
@@ -425,6 +426,20 @@ public class LenderItemConditions implements java.io.Serializable {
      */
     public void setDateDeleted(Date dateDeleted) {
         this.dateDeleted = dateDeleted;
+    }
+
+    /**
+     * @return the itemId
+     */
+    public String getItemId() {
+        return itemId;
+    }
+
+    /**
+     * @param itemId the itemId to set
+     */
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
 }
