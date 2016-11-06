@@ -11,11 +11,11 @@
     <h:form id="application_menu">
 
         <c:choose>
-            <c:when test="${userBean.username == null}">
+            <c:when test="${userBean.userAlias == null}">
                 <c:set var="username" scope="session" value="Friend" />
             </c:when>
             <c:otherwise>
-                <c:set var="username" scope="session"  value="#{userBean.username}" />
+                <c:set var="username" scope="session"  value="#{userBean.userAlias}" />
             </c:otherwise>
         </c:choose>
 
