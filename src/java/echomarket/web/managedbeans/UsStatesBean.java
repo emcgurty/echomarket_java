@@ -55,6 +55,9 @@ public class UsStatesBean extends AbstractBean implements Serializable {
 
         } finally {
             //session.close();
+            System.out.println("IS TX STILL ACTIVE 58");
+            System.out.println(tx.isActive());
+            System.out.println("IS TX STILL ACTIVE 58 - close");
             session = null;
             tx = null;
 
@@ -107,7 +110,10 @@ public class UsStatesBean extends AbstractBean implements Serializable {
                 if (tx != null) {
                     tx.rollback();
                 }
-
+            } finally {
+            System.out.println("IS TX STILL ACTIVE 114");
+            System.out.println(tx.isActive());
+            System.out.println("IS TX STILL ACTIVE 114 - close");
             }
 
         } catch (RuntimeException e) {
@@ -115,6 +121,9 @@ public class UsStatesBean extends AbstractBean implements Serializable {
                 e.printStackTrace();
         } finally {
             if (session.isOpen() == true) session.close();
+            System.out.println("IS TX STILL ACTIVE 124");
+            System.out.println(tx.isActive());
+            System.out.println("IS TX STILL ACTIVE 124- close");
             session = null;
             tx = null;
         }
