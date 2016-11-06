@@ -320,12 +320,14 @@ public class UserBean extends AbstractBean implements Serializable {
         String return_string = null;
         Boolean getp = false;
         String queryString = "from Users where username = :un   and activated_at != null";
-        results = hib.createQuery(queryString).setParameter("un", this.username).list();
-        tx.commit();
+
         try {
-            hib.close();
+            results = hib.createQuery(queryString).setParameter("un", this.username).list();
+            tx.commit();
+
         } catch (Exception ex) {
-            System.out.println("Error at line 319 in UserLogin");
+            tx.rollback();
+            System.out.println("Error at line 326 in UserLogin");
             ex.printStackTrace();
         }
         Users users_Array = new Users();
@@ -638,48 +640,49 @@ public class UserBean extends AbstractBean implements Serializable {
 
         // get password
         UIInput uiInputPassword = (UIInput) components.findComponent("password");
-        String password = uiInputPassword.getLocalValue() == null ? ""
-                : uiInputPassword.getLocalValue().toString();
-        String passwordId = uiInputPassword.getClientId();
+        if (uiInputPassword != null) {
+            String password = uiInputPassword.getLocalValue() == null ? "": uiInputPassword.getLocalValue().toString();
+            String passwordId = uiInputPassword.getClientId();
 
-        // get confirm password
-        UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirmPassword");
-        String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
-                : uiInputConfirmPassword.getLocalValue().toString();
+            // get confirm password
+            UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirmPassword");
+            String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
+                    : uiInputConfirmPassword.getLocalValue().toString();
 
-        // Let required="true" do its job.
-        if (password.isEmpty() || confirmPassword.isEmpty()) {
-            return;
-        }
-        if (!password.equals(confirmPassword)) {
-            ///send a message
-            FacesMessage msg = new FacesMessage("Password must match confirm password");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            context().addMessage(passwordId, msg);
-            context().renderResponse();
-            message(null,
-                    "PasswordsDoNotMatch",
-                    null);
-        } else {
-            PasswordValidator pv = new PasswordValidator();
-            Boolean is_valid = pv.validate(password);
-            if (!is_valid) {
-                FacesMessage msg = new FacesMessage("Password does not have required values");
+            // Let required="true" do its job.
+            if (password.isEmpty() || confirmPassword.isEmpty()) {
+                return;
+            }
+            if (!password.equals(confirmPassword)) {
+                ///send a message
+                FacesMessage msg = new FacesMessage("Password must match confirm password");
                 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context().addMessage(passwordId, msg);
                 context().renderResponse();
-                message(
-                        null,
-                        "PasswordMustContain",
+                message(null,
+                        "PasswordsDoNotMatch",
                         null);
-
             } else {
+                PasswordValidator pv = new PasswordValidator();
+                Boolean is_valid = pv.validate(password);
+                if (!is_valid) {
+                    FacesMessage msg = new FacesMessage("Password does not have required values");
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    context().addMessage(passwordId, msg);
+                    context().renderResponse();
+                    message(
+                            null,
+                            "PasswordMustContain",
+                            null);
 
-                return;
+                } else {
+
+                    return;
+                }
+
             }
 
         }
-
     }
 
     /**
