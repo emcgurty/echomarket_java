@@ -46,6 +46,9 @@ public class CountriesBean extends AbstractBean implements Serializable {
 
         } finally {
             //session.close();
+            System.out.println("IS TX STILL ACTIVE 49");
+            System.out.println(tx.isActive());
+            System.out.println("IS TX STILL ACTIVE 49 - close");
             session = null;
             tx = null;
         }
@@ -99,8 +102,12 @@ public class CountriesBean extends AbstractBean implements Serializable {
             e.printStackTrace();
         } finally {
             //session.close();
+            System.out.println("IS TX STILL ACTIVE 102");
+            System.out.println(tx.isActive());
+            System.out.println("IS TX STILL ACTIVE 102 - close");
             session = null;
             tx = null;
+            
         }
         return result;
     }
