@@ -19,6 +19,8 @@ import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+//See for https://github.com/lovelle/jquery-chat
+
 @Named
 @ManagedBean(name = "cpb")
 @RequestScoped
@@ -332,6 +334,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             hib = hib_session();
             tx = hib.beginTransaction();
         } catch (Exception ex) {
+            System.out.println("Error at line 335 in getAddress");
+            ex.printStackTrace(); 
         }
 
         String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
