@@ -86,33 +86,55 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         return true;
     }
 
+    public String load_ud(Integer which) {
+
+        ubean.setEditable(which);
+
+        return "user_detail";
+    }
+
     public String getUserDefinedAlternativeEmail(String pid) {
         Session sb;
         Transaction tx;
         sb = null;
         tx = null;
-        sb = hib_session();
-        tx = sb.beginTransaction();
         List result = null;
         String alt_email = null;
+        sb = hib_session();
+        tx = sb.beginTransaction();
+
         try {
-            String query = "FROM Participant WHERE participant_id = :pid ";
+            String query = "FROM Participant WHERE user_id = :pid ";
             result = sb.createQuery(query)
                     .setParameter("pid", pid)
                     .list();
-            Participant part = (Participant) result.get(0);
-            alt_email = part.getEmailAlternative();
+            tx.commit();
+            if (result.size() > 0) {
+                Participant part = (Participant) result.get(0);
+                alt_email = part.getEmailAlternative();
+            }
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Error in getCurrentB");
             e.printStackTrace();
+            System.out.println("IS TX STILL ACTIVE 110");
+            System.out.println(tx.isActive());
+            System.out.println("IS TX STILL ACTIVE 110 - close");
 
         } finally {
+            System.out.println("IS TX STILL ACTIVE 116");
+            System.out.println(tx.isActive());
+            System.out.println("IS TX STILL ACTIVE 116 - close");
             tx = null;
             sb = null;
 
         }
 
-        return alt_email;
+        if (alt_email == null) {
+            return "Not provided";
+        } else {
+            return alt_email;
+        }
     }
 
     public String updateNAE() {
@@ -482,7 +504,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
      * @return the emailAlternative
      */
     public String getEmailAlternative() {
-        return emailAlternative;
+//        if ((emailAlternative != null) || (ubean.getEditable() == 8)) {
+            return emailAlternative;
+//        } else {
+//            return "Not provided";
+//        }
+
     }
 
     /**
@@ -898,7 +925,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
                     .setParameter("bid", ubean.getUserAction())
                     .setParameter("which", which)
                     .list();
-            
+
         } catch (Exception e) {
 
         } finally {
