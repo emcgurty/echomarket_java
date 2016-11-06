@@ -1,8 +1,11 @@
 package echomarket.web.managedbeans;
 
+import echomarket.hibernate.LenderItemConditions;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
@@ -49,13 +52,45 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     }
 
     public String saveLenderItemConditions() {
-        return "index";
+
+        Session sb;
+        Transaction tx;
+        sb = null;
+        tx = null;
+        sb = hib_session();
+        tx = sb.beginTransaction();
+
+        LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getUser_id(), this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
+
+        try {
+            sb.save(lic);
+            tx.commit();
+            message(null, "LenderItemConditionsSaved", null);
+            ubean.setEditable(10);
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in saveLenderItemCon");
+            Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+            message(null, "LenderItemConditionsNotSaved", null);
+            ubean.setEditable(11);
+        } finally {
+            if (sb != null) {
+                sb.close();
+            }
+
+        }
+        sb = null;
+        tx = null;
+
+        ubean.setEditable(8);
+        return "user_detail";
 
     }
 
     /**
      * @return the lender_item_condition_id
      */
+    @Id
     public String getLender_item_condition_id() {
         return lender_item_condition_id;
     }
@@ -257,7 +292,8 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     }
 
     /**
-     * @param presentDuringBorrowingPeriod the presentDuringBorrowingPeriod to set
+     * @param presentDuringBorrowingPeriod the presentDuringBorrowingPeriod to
+     * set
      */
     public void setPresentDuringBorrowingPeriod(Integer presentDuringBorrowingPeriod) {
         this.presentDuringBorrowingPeriod = presentDuringBorrowingPeriod;
