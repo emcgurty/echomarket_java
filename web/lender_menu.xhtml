@@ -9,24 +9,40 @@
 
 
     <ul id="nav"  class="lender_menu">
-        <li class="subs"><a href="#menu_item_1" onclick="showFormContact();">Contact Information</a></li>
-        <li class="subs"><a href="#menu_item_2" onclick="showBorrowersContactPreferences();">Contact Preferences</a></li>
+        <li class="subs">
+              <h:commandLink  action="#{itemBean.load_ud(20)}"  value="Your Lending History"  rendered="#{userBean.editable == -1}" />
+            
+        </li>
+        <li class="subs">
+              <h:commandLink  action="#{itemBean.load_ud(21)}"  value="Offer a New Item "  rendered="#{userBean.editable == -1}" />
+            
+        </li>
         <li class="subs"><a href="#s2">Transfer</a>
             <ul>
-                <li><a href="#menu_item_3" onclick="showLenderToBorrower();">Lender to Borrower</a></li>
-                <li><a href="#menu_item_4" onclick="showBorrowerToLender();">Borrower to Lender</a></li>
+                <li>
+                    <h:commandLink  action="#{itemBean.load_ud(21)}"  value="Offer a New Item "  rendered="#{userBean.editable == -1}" />
+                    <a href="#menu_item_3" onclick="showLenderToBorrower();">Lender to Borrower</a>
+                </li>
+                <li>
+                    <a href="#menu_item_4" onclick="showBorrowerToLender();">Borrower to Lender</a>
+                </li>
             </ul>
         </li>
-        <li class="subs"><a href="#menu_item_5" onclick="showItem();">Item to Lend</a></li>
-
+        
         <li class="subs"><a href="#s2">Lending Terms</a>
             <ul>
-                <li class="subs"><a href="#menu_item_6" onclick="showMonetary();">Monetary</a></li>
-                <li class="subs"><a href="#menu_item_7" onclick="showDuration();">Duration</a></li>
-                <li class="subs"><a href="#menu_item_8" onclick="showConditions();">Conditions</a></li>
+                <li class="subs">
+                    <a href="#menu_item_6" onclick="showMonetary();">Monetary</a>
+                </li>
+                <li class="subs">
+                    <a href="#menu_item_7" onclick="showDuration();">Duration</a>
+                </li>
+                <li class="subs">
+                    <a href="#menu_item_8" onclick="showConditions();">Conditions</a>
+                </li>
             </ul>
         </li>
-        <li class="subs"><a href="#menu_item_9" onclick="showLegal();">Good Faith</a></li>
+        
     </ul>
 
 
