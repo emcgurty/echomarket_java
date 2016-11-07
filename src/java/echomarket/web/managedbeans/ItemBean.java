@@ -49,6 +49,12 @@ public class ItemBean extends AbstractBean implements Serializable {
     private Part imageFileNamePart;
     private Integer editable;
 
+    public String load_ud(Integer which) {
+        ubean.setEditable(which);
+        return "user_detail";
+        
+    }
+        
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
                     new ItemImages(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, "temp", null)
