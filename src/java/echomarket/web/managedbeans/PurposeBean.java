@@ -50,15 +50,17 @@ public class PurposeBean extends AbstractBean implements Serializable {
             session = hib_session();
             tx = session.beginTransaction();
         } catch (Exception ex) {
-        }
+             System.out.println("Error at line 52 in PurposeBeans");
+             ex.printStackTrace();
+        } 
 
         try {
             result = session.createQuery("from Purpose ORDER BY purpose_order").list();
             tx.commit();
-        } catch (Exception e) {
+        } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error at line 57 in PurposeBeans");
-            e.printStackTrace();
+            ex.printStackTrace();
 
         }
 
