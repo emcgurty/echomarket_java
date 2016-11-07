@@ -9,7 +9,7 @@
 
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="#{userBean.username}: USER DETAIL"  />
+                <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
                 <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Save Item Transfer Contact Preferences Update"  rendered="#{userBean.editable == 5}" />
                 <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 4}" />
             </div> 
@@ -200,7 +200,16 @@
                     <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
                         <h:selectOneRadio id="contactByEmail" value="#{cpb.contactByEmail}"  rendered="#{userBean.editable == 5}" >
                             <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
-                            <f:selectItem itemValue="2" itemLabel="Your alternative email. (#{participant.getUserDefinedAlternativeEmail(ubean.getUser_Id())})" />	
+                            <c:set var="udae"  value="#{participant.getUserDefinedAlternativeEmail(userBean.user_id)}" />
+                            <c:choose>
+                                <c:when test="#{udae == null}">
+                                    <c:set var="cbe" value="Not provided"/>
+                                </c:when>
+                                <c:when test="#{udae != null}">
+                                    <c:set var="cbe" value="#{udae}"/>
+                                </c:when>
+                            </c:choose>    
+                            <f:selectItem itemValue="2" itemLabel="Your alternative email. (#{cbe})" />	
                             <f:selectItem itemValue="1" itemLabel="Either Email." />
                             <f:selectItem itemValue="0" itemLabel="Neither Email." />	
                         </h:selectOneRadio>    
@@ -342,7 +351,7 @@
                         </td>
                         <td>
                             <h:outputLabel value="Your Instagram Account:" for="contactByInstagram" >
-                                <h:inputText id="contactByInstagramo" value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
+                                <h:inputText id="contactByInstagram" value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
                                 <h:outputText value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  />                                
                             </h:outputLabel>
                         </td>
