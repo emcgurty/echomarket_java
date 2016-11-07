@@ -11,7 +11,8 @@
         <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 3}" />    
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="#{userBean.username}: USER DETAIL"  />
+                <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
+                
                 <h:commandLink  action="#{participant.updateNAE()}"  class="right_div" value="Save EchoMarket partipicant information"   rendered="#{userBean.editable == 3}" />
                 <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Edit EchoMarket participant information"   rendered="#{userBean.editable == 2}" />
             </div> 
@@ -32,7 +33,7 @@
 
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                     <div style="float:left;margin-left:25px">
-                        <h:inputHidden value="#{participant.participantId}" id="participantId"/>
+                        
                         <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
                             <br />
                             <h:selectOneMenu id="contactDescribeId" value="#{participant.contactDescribeId}" rendered="#{userBean.editable == 3}" >
@@ -184,7 +185,7 @@
 
                     <div id="emailAlternativeRO" style="margin: 10px;float:left;"  >
                         <h:outputLabel value="Your alternative email address:"  for="emailAlternativeRO" rendered="#{userBean.editable == 2}">
-                            <h:outputText  value="#{participant.emailAlternative}"  style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
+                            <h:outputText  id="emailAlternativeRO" value="#{participant.emailAlternative}"  style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                     </div>
 
