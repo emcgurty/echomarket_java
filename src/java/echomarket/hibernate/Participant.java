@@ -55,11 +55,11 @@ public class Participant implements java.io.Serializable {
         this.approved = 1;
     }
     // Update 
-    public Participant(String participantId, String communityId, int contactDescribeId, String organizationName, int displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, int displayName, int displayAddress, String homePhone, String cellPhone, 
+    public Participant(String participantId, String userId, int contactDescribeId, String organizationName, int displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, int displayName, int displayAddress, String homePhone, String cellPhone, 
             String alternativePhone, String emailAlternative, Integer displayHomePhone, Integer displayCellPhone, Integer displayAlternativePhone, Integer displayAlternativeAddress, String remoteIp) {
         this.participantId = participantId;
         this.userId = userId;
-        this.communityId = communityId;
+        this.communityId = null;
         this.contactDescribeId = contactDescribeId;
         this.organizationName = organizationName;
         this.displayOrganization = displayOrganization;
