@@ -16,10 +16,10 @@
         </li>
 
         <li class="subs" id="tab_item_2" >
-            <h:commandLink  action="#{userBean.load_ud(3)}"  value="Participant Information.."  rendered="#{userBean.editable != -1}" />
+            <h:commandLink  action="#{participant.load_ud(userBean.user_id)}"  value="Participant Information.."  rendered="#{userBean.editable != -1}" />
         </li>
         <li class="subs" id="tab_item_3" >
-            <h:commandLink  action="#{participant.load_ud(5)}"  value="Item Transfer Contact Preferences"  rendered="#{userBean.editable != -1}" />
+            <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.user_id)}"  value="Item Transfer Contact Preferences"  rendered="#{userBean.editable != -1}" />
         </li>
         <li class="subs" id="tab_item_4" >
             <h:commandLink  action="#{userBean.load_ud(11)}"  value="Lender Conditions"  rendered="#{userBean.editable != -1}" />
