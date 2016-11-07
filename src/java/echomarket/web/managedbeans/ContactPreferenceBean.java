@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.persistence.Id;
@@ -20,10 +20,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 //See for https://github.com/lovelle/jquery-chat
-
 @Named
 @ManagedBean(name = "cpb")
-@RequestScoped
+@SessionScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
     public static ArrayList<Addresses> getParticpant_alternative() {
@@ -335,7 +334,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             tx = hib.beginTransaction();
         } catch (Exception ex) {
             System.out.println("Error at line 335 in getAddress");
-            ex.printStackTrace(); 
+            ex.printStackTrace();
         }
 
         String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
@@ -363,6 +362,57 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             return result;
         }
 
+    }
+
+    public String load_ud(String uid) {
+
+        List partlist = null;
+        partlist = getCurrentCP(uid);
+        if (partlist.size() > 0) {
+            ContactPreference pp = (ContactPreference) partlist.get(0);
+            this.participantId = pp.getParticipantId();
+            this.useWhichContactAddress = pp.getUseWhichContactAddress();
+            this.contactByChat = pp.getContactByChat();
+            this.contactByEmail = pp.getContactByEmail();
+            this.contactByHomePhone = pp.getContactByHomePhone();
+            this.contactByCellPhone = pp.getContactByCellPhone();
+            this.contactByAlternativePhone = pp.getContactByAlternativePhone();
+            this.contactByFacebook = pp.getContactByFacebook();
+            this.contactByTwitter = pp.getContactByTwitter();
+            this.contactByInstagram = pp.getContactByInstagram();
+            this.contactByLinkedIn = pp.getContactByLinkedIn();
+            this.contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
+            this.contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
+        }
+        ubean.setEditable(5);
+        partlist = null;
+        
+        return "user_detail";
+    }
+
+    public List getCurrentCP(String uid) {
+
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String query = null;
+        try {
+            query = "FROM ContactPreference WHERE participant_id = :uid";
+            result = session.createQuery(query)
+                    .setParameter("uid", uid)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            System.out.println("Error in getCurrentCP");
+            e.printStackTrace();
+            tx.rollback();
+            return null;
+        } finally {
+            tx = null;
+            session = null;
+
+        }
+        return result;
     }
 
 }
