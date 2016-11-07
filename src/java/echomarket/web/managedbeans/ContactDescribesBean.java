@@ -61,7 +61,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
             returnCD = "Contact Description not found";
         }
 
-         result = null;
+        result = null;
         return returnCD;
     }
 
@@ -81,17 +81,18 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     private List cd_list(String purpose) {
 
         List result = null;
-        Session session;
-        Transaction tx;
-        session = null;
-        tx = null;
-
+        Session session = null;
+        Transaction tx = null;
+        
         try {
             session = hib_session();
             tx = session.beginTransaction();
         } catch (Exception ex) {
+            tx.rollback();
             System.out.println("Error at line 87 in CDBeans");
             ex.printStackTrace();
+        } finally {
+            
         }
 
         try {
