@@ -24,6 +24,7 @@
 
             <ui:include rendered="true" src="user_detail_menu.xhtml" id="UserDetailMenu" /> 
             <h:inputHidden id="editable" value="#{userBean.editable}" />
+            <h:outputText value="#{userBean.editable}" />
             <div class="message.color">
                 <h:messages showSummary="true" 
                             showDetail="false"
@@ -45,6 +46,17 @@
                     </c:when>
                     <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
                         <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
+                    </c:when>     
+                    <c:when test="#{(userBean.editable == 6) or (userBean.editable == 7) }">
+                        <ui:include src="history.xhtml" id="history" />
+                    </c:when>     
+                    <c:when test="#{(userBean.editable == 8) or (userBean.editable == 9) }">
+<!--                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> -->
+                        <ui:include src="lender_transfer.xhtml" id="lender_transfer" />
+                    </c:when>     
+                    <c:when test="#{(userBean.editable == 10) or (userBean.editable == 11) }">
+<!--                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> -->
+                        <ui:include src="lender_conditions.xhtml" id="lender_conditions" />
                     </c:when>     
                     <c:otherwise>
                         <ui:include  src="user_detail.xhtml" id="ud"  /> 
