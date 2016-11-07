@@ -25,6 +25,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -34,6 +35,10 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class UserBean extends AbstractBean implements Serializable {
 
+    @Inject
+    ContactPreferenceBean cpbean;
+    @Inject
+    ParticipantBean pbean;
     private String user_id;
     private String username;
     private String userAlias;
@@ -163,15 +168,14 @@ public class UserBean extends AbstractBean implements Serializable {
 
         if (savedRecord == true) {
 
-            hib = hib_session();
-            tx = hib.beginTransaction();
-
             if (this.communityName != null) {
-                comm = new Communities(current_user_id, this.communityName, 0, "NA", "?", "NA", "NA", "NA", "NA", "NA", "NA", "99", "99", "NA", "NA", this.email, 1, "NA", "NA");
-                hib.save(comm);
+                hib = hib_session();
+                tx = hib.beginTransaction();
                 //participant = new Participant(getId(), current_user_id, -9, 0, "NA", "NA", "NA", 0, 0, 0, 1);
                 //hib.save(participant);
                 try {
+                    comm = new Communities(current_user_id, this.communityName, 0, "NA", "?", "NA", "NA", "NA", "NA", "NA", "NA", "99", "99", "NA", "NA", this.email, 1, "NA", "NA");
+                    hib.save(comm);
                     tx.commit();
                     Boolean txw = tx.wasCommitted();
                     savedRecord = true;
@@ -386,9 +390,18 @@ public class UserBean extends AbstractBean implements Serializable {
                 String un = part.getFirstName();
                 if ((act_results == false) && (gw == 1) && (i18 == 1) && (un == null)) {
                     this.editable = 3;
-                    return_string = "user_detail";
+                    return pbean.load_ud(this.user_id);
                 } else if ((act_results == true) && (gw != 1) && (i18 != 1) && (un != null)) {
                     return_string = "index";
+                } else if ((act_results == false) && (gw == 1) && (i18 == 1) && (un != null)) {
+                    List hasCompleteCP = completeContactPreferences(this.user_id);
+                    hs = hasCompleteCP.size();
+                    if (hs == 0) {
+                    this.editable = 5;
+                    return cpbean.load_ud(this.user_id);
+                    }
+                        
+                    
                 }
             } else {
                 return_string = "index";
@@ -640,57 +653,60 @@ public class UserBean extends AbstractBean implements Serializable {
 
         // get password
         UIInput uiInputPassword = (UIInput) components.findComponent("password");
-        if (uiInputPassword != null) {
-            String password = uiInputPassword.getLocalValue() == null ? "": uiInputPassword.getLocalValue().toString();
-            String passwordId = uiInputPassword.getClientId();
 
-            // get confirm password
-            UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirmPassword");
-            String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
-                    : uiInputConfirmPassword.getLocalValue().toString();
+        String password = uiInputPassword.getLocalValue() == null ? "" : uiInputPassword.getLocalValue().toString();
+        String passwordId = uiInputPassword.getClientId();
 
-            // Let required="true" do its job.
-            if (password.isEmpty() || confirmPassword.isEmpty()) {
-                return;
-            }
-            if (!password.equals(confirmPassword)) {
-                ///send a message
-                FacesMessage msg = new FacesMessage("Password must match confirm password");
+        // get confirm password
+        UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirmPassword");
+        String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
+                : uiInputConfirmPassword.getLocalValue().toString();
+
+        // Let required="true" do its job.
+        if (password.isEmpty() || confirmPassword.isEmpty()) {
+            return;
+        }
+        if (!password.equals(confirmPassword)) {
+            ///send a message
+            FacesMessage msg = new FacesMessage("Password must match confirm password");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            context().addMessage(passwordId, msg);
+            context().renderResponse();
+            message(null,
+                    "PasswordsDoNotMatch",
+                    null);
+        } else {
+            PasswordValidator pv = new PasswordValidator();
+            Boolean is_valid = pv.validate(password);
+            if (!is_valid) {
+                FacesMessage msg = new FacesMessage("Password does not have required values");
                 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context().addMessage(passwordId, msg);
                 context().renderResponse();
-                message(null,
-                        "PasswordsDoNotMatch",
+                message(
+                        null,
+                        "PasswordMustContain",
                         null);
+
             } else {
-                PasswordValidator pv = new PasswordValidator();
-                Boolean is_valid = pv.validate(password);
-                if (!is_valid) {
-                    FacesMessage msg = new FacesMessage("Password does not have required values");
-                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                    context().addMessage(passwordId, msg);
-                    context().renderResponse();
-                    message(
-                            null,
-                            "PasswordMustContain",
-                            null);
 
-                } else {
-
-                    return;
-                }
-
+                return;
             }
 
         }
+
     }
 
     /**
      * @return the userTypeArray
      */
     public List<String> getUserTypeArray() {
-        ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(";")));
-        return uta;
+        if (this.userType != null) {
+            ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(";")));
+            return uta;
+        } else {
+            return userTypeArray;
+        }
     }
 
     /**
@@ -857,18 +873,51 @@ public class UserBean extends AbstractBean implements Serializable {
 
     private List completeParticipantRecord(String user_id) {
 
+        List results = null;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
-        List results = hib.createQuery("from Participant WHERE user_id = :uid")
-                .setParameter("uid", user_id)
-                .list();
-        tx.commit();
-        tx = null;
-        hib = null;
+
+        try {
+            results = hib.createQuery("from Participant WHERE user_id = :uid")
+                    .setParameter("uid", user_id)
+                    .list();
+            tx.commit();
+        } catch (Exception ex) {
+            tx.rollback();
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error on completeParticipantRecord");
+            return null;
+        } finally {
+            tx = null;
+            hib = null;
+        }
         return results;
 
     }
 
+       private List completeContactPreferences(String user_id) {
+
+        List results = null;
+        Session hib = hib_session();
+        Transaction tx = hib.beginTransaction();
+
+        try {
+            results = hib.createQuery("from ContactPreference WHERE participant_id = :uid")
+                    .setParameter("uid", user_id)
+                    .list();
+            tx.commit();
+        } catch (Exception ex) {
+            tx.rollback();
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error on completeParticipantRecord");
+            return null;
+        } finally {
+            tx = null;
+            hib = null;
+        }
+        return results;
+
+    }
     /**
      * @return the editable
      */
@@ -994,27 +1043,25 @@ public class UserBean extends AbstractBean implements Serializable {
 
         Session hib = null;
         Transaction tx = null;
+        List results = null;
+        Map a_array = null;
         try {
             hib = hib_session();
             tx = hib.beginTransaction();
         } catch (Exception ex) {
+            System.out.println("Error in SendActivationEmail, line 1003");
+            ex.printStackTrace();
         }
 
-        List results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
-        tx.commit();
-        Map a_array = (Map) results.get(0);
-
         try {
-//            tx.commit();
+            results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
+            tx.commit();
+            a_array = (Map) results.get(0);
         } catch (Exception ex) {
-            //          tx.rollback();
-            Logger.getLogger(UserBean.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error on Register User");
+            tx.rollback();
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error on SendEmail, line ");
         } finally {
-            if (hib != null) {
-                hib.close();
-            }
             tx = null;
             hib = null;
 
