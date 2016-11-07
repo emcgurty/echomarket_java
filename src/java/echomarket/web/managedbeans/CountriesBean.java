@@ -29,6 +29,10 @@ public class CountriesBean extends AbstractBean implements Serializable {
             session = hib_session();
             tx = session.beginTransaction();
         } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("IS TX STILL ACTIVE 33 - close");
+            session = null;
+            tx = null;
             message(
                     null,
                     "ApplicationError",
@@ -41,6 +45,7 @@ public class CountriesBean extends AbstractBean implements Serializable {
                     .list();
             tx.commit();
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Error at line 28 in Country Bean");
             e.printStackTrace();
 
