@@ -26,6 +26,8 @@ public class Participant implements java.io.Serializable {
     private String alternativePhone;
     private String emailAlternative;
     private Integer displayHomePhone;
+    private int questionAltEmail;
+    private int questionAltAddress;
     private Integer displayCellPhone;
     private Integer displayAlternativePhone;
     private Integer displayAlternativeAddress;
@@ -328,6 +330,34 @@ public class Participant implements java.io.Serializable {
 
     public void setApproved(int approved) {
         this.approved = approved;
+    }
+
+    /**
+     * @return the questionAltEmail
+     */
+    public int getQuestionAltEmail() {
+        return questionAltEmail;
+    }
+
+    /**
+     * @param questionAltEmail the questionAltEmail to set
+     */
+    public void setQuestionAltEmail(int questionAltEmail) {
+        this.questionAltEmail = questionAltEmail;
+    }
+
+    /**
+     * @return the questionAltAddress
+     */
+    public int getQuestionAltAddress() {
+        return questionAltAddress;
+    }
+
+    /**
+     * @param questionAltAddress the questionAltAddress to set
+     */
+    public void setQuestionAltAddress(int questionAltAddress) {
+        this.questionAltAddress = questionAltAddress;
     }
 
 }
