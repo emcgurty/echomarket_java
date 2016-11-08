@@ -9,13 +9,13 @@
         
     <div class="top" >
         <div style="margin:10px;margin-top:25px;" >
-            <h:outputText value="#{userBean.username}: USER DETAIL"  />
+            <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
             <h:commandLink  action="#{userBean.updateUserLogin()}"  class="right_div" value="Save Login Update"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{userBean.editUserLogin()}"  class="right_div" value="Edit Login Information"  rendered="#{userBean.editable == 0}" />
         </div> 
         <div style="margin:10px;" >
             <h:outputText value="Login Information..." />
-            <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Continue to 'Name, Address, Email..'"  />
+            <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" />
             <h:inputHidden id="roleId"  value="#{userBean.roleId}" />                  
         </div>
     </div> 
@@ -60,7 +60,7 @@
                 </tr>
                 <tr >
                     <td style="width:50%;padding-bottom: 15px;">
-                        <f:event listener="#{userBean.validatePassword}" type="postValidate" />
+                        <f:event listener="#{userBean.validatePassword}" type="postValidate"  rendered="#{userBean.editable == 1}"/>
                         <h:outputLabel for="password" value="#{bundle.password}" >       
                             <h:inputSecret id="password"
                                            size="16"
