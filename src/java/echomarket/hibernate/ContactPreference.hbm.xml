@@ -15,8 +15,9 @@
             <column name="item_id" length="40" />
         </property>
         <property name="useWhichContactAddress" type="int">
-            <column name="use_which_contact_address" not-null="true" />
+            <column name="use_which_contact_address"  />
         </property>
+               
         <property name="contactByChat" type="string">
             <column name="contact_by_chat" length="3" />
         </property>
