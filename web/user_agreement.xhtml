@@ -3,13 +3,14 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    >
 
     <div id="form_legal" class="contact_information" >
 
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="#{userBean.username}: USER DETAIL"  />
+                <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
                 <h:commandLink  action="#{participant.userAgreement()}"  class="right_div" value="I agree..."  rendered="#{userBean.editable == -1}" />
             </div> 
             <div style="margin:10px;" >
@@ -18,31 +19,14 @@
             </div>
         </div> 
 
-
-        <div style="margin-left:25px;margin-top:5px;float:left;">
-            <p >
-                Echo Market is offered as a facilitating service to introduce borrowers to lenders and vice versa.
-            </p>
-
-            <p >
-                Once a borrower or lender has been introduced, EchoMarket will play no mediating role in that event.
-            </p>
-
-            <p >
-                In the aftermath of that event, EchoMarket will offer a 'Satisfaction Survey' to both the borrower and the lender.
-                If satisfaction is found poor, EchoMarket will then seek more information to determine the continuance of either the borrower or lender participation.
-            </p>
-
-            <p >
-                Otherwise, thanks for seeking to borrow with EchoMarket.  All the Very Best!
-            </p>
-        </div>
+        <ui:include rendered="true" src="agreement_text.xhtml" id="agreementText" />
 
         <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
             <ul >
                 <li style="margin:5px;">
                     <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill"  ><span class="required_fields">*</span>
-                        <h:selectOneRadio id="goodwill"  value="#{participant.goodwill}" >
+                        <h:outputText value="#{participant.goodwill}" />
+                        <h:selectOneRadio id="goodwill"  value="#{participantBean.goodwill}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />	
                         </h:selectOneRadio>    
@@ -51,7 +35,7 @@
                 </li>
                 <li style="margin:5px;">
                     <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore"  ><span class="required_fields">*</span>
-                        <h:selectOneRadio  id="age18OrMore" value="#{participant.age18OrMore}" >
+                        <h:selectOneRadio  id="age18OrMore" value="#{participantBean.age18OrMore}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />	
                         </h:selectOneRadio>    
@@ -63,6 +47,6 @@
 
 
     </div>
-    
-    
+
+
 </ui:composition>
