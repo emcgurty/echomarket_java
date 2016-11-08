@@ -4,7 +4,6 @@ $(document).ready(function () {
 
     $('input').on('change', function () {
         checkLegal();
-
     });
 
 });
@@ -18,8 +17,9 @@ function checkLegal() {
         for (var i = 0; i < legal_check.length; i++) {
             var id = legal_check[i].id;
             if (id.includes('age18OrMore')) {
-                if (legal_check[i].value == 1) {
-                    if (legal_check[i].checked == false) {
+              
+                if (legal_check[i].value == 0) {
+                    if (legal_check[i].checked == true) {
                         $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
                         $("span#age18OrMore_span.error-message").css("visibility", "visible");
                     } else {
@@ -30,8 +30,9 @@ function checkLegal() {
                 }
                 foundValue++;
             } else if (id.includes('goodwill')) {
-                if (legal_check[i].value == 1) {
-                    if (legal_check[i].checked == false) {
+              
+                if (legal_check[i].value == 0) {
+                    if (legal_check[i].checked == true) {
                         $("span#goodwill_span.error-message").text("You must be acting in goodwill.");
                         $("span#goodwill_span.error-message").css("visibility", "visible");
                     } else {
@@ -42,6 +43,7 @@ function checkLegal() {
                 }
                 foundValue++;
             } else if (id.includes('questionAltEmail')) {
+
                 if (legal_check[i].value == 1) {
                     if (legal_check[i].checked == false) {
                         $("div#emailAlternative").css("display", "none");
@@ -50,7 +52,7 @@ function checkLegal() {
                         getValue = true;
                     }
                 }
-                foundValue++;
+                foundValue++;                
             } else if (id.includes('questionAltAddress')) {
                 if (legal_check[i].value == 1) {
                     if (legal_check[i].checked == false) {
@@ -61,7 +63,7 @@ function checkLegal() {
                     }
                 }
                 foundValue++;
-
+            
             } else if (foundValue == 3) {
                 break;
             }
