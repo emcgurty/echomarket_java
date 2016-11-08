@@ -371,37 +371,35 @@ public class UserBean extends AbstractBean implements Serializable {
                 setIsCommunity(1);
             }
 
-            //setSessionVariables();
-            message(
-                    null,
-                    "LogInSuccessful",
-                    new Object[]{this.username});
+            if (act_results == true) {
+                message(null, "ActivateSuccessful", new Object[]{});
+            } else {
+                message(null, "LogInSuccessful", new Object[]{this.username});
+            }
 
             List hasComplete = completeParticipantRecord(this.user_id);
             Integer hs = hasComplete.size();
-            if ((act_results == false) && (hs == 0)) {
+            if ((hs == 0)) {
                 this.editable = -1;
                 return_string = "user_detail";
-
             } else if ((act_results == false) && (hs > 0)) {
                 Participant part = (Participant) hasComplete.get(0);
                 Integer gw = part.getGoodwill();
                 Integer i18 = part.getAge18OrMore();
                 String un = part.getFirstName();
-                if ((act_results == false) && (gw == 1) && (i18 == 1) && (un == null)) {
+                if ((act_results == false) && (gw == 1) && (i18 == 1) && (un == null) && (userAction != "agreement")) {
                     this.editable = 3;
                     return pbean.load_ud(this.user_id);
-                } else if ((act_results == true) && (gw != 1) && (i18 != 1) && (un != null)) {
-                    return_string = "index";
-                } else if ((act_results == false) && (gw == 1) && (i18 == 1) && (un != null)) {
+                } else if ((act_results == false) && (gw == 1) && (i18 == 1) && (un != null) && (userAction != "agreement")) {
                     List hasCompleteCP = completeContactPreferences(this.user_id);
                     hs = hasCompleteCP.size();
                     if (hs == 0) {
-                    this.editable = 5;
-                    return cpbean.load_ud(this.user_id);
+                        this.editable = 5;
+                        return cpbean.load_ud(this.user_id);
                     }
-                        
+                } else if ((act_results == false) && (gw == 1) && (i18 == 1) && (un != null) && (userAction == "agreement")) {
                     
+                    return pbean.load_ud(this.user_id);
                 }
             } else {
                 return_string = "index";
@@ -457,10 +455,10 @@ public class UserBean extends AbstractBean implements Serializable {
             session = null;
             tx = null;
             uu = null;
-            message(
-                    null,
-                    "ActivateSuccessful",
-                    new Object[]{});
+//            message(
+//                    null,
+//                    "ActivateSuccessful",
+//                    new Object[]{});
             return true;
         } else {
             return false;
@@ -895,7 +893,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
     }
 
-       private List completeContactPreferences(String user_id) {
+    private List completeContactPreferences(String user_id) {
 
         List results = null;
         Session hib = hib_session();
@@ -918,6 +916,7 @@ public class UserBean extends AbstractBean implements Serializable {
         return results;
 
     }
+
     /**
      * @return the editable
      */
@@ -983,15 +982,17 @@ public class UserBean extends AbstractBean implements Serializable {
     public String load_ud(Integer which) {
 
         this.editable = which;
-
-        return "user_detail.xhtml?faces-redirect=true";
-
+        if (user_id == null) {
+            this.userAction = "agreement";
+            message(null, "LoginInRequiredToReviseAgreement", null);
+            return "index";
+        } else {
+            return "user_detail.xhtml?faces-redirect=true";
+        }
     }
 
     public void editUserLogin() {
-
         this.editable = 1;
-
     }
 
     public void updateNAE() {
