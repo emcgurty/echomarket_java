@@ -56,6 +56,14 @@
         <property name="emailAlternative" type="string">
             <column name="email_alternative" length="50" />
         </property>
+        
+        <property name="questionAltEmail" type="int">
+            <column name="question_alt_email"  />
+        </property>
+        
+        <property name="questionAltAddress" type="int">
+            <column name="question_alt_address"  />
+        </property>
         <property name="displayHomePhone" type="java.lang.Integer">
             <column name="display_home_phone" />
         </property>
