@@ -396,11 +396,10 @@ public class UserBean extends AbstractBean implements Serializable {
                     if (hs == 0) {
                         this.editable = 5;
                         return cpbean.load_ud(this.user_id);
-                    }
+                    } else {this.editable = 9;return_string = "user_detail";}
                 } else if ((act_results == false) && (gw == 1) && (i18 == 1) && (un != null) && (userAction == "agreement")) {
-                    
                     return pbean.load_ud(this.user_id);
-                }
+                } 
             } else {
                 return_string = "index";
 
