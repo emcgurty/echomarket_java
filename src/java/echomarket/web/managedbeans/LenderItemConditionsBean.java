@@ -51,7 +51,12 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     public LenderItemConditionsBean() {
     }
 
-    public String saveLenderItemConditions() {
+    public String load_ud(String uid) {
+
+        return "noneDone";
+    }
+
+    public String updateLIC() {
 
         Session sb;
         Transaction tx;
@@ -60,6 +65,8 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         sb = hib_session();
         tx = sb.beginTransaction();
 
+        // THis needs to be rewritten
+        
         LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getUser_id(), this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
 
         try {
@@ -70,7 +77,9 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in saveLenderItemCon");
-            Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(LenderItemConditionsBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
             message(null, "LenderItemConditionsNotSaved", null);
             ubean.setEditable(11);
         } finally {
