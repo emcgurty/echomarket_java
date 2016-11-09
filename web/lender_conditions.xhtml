@@ -5,7 +5,7 @@
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
     >
-    <h:inputHidden id="approved" value="0"   />
+    
 
     <div id="lender_registration" class="lender_registration" >
 
@@ -13,7 +13,8 @@
             <div class="top" >
                 <div style="margin:10px;margin-top:25px;" >
                     <h:outputText value="#{userBean.userAlias}: LENDER ITEM CONDITIONS"  />
-                    <h:commandLink  action="#{lenderItemConditionsBean.saveLenderItemConditions()}"  class="right_div" value="Save Lender Conditions"  />
+                    <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="Save Item Condition Update"  rendered="#{userBean.editable == 11}" />
+                    <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.user_id)}"  class="right_div" value="Edit Item Coonditions"  rendered="#{userBean.editable == 10}" />
                 </div> 
             </div>
             <div  class="div_p" id="menu_item_6" >
@@ -84,7 +85,7 @@
                     <td>
                         <div style="margin-top:5px;margin-left:25px;">
                             <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
-                                <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" />
+                                <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" rendered="#{userBean.editable == 11}"  />
                                 <c:if test="#{userBean.editable == 10}" >
                                     <h:outputText id="smallFeeAmountString"   value="#{lenderItemConditionsBean.smallFeeAmount}" class="RO_text" />
                                 </c:if> 
@@ -121,7 +122,10 @@
                     <td>
                         <div style="margin-top:5px;margin-left:25px;">
                             <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
-                                <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}" />
+                                <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}"  rendered="#{userBean.editable == 11}" />
+                                <c:if test="#{userBean.editable == 10}" >
+                                    <h:outputText id="availableForPurchaseAmountString"   value="#{lenderItemConditionsBean.availableForPurchaseAmount}" class="RO_text" />
+                                </c:if> 
                             </h:outputLabel>
 
                         </div>
@@ -210,7 +214,7 @@
                     <td>
                         <div style="margin-top:5px;margin-left:25px;">
                             <h:outputLabel for="tradeItem" value="If yes, what would you like in exchange?" >
-                                <h:inputText id="tradeItem" value="#{lenderItemConditionsBean.tradeItem}"  />
+                                <h:inputText id="tradeItem" value="#{lenderItemConditionsBean.tradeItem}"  rendered="#{userBean.editable == 11}" />
                                 <c:if test="#{userBean.editable == 10}" >
                                     <h:outputText id="tradeItemString"   value="#{lenderItemConditionsBean.tradeItem}" class="RO_text" />
                                 </c:if> 
@@ -247,7 +251,7 @@
                     <td>
                         <div style="margin-top:5px;margin-left:25px;">
                             <h:outputLabel for="securityDepositAmount" value="If yes, please provide the security deposit amount:" >
-                                <h:inputText id="securityDepositAmount" value="#{lenderItemConditionsBean.securityDepositAmount}" />
+                                <h:inputText id="securityDepositAmount" value="#{lenderItemConditionsBean.securityDepositAmount}"  rendered="#{userBean.editable == 11}" />
                                 <span class="security_deposit_amount_error"></span>
                                 <c:if test="#{userBean.editable == 10}" >
                                     <h:outputText id="securityDepositAmountString"   value="#{lenderItemConditionsBean.securityDepositAmount}" class="RO_text" />
@@ -473,7 +477,7 @@
                     <td style="vertical-align:top;">
                         <div style="margin-left:15px;margin-top:5px;">
                             <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
-                                <h:inputTextarea id="specificConditions"  value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" />
+                                <h:inputTextarea id="specificConditions"  value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" rendered="#{userBean.editable == 11}" />
                                 <c:if test="#{userBean.editable == 10}" >
                                     <h:outputText id="specificConditionsString"   value="#{lenderItemConditionsBean.specificConditions}" class="RO_text" />
                                 </c:if> 
