@@ -8,11 +8,11 @@
 
     <div id="form_lender_to_borrower" class="contact_information" >
 
-
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: LENDER ITEM TRANSFER PREFERENCES"  />
-                <h:commandLink  action="#{lenderTransferBean.saveLenderTransfer()}"  class="right_div" value="Save Lender Transfer Preference"  />
+                <h:commandLink  action="#{lenderTransferBean.saveLenderTransfer()}"  class="right_div" value="Save Lender Transfer Preference"  rendered="#{userBean.editable == 9}"/>
+                <h:commandLink  action="#{lenderTransferBean.saveLenderTransfer()}"  class="right_div" value="Save Lender Transfer Preference"  rendered="#{userBean.editable == 10}"/>
             </div> 
         </div>
 
