@@ -320,8 +320,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
                 System.out.println("Error in Save Contact Preferences");
                 Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
-               // sb = null;
-              //  tx = null;
+                // sb = null;
+                //  tx = null;
             }
 
         } else {
@@ -343,12 +343,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             part.setContactByOtherSocialMediaAccess(contactByOtherSocialMediaAccess);
             part.setDateUpdated(new Date());
 
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
+            sb = hib_session();
+            tx = sb.beginTransaction();
+            
             try {
                 sb.update(part);
                 tx.commit();
@@ -374,19 +371,25 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             try {
                 sb.update((Addresses) particpant_alternative.get(0));
                 tx.commit();
-            } catch(Exception ex) {
+                successTransaction = true;
+            } catch (Exception ex) {
                 tx.rollback();
                 System.out.println("Error in Update Contact Preferences Asdress");
                 Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
+                successTransaction = false;
             } finally {
                 sb = null;
                 tx = null;
                 cp_list = null;
             }
 
-
         }
-        ubean.setEditable(4);
+        if (successTransaction = true) {
+            ubean.setEditable(4);
+        } else {
+            message(null, "UpdateOrSaveOfCPNotSuccessful", null);
+            ubean.setEditable(5);
+        }
         return "user_detail";
     }
 
@@ -453,6 +456,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             this.contactByLinkedIn = pp.getContactByLinkedIn();
             this.contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
             this.contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
+            //this.setParticpant_alternative((List)getAddress().get(0));
+            
         }
         ubean.setEditable(5);
         partlist = null;
