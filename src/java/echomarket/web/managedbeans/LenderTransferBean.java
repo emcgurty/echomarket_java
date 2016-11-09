@@ -46,14 +46,19 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     public LenderTransferBean() {
     }
 
-    public String saveLenderTransfer() {
+    public String load_ud(String uid) {
+
+        return "notdone";
+    }
+
+    public String updateLIT() {
         Session sb;
         Transaction tx;
         sb = null;
         tx = null;
         sb = hib_session();
         tx = sb.beginTransaction();
-
+// This need to be rewritten
         LenderTransfer lt = new LenderTransfer(getId(), "NA", "NA", ubean.getUser_id(), ubean.getUser_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
 
         try {
@@ -71,6 +76,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             if (sb != null) {
                 sb.close();
             }
+            tx = null;
 
         }
         sb = null;
@@ -236,7 +242,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
     }
 
-       /**
+    /**
      * @return the borrowerThirdPartyChoice
      */
     public Integer getBorrowerThirdPartyChoice() {
