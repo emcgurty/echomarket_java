@@ -1,3 +1,9 @@
+.RO_text {
+    margin-left: 5px;
+    color:darkcyan;
+    font-size:14px;
+    
+}
 .div_center {
     position:relative;
     display:inline;
