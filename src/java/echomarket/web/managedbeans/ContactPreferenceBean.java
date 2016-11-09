@@ -369,12 +369,18 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
                 tx = sb.beginTransaction();
             }
             try {
-                sb.update((Addresses) particpant_alternative.get(0));
+                Addresses altadd = (Addresses) particpant_alternative.get(0);
+                String uid = altadd.getParticipantId();
+                if (uid.equals(ubean.getUser_id())) sb.update(altadd);
+                else {
+                    altadd.setParticipantId(ubean.getUser_id());
+                    sb.save(altadd);
+                }
                 tx.commit();
                 successTransaction = true;
             } catch (Exception ex) {
                 tx.rollback();
-                System.out.println("Error in Update Contact Preferences Asdress");
+                System.out.println("Error in Update Contact Preferences Address");
                 Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
                 successTransaction = false;
             } finally {
