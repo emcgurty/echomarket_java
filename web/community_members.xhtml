@@ -21,13 +21,6 @@
 
         <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
 
-        <div class="messagecolor">
-            <h:messages showSummary="true" 
-                        showDetail="false"
-                        errorStyle="color: #d20005" 
-                        infoStyle="color: blue"/>
-        </div>
-
         <div  id="form_community_members">
 
             <h:form id="member_build" >
@@ -92,7 +85,7 @@
                         <h:outputText value="#{creator.email}"  />
 
                     </h:column>
-                    
+
                     <h:column>
                         <f:facet name="header">Is Active?</f:facet>
                         <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{creator.isActive == 1}"/>
@@ -109,7 +102,7 @@
                              headerClass="member-table-header"
                              rowClasses="member-table-odd-row,member-table-even-row"
                              rendered="#{communityMembersBean.editable != 3}"
-                             
+
                              >
                      <f:facet name="header">
                                 <h:outputText value="Community Members" />
@@ -169,7 +162,7 @@
                         </h:selectOneRadio>    
 
                     </h:column>
-                    
+
                     <h:column>
                         <f:facet name="header">Date Created</f:facet>
                         <!--  Eventually want to sort by date created, or toggle between date created, date updated.<h:commandLink value="#{member.dateCreated}" action="" style="color: green; font-weight: lighter;" />-->
