@@ -11,7 +11,7 @@
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-                <h:commandLink  action="#{participant.userAgreement()}"  class="right_div" value="I agree..."  rendered="#{userBean.editable == -1}" />
+                <h:commandLink  action="#{participantBean.userAgreement()}"  class="right_div" value="I agree..."  rendered="#{userBean.editable == -1}" />
             </div> 
             <div style="margin:10px;" >
                 <h:outputText value="EchoMarket Agreement..." />
@@ -25,7 +25,7 @@
             <ul >
                 <li style="margin:5px;">
                     <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill"  ><span class="required_fields">*</span>
-                        <h:outputText value="#{participant.goodwill}" />
+                        <h:outputText value="#{participantBean.goodwill}" />
                         <h:selectOneRadio id="goodwill"  value="#{participantBean.goodwill}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />	

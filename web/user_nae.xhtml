@@ -13,12 +13,12 @@
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
                 
-                <h:commandLink  action="#{participant.updateNAE()}"  class="right_div" value="Save EchoMarket partipicant information"   rendered="#{userBean.editable == 3}" />
+                <h:commandLink  action="#{participantBean.updateNAE()}"  class="right_div" value="Save EchoMarket partipicant information"   rendered="#{userBean.editable == 3}" />
                 <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Edit EchoMarket participant information"   rendered="#{userBean.editable == 2}" />
             </div> 
             <div style="margin:10px;" >
                 <h:outputText value="EchoMarket participant information..." />
-                <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Continue to 'Item Transfer Contact Preferences'"  onclick="showCP();" />
+                <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Continue to 'Item Transfer Contact Preferences'"  />
             </div>
         </div> 
 
@@ -28,19 +28,22 @@
                 <div  class="div_p" >
                     <div style="margin:5px;" >
                         <h:outputText value="Yourself generally, your affiliation" />
+                        <h:outputText value="#{participantBean.age18OrMore}"  />
+                        <h:outputText value="#{participantBean.goodwill}" />
                     </div>
                 </div>
 
-                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                <ui:define name="agreement" >
+                    <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                     <div style="float:left;margin-left:25px">
                         
                         <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
                             <br />
-                            <h:selectOneMenu id="contactDescribeId" value="#{participant.contactDescribeId}" rendered="#{userBean.editable == 3}" >
+                            <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 3}" >
                                 <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
                                                var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
                             </h:selectOneMenu>
-                            <h:outputText value="#{cd.getOneCD(participant.contactDescribeId)}" rendered="#{userBean.editable == 2}" />
+                            <h:outputText value="#{cd.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                         <span class="error-message" id="contactDescribeId" ></span>
                     </div>
@@ -48,20 +51,20 @@
                     <div id="otherDescribeYourselfText"  style="float:left;margin-left:25px;visibility: hidden;">    
                         <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"  style="margin-left:25px">
                             <br />
-                            <h:inputText id="otherDescribeYourself" value="#{participant.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"  rendered="#{userBean.editable == 3}" /> 
-                            <h:outputText value="#{participant.otherDescribeYourself}" rendered="#{userBean.editable == 2}" />
+                            <h:inputText id="otherDescribeYourself" value="#{participantBean.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"  rendered="#{userBean.editable == 3}" /> 
+                            <h:outputText value="#{participantBean.otherDescribeYourself}" rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                         <h:message styleClass="error-message" for="otherDescribeYourself"/>
                         <span class="error-message" id="otherDescribeYourself" ></span>
 
                     </div>
                 </div>
-
+                </ui:define>
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                     <div style="float:left;margin-left:25px">
                         <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" >
-                            <h:inputText  id="organizationName" class="org_name"  value="#{participant.organizationName}"  rendered="#{userBean.editable == 3}" />
-                            <h:outputText value="#{participant.organizationName}" rendered="#{userBean.editable == 2}" />
+                            <h:inputText  id="organizationName" class="org_name"  value="#{participantBean.organizationName}"  rendered="#{userBean.editable == 3}" />
+                            <h:outputText value="#{participantBean.organizationName}" rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                         <span class="error-message" id="organizationName" ></span>
                     </div>
@@ -69,16 +72,16 @@
                     <div style="float:left;margin">
                         <div id="yesNoOrganization" style="display:none;margin-left:15px;">
                             <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayOrganization" >
-                                <h:selectOneRadio id="displayOrganization" value="#{participant.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 3}" >
+                                <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 3}" >
                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                 </h:selectOneRadio>    
                                 <c:if test="#{userBean.editable == 2}" >
                                     <c:choose>
-                                        <c:when test="#{participant.displayOrganization == 0}">
+                                        <c:when test="#{participantBean.displayOrganization == 0}">
                                             <c:set var="yn" value="No"/>
                                         </c:when>
-                                        <c:when test="#{participant.displayOrganization == 1}">
+                                        <c:when test="#{participantBean.displayOrganization == 1}">
                                             <c:set var="yn" value="Yes"/>
                                         </c:when>
                                         <c:otherwise>
@@ -105,23 +108,23 @@
                     <div style="margin-left: 25px;float:left">
                         <h:outputLabel value="First Name:" for="firstName" ><span id="firstName" class="required_fields">*</span>
                             <br />
-                            <h:inputText  id="firstName" value="#{participant.firstName}"  maxlength="24" size="24"  rendered="#{userBean.editable == 3}" />
-                            <h:outputText  value="#{participant.firstName}"  rendered="#{userBean.editable == 2}" />
+                            <h:inputText  id="firstName" value="#{participantBean.firstName}"  maxlength="24" size="24"  rendered="#{userBean.editable == 3}" />
+                            <h:outputText  value="#{participantBean.firstName}"  rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                         <span class="error-message" id="firstName" ></span>
                     </div>
                     <div style="margin-left: 25px;float:left">
                         <h:outputLabel value="Middle Initial:"  for="mi" >
                             <br />
-                            <h:inputText  id="mi" value="#{participant.mi}" maxlength="1" size="1" rendered="#{userBean.editable == 3}" />
-                            <h:outputText  value="#{participant.mi}"  rendered="#{userBean.editable == 2}" />
+                            <h:inputText  id="mi" value="#{participantBean.mi}" maxlength="1" size="1" rendered="#{userBean.editable == 3}" />
+                            <h:outputText  value="#{participantBean.mi}"  rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                     </div>
                     <div style="margin-left: 25px;float:left">
                         <h:outputLabel value="Last Name:"  for="lastName" ><span id="lastName" class="required_fields">*</span>
                             <br />
-                            <h:inputText  id="lastName" value="#{participant.lastName}" maxlength="24" size="24" rendered="#{userBean.editable == 3}" />
-                            <h:outputText  value="#{participant.lastName}"  rendered="#{userBean.editable == 2}" />
+                            <h:inputText  id="lastName" value="#{participantBean.lastName}" maxlength="24" size="24" rendered="#{userBean.editable == 3}" />
+                            <h:outputText  value="#{participantBean.lastName}"  rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                         <span class="error-message" id="lastName" ></span>
                     </div>
@@ -129,16 +132,16 @@
                     <div style="margin-left: 25px;float:left">
 
                         <h:outputLabel value="Allow public to see your Name?"  for="displayName" >
-                            <h:selectOneRadio id="displayName" value="#{participant.displayName}" layout="pageDirection"  rendered="#{userBean.editable == 3}">
+                            <h:selectOneRadio id="displayName" value="#{participantBean.displayName}" layout="pageDirection"  rendered="#{userBean.editable == 3}">
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />	
                             </h:selectOneRadio>    
                             <c:if test="#{userBean.editable == 2}" >
                                 <c:choose>
-                                    <c:when test="#{participant.displayName == 0}">
+                                    <c:when test="#{participantBean.displayName == 0}">
                                         <c:set var="yn" value="No"/>
                                     </c:when>
-                                    <c:when test="#{participant.displayName == 1}">
+                                    <c:when test="#{participantBean.displayName == 1}">
                                         <c:set var="yn" value="Yes"/>
                                     </c:when>
                                     <c:otherwise>
@@ -178,14 +181,14 @@
 
                     <div id="emailAlternative" style="margin-left: 25px;float:left;display:none;"  >
                         <h:outputLabel value="Your alternative email address:"  for="emailAlternative" >
-                            <h:inputText  id="emailAlternative" value="#{participant.emailAlternative}" maxlength="50" size="25" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
+                            <h:inputText  id="emailAlternative" value="#{participantBean.emailAlternative}" maxlength="50" size="25" style="margin-left: 5px;" rendered="#{userBean.editable == 3}" />
                             <span class="error-message" id="emailAlternative" ></span>
                         </h:outputLabel>
                     </div>
 
                     <div id="emailAlternativeRO" style="margin: 10px;float:left;"  >
                         <h:outputLabel value="Your alternative email address:"  for="emailAlternativeRO" rendered="#{userBean.editable == 2}">
-                            <h:outputText  id="emailAlternativeRO" value="#{participant.emailAlternative}"  style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
+                            <h:outputText  id="emailAlternativeRO" value="#{participantBean.emailAlternative}"  style="margin-left: 5px;" rendered="#{userBean.editable == 2}" />
                         </h:outputLabel>
                     </div>
 
@@ -200,7 +203,7 @@
 
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                     <div style="margin-left: 15px;float:left">
-                        <h:dataTable value="#{participant.primary}" id="primary"   var="pa"           >    
+                        <h:dataTable value="#{participantBean.primary}" id="primary"   var="pa"           >    
                             <h:column rowHeader="">
 
                                 <table >
@@ -277,16 +280,16 @@
                                     <tr >
                                         <td colspan="2">
                                             <h:outputLabel value="Allow public to see your Primary Address?"  for="displayAddress" >
-                                                <h:selectOneRadio id="displayAddress" value="#{participant.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 3}">
+                                                <h:selectOneRadio id="displayAddress" value="#{participantBean.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 3}">
                                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
                                                 <c:if test="#{userBean.editable == 2}" >
                                                     <c:choose>
-                                                        <c:when test="#{participant.displayAddress == 0}">
+                                                        <c:when test="#{participantBean.displayAddress == 0}">
                                                             <c:set var="yn" value="No"/>
                                                         </c:when>
-                                                        <c:when test="#{participant.displayAddress == 1}">
+                                                        <c:when test="#{participantBean.displayAddress == 1}">
                                                             <c:set var="yn" value="Yes"/>
                                                         </c:when>
                                                         <c:otherwise>
@@ -321,7 +324,7 @@
                 </div>
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                     <div style="margin-left: 15px;float:left">
-                        <h:dataTable value="#{participant.alternative}" id="alternative"   var="pa"           >    
+                        <h:dataTable value="#{participantBean.alternative}" id="alternative"   var="pa"           >    
                             <h:column rowHeader="">
                                 <table >
                                     <tr>
@@ -401,16 +404,16 @@
                                     <tr >
                                         <td colspan="2">
                                             <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayAlternativeAddress" >
-                                                <h:selectOneRadio id="displayAlternativeAddress" value="#{participant.displayAlternativeAddress}" layout='lineDirection'  rendered="#{userBean.editable == 3}" >
+                                                <h:selectOneRadio id="displayAlternativeAddress" value="#{participantBean.displayAlternativeAddress}" layout='lineDirection'  rendered="#{userBean.editable == 3}" >
                                                     <f:selectItem itemValue="1" itemLabel="Yes" />
                                                     <f:selectItem itemValue="0" itemLabel="No" />	
                                                 </h:selectOneRadio>    
                                                 <c:if test="#{userBean.editable == 2}" >
                                                     <c:choose>
-                                                        <c:when test="#{participant.displayAlternativeAddress == 0}">
+                                                        <c:when test="#{participantBean.displayAlternativeAddress == 0}">
                                                             <c:set var="yn" value="No"/>
                                                         </c:when>
-                                                        <c:when test="#{participant.displayAlternativeAddress == 1}">
+                                                        <c:when test="#{participantBean.displayAlternativeAddress == 1}">
                                                             <c:set var="yn" value="Yes"/>
                                                         </c:when>
                                                         <c:otherwise>
@@ -441,20 +444,20 @@
                             <tr class="odd">
                                 <td style="width:33%;">
                                     <h:outputLabel  for="homePhone"  value="Home Phone:" >
-                                        <h:inputText  id="homePhone"  class="homePhone"   value="#{participant.homePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                        <h:inputText  id="homePhone"  class="homePhone"   value="#{participantBean.homePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
                                     </h:outputLabel>
                                     <div style="float:left" >
                                         <h:outputLabel value="Allow public to see your Home Phone Number?"  for="displayHomePhone" rendered="#{userBean.editable == 3}" >
-                                            <h:selectOneRadio id="displayHomePhone" value="#{participant.displayHomePhone}"  >
+                                            <h:selectOneRadio id="displayHomePhone" value="#{participantBean.displayHomePhone}"  >
                                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                                 <f:selectItem itemValue="0" itemLabel="No" />	
                                             </h:selectOneRadio>   
                                             <c:if test="#{userBean.editable == 2}" >
                                                 <c:choose>
-                                                    <c:when test="#{participant.displayHomePhone == 0}">
+                                                    <c:when test="#{participantBean.displayHomePhone == 0}">
                                                         <c:set var="yn" value="No"/>
                                                     </c:when>
-                                                    <c:when test="#{participant.displayHomePhone == 1}">
+                                                    <c:when test="#{participantBean.displayHomePhone == 1}">
                                                         <c:set var="yn" value="Yes"/>
                                                     </c:when>
                                                     <c:otherwise>
@@ -470,22 +473,22 @@
 
                                 <td style="width:33%;">
                                     <h:outputLabel  for="cellPhone"  value="Cell Phone:" >
-                                        <h:inputText  id="cellPhone"  class="cellPhone" value="#{participant.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
+                                        <h:inputText  id="cellPhone"  class="cellPhone" value="#{participantBean.cellPhone}" style="margin-left:10px" maxlength="20"  size='20' /> 
 
 
                                     </h:outputLabel>
                                     <div style="float:left" >
                                         <h:outputLabel value=".. to see your Cell Phone Number?"  for="displayCellPhone" >
-                                            <h:selectOneRadio id="displayCellPhone" value="#{participant.displayCellPhone}" rendered="#{userBean.editable == 3}" >
+                                            <h:selectOneRadio id="displayCellPhone" value="#{participantBean.displayCellPhone}" rendered="#{userBean.editable == 3}" >
                                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                                 <f:selectItem itemValue="0" itemLabel="No" />	
                                             </h:selectOneRadio>    
                                             <c:if test="#{userBean.editable == 2}" >
                                                 <c:choose>
-                                                    <c:when test="#{participant.displayCellPhone == 0}">
+                                                    <c:when test="#{participantBean.displayCellPhone == 0}">
                                                         <c:set var="yn" value="No"/>
                                                     </c:when>
-                                                    <c:when test="#{participant.displayCellPhone == 1}">
+                                                    <c:when test="#{participantBean.displayCellPhone == 1}">
                                                         <c:set var="yn" value="Yes"/>
                                                     </c:when>
                                                     <c:otherwise>
@@ -500,20 +503,20 @@
                                 </td>
                                 <td style="width:33%;">
                                     <h:outputLabel  for="alternativePhone"  value="Alternative Phone:" >
-                                        <h:inputText  id="alternativePhone"  class="alternativePhone" value="#{participant.alternativePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
+                                        <h:inputText  id="alternativePhone"  class="alternativePhone" value="#{participantBean.alternativePhone}" style="margin-left:10px" maxlength="20"  size='20'/> 
                                     </h:outputLabel>
                                     <div style="float:left" >
                                         <h:outputLabel value="... to see your Alternative Phone Number?"  for="displayAlternativePhone" >
-                                            <h:selectOneRadio id="displayAlternativePhone" value="#{participant.displayAlternativePhone}" rendered="#{userBean.editable == 3}" >
-                                                <f:selectItem itemValue="1" itemLabel="Yes" />
-                                                <f:selectItem itemValue="0" itemLabel="No" />	
+                                            <h:selectOneRadio id="displayAlternativePhone" value="#{participantBean.displayAlternativePhone}" rendered="#{userBean.editable == 3}" >
+                                                <f:selectItem itemValue="1" itemLabel="Yes" rendered="#{userBean.editable == 3}" />
+                                                <f:selectItem itemValue="0" itemLabel="No" rendered="#{userBean.editable == 3}" />	
                                             </h:selectOneRadio>    
                                             <c:if test="#{userBean.editable == 2}" >
                                                 <c:choose>
-                                                    <c:when test="#{participant.displayAlternativePhone == 0}">
+                                                    <c:when test="#{participantBean.displayAlternativePhone == 0}">
                                                         <c:set var="yn" value="No"/>
                                                     </c:when>
-                                                    <c:when test="#{participant.displayAlternativePhone == 1}">
+                                                    <c:when test="#{participantBean.displayAlternativePhone == 1}">
                                                         <c:set var="yn" value="Yes"/>
                                                     </c:when>
                                                     <c:otherwise>

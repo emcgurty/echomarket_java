@@ -11,8 +11,8 @@
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: LENDER ITEM TRANSFER PREFERENCES"  />
-                <h:commandLink  action="#{lenderTransferBean.saveLenderTransfer()}"  class="right_div" value="Save Lender Transfer Preference"  rendered="#{userBean.editable == 9}"/>
-                <h:commandLink  action="#{lenderTransferBean.saveLenderTransfer()}"  class="right_div" value="Save Lender Transfer Preference"  rendered="#{userBean.editable == 10}"/>
+                <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Save Item Transfer Preferences"  rendered="#{userBean.editable == 9}" />
+                <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.user_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="#{userBean.editable == 10}" />
             </div> 
         </div>
 

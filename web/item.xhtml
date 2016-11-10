@@ -1,0 +1,200 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    >
+    <div id="form_item" class="contact_information" >
+
+               
+        <div class="top" >
+            <div style="margin:10px;margin-top:25px;" >
+                <h:outputText value="#{userBean.username}: NEW ITEM"  />
+                <h:commandLink  action="#{itemBean.updateItem()}"  class="right_div" value="Save Item Condition Update"  rendered="#{userBean.editable == 13}" />
+                <h:commandLink  action="#{itemBean.load_ud(userBean.user_id)}"  class="right_div" value="Edit Item Coonditions"  rendered="#{userBean.editable == 12}" />
+
+            </div> 
+        </div> 
+
+        <div  class="div_p" id="menu_item_3" >
+            <div style="margin:10px;" >
+                <h:outputText value="The Item you would like to borrow" />
+            </div>
+        </div>
+
+        <div  class="div_p"  >
+            <div style="margin:10px;" >
+                <h:outputText value="Item Detail..." />
+            </div>
+        </div>
+
+        <table >
+            <tr class="odd">
+                <td style="width:50%;">
+                    <div style="margin-left:25px;margin-top:5px;">
+                        <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
+                            <h:selectOneMenu id="categoryId" value="#{itemBean.categoryId}"  style="margin-left:10px"  class="items select" rendered="#{userBean.editable == 13}">
+                                <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
+                                               itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
+                                </f:selectItems>
+                            </h:selectOneMenu>
+                            <h:outputText  id="categoryIdString" value="#{cats.getCategoryName(itemBean.categoryId)}" rendered="#{userBean.editable == 12}"/>
+                        </h:outputLabel>  
+                        <br /><span class="error-message" id="categoryId" ></span>
+                    </div>
+                </td>
+                <td style="width:50%;">
+
+
+                    <div id="other_category" style="display:none;">    
+                        <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
+                            <h:inputText  value="#{itemBean.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"  rendered="#{userBean.editable == 13}"/>
+                            <h:outputText  id="otherItemCategoryString" value="#{itemBean.otherItemCategory}" rendered="#{userBean.editable == 12}"/>
+                        </h:outputLabel>    
+                        <span class="error-message" id="otherItemCategory" ></span>
+                    </div>
+
+                </td>
+
+            </tr>
+
+            <tr class="even">
+                <td colspan='2'>
+                    <div style="margin-left:25px;margin-top:5px;">
+                        <h:outputLabel value="#{bundle.BasedOnB}"  for="notifyLenders" >
+                            <h:selectOneRadio id="notifyLenders" value="#{itemBean.notifyLenders}" rendered="#{userBean.editable == 13}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />	
+                            </h:selectOneRadio>    
+                            <c:if test="#{userBean.editable == 12}" >
+                                <c:choose>
+                                    <c:when test="#{itemBean.notifyLenders == 0}">
+                                        <c:set var="cbe" value="No"/>
+                                    </c:when>
+                                    <c:when test="#{itemBean.notifyLenders == 1}">
+                                        <c:set var="cbe" value="Yes"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:set var="cbe" value="No preference provided"/>
+                                    </c:otherwise>
+                                </c:choose>
+                                <h:outputText id="notifyLendersString"   value="#{cbe}" class="RO_text" />
+                            </c:if>  
+                        </h:outputLabel>                        
+
+                    </div></td>
+            </tr>
+
+            <tr class="odd">
+                <td style="width:50%">
+                    <div style="margin-left:25px;margin-top:5px;">
+                        <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
+                            <h:inputText  id="itemDescription" value="#{itemBean.itemDescription}" class="items"  style="margin-left:10px" rendered="#{userBean.editable == 13}"/>
+                        </h:outputLabel>
+                        <span class="error-message" id="itemDescription" ></span>
+                    </div></td>
+                <td style="width:50%">
+                    <div style="margin-left:25px;margin-top:5px;">
+                        <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
+                            <h:selectOneMenu id="itemConditionId" value="#{itemBean.itemConditionId}"  style="margin-left:10px" class="items select" rendered="#{userBean.editable == 13}">
+                                <f:validator validatorId="selectOneMenuValidator" />  
+                                <f:selectItems id="item_condtion" value="#{itemc.buildItemConditionsArray()}"  
+                                               var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
+                                               >   
+                                </f:selectItems>    
+                            </h:selectOneMenu>
+                            <h:outputText  id="itemConditionIdString" value="#{itemc.getItemConditionName(itemBean.itemConditionId)}" rendered="#{userBean.editable == 12}"/>
+                        </h:outputLabel>
+                        <br /> <span class="error-message" id="itemConditionId" ></span>
+                    </div></td>
+            </tr>
+
+            <tr class="even">
+                <td  style="width:50%;">
+                    <div style="margin-left:25px;margin-top:5px;">
+                        <h:outputLabel for="itemModel" value="#{bundle.ItemModel}" >
+                            <h:inputText id="itemModel" value="#{itemBean.itemModel}"  style="margin-left:10px" rendered="#{userBean.editable == 13}"/>
+                            <h:outputText  id="itemModelString" value="#{itemBean.itemModel}" rendered="#{userBean.editable == 12}"/>
+                        </h:outputLabel>
+                    </div></td>
+                <td  style="width:50%;">
+                    <div style="margin-left:25px;margin-top:5px;">
+                        <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
+                            <h:inputText  id="itemCount" value="#{itemBean.itemCount}" size="2" maxlength="2" required="true" class="items"  style="margin-left:10px" rendered="#{userBean.editable == 13}"/>
+                            <h:outputText  id="itemCountString" value="#{itemBean.itemCount}" rendered="#{userBean.editable == 12}"/>
+                        </h:outputLabel>
+                        <span class="error-message" id="itemCount" ></span>
+                    </div></td>
+            </tr>
+        </table>
+        <br />
+        <div style="margin-left:25px;margin-top:5px;float:left;">
+
+            <h:dataTable id="picture"  value="#{itemBean.picture}" var="image" rendered="#{userBean.editable == 13}" >
+                <h:column rowHeader="">
+                    <div style="margin-left:25px;margin-top:5px;float:left;">
+                        <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
+                            <h:inputFile id="imageFileNamePart" value="#{itemBean.imageFileNamePart}" />
+                            <span class="file_image_error"></span>
+                        </h:outputLabel>
+                        <br />
+                        <input type="button" onclick="removeImage()" alt="Click to remove elected image.."  value="Remove Image" ></input>
+                    </div>    
+                    <br />
+                    <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
+                        <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
+                            <img id="imagePreview" height="200" width="200" src=""  />
+                        </h:outputLabel> 
+                    </div>
+                    <br />
+                    <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                        <h:outputLabel for="itemImageCaption" value="If you'd like, provide a caption for your item image:" >
+                            <h:inputText  id="itemImageCaption" value="#{image.itemImageCaption}" size="50" maxlength="50" style="margin-left:10px" />
+                        </h:outputLabel>
+                    </div>
+                </h:column>
+            </h:dataTable>
+            
+            <h:dataTable id="pictureRO"  value="#{itemBean.picture}" var="image" rendered="#{userBean.editable == 12}" >
+                <h:column rowHeader="">
+                    <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
+                        <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
+                            <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
+                            <img id="imagePreview" height="200" width="200" src=""  />
+                        </h:outputLabel> 
+                    </div>
+                    <br />
+                    <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                        <h:outputLabel for="itemImageCaption" value="Provided aption for your item image:" >
+                            <h:outputText  id="itemImageCaption" value="#{image.itemImageCaption}" class="RO_text" />
+                        </h:outputLabel>
+                    </div>
+                </h:column>
+            </h:dataTable>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+
+    </div>
+
+</ui:composition>
+
+

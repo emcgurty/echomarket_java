@@ -18,7 +18,7 @@
             <h:head>
                 <h:outputScript library="javascript" name="user_detail.js"  />
                 <h:outputScript library="javascript" name="borrower_seeking.js"  rendered="#{(userBean.editable > 2) }"/>
-                
+
                 <title>#{bundle.userDetailTitle}</title>
             </h:head>
 
@@ -35,7 +35,7 @@
             <div id="borrower_registration" style="width:inherit;" >
 
                 <c:choose>
-                     <c:when test="#{userBean.editable == -1 }">
+                    <c:when test="#{userBean.editable == -1 }">
                         <ui:include src="user_agreement.xhtml" id="user_agreement"   />
                     </c:when>
                     <c:when test="#{(userBean.editable == 0) or (userBean.editable == 1) }">
@@ -47,17 +47,24 @@
                     <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
                         <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
                     </c:when>     
-                    <c:when test="#{(userBean.editable == 6) or (userBean.editable == 7) }">
-                        <ui:include src="history.xhtml" id="history" />
+                    <c:when test="#{(userBean.editable == 100)}">
+                        <ui:include src="borrower_panel.xhtml" id="history" />
                     </c:when>     
-                    <c:when test="#{(userBean.editable == 8) or (userBean.editable == 9) }">
-<!--                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> -->
+                    <c:when test="#{(userBean.editable == 200)}">
+                        <ui:include src="lender_panel.xhtml" id="history" />
+                    </c:when>     
+<!--                    <c:when test="#{(userBean.editable == 8) or (userBean.editable == 9) }">
+                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
                         <ui:include src="lender_transfer.xhtml" id="lender_transfer" />
                     </c:when>     
                     <c:when test="#{(userBean.editable == 10) or (userBean.editable == 11) }">
-<!--                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> -->
+                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
                         <ui:include src="lender_conditions.xhtml" id="lender_conditions" />
                     </c:when>     
+                    <c:when test="#{(userBean.editable == 12) or (userBean.editable == 13) }">
+                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
+                        <ui:include src="item.xhtml" id="lender_item" />
+                    </c:when>    -->
                     <c:otherwise>
                         <ui:include  src="user_detail.xhtml" id="ud"  /> 
                     </c:otherwise>
