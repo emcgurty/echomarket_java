@@ -9,6 +9,8 @@ package echomarket.web.managedbeans;
 import echomarket.hibernate.ItemConditions;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import org.hibernate.Session;
@@ -24,7 +26,42 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
     public ItemConditionBean() {
     }
 
-    
+   public String getItemConditionName(String cid) {
+        String returnString = null;
+        List result = null;
+        Session session;
+        Transaction tx;
+        session = null;
+        tx = null;
+        session = hib_session();
+        
+        try {
+            tx = session.beginTransaction();
+            result = session.createQuery("from ItemConditions WHERE id = :cid")
+                    .setParameter("cid", cid)
+                    .list();
+            tx.commit();
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in getCategoryName");
+            Logger.getLogger(ItemConditionBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            session = null;
+            tx = null;
+        }
+
+        if (result.size() == 1) {
+            ItemConditions retCat = (ItemConditions) result.get((0));
+            returnString = retCat.getCondition();
+
+        } else {
+
+            returnString = "Not found";
+        }
+
+        result = null;
+        return returnString;
+    }  
 
     public ItemConditions[] buildItemConditionsArray() {
         ItemConditions[] catArray = null;

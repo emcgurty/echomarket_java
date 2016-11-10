@@ -323,16 +323,18 @@ public class UserBean extends AbstractBean implements Serializable {
         List results = null;
         String return_string = null;
         Boolean getp = false;
-        String queryString = "from Users where username = :un   and activated_at != null";
+        String queryString = "from Users where username = :un  and activated_at != null";
 
         try {
             results = hib.createQuery(queryString).setParameter("un", this.username).list();
             tx.commit();
-
         } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error at line 326 in UserLogin");
             ex.printStackTrace();
+        } finally {
+            hib = null;
+            tx = null;
         }
         Users users_Array = new Users();
 
@@ -372,37 +374,47 @@ public class UserBean extends AbstractBean implements Serializable {
             }
 
             if (act_results == true) {
+                this.editable = -1;
+                return_string = "user_detail";
                 message(null, "ActivateSuccessful", new Object[]{});
             } else {
                 message(null, "LogInSuccessful", new Object[]{this.username});
             }
 
+            act_results = false;
             List hasComplete = completeParticipantRecord(this.user_id);
             Integer hs = hasComplete.size();
-            if ((hs == 0)) {
+            if (hs == 0) {
+                hasComplete = null;
                 this.editable = -1;
                 return_string = "user_detail";
-            } else if ((act_results == false) && (hs > 0)) {
-                Participant part = (Participant) hasComplete.get(0);
-                Integer gw = part.getGoodwill();
-                Integer i18 = part.getAge18OrMore();
-                String un = part.getFirstName();
-                if ((act_results == false) && (gw == 1) && (i18 == 1) && (un == null) && (userAction != "agreement")) {
-                    this.editable = 3;
-                    return pbean.load_ud(this.user_id);
-                } else if ((act_results == false) && (gw == 1) && (i18 == 1) && (un != null) && (userAction != "agreement")) {
-                    List hasCompleteCP = completeContactPreferences(this.user_id);
-                    hs = hasCompleteCP.size();
-                    if (hs == 0) {
-                        this.editable = 5;
-                        return cpbean.load_ud(this.user_id);
-                    } else {this.editable = 9;return_string = "user_detail";}
-                } else if ((act_results == false) && (gw == 1) && (i18 == 1) && (un != null) && (userAction == "agreement")) {
-                    return pbean.load_ud(this.user_id);
-                } 
-            } else {
-                return_string = "index";
-
+            } else if ((hs > 0)) {
+                switch (userAction) {
+                    case "agreement":
+                        return pbean.load_ud(this.user_id);
+                    case "dashboard":
+                        Participant part = (Participant) hasComplete.get(0);
+                        Integer gw = part.getGoodwill();
+                        Integer i18 = part.getAge18OrMore();
+                        String un = part.getFirstName();
+                        if ((gw == 1) && (i18 == 1) && (un == null)) {
+                            this.editable = 3;
+                            return pbean.load_ud(this.user_id);
+                        } else if ((gw == 1) && (i18 == 1) && (un != null)) {
+                            List hasCompleteCP = completeContactPreferences(this.user_id);
+                            hs = hasCompleteCP.size();
+                            if (hs == 0) {
+                                this.editable = 5;
+                                return cpbean.load_ud(this.user_id);
+                            } else {
+                            this.editable = 100;    
+                            return_string = "user_detail";
+                            }
+                        }
+                    default:
+                    // Statements
+                }
+                this.userAction = null;
             }
 
         } else if (getp == false) {
@@ -775,7 +787,12 @@ public class UserBean extends AbstractBean implements Serializable {
      * @return the userAction
      */
     public String getUserAction() {
-        return userAction;
+        if (userAction == null) {
+            this.userAction = "dashboard";
+            return userAction;
+        } else {
+            return userAction;
+        }
     }
 
     /**
@@ -986,6 +1003,7 @@ public class UserBean extends AbstractBean implements Serializable {
             message(null, "LoginInRequiredToReviseAgreement", null);
             return "index";
         } else {
+            this.userAction = "dashboard";
             return "user_detail.xhtml?faces-redirect=true";
         }
     }

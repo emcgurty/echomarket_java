@@ -33,7 +33,6 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
-    //
     private Integer categoryId;
     private String otherItemCategory;
     private String itemModel;
@@ -47,12 +46,15 @@ public class ItemBean extends AbstractBean implements Serializable {
     private int approved;
     private int notify;
     private Part imageFileNamePart;
-    private Integer editable;
+    
 
-    public String load_ud(Integer which) {
-        ubean.setEditable(which);
+    public String load_ud(String uid) {
+        if ("borrow".equals(uid)) {
+            ubean.setEditable(100);
+        } else if ("lend".equals(uid)) {
+            ubean.setEditable(200);
+        }
         return "user_detail";
-        
     }
         
     private static ArrayList<ItemImages> picture
@@ -185,7 +187,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     }
 
-    public String saveItemEdit() {
+    public String updateItem() {
 
         List result = null;
         //Session sb = hib_session();
@@ -529,23 +531,24 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     }
 
-    public List getCurrentBorrower(String bid) {
-        System.out.println("getCurrent Borrower Called");
+    public List getCurrentItem(String bid) {
+        System.out.println("getCurrentItem Called");
         List result = null;
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
         String query = null;
         try {
-            query = "FROM Item as b WHERE b.user_id = '" + bid + "'";
+            query = "FROM Item WHERE user_id = '" + bid + "'";
             result = session.createQuery(query).list();
             tx.commit();
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Error in getCurrentB");
             e.printStackTrace();
 
         } finally {
             tx = null;
-            //session = null;
+            session = null;
 
         }
 
@@ -554,7 +557,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     public void getItemRecord(String bid) {
 
-        this.editable = 0;
+    //    this.editable = 0;
 
     }
 
