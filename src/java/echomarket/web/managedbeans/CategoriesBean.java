@@ -8,6 +8,8 @@ package echomarket.web.managedbeans;
 import echomarket.hibernate.Categories;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import org.hibernate.Session;
@@ -34,15 +36,54 @@ public class CategoriesBean extends AbstractBean implements Serializable {
         this.categoryType = categoryType;
     }
 
+    public String getCategoryName(String cid) {
+        String returnString = null;
+        List result = null;
+        Session session;
+        Transaction tx;
+        session = null;
+        tx = null;
+        session = hib_session();
+        
+        try {
+            tx = session.beginTransaction();
+            result = session.createQuery("from Categories WHERE id = :cid")
+                    .setParameter("cid", cid)
+                    .list();
+            tx.commit();
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in getCategoryName");
+            Logger.getLogger(CategoriesBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            session = null;
+            tx = null;
+        }
+
+        if (result.size() == 1) {
+            Categories retCat = (Categories) result.get((0));
+            returnString = retCat.getCategoryType();
+
+        } else {
+
+            returnString = "Not found";
+        }
+
+        result = null;
+        return returnString;
+    }
+
     public Categories[] buildCatArray() {
         Categories[] catArray = null;
         List cat_list = null;
         cat_list = cat_list();
-        int size_of_list = cat_list.size();
-        catArray = new Categories[size_of_list];
-        for (int i = 0; i < size_of_list; i++) {
-            Categories cArray = (Categories) cat_list.get(i);
-            catArray[i] = new Categories(cArray.getId(), cArray.getCategoryType());
+        if (cat_list != null) {
+            int size_of_list = cat_list.size();
+            catArray = new Categories[size_of_list];
+            for (int i = 0; i < size_of_list; i++) {
+                Categories cArray = (Categories) cat_list.get(i);
+                catArray[i] = new Categories(cArray.getId(), cArray.getCategoryType());
+            }
         }
         return catArray;
     }
@@ -54,18 +95,22 @@ public class CategoriesBean extends AbstractBean implements Serializable {
         Transaction tx;
         session = null;
         tx = null;
-        
+
         try {
             session = hib_session();
             tx = session.beginTransaction();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
+            System.out.println("Error in establishing transaction in cat_list");
+            Logger.getLogger(CategoriesBean.class.getName()).log(Level.SEVERE, null, ex);
+            tx.rollback();
         }
 
         try {
             result = session.createQuery("from Categories Order By id").list();
             tx.commit();
         } catch (Exception e) {
-            System.out.println("Error line 74 CatBean");
+            tx.rollback();
+            System.out.println("Error line 108 CatBean");
             e.printStackTrace();
 
         }
