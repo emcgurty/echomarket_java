@@ -11,13 +11,15 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+@Named
 @ManagedBean(name = "itemc")
-@RequestScoped
+@SessionScoped
 public class ItemConditionBean extends AbstractBean implements Serializable{
 
 //    private Integer id;
@@ -27,6 +29,7 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
     }
 
    public String getItemConditionName(String cid) {
+        
         String returnString = null;
         List result = null;
         Session session;
@@ -43,7 +46,7 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
             tx.commit();
         } catch (Exception ex) {
             tx.rollback();
-            System.out.println("Error in getCategoryName");
+            System.out.println("Error in getItemConditionName");
             Logger.getLogger(ItemConditionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             session = null;
