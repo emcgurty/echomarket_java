@@ -6,6 +6,7 @@
     xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
     >
 
+    <h:form id="personal_information" >
     <div id="form_NAE" class="contact_information" >
         <c:set var="states_list" value="#{uss.buildUsStates()}"   rendered="#{userBean.editable == 3}" />    
         <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 3}" />    
@@ -540,5 +541,5 @@
 
 
     </div>
-
+    </h:form>
 </ui:composition>
