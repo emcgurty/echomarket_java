@@ -85,7 +85,7 @@
     <managed-bean>
         <managed-bean-name>itemConditionBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedBeans.ItemConditionBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>lenderBean</managed-bean-name>
@@ -138,7 +138,7 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>itemdBean</managed-bean-name>
+        <managed-bean-name>itemBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.ItemBean</managed-bean-class>
             <managed-bean-scope>request</managed-bean-scope></managed-bean>
     <managed-bean>
