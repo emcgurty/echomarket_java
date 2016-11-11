@@ -2,7 +2,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -13,8 +12,9 @@
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="UserDetailHeader" /> </ui:define>
     <ui:define name="content"  >
+       
+        <h:form id="user_detail"  enctype="multipart/form-data" >
 
-        <h:form id="user_detail" style="border-bottom-color: indigo; border-bottom-style: double;">
             <h:head>
                 <h:outputScript library="javascript" name="user_detail.js"  />
                 <h:outputScript library="javascript" name="borrower_seeking.js"  rendered="#{(userBean.editable > 2) }"/>
@@ -25,12 +25,7 @@
             <ui:include rendered="true" src="user_detail_menu.xhtml" id="UserDetailMenu" /> 
             <h:inputHidden id="editable" value="#{userBean.editable}" />
             <h:outputText value="#{userBean.editable}" />
-            <div class="message.color">
-                <h:messages showSummary="true" 
-                            showDetail="false"
-                            errorStyle="color: #d20005" 
-                            infoStyle="color: blue"/>
-            </div>
+        
 
             <div id="borrower_registration" style="width:inherit;" >
 
@@ -47,24 +42,14 @@
                     <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
                         <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
                     </c:when>     
-                    <c:when test="#{(userBean.editable == 100)}">
-                        <ui:include src="borrower_panel.xhtml" id="history" />
-                    </c:when>     
-                    <c:when test="#{(userBean.editable == 200)}">
-                        <ui:include src="lender_panel.xhtml" id="history" />
-                    </c:when>     
-<!--                    <c:when test="#{(userBean.editable == 8) or (userBean.editable == 9) }">
-                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
-                        <ui:include src="lender_transfer.xhtml" id="lender_transfer" />
-                    </c:when>     
-                    <c:when test="#{(userBean.editable == 10) or (userBean.editable == 11) }">
-                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
-                        <ui:include src="lender_conditions.xhtml" id="lender_conditions" />
-                    </c:when>     
-                    <c:when test="#{(userBean.editable == 12) or (userBean.editable == 13) }">
-                        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
-                        <ui:include src="item.xhtml" id="lender_item" />
-                    </c:when>    -->
+                    <c:when test="#{(userBean.editable == 13)}">
+                        <ui:include src="borrower_panel.xhtml" id="b_panel" />
+                    </c:when>        
+
+                    <c:when test="#{(userBean.editable == 15)}">
+                        <ui:include src="lender_panel.xhtml" id="l_panel"  />
+                    </c:when>        
+
                     <c:otherwise>
                         <ui:include  src="user_detail.xhtml" id="ud"  /> 
                     </c:otherwise>
