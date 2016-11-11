@@ -36,7 +36,7 @@ public class CategoriesBean extends AbstractBean implements Serializable {
         this.categoryType = categoryType;
     }
 
-    public String getCategoryName(String cid) {
+    public String getCategoryName(Integer cid) {
         String returnString = null;
         List result = null;
         Session session;
