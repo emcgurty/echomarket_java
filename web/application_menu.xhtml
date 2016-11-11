@@ -60,28 +60,6 @@
 
                         </h:commandLink>                  
                     </li>
-                    <c:if test="#{userBean.username != null}" >
-                        <li>
-                            <h:commandLink id="borrowerSeeking" action="#{bb.load_borrower_seeking()}">
-                                <h:outputText value="I need to borrow"/>
-
-                            </h:commandLink>
-
-                        </li>
-                        <li>
-                            <h:commandLink id="borrowHistory" action="borrower_history">
-
-                                <h:outputText value="My borrowing history"/>
-
-                            </h:commandLink>                  
-                        </li>
-                        <li>
-                            <h:commandLink id="borrowerUpdate" action="borrower_update">
-                                <h:outputText value="Change my borrowing requirements"/>
-
-                            </h:commandLink>                  
-                        </li>
-                    </c:if>    
                 </ul>
             </li>
 
