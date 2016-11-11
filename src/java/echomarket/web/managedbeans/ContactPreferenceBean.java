@@ -396,6 +396,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             message(null, "UpdateOrSaveOfCPNotSuccessful", null);
             ubean.setEditable(5);
         }
+//        return "user_detail?faces-redirect=true";
         return "user_detail";
     }
 
@@ -469,6 +470,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         partlist = null;
 
         return "user_detail";
+//        return "user_detail?faces-redirect=true";
     }
 
     public List getCurrentCP(String uid) {
