@@ -83,6 +83,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         tx = null;
 
         ubean.setEditable(8);
+//        return "user_detail?faces-redirect=true";
         return "user_detail";
 
     }
