@@ -118,6 +118,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         } else {
             ubean.setEditable(3);
         }
+//        return "user_detailfaces-redirect=true";
         return "user_detail";
     }
 
@@ -299,6 +300,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         ubean.setEditable(3);
         return "user_detail";
+//        return "user_detail?faces-redirect=true";
 
     }
 
@@ -333,6 +335,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         }
 
         return "user_detail";
+//        return "user_detail?faces-redirect=true";
     }
 
     private Boolean processAddress(Addresses[] address) {
