@@ -46,22 +46,22 @@ public class ItemBean extends AbstractBean implements Serializable {
     private int approved;
     private int notify;
     private Part imageFileNamePart;
-    
 
     public String load_ud(String uid) {
         if ("borrow".equals(uid)) {
-            ubean.setEditable(100);
+            ubean.setEditable(13);
         } else if ("lend".equals(uid)) {
-            ubean.setEditable(200);
+            ubean.setEditable(15);
         }
+//        return "user_detail?faces-redirect=true";
         return "user_detail";
     }
-        
+
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, "temp", null)
+                    new ItemImages(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, "echo_market.png", null)
             ));
-    
+
     public ArrayList<ItemImages> getPicture() {
         return picture;
     }
@@ -109,7 +109,6 @@ public class ItemBean extends AbstractBean implements Serializable {
 
 //        Session sb = hib_session();
 //        Transaction tx = sb.beginTransaction();
-
         return true;
     }
 
@@ -201,7 +200,7 @@ public class ItemBean extends AbstractBean implements Serializable {
             bret = processNewFileImage();
         }
 
-        if ((bret == true) && (this.notify == 1)) {
+        if ((bret == true) && (this.getNotify() == 1)) {
             bret = sendNotification("lenders");
         }
 
@@ -557,11 +556,9 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     public void getItemRecord(String bid) {
 
-    //    this.editable = 0;
-
+        //    this.editable = 0;
     }
 
-    
     public List getExistingPicture() {
 
         List result = null;
@@ -595,6 +592,31 @@ public class ItemBean extends AbstractBean implements Serializable {
             return getPicture();
         }
 
+    }
+
+    public List getCurrentBorrower(String bid) {
+
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String query = null;
+
+        try {
+            query = "FROM Items WHERE participant_id = :bid";
+            result = session.createQuery(query)
+                    .setParameter("bid", bid)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("Error in getCurrentB");
+            e.printStackTrace();
+        } finally {
+            tx = null;
+            session = null;
+        }
+
+        return result;
     }
 
     private Boolean DeleteImageFile(String fileName) {
@@ -650,4 +672,32 @@ public class ItemBean extends AbstractBean implements Serializable {
         }
         //return "borrower_history";
     }
+
+    /**
+     * @return the notify
+     */
+    public int getNotify() {
+        return notify;
+    }
+
+    /**
+     * @param notify the notify to set
+     */
+    public void setNotify(int notify) {
+        this.notify = notify;
+    }
+
+//    /**
+//     * @return the imagePreview
+//     */
+//    public Image getImagePreview() {
+//        return imagePreview;
+//    }
+//
+//    /**
+//     * @param imagePreview the imagePreview to set
+//     */
+//    public void setImagePreview(Image imagePreview) {
+//        this.imagePreview = imagePreview;
+//    }
 }
