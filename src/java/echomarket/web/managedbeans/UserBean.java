@@ -6,7 +6,6 @@ import echomarket.hibernate.Users;
 import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
-import echomarket.hibernate.HibernateUtil;
 import echomarket.hibernate.Participant;
 import echomarket.hibernate.PasswordEncryptionService;
 import javax.faces.bean.ManagedBean;
@@ -23,7 +22,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -407,7 +405,7 @@ public class UserBean extends AbstractBean implements Serializable {
                                 this.editable = 5;
                                 return cpbean.load_ud(this.user_id);
                             } else {
-                            this.editable = 100;    
+                            this.editable = 13;    
                             return_string = "user_detail";
                             }
                         }
@@ -433,8 +431,10 @@ public class UserBean extends AbstractBean implements Serializable {
             return_string = "login";
         }
 
-        return return_string;
+       return return_string + "?faces-redirect=true";
+//        return return_string;
     }
+        
 
     private Boolean ActivateUser() {
 
@@ -1004,7 +1004,8 @@ public class UserBean extends AbstractBean implements Serializable {
             return "index";
         } else {
             this.userAction = "dashboard";
-            return "user_detail.xhtml?faces-redirect=true";
+//            return "user_detail.xhtml?faces-redirect=true";
+            return "user_detail.xhtml";
         }
     }
 
