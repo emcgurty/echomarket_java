@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Id;
 import javax.servlet.http.Part;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -31,6 +32,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
+    private String itemId;
     private Integer categoryId;
     private String otherItemCategory;
     private String itemModel;
@@ -69,6 +71,7 @@ public class ItemBean extends AbstractBean implements Serializable {
             result = getCurrentItem(iid);
             if (result.size() == 1) {
                 Items ir = (Items) result.get(0);
+                this.setItemId(ir.getItemId());
                 this.categoryId = ir.getCategoryId();
                 this.otherItemCategory = ir.getOtherItemCategory();
                 this.itemModel = ir.getItemModel();
@@ -211,23 +214,58 @@ public class ItemBean extends AbstractBean implements Serializable {
         Boolean bret = false;
         String strRetId = null;
         String new_iid = getId();
+        List result = null;
 
-        Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify);
+        if (itemId == null) {
+            Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify);
 
-        try {
-            sb = hib_session();
-            tx = sb.beginTransaction();
-            sb.save(ii);
-            tx.commit();
-            bret = true;
-        } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("Error in Save Item");
-            Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
-            bret = false;
-        } finally {
-            // sb = null;
-            //  tx = null;
+            try {
+                sb = hib_session();
+                tx = sb.beginTransaction();
+                sb.save(ii);
+                tx.commit();
+                bret = true;
+            } catch (Exception ex) {
+                tx.rollback();
+                System.out.println("Error in Save Item");
+                Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
+                bret = false;
+            } finally {
+//            sb = null;
+//            tx = null;
+            }
+        } else {
+            result = getCurrentItem(itemId);
+            if (result.size() == 1) {
+                Items uitem = (Items) result.get(0);
+                uitem.setCategoryId(categoryId);
+                uitem.setOtherItemCategory(otherItemCategory);
+                uitem.setItemModel(itemModel);
+                uitem.setItemDescription(itemDescription);
+                uitem.setItemConditionId(itemConditionId);
+                uitem.setItemCount(itemCount);
+                if (sb.isOpen() == false) {
+                    sb = hib_session();
+                }
+                if (tx.isActive() == false) {
+                    tx = sb.beginTransaction();
+                }
+
+                try {
+                    sb.save(uitem);
+                    tx.commit();
+                    bret = true;
+                } catch (Exception ex) {
+                    bret = false;
+                    tx.rollback();
+                    System.out.println("Error in updating item");
+                    ex.printStackTrace();
+                } finally {
+                    sb = null;
+                    tx = null;
+                }
+
+            }
         }
 
         if (bret == true) {
@@ -249,8 +287,6 @@ public class ItemBean extends AbstractBean implements Serializable {
         }
         if (bret == true) {
 
-            tx = null;
-            sb = null;
             message(
                     null,
                     "ItemRecordUpdated",
@@ -604,14 +640,14 @@ public class ItemBean extends AbstractBean implements Serializable {
         } else {
             ItemImages a_array = (ItemImages) result.get(0);
             ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                   new ItemImages(a_array.getItemImageId(), a_array.getItemId(), a_array.getImageContentType(), 
+                    new ItemImages(a_array.getItemImageId(), a_array.getItemId(), a_array.getImageContentType(),
                             a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
             ));
-           setPicture(tmp_picture);
-           
-           a_array = null;
-           tmp_picture = null;
-           return getPicture();
+            setPicture(tmp_picture);
+
+            a_array = null;
+            tmp_picture = null;
+            return getPicture();
         }
     }
 
@@ -701,6 +737,21 @@ public class ItemBean extends AbstractBean implements Serializable {
      */
     public void setNotify(int notify) {
         this.notify = notify;
+    }
+
+    /**
+     * @return the itemId
+     */
+    @Id
+    public String getItemId() {
+        return itemId;
+    }
+
+    /**
+     * @param itemId the itemId to set
+     */
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
 }
