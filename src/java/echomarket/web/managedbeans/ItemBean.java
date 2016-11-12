@@ -1,7 +1,6 @@
 package echomarket.web.managedbeans;
 
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
-import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Items;
 import echomarket.hibernate.ItemImages;
 import java.io.File;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
@@ -46,20 +44,8 @@ public class ItemBean extends AbstractBean implements Serializable {
     private int approved;
     private int notify;
     private Part imageFileNamePart;
-
-    public String load_ud(String uid) {
-        if ("borrow".equals(uid)) {
-            ubean.setEditable(13);
-        } else if ("lend".equals(uid)) {
-            ubean.setEditable(15);
-        }
-//        return "user_detail?faces-redirect=true";
-        return "user_detail";
-    }
-
     private static ArrayList<ItemImages> picture
-            = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, "echo_market.png", null)
+            = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
             ));
 
     public ArrayList<ItemImages> getPicture() {
@@ -70,17 +56,47 @@ public class ItemBean extends AbstractBean implements Serializable {
         picture = aPicture;
     }
 
-    private String doesImageExist() {
+    public String load_ud(String which, String iid) {
+
+        List result = null;
+        if ("borrow".equals(which)) {
+            ubean.setEditable(13);
+        } else if ("lend".equals(which)) {
+            ubean.setEditable(15);
+        }
+
+        if (iid != null) {
+            result = getCurrentItem(iid);
+            if (result.size() == 1) {
+                Items ir = (Items) result.get(0);
+                this.categoryId = ir.getCategoryId();
+                this.otherItemCategory = ir.getOtherItemCategory();
+                this.itemModel = ir.getItemModel();
+                this.itemDescription = ir.getItemDescription();
+                this.itemConditionId = ir.getItemConditionId();
+                this.itemCount = ir.getItemCount();
+                //    this.comment = ir.getComment();  Later, not in gui yet
+                this.notify = ir.getNotify();
+                // Image detail will be retrieve from gui
+            }
+            /// Have to manage for record not found
+
+        }
+//      return "user_detail?faces-redirect=true";
+        return "user_detail";
+    }
+
+    private String doesImageExist(String iid) {
 
         Session sb = hib_session();
         Transaction tx = sb.beginTransaction();
         List result = null;
         String existingImageFileId = null;
-
-        String queryString = "from ItemImages where borrower_id = :bid ";
+        ItemImages existingImageobj = null;
+        String queryString = "from ItemImages where item_id = :iid ";
 
         result = sb.createQuery(queryString)
-                .setParameter("bid", ubean.getUserAction())
+                .setParameter("iid", iid)
                 .list();
         try {
             tx.commit();
@@ -97,10 +113,10 @@ public class ItemBean extends AbstractBean implements Serializable {
 
         }
         if (result.size() > 0) {
-            ItemImages existingImageobj = (ItemImages) result.get(0);
+            existingImageobj = (ItemImages) result.get(0);
             existingImageFileId = existingImageobj.getImageFileName();
         }
-
+        existingImageobj = null;
         result = null;
         return existingImageFileId;
     }
@@ -120,7 +136,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         Boolean retResult = false;
 
         /// Delete existing image file name record becuase maybe be using same name but had editted
-        String queryString = "from ItemImages where image_id = :iid ";
+        String queryString = "from ItemImages where item_image_id = :iid ";
 
         result = sb.createQuery(queryString)
                 .setParameter("iid", iid)
@@ -140,14 +156,14 @@ public class ItemBean extends AbstractBean implements Serializable {
             }
             tx = null;
             sb = null;
-
+            result = null;
         }
 
         return retResult;
 
     }
 
-    private Boolean processNewFileImage() {
+    private Boolean processNewFileImage(String iid) {
 
         Boolean b_return = false;
         List ii = this.getPicture();
@@ -155,58 +171,86 @@ public class ItemBean extends AbstractBean implements Serializable {
         Transaction tx = sb.beginTransaction();
 
         try {
-            SaveUserItemImage(getImageFileNamePart(), ubean.getUserAction());
+            b_return = SaveUserItemImage(getImageFileNamePart(), iid);
         } catch (Exception ex) {
             Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error in Saving Borrower File");;
         }
 
-        ItemImages iii = (ItemImages) ii.get(0);
-        iii.setItemImagesId(getId());
-        iii.setParticipantId(ubean.getUserAction());
-        iii.setImageFileName(ubean.getUserAction() + "_" + getFileName(getImageFileNamePart()));
-        iii.setImageContentType(getImageFileNamePart().getContentType());
+        if (b_return == true) {
+            ItemImages iii = (ItemImages) ii.get(0);
+            iii.setItemImageId(getId());
+            iii.setItemId(iid);
+            iii.setImageFileName(iid + "_" + getFileName(getImageFileNamePart()));
+            iii.setImageContentType(getImageFileNamePart().getContentType());
 
-        try {
-            sb.save(iii);
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            System.out.println("Error on Retreiving Image by Id");
-        } finally {
-            b_return = true;
-            if (sb != null) {
-                sb.close();
+            try {
+                sb.save(iii);
+                tx.commit();
+                b_return = true;
+            } catch (Exception e) {
+                b_return = false;
+                tx.rollback();
+                System.out.println("Error on Retreiving Image by Id");
+            } finally {
+                if (sb != null) {
+                    sb.close();
+                }
+                tx = null;
+                sb = null;
             }
-            tx = null;
-            sb = null;
         }
-
         return b_return;
 
     }
 
-    public String updateItem() {
+    public String saveItem() {
 
-        List result = null;
-        //Session sb = hib_session();
-        //Transaction tx = sb.beginTransaction();
+        Session sb = hib_session();
+        Transaction tx = sb.beginTransaction();
         Boolean bret = false;
-        String strRetId = doesImageExist();
-        if (strRetId != null) {
-            bret = deleteExistingUserImage(strRetId);
-        }
-        if ((bret == true) && (this.imageFileNamePart != null)) {
-            bret = processNewFileImage();
-        }
+        String strRetId = null;
+        String new_iid = getId();
 
-        if ((bret == true) && (this.getNotify() == 1)) {
-            bret = sendNotification("lenders");
+        Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify);
+
+        try {
+            sb = hib_session();
+            tx = sb.beginTransaction();
+            sb.save(ii);
+            tx.commit();
+            bret = true;
+        } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in Save Item");
+            Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
+            bret = false;
+        } finally {
+            // sb = null;
+            //  tx = null;
         }
 
         if (bret == true) {
-//            tx = null;
-//            sb = null;
+            strRetId = doesImageExist(new_iid);
+            if (strRetId != null) {
+                bret = deleteExistingUserImage(strRetId);
+            }
+            if ((bret == true) && (this.imageFileNamePart != null)) {
+                bret = processNewFileImage(new_iid);
+            }
+
+            if ((bret == true) && (notify == 1)) {
+                if (ubean.getEditable() == 13) {
+                    bret = sendNotification("borrower");  // This needs to be written...
+                } else if (ubean.getEditable() == 15) {
+                    bret = sendNotification("lenders");
+                }
+            }
+        }
+        if (bret == true) {
+
+            tx = null;
+            sb = null;
             message(
                     null,
                     "ItemRecordUpdated",
@@ -231,9 +275,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         String getAbstId = getId();
         String current_user = null;
         try {
-
             current_user = ubean.getUser_id();
-            //ut = getUser_type();
 
         } catch (Exception e) {
             System.out.println("Testing inject vs session Map");
@@ -249,8 +291,8 @@ public class ItemBean extends AbstractBean implements Serializable {
             }
 
             ItemImages iii = (ItemImages) ii.get(0);
-            iii.setItemImagesId(getId());
-            iii.setParticipantId(getAbstId);
+            iii.setItemImageId(getId());
+            iii.setItemId(getAbstId);
 
             // Did this becuase graphicImage does not recognize dynmically build attribute library
             iii.setImageFileName(getAbstId + "_" + getFileName(getImageFileNamePart()));
@@ -267,7 +309,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         } else {
 
             ItemImages iii = (ItemImages) ii.get(0);
-            iii.setParticipantId(getAbstId);
+            iii.setItemId(getAbstId);
 
             if (sb.isOpen() == false) {
                 sb = hib_session();
@@ -461,7 +503,8 @@ public class ItemBean extends AbstractBean implements Serializable {
         this.imageFileNamePart = imageFileName;
     }
 
-    private void SaveUserItemImage(Part ui, String bid) throws IOException {
+    private Boolean SaveUserItemImage(Part ui, String bid) throws IOException {
+        Boolean fileCreate = false;
         OutputStream out = null;
         InputStream filecontent = null;
         String itemImagePath = null;
@@ -474,9 +517,15 @@ public class ItemBean extends AbstractBean implements Serializable {
         File files = new File(sPath1 + sPath2);
         //Boolean makeDirectory = files.mkdirs();
         itemImagePath = sPath1 + sPath2 + sPath3;
-        files = new File(itemImagePath);
-//   Testing... leaving at true status for the moment... 
-        if (true) {
+        try {
+            files = new File(itemImagePath);
+            fileCreate = true;
+        } catch (Exception ex) {
+            System.out.println("Error in Creating New File");
+            ex.printStackTrace();
+        }
+
+        if (fileCreate == true) {
 
             if (files.exists()) {
                 /// User may be using same image file name but has been editted
@@ -484,7 +533,7 @@ public class ItemBean extends AbstractBean implements Serializable {
             }
 
             try {
-                files = new File(itemImagePath);   /// not sure I have to run it again??
+                files = new File(itemImagePath);   /// not sure I have to run it again, esp if was deleted above
                 out = new FileOutputStream(files);
                 filecontent = ui.getInputStream();
                 int read = 0;
@@ -492,8 +541,9 @@ public class ItemBean extends AbstractBean implements Serializable {
                 while ((read = filecontent.read(bytes)) != -1) {
                     out.write(bytes, 0, read);
                 }
-
+                fileCreate = true;
             } catch (FileNotFoundException fne) {
+                fileCreate = false;
                 LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
                         new Object[]{fne.getMessage()});
             } finally {
@@ -505,11 +555,8 @@ public class ItemBean extends AbstractBean implements Serializable {
                 }
                 files = null;
             }
-        } else {
-
-            /// Oracle documentation says that mkdri = false is not necessarily an error...
         }
-
+        return fileCreate;
     }
 
     private String getFileName(final Part part) {
@@ -524,39 +571,10 @@ public class ItemBean extends AbstractBean implements Serializable {
         return null;
     }
 
-    public List getCurrentBorrowerImage(String bid) {
-        ubean.setUserAction(bid);
+    public List getCurrentItemImage(String iid) {
+        ubean.setUserAction(iid);  // not used??
         return getExistingPicture();
 
-    }
-
-    public List getCurrentItem(String bid) {
-        System.out.println("getCurrentItem Called");
-        List result = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
-        String query = null;
-        try {
-            query = "FROM Item WHERE user_id = '" + bid + "'";
-            result = session.createQuery(query).list();
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            System.out.println("Error in getCurrentB");
-            e.printStackTrace();
-
-        } finally {
-            tx = null;
-            session = null;
-
-        }
-
-        return result;
-    }
-
-    public void getItemRecord(String bid) {
-
-        //    this.editable = 0;
     }
 
     public List getExistingPicture() {
@@ -565,13 +583,16 @@ public class ItemBean extends AbstractBean implements Serializable {
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
         String[] results = null;
-        String queryString = "from ItemImages where borrower_id = :bid ";
+        String queryString = "from ItemImages where item_id = :iid ";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", ubean.getUserAction())
+                    .setParameter("iid", ubean.getUserAction())
                     .list();
             tx.commit();
         } catch (Exception e) {
+            tx.rollback();
+            System.out.println("Error in getExistingPicture");
+            e.printStackTrace();
         } finally {
             tx = null;
             hib = null;
@@ -581,39 +602,38 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (size_of_list == 0) {
             return getPicture();
         } else {
-//            ItemImages a_array = (ItemImages) result.get(0);
-////            ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-////                    new ItemImages(a_array.getId(), a_array.getBorrower_id(), a_array.getLender_id(), a_array.getImageContentType(),
-////                            a_array.getImageHeight(), a_array.getImageWidth(), a_array.getIsActive(), a_array.getDateCreated(), a_array.getDateDeleted(),
-////                            a_array.getDateUpdated(), a_array.getImageFileName(), a_array.getItemImageCaption(), a_array.getAdvertiserId())
-////            ));
-//            setPicture(tmp_picture);
-
-            return getPicture();
+            ItemImages a_array = (ItemImages) result.get(0);
+            ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
+                   new ItemImages(a_array.getItemImageId(), a_array.getItemId(), a_array.getImageContentType(), 
+                            a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
+            ));
+           setPicture(tmp_picture);
+           
+           a_array = null;
+           tmp_picture = null;
+           return getPicture();
         }
-
     }
 
-    public List getCurrentBorrower(String bid) {
-
+    public List getCurrentItem(String iid) {
+        System.out.println("getCurrentItem Called");
         List result = null;
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
         String query = null;
-
         try {
-            query = "FROM Items WHERE participant_id = :bid";
-            result = session.createQuery(query)
-                    .setParameter("bid", bid)
-                    .list();
+            query = "FROM Item WHERE item_id = '" + iid + "'";
+            result = session.createQuery(query).list();
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
-            System.out.println("Error in getCurrentB");
+            System.out.println("Error in getCurrentItem");
             e.printStackTrace();
+
         } finally {
             tx = null;
             session = null;
+
         }
 
         return result;
@@ -637,40 +657,36 @@ public class ItemBean extends AbstractBean implements Serializable {
         return return_delete_true;
     }
 
-    public void deleteItem(String bid, String itemDesc) {
+    public void deleteItem(String iid, String itemDesc) {
 
         List result = null;
         Session hib = hib_session();
         Transaction tx = hib.beginTransaction();
+        Boolean retResult = false;
 
-        String queryString = "from Items where participant_id = :bid";
+        String queryString = "from Items where item_id = :iid";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", bid)
+                    .setParameter("iid", iid)
                     .list();
-
-            if (result.size() > 0) {
-
-                hib.delete((Items) result.get(0));
-                tx.commit();
-            } else {
-            }
-
+            tx.commit();
+            retResult = true;
         } catch (Exception ex) {
+            tx.rollback();
+            retResult = false;
             System.out.println("Error in deleting borrower record");
             Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-
             result = null;
             tx = null;
             hib = null;
-
-            message(
-                    null,
-                    "DeleteSelecteBorrower",
-                    new Object[]{itemDesc});
         }
-        //return "borrower_history";
+        if (retResult == true) {
+            message(null, "DeleteSelectedBorrowerSuccess", new Object[]{itemDesc});
+        } else {
+            message(null, "DeleteSelectedBorrowerFailed", new Object[]{itemDesc});
+        }
+
     }
 
     /**
@@ -687,17 +703,4 @@ public class ItemBean extends AbstractBean implements Serializable {
         this.notify = notify;
     }
 
-//    /**
-//     * @return the imagePreview
-//     */
-//    public Image getImagePreview() {
-//        return imagePreview;
-//    }
-//
-//    /**
-//     * @param imagePreview the imagePreview to set
-//     */
-//    public void setImagePreview(Image imagePreview) {
-//        this.imagePreview = imagePreview;
-//    }
 }
