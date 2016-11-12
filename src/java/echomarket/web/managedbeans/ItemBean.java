@@ -65,6 +65,10 @@ public class ItemBean extends AbstractBean implements Serializable {
             ubean.setEditable(13);
         } else if ("lend".equals(which)) {
             ubean.setEditable(15);
+        } else if ("viewLend".equals(which)) {
+            ubean.setEditable(14);
+        } else if ("viewBorrow".equals(which)) {
+            ubean.setEditable(12);
         }
 
         if (iid != null) {
