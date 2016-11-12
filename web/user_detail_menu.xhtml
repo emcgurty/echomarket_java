@@ -22,11 +22,11 @@
             <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.user_id)}"  value="Initial Contact Preferences"  rendered="#{userBean.editable != -1}" />
         </li>
         <li class="subs" id="tab_item_4" >
-          <h:commandLink immediate="true"  action="#{item.load_ud('borrow')}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    />
+          <h:commandLink immediate="true"  action="#{item.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    />
                
         </li>
         <li class="subs" id="tab_item_5" >
-            <h:commandLink immediate="true"  action="#{item.load_ud('lend')}"  value="Lending"  rendered="#{userBean.editable != -1}"    />
+            <h:commandLink immediate="true"  action="#{item.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"    />
             
         </li>
         
