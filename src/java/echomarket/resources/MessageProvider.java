@@ -22,6 +22,8 @@ public class MessageProvider {
         try { 
             result = getBundle().getString(key); 
         } catch (MissingResourceException e) { 
+            System.out.println("Error in getValue Bundle");
+            System.out.println(key);
             result = null; 
         } 
         return result; 
