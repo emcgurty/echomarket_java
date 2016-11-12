@@ -14,7 +14,7 @@
             <div class="top" >
                 <div >
                     <h:outputText value="NEW ITEM"  />
-                    <h:commandLink  action="#{itemBean.updateItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 13}" />
+                    <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 13}" />
                     <h:commandLink  action="#{itemBean.load_ud(userBean.user_id)}"  class="right_div" value="Edit New Item"  rendered="#{userBean.editable == 12}" />
 
                 </div> 
