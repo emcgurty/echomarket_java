@@ -26,12 +26,14 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "item")
+@ManagedBean(name = "itemBean")
 @RequestScoped
 public class ItemBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
+    @Inject
+    ContactPreferenceBean cbean;
     private String itemId;
     private Integer categoryId;
     private String otherItemCategory;
@@ -89,8 +91,8 @@ public class ItemBean extends AbstractBean implements Serializable {
             /// Have to manage for record not found
 
         }
-//      return "user_detail?faces-redirect=true";
-        return "user_detail";
+        return "user_detail?faces-redirect=true";
+
     }
 
     private String doesImageExist(String iid) {
@@ -112,9 +114,7 @@ public class ItemBean extends AbstractBean implements Serializable {
             Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error on Update Item");
         } finally {
-            if (sb != null) {
-                sb.close();
-            }
+
             tx = null;
             sb = null;
 
@@ -187,7 +187,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (b_return == true) {
             ItemImages iii = (ItemImages) ii.get(0);
             iii.setItemImageId(getId());
-            iii.setItemId(iid);
+            iii.setItem_id(iid);
             iii.setImageFileName(iid + "_" + getFileName(getImageFileNamePart()));
             iii.setImageContentType(getImageFileNamePart().getContentType());
 
@@ -200,9 +200,6 @@ public class ItemBean extends AbstractBean implements Serializable {
                 tx.rollback();
                 System.out.println("Error on Retreiving Image by Id");
             } finally {
-                if (sb != null) {
-                    sb.close();
-                }
                 tx = null;
                 sb = null;
             }
@@ -213,14 +210,17 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     public String saveItem() {
 
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
+        Session sb;
+        Transaction tx;
+        sb = null;
+        tx = null;
         Boolean bret = false;
         String strRetId = null;
         String new_iid = getId();
         List result = null;
+        String whatever = null;
 
-        if (itemId == null) {
+        if (itemId.isEmpty() == true) {
             Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify);
 
             try {
@@ -290,84 +290,26 @@ public class ItemBean extends AbstractBean implements Serializable {
             }
         }
         if (bret == true) {
-
-            message(
-                    null,
-                    "ItemRecordUpdated",
-                    null);
-        } else {
-            message(
-                    null,
-                    "ItemRecordNotUpdated",
-                    null);
-
-        }
-        return "index?faces-redirect=true";
-
-    }
-
-    public String saveBorrowerRegistration() throws IOException {
-
-        List ii = getPicture();
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
-        Date today_date = new Date();
-        String getAbstId = getId();
-        String current_user = null;
-        try {
-            current_user = ubean.getUser_id();
-
-        } catch (Exception e) {
-            System.out.println("Testing inject vs session Map");
-            e.printStackTrace();
-        }
-
-        if (getImageFileNamePart() != null) {
-            try {
-                SaveUserItemImage(getImageFileNamePart(), getAbstId);
-            } catch (Exception e) {
-                System.out.println("Error in Saving Borrower File");;
-
+            if (ubean.getEditable() == 13) {
+                ubean.setUserAction("preferences");
+                whatever = "borrow";
+                message(null, "ItemRecordUpdated", new Object[]{whatever, itemDescription});
+                cbean.load_ud(ubean.getUser_id());
+                strRetId = "user_detail";
+            } else {
+                whatever = "lend";
+                message(null, "ItemRecordUpdated", new Object[]{whatever, itemDescription});
             }
-
-            ItemImages iii = (ItemImages) ii.get(0);
-            iii.setItemImageId(getId());
-            iii.setItemId(getAbstId);
-
-            // Did this becuase graphicImage does not recognize dynmically build attribute library
-            iii.setImageFileName(getAbstId + "_" + getFileName(getImageFileNamePart()));
-            iii.setImageContentType(getImageFileNamePart().getContentType());
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-            sb.save(iii);
-            tx.commit();
 
         } else {
+            message(null, "ItemRecordNotUpdated", null);
 
-            ItemImages iii = (ItemImages) ii.get(0);
-            iii.setItemId(getAbstId);
-
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-            sb.save(iii);
-            tx.commit();
         }
+        
+        return strRetId;
 
-        message(
-                null,
-                "BorrowerRegistionRecordSaved",
-                null);
-
-        return "index?faces-redirect=true";
     }
+  
 
     /**
      * @return the categoryId
@@ -644,7 +586,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         } else {
             ItemImages a_array = (ItemImages) result.get(0);
             ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                    new ItemImages(a_array.getItemImageId(), a_array.getItemId(), a_array.getImageContentType(),
+                    new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
                             a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
             ));
             setPicture(tmp_picture);
@@ -662,7 +604,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         Transaction tx = session.beginTransaction();
         String query = null;
         try {
-            query = "FROM Item WHERE item_id = '" + iid + "'";
+            query = "FROM Items WHERE item_id = '" + iid + "'";
             result = session.createQuery(query).list();
             tx.commit();
         } catch (Exception e) {
