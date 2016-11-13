@@ -72,7 +72,6 @@ public class ItemBean extends AbstractBean implements Serializable {
             case "lend":
                 ubean.setEditable(15);
                 this.whichType = which;
-                this.itemModel = "T";
                 break;
             case "both":
                 ubean.setEditable(17);
@@ -240,7 +239,9 @@ public class ItemBean extends AbstractBean implements Serializable {
         String which_type = null;
 
         if (itemId.isEmpty() == true) {
-            Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify);
+            
+            Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, 
+                    itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, whichType );
 
             try {
                 sb = hib_session();
@@ -267,6 +268,7 @@ public class ItemBean extends AbstractBean implements Serializable {
                 uitem.setItemDescription(itemDescription);
                 uitem.setItemConditionId(itemConditionId);
                 uitem.setItemCount(itemCount);
+                uitem.setItemType(whichType);
                 if (sb.isOpen() == false) {
                     sb = hib_session();
                 }
@@ -632,6 +634,34 @@ public class ItemBean extends AbstractBean implements Serializable {
 
         return result;
     }
+    
+      public List getParticipantItems(String pid, String which) {
+        System.out.println("getParticipantItems Called");
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String query = null;
+        try {
+            query = "FROM Items WHERE participant_id = :pid and itemType = :it";
+            result = session.createQuery(query)
+                    .setParameter("pid", pid)
+                    .setParameter("it", which)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("Error in ParticipantItems");
+            e.printStackTrace();
+
+        } finally {
+            tx = null;
+            session = null;
+
+        }
+
+        return result;
+    }
+
 
     private Boolean DeleteImageFile(String fileName) {
 
