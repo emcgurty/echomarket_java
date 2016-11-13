@@ -5,7 +5,7 @@ import java.util.Date;
 public class ItemImages  implements java.io.Serializable {
 
      private String itemImageId;
-     private String itemId;
+     private String item_id;
      private String imageContentType;
      private Integer imageHeight;
      private Integer imageWidth;
@@ -18,18 +18,17 @@ public class ItemImages  implements java.io.Serializable {
     public ItemImages() {
     }
 
-	
-    public ItemImages(String itemImagesId, String itemId, String imageFileName) {
-        this.itemImageId = itemImagesId;
-        this.itemId = itemId;
+    public ItemImages(String itemImageId, String item_id, String imageFileName) {
+        this.itemImageId = itemImageId;
+        this.item_id = item_id;
         this.imageFileName = imageFileName;
         this.dateCreated = dateCreated;
         this.dateDeleted = dateDeleted;
         this.dateUpdated = dateUpdated;
     }
-    public ItemImages(String itemImageId, String itemId, String imageContentType, Integer imageHeight, Integer imageWidth, String imageFileName, String itemImageCaption) {
+    public ItemImages(String itemImageId, String item_id, String imageContentType, Integer imageHeight, Integer imageWidth, String imageFileName, String itemImageCaption) {
        this.itemImageId = itemImageId;
-       this.itemId = itemId;
+       this.item_id = item_id;
        this.imageContentType = imageContentType;
        this.imageHeight = imageHeight;
        this.imageWidth = imageWidth;
@@ -103,19 +102,20 @@ public class ItemImages  implements java.io.Serializable {
     }
 
     /**
-     * @return the itemId
+     * @return the item_id
      */
-    public String getItemId() {
-        return itemId;
+    public String getItem_id() {
+        return item_id;
     }
 
     /**
-     * @param itemId the itemId to set
+     * @param item_id the item_id to set
      */
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
     }
 
+   
 
 
 
