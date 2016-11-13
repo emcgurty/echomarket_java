@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package echomarket.web.managedbeans;
 
-
+import echomarket.hibernate.ContactPreference;
 import echomarket.hibernate.ItemConditions;
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +15,7 @@ import org.hibernate.Transaction;
 @Named
 @ManagedBean(name = "itemc")
 @SessionScoped
-public class ItemConditionBean extends AbstractBean implements Serializable{
+public class ItemConditionBean extends AbstractBean implements Serializable {
 
 //    private Integer id;
     private String condition;
@@ -28,8 +23,8 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
     public ItemConditionBean() {
     }
 
-   public String getItemConditionName(String cid) {
-        
+    public String getItemConditionName(String cid) {
+
         String returnString = null;
         List result = null;
         Session session;
@@ -37,7 +32,7 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
         session = null;
         tx = null;
         session = hib_session();
-        
+
         try {
             tx = session.beginTransaction();
             result = session.createQuery("from ItemConditions WHERE id = :cid")
@@ -64,7 +59,7 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
 
         result = null;
         return returnString;
-    }  
+    }
 
     public ItemConditions[] buildItemConditionsArray() {
         ItemConditions[] catArray = null;
@@ -96,20 +91,6 @@ public class ItemConditionBean extends AbstractBean implements Serializable{
 
         return result;
     }
-
-//    /**
-//     * @return the id
-//     */
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    /**
-//     * @param id the id to set
-//     */
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
 
     /**
      * @return the condition
