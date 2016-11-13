@@ -47,5 +47,8 @@
         <property name="notify" type="int">
             <column name="notify" not-null="true" />
         </property>
+        <property name="itemType" type="string">
+            <column name="item_type" length="12" />
+        </property>
     </class>
 </hibernate-mapping>
