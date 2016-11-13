@@ -37,6 +37,8 @@ public class UserBean extends AbstractBean implements Serializable {
     ContactPreferenceBean cpbean;
     @Inject
     ParticipantBean pbean;
+    @Inject
+    ItemBean ibean;
     private String user_id;
     private String username;
     private String userAlias;
@@ -405,8 +407,8 @@ public class UserBean extends AbstractBean implements Serializable {
                                 this.editable = 5;
                                 return cpbean.load_ud(this.user_id);
                             } else {
-                            this.editable = 13;    
-                            return_string = "user_detail";
+                                this.editable = 13;
+                                return ibean.load_ud("borrow", null);
                             }
                         }
                     default:
@@ -434,7 +436,6 @@ public class UserBean extends AbstractBean implements Serializable {
        return return_string + "?faces-redirect=true";
 //        return return_string;
     }
-        
 
     private Boolean ActivateUser() {
 
