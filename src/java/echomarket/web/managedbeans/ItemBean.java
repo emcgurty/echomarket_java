@@ -86,7 +86,7 @@ public class ItemBean extends AbstractBean implements Serializable {
                 this.itemCount = ir.getItemCount();
                 //    this.comment = ir.getComment();  Later, not in gui yet
                 this.notify = ir.getNotify();
-                // Image detail will be retrieve from gui
+                // Image detail will be retrieved from gui
             }
             /// Have to manage for record not found
 
@@ -132,6 +132,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
 //        Session sb = hib_session();
 //        Transaction tx = sb.beginTransaction();
+//        Find all lenders that match a borrowers needs, and vice-versa.  Then send email
         return true;
     }
 
@@ -218,7 +219,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         String strRetId = null;
         String new_iid = getId();
         List result = null;
-        String whatever = null;
+        String which_type = null;
 
         if (itemId.isEmpty() == true) {
             Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify);
@@ -292,13 +293,13 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (bret == true) {
             if (ubean.getEditable() == 13) {
                 ubean.setUserAction("preferences");
-                whatever = "borrow";
-                message(null, "ItemRecordUpdated", new Object[]{whatever, itemDescription});
+                which_type = "borrow";
+                message(null, "ItemRecordUpdated", new Object[]{which_type, itemDescription});
                 cbean.load_ud(ubean.getUser_id());
                 strRetId = "user_detail";
             } else {
-                whatever = "lend";
-                message(null, "ItemRecordUpdated", new Object[]{whatever, itemDescription});
+                which_type = "lend";
+                message(null, "ItemRecordUpdated", new Object[]{which_type, itemDescription});
             }
 
         } else {
