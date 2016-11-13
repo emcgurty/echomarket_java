@@ -88,8 +88,9 @@ function checkType(input) {
         } else {
             which_type_ = "borrow";
         }
+        $("input[name='user_detail:whichType']").val(which_type_);
     }
-    $("input[name='user_detail:whichType']").val(which_type_);
+    
 
 
     return;
