@@ -344,7 +344,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
             sb = hib_session();
             tx = sb.beginTransaction();
-            
+
             try {
                 sb.update(part);
                 tx.commit();
@@ -370,8 +370,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             try {
                 Addresses altadd = (Addresses) participant_alternative.get(0);
                 String uid = altadd.getParticipantId();
-                if (uid.equals(ubean.getUser_id())) sb.update(altadd);
-                else {
+                if (uid.equals(ubean.getUser_id())) {
+                    sb.update(altadd);
+                } else {
                     altadd.setParticipantId(ubean.getUser_id());
                     sb.save(altadd);
                 }
@@ -464,7 +465,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             this.contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
             this.contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
             //this.setParticipant_alternative((List)getAddress().get(0));
-            
+
         }
         ubean.setEditable(5);
         partlist = null;
@@ -480,10 +481,10 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         Transaction tx = session.beginTransaction();
         String query = null;
         try {
-            //SELECT *, min(date_created) FROM contact_preference   WHERE participant_id = 'asd' ORDER BY participant_id;
-            query = "SELECT min(dateCreated), FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
-            result = session.createQuery(query)
-                    .setParameter("pid", pid)
+             query = "FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
+             result = session.createQuery(query)
+                    .setParameter("pid",pid )
+                    .setMaxResults(1)
                     .list();
             tx.commit();
         } catch (Exception e) {
