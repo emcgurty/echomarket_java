@@ -4,6 +4,7 @@ import echomarket.hibernate.LenderItemConditions;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
@@ -23,6 +24,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     UserBean ubean;
     private String lender_item_condition_id;
     private String participantId;
+    private String itemId;
     private Integer forFree;
     private Integer availableForPurchase;
     private BigDecimal availableForPurchaseAmount;
@@ -51,9 +53,65 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     public LenderItemConditionsBean() {
     }
 
-    public String load_ud(String uid) {
+    public String load_ud(String pid) {
 
-        return "noneDone";
+        List condList = null;
+        condList = getCurrentItemConditions(pid);
+        if (condList.size() == 1) {
+            LenderItemConditions pp = (LenderItemConditions) condList.get(0);
+            this.setItemId(pp.getItemId());
+            this.forFree = pp.getForFree();
+            this.availableForPurchase = pp.getAvailableForPurchase();
+            this.availableForPurchaseAmount = pp.getAvailableForPurchaseAmount();
+            this.smallFee = pp.getSmallFee();
+            this.smallFeeAmount = pp.getSmallFeeAmount();
+            this.availableForDonation = pp.getAvailableForDonation();
+            this.donateAnonymous = pp.getDonateAnonymous();
+            this.trade = pp.getTrade();
+            this.tradeItem = pp.getTradeItem();
+            this.agreedNumberOfDays = pp.getAgreedNumberOfDays();
+            this.agreedNumberOfHours = pp.getAgreedNumberOfHours();
+            this.indefiniteDuration = pp.getIndefiniteDuration();
+            this.presentDuringBorrowingPeriod = pp.getPresentDuringBorrowingPeriod();
+            this.entirePeriod = pp.getEntirePeriod();
+            this.partialPeriod = pp.getPartialPeriod();
+            this.provideProperUseTraining = pp.getProvideProperUseTraining();
+            this.specificConditions = pp.getSpecificConditions();
+            this.securityDepositAmount = pp.getSecurityDepositAmount();
+            this.securityDeposit = pp.getSecurityDeposit();
+            //this.comment= pp.get(); // Later
+        }
+        ubean.setEditable(11);
+        condList = null;
+
+        return "user_detail";
+//        return "user_detail?faces-redirect=true";
+    }
+
+    public List getCurrentItemConditions(String pid) {
+
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String query = null;
+        try {
+            query = "FROM LenderItemConditions WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
+            result = session.createQuery(query)
+                    .setParameter("pid", pid)
+                    .setMaxResults(1)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            System.out.println("Error in getCurrentCP");
+            e.printStackTrace();
+            tx.rollback();
+            return null;
+        } finally {
+            tx = null;
+            session = null;
+
+        }
+        return result;
     }
 
     public String updateLIC() {
@@ -62,36 +120,82 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         Transaction tx;
         sb = null;
         tx = null;
-        sb = hib_session();
-        tx = sb.beginTransaction();
+        List icList = null;
+        Boolean successTransaction = false;
 
-        // THis needs to be rewritten
-        
-        LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getUser_id(), this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
+        if (this.itemId != null) {
 
-        try {
-            sb.save(lic);
-            tx.commit();
-            message(null, "LenderItemConditionsSaved", null);
-            ubean.setEditable(10);
-        } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("Error in saveLenderItemCon");
-            Logger
-                    .getLogger(LenderItemConditionsBean.class
-                            .getName()).log(Level.SEVERE, null, ex);
-            message(null, "LenderItemConditionsNotSaved", null);
-            ubean.setEditable(11);
-        } finally {
-            if (sb != null) {
-                sb.close();
+            icList = getCurrentItemConditions(ubean.getUser_id());
+            LenderItemConditions ic = (LenderItemConditions) icList.get(0);
+            ic.setItemId(itemId);
+            ic.setAgreedNumberOfDays(agreedNumberOfDays);
+            ic.setAgreedNumberOfHours(agreedNumberOfHours);
+            ic.setAvailableForDonation(availableForDonation);
+            ic.setAvailableForPurchase(availableForPurchase);
+            ic.setAvailableForPurchaseAmount(availableForPurchaseAmount);
+            ic.setDonateAnonymous(donateAnonymous);
+            ic.setEntirePeriod(entirePeriod);
+//          ic.setComment(comment); Later
+            ic.setForFree(forFree);
+            ic.setIndefiniteDuration(indefiniteDuration);
+            ic.setPartialPeriod(partialPeriod);
+            ic.setPresentDuringBorrowingPeriod(presentDuringBorrowingPeriod);
+            ic.setProvideProperUseTraining(provideProperUseTraining);
+            ic.setSecurityDeposit(securityDeposit);
+            ic.setSecurityDepositAmount(securityDepositAmount);
+            ic.setSmallFee(smallFee);
+            ic.setSmallFeeAmount(smallFeeAmount);
+            ic.setSpecificConditions(specificConditions);
+            ic.setTrade(trade);
+            ic.setTradeItem(tradeItem);
+
+            sb = hib_session();
+            tx = sb.beginTransaction();
+
+            try {
+                sb.update(ic);
+                tx.commit();
+                successTransaction = true;
+                message(null, "LenderItemConditionsUpdated", null);
+            } catch (Exception ex) {
+                successTransaction = false;
+                message(null, "LenderItemConditionsUpdatedFailed", null);
+                tx.rollback();
+                System.out.println("Error in Update Lender ITem Conditions");
+                Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                //sb = null;
+                //tx = null;
             }
 
+        } else {
+            // Creating a new record
+            LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getUser_id(), this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
+
+            try {
+                sb.save(lic);
+                tx.commit();
+                message(null, "LenderItemConditionsSaved", null);
+                successTransaction = true;
+            } catch (Exception ex) {
+                successTransaction = false;
+                tx.rollback();
+                System.out.println("Error in saveLenderItemCon");
+                Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+                message(null, "LenderItemConditionsNotSaved", null);
+                ubean.setEditable(11);
+            } finally {
+
+            }
         }
         sb = null;
         tx = null;
 
-        ubean.setEditable(8);
+        if (successTransaction == true) {
+            ubean.setEditable(8);
+        } else {
+            ubean.setEditable(9);
+        }
         return "user_detail";
 
     }
@@ -460,6 +564,20 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
      */
     public void setDateDeleted(Date dateDeleted) {
         this.dateDeleted = dateDeleted;
+    }
+
+    /**
+     * @return the itemId
+     */
+    public String getItemId() {
+        return itemId;
+    }
+
+    /**
+     * @param itemId the itemId to set
+     */
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
 }
