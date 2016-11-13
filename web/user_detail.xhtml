@@ -12,7 +12,7 @@
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="UserDetailHeader" /> </ui:define>
     <ui:define name="content"  >
-       
+
         <h:form id="user_detail"  enctype="multipart/form-data" >
 
             <h:head>
@@ -25,8 +25,7 @@
             <ui:include rendered="true" src="user_detail_menu.xhtml" id="UserDetailMenu" /> 
             <h:inputHidden id="editable" value="#{userBean.editable}" />
             <h:outputText value="#{userBean.editable}" />
-        
-
+                        
             <div id="borrower_registration" style="width:inherit;" >
 
                 <c:choose>
@@ -40,7 +39,18 @@
                         <ui:include src="user_nae.xhtml" id="name_address_email" />
                     </c:when>
                     <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
+                        <ui:include src="borrower_menu.xhtml" id="borrowersMenu"  rendered="#{userBean.useIsWhichType() == 'borrow'}" />
+                        <ui:include src="lender_menu.xhtml" id="lendersMenu" rendered="#{(userBean.useIsWhichType() == 'lend') or (userBean.useIsWhichType() == 'both')}" />
                         <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
+                    </c:when>     
+                                        
+                    <c:when test="#{(userBean.editable == 8) or (userBean.editable == 9) }">
+                        <ui:include src="lender_menu.xhtml" id="lendersMenu" />
+                        <ui:include src="lender_conditions.xhtml" id="lender_conditions" />
+                    </c:when>     
+                    <c:when test="#{(userBean.editable == 10) or (userBean.editable == 11) }">
+                        <ui:include src="lender_menu.xhtml" id="lendersMenu" rendered="#{(userBean.editable == 11)}" />
+                        <ui:include src="lender_lender.xhtml" id="lender_transfer" />
                     </c:when>     
                     <c:when test="#{userBean.editable == 13}">
                         <ui:include src="borrower_panel.xhtml" id="b_panel" />
