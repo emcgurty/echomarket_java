@@ -47,6 +47,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     private Date dateDeleted;
     private int approved;
     private int notify;
+    private String whichType;
     private Part imageFileNamePart;
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
@@ -65,12 +66,19 @@ public class ItemBean extends AbstractBean implements Serializable {
         List result = null;
         if ("borrow".equals(which)) {
             ubean.setEditable(13);
+            this.whichType = which;
         } else if ("lend".equals(which)) {
             ubean.setEditable(15);
+            this.whichType = which;
+        } else if ("both".equals(which)) {
+            ubean.setEditable(17); 
+            this.whichType = "borrow";  // becuase that's the default on the GUI combobox
         } else if ("viewLend".equals(which)) {
             ubean.setEditable(14);
+            this.whichType = which;
         } else if ("viewBorrow".equals(which)) {
             ubean.setEditable(12);
+            this.whichType = which;
         }
 
         if (iid != null) {
@@ -286,28 +294,21 @@ public class ItemBean extends AbstractBean implements Serializable {
                 if (ubean.getEditable() == 13) {
                     bret = sendNotification("borrower");  // This needs to be written...
                 } else if (ubean.getEditable() == 15) {
-                    bret = sendNotification("lenders");
+                    bret = sendNotification("lender");
                 }
             }
         }
         if (bret == true) {
-            if (ubean.getEditable() == 13) {
                 ubean.setUserAction("preferences");
-                which_type = "borrow";
-                message(null, "ItemRecordUpdated", new Object[]{which_type, itemDescription});
-                cbean.load_ud(ubean.getUser_id());
-                strRetId = "user_detail";
-            } else {
-                which_type = "lend";
-                message(null, "ItemRecordUpdated", new Object[]{which_type, itemDescription});
-            }
+                message(null, "ItemRecordUpdated", new Object[]{whichType, itemDescription});
+                return cbean.load_ud(ubean.getUser_id());
 
         } else {
             message(null, "ItemRecordNotUpdated", null);
-
+            return "user_detail";
         }
         
-        return strRetId;
+        
 
     }
   
@@ -699,6 +700,20 @@ public class ItemBean extends AbstractBean implements Serializable {
      */
     public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    /**
+     * @return the whichType
+     */
+    public String getWhichType() {
+        return whichType;
+    }
+
+    /**
+     * @param whichType the whichType to set
+     */
+    public void setWhichType(String whichType) {
+        this.whichType = whichType;
     }
 
 }
