@@ -20,7 +20,7 @@ public class Items  implements java.io.Serializable {
      private int approved;
      private int notify;
 
-    public Items() {
+     public Items() {
     }
 
 	
@@ -147,9 +147,6 @@ public class Items  implements java.io.Serializable {
     public void setNotify(int notify) {
         this.notify = notify;
     }
-
-
-
 
 }
 
