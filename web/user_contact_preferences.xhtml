@@ -9,16 +9,20 @@
 
         <h:head>
             <h:inputHidden id="itemId" value="#{contactPreferenceBean.itemId}"  />
+          
         </h:head>
 
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-                <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Save Item Transfer Contact Preferences Update"  rendered="#{userBean.editable == 5}" />
-                <h:commandLink  action="#{cpb.load_ud(userBean.user_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 4}" />
+                <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 5}" />
+                <h:commandLink  action="#{cpb.load_ud(userBean.user_id)}"  class="right_div" value="View Contact Preference Information"  rendered="#{userBean.editable == 4}" />
+                <c:set var="is_lender"  value="#{userBean.userType.contains('lend')}"  />
+                <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Review Lender 'Item Transfer'"  rendered="#{userBean.editable == 5 and is_lender}" />
+                <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Review Lender 'Item Conditions'"  rendered="#{userBean.editable == 5 and is_lender}" />
             </div> 
             <div style="margin:10px;" >
-                <h:outputText value="Item Transfer Contact Preferences" />
+                <h:outputText value="Initial Contact Preferences" />
                 <h:commandLink  action="#{userBean.editBH()}"  class="right_div" value="Continue to 'Borrowing History'"  />
             </div>
         </div> 
@@ -246,7 +250,7 @@
                                     <c:set var="cbe" value="No preference provided"/>
                                 </c:otherwise>
                             </c:choose>
-                            <h:outputText id="contactByEmailString"   value="#{cbe}" />
+                            <h:outputText id="contactByEmailString"   value="#{cbe}"  class="RO_text" />
 
                         </c:if>  
 
@@ -281,7 +285,7 @@
                                     <c:set var="yn" value="No preference provided"/>
                                 </c:otherwise>
                             </c:choose>
-                            <h:outputText id="contactByHomePhoneString"   value="#{yn}" />
+                            <h:outputText id="contactByHomePhoneString"   value="#{yn}"  class="RO_text"  />
                         </c:if>   
 
                     </h:outputLabel> 
@@ -304,7 +308,7 @@
                                     <c:set var="yn" value="No preference provided"/>
                                 </c:otherwise>
                             </c:choose>
-                            <h:outputText id="contactByCellPhoneString"   value="#{yn}" />
+                            <h:outputText id="contactByCellPhoneString"   value="#{yn}"  class="RO_text"  />
                         </c:if>   
                     </h:outputLabel>
 
@@ -327,7 +331,7 @@
                                     <c:set var="yn" value="No preference provided"/>
                                 </c:otherwise>
                             </c:choose>
-                            <h:outputText id="contactByAlternativePhoneString"   value="#{yn}" />
+                            <h:outputText id="contactByAlternativePhoneString"   value="#{yn}"   class="RO_text" />
                         </c:if>   
                     </h:outputLabel>
 
@@ -347,13 +351,13 @@
                         <td>
                             <h:outputLabel value="Your Facebook Account:" for="contactByFacebook" >
                                 <h:inputText  id="contactByFacebook" value="#{cpb.contactByFacebook}" style="margin-left:5px;"  rendered="#{userBean.editable == 5}" /> 
-                                <h:outputText  id="contactByFacebooko" value="#{cpb.contactByFacebook}" style="margin-left:5px;"  rendered="#{userBean.editable == 4}" /> 
+                                <h:outputText  id="contactByFacebooko" value="#{cpb.contactByFacebook}" style="margin-left:5px;"  rendered="#{userBean.editable == 4}"   class="RO_text" /> 
                             </h:outputLabel>
                         </td>
                         <td>
                             <h:outputLabel value="Your LinkedIn Account:" for="contactByLinkedIn" >
                                 <h:inputText  id="contactByLinkedIn" value="#{cpb.contactByLinkedIn}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  /> 
-                                <h:outputText  id="contactByLinkedIno" value="#{cpb.contactByLinkedIn}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  /> 
+                                <h:outputText  id="contactByLinkedIno" value="#{cpb.contactByLinkedIn}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  class="RO_text"  /> 
                             </h:outputLabel>
                         </td>
                     </tr>
@@ -361,13 +365,13 @@
                         <td>
                             <h:outputLabel value="Your Twitter Account:" for="contactByTwitter" >
                                 <h:inputText  id="contactByTwitter" value="#{cpb.contactByTwitter}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
-                                <h:outputText   value="#{cpb.contactByTwitter}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  />
+                                <h:outputText   value="#{cpb.contactByTwitter}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  class="RO_text"  />
                             </h:outputLabel>
                         </td>
                         <td>
                             <h:outputLabel value="Your Instagram Account:" for="contactByInstagram" >
                                 <h:inputText id="contactByInstagram" value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
-                                <h:outputText value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  />                                
+                                <h:outputText value="#{cpb.contactByInstagram}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  class="RO_text"  />                                
                             </h:outputLabel>
                         </td>
                     </tr>
@@ -375,14 +379,14 @@
                         <td>
                             <h:outputLabel value="Other Social Media:" for="contactByOtherSocialMedia" >
                                 <h:inputText  id="contactByOtherSocialMedia" value="#{cpb.contactByOtherSocialMedia}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
-                                <h:outputText  value="#{cpb.contactByOtherSocialMedia}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  />
+                                <h:outputText  value="#{cpb.contactByOtherSocialMedia}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  class="RO_text" />
                             </h:outputLabel>
                         </td>
 
                         <td>
                             <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess" >
                                 <h:inputText  id="contactByOtherSocialMediaAccess" value="#{cpb.contactByOtherSocialMediaAccess}" style="margin-left:5px;" rendered="#{userBean.editable == 5}"  />
-                                <h:outputText  value="#{cpb.contactByOtherSocialMediaAccess}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  /> 
+                                <h:outputText  value="#{cpb.contactByOtherSocialMediaAccess}" style="margin-left:5px;" rendered="#{userBean.editable == 4}"  class="RO_text" /> 
                             </h:outputLabel>
                         </td>
                     </tr>
