@@ -9,14 +9,13 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 >
 
-
     <h:form enctype="multipart/form-data" id="b_history" >
 
         <div class="top" >
             <h:outputText value="ITEMS SOUGHT"  />
         </div> 
-
-        <c:set var="currentHistory"  value="#{item.getCurrentBorrower(userBean.user_id)}" />
+          
+        <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(userBean.user_id, 'borrow')}" />
         <h:dataTable id="history"  value="#{currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
             <h:column rowHeader="">
                 <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
@@ -28,17 +27,17 @@
                         <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
                     </h:outputLabel>
 
-                    <h:dataTable id="image"  value="#{item.getCurrentBorrowerImage(history.borrower_id)}" var="i" >
+                    <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
                         <h:column rowHeader="">
                             <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
                         </h:column>
                     </h:dataTable>
 
                     <br />
-                    <h:commandButton value="Edit"  action="#{item.getCurrentEditRecord(history.borrower_id)}">
+                    <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history.item_id)}">
                     </h:commandButton>    
 
-                    <h:commandButton value="Delete"  action="#{item.deleteCurrentRecord(history.borrower_id,history.itemDescription )}">
+                    <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.item_id,history.itemDescription )}">
                     </h:commandButton>    
 
                 </div>
@@ -46,7 +45,7 @@
         </h:dataTable>
 
         <div class="borrower_registration" >
-            <h:outputText value="No Borrower History Records Found" rendered="${fn:length(currentBorrowerHistory) == 0}" />
+            <h:outputText value="No Borrower History Records Found" rendered="${fn:length(currentHistory) == 0}" />
         </div>
     </h:form>
 
