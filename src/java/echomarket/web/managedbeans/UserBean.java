@@ -408,16 +408,24 @@ public class UserBean extends AbstractBean implements Serializable {
                                 return cpbean.load_ud(this.user_id);
                             } else {
                                 this.editable = 13;
-                                return ibean.load_ud("borrow", null);
+                                if (this.userType.contains("borrow")) {
+                                    return ibean.load_ud("borrow", null);
+                                } else if (this.userType.contains("lend")) {
+                                    return ibean.load_ud("lend", null);
+                                } else {
+                                    return ibean.load_ud("both", null);
+                                }
                             }
                         }
+
                     default:
                     // Statements
                 }
                 this.userAction = null;
             }
 
-        } else if (getp == false) {
+        } else if (getp
+                == false) {
             this.username = null;
             this.userAlias = null;
             setUserType(null);
@@ -433,7 +441,8 @@ public class UserBean extends AbstractBean implements Serializable {
             return_string = "login";
         }
 
-       return return_string + "?faces-redirect=true";
+        return return_string
+                + "?faces-redirect=true";
 //        return return_string;
     }
 
@@ -899,7 +908,9 @@ public class UserBean extends AbstractBean implements Serializable {
             tx.commit();
         } catch (Exception ex) {
             tx.rollback();
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(UserBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error on completeParticipantRecord");
             return null;
         } finally {
@@ -923,7 +934,9 @@ public class UserBean extends AbstractBean implements Serializable {
             tx.commit();
         } catch (Exception ex) {
             tx.rollback();
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(UserBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error on completeParticipantRecord");
             return null;
         } finally {
@@ -1079,7 +1092,9 @@ public class UserBean extends AbstractBean implements Serializable {
             a_array = (Map) results.get(0);
         } catch (Exception ex) {
             tx.rollback();
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(UserBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error on SendEmail, line ");
         } finally {
             tx = null;
