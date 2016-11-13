@@ -64,21 +64,30 @@ public class ItemBean extends AbstractBean implements Serializable {
     public String load_ud(String which, String iid) {
 
         List result = null;
-        if ("borrow".equals(which)) {
-            ubean.setEditable(13);
-            this.whichType = which;
-        } else if ("lend".equals(which)) {
-            ubean.setEditable(15);
-            this.whichType = which;
-        } else if ("both".equals(which)) {
-            ubean.setEditable(17); 
-            this.whichType = "borrow";  // becuase that's the default on the GUI combobox
-        } else if ("viewLend".equals(which)) {
-            ubean.setEditable(14);
-            this.whichType = which;
-        } else if ("viewBorrow".equals(which)) {
-            ubean.setEditable(12);
-            this.whichType = which;
+        if (null != which) switch (which) {
+            case "borrow":
+                ubean.setEditable(13);
+                this.whichType = which;
+                break;
+            case "lend":
+                ubean.setEditable(15);
+                this.whichType = which;
+                this.itemModel = "T";
+                break;
+            case "both":
+                ubean.setEditable(17);
+                this.whichType = "borrow";  // because that's the default on the GUI combobox
+                break;
+            case "viewLend":
+                ubean.setEditable(14);
+                this.whichType = which;
+                break;
+            case "viewBorrow":
+                ubean.setEditable(12);
+                this.whichType = which;
+                break;
+            default:
+                break;
         }
 
         if (iid != null) {
@@ -99,7 +108,8 @@ public class ItemBean extends AbstractBean implements Serializable {
             /// Have to manage for record not found
 
         }
-        return "user_detail?faces-redirect=true";
+//        return "user_detail?faces-redirect=true";
+        return "user_detail";
 
     }
 
@@ -299,7 +309,7 @@ public class ItemBean extends AbstractBean implements Serializable {
             }
         }
         if (bret == true) {
-                ubean.setUserAction("preferences");
+                
                 message(null, "ItemRecordUpdated", new Object[]{whichType, itemDescription});
                 return cbean.load_ud(ubean.getUser_id());
 
