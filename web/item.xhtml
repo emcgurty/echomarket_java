@@ -46,7 +46,7 @@
         <div  class="div_p" id="menu_item_3" >
             <div style="margin:10px;" >
                 <h:outputText value="The Item you would like to  #{which}" rendered="#{userBean.editable ne 17}"/>
-                <h:inputHidden id="whichType" value="#{itemBean.whichType}" />
+                <h:inputText id="whichType" value="#{itemBean.whichType}"  style="display:none;"/>
                 <h:outputText value="The Item you would like to " rendered="#{userBean.editable == 17}"/>
                 <h:selectOneMenu id="which_type" value="#{itemBean.whichType}" rendered="#{userBean.editable == 17}" >
                     <f:selectItem itemValue="0" itemLabel="Borrow" />	
@@ -59,7 +59,7 @@
         <div  class="div_p"  >
             <div style="margin:10px;" >
                 <h:outputText value="Item Detail..." />
-                <h:inputHidden id="itemId" value="#{itemBean.itemId}" />
+                <h:inputText id="itemId" value="#{itemBean.itemId}"  style="display:none;" />
             </div>
         </div>
 
