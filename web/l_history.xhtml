@@ -9,25 +9,14 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 >
 
-
-    <h:form enctype="multipart/form-data" id="rb" style="border-bottom-color: indigo; border-bottom-style: double;">
-
-        <div class="messagecolor">
-            <h:messages showSummary="true" 
-                        showDetail="false"
-                        errorStyle="color: #d20005" 
-                        infoStyle="color: blue"/>
-        </div>
+    <h:form enctype="multipart/form-data" id="l_history" >
 
         <div class="top" >
-            <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="#{userBean.username}: Items Offered for Lending"  />
-
-            </div> 
+            <h:outputText value="ITEMS OFFERED"  />
         </div> 
-        <c:set var="currentLenderHistory"  value="#{ll.getCurrentLender(userBean.user_id)}"  scope="request"/>
-<!--            <h:outputText id="adad"  value="${fn:length(currentLenderHistory) > 0}" />-->
-        <h:dataTable id="history"  value="#{currentLenderHistory}" var="history" rendered="${fn:length(currentLenderHistory) > 0}" >
+
+        <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(userBean.user_id, 'lend')}" />
+        <h:dataTable id="history"  value="#{currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
             <h:column rowHeader="">
                 <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
                     <h:outputLabel for="itemDescription" value="Item Description:" >
@@ -38,31 +27,26 @@
                         <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
                     </h:outputLabel>
 
-                    <h:dataTable id="image"  value="#{ll.getCurrentLenderImage(history.lender_id)}" var="i" >
+                    <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
                         <h:column rowHeader="">
-                            <h:graphicImage name="#{i.imageFileName}" library="lender_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
+                            <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
                         </h:column>
                     </h:dataTable>
 
                     <br />
-                    <h:commandButton value="Edit"  action="#{ll.getCurrentEditRecord(history.lender_id)}">
+                    <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history.item_id)}">
                     </h:commandButton>    
 
-                    <h:commandButton value="Delete"  action="#{ll.deleteCurrentRecord(history.lender_id, history.itemDescription)}">
+                    <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.item_id,history.itemDescription )}">
                     </h:commandButton>    
 
                 </div>
             </h:column>
         </h:dataTable>
 
-
-        <div class="top" style="display:block;" >
-            <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="No Lender History Records Found" rendered="${fn:length(currentLenderHistory) == 0}" />
-            </div>
+        <div class="borrower_registration" >
+            <h:outputText value="No Lender History Records Found" rendered="${fn:length(currentHistory) == 0}" />
         </div>
-
-
     </h:form>
 
 </ui:composition>
