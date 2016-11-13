@@ -19,6 +19,7 @@ public class Items  implements java.io.Serializable {
      private Date dateDeleted;
      private int approved;
      private int notify;
+     private String itemType;
 
      public Items() {
     }
@@ -32,7 +33,7 @@ public class Items  implements java.io.Serializable {
         this.approved = approved;
         this.notify = notify;
     }
-    public Items(String itemId, String participantId, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, int approved, int notify) {
+    public Items(String itemId, String participantId, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, int approved, int notify, String itemType) {
        this.itemId = itemId;
        this.participantId = participantId;
        this.categoryId = categoryId;
@@ -47,6 +48,7 @@ public class Items  implements java.io.Serializable {
        this.dateDeleted = dateDeleted;
        this.approved = approved;
        this.notify = notify;
+       this.itemType = itemType;
     }
    
     public String getItemId() {
@@ -146,6 +148,20 @@ public class Items  implements java.io.Serializable {
     
     public void setNotify(int notify) {
         this.notify = notify;
+    }
+
+    /**
+     * @return the itemType
+     */
+    public String getItemType() {
+        return itemType;
+    }
+
+    /**
+     * @param itemType the itemType to set
+     */
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
 }
