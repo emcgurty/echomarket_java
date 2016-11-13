@@ -1,17 +1,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-               xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-    <h:form id="index_options">
-        <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
-        
-        <ui:include rendered="true" src="l_history.xhtml" id="borrowersHistoryBody" /> 
-    </h:form>
-
-
-    <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
-        <ui:include rendered="true" src="lender_menu.xhtml" id="BorrrowMenu" /> 
+    <div  >     
+        <ui:include rendered="true" src="lender_menu.xhtml" id="lenderMenu" /> 
         <ui:include rendered="true" src="item.xhtml" id="newBorrowingItem" /> 
     </div>
 
