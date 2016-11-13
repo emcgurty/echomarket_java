@@ -25,12 +25,12 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
-    public static ArrayList<Addresses> getParticpant_alternative() {
-        return particpant_alternative;
+    public static ArrayList<Addresses> getParticipant_alternative() {
+        return participant_alternative;
     }
 
-    public static void setParticpant_alternative(ArrayList<Addresses> aParticpant_alternative) {
-        particpant_alternative = aParticpant_alternative;
+    public static void setParticipant_alternative(ArrayList<Addresses> aParticipant_alternative) {
+        participant_alternative = aParticipant_alternative;
     }
 
     @Inject
@@ -50,7 +50,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     private String contactByLinkedIn;
     private String contactByOtherSocialMedia;
     private String contactByOtherSocialMediaAccess;
-    private static ArrayList<Addresses> particpant_alternative
+    private static ArrayList<Addresses> participant_alternative
             = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, null, null, "99", null, "99", "alternative")));
 
     public ContactPreferenceBean() {
@@ -302,12 +302,10 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         Transaction tx;
         sb = null;
         tx = null;
-//        sb = hib_session();
-//        tx = sb.beginTransaction();
         cp_list = getCurrentCP(ubean.getUser_id());
 
-        if (cp_list.size() == 0) {
-            ContactPreference part = new ContactPreference(getId(), ubean.getUser_id(), useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
+        if ((cp_list.size() == 0) || (ubean.getUserAction() == "preferences")) {
+            ContactPreference part = new ContactPreference(getId(), ubean.getUser_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
 
             try {
                 sb = hib_session();
@@ -328,6 +326,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
             ContactPreference part = (ContactPreference) cp_list.get(0);
 
+            part.setItemId(itemId);
             part.setUseWhichContactAddress(useWhichContactAddress);
             part.setContactByChat(contactByChat);
             part.setContactByEmail(contactByEmail);
@@ -369,7 +368,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
                 tx = sb.beginTransaction();
             }
             try {
-                Addresses altadd = (Addresses) particpant_alternative.get(0);
+                Addresses altadd = (Addresses) participant_alternative.get(0);
                 String uid = altadd.getParticipantId();
                 if (uid.equals(ubean.getUser_id())) sb.update(altadd);
                 else {
@@ -437,19 +436,20 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
         Integer size_of_list = result.size();
         if (size_of_list == 0) {
-            return getParticpant_alternative();
+            return getParticipant_alternative();
         } else {
             return result;
         }
 
     }
 
-    public String load_ud(String uid) {
+    public String load_ud(String pid) {
 
         List partlist = null;
-        partlist = getCurrentCP(uid);
-        if (partlist.size() > 0) {
+        partlist = getCurrentCP(pid);
+        if (partlist.size() == 1) {
             ContactPreference pp = (ContactPreference) partlist.get(0);
+            this.itemId = pp.getItemId();
             this.participantId = pp.getParticipantId();
             this.useWhichContactAddress = pp.getUseWhichContactAddress();
             this.contactByChat = pp.getContactByChat();
@@ -463,7 +463,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             this.contactByLinkedIn = pp.getContactByLinkedIn();
             this.contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
             this.contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
-            //this.setParticpant_alternative((List)getAddress().get(0));
+            //this.setParticipant_alternative((List)getAddress().get(0));
             
         }
         ubean.setEditable(5);
@@ -473,16 +473,17 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 //        return "user_detail?faces-redirect=true";
     }
 
-    public List getCurrentCP(String uid) {
+    public List getCurrentCP(String pid) {
 
         List result = null;
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
         String query = null;
         try {
-            query = "FROM ContactPreference WHERE participant_id = :uid";
+            //SELECT *, min(date_created) FROM contact_preference   WHERE participant_id = 'asd' ORDER BY participant_id;
+            query = "SELECT min(dateCreated), FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
             result = session.createQuery(query)
-                    .setParameter("uid", uid)
+                    .setParameter("pid", pid)
                     .list();
             tx.commit();
         } catch (Exception e) {
