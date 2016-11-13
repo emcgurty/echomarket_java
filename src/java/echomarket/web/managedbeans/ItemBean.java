@@ -64,29 +64,31 @@ public class ItemBean extends AbstractBean implements Serializable {
     public String load_ud(String which, String iid) {
 
         List result = null;
-        if (null != which) switch (which) {
-            case "borrow":
-                ubean.setEditable(13);
-                this.whichType = which;
-                break;
-            case "lend":
-                ubean.setEditable(15);
-                this.whichType = which;
-                break;
-            case "both":
-                ubean.setEditable(17);
-                this.whichType = "borrow";  // because that's the default on the GUI combobox
-                break;
-            case "viewLend":
-                ubean.setEditable(14);
-                this.whichType = which;
-                break;
-            case "viewBorrow":
-                ubean.setEditable(12);
-                this.whichType = which;
-                break;
-            default:
-                break;
+        if (null != which) {
+            switch (which) {
+                case "borrow":
+                    ubean.setEditable(13);
+                    this.whichType = which;
+                    break;
+                case "lend":
+                    ubean.setEditable(15);
+                    this.whichType = which;
+                    break;
+                case "both":
+                    ubean.setEditable(17);
+                    this.whichType = "borrow";  // because that's the default on the GUI combobox
+                    break;
+                case "viewLend":
+                    ubean.setEditable(14);
+                    this.whichType = which;
+                    break;
+                case "viewBorrow":
+                    ubean.setEditable(12);
+                    this.whichType = which;
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (iid != null) {
@@ -176,9 +178,6 @@ public class ItemBean extends AbstractBean implements Serializable {
             tx.rollback();
             System.out.println("Error on Retreiving Image by Id");
         } finally {
-            if (sb != null) {
-                sb.close();
-            }
             tx = null;
             sb = null;
             result = null;
@@ -239,9 +238,9 @@ public class ItemBean extends AbstractBean implements Serializable {
         String which_type = null;
 
         if (itemId.isEmpty() == true) {
-            
-            Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory, 
-                    itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, whichType );
+
+            Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory,
+                    itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, whichType);
 
             try {
                 sb = hib_session();
@@ -311,19 +310,16 @@ public class ItemBean extends AbstractBean implements Serializable {
             }
         }
         if (bret == true) {
-                
-                message(null, "ItemRecordUpdated", new Object[]{whichType, itemDescription});
-                return cbean.load_ud(ubean.getUser_id());
+
+            message(null, "ItemRecordUpdated", new Object[]{whichType, itemDescription});
+            return cbean.load_ud(ubean.getUser_id());
 
         } else {
             message(null, "ItemRecordNotUpdated", null);
             return "user_detail";
         }
-        
-        
 
     }
-  
 
     /**
      * @return the categoryId
@@ -634,8 +630,34 @@ public class ItemBean extends AbstractBean implements Serializable {
 
         return result;
     }
-    
-      public List getParticipantItems(String pid, String which) {
+
+    public List getAllSoughtItems(String which) {
+        System.out.println("getAllSoughtItems Called");
+        List result = null;
+        Session session = hib_session();
+        Transaction tx = session.beginTransaction();
+        String query = null;
+        try {
+            query = "FROM Items WHERE itemType = :it ORDER BY dateCreated";
+            result = session.createQuery(query)
+                    .setParameter("it", which)
+                    .list();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("Error in getAllSoughtItems");
+            e.printStackTrace();
+
+        } finally {
+            tx = null;
+            session = null;
+
+        }
+
+        return result;
+    }
+
+    public List getParticipantItems(String pid, String which) {
         System.out.println("getParticipantItems Called");
         List result = null;
         Session session = hib_session();
@@ -661,7 +683,6 @@ public class ItemBean extends AbstractBean implements Serializable {
 
         return result;
     }
-
 
     private Boolean DeleteImageFile(String fileName) {
 
