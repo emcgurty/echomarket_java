@@ -302,9 +302,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         Transaction tx;
         sb = null;
         tx = null;
-        cp_list = getCurrentCP(ubean.getUser_id());
 
-        if ((cp_list.size() == 0) || (ubean.getUserAction() == "preferences")) {
+        if ((this.itemId == null)) {
+            /// Create new record
             ContactPreference part = new ContactPreference(getId(), ubean.getUser_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
 
             try {
@@ -323,9 +323,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             }
 
         } else {
-
+            
+            cp_list = getCurrentCP(ubean.getUser_id());
             ContactPreference part = (ContactPreference) cp_list.get(0);
-
             part.setItemId(itemId);
             part.setUseWhichContactAddress(useWhichContactAddress);
             part.setContactByChat(contactByChat);
@@ -481,9 +481,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         Transaction tx = session.beginTransaction();
         String query = null;
         try {
-             query = "FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
-             result = session.createQuery(query)
-                    .setParameter("pid",pid )
+            query = "FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
+            result = session.createQuery(query)
+                    .setParameter("pid", pid)
                     .setMaxResults(1)
                     .list();
             tx.commit();
