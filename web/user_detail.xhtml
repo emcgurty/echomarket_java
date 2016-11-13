@@ -42,11 +42,11 @@
                     <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
                         <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
                     </c:when>     
-                    <c:when test="#{(userBean.editable == 13)}">
+                    <c:when test="#{userBean.editable == 13}">
                         <ui:include src="borrower_panel.xhtml" id="b_panel" />
                     </c:when>        
 
-                    <c:when test="#{(userBean.editable == 15)}">
+                    <c:when test="#{(userBean.editable == 15  or userBean.editable == 17)}">
                         <ui:include src="lender_panel.xhtml" id="l_panel"  />
                     </c:when>        
 
