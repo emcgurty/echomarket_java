@@ -220,6 +220,20 @@ public class UserBean extends AbstractBean implements Serializable {
         return "index";
     }
 
+    public String useIsWhichType() {
+
+        String returnType = null;
+        if (this.userType.contains("lend")) {
+            returnType = "lend";
+        } else if (this.userType.contains("borrow")) {
+            returnType = "borrow";
+        }
+        if ((this.userType.contains("borrower")) && (this.userType.contains("borrower"))) {
+            returnType = "both";
+        }
+        return returnType;
+    }
+
     public void resetForm() {
 
         this.setUsername("");
@@ -1028,23 +1042,18 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     public void updateNAE() {
-
         this.editable = 3;
-
     }
 
     public void editNAE() {
-
         this.editable = 2;
     }
 
     public void updateCP() {
-
         this.editable = 5;
     }
 
     public void editCP() {
-
         this.editable = 4;
     }
 
@@ -1058,16 +1067,10 @@ public class UserBean extends AbstractBean implements Serializable {
 
     }
 
-    /**
-     * @return the roleId
-     */
     public Integer getRoleId() {
         return roleId;
     }
 
-    /**
-     * @param roleId the roleId to set
-     */
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
