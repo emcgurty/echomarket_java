@@ -303,9 +303,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         sb = null;
         tx = null;
 
-        if ((this.itemId == null)) {
+        if ((this.itemId == null)  && (this.participant_id == null)) {
             /// Create new record
-            ContactPreference part = new ContactPreference(getId(), ubean.getUser_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
+            ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
 
             try {
                 sb = hib_session();
@@ -324,7 +324,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
         } else {
             
-            cp_list = getCurrentCP(ubean.getUser_id());
+            cp_list = getCurrentCP(ubean.getParticipant_id());
             ContactPreference part = (ContactPreference) cp_list.get(0);
             part.setItemId(itemId);
             part.setUseWhichContactAddress(useWhichContactAddress);
@@ -373,7 +373,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
                 if (uid.equals(ubean.getUser_id())) {
                     sb.update(altadd);
                 } else {
-                    altadd.setParticipant_id(ubean.getUser_id());
+                    altadd.setParticipant_id(ubean.getParticipant_id());
                     sb.save(altadd);
                 }
                 tx.commit();
@@ -417,10 +417,10 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             ex.printStackTrace();
         }
 
-        String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
+        String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
         try {
             result = hib.createQuery(queryString)
-                    .setParameter("bid", ubean.getUser_id())
+                    .setParameter("pid", ubean.getParticipant_id())
                     .setParameter("which", "alternative")
                     .list();
             tx.commit();
