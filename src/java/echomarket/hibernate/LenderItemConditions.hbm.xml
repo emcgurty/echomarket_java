@@ -11,7 +11,7 @@
         <property name="itemId" type="string">
             <column name="item_id" length="40" not-null="true" />
         </property>
-        <property name="participantId" type="string">
+        <property name="participant_id" type="string">
             <column name="participant_id" length="40" />
         </property>
         <property name="forFree" type="java.lang.Integer">
