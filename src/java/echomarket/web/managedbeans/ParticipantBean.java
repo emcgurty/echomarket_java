@@ -25,7 +25,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
     @Inject
     UserBean ubean;
-    private String participantId;
+    private String participant_id;
     private int contactDescribeId;
     private String organizationName;
     private int displayOrganization;
@@ -90,7 +90,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         List partlist = null;
         partlist = getCurrentParticipant(uid);
         Participant pp = (Participant) partlist.get(0);
-        this.participantId = pp.getParticipantId();
+        this.participant_id = pp.getParticipant_id();
         this.contactDescribeId = pp.getContactDescribeId();
         this.organizationName = pp.getOrganizationName();
         this.displayOrganization = pp.getDisplayOrganization();
@@ -186,7 +186,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
             System.out.println("Error in Save/Update Particpant, line 173");
             Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        Participant part = (Participant) sb.load(Participant.class, participantId);  //proxy
+//        Participant part = (Participant) sb.load(Participant.class, participant_id);  //proxy
 //        part.setAlternativePhone(alternativePhone);
 //        part.setContactDescribeId(contactDescribeId);
 //        part.setOrganizationName(organizationName);
@@ -206,7 +206,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 //            sb = null;
 
         }
-//         Participant part = new Participant(participantId, ubean.getUser_id(), contactDescribeId, organizationName, displayOrganization, otherDescribeYourself, firstName, mi, lastName, "NA", displayName, displayAddress, homePhone, cellPhone,
+//         Participant part = new Participant(participant_id, ubean.getUser_id(), contactDescribeId, organizationName, displayOrganization, otherDescribeYourself, firstName, mi, lastName, "NA", displayName, displayAddress, homePhone, cellPhone,
 //                alternativePhone, emailAlternative, displayHomePhone, displayCellPhone, displayAlternativePhone, displayAlternativeAddress, "NA");
 
         try {
@@ -217,7 +217,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
                 tx = sb.beginTransaction();
             }
             Participant part = (Participant) result.get(0);
-            pid = part.getParticipantId();
+            pid = part.getParticipant_id();
             part.setContactDescribeId(contactDescribeId);
             part.setOrganizationName(organizationName);
             part.setDisplayOrganization(displayOrganization);
@@ -251,7 +251,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
             Addresses balt = (Addresses) aadrs.get(0);
             reqPO = balt.getPostalCode();
             if (reqPO != null) {
-                balt.setParticipantId(pid);
+                balt.setParticipant_id(pid);
 
                 if (sb.isOpen() == false) {
                     sb = hib_session();
@@ -272,7 +272,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         Addresses ba = (Addresses) padrs.get(0);
         reqPO = ba.getPostalCode();
         if (reqPO != null) {
-            ba.setParticipantId(pid);
+            ba.setParticipant_id(pid);
             if (sb.isOpen() == false) {
                 sb = hib_session();
             }
@@ -443,7 +443,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         }
 
         Addresses balt = (Addresses) aadrs.get(0);
-        balt.setParticipantId(getAbstId);
+        balt.setParticipant_id(getAbstId);
 
         if (sb.isOpen() == false) {
             sb = hib_session();
@@ -460,7 +460,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         }
 
         Addresses ba = (Addresses) padrs.get(0);
-        ba.setParticipantId(getAbstId);
+        ba.setParticipant_id(getAbstId);
 
         if (sb.isOpen() == false) {
             sb = hib_session();
@@ -987,22 +987,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         return displayAlternativeAddress;
     }
 
-    /**
-     * @return the participantId
-     */
-    @Id
-    public String getParticipantId() {
-        return participantId;
-    }
-
-    /**
-     * @param participantId the participantId to set
-     */
-    public void setParticipantId(String participantId) {
-        this.participantId = participantId;
-    }
-
-    /**
+      /**
      * @return the questionAltEmail
      */
     public int getQuestionAltEmail() {
@@ -1029,5 +1014,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     public void setQuestionAltAddress(int questionAltAddress) {
         this.questionAltAddress = questionAltAddress;
     }
+
+  /**
+   * @return the participant_id
+   */
+   @Id 
+  public String getParticipant_id() {
+    return participant_id;
+  }
+
+  /**
+   * @param participant_id the participant_id to set
+   */
+  public void setParticipant_id(String participant_id) {
+    this.participant_id = participant_id;
+  }
 
 }
