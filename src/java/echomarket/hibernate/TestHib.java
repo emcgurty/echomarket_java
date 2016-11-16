@@ -30,15 +30,16 @@ public class TestHib {
               + " from Participant part "
               + " left join part.addresses addr"
               + " left join part.contactPreference cp "
-              + " WHERE (cp.useWhichContactAddress = 1 OR cp.useWhichContactAddress = 3)";
+              + " left join part.item it "
+              + " WHERE (cp.useWhichContactAddress = 1 OR cp.useWhichContactAddress = 3)"
+              + " AND  (it.itemId like 'a%')";
 //      
 //      This worked
 //      Object obj_part = session.get(Participant.class, "c8b59121-7007-425a-ae3d-860598cb213b");
 //      Participant part = (Participant) obj_part;
 //      System.out.println(part.getCellPhone());
 //      Set part_address = part.getAddresses();
-//       query = "select u from UserGroup ug inner join ug.user u";
-//       query = "select addre from Participant part inner join part.Addresses addre";
+
       System.out.println(query);
       result = session.createQuery(query)
               .list();
