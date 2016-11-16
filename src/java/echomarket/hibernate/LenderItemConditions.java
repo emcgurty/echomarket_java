@@ -7,7 +7,7 @@ public class LenderItemConditions implements java.io.Serializable {
 
     private String lender_item_condition_id;
     private String itemId;
-    private String participantId;
+    private String participant_id;
     private Integer forFree;
     private Integer availableForPurchase;
     private BigDecimal availableForPurchaseAmount;
@@ -36,10 +36,10 @@ public class LenderItemConditions implements java.io.Serializable {
     public LenderItemConditions() {
     }
 
-    public LenderItemConditions(String lender_item_condition_id, String participantId, Integer forFree, Integer availableForPurchase, BigDecimal availableForPurchaseAmount, Integer smallFee, BigDecimal smallFeeAmount, Integer availableForDonation, Integer donateAnonymous, Integer trade, String tradeItem, Integer agreedNumberOfDays,             Integer agreedNumberOfHours, Integer indefiniteDuration,             Integer presentDuringBorrowingPeriod, Integer entirePeriod,             Integer partialPeriod, Integer provideProperUseTraining,             String specificConditions, BigDecimal securityDepositAmount,             Integer securityDeposit, String remoteIp,            String comment, Date dateCreated, Date dateUpdated) 
+    public LenderItemConditions(String lender_item_condition_id, String participant_id, Integer forFree, Integer availableForPurchase, BigDecimal availableForPurchaseAmount, Integer smallFee, BigDecimal smallFeeAmount, Integer availableForDonation, Integer donateAnonymous, Integer trade, String tradeItem, Integer agreedNumberOfDays,             Integer agreedNumberOfHours, Integer indefiniteDuration,             Integer presentDuringBorrowingPeriod, Integer entirePeriod,             Integer partialPeriod, Integer provideProperUseTraining,             String specificConditions, BigDecimal securityDepositAmount,             Integer securityDeposit, String remoteIp,            String comment, Date dateCreated, Date dateUpdated) 
     {
         this.lender_item_condition_id = lender_item_condition_id;
-        this.participantId = participantId;
+        this.participant_id = participant_id;
         this.forFree = forFree;
         this.availableForPurchase = availableForPurchase;
         this.availableForPurchaseAmount = availableForPurchaseAmount;
@@ -78,17 +78,17 @@ public class LenderItemConditions implements java.io.Serializable {
     }
 
     /**
-     * @return the participantId
+     * @return the participant_id
      */
-    public String getParticipantId() {
-        return participantId;
+    public String getParticipant_id() {
+        return participant_id;
     }
 
     /**
-     * @param participantId the participantId to set
+     * @param participant_id the participant_id to set
      */
-    public void setParticipantId(String participantId) {
-        this.participantId = participantId;
+    public void setParticipant_id(String participant_id) {
+        this.participant_id = participant_id;
     }
 
     /**
