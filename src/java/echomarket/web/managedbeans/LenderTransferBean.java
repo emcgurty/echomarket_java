@@ -25,7 +25,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     private String lenderId;
     private String itemId;
     private String userId;
-    private String participantId;
+    private String participant_id;
     private Integer borrowerComesToWhichAddress;
     private Integer meetBorrowerAtAgreedL2b;
     private Integer meetBorrowerAtAgreedB2l;
@@ -146,17 +146,17 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @return the participantId
+     * @return the participant_id
      */
-    public String getParticipantId() {
-        return participantId;
+    public String getParticipant_id() {
+        return participant_id;
     }
 
     /**
-     * @param participantId the participantId to set
+     * @param participant_id the participant_id to set
      */
-    public void setParticipantId(String participantId) {
-        this.participantId = participantId;
+    public void setParticipant_id(String participant_id) {
+        this.participant_id = participant_id;
     }
 
     /**
