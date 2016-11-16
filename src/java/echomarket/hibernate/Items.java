@@ -6,7 +6,7 @@ public class Items  implements java.io.Serializable {
 
 
      private String itemId;
-     private String participantId;
+     private String participant_id;
      private Integer categoryId;
      private String otherItemCategory;
      private String itemModel;
@@ -33,9 +33,9 @@ public class Items  implements java.io.Serializable {
         this.approved = approved;
         this.notify = notify;
     }
-    public Items(String itemId, String participantId, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, int approved, int notify, String itemType) {
+    public Items(String itemId, String participant_id, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, int approved, int notify, String itemType) {
        this.itemId = itemId;
-       this.participantId = participantId;
+       this.participant_id = participant_id;
        this.categoryId = categoryId;
        this.otherItemCategory = otherItemCategory;
        this.itemModel = itemModel;
@@ -58,12 +58,12 @@ public class Items  implements java.io.Serializable {
     public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-    public String getParticipantId() {
-        return this.participantId;
+    public String getParticipant_id() {
+        return this.participant_id;
     }
     
-    public void setParticipantId(String participantId) {
-        this.participantId = participantId;
+    public void setParticipant_id(String participant_id) {
+        this.participant_id = participant_id;
     }
     public Integer getCategoryId() {
         return this.categoryId;
