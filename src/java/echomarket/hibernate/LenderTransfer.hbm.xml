@@ -8,16 +8,10 @@
             <column name="lender_transfer_id" length="40" />
             <generator class="assigned" />
         </id>
-        <property name="lenderId" type="string">
-            <column name="lender_id" length="40" not-null="true" />
-        </property>
         <property name="itemId" type="string">
             <column name="item_id" length="40" not-null="true" />
         </property>
-        <property name="userId" type="string">
-            <column name="user_id" length="40" />
-        </property>
-        <property name="participantId" type="string">
+        <property name="participant_id" type="string">
             <column name="participant_id" length="40" />
         </property>
         <property name="borrowerComesToWhichAddress" type="java.lang.Integer">
