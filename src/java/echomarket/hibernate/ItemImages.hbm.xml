@@ -4,12 +4,12 @@
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="echomarket.hibernate.ItemImages" table="item_images" catalog="echomarket" optimistic-lock="version">
-        <id name="itemImagesId" type="string">
-            <column name="item_images_id" length="40" />
+        <id name="itemImageId" type="string">
+            <column name="item_image_id" length="40" />
             <generator class="assigned" />
         </id>
-        <property name="participantId" type="string">
-            <column name="participant_id" length="40" not-null="true" />
+        <property name="item_id" type="string">
+            <column name="item_id" length="40" not-null="true" />
         </property>
         <property name="imageContentType" type="string">
             <column name="image_content_type" length="20" />
@@ -30,10 +30,10 @@
             <column name="date_created" length="19" not-null="true" />
         </property>
         <property name="dateDeleted" type="timestamp">
-            <column name="date_deleted" length="19" not-null="true" />
+            <column name="date_deleted" length="19"  />
         </property>
         <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19" not-null="true" />
+            <column name="date_updated" length="19"  />
         </property>
     </class>
 </hibernate-mapping>
