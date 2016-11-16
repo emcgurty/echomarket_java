@@ -8,7 +8,7 @@
             <column name="item_id" length="40" />
             <generator class="assigned" />
         </id>
-        <property name="participantId" type="string">
+        <property name="participant_id" type="string">
             <column name="participant_id" length="40" />
         </property>
         <property name="categoryId" type="java.lang.Integer">
