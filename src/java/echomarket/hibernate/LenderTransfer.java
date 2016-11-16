@@ -9,7 +9,7 @@ public class LenderTransfer implements java.io.Serializable {
     private String lenderId;
     private String itemId;
     private String userId;
-    private String participantId;
+    private String participant_id;
     private Integer borrowerComesToWhichAddress;
     private Integer meetBorrowerAtAgreedL2b;
     private Integer meetBorrowerAtAgreedB2l;
@@ -42,12 +42,12 @@ public class LenderTransfer implements java.io.Serializable {
         this.dateDeleted = dateDeleted;
     }
 
-    public LenderTransfer(String lenderTransferId, String lenderId, String itemId, String userId, String participantId, Integer borrowerComesToWhichAddress, Integer meetBorrowerAtAgreedL2b, Integer meetBorrowerAtAgreedB2l, Integer willDeliverToBorrower, Integer thirdPartyPresenceL2b, Integer thirdPartyPresenceB2l, Integer borrowerThirdPartyChoice, Integer agreedThirdPartyChoiceL2b, Integer agreedThirdPartyChoiceB2l, Integer borrowerReturnsToWhichAddress, Integer willPickUpPreferredLocationB2l, Integer lenderThirdPartyChoiceB2l, Integer borrowerChoice, String remoteIp, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted) {
+    public LenderTransfer(String lenderTransferId, String lenderId, String itemId, String userId, String participant_id, Integer borrowerComesToWhichAddress, Integer meetBorrowerAtAgreedL2b, Integer meetBorrowerAtAgreedB2l, Integer willDeliverToBorrower, Integer thirdPartyPresenceL2b, Integer thirdPartyPresenceB2l, Integer borrowerThirdPartyChoice, Integer agreedThirdPartyChoiceL2b, Integer agreedThirdPartyChoiceB2l, Integer borrowerReturnsToWhichAddress, Integer willPickUpPreferredLocationB2l, Integer lenderThirdPartyChoiceB2l, Integer borrowerChoice, String remoteIp, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted) {
         this.lenderTransferId = lenderTransferId;
         this.lenderId = lenderId;
         this.itemId = itemId;
         this.userId = userId;
-        this.participantId = participantId;
+        this.participant_id = participant_id;
         this.borrowerComesToWhichAddress = borrowerComesToWhichAddress;
         this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
         this.meetBorrowerAtAgreedB2l = meetBorrowerAtAgreedB2l;
@@ -100,12 +100,12 @@ public class LenderTransfer implements java.io.Serializable {
         this.userId = userId;
     }
 
-    public String getParticipantId() {
-        return this.participantId;
+    public String getParticipant_id() {
+        return this.participant_id;
     }
 
-    public void setParticipantId(String participantId) {
-        this.participantId = participantId;
+    public void setParticipant_id(String participant_id) {
+        this.participant_id = participant_id;
     }
 
     public Integer getBorrowerComesToWhichAddress() {
