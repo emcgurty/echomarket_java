@@ -5,7 +5,7 @@ import java.util.Date;
 public class ContactPreference implements java.io.Serializable {
 
     private String contactPreferenceId;
-    private String participantId;
+    private String participant_id;
     private String itemId;
     private int useWhichContactAddress;
     private String contactByChat;
@@ -35,10 +35,10 @@ public class ContactPreference implements java.io.Serializable {
     }
 
     //update
-    public ContactPreference(String contactPreferenceId, String participantId, String itemId, int useWhichContactAddress, String contactByChat, String contactByEmail, Integer contactByHomePhone, Integer contactByCellPhone, Integer contactByAlternativePhone, String contactByFacebook, String contactByTwitter, String contactByInstagram, String contactByLinkedIn, String contactByOtherSocialMedia, String contactByOtherSocialMediaAccess, Date dateUpdated) {
+    public ContactPreference(String contactPreferenceId, String participant_id, String itemId, int useWhichContactAddress, String contactByChat, String contactByEmail, Integer contactByHomePhone, Integer contactByCellPhone, Integer contactByAlternativePhone, String contactByFacebook, String contactByTwitter, String contactByInstagram, String contactByLinkedIn, String contactByOtherSocialMedia, String contactByOtherSocialMediaAccess, Date dateUpdated) {
     
         this.contactPreferenceId = contactPreferenceId;
-        this.participantId = participantId;
+        this.participant_id = participant_id;
         this.itemId = itemId;
         this.useWhichContactAddress = useWhichContactAddress;
         this.contactByChat = contactByChat;
@@ -64,12 +64,12 @@ public class ContactPreference implements java.io.Serializable {
         this.contactPreferenceId = contactPreferenceId;
     }
 
-    public String getParticipantId() {
-        return this.participantId;
+    public String getParticipant_id() {
+        return this.participant_id;
     }
 
-    public void setParticipantId(String participantId) {
-        this.participantId = participantId;
+    public void setParticipant_id(String participant_id) {
+        this.participant_id = participant_id;
     }
 
     public int getUseWhichContactAddress() {
