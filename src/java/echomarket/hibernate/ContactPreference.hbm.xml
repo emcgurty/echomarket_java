@@ -8,7 +8,7 @@
             <column name="contact_preference_id" length="40" />
             <generator class="assigned" />
         </id>
-        <property name="participantId" type="string">
+        <property name="participant_id" type="string">
             <column name="participant_id" length="40" />
         </property>
         <property name="itemId" type="string">
@@ -60,5 +60,6 @@
         <property name="dateDeleted" type="timestamp">
             <column name="date_deleted" length="19" not-null="true" />
         </property>
+        
     </class>
 </hibernate-mapping>
