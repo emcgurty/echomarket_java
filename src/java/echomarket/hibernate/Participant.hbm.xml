@@ -3,108 +3,120 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="echomarket.hibernate.Participant" table="participant" catalog="echomarket" optimistic-lock="version">
-        <id name="participantId" type="string">
-            <column name="participant_id" length="40" />
-            <generator class="assigned" />
-        </id>
-        <property name="userId" type="string">
-            <column name="user_id" length="40" not-null="true" />
-        </property>
-        <property name="communityId" type="string">
-            <column name="community_id" length="40" />
-        </property>
-        <property name="contactDescribeId" type="int">
-            <column name="contact_describe_id"  />
-        </property>
-        <property name="organizationName" type="string">
-            <column name="organization_name" length="50" />
-        </property>
-        <property name="displayOrganization" type="int">
-            <column name="display_organization"  />
-        </property>
-        <property name="otherDescribeYourself" type="string">
-            <column name="other_describe_yourself" length="24" />
-        </property>
-        <property name="firstName" type="string">
-            <column name="first_name" length="24" />
-        </property>
-        <property name="mi" type="string">
-            <column name="mi" length="1" />
-        </property>
-        <property name="lastName" type="string">
-            <column name="last_name" length="24"  />
-        </property>
-        <property name="alias" type="string">
-            <column name="alias" length="24"  />
-        </property>
-        <property name="displayName" type="int">
-            <column name="display_name"  />
-        </property>
-        <property name="displayAddress" type="int">
-            <column name="display_address"  />
-        </property>
-        <property name="homePhone" type="string">
-            <column name="home_phone" length="20" />
-        </property>
-        <property name="cellPhone" type="string">
-            <column name="cell_phone" length="20" />
-        </property>
-        <property name="alternativePhone" type="string">
-            <column name="alternative_phone" length="20" />
-        </property>
-        <property name="emailAlternative" type="string">
-            <column name="email_alternative" length="50" />
-        </property>
+  <class name="echomarket.hibernate.Participant" table="participant" catalog="echomarket" optimistic-lock="version">
+    <id name="participant_id" type="string">
+      <column name="participant_id" length="40" />
+      <generator class="assigned" />
+    </id>
+    <set name="addresses" lazy="true" table="addresses">
+      <key column="participant_id" />
+      <one-to-many class="echomarket.hibernate.Addresses"  />
+    </set>
+    <set name="contactPreference" lazy="true" table="contact_preference">
+      <key column="participant_id" />
+      <one-to-many class="echomarket.hibernate.ContactPreference"  />
+    </set>
+    <set name="item" lazy="true" table="items">
+      <key column="participant_id" />
+      <one-to-many class="echomarket.hibernate.Items"  />
+    </set>
+    <property name="userId" type="string">
+      <column name="user_id" length="40" not-null="true" />
+    </property>
+    <property name="communityId" type="string">
+      <column name="community_id" length="40" />
+    </property>
+    <property name="contactDescribeId" type="int">
+      <column name="contact_describe_id"  />
+    </property>
+    <property name="organizationName" type="string">
+      <column name="organization_name" length="50" />
+    </property>
+    <property name="displayOrganization" type="int">
+      <column name="display_organization"  />
+    </property>
+    <property name="otherDescribeYourself" type="string">
+      <column name="other_describe_yourself" length="24" />
+    </property>
+    <property name="firstName" type="string">
+      <column name="first_name" length="24" />
+    </property>
+    <property name="mi" type="string">
+      <column name="mi" length="1" />
+    </property>
+    <property name="lastName" type="string">
+      <column name="last_name" length="24"  />
+    </property>
+    <property name="alias" type="string">
+      <column name="alias" length="24"  />
+    </property>
+    <property name="displayName" type="int">
+      <column name="display_name"  />
+    </property>
+    <property name="displayAddress" type="int">
+      <column name="display_address"  />
+    </property>
+    <property name="homePhone" type="string">
+      <column name="home_phone" length="20" />
+    </property>
+    <property name="cellPhone" type="string">
+      <column name="cell_phone" length="20" />
+    </property>
+    <property name="alternativePhone" type="string">
+      <column name="alternative_phone" length="20" />
+    </property>
+    <property name="emailAlternative" type="string">
+      <column name="email_alternative" length="50" />
+    </property>
         
-        <property name="questionAltEmail" type="int">
-            <column name="question_alt_email"  />
-        </property>
+    <property name="questionAltEmail" type="int">
+      <column name="question_alt_email"  />
+    </property>
         
-        <property name="questionAltAddress" type="int">
-            <column name="question_alt_address"  />
-        </property>
-        <property name="displayHomePhone" type="java.lang.Integer">
-            <column name="display_home_phone" />
-        </property>
-        <property name="displayCellPhone" type="java.lang.Integer">
-            <column name="display_cell_phone" />
-        </property>
-        <property name="displayAlternativePhone" type="java.lang.Integer">
-            <column name="display_alternative_phone" />
-        </property>
-        <property name="displayAlternativeAddress" type="java.lang.Integer">
-            <column name="display_alternative_address" />
-        </property>
-        <property name="goodwill" type="java.lang.Integer">
-            <column name="goodwill" />
-        </property>
-        <property name="age18OrMore" type="java.lang.Integer">
-            <column name="age_18_or_more" />
-        </property>
-        <property name="isActive" type="java.lang.Integer">
-            <column name="is_active" />
-        </property>
-        <property name="editable" type="java.lang.Integer">
-            <column name="editable" />
-        </property>
-        <property name="isCreator" type="java.lang.Integer">
-            <column name="is_creator" />
-        </property>
-        <property name="dateCreated" type="timestamp">
-            <column name="date_created" length="19" not-null="true" />
-        </property>
-        <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19"  />
-        </property>
-        <property name="dateDeleted" type="timestamp">
-            <column name="date_deleted" length="19"  />
-        </property>
-        <property name="remoteIp" type="string">
-            <column name="remote_ip" length="50" />
-        </property>
-        <property name="approved" type="int">
-            <column name="approved" not-null="true" />
-        </property>
-    </class>
+    <property name="questionAltAddress" type="int">
+      <column name="question_alt_address"  />
+    </property>
+    <property name="displayHomePhone" type="java.lang.Integer">
+      <column name="display_home_phone" />
+    </property>
+    <property name="displayCellPhone" type="java.lang.Integer">
+      <column name="display_cell_phone" />
+    </property>
+    <property name="displayAlternativePhone" type="java.lang.Integer">
+      <column name="display_alternative_phone" />
+    </property>
+    <property name="displayAlternativeAddress" type="java.lang.Integer">
+      <column name="display_alternative_address" />
+    </property>
+    <property name="goodwill" type="java.lang.Integer">
+      <column name="goodwill" />
+    </property>
+    <property name="age18OrMore" type="java.lang.Integer">
+      <column name="age_18_or_more" />
+    </property>
+    <property name="isActive" type="java.lang.Integer">
+      <column name="is_active" />
+    </property>
+    <property name="editable" type="java.lang.Integer">
+      <column name="editable" />
+    </property>
+    <property name="isCreator" type="java.lang.Integer">
+      <column name="is_creator" />
+    </property>
+    <property name="dateCreated" type="timestamp">
+      <column name="date_created" length="19" not-null="true" />
+    </property>
+    <property name="dateUpdated" type="timestamp">
+      <column name="date_updated" length="19"  />
+    </property>
+    <property name="dateDeleted" type="timestamp">
+      <column name="date_deleted" length="19"  />
+    </property>
+    <property name="remoteIp" type="string">
+      <column name="remote_ip" length="50" />
+    </property>
+    <property name="approved" type="int">
+      <column name="approved" not-null="true" />
+    </property>
+  </class>
 </hibernate-mapping>
