@@ -36,7 +36,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     @Inject
     UserBean ubean;
     private String contactPreferenceId;
-    private String participantId;
+    private String participant_id;
     private String itemId;
     private int useWhichContactAddress;
     private String contactByChat;
@@ -66,17 +66,17 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     }
 
     /**
-     * @return the participantId
+     * @return the participant_id
      */
-    public String getParticipantId() {
-        return participantId;
+    public String getParticipant_id() {
+        return participant_id;
     }
 
     /**
-     * @param participantId the participantId to set
+     * @param participant_id the participant_id to set
      */
-    public void setParticipantId(String participantId) {
-        this.participantId = participantId;
+    public void setParticipant_id(String participant_id) {
+        this.participant_id = participant_id;
     }
 
     /**
@@ -369,11 +369,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             }
             try {
                 Addresses altadd = (Addresses) participant_alternative.get(0);
-                String uid = altadd.getParticipantId();
+                String uid = altadd.getParticipant_id();
                 if (uid.equals(ubean.getUser_id())) {
                     sb.update(altadd);
                 } else {
-                    altadd.setParticipantId(ubean.getUser_id());
+                    altadd.setParticipant_id(ubean.getUser_id());
                     sb.save(altadd);
                 }
                 tx.commit();
@@ -451,7 +451,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         if (partlist.size() == 1) {
             ContactPreference pp = (ContactPreference) partlist.get(0);
             this.itemId = pp.getItemId();
-            this.participantId = pp.getParticipantId();
+            this.participant_id = pp.getParticipant_id();
             this.useWhichContactAddress = pp.getUseWhichContactAddress();
             this.contactByChat = pp.getContactByChat();
             this.contactByEmail = pp.getContactByEmail();
