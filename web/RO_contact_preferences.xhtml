@@ -10,7 +10,6 @@
 
     <h:dataTable value="#{readOnlyBean.getPrimaryAddress(readOnlyBean.itemId)}" id="primary"   var="pa" >    
       <h:column rowHeader="">
-
         <div  class="div_p"  >
           <div style="margin:10px;" >
             <h:outputText value="Contact Option: By Primary Adddress.." />
@@ -273,7 +272,7 @@
                 <h:outputText  value="#{cpb.contactByOtherSocialMediaAccess}" style="margin-left:5px;" class="RO_text" /> 
               </h:outputLabel>
             </div>
-            </
+          </c:if>
         </div>
       </h:column>
     </h:dataTable>
