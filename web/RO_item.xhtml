@@ -1,0 +1,84 @@
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  >
+
+
+  <div id="form_item" class="contact_information" >
+
+    <div  class="div_p"  >
+      <div style="margin:10px;" >
+        <h:outputText value="An item available to #{readOnlyBean.which}:"  />
+      </div>
+    </div>
+
+    <div  class="div_p"  >
+      <div style="margin:10px;" >
+        <h:outputText value="Item Detail..." />
+      </div>
+    </div>
+
+    <h:dataTable value="#{readOnlyBean.getItemData()}" id="RO_item"   var="ii" >    
+      <h:column rowHeader="">
+        <div style="margin-left:25px;margin-top:5px;">
+          <h:outputLabel value="Category:" >
+            <h:outputText  value="#{cats.getCategoryName(ii.categoryId)}" rendered="#{empty ii.otherItemCategory}" class="RO_text"  />
+            <h:outputText  value="#{ii.otherItemCategory}" rendered="#{!empty ii.otherItemCategory}" class="RO_text"  />
+          </h:outputLabel>  
+
+        </div>
+        <div style="margin-left:25px;margin-top:5px;">
+          <h:outputLabel value="#{bundle.ItemDescription}" >
+            <h:outputText value="#{ii.itemDescription}" class="RO_text"    />
+          </h:outputLabel>
+
+        </div>
+
+        <div style="margin-left:25px;margin-top:5px;">
+          <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  >
+            <c:set var="icn" value="#{itemc.getItemConditionName(ii.itemConditionId)}" />
+            <h:outputText value="#{icn}" class="RO_text"/>
+          </h:outputLabel>
+        </div>
+
+
+
+        <div style="margin-left:25px;margin-top:5px;">
+          <h:outputLabel value="#{bundle.ItemModel}" >
+            <h:outputText value="#{ii.itemModel}" class="RO_text"/>
+          </h:outputLabel>
+        </div>
+
+        <div style="margin-left:25px;margin-top:5px;">
+          <h:outputLabel value="#{bundle.NumberOfItems}" >
+            <h:outputText  value="#{ii.itemCount}" class="RO_text"/>
+          </h:outputLabel>
+
+        </div>
+
+        <div style="margin-left:25px;margin-top:5px;float:left;">
+          <c:if test="#{!empty image.imageFileName}" >
+            <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
+              <h:outputLabel value="Uploaded Image:"  >	
+                <h:graphicImage name="#{ii.imageFileName}" library="#{ii.itemType}er_images" alt="Item Image"   height="100" width="100" />
+              </h:outputLabel> 
+            </div>
+            <br />
+            <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+              <h:outputLabel for="itemImageCaption" value="Provided aption for your item image:" >
+                <h:outputText  id="itemImageCaption" value="#{ii.itemImageCaption}" class="RO_text" />
+              </h:outputLabel>
+            </div>
+          </c:if>
+        </div>
+      </h:column>
+    </h:dataTable>
+
+  </div>
+
+</ui:composition>
+
+
