@@ -13,7 +13,6 @@
         <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-                
                 <h:commandLink  action="#{participantBean.updateNAE()}"  class="right_div" value="Save EchoMarket partipicant information"   rendered="#{userBean.editable == 3}" />
                 <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Edit EchoMarket participant information"   rendered="#{userBean.editable == 2}" />
             </div> 
