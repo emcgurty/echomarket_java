@@ -1,0 +1,58 @@
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  >
+
+  <h:form id="personal_information" >
+    <div id="form_NAE" class="contact_information" >
+
+      <h:dataTable value="#{readOnlyBean.getByNAE()}" id="ro_nae"   var="nae" >    
+        <h:column rowHeader="">
+
+          <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+            <div style="margin-left: 25px;float:left">
+
+              <div  class="div_p" >
+                <div style="margin:5px;" >
+                  <h:outputText value="About the #{nae.itemType}er..." />
+                </div>
+              </div>
+
+              <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                <div style="float:left;margin-left:25px">
+                  <c:set var="cdes"  value=="#{cd.getOneCD(nae.contactDescribeId)}" />
+                  <h:outputLabel for="contactDescribeId"  value="#{nae.itemType}er describes his/herself as:"   >
+                    <h:outputText value="#{cdes}" class="RO_text" rendered="#{cdes ne 'other'}" />
+                    <h:outputText value="#{cdes}" class="RO_text" rendered="#{cdes ne 'other'}" />
+                  </h:outputLabel>
+
+                  <div style="float:left;margin-left:25px">
+                    <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" rendered="#{nae.displayOrganization == 1}" >
+                      <h:outputText value="#{nae.organizationName}" rendered="#{nae.displayOrganization == 1}" />
+                    </h:outputLabel>
+                  </div>
+                </div>
+              </div>
+
+              <c:if test="#{nae.displayName == 1}"  
+                    <div  class="div_p"  >
+                  <div style="margin:5px;" >
+                    <h:outputText value="#{nae.itemType}er's name:" />
+                    <h:outputText  value="#{nae.firstName} #{nae.mi}. #{nae.LastName}" rendered="#{nae.mi != null}" />
+                    <h:outputText  value="#{nae.firstName} #{nae.LastName}" rendered="#{nae.mi == null}" />
+                  </div>
+                </div>
+              </c:if>
+
+
+            </div>
+          </div>
+        </h:column>
+      </h:dataTable>
+
+    </div>
+  </h:form>
+</ui:composition>
