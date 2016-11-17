@@ -20,8 +20,14 @@
       </h:head>
 
       <div id="borrower_registration" style="width:inherit;" >
-        <ui:include rendered="true" src="RO_contact_preferences.xhtml" id="readOnlyInclude" /> 
-</div>
+        <ui:include rendered="true" src="RO_item.xhtml" id="itemInclude" /> 
+        <ui:include rendered="true" src="RO_user_nae.xhtml" id="naeInclude" /> 
+        <ui:include rendered="true" src="RO_contact_preferences.xhtml" id="cpInclude" /> 
+        <c:if test="#{readOnlyBean.which == 'lend'}" >
+          <ui:include rendered="true" src="RO_lender_conditions.xhtml" id="conditionsInclude" /> 
+          <ui:include rendered="true" src="RO_lender_transfer.xhtml" id="transferInclude" /> 
+        </c:if>
+      </div>
 
     </h:form>
   </ui:define>
