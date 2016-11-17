@@ -3,46 +3,50 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="echomarket.hibernate.Users" table="users" catalog="echomarket" optimistic-lock="version">
-        <id name="user_id" type="string">
-            <column name="user_id" length="40" />
-            <generator class="assigned" />
-        </id>
-        <property name="username" type="string">
-            <column name="username" length="40" not-null="true" />
-        </property>
-        <property name="email" type="string">
-            <column name="email" length="100" not-null="true" />
-        </property>
-        <property name="dateCreated" type="timestamp">
-            <column name="date_created" length="19" />
-        </property>
-        <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19" />
-        </property>
-        <property name="remoteIp" type="string">
-            <column name="remote_ip" length="24" />
-        </property>
-        <property name="cryptedPassword" type="binary">
-            <column name="crypted_password" />
-        </property>
-        <property name="salt" type="binary">
-            <column name="salt" />
-        </property>
-        <property name="resetCode" type="string">
-            <column name="reset_code" length="40" />
-        </property>
-        <property name="activatedAt" type="timestamp">
-            <column name="activated_at" length="19" />
-        </property>
-        <property name="userAlias" type="string">
-            <column name="user_alias" length="40" not-null="true" />
-        </property>
-        <property name="userType" type="string">
-            <column name="user_type" length="40" />
-        </property>
-        <property name="roleId" type="java.lang.Integer">
-            <column name="role_id" />
-        </property>
-    </class>
+  <class name="echomarket.hibernate.Users" table="users" catalog="echomarket" optimistic-lock="version">
+    <id name="user_id" type="string">
+      <column name="user_id" length="40" />
+      <generator class="assigned" />
+    </id>
+    <set name="participant" lazy="true" table="participant">
+      <key column="user_id" />
+      <one-to-many class="echomarket.hibernate.Participant"  />
+    </set>
+    <property name="username" type="string">
+      <column name="username" length="40" not-null="true" />
+    </property>
+    <property name="email" type="string">
+      <column name="email" length="100" not-null="true" />
+    </property>
+    <property name="dateCreated" type="timestamp">
+      <column name="date_created" length="19" />
+    </property>
+    <property name="dateUpdated" type="timestamp">
+      <column name="date_updated" length="19" />
+    </property>
+    <property name="remoteIp" type="string">
+      <column name="remote_ip" length="24" />
+    </property>
+    <property name="cryptedPassword" type="binary">
+      <column name="crypted_password" />
+    </property>
+    <property name="salt" type="binary">
+      <column name="salt" />
+    </property>
+    <property name="resetCode" type="string">
+      <column name="reset_code" length="40" />
+    </property>
+    <property name="activatedAt" type="timestamp">
+      <column name="activated_at" length="19" />
+    </property>
+    <property name="userAlias" type="string">
+      <column name="user_alias" length="40" not-null="true" />
+    </property>
+    <property name="userType" type="string">
+      <column name="user_type" length="40" />
+    </property>
+    <property name="roleId" type="java.lang.Integer">
+      <column name="role_id" />
+    </property>
+  </class>
 </hibernate-mapping>
