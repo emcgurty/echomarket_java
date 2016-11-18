@@ -28,6 +28,66 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return "read_only";
   }
 
+  public List getLIC() {
+
+    List result = null;
+    Session hib = hib_session();
+    Transaction tx = null;
+    String queryString = null;
+
+    try {
+      tx = hib.beginTransaction();
+      queryString = " FROM LenderItemConditions lic "
+              + " WHERE  (lic.itemId = :iid)";
+
+      result = hib.createQuery(queryString)
+              .setParameter("iid", this.getItemId())
+              .list();
+      tx.commit();
+
+    } catch (Exception e) {
+      System.out.println("Error in getLIC in ReadONlyBean");
+      e.printStackTrace();
+      tx.rollback();
+
+    } finally {
+      tx = null;
+      hib = null;
+    }
+
+    return result;
+  }
+
+  public List getLenderTransferData() {
+
+    List result = null;
+    Session hib = hib_session();
+    Transaction tx = null;
+    String queryString = null;
+
+    try {
+      tx = hib.beginTransaction();
+      queryString = " FROM LenderTransfer lt "
+              + " WHERE  (lt.itemId = :iid)";
+
+      result = hib.createQuery(queryString)
+              .setParameter("iid", this.getItemId())
+              .list();
+      tx.commit();
+
+    } catch (Exception e) {
+      System.out.println("Error in getLenderTransferData in ReadnNlyBean");
+      e.printStackTrace();
+      tx.rollback();
+
+    } finally {
+      tx = null;
+      hib = null;
+    }
+
+    return result;
+  }
+
   public List getItemData() {
 
     List result = null;
@@ -46,9 +106,10 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
+      tx.commit();
 
     } catch (Exception e) {
-      System.out.println("Error in getByNAE in ReadONlyBean");
+      System.out.println("Error in getItemData in ReadONlyBean");
       e.printStackTrace();
       tx.rollback();
 
@@ -79,6 +140,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
+      tx.commit();
 
     } catch (Exception e) {
       System.out.println("Error in getByNAE in ReadONlyBean");
@@ -112,7 +174,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getbySocialMedia in ReadOnlyBean");
       e.printStackTrace();
@@ -137,7 +199,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = hib.beginTransaction();
       queryString = "SELECT cp.contactByHomePhone, cp.contactByCellPhone, cp.contactByAlternativePhone, "
               + " part.homePhone, part.cellPhone, part.alternativePhone, "
-              + " part.DisplayHomePhone, part.displayCellPhone, part.displayAlternativePhone, "
+              + " part.DisplayHomePhone, part.displayCellPhone, part.displayAlternativePhone "
               + " it.itemType "
               + " FROM Users us, Participant part "
               + " left join us.participant part "
@@ -148,7 +210,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getByPhone in ReadOnlyBean");
       e.printStackTrace();
@@ -182,7 +244,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getByEmail in ReadOnlyBean");
       e.printStackTrace();
@@ -218,7 +280,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.itemId)
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getPrimaryAdrress in ReadONlyBean");
       e.printStackTrace();
@@ -231,7 +293,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
 
     return result;
   }
-  
+
   public List getBorrowerComesToAlternativeAddress() {
 
     List result = null;
@@ -253,7 +315,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.itemId)
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getPrimaryAdrress in ReadONlyBean");
       e.printStackTrace();
@@ -266,6 +328,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
 
     return result;
   }
+
   public List getPrimaryAddress(String iid) {
 
     List result = null;
@@ -288,7 +351,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getPrimaryAdrress in ReadONlyBean");
       e.printStackTrace();
@@ -324,7 +387,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getAlternativeAdrress in ReadOnlyBean");
       e.printStackTrace();
@@ -354,7 +417,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
-
+      tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getByChat in ReadOnlyBean");
       e.printStackTrace();
