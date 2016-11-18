@@ -1,52 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-    >
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  template="./UserDetailTemplate.xhtml">
+  >
 
-    <div id="form_legal" class="contact_information" >
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
+  </ui:define>  
 
-        <div class="top" >
-            <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-                <h:commandLink  action="#{participantBean.userAgreement()}"  class="right_div" value="I agree..."  rendered="#{userBean.editable == -1}" />
-            </div> 
-            <div style="margin:10px;" >
-                <h:outputText value="EchoMarket Agreement..." />
-
-            </div>
+  <ui:define name="content">
+    <h:form id="user_agreement_content" >
+      <div class="top" >
+        <div style="margin:10px;margin-top:25px;" >
+          <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
+          <h:commandLink  action="#{participantBean.userAgreement()}"  class="right_div" value="I agree..."  rendered="#{userBean.editable == -1}" />
         </div> 
-
-        <ui:include rendered="true" src="agreement_text.xhtml" id="agreementText" />
-
-        <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
-            <ul >
-                <li style="margin:5px;">
-                    <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill"  ><span class="required_fields">*</span>
-                        <h:outputText value="#{participantBean.goodwill}" />
-                        <h:selectOneRadio id="goodwill"  value="#{participantBean.goodwill}" >
-                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                            <f:selectItem itemValue="0" itemLabel="No" />	
-                        </h:selectOneRadio>    
-                    </h:outputLabel>                                     
-                    <span class="error-message" id="goodwill_span" ></span>
-                </li>
-                <li style="margin:5px;">
-                    <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore"  ><span class="required_fields">*</span>
-                        <h:selectOneRadio  id="age18OrMore" value="#{participantBean.age18OrMore}" >
-                            <f:selectItem itemValue="1" itemLabel="Yes" />
-                            <f:selectItem itemValue="0" itemLabel="No" />	
-                        </h:selectOneRadio>    
-                    </h:outputLabel>                                     
-                    <span class="error-message" id="age18OrMore_span" ></span>
-                </li>
-            </ul>
+        <div style="margin:10px;" >
+          <h:outputText value="EchoMarket Agreement..." />
         </div>
+      </div> 
 
+      <div class="messagecolor">
+        <h:messages showSummary="true" 
+                    showDetail="false"
+                    errorStyle="color: #d20005" 
+                    infoStyle="color: blue"/>
+      </div>
 
-    </div>
+      <ui:include rendered="true" src="agreement_text.xhtml" id="agreementText" />
 
+      <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
+        <ul >
+          <li style="margin:5px;">
+            <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill"  ><span class="required_fields">*</span>
+              <h:outputText value="#{participantBean.goodwill}" />
+              <h:selectOneRadio id="goodwill"  value="#{participantBean.goodwill}" >
+                <f:selectItem itemValue="1" itemLabel="Yes" />
+                <f:selectItem itemValue="0" itemLabel="No" />	
+              </h:selectOneRadio>    
+            </h:outputLabel>                                     
+            <span class="error-message" id="goodwill_span" ></span>
+          </li>
+          <li style="margin:5px;">
+            <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore"  ><span class="required_fields">*</span>
+              <h:selectOneRadio  id="age18OrMore" value="#{participantBean.age18OrMore}" >
+                <f:selectItem itemValue="1" itemLabel="Yes" />
+                <f:selectItem itemValue="0" itemLabel="No" />	
+              </h:selectOneRadio>    
+            </h:outputLabel>                                     
+            <span class="error-message" id="age18OrMore_span" ></span>
+          </li>
+        </ul>
+      </div>
+    </h:form>
+  </ui:define>
+
+  <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="LoginFooter" /> 
+  </ui:define>
 
 </ui:composition>
