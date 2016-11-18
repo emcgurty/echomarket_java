@@ -23,1002 +23,1005 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class ParticipantBean extends AbstractBean implements Serializable {
 
-    @Inject
-    UserBean ubean;
-    private String participant_id;
-    private int contactDescribeId;
-    private String organizationName;
-    private int displayOrganization;
-    private String otherDescribeYourself;
-    private String firstName;
-    private String mi;
-    private String lastName;
-    private String alias;
-    private int displayName;
-    private int displayAddress;
-    private String homePhone;
-    private String cellPhone;
-    private String alternativePhone;
-    private String emailAlternative;
-    private int questionAltEmail;
-    private int questionAltAddress;
-    private Integer displayHomePhone;
-    private Integer displayCellPhone;
-    private Integer displayAlternativePhone;
-    private Integer displayAlternativeAddress;
-    private Integer goodwill;
-    private Integer age18OrMore;
-    private Integer isCreator;
-    private Date dateCreated;
-    private Date dateUpdated;
-    private Date dateDeleted;
-    private String remoteIp;
-    private int approved;
+  @Inject
+  UserBean ubean;
+  private String participant_id;
+  private int contactDescribeId;
+  private String organizationName;
+  private int displayOrganization;
+  private String otherDescribeYourself;
+  private String firstName;
+  private String mi;
+  private String lastName;
+  private String alias;
+  private int displayName;
+  private int displayAddress;
+  private String homePhone;
+  private String cellPhone;
+  private String alternativePhone;
+  private String emailAlternative;
+  private int questionAltEmail;
+  private int questionAltAddress;
+  private Integer displayHomePhone;
+  private Integer displayCellPhone;
+  private Integer displayAlternativePhone;
+  private Integer displayAlternativeAddress;
+  private Integer goodwill;
+  private Integer age18OrMore;
+  private Integer isCreator;
+  private Date dateCreated;
+  private Date dateUpdated;
+  private Date dateDeleted;
+  private String remoteIp;
+  private int approved;
 
-    private static ArrayList<Addresses> primary
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "primary")));
+  private static ArrayList<Addresses> primary
+          = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "primary")));
 
-    private static ArrayList<Addresses> alternative
-            = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "alternative")));
+  private static ArrayList<Addresses> alternative
+          = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "alternative")));
 
-    private Addresses[] existing_primary;
-    private Addresses[] existing_alternative;
+  private Addresses[] existing_primary;
+  private Addresses[] existing_alternative;
 
-    public ArrayList<Addresses> getPrimary() {
-        return primary;
-    }
+  public ArrayList<Addresses> getPrimary() {
+    return primary;
+  }
 
-    public ArrayList<Addresses> getAlternative() {
-        return alternative;
-    }
+  public ArrayList<Addresses> getAlternative() {
+    return alternative;
+  }
 
-    public static void setPrimary(ArrayList<Addresses> aPrimary) {
-        primary = aPrimary;
-    }
+  public static void setPrimary(ArrayList<Addresses> aPrimary) {
+    primary = aPrimary;
+  }
 
-    public static void setAlternative(ArrayList<Addresses> aAlternative) {
-        alternative = aAlternative;
-    }
+  public static void setAlternative(ArrayList<Addresses> aAlternative) {
+    alternative = aAlternative;
+  }
 
-    public Boolean notifyLenders() {
-        // Not complete
-        return true;
-    }
+  public Boolean notifyLenders() {
+    // Not complete
+    return true;
+  }
 
-    public String load_ud(String uid) {
+  public String load_ud(String uid) {
 
-        List partlist = null;
-        partlist = getCurrentParticipant(uid);
-        Participant pp = (Participant) partlist.get(0);
-        this.participant_id = pp.getParticipant_id();
-        this.contactDescribeId = pp.getContactDescribeId();
-        this.organizationName = pp.getOrganizationName();
-        this.displayOrganization = pp.getDisplayOrganization();
-        this.otherDescribeYourself = pp.getOtherDescribeYourself();
-        this.firstName = pp.getFirstName();
-        this.mi = pp.getMi();
-        this.lastName = pp.getLastName();
-        this.alias = pp.getAlias();
-        this.displayName = pp.getDisplayName();
-        this.displayAddress = pp.getDisplayAddress();
-        this.homePhone = pp.getHomePhone();
-        this.cellPhone = pp.getCellPhone();
-        this.alternativePhone = pp.getAlternativePhone();
-        this.emailAlternative = pp.getEmailAlternative();
-        this.displayHomePhone = pp.getDisplayHomePhone();
-        this.displayCellPhone = pp.getDisplayCellPhone();
-        this.displayAlternativePhone = pp.getDisplayAlternativeAddress();
-        this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
-        this.goodwill = pp.getGoodwill();
-        this.age18OrMore = pp.getAge18OrMore();
-        this.isCreator = pp.getIsCreator();
-        if ("agreement".equals(ubean.getUserAction())) {
+    List partlist = null;
+    partlist = getCurrentParticipant(uid);
+    Participant pp = (Participant) partlist.get(0);
+    this.participant_id = pp.getParticipant_id();
+    this.contactDescribeId = pp.getContactDescribeId();
+    this.organizationName = pp.getOrganizationName();
+    this.displayOrganization = pp.getDisplayOrganization();
+    this.otherDescribeYourself = pp.getOtherDescribeYourself();
+    this.firstName = pp.getFirstName();
+    this.mi = pp.getMi();
+    this.lastName = pp.getLastName();
+    this.alias = pp.getAlias();
+    this.displayName = pp.getDisplayName();
+    this.displayAddress = pp.getDisplayAddress();
+    this.homePhone = pp.getHomePhone();
+    this.cellPhone = pp.getCellPhone();
+    this.alternativePhone = pp.getAlternativePhone();
+    this.emailAlternative = pp.getEmailAlternative();
+    this.displayHomePhone = pp.getDisplayHomePhone();
+    this.displayCellPhone = pp.getDisplayCellPhone();
+    this.displayAlternativePhone = pp.getDisplayAlternativeAddress();
+    this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
+    this.goodwill = pp.getGoodwill();
+    this.age18OrMore = pp.getAge18OrMore();
+    this.isCreator = pp.getIsCreator();
+    if ("agreement".equals(ubean.getUserAction())) {
 //            ubean.setUserAction(null);
-            ubean.setEditable(-1);
-        } else {
-            ubean.setEditable(3);
-        }
+      ubean.setEditable(-1);
+    } else {
+      ubean.setEditable(3);
+    }
 //        return "user_detailfaces-redirect=true";
-        return "user_detail";
+    return "user_detail";
+  }
+
+  public String getUserDefinedAlternativeEmail(String pid) {
+    Session sb;
+    Transaction tx;
+    sb = null;
+    tx = null;
+    List result = null;
+    String alt_email = null;
+    sb = hib_session();
+    tx = sb.beginTransaction();
+
+    try {
+      String query = "FROM Participant WHERE user_id = :pid ";
+      result = sb.createQuery(query)
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+      if (result.size() > 0) {
+        Participant part = (Participant) result.get(0);
+        alt_email = part.getEmailAlternative();
+      }
+    } catch (Exception e) {
+      tx.rollback();
+      System.out.println("Error in getCurrentB");
+      e.printStackTrace();
+      System.out.println("IS TX STILL ACTIVE 110");
+      System.out.println(tx.isActive());
+      System.out.println("IS TX STILL ACTIVE 110 - close");
+
+    } finally {
+      System.out.println("IS TX STILL ACTIVE 116");
+      System.out.println(tx.isActive());
+      System.out.println("IS TX STILL ACTIVE 116 - close");
+      tx = null;
+      sb = null;
+
     }
 
-    public String getUserDefinedAlternativeEmail(String pid) {
-        Session sb;
-        Transaction tx;
-        sb = null;
-        tx = null;
-        List result = null;
-        String alt_email = null;
-        sb = hib_session();
-        tx = sb.beginTransaction();
+    if (alt_email == null) {
+      return "Not provided";
+    } else {
+      return alt_email;
+    }
+  }
 
-        try {
-            String query = "FROM Participant WHERE user_id = :pid ";
-            result = sb.createQuery(query)
-                    .setParameter("pid", pid)
-                    .list();
-            tx.commit();
-            if (result.size() > 0) {
-                Participant part = (Participant) result.get(0);
-                alt_email = part.getEmailAlternative();
-            }
-        } catch (Exception e) {
-            tx.rollback();
-            System.out.println("Error in getCurrentB");
-            e.printStackTrace();
-            System.out.println("IS TX STILL ACTIVE 110");
-            System.out.println(tx.isActive());
-            System.out.println("IS TX STILL ACTIVE 110 - close");
+  public String updateNAE() {
 
-        } finally {
-            System.out.println("IS TX STILL ACTIVE 116");
-            System.out.println(tx.isActive());
-            System.out.println("IS TX STILL ACTIVE 116 - close");
-            tx = null;
-            sb = null;
+    List padrs = getPrimary();
+    List aadrs = getAlternative();
+    String query = null;
+    String reqPO = null;
+    Session sb;
+    Transaction tx;
+    List result = null;
+    sb = null;
+    tx = null;
+    String pid = null;
 
-        }
-
-        if (alt_email == null) {
-            return "Not provided";
-        } else {
-            return alt_email;
-        }
+    try {
+      sb = hib_session();
+      tx = sb.beginTransaction();
+    } catch (Exception ex) {
+      System.out.println("Error in Save/Update Particpant, line 173");
+      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    public String updateNAE() {
-
-        List padrs = getPrimary();
-        List aadrs = getAlternative();
-        String query = null;
-        String reqPO = null;
-        Session sb;
-        Transaction tx;
-        List result = null;
-        sb = null;
-        tx = null;
-        String pid = null;
-
-        try {
-            sb = hib_session();
-            tx = sb.beginTransaction();
-        } catch (Exception ex) {
-            System.out.println("Error in Save/Update Particpant, line 173");
-            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-//        Participant part = (Participant) sb.load(Participant.class, participant_id);  //proxy
-//        part.setAlternativePhone(alternativePhone);
-//        part.setContactDescribeId(contactDescribeId);
-//        part.setOrganizationName(organizationName);
-
-        try {
-            query = "FROM Participant WHERE user_id = :uid";
-            result = sb.createQuery(query)
-                    .setParameter("uid", ubean.getUser_id())
-                    .list();
-            tx.commit();
-        } catch (Exception e) {
-            System.out.println("Error in getCurrentB");
-            e.printStackTrace();
-            tx.rollback();
-        } finally {
+    try {
+      query = "FROM Participant WHERE user_id = :uid";
+      result = sb.createQuery(query)
+              .setParameter("uid", ubean.getUser_id())
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentB");
+      e.printStackTrace();
+      tx.rollback();
+    } finally {
 //            tx = null;
 //            sb = null;
 
-        }
+    }
 //         Participant part = new Participant(participant_id, ubean.getUser_id(), contactDescribeId, organizationName, displayOrganization, otherDescribeYourself, firstName, mi, lastName, "NA", displayName, displayAddress, homePhone, cellPhone,
 //                alternativePhone, emailAlternative, displayHomePhone, displayCellPhone, displayAlternativePhone, displayAlternativeAddress, "NA");
 
-        try {
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-            Participant part = (Participant) result.get(0);
-            pid = part.getParticipant_id();
-            part.setContactDescribeId(contactDescribeId);
-            part.setOrganizationName(organizationName);
-            part.setDisplayOrganization(displayOrganization);
-            part.setOtherDescribeYourself(otherDescribeYourself);
-            part.setFirstName(firstName);
-            part.setMi(mi);
-            part.setLastName(lastName);
-            part.setDisplayName(displayName);
-            part.setDisplayAddress(displayAddress);
-            part.setHomePhone(homePhone);
-            part.setCellPhone(cellPhone);
-            part.setAlternativePhone(alternativePhone);
-            part.setEmailAlternative(emailAlternative);
-            part.setDisplayHomePhone(displayHomePhone);
-            part.setDisplayCellPhone(displayCellPhone);
-            part.setDisplayAlternativePhone(displayAlternativePhone);
-            part.setDisplayAlternativeAddress(displayAlternativeAddress);
+    try {
+      if (sb.isOpen() == false) {
+        sb = hib_session();
+      }
+      if (tx.isActive() == false) {
+        tx = sb.beginTransaction();
+      }
+      Participant part = (Participant) result.get(0);
+      pid = part.getParticipant_id();
+      part.setContactDescribeId(contactDescribeId);
+      part.setOrganizationName(organizationName);
+      part.setDisplayOrganization(displayOrganization);
+      part.setOtherDescribeYourself(otherDescribeYourself);
+      part.setFirstName(firstName);
+      part.setMi(mi);
+      part.setLastName(lastName);
+      part.setDisplayName(displayName);
+      part.setDisplayAddress(displayAddress);
+      part.setHomePhone(homePhone);
+      part.setCellPhone(cellPhone);
+      part.setAlternativePhone(alternativePhone);
+      part.setEmailAlternative(emailAlternative);
+      part.setDisplayHomePhone(displayHomePhone);
+      part.setDisplayCellPhone(displayCellPhone);
+      part.setDisplayAlternativePhone(displayAlternativePhone);
+      part.setDisplayAlternativeAddress(displayAlternativeAddress);
 
-            sb.update(part);
-            tx.commit();
+      sb.update(part);
+      tx.commit();
 
-        } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("Error in Save/Update Particpant");
-            Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error in Save/Update Particpant");
+      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
 //            if (sb != null) {
 //                sb.close();
 //            }
 
-            Addresses balt = (Addresses) aadrs.get(0);
-            reqPO = balt.getPostalCode();
-            if (reqPO != null) {
-                balt.setParticipant_id(pid);
-
-                if (sb.isOpen() == false) {
-                    sb = hib_session();
-                }
-                if (tx.isActive() == false) {
-                    tx = sb.beginTransaction();
-                }
-
-                try {
-                    sb.save(balt);
-                    tx.commit();
-                } catch (Exception e) {
-                } finally {
-                }
-            }
-        }
-
-        Addresses ba = (Addresses) padrs.get(0);
-        reqPO = ba.getPostalCode();
-        if (reqPO != null) {
-            ba.setParticipant_id(pid);
-            if (sb.isOpen() == false) {
-                sb = hib_session();
-            }
-            if (tx.isActive() == false) {
-                tx = sb.beginTransaction();
-            }
-
-            try {
-                sb.save(ba);
-                tx.commit();
-            } catch (Exception ex) {
-                tx.rollback();
-                System.out.println("Error in Save/Update Particpant, 276");
-                Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                sb = null;
-                tx = null;
-                message(
-                        null,
-                        "BorrowerRegistionRecordSaved",
-                        null);
-
-            }
-        }
-
-        ubean.setEditable(3);
-        return "user_detail";
-//        return "user_detail?faces-redirect=true";
-
-    }
-
-    public String userAgreement() {
-
-        if ((goodwill != 1) || (age18OrMore != 1)) {
-            message(
-                    null,
-                    "threeStrikesYourOut",
-                    null);
-            ubean.setEditable(-1);
-
-        } else {
-            Session sb = hib_session();
-            Transaction tx = sb.beginTransaction();
-
-            Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
-            try {
-                sb.save(part);
-                tx.commit();
-            } catch (Exception ex) {
-                tx.rollback();
-                System.out.println("Error in Save/Update Particpant");
-                Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-
-                sb = null;
-                tx = null;
-                ubean.setEditable(0);
-
-            }
-        }
-
-        return "user_detail";
-//        return "user_detail?faces-redirect=true";
-    }
-
-    private Boolean processAddress(Addresses[] address) {
-
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
-        Boolean b_return = false;
-        try {
-            sb.update(address);
-            tx.commit();
-            b_return = true;
-        } catch (Exception ex) {
-            tx.rollback();
-            Logger
-                    .getLogger(ParticipantBean.class
-                            .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (sb != null) {
-                sb.close();
-            }
-            tx = null;
-            sb = null;
-
-        }
-
-        return b_return;
-    }
-
-    public String saveParticipantEdit() {
-
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
-        Date today_date = new Date();
-        String current_user = null;
-        Boolean bret = false;
-
-        try {
-            current_user = ubean.getUser_id();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        /// Need to implement onChange Listener to learn if dirty??
-        Participant bb = new Participant();
-
-        try {
-            sb.update(bb);
-            tx.commit();
-        } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("Error on Update Participant");
-            Logger
-                    .getLogger(ParticipantBean.class
-                            .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (sb != null) {
-                sb.close();
-            }
-
-            bret = processAddress(this.existing_alternative);
-            bret = processAddress(this.existing_primary);
-        }
-
-        if (bret == true) {
-            tx = null;
-            sb = null;
-            message(
-                    null,
-                    "ParticipantRecordUpdated",
-                    null);
-        } else {
-            message(
-                    null,
-                    "ParticipantRecordNotUpdated",
-                    null);
-
-        }
-
-        return "index?faces-redirect=true";
-
-    }
-
-    public String saveParticipantRegistration() {
-
-        List padrs = getPrimary();
-        List aadrs = getAlternative();
-        Session sb = hib_session();
-        Transaction tx = sb.beginTransaction();
-        Date today_date = new Date();
-        String getAbstId = getId();
-        String current_user = null;
-        try {
-
-            current_user = ubean.getUser_id();
-
-        } catch (Exception e) {
-            System.out.println("Testing inject vs session Map");
-            e.printStackTrace();
-        }
-        Participant bb = new Participant();
-
-        sb.save(bb);
-        try {
-            tx.commit();
-        } catch (Exception e) {
-        }
-
-        Addresses balt = (Addresses) aadrs.get(0);
-        balt.setParticipant_id(getAbstId);
+      Addresses balt = (Addresses) aadrs.get(0);
+      reqPO = balt.getPostalCode();
+      if (reqPO != null) {
+        balt.setParticipant_id(pid);
 
         if (sb.isOpen() == false) {
-            sb = hib_session();
+          sb = hib_session();
         }
         if (tx.isActive() == false) {
-            tx = sb.beginTransaction();
+          tx = sb.beginTransaction();
         }
 
         try {
-            sb.save(balt);
-            tx.commit();
+          sb.save(balt);
+          tx.commit();
         } catch (Exception e) {
         } finally {
         }
-
-        Addresses ba = (Addresses) padrs.get(0);
-        ba.setParticipant_id(getAbstId);
-
-        if (sb.isOpen() == false) {
-            sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-            tx = sb.beginTransaction();
-        }
-
-        try {
-            sb.save(ba);
-            tx.commit();
-        } catch (Exception e) {
-        } finally {
-            message(
-                    null,
-                    "ParticipantRegistionRecordSaved",
-                    null);
-
-        }
-        return "index?faces-redirect=true";
+      }
     }
 
-    public int getContactDescribeId() {
-        return contactDescribeId;
+    Addresses ba = (Addresses) padrs.get(0);
+    reqPO = ba.getPostalCode();
+    if (reqPO != null) {
+      ba.setParticipant_id(pid);
+      if (sb.isOpen() == false) {
+        sb = hib_session();
+      }
+      if (tx.isActive() == false) {
+        tx = sb.beginTransaction();
+      }
+
+      try {
+        sb.save(ba);
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in Save/Update Particpant, 276");
+        Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+        sb = null;
+        tx = null;
+        message(
+                null,
+                "BorrowerRegistionRecordSaved",
+                null);
+
+      }
     }
 
-    public void setContactDescribeId(int contactDescribeId) {
-        this.contactDescribeId = contactDescribeId;
+    ubean.setEditable(3);
+    return "user_detail";
+//        return "user_detail?faces-redirect=true";
+
+  }
+
+  public String userAgreement() {
+
+    if ((goodwill != 1) || (age18OrMore != 1)) {
+      message(
+              null,
+              "threeStrikesYourOut",
+              null);
+      ubean.setEditable(-1);
+
+    } else {
+      Session sb = hib_session();
+      Transaction tx = sb.beginTransaction();
+
+      Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
+      try {
+        sb.save(part);
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in Save/Update Particpant");
+        Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+
+        sb = null;
+        tx = null;
+        ubean.setEditable(0);
+
+      }
     }
 
-    public String getOrganizationName() {
-        if ((organizationName != null) || (ubean.getEditable() == 3)) {
-            return organizationName;
-        } else {
-            return "Not provided";
-        }
+    return "user_detail";
+//        return "user_detail?faces-redirect=true";
+  }
+
+  private Boolean processAddress(Addresses[] address) {
+
+    Session sb = hib_session();
+    Transaction tx = sb.beginTransaction();
+    Boolean b_return = false;
+    try {
+      sb.update(address);
+      tx.commit();
+      b_return = true;
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      if (sb != null) {
+        sb.close();
+      }
+      tx = null;
+      sb = null;
 
     }
 
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
+    return b_return;
+  }
+
+  public String saveParticipantEdit() {
+
+    Session sb = hib_session();
+    Transaction tx = sb.beginTransaction();
+    Date today_date = new Date();
+    String current_user = null;
+    Boolean bret = false;
+
+    try {
+      current_user = ubean.getUser_id();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    /// Need to implement onChange Listener to learn if dirty??
+    Participant bb = new Participant();
+
+    try {
+      sb.update(bb);
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on Update Participant");
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      if (sb != null) {
+        sb.close();
+      }
+
+      bret = processAddress(this.existing_alternative);
+      bret = processAddress(this.existing_primary);
     }
 
-    public String getOtherDescribeYourself() {
-        if ((otherDescribeYourself != null) || (ubean.getEditable() == 3)) {
-            return otherDescribeYourself;
-        } else {
-            return "Not provided";
-        }
+    if (bret == true) {
+      tx = null;
+      sb = null;
+      message(
+              null,
+              "ParticipantRecordUpdated",
+              null);
+    } else {
+      message(
+              null,
+              "ParticipantRecordNotUpdated",
+              null);
+
     }
 
-    public void setOtherDescribeYourself(String otherDescribeYourself) {
-        this.otherDescribeYourself = otherDescribeYourself;
+    return "index?faces-redirect=true";
+
+  }
+
+  public String saveParticipantRegistration() {
+
+    List padrs = getPrimary();
+    List aadrs = getAlternative();
+    Session sb = hib_session();
+    Transaction tx = sb.beginTransaction();
+    Date today_date = new Date();
+    String getAbstId = getId();
+    String current_user = null;
+    try {
+
+      current_user = ubean.getUser_id();
+
+    } catch (Exception e) {
+      System.out.println("Testing inject vs session Map");
+      e.printStackTrace();
+    }
+    Participant bb = new Participant();
+
+    sb.save(bb);
+    try {
+      tx.commit();
+    } catch (Exception e) {
     }
 
-    public String getFirstName() {
-        return firstName;
+    Addresses balt = (Addresses) aadrs.get(0);
+    balt.setParticipant_id(getAbstId);
+
+    if (sb.isOpen() == false) {
+      sb = hib_session();
+    }
+    if (tx.isActive() == false) {
+      tx = sb.beginTransaction();
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    try {
+      sb.save(balt);
+      tx.commit();
+    } catch (Exception e) {
+    } finally {
     }
 
-    public String getMi() {
-        if (mi == null) {
-            return " ";
-        } else {
-            return mi;
-        }
+    Addresses ba = (Addresses) padrs.get(0);
+    ba.setParticipant_id(getAbstId);
+
+    if (sb.isOpen() == false) {
+      sb = hib_session();
+    }
+    if (tx.isActive() == false) {
+      tx = sb.beginTransaction();
     }
 
-    public void setMi(String mi) {
-        this.mi = mi;
+    try {
+      sb.save(ba);
+      tx.commit();
+    } catch (Exception e) {
+    } finally {
+      message(
+              null,
+              "ParticipantRegistionRecordSaved",
+              null);
+
+    }
+    return "index?faces-redirect=true";
+  }
+
+  public int getContactDescribeId() {
+    return contactDescribeId;
+  }
+
+  public void setContactDescribeId(int contactDescribeId) {
+    this.contactDescribeId = contactDescribeId;
+  }
+
+  public String getOrganizationName() {
+    if ((organizationName != null) || (ubean.getEditable() == 3)) {
+      return organizationName;
+    } else {
+      return "Not provided";
     }
 
-    public String getLastName() {
-        return lastName;
-    }
+  }
 
-    /**
-     * @param lastName the lastName to set
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public void setOrganizationName(String organizationName) {
+    this.organizationName = organizationName;
+  }
 
-    /**
-     * @return the homePhone
-     */
-    public String getHomePhone() {
-        return homePhone;
+  public String getOtherDescribeYourself() {
+    if ((otherDescribeYourself != null) || (ubean.getEditable() == 3)) {
+      return otherDescribeYourself;
+    } else {
+      return "Not provided";
     }
+  }
 
-    /**
-     * @param homePhone the homePhone to set
-     */
-    public void setHomePhone(String homePhone) {
-        this.homePhone = homePhone;
+  public void setOtherDescribeYourself(String otherDescribeYourself) {
+    this.otherDescribeYourself = otherDescribeYourself;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getMi() {
+    if (mi == null) {
+      return " ";
+    } else {
+      return mi;
     }
+  }
 
-    /**
-     * @return the cellPhone
-     */
-    public String getCellPhone() {
-        return cellPhone;
-    }
+  public void setMi(String mi) {
+    this.mi = mi;
+  }
 
-    /**
-     * @param cellPhone the cellPhone to set
-     */
-    public void setCellPhone(String cellPhone) {
-        this.cellPhone = cellPhone;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    /**
-     * @return the alternativePhone
-     */
-    public String getAlternativePhone() {
-        return alternativePhone;
-    }
+  /**
+   * @param lastName the lastName to set
+   */
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    /**
-     * @param alternativePhone the alternativePhone to set
-     */
-    public void setAlternativePhone(String alternativePhone) {
-        this.alternativePhone = alternativePhone;
-    }
+  /**
+   * @return the homePhone
+   */
+  public String getHomePhone() {
+    return homePhone;
+  }
 
-    /**
-     * @return the emailAlternative
-     */
-    public String getEmailAlternative() {
+  /**
+   * @param homePhone the homePhone to set
+   */
+  public void setHomePhone(String homePhone) {
+    this.homePhone = homePhone;
+  }
+
+  /**
+   * @return the cellPhone
+   */
+  public String getCellPhone() {
+    return cellPhone;
+  }
+
+  /**
+   * @param cellPhone the cellPhone to set
+   */
+  public void setCellPhone(String cellPhone) {
+    this.cellPhone = cellPhone;
+  }
+
+  /**
+   * @return the alternativePhone
+   */
+  public String getAlternativePhone() {
+    return alternativePhone;
+  }
+
+  /**
+   * @param alternativePhone the alternativePhone to set
+   */
+  public void setAlternativePhone(String alternativePhone) {
+    this.alternativePhone = alternativePhone;
+  }
+
+  /**
+   * @return the emailAlternative
+   */
+  public String getEmailAlternative() {
 //        if ((emailAlternative != null) || (ubean.getEditable() == 8)) {
-        return emailAlternative;
+    return emailAlternative;
 //        } else {
 //            return "Not provided";
 //        }
 
-    }
+  }
 
-    /**
-     * @param emailAlternative the emailAlternative to set
-     */
-    public void setEmailAlternative(String emailAlternative) {
-        this.emailAlternative = emailAlternative;
-    }
+  /**
+   * @param emailAlternative the emailAlternative to set
+   */
+  public void setEmailAlternative(String emailAlternative) {
+    this.emailAlternative = emailAlternative;
+  }
 
-    /**
-     * @return the goodwill
-     */
-    public Integer getGoodwill() {
-        return goodwill;
-    }
+  /**
+   * @return the goodwill
+   */
+  public Integer getGoodwill() {
+    return goodwill;
+  }
 
-    /**
-     * @param goodwill the goodwill to set
-     */
-    public void setGoodwill(Integer goodwill) {
-        this.goodwill = goodwill;
-    }
+  /**
+   * @param goodwill the goodwill to set
+   */
+  public void setGoodwill(Integer goodwill) {
+    this.goodwill = goodwill;
+  }
 
-    /**
-     * @return the age18OrMore
-     */
-    public Integer getAge18OrMore() {
-        return age18OrMore;
-    }
+  /**
+   * @return the age18OrMore
+   */
+  public Integer getAge18OrMore() {
+    return age18OrMore;
+  }
 
-    /**
-     * @param age18OrMore the age18OrMore to set
-     */
-    public void setAge18OrMore(Integer age18OrMore) {
-        this.age18OrMore = age18OrMore;
-    }
+  /**
+   * @param age18OrMore the age18OrMore to set
+   */
+  public void setAge18OrMore(Integer age18OrMore) {
+    this.age18OrMore = age18OrMore;
+  }
 
-    /**
-     * @return the dateCreated
-     */
-    public Date getDateCreated() {
-        return dateCreated;
-    }
+  /**
+   * @return the dateCreated
+   */
+  public Date getDateCreated() {
+    return dateCreated;
+  }
 
-    /**
-     * @param dateCreated the dateCreated to set
-     */
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
+  /**
+   * @param dateCreated the dateCreated to set
+   */
+  public void setDateCreated(Date dateCreated) {
+    this.dateCreated = dateCreated;
+  }
 
-    /**
-     * @return the dateUpdated
-     */
-    public Date getDateUpdated() {
-        return dateUpdated;
-    }
+  /**
+   * @return the dateUpdated
+   */
+  public Date getDateUpdated() {
+    return dateUpdated;
+  }
 
-    /**
-     * @param dateUpdated the dateUpdated to set
-     */
-    public void setDateUpdated(Date dateUpdated) {
-        this.dateUpdated = dateUpdated;
-    }
+  /**
+   * @param dateUpdated the dateUpdated to set
+   */
+  public void setDateUpdated(Date dateUpdated) {
+    this.dateUpdated = dateUpdated;
+  }
 
-    /**
-     * @return the dateDeleted
-     */
-    public Date getDateDeleted() {
-        return dateDeleted;
-    }
+  /**
+   * @return the dateDeleted
+   */
+  public Date getDateDeleted() {
+    return dateDeleted;
+  }
 
-    /**
-     * @param dateDeleted the dateDeleted to set
-     */
-    public void setDateDeleted(Date dateDeleted) {
-        this.dateDeleted = dateDeleted;
-    }
+  /**
+   * @param dateDeleted the dateDeleted to set
+   */
+  public void setDateDeleted(Date dateDeleted) {
+    this.dateDeleted = dateDeleted;
+  }
 
-    /**
-     * @return the approved
-     */
-    public int getApproved() {
-        return approved;
-    }
+  /**
+   * @return the approved
+   */
+  public int getApproved() {
+    return approved;
+  }
 
-    /**
-     * @param approved the approved to set
-     */
-    public void setApproved(int approved) {
-        this.approved = approved;
-    }
+  /**
+   * @param approved the approved to set
+   */
+  public void setApproved(int approved) {
+    this.approved = approved;
+  }
 
-    /**
-     * @return the remoteIp
-     */
-    public String getRemoteIp() {
-        return remoteIp;
-    }
+  /**
+   * @return the remoteIp
+   */
+  public String getRemoteIp() {
+    return remoteIp;
+  }
 
-    /**
-     * @param remoteIp the remoteIp to set
-     */
-    public void setRemoteIp(String remoteIp) {
-        this.remoteIp = remoteIp;
-    }
+  /**
+   * @param remoteIp the remoteIp to set
+   */
+  public void setRemoteIp(String remoteIp) {
+    this.remoteIp = remoteIp;
+  }
 
-    private List getCurrentParticipant(String uid) {
+  private List getCurrentParticipant(String uid) {
 
-        List result = null;
-        Session session = hib_session();
-        Transaction tx = session.beginTransaction();
-        String query = null;
-        try {
-            query = "FROM Participant WHERE user_id = :uid";
-            result = session.createQuery(query)
-                    .setParameter("uid", uid)
-                    .list();
-            tx.commit();
-        } catch (Exception e) {
-            System.out.println("Error in getCurrentParticipant");
-            e.printStackTrace();
-            tx.rollback();
-        } finally {
-            tx = null;
-            session = null;
-
-        }
-        return result;
-    }
-
-    private List getExistingParticipantAddress(String which) {
-
-        List result = null;
-        Addresses[] a_array = null;
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
-
-        String queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
-        try {
-            result = hib.createQuery(queryString)
-                    .setParameter("bid", ubean.getUserAction())
-                    .setParameter("which", which)
-                    .list();
-            tx.commit();
-        } catch (Exception e) {
-
-        } finally {
-            tx = null;
-            hib = null;
-        }
-
-        Integer size_of_list = result.size();
-        if ((size_of_list == 0) && (which == "alternative")) {
-            return getAlternative();
-        } else if ((size_of_list == 0) && (which == "primary")) {
-            return getPrimary();
-        } else {
-            return result;
-        }
+    List result = null;
+    Session session = hib_session();
+    Transaction tx = session.beginTransaction();
+    String query = null;
+    try {
+      query = "FROM Participant WHERE user_id = :uid";
+      result = session.createQuery(query)
+              .setParameter("uid", uid)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentParticipant");
+      e.printStackTrace();
+      tx.rollback();
+    } finally {
+      tx = null;
+      session = null;
 
     }
+    return result;
+  }
 
-    public String deleteCurrentRecord(String bid, String itemDesc) {
+  private List getExistingParticipantAddress(String which) {
 
-        List result = null;
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
+    List result = null;
+    Addresses[] a_array = null;
+    Session hib = hib_session();
+    Transaction tx = null;
 
-        String queryString = "from Participant where borrower_id = :bid";
-        try {
-            result = hib.createQuery(queryString)
-                    .setParameter("bid", bid)
-                    .list();
+    String queryString = null;
+    try {
+      queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
+      tx = hib.beginTransaction();
+      result = hib.createQuery(queryString)
+              .setParameter("bid", ubean.getUserAction())
+              .setParameter("which", which)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
 
-            if (result.size() > 0) {
-
-                hib.delete((Participant) result.get(0));
-                tx.commit();
-            } else {
-            }
-
-        } catch (Exception ex) {
-            System.out.println("Error in deleting borrower record");
-            Logger
-                    .getLogger(ParticipantBean.class
-                            .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-
-            result = null;
-            tx = null;
-            hib = null;
-
-            message(
-                    null,
-                    "DeleteSelecteParticipant",
-                    new Object[]{itemDesc});
-        }
-        return "borrower_history";
+    } finally {
+      tx = null;
+      hib = null;
     }
 
-    /**
-     * @return the alias
-     */
-    public String getAlias() {
-        return alias;
+    Integer size_of_list = result.size();
+    if ((size_of_list == 0) && (which == "alternative")) {
+      return getAlternative();
+    } else if ((size_of_list == 0) && (which == "primary")) {
+      return getPrimary();
+    } else {
+      return result;
     }
 
-    /**
-     * @param alias the alias to set
-     */
-    public void setAlias(String alias) {
-        this.alias = alias;
+  }
+
+  public String deleteCurrentRecord(String bid, String itemDesc) {
+
+    List result = null;
+    Session hib = hib_session();
+    Transaction tx = hib.beginTransaction();
+
+    String queryString = "from Participant where borrower_id = :bid";
+    try {
+      result = hib.createQuery(queryString)
+              .setParameter("bid", bid)
+              .list();
+
+      if (result.size() > 0) {
+
+        hib.delete((Participant) result.get(0));
+        tx.commit();
+      } else {
+      }
+
+    } catch (Exception ex) {
+      System.out.println("Error in deleting borrower record");
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
+    } finally {
+
+      result = null;
+      tx = null;
+      hib = null;
+
+      message(
+              null,
+              "DeleteSelecteParticipant",
+              new Object[]{itemDesc});
+    }
+    return "borrower_history";
+  }
+
+  /**
+   * @return the alias
+   */
+  public String getAlias() {
+    return alias;
+  }
+
+  /**
+   * @param alias the alias to set
+   */
+  public void setAlias(String alias) {
+    this.alias = alias;
+  }
+
+  public String load_borrower_seeking() {
+
+    return "borrower_seeking.xhtml";
+  }
+
+  /**
+   * @return the displayOrganization
+   */
+  public int getDisplayOrganization() {
+    return displayOrganization;
+  }
+
+  /**
+   * @param displayOrganization the displayOrganization to set
+   */
+  public void setDisplayOrganization(int displayOrganization) {
+    this.displayOrganization = displayOrganization;
+  }
+
+  /**
+   * @return the displayName
+   */
+  public int getDisplayName() {
+    return displayName;
+  }
+
+  /**
+   * @param displayName the displayName to set
+   */
+  public void setDisplayName(int displayName) {
+    this.displayName = displayName;
+  }
+
+  /**
+   * @return the displayAddress
+   */
+  public int getDisplayAddress() {
+    return displayAddress;
+  }
+
+  /**
+   * @param displayAddress the displayAddress to set
+   */
+  public void setDisplayAddress(int displayAddress) {
+    this.displayAddress = displayAddress;
+  }
+
+  /**
+   * @return the displayHomePhone
+   */
+  public Integer getDisplayHomePhone() {
+    return displayHomePhone;
+  }
+
+  /**
+   * @param displayHomePhone the displayHomePhone to set
+   */
+  public void setDisplayHomePhone(Integer displayHomePhone) {
+    this.displayHomePhone = displayHomePhone;
+  }
+
+  /**
+   * @return the displayCellPhone
+   */
+  public Integer getDisplayCellPhone() {
+    return displayCellPhone;
+  }
+
+  /**
+   * @param displayCellPhone the displayCellPhone to set
+   */
+  public void setDisplayCellPhone(Integer displayCellPhone) {
+    this.displayCellPhone = displayCellPhone;
+  }
+
+  /**
+   * @return the displayAlternativePhone
+   */
+  public Integer getDisplayAlternativePhone() {
+    return displayAlternativePhone;
+  }
+
+  /**
+   * @param displayAlternativePhone the displayAlternativePhone to set
+   */
+  public void setDisplayAlternativePhone(Integer displayAlternativePhone) {
+    this.displayAlternativePhone = displayAlternativePhone;
+  }
+
+  /**
+   * @param displayAlternativeAddress the displayAlternativeAddress to set
+   */
+  public void setDisplayAlternativeAddress(Integer displayAlternativeAddress) {
+    this.displayAlternativeAddress = displayAlternativeAddress;
+  }
+
+  /**
+   * @return the isCreator
+   */
+  public Integer getIsCreator() {
+    return isCreator;
+  }
+
+  /**
+   * @param isCreator the isCreator to set
+   */
+  public void setIsCreator(Integer isCreator) {
+    this.isCreator = isCreator;
+  }
+
+  public List getExisting_primary() {
+    return getExistingAddress("primary");
+  }
+
+  /**
+   * @param existing_primary the existing_primary to set
+   */
+  public void setExisting_primary(Addresses[] existing_primary) {
+    this.existing_primary = existing_primary;
+  }
+
+  /**
+   * @return the existing_alternative
+   */
+  public List getExisting_alternative() {
+    return getExistingAddress("alternative");
+  }
+
+  /**
+   * @param existing_alternative the existing_alternative to set
+   */
+  public void setExisting_alternative(Addresses[] existing_alternative) {
+    this.existing_alternative = existing_alternative;
+  }
+
+  private List getExistingAddress(String which) {
+
+    List result = null;
+    Session hib = hib_session();
+    Transaction tx = hib.beginTransaction();
+
+    String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
+    try {
+      result = hib.createQuery(queryString)
+              .setParameter("bid", ubean.getUserAction())
+              .setParameter("which", which)
+              .list();
+      tx.commit();
+
+    } catch (Exception e) {
+      tx.rollback();
+      System.out.println("Error in getExistingAddress in PartBean");
+      e.printStackTrace();
+
+    } finally {
+      tx = null;
+      hib = null;
     }
 
-    public String load_borrower_seeking() {
-
-        return "borrower_seeking.xhtml";
+    Integer size_of_list = result.size();
+    if ((size_of_list == 0) && (which == "alternative")) {
+      return getAlternative();
+    } else if ((size_of_list == 0) && (which == "primary")) {
+      return getPrimary();
+    } else {
+      return result;
     }
 
-    /**
-     * @return the displayOrganization
-     */
-    public int getDisplayOrganization() {
-        return displayOrganization;
-    }
+  }
 
-    /**
-     * @param displayOrganization the displayOrganization to set
-     */
-    public void setDisplayOrganization(int displayOrganization) {
-        this.displayOrganization = displayOrganization;
-    }
+  /**
+   * @return the displayAlternativeAddress
+   */
+  public Integer getDisplayAlternativeAddress() {
+    return displayAlternativeAddress;
+  }
 
-    /**
-     * @return the displayName
-     */
-    public int getDisplayName() {
-        return displayName;
-    }
+  /**
+   * @return the questionAltEmail
+   */
+  public int getQuestionAltEmail() {
+    return questionAltEmail;
+  }
 
-    /**
-     * @param displayName the displayName to set
-     */
-    public void setDisplayName(int displayName) {
-        this.displayName = displayName;
-    }
+  /**
+   * @param questionAltEmail the questionAltEmail to set
+   */
+  public void setQuestionAltEmail(int questionAltEmail) {
+    this.questionAltEmail = questionAltEmail;
+  }
 
-    /**
-     * @return the displayAddress
-     */
-    public int getDisplayAddress() {
-        return displayAddress;
-    }
+  /**
+   * @return the questionAltAddress
+   */
+  public int getQuestionAltAddress() {
+    return questionAltAddress;
+  }
 
-    /**
-     * @param displayAddress the displayAddress to set
-     */
-    public void setDisplayAddress(int displayAddress) {
-        this.displayAddress = displayAddress;
-    }
-
-    /**
-     * @return the displayHomePhone
-     */
-    public Integer getDisplayHomePhone() {
-        return displayHomePhone;
-    }
-
-    /**
-     * @param displayHomePhone the displayHomePhone to set
-     */
-    public void setDisplayHomePhone(Integer displayHomePhone) {
-        this.displayHomePhone = displayHomePhone;
-    }
-
-    /**
-     * @return the displayCellPhone
-     */
-    public Integer getDisplayCellPhone() {
-        return displayCellPhone;
-    }
-
-    /**
-     * @param displayCellPhone the displayCellPhone to set
-     */
-    public void setDisplayCellPhone(Integer displayCellPhone) {
-        this.displayCellPhone = displayCellPhone;
-    }
-
-    /**
-     * @return the displayAlternativePhone
-     */
-    public Integer getDisplayAlternativePhone() {
-        return displayAlternativePhone;
-    }
-
-    /**
-     * @param displayAlternativePhone the displayAlternativePhone to set
-     */
-    public void setDisplayAlternativePhone(Integer displayAlternativePhone) {
-        this.displayAlternativePhone = displayAlternativePhone;
-    }
-
-    /**
-     * @param displayAlternativeAddress the displayAlternativeAddress to set
-     */
-    public void setDisplayAlternativeAddress(Integer displayAlternativeAddress) {
-        this.displayAlternativeAddress = displayAlternativeAddress;
-    }
-
-    /**
-     * @return the isCreator
-     */
-    public Integer getIsCreator() {
-        return isCreator;
-    }
-
-    /**
-     * @param isCreator the isCreator to set
-     */
-    public void setIsCreator(Integer isCreator) {
-        this.isCreator = isCreator;
-    }
-
-    public List getExisting_primary() {
-        return getExistingAddress("primary");
-    }
-
-    /**
-     * @param existing_primary the existing_primary to set
-     */
-    public void setExisting_primary(Addresses[] existing_primary) {
-        this.existing_primary = existing_primary;
-    }
-
-    /**
-     * @return the existing_alternative
-     */
-    public List getExisting_alternative() {
-        return getExistingAddress("alternative");
-    }
-
-    /**
-     * @param existing_alternative the existing_alternative to set
-     */
-    public void setExisting_alternative(Addresses[] existing_alternative) {
-        this.existing_alternative = existing_alternative;
-    }
-
-    private List getExistingAddress(String which) {
-
-        List result = null;
-        Session hib = hib_session();
-        Transaction tx = hib.beginTransaction();
-
-        String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
-        try {
-            result = hib.createQuery(queryString)
-                    .setParameter("bid", ubean.getUserAction())
-                    .setParameter("which", which)
-                    .list();
-
-        } catch (Exception e) {
-
-        } finally {
-            tx = null;
-            hib = null;
-        }
-
-        Integer size_of_list = result.size();
-        if ((size_of_list == 0) && (which == "alternative")) {
-            return getAlternative();
-        } else if ((size_of_list == 0) && (which == "primary")) {
-            return getPrimary();
-        } else {
-            return result;
-        }
-
-    }
-
-    /**
-     * @return the displayAlternativeAddress
-     */
-    public Integer getDisplayAlternativeAddress() {
-        return displayAlternativeAddress;
-    }
-
-      /**
-     * @return the questionAltEmail
-     */
-    public int getQuestionAltEmail() {
-        return questionAltEmail;
-    }
-
-    /**
-     * @param questionAltEmail the questionAltEmail to set
-     */
-    public void setQuestionAltEmail(int questionAltEmail) {
-        this.questionAltEmail = questionAltEmail;
-    }
-
-    /**
-     * @return the questionAltAddress
-     */
-    public int getQuestionAltAddress() {
-        return questionAltAddress;
-    }
-
-    /**
-     * @param questionAltAddress the questionAltAddress to set
-     */
-    public void setQuestionAltAddress(int questionAltAddress) {
-        this.questionAltAddress = questionAltAddress;
-    }
+  /**
+   * @param questionAltAddress the questionAltAddress to set
+   */
+  public void setQuestionAltAddress(int questionAltAddress) {
+    this.questionAltAddress = questionAltAddress;
+  }
 
   /**
    * @return the participant_id
    */
-   @Id 
+  @Id
   public String getParticipant_id() {
     return participant_id;
   }
