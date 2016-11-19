@@ -391,13 +391,13 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
         }
         if (successTransaction = true) {
-            ubean.setEditable(4);
+            ubean.setEditable(0);
         } else {
             message(null, "UpdateOrSaveOfCPNotSuccessful", null);
-            ubean.setEditable(5);
+            ubean.setEditable(1);
         }
 //        return "user_detail?faces-redirect=true";
-        return "user_detail";
+        return "user_contact_preferences";
     }
 
     public List getAddress() {
@@ -467,10 +467,10 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             //this.setParticipant_alternative((List)getAddress().get(0));
 
         }
-        ubean.setEditable(5);
+        ubean.setEditable(1);
         partlist = null;
 
-        return "user_detail";
+        return "user_contact_preferences";
 //        return "user_detail?faces-redirect=true";
     }
 
