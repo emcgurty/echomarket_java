@@ -381,9 +381,9 @@ public class UserBean extends AbstractBean implements Serializable {
           if (users_Array.getRoleId() == 2) {
             setIsCommunity(1);
           }
-
+          message(null, "ActivateSuccessful", new Object[]{});
           this.editable = -1;
-          return_string = "user_agreement";
+          return pbean.load_ud(user_id);
         } else {
           message(null, "ActivateFailed", null);
           return_string = "login";
@@ -418,7 +418,7 @@ public class UserBean extends AbstractBean implements Serializable {
       query_ok = true;
     } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error at line 326 in UserLogin");
+      System.out.println("Error at line 420 in UserLogin");
       ex.printStackTrace();
       query_ok = false;
     } finally {
@@ -479,16 +479,16 @@ public class UserBean extends AbstractBean implements Serializable {
             Integer i18 = part.getAge18OrMore();
             String un = part.getFirstName();
             if ((gw == 1) && (i18 == 1) && (un == null)) {
-              this.editable = 3;
+              this.editable = 1;
               return pbean.load_ud(this.user_id);
             } else if ((gw == 1) && (i18 == 1) && (un != null)) {
               List hasCompleteCP = completeContactPreferences(this.user_id);
               hs = hasCompleteCP.size();
               if (hs == 0) {
-                this.editable = 5;
+                this.editable = 1;
                 return cpbean.load_ud(this.user_id);
               } else {
-                this.editable = 13;
+                this.editable = 1;
                 if (this.userType.contains("borrow")) {
                   return ibean.load_ud("borrow", null);
                 } else if (this.userType.contains("lend")) {
@@ -543,10 +543,7 @@ public class UserBean extends AbstractBean implements Serializable {
       session = null;
       tx = null;
       uu = null;
-//            message(
-//                    null,
-//                    "ActivateSuccessful",
-//                    new Object[]{});
+
       return true;
     } else {
       return false;
@@ -1080,36 +1077,12 @@ public class UserBean extends AbstractBean implements Serializable {
 
     this.editable = which;
     if (user_id == null) {
-      this.userAction = "agreement";
-      message(null, "LoginInRequiredToReviseAgreement", null);
+      message(null, "LoginInRequiredToReviseUserInformation", null);
       return "index";
-    } else {
-      this.userAction = "dashboard";
-//            return "user_detail.xhtml?faces-redirect=true";
-      return "user_detail.xhtml";
-    }
-  }
-
-  public void editUserLogin() {
-    this.editable = 1;
-  }
-
-  public void updateNAE() {
-    this.editable = 3;
-  }
-
-  public void editNAE() {
-    this.editable = 2;
-  }
-
-  public void updateCP() {
-    this.editable = 5;
-  }
-
-  public void editCP() {
-    this.editable = 4;
-  }
-
+    } else 
+      return "user_login_update";
+    } 
+  
   private String parseUserTypeArray() {
 
     String hold_userTypeBuild = "";
