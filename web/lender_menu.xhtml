@@ -15,7 +15,7 @@
         <li class="subs"><a href="#s2">Transfer</a>
             <ul>
                 <li class="subs">
-                    <h:commandLink  action="#{itemBean.load_ud(9)}"  value="Transfer "  rendered="#{userBean.editable == -1}" />
+                  <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="Transfer "  rendered="#{userBean.editable == -1}" />
                 </li>
                 <li class="subs">
 
@@ -30,7 +30,7 @@
         <li class="subs"><a href="#s2">Lending Terms</a>
             <ul>
                 <li class="subs">
-                    <h:commandLink  action="#{itemBean.load_ud(11)}"  value="Lending Terms"  rendered="#{userBean.editable == -1}" />
+                  <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="Lending Terms"  rendered="#{userBean.editable == -1}" />
                 </li>
                 <li class="subs">
                     <a href="#menu_item_6" onclick="showMonetary();">Monetary</a>

@@ -28,19 +28,19 @@
                 <div  class="div_p" >
                     <div style="margin:5px;" >
                         <h:outputText value="Yourself generally, your affiliation" />
-                        <h:outputText value="#{participantBean.age18OrMore}"  />
-                        <h:outputText value="#{participantBean.goodwill}" />
+                        <h:outputText value="#{userBean.editable}"  />
+                        
                     </div>
                 </div>
 
-                <ui:define name="agreement" >
                     <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
                     <div style="float:left;margin-left:25px">
                         
                         <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
                             <br />
+                            <h:outputText value="#{userBean.editable}"  />
                             <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 3}" >
-                                <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
+                              <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray('borrower')}"  
                                                var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
                             </h:selectOneMenu>
                             <h:outputText value="#{cd.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 2}" />
@@ -59,7 +59,7 @@
 
                     </div>
                 </div>
-                </ui:define>
+                
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                     <div style="float:left;margin-left:25px">
                         <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" >

@@ -1,12 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition 
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  template="./UserDetailTemplate.xhtml">
+  >
 
-    <div id="form_login_information" class="contact_information" >
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
+  </ui:define>  
         
+  <ui:define name="content">
+    <h:form id="user_agreement_content" >
     <div class="top" >
         <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
@@ -130,6 +139,11 @@
             </table>
         </div>
     </div>
-</div>
 
+    </h:form>
+  </ui:define>
+  
+   <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="LoginFooter" /> 
+  </ui:define>
 </ui:composition>
