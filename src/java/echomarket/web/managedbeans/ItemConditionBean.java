@@ -23,7 +23,7 @@ public class ItemConditionBean extends AbstractBean implements Serializable {
     public ItemConditionBean() {
     }
 
-    public String getItemConditionName(String cid) {
+    public String getItemConditionName(Integer cid) {
 
         String returnString = null;
         List result = null;

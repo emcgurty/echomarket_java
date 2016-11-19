@@ -4,6 +4,7 @@ import echomarket.hibernate.LenderTransfer;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
@@ -19,370 +20,395 @@ import org.hibernate.Transaction;
 @RequestScoped
 public class LenderTransferBean extends AbstractBean implements Serializable {
 
-    @Inject
-    UserBean ubean;
-    private String lenderTransferId;
-    private String lenderId;
-    private String itemId;
-    private String userId;
-    private String participant_id;
-    private Integer borrowerComesToWhichAddress;
-    private Integer meetBorrowerAtAgreedL2b;
-    private Integer meetBorrowerAtAgreedB2l;
-    private Integer willDeliverToBorrower;
-    private Integer thirdPartyPresenceL2b;
-    private Integer thirdPartyPresenceB2l;
-    private Integer borrowerThirdPartyChoice;
-    private Integer agreedThirdPartyChoiceL2b;
-    private Integer agreedThirdPartyChoiceB2l;
-    private Integer borrowerReturnsToWhichAddress;
-    private Integer willPickUpPreferredLocationB2l;
-    private Integer lenderThirdPartyChoiceB2l;
-    private Integer lenderThirdPartyChoiceL2b;
-    private Integer borrowerChoice;
-    private String remoteIp;
-    private String comment;
+  @Inject
+  UserBean ubean;
+  private String lenderTransferId;
+  private String itemId;
+  private String participant_id;
+  private Integer borrowerComesToWhichAddress;
+  private Integer meetBorrowerAtAgreedL2b;
+  private Integer meetBorrowerAtAgreedB2l;
+  private Integer willDeliverToBorrower;
+  private Integer thirdPartyPresenceL2b;
+  private Integer thirdPartyPresenceB2l;
+  private Integer borrowerThirdPartyChoice;
+  private Integer agreedThirdPartyChoiceL2b;
+  private Integer agreedThirdPartyChoiceB2l;
+  private Integer borrowerReturnsToWhichAddress;
+  private Integer willPickUpPreferredLocationB2l;
+  private Integer lenderThirdPartyChoiceB2l;
+  private Integer lenderThirdPartyChoiceL2b;
+  private Integer borrowerChoice;
+  private String remoteIp;
+  private String comment;
 
-    public LenderTransferBean() {
+  public LenderTransferBean() {
+  }
+
+  public String load_ud(String pid) {
+
+    List result = getCurrentLT(pid);
+    LenderTransfer ltr = (LenderTransfer) result.get(0);
+    if (result.size() > 0) {
+      this.lenderTransferId = ltr.getLenderTransferId();
+      this.itemId = ltr.getItemId();
+      this.participant_id = ltr.getParticipant_id();
+      this.borrowerComesToWhichAddress = ltr.getBorrowerComesToWhichAddress();
+      this.meetBorrowerAtAgreedL2b = ltr.getMeetBorrowerAtAgreedL2b();
+      this.meetBorrowerAtAgreedB2l = ltr.getMeetBorrowerAtAgreedL2b();
+      this.willDeliverToBorrower = ltr.getWillDeliverToBorrower();
+      this.thirdPartyPresenceL2b = ltr.getThirdPartyPresenceL2b();
+      this.thirdPartyPresenceB2l = ltr.getThirdPartyPresenceB2l();
+      this.borrowerThirdPartyChoice = ltr.getBorrowerThirdPartyChoice();
+      this.agreedThirdPartyChoiceL2b = ltr.getAgreedThirdPartyChoiceL2b();
+      this.agreedThirdPartyChoiceB2l = ltr.getAgreedThirdPartyChoiceB2l();
+      this.borrowerReturnsToWhichAddress = ltr.getBorrowerReturnsToWhichAddress();
+      this.willPickUpPreferredLocationB2l = ltr.getWillPickUpPreferredLocationB2l();
+      this.lenderThirdPartyChoiceB2l = ltr.getLenderThirdPartyChoiceB2l();
+      this.lenderThirdPartyChoiceL2b = ltr.getLenderThirdPartyChoiceL2b();
+      this.borrowerChoice = ltr.getBorrowerChoice();
+    } else {
+      ubean.setEditable(1);
+
     }
+    ltr = null;
+    return "lender_transfer";
+  }
 
-    public String load_ud(String uid) {
+  public List getCurrentLT(String pid) {
 
-        return "notdone";
+    List result = null;
+    Session session = hib_session();
+    Transaction tx = session.beginTransaction();
+    String query = null;
+    try {
+      query = "SELECT ltr Participant part "
+              + " left join part.item itm "
+              + " left join itm.lenderTransfer ltr "
+              + "WHERE part.participant_id = :pid";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentCP");
+      e.printStackTrace();
+      tx.rollback();
+      return null;
+    } finally {
+      tx = null;
+      session = null;
+
     }
+    return result;
+  }
 
-    public String updateLIT() {
-        Session sb;
-        Transaction tx;
-        sb = null;
-        tx = null;
-        sb = hib_session();
-        tx = sb.beginTransaction();
-        // This need to be rewritten
-        LenderTransfer lt = new LenderTransfer(getId(), "NA", "NA", ubean.getUser_id(), ubean.getUser_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
+  public String updateLIT() {
+    Session sb;
+    Transaction tx;
+    sb = null;
+    tx = null;
+    sb = hib_session();
+    tx = sb.beginTransaction();
 
-        try {
-            sb.save(lt);
-            tx.commit();
-            message(null, "LenderTransferSaved", null);
-            ubean.setEditable(8);
-        } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("Error in saveLenderItemCon");
-            Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
-            message(null, "LenderTransferNotSaved", null);
-            ubean.setEditable(9);
-        } finally {
-            if (sb != null) {
-                sb.close();
-            }
-            tx = null;
+    if (itemId != null && participant_id != null) {
+      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, this.participant_id, this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
 
+      try {
+        sb.save(lt);
+        tx.commit();
+        message(null, "LenderTransferSaved", null);
+        ubean.setEditable(0);
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in saveLenderItemCon");
+        Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+        message(null, "LenderTransferNotSaved", null);
+        ubean.setEditable(1);
+      } finally {
+        if (sb != null) {
+          sb.close();
         }
-        sb = null;
         tx = null;
 
-        ubean.setEditable(8);
-//        return "user_detail?faces-redirect=true";
-        return "user_detail";
-
+      }
+    } else {
+      // Do update
     }
+    sb = null;
+    tx = null;
+    
+    return load_ud(ubean.getUser_id());
 
-    /**
-     * @return the lenderTransferId
-     */
-    @Id
-    public String getLenderTransferId() {
-        return lenderTransferId;
-    }
+  }
 
-    /**
-     * @param lenderTransferId the lenderTransferId to set
-     */
-    public void setLenderTransferId(String lenderTransferId) {
-        this.lenderTransferId = lenderTransferId;
-    }
+  /**
+   * @return the lenderTransferId
+   */
+  @Id
+  public String getLenderTransferId() {
+    return lenderTransferId;
+  }
 
-    /**
-     * @return the lenderId
-     */
-    public String getLenderId() {
-        return lenderId;
-    }
+  /**
+   * @param lenderTransferId the lenderTransferId to set
+   */
+  public void setLenderTransferId(String lenderTransferId) {
+    this.lenderTransferId = lenderTransferId;
+  }
 
-    /**
-     * @param lenderId the lenderId to set
-     */
-    public void setLenderId(String lenderId) {
-        this.lenderId = lenderId;
-    }
+  /**
+   * @return the itemId
+   */
+  public String getItemId() {
+    return itemId;
+  }
 
-    /**
-     * @return the itemId
-     */
-    public String getItemId() {
-        return itemId;
-    }
+  /**
+   * @param itemId the itemId to set
+   */
+  public void setItemId(String itemId) {
+    this.itemId = itemId;
+  }
 
-    /**
-     * @param itemId the itemId to set
-     */
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
+  /**
+   * @return the participant_id
+   */
+  public String getParticipant_id() {
+    return participant_id;
+  }
 
-    /**
-     * @return the userId
-     */
-    public String getUserId() {
-        return userId;
-    }
+  /**
+   * @param participant_id the participant_id to set
+   */
+  public void setParticipant_id(String participant_id) {
+    this.participant_id = participant_id;
+  }
 
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+  /**
+   * @return the borrowerComesToWhichAddress
+   */
+  public Integer getBorrowerComesToWhichAddress() {
+    return borrowerComesToWhichAddress;
+  }
 
-    /**
-     * @return the participant_id
-     */
-    public String getParticipant_id() {
-        return participant_id;
-    }
+  /**
+   * @param borrowerComesToWhichAddress the borrowerComesToWhichAddress to set
+   */
+  public void setBorrowerComesToWhichAddress(Integer borrowerComesToWhichAddress) {
+    this.borrowerComesToWhichAddress = borrowerComesToWhichAddress;
+  }
 
-    /**
-     * @param participant_id the participant_id to set
-     */
-    public void setParticipant_id(String participant_id) {
-        this.participant_id = participant_id;
-    }
+  /**
+   * @return the meetBorrowerAtAgreedL2b
+   */
+  public Integer getMeetBorrowerAtAgreedL2b() {
+    return meetBorrowerAtAgreedL2b;
+  }
 
-    /**
-     * @return the borrowerComesToWhichAddress
-     */
-    public Integer getBorrowerComesToWhichAddress() {
-        return borrowerComesToWhichAddress;
-    }
+  /**
+   * @param meetBorrowerAtAgreedL2b the meetBorrowerAtAgreedL2b to set
+   */
+  public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2b) {
+    this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
+  }
 
-    /**
-     * @param borrowerComesToWhichAddress the borrowerComesToWhichAddress to set
-     */
-    public void setBorrowerComesToWhichAddress(Integer borrowerComesToWhichAddress) {
-        this.borrowerComesToWhichAddress = borrowerComesToWhichAddress;
-    }
+  /**
+   * @return the meetBorrowerAtAgreedB2l
+   */
+  public Integer getMeetBorrowerAtAgreedB2l() {
+    return meetBorrowerAtAgreedB2l;
+  }
 
-    /**
-     * @return the meetBorrowerAtAgreedL2b
-     */
-    public Integer getMeetBorrowerAtAgreedL2b() {
-        return meetBorrowerAtAgreedL2b;
-    }
+  /**
+   * @param meetBorrowerAtAgreedB2l the meetBorrowerAtAgreedB2l to set
+   */
+  public void setMeetBorrowerAtAgreedB2l(Integer meetBorrowerAtAgreedB2l) {
+    this.meetBorrowerAtAgreedB2l = meetBorrowerAtAgreedB2l;
+  }
 
-    /**
-     * @param meetBorrowerAtAgreedL2b the meetBorrowerAtAgreedL2b to set
-     */
-    public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2b) {
-        this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
-    }
+  /**
+   * @return the willDeliverToBorrower
+   */
+  public Integer getWillDeliverToBorrower() {
+    return willDeliverToBorrower;
+  }
 
-    /**
-     * @return the meetBorrowerAtAgreedB2l
-     */
-    public Integer getMeetBorrowerAtAgreedB2l() {
-        return meetBorrowerAtAgreedB2l;
-    }
+  /**
+   * @param willDeliverToBorrower the willDeliverToBorrower to set
+   */
+  public void setWillDeliverToBorrower(Integer willDeliverToBorrower) {
+    this.willDeliverToBorrower = willDeliverToBorrower;
+  }
 
-    /**
-     * @param meetBorrowerAtAgreedB2l the meetBorrowerAtAgreedB2l to set
-     */
-    public void setMeetBorrowerAtAgreedB2l(Integer meetBorrowerAtAgreedB2l) {
-        this.meetBorrowerAtAgreedB2l = meetBorrowerAtAgreedB2l;
-    }
+  /**
+   * @return the thirdPartyPresenceL2b
+   */
+  public Integer getThirdPartyPresenceL2b() {
+    return thirdPartyPresenceL2b;
+  }
 
-    /**
-     * @return the willDeliverToBorrower
-     */
-    public Integer getWillDeliverToBorrower() {
-        return willDeliverToBorrower;
-    }
+  /**
+   * @param thirdPartyPresenceL2b the thirdPartyPresenceL2b to set
+   */
+  public void setThirdPartyPresenceL2b(Integer thirdPartyPresenceL2b) {
+    this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
+  }
 
-    /**
-     * @param willDeliverToBorrower the willDeliverToBorrower to set
-     */
-    public void setWillDeliverToBorrower(Integer willDeliverToBorrower) {
-        this.willDeliverToBorrower = willDeliverToBorrower;
-    }
+  /**
+   * @return the thirdPartyPresenceB2l
+   */
+  public Integer getThirdPartyPresenceB2l() {
+    return thirdPartyPresenceB2l;
+  }
 
-    /**
-     * @return the thirdPartyPresenceL2b
-     */
-    public Integer getThirdPartyPresenceL2b() {
-        return thirdPartyPresenceL2b;
-    }
+  /**
+   * @param thirdPartyPresenceB2l the thirdPartyPresenceB2l to set
+   */
+  public void setThirdPartyPresenceB2l(Integer thirdPartyPresenceB2l) {
+    this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
+  }
 
-    /**
-     * @param thirdPartyPresenceL2b the thirdPartyPresenceL2b to set
-     */
-    public void setThirdPartyPresenceL2b(Integer thirdPartyPresenceL2b) {
-        this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
-    }
+  /**
+   * @return the borrowerThirdPartyChoice
+   */
+  public Integer getBorrowerThirdPartyChoice() {
+    return borrowerThirdPartyChoice;
+  }
 
-    /**
-     * @return the thirdPartyPresenceB2l
-     */
-    public Integer getThirdPartyPresenceB2l() {
-        return thirdPartyPresenceB2l;
-    }
+  /**
+   * @param borrowerThirdPartyChoice the borrowerThirdPartyChoice to set
+   */
+  public void setBorrowerThirdPartyChoice(Integer borrowerThirdPartyChoice) {
+    this.borrowerThirdPartyChoice = borrowerThirdPartyChoice;
+  }
 
-    /**
-     * @param thirdPartyPresenceB2l the thirdPartyPresenceB2l to set
-     */
-    public void setThirdPartyPresenceB2l(Integer thirdPartyPresenceB2l) {
-        this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
-    }
+  /**
+   * @return the agreedThirdPartyChoiceL2b
+   */
+  public Integer getAgreedThirdPartyChoiceL2b() {
+    return agreedThirdPartyChoiceL2b;
+  }
 
-    /**
-     * @return the borrowerThirdPartyChoice
-     */
-    public Integer getBorrowerThirdPartyChoice() {
-        return borrowerThirdPartyChoice;
-    }
+  /**
+   * @param agreedThirdPartyChoiceL2b the agreedThirdPartyChoiceL2b to set
+   */
+  public void setAgreedThirdPartyChoiceL2b(Integer agreedThirdPartyChoiceL2b) {
+    this.agreedThirdPartyChoiceL2b = agreedThirdPartyChoiceL2b;
+  }
 
-    /**
-     * @param borrowerThirdPartyChoice the borrowerThirdPartyChoice to set
-     */
-    public void setBorrowerThirdPartyChoice(Integer borrowerThirdPartyChoice) {
-        this.borrowerThirdPartyChoice = borrowerThirdPartyChoice;
-    }
+  /**
+   * @return the agreedThirdPartyChoiceB2l
+   */
+  public Integer getAgreedThirdPartyChoiceB2l() {
+    return agreedThirdPartyChoiceB2l;
+  }
 
-    /**
-     * @return the agreedThirdPartyChoiceL2b
-     */
-    public Integer getAgreedThirdPartyChoiceL2b() {
-        return agreedThirdPartyChoiceL2b;
-    }
+  /**
+   * @param agreedThirdPartyChoiceB2l the agreedThirdPartyChoiceB2l to set
+   */
+  public void setAgreedThirdPartyChoiceB2l(Integer agreedThirdPartyChoiceB2l) {
+    this.agreedThirdPartyChoiceB2l = agreedThirdPartyChoiceB2l;
+  }
 
-    /**
-     * @param agreedThirdPartyChoiceL2b the agreedThirdPartyChoiceL2b to set
-     */
-    public void setAgreedThirdPartyChoiceL2b(Integer agreedThirdPartyChoiceL2b) {
-        this.agreedThirdPartyChoiceL2b = agreedThirdPartyChoiceL2b;
-    }
+  /**
+   * @return the borrowerReturnsToWhichAddress
+   */
+  public Integer getBorrowerReturnsToWhichAddress() {
+    return borrowerReturnsToWhichAddress;
+  }
 
-    /**
-     * @return the agreedThirdPartyChoiceB2l
-     */
-    public Integer getAgreedThirdPartyChoiceB2l() {
-        return agreedThirdPartyChoiceB2l;
-    }
+  /**
+   * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to
+   * set
+   */
+  public void setBorrowerReturnsToWhichAddress(Integer borrowerReturnsToWhichAddress) {
+    this.borrowerReturnsToWhichAddress = borrowerReturnsToWhichAddress;
+  }
 
-    /**
-     * @param agreedThirdPartyChoiceB2l the agreedThirdPartyChoiceB2l to set
-     */
-    public void setAgreedThirdPartyChoiceB2l(Integer agreedThirdPartyChoiceB2l) {
-        this.agreedThirdPartyChoiceB2l = agreedThirdPartyChoiceB2l;
-    }
+  /**
+   * @return the willPickUpPreferredLocationB2l
+   */
+  public Integer getWillPickUpPreferredLocationB2l() {
+    return willPickUpPreferredLocationB2l;
+  }
 
-    /**
-     * @return the borrowerReturnsToWhichAddress
-     */
-    public Integer getBorrowerReturnsToWhichAddress() {
-        return borrowerReturnsToWhichAddress;
-    }
+  /**
+   * @param willPickUpPreferredLocationB2l the willPickUpPreferredLocationB2l to
+   * set
+   */
+  public void setWillPickUpPreferredLocationB2l(Integer willPickUpPreferredLocationB2l) {
+    this.willPickUpPreferredLocationB2l = willPickUpPreferredLocationB2l;
+  }
 
-    /**
-     * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to
-     * set
-     */
-    public void setBorrowerReturnsToWhichAddress(Integer borrowerReturnsToWhichAddress) {
-        this.borrowerReturnsToWhichAddress = borrowerReturnsToWhichAddress;
-    }
+  /**
+   * @return the lenderThirdPartyChoiceB2l
+   */
+  public Integer getLenderThirdPartyChoiceB2l() {
+    return lenderThirdPartyChoiceB2l;
+  }
 
-    /**
-     * @return the willPickUpPreferredLocationB2l
-     */
-    public Integer getWillPickUpPreferredLocationB2l() {
-        return willPickUpPreferredLocationB2l;
-    }
+  /**
+   * @param lenderThirdPartyChoiceB2l the lenderThirdPartyChoiceB2l to set
+   */
+  public void setLenderThirdPartyChoiceB2l(Integer lenderThirdPartyChoiceB2l) {
+    this.lenderThirdPartyChoiceB2l = lenderThirdPartyChoiceB2l;
+  }
 
-    /**
-     * @param willPickUpPreferredLocationB2l the willPickUpPreferredLocationB2l
-     * to set
-     */
-    public void setWillPickUpPreferredLocationB2l(Integer willPickUpPreferredLocationB2l) {
-        this.willPickUpPreferredLocationB2l = willPickUpPreferredLocationB2l;
-    }
+  /**
+   * @return the borrowerChoice
+   */
+  public Integer getBorrowerChoice() {
+    return borrowerChoice;
+  }
 
-    /**
-     * @return the lenderThirdPartyChoiceB2l
-     */
-    public Integer getLenderThirdPartyChoiceB2l() {
-        return lenderThirdPartyChoiceB2l;
-    }
+  /**
+   * @param borrowerChoice the borrowerChoice to set
+   */
+  public void setBorrowerChoice(Integer borrowerChoice) {
+    this.borrowerChoice = borrowerChoice;
+  }
 
-    /**
-     * @param lenderThirdPartyChoiceB2l the lenderThirdPartyChoiceB2l to set
-     */
-    public void setLenderThirdPartyChoiceB2l(Integer lenderThirdPartyChoiceB2l) {
-        this.lenderThirdPartyChoiceB2l = lenderThirdPartyChoiceB2l;
-    }
+  /**
+   * @return the remoteIp
+   */
+  public String getRemoteIp() {
+    return remoteIp;
+  }
 
-    /**
-     * @return the borrowerChoice
-     */
-    public Integer getBorrowerChoice() {
-        return borrowerChoice;
-    }
+  /**
+   * @param remoteIp the remoteIp to set
+   */
+  public void setRemoteIp(String remoteIp) {
+    this.remoteIp = remoteIp;
+  }
 
-    /**
-     * @param borrowerChoice the borrowerChoice to set
-     */
-    public void setBorrowerChoice(Integer borrowerChoice) {
-        this.borrowerChoice = borrowerChoice;
-    }
+  /**
+   * @return the comment
+   */
+  public String getComment() {
+    return comment;
+  }
 
-    /**
-     * @return the remoteIp
-     */
-    public String getRemoteIp() {
-        return remoteIp;
-    }
+  /**
+   * @param comment the comment to set
+   */
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
 
-    /**
-     * @param remoteIp the remoteIp to set
-     */
-    public void setRemoteIp(String remoteIp) {
-        this.remoteIp = remoteIp;
-    }
+  /**
+   * @return the lenderThirdPartyChoiceL2b
+   */
+  public Integer getLenderThirdPartyChoiceL2b() {
+    return lenderThirdPartyChoiceL2b;
+  }
 
-    /**
-     * @return the comment
-     */
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * @param comment the comment to set
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    /**
-     * @return the lenderThirdPartyChoiceL2b
-     */
-    public Integer getLenderThirdPartyChoiceL2b() {
-        return lenderThirdPartyChoiceL2b;
-    }
-
-    /**
-     * @param lenderThirdPartyChoiceL2b the lenderThirdPartyChoiceL2b to set
-     */
-    public void setLenderThirdPartyChoiceL2b(Integer lenderThirdPartyChoiceL2b) {
-        this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
-    }
+  /**
+   * @param lenderThirdPartyChoiceL2b the lenderThirdPartyChoiceL2b to set
+   */
+  public void setLenderThirdPartyChoiceL2b(Integer lenderThirdPartyChoiceL2b) {
+    this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
+  }
 
 }

@@ -36,6 +36,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     ContactPreferenceBean cbean;
     private String itemId;
     private Integer categoryId;
+    private String participant_id;
     private String otherItemCategory;
     private String itemModel;
     private String itemDescription;
@@ -47,7 +48,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     private Date dateDeleted;
     private int approved;
     private int notify;
-    private String whichType;
+    private String itemType;
     private Part imageFileNamePart;
     private static ArrayList<ItemImages> picture
             = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
@@ -67,24 +68,24 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (null != which) {
             switch (which) {
                 case "borrow":
-                    ubean.setEditable(13);
-                    this.whichType = which;
+                    ubean.setEditable(1);
+                    this.itemType = which;
                     break;
                 case "lend":
-                    ubean.setEditable(15);
-                    this.whichType = which;
+                    ubean.setEditable(1);
+                    this.itemType = which;
                     break;
                 case "both":
-                    ubean.setEditable(17);
-                    this.whichType = "borrow";  // because that's the default on the GUI combobox
+                    ubean.setEditable(1);
+                    this.itemType = "both";  
                     break;
                 case "viewLend":
-                    ubean.setEditable(14);
-                    this.whichType = which;
+                    ubean.setEditable(0);
+                    this.itemType = which;
                     break;
                 case "viewBorrow":
-                    ubean.setEditable(12);
-                    this.whichType = which;
+                    ubean.setEditable(0);
+                    this.itemType = which;
                     break;
                 default:
                     break;
@@ -96,6 +97,7 @@ public class ItemBean extends AbstractBean implements Serializable {
             if (result.size() == 1) {
                 Items ir = (Items) result.get(0);
                 this.setItemId(ir.getItemId());
+                this.participant_id = ir.getParticipant_id();
                 this.categoryId = ir.getCategoryId();
                 this.otherItemCategory = ir.getOtherItemCategory();
                 this.itemModel = ir.getItemModel();
@@ -110,7 +112,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
         }
 //        return "user_detail?faces-redirect=true";
-        return "user_detail";
+        return "item";
 
     }
 
@@ -239,8 +241,8 @@ public class ItemBean extends AbstractBean implements Serializable {
 
         if (itemId.isEmpty() == true) {
 
-            Items ii = new Items(new_iid, ubean.getUser_id(), categoryId, otherItemCategory,
-                    itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, whichType);
+            Items ii = new Items(new_iid, ubean.getParticipant_id(), categoryId, otherItemCategory,
+                    itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, itemType);
 
             try {
                 sb = hib_session();
@@ -267,7 +269,7 @@ public class ItemBean extends AbstractBean implements Serializable {
                 uitem.setItemDescription(itemDescription);
                 uitem.setItemConditionId(itemConditionId);
                 uitem.setItemCount(itemCount);
-                uitem.setItemType(whichType);
+                uitem.setItemType(itemType);
                 if (sb.isOpen() == false) {
                     sb = hib_session();
                 }
@@ -302,21 +304,19 @@ public class ItemBean extends AbstractBean implements Serializable {
             }
 
             if ((bret == true) && (notify == 1)) {
-                if (ubean.getEditable() == 13) {
-                    bret = sendNotification("borrower");  // This needs to be written...
-                } else if (ubean.getEditable() == 15) {
-                    bret = sendNotification("lender");
-                }
+                  bret = sendNotification(itemType);  // This needs to be written...
+               }
             }
-        }
+        
         if (bret == true) {
 
-            message(null, "ItemRecordUpdated", new Object[]{whichType, itemDescription});
-            return cbean.load_ud(ubean.getUser_id());
+            message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
+            ubean.setEditable(0);
+            return this.load_ud(itemId, ubean.getParticipant_id());
 
         } else {
             message(null, "ItemRecordNotUpdated", null);
-            return "user_detail";
+            return "item";
         }
 
     }
@@ -564,7 +564,6 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
 
     public List getCurrentItemImage(String iid) {
-        ubean.setUserAction(iid);  // not used??
         return getExistingPicture();
 
     }
@@ -764,17 +763,45 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * @return the whichType
+     * @return the itemType
      */
     public String getWhichType() {
-        return whichType;
+        return itemType;
     }
 
     /**
-     * @param whichType the whichType to set
+     * @param itemType the itemType to set
      */
-    public void setWhichType(String whichType) {
-        this.whichType = whichType;
+    public void setWhichType(String itemType) {
+        this.itemType = itemType;
     }
+
+  /**
+   * @return the participant_id
+   */
+  public String getParticipant_id() {
+    return participant_id;
+  }
+
+  /**
+   * @param participant_id the participant_id to set
+   */
+  public void setParticipant_id(String participant_id) {
+    this.participant_id = participant_id;
+  }
+
+  /**
+   * @return the itemType
+   */
+  public String getItemType() {
+    return itemType;
+  }
+
+  /**
+   * @param itemType the itemType to set
+   */
+  public void setItemType(String itemType) {
+    this.itemType = itemType;
+  }
 
 }

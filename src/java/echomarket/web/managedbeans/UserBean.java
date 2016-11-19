@@ -467,49 +467,42 @@ public class UserBean extends AbstractBean implements Serializable {
       if (hs == 0) {
         hasComplete = null;
         this.editable = -1;
-        return_string = "user_agreement";
-      } else if ((hs > 0)) {
-        switch (userAction) {
-          case "agreement":
-            return pbean.load_ud(this.user_id);
-          case "dashboard":
-            Participant part = (Participant) hasComplete.get(0);
-            this.setParticipant_id(part.getParticipant_id());
-            Integer gw = part.getGoodwill();
-            Integer i18 = part.getAge18OrMore();
-            String un = part.getFirstName();
-            if ((gw == 1) && (i18 == 1) && (un == null)) {
-              this.editable = 1;
-              return pbean.load_ud(this.user_id);
-            } else if ((gw == 1) && (i18 == 1) && (un != null)) {
-              List hasCompleteCP = completeContactPreferences(this.user_id);
-              hs = hasCompleteCP.size();
-              if (hs == 0) {
-                this.editable = 1;
-                return cpbean.load_ud(this.user_id);
-              } else {
-                this.editable = 1;
-                if (this.userType.contains("borrow")) {
-                  return ibean.load_ud("borrow", null);
-                } else if (this.userType.contains("lend")) {
-                  return ibean.load_ud("lend", null);
-                } else {
-                  return ibean.load_ud("both", null);
-                }
-              }
-            }
+        return pbean.load_ud(this.user_id);
 
-          default:
-          // Statements
+      } else if ((hs > 0)) {
+        Participant part = (Participant) hasComplete.get(0);
+        this.setParticipant_id(part.getParticipant_id());
+        Integer gw = part.getGoodwill();
+        Integer i18 = part.getAge18OrMore();
+        String un = part.getFirstName();
+        if ((gw == 1) && (i18 == 1) && (un == null)) {
+          this.editable = 1;
+          return pbean.load_ud(this.participant_id);
+        } else if ((gw == 1) && (i18 == 1) && (un != null)) {
+          List hasCompleteCP = completeContactPreferences(this.participant_id);
+          hs = hasCompleteCP.size();
+          if (hs == 0) {
+            this.editable = 1;
+            return cpbean.load_ud(this.participant_id);
+          } else {
+            this.editable = 1;
+            if (this.userType.contains("borrow")) {
+              return ibean.load_ud("borrow", null);
+            } else if (this.userType.contains("lend")) {
+              return ibean.load_ud("lend", null);
+            } else {
+              return ibean.load_ud("both", null);
+            }
           }
-        this.userAction = null;
+        }
       }
-    } else {
-      message(null, "LogInSuccessful", new Object[]{this.username});
-      return_string = "login";
     }
-    // 
-    return return_string + "?faces-redirect=true";
+    else {
+      message(null, "LogInSuccessful", new Object[]{this.username});
+    return_string = "login";
+  }
+  
+  return return_string+ "?faces-redirect=true";
 
   }
 
@@ -534,9 +527,12 @@ public class UserBean extends AbstractBean implements Serializable {
       if (tx.isActive() == false) {
         tx = session.beginTransaction();
 
-      }
+      
 
-      Users uu = (Users) session.get(Users.class, u_id);
+}
+
+      Users uu = (Users) session.get(Users.class
+, u_id);
       uu.setActivatedAt(ndate);
       uu.setResetCode(null);
       tx.commit();
@@ -558,19 +554,28 @@ public class UserBean extends AbstractBean implements Serializable {
       Users userArray = (Users) results.get(0);
       Session hib = hib_session();
       Transaction tx = hib.beginTransaction();
-      Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
+      Users 
+
+uu = (Users) hib.get(Users.class
+, userArray.getUser_id());
       uu.setResetCode(null);
       PasswordEncryptionService pes = new PasswordEncryptionService();
       try {
         uu.setCryptedPassword(pes.getEncryptedPassword(this.password, uu.getSalt()));
 
-      } catch (NoSuchAlgorithmException ex) {
-        Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+      
 
-      } catch (InvalidKeySpecException ex) {
+} catch (NoSuchAlgorithmException ex) {
         Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+
+.getName()).log(Level.SEVERE, null, ex);
+
+      
+
+} catch (InvalidKeySpecException ex) {
+        Logger.getLogger(UserBean.class
+
+.getName()).log(Level.SEVERE, null, ex);
       }
       tx.commit();
       tx = null;
@@ -591,7 +596,10 @@ public class UserBean extends AbstractBean implements Serializable {
       //// Update the user to generate reset_code
       Session hib = hib_session();
       Transaction tx = hib.beginTransaction();
-      Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
+      Users 
+
+uu = (Users) hib.get(Users.class
+, userArray.getUser_id());
       buildReset_Code = uu.BuildRandomValue();
       uu.setResetCode(buildReset_Code);
       tx.commit();
@@ -679,13 +687,19 @@ public class UserBean extends AbstractBean implements Serializable {
       try {
         auth_pw = pes.authenticate(pw, crypted_password, salt);
 
-      } catch (NoSuchAlgorithmException ex) {
-        Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+      
 
-      } catch (InvalidKeySpecException ex) {
+} catch (NoSuchAlgorithmException ex) {
         Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+
+.getName()).log(Level.SEVERE, null, ex);
+
+      
+
+} catch (InvalidKeySpecException ex) {
+        Logger.getLogger(UserBean.class
+
+.getName()).log(Level.SEVERE, null, ex);
       }
 
     }
@@ -973,8 +987,11 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+.getLogger(UserBean.class
+
+.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
       return null;
     } finally {
@@ -999,8 +1016,11 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+.getLogger(UserBean.class
+
+.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
       return null;
     } finally {
@@ -1040,8 +1060,11 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+.getLogger(UserBean.class
+
+.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User");
       message(
               null,
@@ -1122,8 +1145,11 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+.getLogger(UserBean.class
+
+.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on SendEmail, line ");
     } finally {
       tx = null;

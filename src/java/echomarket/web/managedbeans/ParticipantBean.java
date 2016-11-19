@@ -87,6 +87,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String load_ud(String uid) {
 
+    if (uid == "-1") {
+      ubean.setEditable(-1);
+      uid = ubean.getUser_id();
+    }
+      
     List partlist = null;
     partlist = getCurrentParticipant(uid);
     Participant pp = (Participant) partlist.get(0);
@@ -305,7 +310,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if ((goodwill != 1) || (age18OrMore != 1)) {
       message(null, "threeStrikesYourOut", null);
       ubean.setEditable(-1);
-      return load_ud(ubean.getUser_id());
+      return this.load_ud(ubean.getUser_id());
     } else {
       Session sb = hib_session();
       Transaction tx = sb.beginTransaction();
@@ -324,7 +329,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       } finally {
         sb = null;
         tx = null;
-        return load_ud(ubean.getUser_id());
+        return this.load_ud(ubean.getUser_id());
       }
     }
 
