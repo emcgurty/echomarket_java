@@ -3,52 +3,60 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="echomarket.hibernate.Items" table="items" catalog="echomarket" optimistic-lock="version">
-        <id name="itemId" type="string">
-            <column name="item_id" length="40" />
-            <generator class="assigned" />
-        </id>
-        <property name="participant_id" type="string">
-            <column name="participant_id" length="40" />
-        </property>
-        <property name="categoryId" type="java.lang.Integer">
-            <column name="category_id" />
-        </property>
-        <property name="otherItemCategory" type="string">
-            <column name="other_item_category" length="24" />
-        </property>
-        <property name="itemModel" type="string">
-            <column name="item_model" length="24" />
-        </property>
-        <property name="itemDescription" type="string">
-            <column name="item_description" length="50" />
-        </property>
-        <property name="itemConditionId" type="java.lang.Integer">
-            <column name="item_condition_id" />
-        </property>
-        <property name="itemCount" type="java.lang.Integer">
-            <column name="item_count" />
-        </property>
-        <property name="comment" type="string">
-            <column name="comment" />
-        </property>
-        <property name="dateCreated" type="timestamp">
-            <column name="date_created" length="19" not-null="true" />
-        </property>
-        <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19" not-null="true" />
-        </property>
-        <property name="dateDeleted" type="timestamp">
-            <column name="date_deleted" length="19" not-null="true" />
-        </property>
-        <property name="approved" type="int">
-            <column name="approved" not-null="true" />
-        </property>
-        <property name="notify" type="int">
-            <column name="notify" not-null="true" />
-        </property>
-        <property name="itemType" type="string">
-            <column name="item_type" length="12" />
-        </property>
-    </class>
+  <class name="echomarket.hibernate.Items" table="items" catalog="echomarket" optimistic-lock="version">
+    <id name="itemId" type="string">
+      <column name="item_id" length="40" />
+      <generator class="assigned" />
+    </id>
+    <set name="lenderTransfer" lazy="true" table="lender_transfer">
+      <key column="item_id" />
+      <one-to-many class="echomarket.hibernate.LenderTransfer"  />
+    </set>
+    <set name="lenderItemConditions" lazy="true" table="lender_item_conditions">
+      <key column="item_id" />
+      <one-to-many class="echomarket.hibernate.LenderItemConditions"  />
+    </set>
+    <property name="participant_id" type="string">
+      <column name="participant_id" length="40" />
+    </property>
+    <property name="categoryId" type="java.lang.Integer">
+      <column name="category_id" />
+    </property>
+    <property name="otherItemCategory" type="string">
+      <column name="other_item_category" length="24" />
+    </property>
+    <property name="itemModel" type="string">
+      <column name="item_model" length="24" />
+    </property>
+    <property name="itemDescription" type="string">
+      <column name="item_description" length="50" />
+    </property>
+    <property name="itemConditionId" type="java.lang.Integer">
+      <column name="item_condition_id" />
+    </property>
+    <property name="itemCount" type="java.lang.Integer">
+      <column name="item_count" />
+    </property>
+    <property name="comment" type="string">
+      <column name="comment" />
+    </property>
+    <property name="dateCreated" type="timestamp">
+      <column name="date_created" length="19" not-null="true" />
+    </property>
+    <property name="dateUpdated" type="timestamp">
+      <column name="date_updated" length="19" not-null="true" />
+    </property>
+    <property name="dateDeleted" type="timestamp">
+      <column name="date_deleted" length="19" not-null="true" />
+    </property>
+    <property name="approved" type="int">
+      <column name="approved" not-null="true" />
+    </property>
+    <property name="notify" type="int">
+      <column name="notify" not-null="true" />
+    </property>
+    <property name="itemType" type="string">
+      <column name="item_type" length="12" />
+    </property>
+  </class>
 </hibernate-mapping>
