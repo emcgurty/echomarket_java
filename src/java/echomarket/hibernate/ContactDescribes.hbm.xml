@@ -4,10 +4,10 @@
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="echomarket.hibernate.ContactDescribes" table="contact_describes" catalog="echomarket" optimistic-lock="version">
-        <id name="id" type="string">
-            <column name="id" length="2" />
-            <generator class="assigned" />
-        </id>
+      <id name="contact_describe_id" type="string">
+      <column name="contact_describe_id" length="40" />
+      <generator class="assigned" />
+    </id>
         <property name="purposeType" type="string">
             <column name="purpose_type" length="10" />
         </property>
