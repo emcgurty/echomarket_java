@@ -112,14 +112,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.goodwill = pp.getGoodwill();
     this.age18OrMore = pp.getAge18OrMore();
     this.isCreator = pp.getIsCreator();
-    if ("agreement".equals(ubean.getUserAction())) {
-//            ubean.setUserAction(null);
-      ubean.setEditable(-1);
+    if (ubean.getEditable() == -1) {
+      return "user_agreement";
     } else {
-      ubean.setEditable(3);
+      ubean.setEditable(1);
+      return "user_nae";
     }
-//        return "user_detailfaces-redirect=true";
-    return "user_detail";
+
   }
 
   public String getUserDefinedAlternativeEmail(String pid) {
@@ -146,19 +145,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error in getCurrentB");
       e.printStackTrace();
-      System.out.println("IS TX STILL ACTIVE 110");
-      System.out.println(tx.isActive());
-      System.out.println("IS TX STILL ACTIVE 110 - close");
 
     } finally {
-      System.out.println("IS TX STILL ACTIVE 116");
-      System.out.println(tx.isActive());
-      System.out.println("IS TX STILL ACTIVE 116 - close");
       tx = null;
       sb = null;
 
     }
-
     if (alt_email == null) {
       return "Not provided";
     } else {
@@ -178,12 +170,15 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     sb = null;
     tx = null;
     String pid = null;
+    Boolean updateSuccess = false;
 
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
+      updateSuccess = true;
     } catch (Exception ex) {
-      System.out.println("Error in Save/Update Particpant, line 173");
+      updateSuccess = false;
+      System.out.println("Error in Save/Update Particpant, line 177");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     }
 
@@ -193,17 +188,16 @@ public class ParticipantBean extends AbstractBean implements Serializable {
               .setParameter("uid", ubean.getUser_id())
               .list();
       tx.commit();
-    } catch (Exception e) {
-      System.out.println("Error in getCurrentB");
-      e.printStackTrace();
+      updateSuccess = true;
+    } catch (Exception ex) {
+      updateSuccess = false;
+      System.out.println("Error in Save/Update Particpant, line 187");
+      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
       tx.rollback();
     } finally {
 //            tx = null;
 //            sb = null;
-
     }
-//         Participant part = new Participant(participant_id, ubean.getUser_id(), contactDescribeId, organizationName, displayOrganization, otherDescribeYourself, firstName, mi, lastName, "NA", displayName, displayAddress, homePhone, cellPhone,
-//                alternativePhone, emailAlternative, displayHomePhone, displayCellPhone, displayAlternativePhone, displayAlternativeAddress, "NA");
 
     try {
       if (sb.isOpen() == false) {
@@ -234,15 +228,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
       sb.update(part);
       tx.commit();
-
+      updateSuccess = true;
     } catch (Exception ex) {
+      updateSuccess = false;
       tx.rollback();
-      System.out.println("Error in Save/Update Particpant");
+      System.out.println("Error in Save/Update Particpant, line 228");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
-//            if (sb != null) {
-//                sb.close();
-//            }
 
       Addresses balt = (Addresses) aadrs.get(0);
       reqPO = balt.getPostalCode();
@@ -259,7 +251,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         try {
           sb.save(balt);
           tx.commit();
-        } catch (Exception e) {
+          updateSuccess = true;
+        } catch (Exception ex) {
+          updateSuccess = false;
+          tx.rollback();
+          System.out.println("Error in Save/Update Particpant, line 254");
+          Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+
         } finally {
         }
       }
@@ -279,59 +277,57 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       try {
         sb.save(ba);
         tx.commit();
+        updateSuccess = true;
+        message(null, "RecordSavedFailed", null);
       } catch (Exception ex) {
+        updateSuccess = false;
         tx.rollback();
         System.out.println("Error in Save/Update Particpant, 276");
         Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
       } finally {
         sb = null;
         tx = null;
-        message(
-                null,
-                "BorrowerRegistionRecordSaved",
-                null);
+        message(null, "RecordSaved", null);
 
       }
     }
-
-    ubean.setEditable(3);
-    return "user_detail";
-//        return "user_detail?faces-redirect=true";
+    if (updateSuccess == true) {
+      ubean.setEditable(0);
+    } else {
+      ubean.setEditable(1);
+    }
+    return load_ud(ubean.getUser_id());
 
   }
 
   public String userAgreement() {
 
     if ((goodwill != 1) || (age18OrMore != 1)) {
-      message(
-              null,
-              "threeStrikesYourOut",
-              null);
+      message(null, "threeStrikesYourOut", null);
       ubean.setEditable(-1);
-
+      return load_ud(ubean.getUser_id());
     } else {
       Session sb = hib_session();
       Transaction tx = sb.beginTransaction();
-
       Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
       try {
         sb.save(part);
         tx.commit();
+        ubean.setEditable(1);
+        message(null, "thanksForAcceptingAgreement", null);
       } catch (Exception ex) {
+        ubean.setEditable(-1);
+        message(null, "failedToSaveAgreement", null);
         tx.rollback();
         System.out.println("Error in Save/Update Particpant");
         Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
       } finally {
-
         sb = null;
         tx = null;
-        ubean.setEditable(0);
-
+        return load_ud(ubean.getUser_id());
       }
     }
 
-    return "user_detail";
-//        return "user_detail?faces-redirect=true";
   }
 
   private Boolean processAddress(Addresses[] address) {
@@ -358,125 +354,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     return b_return;
-  }
-
-  public String saveParticipantEdit() {
-
-    Session sb = hib_session();
-    Transaction tx = sb.beginTransaction();
-    Date today_date = new Date();
-    String current_user = null;
-    Boolean bret = false;
-
-    try {
-      current_user = ubean.getUser_id();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    /// Need to implement onChange Listener to learn if dirty??
-    Participant bb = new Participant();
-
-    try {
-      sb.update(bb);
-      tx.commit();
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error on Update Participant");
-      Logger
-              .getLogger(ParticipantBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      if (sb != null) {
-        sb.close();
-      }
-
-      bret = processAddress(this.existing_alternative);
-      bret = processAddress(this.existing_primary);
-    }
-
-    if (bret == true) {
-      tx = null;
-      sb = null;
-      message(
-              null,
-              "ParticipantRecordUpdated",
-              null);
-    } else {
-      message(
-              null,
-              "ParticipantRecordNotUpdated",
-              null);
-
-    }
-
-    return "index?faces-redirect=true";
-
-  }
-
-  public String saveParticipantRegistration() {
-
-    List padrs = getPrimary();
-    List aadrs = getAlternative();
-    Session sb = hib_session();
-    Transaction tx = sb.beginTransaction();
-    Date today_date = new Date();
-    String getAbstId = getId();
-    String current_user = null;
-    try {
-
-      current_user = ubean.getUser_id();
-
-    } catch (Exception e) {
-      System.out.println("Testing inject vs session Map");
-      e.printStackTrace();
-    }
-    Participant bb = new Participant();
-
-    sb.save(bb);
-    try {
-      tx.commit();
-    } catch (Exception e) {
-    }
-
-    Addresses balt = (Addresses) aadrs.get(0);
-    balt.setParticipant_id(getAbstId);
-
-    if (sb.isOpen() == false) {
-      sb = hib_session();
-    }
-    if (tx.isActive() == false) {
-      tx = sb.beginTransaction();
-    }
-
-    try {
-      sb.save(balt);
-      tx.commit();
-    } catch (Exception e) {
-    } finally {
-    }
-
-    Addresses ba = (Addresses) padrs.get(0);
-    ba.setParticipant_id(getAbstId);
-
-    if (sb.isOpen() == false) {
-      sb = hib_session();
-    }
-    if (tx.isActive() == false) {
-      tx = sb.beginTransaction();
-    }
-
-    try {
-      sb.save(ba);
-      tx.commit();
-    } catch (Exception e) {
-    } finally {
-      message(
-              null,
-              "ParticipantRegistionRecordSaved",
-              null);
-
-    }
-    return "index?faces-redirect=true";
   }
 
   public int getContactDescribeId() {
@@ -724,41 +601,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
     }
     return result;
-  }
-
-  private List getExistingParticipantAddress(String which) {
-
-    List result = null;
-    Addresses[] a_array = null;
-    Session hib = hib_session();
-    Transaction tx = null;
-
-    String queryString = null;
-    try {
-      queryString = "from Addresses where borrower_id = :bid AND address_type = :which";
-      tx = hib.beginTransaction();
-      result = hib.createQuery(queryString)
-              .setParameter("bid", ubean.getUserAction())
-              .setParameter("which", which)
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      tx.rollback();
-
-    } finally {
-      tx = null;
-      hib = null;
-    }
-
-    Integer size_of_list = result.size();
-    if ((size_of_list == 0) && (which == "alternative")) {
-      return getAlternative();
-    } else if ((size_of_list == 0) && (which == "primary")) {
-      return getPrimary();
-    } else {
-      return result;
-    }
-
   }
 
   public String deleteCurrentRecord(String bid, String itemDesc) {
