@@ -325,78 +325,85 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } else {
 
       cp_list = getCurrentCP(ubean.getParticipant_id());
-      ContactPreference part = (ContactPreference) cp_list.get(0);
-      part.setItemId(itemId);
-      part.setUseWhichContactAddress(useWhichContactAddress);
-      part.setContactByChat(contactByChat);
-      part.setContactByEmail(contactByEmail);
-      part.setContactByHomePhone(contactByHomePhone);
-      part.setContactByAlternativePhone(contactByAlternativePhone);
-      part.setContactByCellPhone(contactByCellPhone);
-      part.setContactByAlternativePhone(contactByAlternativePhone);
-      part.setContactByFacebook(contactByFacebook);
-      part.setContactByTwitter(contactByTwitter);
-      part.setContactByInstagram(contactByInstagram);
-      part.setContactByLinkedIn(contactByLinkedIn);
-      part.setContactByOtherSocialMedia(contactByOtherSocialMedia);
-      part.setContactByOtherSocialMediaAccess(contactByOtherSocialMediaAccess);
-      part.setDateUpdated(new Date());
+      if (cp_list.size() == 1) {
+        ContactPreference part = (ContactPreference) cp_list.get(0);
+        part.setItemId(itemId);
+        part.setUseWhichContactAddress(useWhichContactAddress);
+        part.setContactByChat(contactByChat);
+        part.setContactByEmail(contactByEmail);
+        part.setContactByHomePhone(contactByHomePhone);
+        part.setContactByAlternativePhone(contactByAlternativePhone);
+        part.setContactByCellPhone(contactByCellPhone);
+        part.setContactByAlternativePhone(contactByAlternativePhone);
+        part.setContactByFacebook(contactByFacebook);
+        part.setContactByTwitter(contactByTwitter);
+        part.setContactByInstagram(contactByInstagram);
+        part.setContactByLinkedIn(contactByLinkedIn);
+        part.setContactByOtherSocialMedia(contactByOtherSocialMedia);
+        part.setContactByOtherSocialMediaAccess(contactByOtherSocialMediaAccess);
+        part.setDateUpdated(new Date());
 
-      sb = hib_session();
-      tx = sb.beginTransaction();
-
-      try {
-        sb.update(part);
-        tx.commit();
-        successTransaction = true;
-      } catch (Exception ex) {
-        tx.rollback();
-        System.out.println("Error in Update Contact Preferences");
-        Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
-      } finally {
-        //sb = null;
-        //tx = null;
-      }
-
-    }
-
-    if (successTransaction = true) {
-      if (sb.isOpen() == false) {
         sb = hib_session();
-      }
-      if (tx.isActive() == false) {
         tx = sb.beginTransaction();
-      }
-      try {
-        Addresses altadd = (Addresses) participant_alternative.get(0);
-        String uid = altadd.getParticipant_id();
-        if (uid.equals(ubean.getUser_id())) {
-          sb.update(altadd);
-        } else {
-          altadd.setParticipant_id(ubean.getParticipant_id());
-          sb.save(altadd);
-        }
-        tx.commit();
-        successTransaction = true;
-      } catch (Exception ex) {
-        tx.rollback();
-        System.out.println("Error in Update Contact Preferences Address");
-        Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
-        successTransaction = false;
-      } finally {
-        sb = null;
-        tx = null;
-        cp_list = null;
-      }
 
-    }
-    if (successTransaction = true) {
-      ubean.setEditable(0);
-    } else {
-      message(null, "UpdateOrSaveOfCPNotSuccessful", null);
-      ubean.setEditable(1);
-    }
+        try {
+          sb.update(part);
+          tx.commit();
+          successTransaction = true;
+        } catch (Exception ex) {
+          tx.rollback();
+          successTransaction = true;
+          System.out.println("Error in Update Contact Preferences");
+          Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+          //sb = null;
+          //tx = null;
+        }
+
+      } else {
+        successTransaction = false;
+      }
+    }  ///// Save or update
+    
+      if (successTransaction = true) {
+        if (sb.isOpen() == false) {
+          sb = hib_session();
+        }
+        if (tx.isActive() == false) {
+          tx = sb.beginTransaction();
+        }
+        try {
+          Addresses altadd = (Addresses) participant_alternative.get(0);
+          String uid = altadd.getParticipant_id();
+          if (uid.equals(ubean.getUser_id())) {
+            sb.update(altadd);
+          } else {
+            altadd.setParticipant_id(ubean.getParticipant_id());
+            sb.save(altadd);
+          }
+          tx.commit();
+          successTransaction = true;
+        } catch (Exception ex) {
+          tx.rollback();
+          successTransaction = false;
+          System.out.println("Error in Update Contact Preferences Address");
+          Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
+          successTransaction = false;
+        } finally {
+          sb = null;
+          tx = null;
+          cp_list = null;
+        }
+
+      
+      if (successTransaction = true) {
+        ubean.setEditable(0);
+      } else {
+        message(null, "UpdateOrSaveOfCPNotSuccessful", null);
+        ubean.setEditable(1);
+      }
 //        return "user_detail?faces-redirect=true";
+    }
     return "user_contact_preferences";
   }
 
