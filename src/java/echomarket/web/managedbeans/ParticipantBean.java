@@ -122,7 +122,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if (ubean.getEditable() == -1) {
       return "user_agreement";
     } else {
-      ubean.setEditable(1);
+//      ubean.setEditable(1);
       return "user_nae";
     }
 
