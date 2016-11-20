@@ -156,10 +156,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User");
-      message(
-              null,
-              "LoginNotUpdated",
-              new Object[]{this.username, this.email});
+      message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
     } finally {
 
       tx = null;
@@ -198,22 +195,13 @@ public class UserBean extends AbstractBean implements Serializable {
       }
       if (savedRecord == true) {
         if (commName == null) {
-          message(
-                  null,
-                  "NewRegistration",
-                  new Object[]{fullname, this.email});
+          message(null, "NewRegistration", new Object[]{fullname, this.email});
         } else {
 
-          message(
-                  null,
-                  "NewCommunityRegistration",
-                  new Object[]{fullname, commName, this.email});
+          message(null, "NewCommunityRegistration", new Object[]{fullname, commName, this.email});
         }
       } else {
-        message(
-                null,
-                "NewRegistrationFailed",
-                new Object[]{fullname});
+        message(null, "NewRegistrationFailed", new Object[]{fullname});
 
       }
     }
@@ -477,32 +465,31 @@ public class UserBean extends AbstractBean implements Serializable {
         String un = part.getFirstName();
         if ((gw == 1) && (i18 == 1) && (un == null)) {
           this.editable = 1;
-          return_string =  pbean.load_ud(this.participant_id);
+          return_string = pbean.load_ud(this.participant_id);
         } else if ((gw == 1) && (i18 == 1) && (un != null)) {
           List hasCompleteCP = completeContactPreferences(this.participant_id);
           hs = hasCompleteCP.size();
           if (hs == 0) {
             this.editable = 1;
-            return_string =  cpbean.load_ud(this.participant_id);
+            return_string = cpbean.load_ud(this.participant_id);
           } else {
             this.editable = 1;
             if (this.userType.contains("borrow")) {
-              return_string =  ibean.load_ud("borrow", null);
+              return_string = ibean.load_ud("borrow", null);
             } else if (this.userType.contains("lend")) {
-              return_string =  ibean.load_ud("lend", null);
+              return_string = ibean.load_ud("lend", null);
             } else {
               return_string = ibean.load_ud("both", null);
             }
           }
         }
       }
-    }
-    else {
+    } else {
       message(null, "LogInSuccessful", new Object[]{this.username});
-    return_string = "login";
-  }
-  
-  return return_string+ "?faces-redirect=true";
+      return_string = "login";
+    }
+
+    return return_string + "?faces-redirect=true";
 
   }
 
@@ -526,13 +513,9 @@ public class UserBean extends AbstractBean implements Serializable {
       }
       if (tx.isActive() == false) {
         tx = session.beginTransaction();
+      }
 
-      
-
-}
-
-      Users uu = (Users) session.get(Users.class
-, u_id);
+      Users uu = (Users) session.get(Users.class, u_id);
       uu.setActivatedAt(ndate);
       uu.setResetCode(null);
       tx.commit();
@@ -554,28 +537,19 @@ public class UserBean extends AbstractBean implements Serializable {
       Users userArray = (Users) results.get(0);
       Session hib = hib_session();
       Transaction tx = hib.beginTransaction();
-      Users 
-
-uu = (Users) hib.get(Users.class
-, userArray.getUser_id());
+      Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
       uu.setResetCode(null);
       PasswordEncryptionService pes = new PasswordEncryptionService();
       try {
         uu.setCryptedPassword(pes.getEncryptedPassword(this.password, uu.getSalt()));
 
-      
-
-} catch (NoSuchAlgorithmException ex) {
+      } catch (NoSuchAlgorithmException ex) {
         Logger.getLogger(UserBean.class
+                .getName()).log(Level.SEVERE, null, ex);
 
-.getName()).log(Level.SEVERE, null, ex);
-
-      
-
-} catch (InvalidKeySpecException ex) {
+      } catch (InvalidKeySpecException ex) {
         Logger.getLogger(UserBean.class
-
-.getName()).log(Level.SEVERE, null, ex);
+                .getName()).log(Level.SEVERE, null, ex);
       }
       tx.commit();
       tx = null;
@@ -596,10 +570,7 @@ uu = (Users) hib.get(Users.class
       //// Update the user to generate reset_code
       Session hib = hib_session();
       Transaction tx = hib.beginTransaction();
-      Users 
-
-uu = (Users) hib.get(Users.class
-, userArray.getUser_id());
+      Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
       buildReset_Code = uu.BuildRandomValue();
       uu.setResetCode(buildReset_Code);
       tx.commit();
@@ -623,18 +594,12 @@ uu = (Users) hib.get(Users.class
       } catch (Exception e) {
         System.out.println("Send Mail Failed");
       }
-      message(
-              null,
-              "ForgotUserPasswordSuccess",
-              new Object[]{email});
+      message(null, "ForgotUserPasswordSuccess", new Object[]{email});
       this.username = null;
       this.userAction = "login";
       return "index";
     } else {
-      message(
-              null,
-              "ForgotUserPasswordFailed",
-              new Object[]{email});
+      message(null, "ForgotUserPasswordFailed", new Object[]{email});
       this.username = null;
       this.userAction = "login";
       return "index";
@@ -687,19 +652,13 @@ uu = (Users) hib.get(Users.class
       try {
         auth_pw = pes.authenticate(pw, crypted_password, salt);
 
-      
-
-} catch (NoSuchAlgorithmException ex) {
+      } catch (NoSuchAlgorithmException ex) {
         Logger.getLogger(UserBean.class
+                .getName()).log(Level.SEVERE, null, ex);
 
-.getName()).log(Level.SEVERE, null, ex);
-
-      
-
-} catch (InvalidKeySpecException ex) {
+      } catch (InvalidKeySpecException ex) {
         Logger.getLogger(UserBean.class
-
-.getName()).log(Level.SEVERE, null, ex);
+                .getName()).log(Level.SEVERE, null, ex);
       }
 
     }
@@ -987,11 +946,8 @@ uu = (Users) hib.get(Users.class
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              
-
-.getLogger(UserBean.class
-
-.getName()).log(Level.SEVERE, null, ex);
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
       return null;
     } finally {
@@ -1016,11 +972,8 @@ uu = (Users) hib.get(Users.class
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              
-
-.getLogger(UserBean.class
-
-.getName()).log(Level.SEVERE, null, ex);
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
       return null;
     } finally {
@@ -1060,11 +1013,8 @@ uu = (Users) hib.get(Users.class
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              
-
-.getLogger(UserBean.class
-
-.getName()).log(Level.SEVERE, null, ex);
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User");
       message(
               null,
@@ -1102,10 +1052,11 @@ uu = (Users) hib.get(Users.class
     if (user_id == null) {
       message(null, "LoginInRequiredToReviseUserInformation", null);
       return "index";
-    } else 
+    } else {
       return "user_login_update";
-    } 
-  
+    }
+  }
+
   private String parseUserTypeArray() {
 
     String hold_userTypeBuild = "";
@@ -1145,11 +1096,8 @@ uu = (Users) hib.get(Users.class
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              
-
-.getLogger(UserBean.class
-
-.getName()).log(Level.SEVERE, null, ex);
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on SendEmail, line ");
     } finally {
       tx = null;
