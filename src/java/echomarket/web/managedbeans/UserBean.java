@@ -467,7 +467,7 @@ public class UserBean extends AbstractBean implements Serializable {
       if (hs == 0) {
         hasComplete = null;
         this.editable = -1;
-        return pbean.load_ud(this.user_id);
+        return_string = pbean.load_ud(this.user_id);
 
       } else if ((hs > 0)) {
         Participant part = (Participant) hasComplete.get(0);
@@ -477,21 +477,21 @@ public class UserBean extends AbstractBean implements Serializable {
         String un = part.getFirstName();
         if ((gw == 1) && (i18 == 1) && (un == null)) {
           this.editable = 1;
-          return pbean.load_ud(this.participant_id);
+          return_string =  pbean.load_ud(this.participant_id);
         } else if ((gw == 1) && (i18 == 1) && (un != null)) {
           List hasCompleteCP = completeContactPreferences(this.participant_id);
           hs = hasCompleteCP.size();
           if (hs == 0) {
             this.editable = 1;
-            return cpbean.load_ud(this.participant_id);
+            return_string =  cpbean.load_ud(this.participant_id);
           } else {
             this.editable = 1;
             if (this.userType.contains("borrow")) {
-              return ibean.load_ud("borrow", null);
+              return_string =  ibean.load_ud("borrow", null);
             } else if (this.userType.contains("lend")) {
-              return ibean.load_ud("lend", null);
+              return_string =  ibean.load_ud("lend", null);
             } else {
-              return ibean.load_ud("both", null);
+              return_string = ibean.load_ud("both", null);
             }
           }
         }
