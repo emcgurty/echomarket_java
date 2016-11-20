@@ -1,14 +1,10 @@
 $(document).ready(function () {
 
-    showFormContact();
-
-    if ($("input[id$='organizationName']").val()) {
+if ($("input[id$='organizationName']").val()) {
         $("div[id$='yesNoOrganization']").css("display", "block");
     }
 
-// Could not get tilde to work 
-// var contactAddressCheck = $("input[type=radio][id~='useWhichContactAddress']");
-// var contactAddressCheck = $("input[type=radio]"); -- didnt work, didn't find all
+
     var contactAddressCheck = $("input");
     findContactAddressValue(contactAddressCheck);
     function findContactAddressValue(cad) {
@@ -24,14 +20,7 @@ $(document).ready(function () {
                     }
                 }
             }
-            if (id.includes('borrowerContactByEmail')) {
-
-                if ((id.includes('1')) || (id.includes('2'))) {
-                    $("div#emailAlternative").css("display", "block");
-
-                    foundValue++;
-                }
-            }
+            
             if (id.includes('thirdPartyPresenceL2b')) {
 
                 if (id.includes('0')) {
@@ -71,7 +60,7 @@ $(document).ready(function () {
             returnResult = true;
         }
 
-        if ((select_id == 'contactDescribeId') && (select_value == '100')) {
+        if ((select_id == 'contactDescribeId') && (select_value == '10')) {
             $("div#otherDescribeYourselfText").css("visibility", "visible");
         } else {
             $("input#otherDescribeYourself").html("");
@@ -113,17 +102,13 @@ $(document).ready(function () {
         if (this.id.includes('useWhichContactAddress')) {
             y_n = $(this).val();
             if ((y_n == 1) || (y_n == 2)) {
-
-
                 $("div#buildAlternativeAddress").css("display", "block");
             } else {
                 $("div#buildAlternativeAddress").css("display", "none");
             }
-        } else if (this.id.includes('borrowerContactByEmail')) {
+        } else if (this.id.includes('questionAltEmail')) {
             y_n = $(this).val();
             if ((y_n == 1) || (y_n == 2)) {
-
-
                 $("div#emailAlternative").css("display", "block");
             } else {
                 $("div#emailAlternative").css("display", "none");
@@ -160,7 +145,7 @@ $(document).ready(function () {
                 $("span#organizationName.error-message").text("");
                 $("span#organizationName.error-message").css("visibility", "hidden");
             }
-        } else if (this.id.includes('publicDisplayHomePhone')) {
+        } else if (this.id.includes('displayHomePhone')) {
             y_n = $(this).val();
             try {
                 var getHomePhone = $("input[class='homePhone']").val();
@@ -175,7 +160,7 @@ $(document).ready(function () {
                 $("span#homePhone.error-message").text("");
                 $("span#homePhone.error-message").css("visibility", "hidden");
             }
-        } else if (this.id.includes('publicDisplayCellPhone')) {
+        } else if (this.id.includes('displayCellPhone')) {
             y_n = $(this).val();
             try {
                 var getCellPhone = $("input[class='cellPhone']").val();
@@ -190,7 +175,7 @@ $(document).ready(function () {
                 $("span#cellPhone.error-message").text("");
                 $("span#cellPhone.error-message").css("visibility", "hidden");
             }
-        } else if (this.id.includes('publicDisplayAlternativePhone')) {
+        } else if (this.id.includes('displayAlternativePhone')) {
             y_n = $(this).val();
             try {
                 var getAlternativePhone = $("input[class='alternativePhone']").val();
@@ -446,6 +431,15 @@ function showFormContact() {
     $("#form_contact_information").css("display", "block");
     return false;
 }
+
+function showLoginUpdate() {
+    hideAllBFormHrefs();
+    $("li[id^=tab_item_1]").css("display", "block");
+    whichSaveMenu(1);
+    $("#form_login_information").css("display", "block");
+    return false;
+}
+
 
 function showMonetary() {
     hideAllBFormHrefs();
@@ -728,49 +722,49 @@ function displayPhone() {
 
 }
 
-function checkBLegal() {
-
-    var legal_check = $("input[type=radio]");
-    var getValue = false;
-    var foundValue = 0;
-    try {
-
-        for (var i = 0; i < legal_check.length; i++) {
-            var id = legal_check[i].id;
-            if (id.includes('age18OrMore')) {
-                if (legal_check[i].value == 1) {
-                    if (legal_check[i].checked == false) {
-                        $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
-                        $("span#age18OrMore_span.error-message").css("visibility", "visible");
-                    } else {
-                        $("span#age18OrMore_span.error-message").text("");
-                        $("span#age18OrMore_span.error-message").css("visibility", "hidden");
-                        getValue = true;
-                    }
-                }
-                foundValue++;
-            } else if (id.includes('goodwill')) {
-                if (legal_check[i].value == 1) {
-                    if (legal_check[i].checked == false) {
-                        $("span#goodwill_span.error-message").text("You must be acting in goodwill.");
-                        $("span#goodwill_span.error-message").css("visibility", "visible");
-                    } else {
-                        $("span#goodwill_span.error-message").text("");
-                        $("span#goodwill_span.error-message").css("visibility", "hidden");
-                        getValue = true;
-                    }
-                }
-                foundValue++;
-            } else if (foundValue == 2) {
-                break;
-            }
-        }
-
-    } catch (err) {
-    }
-
-    return getValue;
-}
+//function checkBLegal() {
+//
+//    var legal_check = $("input[type=radio]");
+//    var getValue = false;
+//    var foundValue = 0;
+//    try {
+//
+//        for (var i = 0; i < legal_check.length; i++) {
+//            var id = legal_check[i].id;
+//            if (id.includes('age18OrMore')) {
+//                if (legal_check[i].value == 1) {
+//                    if (legal_check[i].checked == false) {
+//                        $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
+//                        $("span#age18OrMore_span.error-message").css("visibility", "visible");
+//                    } else {
+//                        $("span#age18OrMore_span.error-message").text("");
+//                        $("span#age18OrMore_span.error-message").css("visibility", "hidden");
+//                        getValue = true;
+//                    }
+//                }
+//                foundValue++;
+//            } else if (id.includes('goodwill')) {
+//                if (legal_check[i].value == 1) {
+//                    if (legal_check[i].checked == false) {
+//                        $("span#goodwill_span.error-message").text("You must be acting in goodwill.");
+//                        $("span#goodwill_span.error-message").css("visibility", "visible");
+//                    } else {
+//                        $("span#goodwill_span.error-message").text("");
+//                        $("span#goodwill_span.error-message").css("visibility", "hidden");
+//                        getValue = true;
+//                    }
+//                }
+//                foundValue++;
+//            } else if (foundValue == 2) {
+//                break;
+//            }
+//        }
+//
+//    } catch (err) {
+//    }
+//
+//    return getValue;
+//}
 
 function getChildID(parentID) {
     var child_id = null;
