@@ -56,10 +56,10 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   private int approved;
 
   private static ArrayList<Addresses> primary
-          = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "primary")));
+          = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "primary")));
 
   private static ArrayList<Addresses> alternative
-          = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), null, null, null, null, null, null, null, null, null, "alternative")));
+          = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "alternative")));
 
   private Addresses[] existing_primary;
   private Addresses[] existing_alternative;
@@ -87,36 +87,38 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String load_ud(String uid) {
 
-    if (uid == "-1") {
+    if ("-1".equals(uid)) {
       ubean.setEditable(-1);
       uid = ubean.getUser_id();
     }
-      
+
     List partlist = null;
     partlist = getCurrentParticipant(uid);
-    Participant pp = (Participant) partlist.get(0);
-    this.participant_id = pp.getParticipant_id();
-    this.contactDescribeId = pp.getContactDescribeId();
-    this.organizationName = pp.getOrganizationName();
-    this.displayOrganization = pp.getDisplayOrganization();
-    this.otherDescribeYourself = pp.getOtherDescribeYourself();
-    this.firstName = pp.getFirstName();
-    this.mi = pp.getMi();
-    this.lastName = pp.getLastName();
-    this.alias = pp.getAlias();
-    this.displayName = pp.getDisplayName();
-    this.displayAddress = pp.getDisplayAddress();
-    this.homePhone = pp.getHomePhone();
-    this.cellPhone = pp.getCellPhone();
-    this.alternativePhone = pp.getAlternativePhone();
-    this.emailAlternative = pp.getEmailAlternative();
-    this.displayHomePhone = pp.getDisplayHomePhone();
-    this.displayCellPhone = pp.getDisplayCellPhone();
-    this.displayAlternativePhone = pp.getDisplayAlternativeAddress();
-    this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
-    this.goodwill = pp.getGoodwill();
-    this.age18OrMore = pp.getAge18OrMore();
-    this.isCreator = pp.getIsCreator();
+    if (partlist.size() == 1) {
+      Participant pp = (Participant) partlist.get(0);
+      this.participant_id = pp.getParticipant_id();
+      this.contactDescribeId = pp.getContactDescribeId();
+      this.organizationName = pp.getOrganizationName();
+      this.displayOrganization = pp.getDisplayOrganization();
+      this.otherDescribeYourself = pp.getOtherDescribeYourself();
+      this.firstName = pp.getFirstName();
+      this.mi = pp.getMi();
+      this.lastName = pp.getLastName();
+      this.alias = pp.getAlias();
+      this.displayName = pp.getDisplayName();
+      this.displayAddress = pp.getDisplayAddress();
+      this.homePhone = pp.getHomePhone();
+      this.cellPhone = pp.getCellPhone();
+      this.alternativePhone = pp.getAlternativePhone();
+      this.emailAlternative = pp.getEmailAlternative();
+      this.displayHomePhone = pp.getDisplayHomePhone();
+      this.displayCellPhone = pp.getDisplayCellPhone();
+      this.displayAlternativePhone = pp.getDisplayAlternativeAddress();
+      this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
+      this.goodwill = pp.getGoodwill();
+      this.age18OrMore = pp.getAge18OrMore();
+      this.isCreator = pp.getIsCreator();
+    }
     if (ubean.getEditable() == -1) {
       return "user_agreement";
     } else {
@@ -254,7 +256,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         }
 
         try {
-          sb.save(balt);
+          if (balt.getAddressId() == null) {
+            balt.setAddressId(UUID.randomUUID().toString());
+            sb.save(balt);
+          } else {
+            sb.update(balt);
+          }
           tx.commit();
           updateSuccess = true;
         } catch (Exception ex) {
@@ -280,19 +287,25 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
 
       try {
-        sb.save(ba);
+        if (ba.getAddressId() == null) {
+            ba.setAddressId(UUID.randomUUID().toString());
+            sb.save(ba);
+          } else {
+            sb.update(ba);
+          }
+       
         tx.commit();
         updateSuccess = true;
-        message(null, "RecordSavedFailed", null);
+        message(null, "RecordSaved", null);
       } catch (Exception ex) {
         updateSuccess = false;
         tx.rollback();
         System.out.println("Error in Save/Update Particpant, 276");
         Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+        message(null, "RecordSaved", null);
       } finally {
         sb = null;
         tx = null;
-        message(null, "RecordSaved", null);
 
       }
     }
@@ -307,10 +320,10 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String userAgreement() {
 
+    String return_string = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
       message(null, "threeStrikesYourOut", null);
       ubean.setEditable(-1);
-      return this.load_ud(ubean.getUser_id());
     } else {
       Session sb = hib_session();
       Transaction tx = sb.beginTransaction();
@@ -329,9 +342,10 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       } finally {
         sb = null;
         tx = null;
-        return this.load_ud(ubean.getUser_id());
+
       }
     }
+    return this.load_ud(ubean.getUser_id());
 
   }
 
@@ -370,7 +384,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String getOrganizationName() {
-    if ((organizationName != null) || (ubean.getEditable() == 3)) {
+    if ((organizationName != null) || (ubean.getEditable() == 1)) {
       return organizationName;
     } else {
       return "Not provided";
@@ -383,7 +397,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String getOtherDescribeYourself() {
-    if ((otherDescribeYourself != null) || (ubean.getEditable() == 3)) {
+    if ((otherDescribeYourself != null) || (ubean.getEditable() == 1)) {
       return otherDescribeYourself;
     } else {
       return "Not provided";
