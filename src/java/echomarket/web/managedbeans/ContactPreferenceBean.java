@@ -1,14 +1,14 @@
 package echomarket.web.managedbeans;
 
-import echomarket.hibernate.Addresses;
+//import echomarket.hibernate.Addresses;
 import echomarket.hibernate.ContactPreference;
-import echomarket.hibernate.Purpose;
+//import echomarket.hibernate.Purpose;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.ArrayList;
+//import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+//import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
@@ -25,13 +25,13 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
-  public static ArrayList<Addresses> getParticipant_alternative() {
-    return participant_alternative;
-  }
-
-  public static void setParticipant_alternative(ArrayList<Addresses> aParticipant_alternative) {
-    participant_alternative = aParticipant_alternative;
-  }
+//  public static ArrayList<Addresses> getParticipant_alternative() {
+//    return participant_alternative;
+//  }
+//
+//  public static void setParticipant_alternative(ArrayList<Addresses> aParticipant_alternative) {
+//    participant_alternative = aParticipant_alternative;
+//  }
 
   @Inject
   UserBean ubean;
@@ -50,8 +50,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private String contactByLinkedIn;
   private String contactByOtherSocialMedia;
   private String contactByOtherSocialMediaAccess;
-  private static ArrayList<Addresses> participant_alternative
-          = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, null, null, "99", null, "99", "alternative")));
+
+//  private static ArrayList<Addresses> participant_alternative
+//          = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, null, null, "99", null, "99", "alternative")));
 
   public ContactPreferenceBean() {
   }
@@ -318,8 +319,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         System.out.println("Error in Save Contact Preferences");
         Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
       } finally {
-        // sb = null;
-        //  tx = null;
+        sb = null;
+        tx = null;
       }
 
     } else {
@@ -352,107 +353,78 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           successTransaction = true;
         } catch (Exception ex) {
           tx.rollback();
-          successTransaction = true;
           System.out.println("Error in Update Contact Preferences");
           Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-          //sb = null;
-          //tx = null;
-        }
-
-      } else {
-        successTransaction = false;
-      }
-    }  ///// Save or update
-    
-      if (successTransaction = true) {
-        if (sb.isOpen() == false) {
-          sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-          tx = sb.beginTransaction();
-        }
-        try {
-          Addresses altadd = (Addresses) participant_alternative.get(0);
-          String uid = altadd.getParticipant_id();
-          if (uid.equals(ubean.getUser_id())) {
-            sb.update(altadd);
-          } else {
-            altadd.setParticipant_id(ubean.getParticipant_id());
-            sb.save(altadd);
-          }
-          tx.commit();
-          successTransaction = true;
-        } catch (Exception ex) {
-          tx.rollback();
-          successTransaction = false;
-          System.out.println("Error in Update Contact Preferences Address");
-          Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
-          successTransaction = false;
-        } finally {
           sb = null;
           tx = null;
-          cp_list = null;
         }
 
-      
-      if (successTransaction = true) {
-        ubean.setEditable(0);
-      } else {
-        message(null, "UpdateOrSaveOfCPNotSuccessful", null);
-        ubean.setEditable(1);
       }
-//        return "user_detail?faces-redirect=true";
-    }
-    return "user_contact_preferences";
-  }
-
-  public List getAddress() {
-
-    Addresses[] a_array = null;
-    List result = null;
-    Session hib;
-    Transaction tx;
-    hib = null;
-    tx = null;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-    } catch (Exception ex) {
-      System.out.println("Error at line 335 in getAddress");
-      ex.printStackTrace();
     }
 
-    String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
-    try {
-      result = hib.createQuery(queryString)
-              .setParameter("pid", ubean.getParticipant_id())
-              .setParameter("which", "alternative")
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      System.out.println("Error at line 344 in CP Bean");
-      e.printStackTrace();
-
-    } finally {
-//            hib.close();
-      hib = null;
-      tx = null;
-
-    }
-
-    Integer size_of_list = result.size();
-    if (size_of_list == 0) {
-      return getParticipant_alternative();
+    if (successTransaction = true) {
+      ubean.setEditable(1);
     } else {
-      return result;
+      message(null, "UpdateOrSaveOfCPNotSuccessful", null);
+      ubean.setEditable(0);
     }
+//        return "user_detail?faces-redirect=true";
 
+    return load_ud(ubean.getParticipant_id());
   }
+
+//  public List getAddress() {
+//
+//    Addresses[] a_array = null;
+//    List result = null;
+//    Session hib;
+//    Transaction tx;
+//    hib = null;
+//    tx = null;
+//
+//    try {
+//      hib = hib_session();
+//      tx = hib.beginTransaction();
+//    } catch (Exception ex) {
+//      System.out.println("Error at line 335 in getAddress");
+//      ex.printStackTrace();
+//    }
+//
+//    String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
+//    try {
+//      result = hib.createQuery(queryString)
+//              .setParameter("pid", ubean.getParticipant_id())
+//              .setParameter("which", "alternative")
+//              .list();
+//      tx.commit();
+//    } catch (Exception e) {
+//      System.out.println("Error at line 344 in CP Bean");
+//      e.printStackTrace();
+//
+//    } finally {
+////            hib.close();
+//      hib = null;
+//      tx = null;
+//
+//    }
+//
+//    Integer size_of_list = result.size();
+//    if (size_of_list == 0) {
+//      return getParticipant_alternative();
+//    } else {
+//      return result;
+//    }
+//
+//  }
 
   public String load_ud(String pid) {
 
+    if (ubean.getEditable() == 0) {
+      ubean.setEditable(1);
+    } else {
+      ubean.setEditable(0);
+    }
     List partlist = null;
     partlist = getCurrentCP(pid);
     if (partlist.size() == 1) {
@@ -472,14 +444,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       this.contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
       this.contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
       //this.setParticipant_alternative((List)getAddress().get(0));
-    } else {
-      ubean.setEditable(1);
     }
 
     partlist = null;
 
     return "user_contact_preferences";
-//        return "user_detail?faces-redirect=true";
+
   }
 
   public List getCurrentCP(String pid) {
