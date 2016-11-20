@@ -93,8 +93,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     }
 
     try {
-      result = session.createQuery("FROM ContactDescribes Where purposeType  = :pt ORDER BY optionValue")
-              .setParameter("pt", purpose)
+      result = session.createQuery("FROM ContactDescribes ORDER BY optionValue")
               .list();
       tx.commit();
     } catch (Exception ex) {
