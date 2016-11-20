@@ -183,7 +183,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByFacebook
    */
   public String getContactByFacebook() {
-    if ((contactByFacebook != null) || (ubean.getEditable() == 5)) {
+    if ((contactByFacebook != null) || (ubean.getEditable() == 1)) {
       return contactByFacebook;
     } else {
       return "Not provided";
@@ -202,7 +202,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByTwitter
    */
   public String getContactByTwitter() {
-    if ((contactByTwitter != null) || (ubean.getEditable() == 5)) {
+    if ((contactByTwitter != null) || (ubean.getEditable() == 1)) {
       return contactByTwitter;
     } else {
       return "Not provided";
@@ -221,7 +221,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByInstagram
    */
   public String getContactByInstagram() {
-    if ((contactByInstagram != null) || (ubean.getEditable() == 5)) {
+    if ((contactByInstagram != null) || (ubean.getEditable() == 1)) {
       return contactByInstagram;
     } else {
       return "Not provided";
@@ -240,7 +240,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByLinkedIn
    */
   public String getContactByLinkedIn() {
-    if ((contactByLinkedIn != null) || (ubean.getEditable() == 5)) {
+    if ((contactByLinkedIn != null) || (ubean.getEditable() == 1)) {
       return contactByLinkedIn;
     } else {
       return "Not provided";
@@ -259,7 +259,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByOtherSocialMedia
    */
   public String getContactByOtherSocialMedia() {
-    if ((contactByOtherSocialMedia != null) || (ubean.getEditable() == 5)) {
+    if ((contactByOtherSocialMedia != null) || (ubean.getEditable() == 1)) {
       return contactByOtherSocialMedia;
     } else {
       return "Not provided";
@@ -278,7 +278,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByOtherSocialMediaAccess
    */
   public String getContactByOtherSocialMediaAccess() {
-    if ((contactByOtherSocialMediaAccess != null) || (ubean.getEditable() == 5)) {
+    if ((contactByOtherSocialMediaAccess != null) || (ubean.getEditable() == 1)) {
       return contactByOtherSocialMediaAccess;
     } else {
       return "Not provided";

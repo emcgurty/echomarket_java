@@ -97,7 +97,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     Transaction tx = session.beginTransaction();
     String query = null;
     try {
-           query = "SELECT lic FROM Participant part "
+      query = "SELECT lic FROM Participant part "
               + " left join part.item itm "
               + " left join itm.lenderItemConditions lic "
               + "WHERE part.participant_id = :pid";
@@ -131,46 +131,50 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     if (this.itemId != null) {
 
       icList = getCurrentItemConditions(ubean.getUser_id());
-      LenderItemConditions ic = (LenderItemConditions) icList.get(0);
-      ic.setItemId(itemId);
-      ic.setAgreedNumberOfDays(agreedNumberOfDays);
-      ic.setAgreedNumberOfHours(agreedNumberOfHours);
-      ic.setAvailableForDonation(availableForDonation);
-      ic.setAvailableForPurchase(availableForPurchase);
-      ic.setAvailableForPurchaseAmount(availableForPurchaseAmount);
-      ic.setDonateAnonymous(donateAnonymous);
-      ic.setEntirePeriod(entirePeriod);
+      if (icList.size() == 1) {
+        LenderItemConditions ic = (LenderItemConditions) icList.get(0);
+        ic.setItemId(itemId);
+        ic.setAgreedNumberOfDays(agreedNumberOfDays);
+        ic.setAgreedNumberOfHours(agreedNumberOfHours);
+        ic.setAvailableForDonation(availableForDonation);
+        ic.setAvailableForPurchase(availableForPurchase);
+        ic.setAvailableForPurchaseAmount(availableForPurchaseAmount);
+        ic.setDonateAnonymous(donateAnonymous);
+        ic.setEntirePeriod(entirePeriod);
 //          ic.setComment(comment); Later
-      ic.setForFree(forFree);
-      ic.setIndefiniteDuration(indefiniteDuration);
-      ic.setPartialPeriod(partialPeriod);
-      ic.setPresentDuringBorrowingPeriod(presentDuringBorrowingPeriod);
-      ic.setProvideProperUseTraining(provideProperUseTraining);
-      ic.setSecurityDeposit(securityDeposit);
-      ic.setSecurityDepositAmount(securityDepositAmount);
-      ic.setSmallFee(smallFee);
-      ic.setSmallFeeAmount(smallFeeAmount);
-      ic.setSpecificConditions(specificConditions);
-      ic.setTrade(trade);
-      ic.setTradeItem(tradeItem);
+        ic.setForFree(forFree);
+        ic.setIndefiniteDuration(indefiniteDuration);
+        ic.setPartialPeriod(partialPeriod);
+        ic.setPresentDuringBorrowingPeriod(presentDuringBorrowingPeriod);
+        ic.setProvideProperUseTraining(provideProperUseTraining);
+        ic.setSecurityDeposit(securityDeposit);
+        ic.setSecurityDepositAmount(securityDepositAmount);
+        ic.setSmallFee(smallFee);
+        ic.setSmallFeeAmount(smallFeeAmount);
+        ic.setSpecificConditions(specificConditions);
+        ic.setTrade(trade);
+        ic.setTradeItem(tradeItem);
 
-      sb = hib_session();
-      tx = sb.beginTransaction();
+        sb = hib_session();
+        tx = sb.beginTransaction();
 
-      try {
-        sb.update(ic);
-        tx.commit();
-        successTransaction = true;
-        message(null, "LenderItemConditionsUpdated", null);
-      } catch (Exception ex) {
+        try {
+          sb.update(ic);
+          tx.commit();
+          successTransaction = true;
+          message(null, "LenderItemConditionsUpdated", null);
+        } catch (Exception ex) {
+          successTransaction = false;
+          message(null, "LenderItemConditionsUpdatedFailed", null);
+          tx.rollback();
+          System.out.println("Error in Update Lender ITem Conditions");
+          Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+          //sb = null;
+          //tx = null;
+        }
+      } else {
         successTransaction = false;
-        message(null, "LenderItemConditionsUpdatedFailed", null);
-        tx.rollback();
-        System.out.println("Error in Update Lender ITem Conditions");
-        Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
-      } finally {
-        //sb = null;
-        //tx = null;
       }
 
     } else {

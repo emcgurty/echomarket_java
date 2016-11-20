@@ -291,7 +291,10 @@ public class ItemBean extends AbstractBean implements Serializable {
                     tx = null;
                 }
 
+            } else {
+                    bret = false;
             }
+            
         }
 
         if (bret == true) {
@@ -607,7 +610,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
 
     public List getCurrentItem(String iid) {
-        System.out.println("getCurrentItem Called");
+        
         List result = null;
         Session session = hib_session();
         Transaction tx = session.beginTransaction();
@@ -618,7 +621,7 @@ public class ItemBean extends AbstractBean implements Serializable {
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
-            System.out.println("Error in getCurrentItem");
+           System.out.println("Error in getCurrentItem");
             e.printStackTrace();
 
         } finally {

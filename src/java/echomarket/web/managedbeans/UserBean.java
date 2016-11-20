@@ -383,7 +383,7 @@ public class UserBean extends AbstractBean implements Serializable {
           }
           message(null, "ActivateSuccessful", new Object[]{});
           this.editable = -1;
-          return pbean.load_ud(user_id);
+          return_string = pbean.load_ud(user_id);
         } else {
           message(null, "ActivateFailed", null);
           return_string = "login";
