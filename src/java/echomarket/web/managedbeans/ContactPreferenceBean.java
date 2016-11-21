@@ -304,7 +304,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     sb = null;
     tx = null;
 
-    if ((this.itemId == null) && (this.participant_id == null)) {
+    if (contactPreferenceId.isEmpty() == true) {
       /// Create new record
       ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
 
@@ -359,7 +359,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           sb = null;
           tx = null;
         }
-
       }
     }
 
@@ -374,50 +373,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     return load_ud(ubean.getParticipant_id());
   }
 
-//  public List getAddress() {
-//
-//    Addresses[] a_array = null;
-//    List result = null;
-//    Session hib;
-//    Transaction tx;
-//    hib = null;
-//    tx = null;
-//
-//    try {
-//      hib = hib_session();
-//      tx = hib.beginTransaction();
-//    } catch (Exception ex) {
-//      System.out.println("Error at line 335 in getAddress");
-//      ex.printStackTrace();
-//    }
-//
-//    String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
-//    try {
-//      result = hib.createQuery(queryString)
-//              .setParameter("pid", ubean.getParticipant_id())
-//              .setParameter("which", "alternative")
-//              .list();
-//      tx.commit();
-//    } catch (Exception e) {
-//      System.out.println("Error at line 344 in CP Bean");
-//      e.printStackTrace();
-//
-//    } finally {
-////            hib.close();
-//      hib = null;
-//      tx = null;
-//
-//    }
-//
-//    Integer size_of_list = result.size();
-//    if (size_of_list == 0) {
-//      return getParticipant_alternative();
-//    } else {
-//      return result;
-//    }
-//
-//  }
-
   public String load_ud(String pid) {
 
     if (ubean.getEditable() == 0) {
@@ -429,6 +384,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     partlist = getCurrentCP(pid);
     if (partlist.size() == 1) {
       ContactPreference pp = (ContactPreference) partlist.get(0);
+      this.contactPreferenceId = pp.getContactPreferenceId();
       this.itemId = pp.getItemId();
       this.participant_id = pp.getParticipant_id();
       this.useWhichContactAddress = pp.getUseWhichContactAddress();
@@ -444,7 +400,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       this.contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
       this.contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
       //this.setParticipant_alternative((List)getAddress().get(0));
-    }
+    } 
 
     partlist = null;
 
