@@ -15,19 +15,24 @@
   <ui:define name="content">
     <h:form id="contact_preference_content" >
 
-
       <h:head>
-        <h:inputHidden id="itemId" value="#{contactPreferenceBean.itemId}"  />
-        <h:inputHidden id="participant_id" value="#{contactPreferenceBean.participant_id}"  />
+
       </h:head>
-      
+
       <div id="form_contact_preference" class="contact_information" >
-      <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_contact_preferences"></ui:include>  
+        <div class="message.color">
+          <h:messages showSummary="true" 
+                      showDetail="false"
+                      errorStyle="color: #d20005" 
+                      infoStyle="color: blue"/>
+        </div>
+
+        <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_contact_preferences"></ui:include>  
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
             <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 1}" />
-            <h:commandLink  action="#{cpb.load_ud(userBean.participant_id)}"  class="right_div" value="View Contact Preference Information"  rendered="#{userBean.editable == 0}" />
+            <h:commandLink  action="#{cpb.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
             <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Review Lender 'Item Transfer'"  rendered="#{(userBean.editable == 1) and (userBean.useIsWhichType() == 'lend')}"  />
             <h:commandLink  action="#{cpb.updateCP()}"  class="right_div" value="Review Lender 'Item Conditions'"  rendered="#{(userBean.editable == 1) and (userBean.useIsWhichType() == 'lend')}"  />
           </div> 
@@ -37,17 +42,6 @@
           </div>
         </div> 
 
-        <c:if test="#{userBean.userAction == 'preferences'}" >
-          <div class="message.color">
-            <h:messages showSummary="true" 
-                        showDetail="false"
-                        errorStyle="color: #d20005" 
-                        infoStyle="color: blue"/>
-          </div>
-        </c:if>
-
-
-
         <div  class="div_p"  >
           <div style="margin:10px;" >
             <h:outputText value="Contact Option: By Address.." />
@@ -55,6 +49,7 @@
         </div>
 
         <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+          <h:inputText id="contactPreferenceId" value="#{cpb.contactPreferenceId}"  style="display:none;"/>
           <div style="float:left;margin-left:25px">
             <div id="postalWithContactAddress" >    
               <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
@@ -82,106 +77,11 @@
                       <c:set var="whichAddress" value="No preference provided"/>
                     </c:otherwise>
                   </c:choose>
-                  <h:outputText id="useWhichContactAddressString"   value="#{whichAddress}" />
+                  <h:outputText id="useWhichContactAddressString"   value="#{whichAddress}" class="RO_text" />
                 </c:if>
               </h:outputLabel>
             </div>
 
-            <div id="buildAlternativeAddress" style="float:left;height:auto;width:inherit;margin-top:10px;"  >    
-              <h:dataTable id="participant_alternative"  value="#{cpb.getAddress()}" var="pa" >
-
-                <h:column  rowHeader="Alternative Address" id="buildAlternativeAddress" >
-                  <table id="buildAlternativeAddressTable" stlye="margin-left:10px;">
-                    <thead>
-                      <tr colspan="2" style="text-align: center">
-                        <h:outputLabel value="Alternative Address" style="text-align: center;margin-left:5px;"/>
-                      </tr>
-                    </thead>
-                    <tr>
-                      <td>
-                        <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span class="required_fields">*</span>
-                        <h:inputText id="addressLine1" value="#{pa.addressLine1}" 
-                                     style="margin-left: 5px;" class="alternativeAddress"  rendered="#{userBean.editable == 1}" >
-                        </h:inputText>
-                        <h:outputText id="addressLine1o" value="#{pa.addressLine1}"  rendered="#{userBean.editable == 0}" />
-                        <span class="error-message" id="addressLine1_alternative" ></span>
-                      </td>
-                      <td>
-                        <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
-                        <h:inputText id="addressLine2" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
-                        <h:outputText id="addressLine2o" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" />
-                      </td>
-                    </tr> 
-                    <tr>
-                      <td>
-                        <h:outputLabel for="city" value="#{bundle.City}"/><span class="required_fields">*</span>
-                        <h:inputText id="city" value="#{pa.city}" style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 1}" />
-                        <h:outputText id="cityo" value="#{pa.city}" style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 0}" />
-                        <span class="error-message" id="city_alternative" ></span>
-                      </td>
-                      <td>
-                        <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
-                        <h:selectOneMenu id="usStates" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" >
-                          <f:validator validatorId="selectOneMenuValidator" />  
-                          <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
-                                         var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
-                                         >   
-                          </f:selectItems>    
-                        </h:selectOneMenu>
-                        <h:message styleClass="error-message" for="usStates"/>
-                        <span class="error-message" id="usStates" ></span>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td>
-                        <h:outputLabel for="province" value="#{bundle.Province}"/>
-                        <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
-                        <h:outputText id="provinceo" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" />
-
-                      </td>
-                      <td>
-                        <h:outputLabel for="region" value="#{bundle.Region}"/>
-                        <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
-                        <h:outputText id="regiono" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" />
-
-                      </td>
-                    </tr>
-                    <tr >
-                      <td >
-                        <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span class="required_fields">*</span>
-                        <h:inputText id="postalCode" value="#{pa.postalCode}" 
-                                     style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 1}" />
-                        <h:outputText id="postalCodeo" value="#{pa.postalCode}" 
-                                      style="margin-left: 5px;" class="alternativeAddress" rendered="#{userBean.editable == 0}" />
-
-                        <h:message styleClass="error-message" for="postalCode"/>
-                        <span class="error-message" id="postalCode_alternative" ></span>
-                      </td>
-                      <td >
-                        <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
-                        <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" class="alternativeAddress select" rendered="#{userBean.editable == 1}" >
-
-                          <f:selectItems id="country_id" value="#{country.buildCountries()}"  
-                                         var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
-                          </f:selectItems>    
-                        </h:selectOneMenu>
-                        <h:message styleClass="error-message" for="countryId"/>
-                        <span class="error-message" id="countryId_alternative" ></span>
-                      </td>
-                    </tr>
-
-                    <tr >
-                      <td colspan="2">
-
-                      </td>
-                    </tr>
-
-                  </table>
-                </h:column>
-              </h:dataTable>
-
-            </div>
           </div>
         </div>
 
@@ -261,10 +161,7 @@
                   </c:otherwise>
                 </c:choose>
                 <h:outputText id="contactByEmailString"   value="#{cbe}"  class="RO_text" />
-
               </c:if>  
-
-
             </h:outputLabel>
 
 
@@ -279,20 +176,7 @@
         <div style="float:left;margin-left:25px;display:block;" >
           <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
 
-            <c:choose>
-              <c:when test="#{userBean.useIsWhichType() == 'lend'}" >
-                <c:set var="who" value="borrowers" />
-              </c:when>
-              <c:when test="#{userBean.useIsWhichType() == 'borrow'}" >
-                <c:set var="who" value="lenders" />
-              </c:when>    
-              <c:otherwise >
-                <c:set var="who" value="participants" />
-              </c:otherwise >       
-            </c:choose>    
-
-
-            <h:outputLabel value="Can #{who} call you at your home phone?:"  for="contactByHomePhone" >
+            <h:outputLabel value="Can interested EchoMarket participants call you at your home phone?:"  for="contactByHomePhone" >
               <h:selectOneRadio id="contactByHomePhone" value="#{cpb.contactByHomePhone}"  rendered="#{userBean.editable == 1}" >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />	
@@ -420,9 +304,9 @@
       </div>
     </h:form>
   </ui:define>
-  
+
   <ui:define name="footer"  >
     <ui:include rendered="true" src="application_footer.xhtml" id="LoginFooter" /> 
   </ui:define>
-  
+
 </ui:composition>
