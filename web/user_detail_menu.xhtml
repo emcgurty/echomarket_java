@@ -9,7 +9,7 @@
     
     <ul id="nav" class="user_detail_menu"> 
         <li class="subs" id="tab_item_0" >
-            <h:commandLink immediate="true"  action="#{userBean.load_ud(-1)}"  value="EchoMarket Agreement"  rendered="#{userBean.editable == -1}" />
+            <h:commandLink immediate="true"  action="#{participantBean.load_ud('-1')}"  value="EchoMarket Agreement"  rendered="#{userBean.editable == -1}" />
         </li>
         <li class="subs" id="tab_item_1" >
             <h:commandLink immediate="true"  action="#{userBean.load_ud(0)}"  value="Login Information"  rendered="#{userBean.editable != -1}" />
@@ -19,7 +19,7 @@
             <h:commandLink immediate="true"  action="#{participantBean.load_ud(userBean.user_id)}"  value="Participant Information.."  rendered="#{userBean.editable != -1}" />
         </li>
         <li class="subs" id="tab_item_3" >
-            <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.user_id)}"  value="Initial Contact Preferences"  rendered="#{userBean.editable != -1}" />
+            <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="Initial Contact Preferences"  rendered="#{userBean.editable != -1}" />
         </li>
         <li class="subs" id="tab_item_4" >
           <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    />
