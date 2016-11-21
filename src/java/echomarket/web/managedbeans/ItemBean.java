@@ -65,33 +65,6 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     List result = null;
 
-    if (null != which) {
-      switch (which) {
-        case "borrow":
-          ubean.setEditable(1);
-          this.itemType = which;
-          break;
-        case "lend":
-          ubean.setEditable(1);
-          this.itemType = which;
-          break;
-        case "both":
-          ubean.setEditable(1);
-          this.itemType = "both";
-          break;
-        case "viewLend":
-          ubean.setEditable(0);
-          this.itemType = which;
-          break;
-        case "viewBorrow":
-          ubean.setEditable(0);
-          this.itemType = which;
-          break;
-        default:
-          break;
-      }
-    }
-
     if (iid != null) {
       result = getCurrentItem(iid);
       if (result.size() == 1) {
@@ -109,8 +82,6 @@ public class ItemBean extends AbstractBean implements Serializable {
         this.notify = ir.getNotify();
         // Image detail will be retrieved from gui
       }
-    } else {
-      this.itemType = which;
     }
     return "user_item";
 
@@ -810,7 +781,7 @@ public class ItemBean extends AbstractBean implements Serializable {
    */
   public String getItemType() {
     if (itemType == null && ubean.getEditable() == 1) {
-       return ubean.useIsWhichType();
+      return ubean.useIsWhichType();
     } else {
       return itemType;
     }
