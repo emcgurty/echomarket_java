@@ -62,10 +62,10 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     return returnCD;
   }
 
-  public ContactDescribes[] buildContactDArray(String whichpurpose) {
+  public ContactDescribes[] buildContactDArray() {
     ContactDescribes[] cdArray = null;
     List cd_list = null;
-    cd_list = cd_list(whichpurpose);
+    cd_list = cd_list();
     int size_of_list = cd_list.size();
     cdArray = new ContactDescribes[size_of_list];
     for (int i = 0; i < size_of_list; i++) {
@@ -75,7 +75,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     return cdArray;
   }
 
-  private List cd_list(String purpose) {
+  private List cd_list() {
 
     List result = null;
     Session session = null;
