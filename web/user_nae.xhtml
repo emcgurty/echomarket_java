@@ -218,7 +218,7 @@
 
             <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
-                <h:dataTable value="#{participantBean.getExistingAddress('primary')}" id="primary"   var="pa" >    
+                <h:dataTable value="#{participantBean.existing_primary}" id="primary"   var="pa" >    
                   <h:column rowHeader="">
 
                     <table >
@@ -339,7 +339,7 @@
               </div>
               <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                 <div style="margin-left: 15px;float:left">
-                  <h:dataTable value="#{participantBean.getExistingAddress('alternative')}" id="alternative"   var="pa"           >    
+                  <h:dataTable value="#{participantBean.existing_alternative}" id="alternative"   var="pa"           >    
                     <h:column rowHeader="">
                       <table >
                         <tr>
