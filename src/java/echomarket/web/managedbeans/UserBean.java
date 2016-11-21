@@ -92,7 +92,7 @@ public class UserBean extends AbstractBean implements Serializable {
     if (this.editable == 1) {
       return userType;
     } else {
-      return userType.replace(";", " ").toUpperCase();
+      return userType.replace(";", " ");
     }
   }
 
@@ -197,7 +197,6 @@ public class UserBean extends AbstractBean implements Serializable {
         if (commName == null) {
           message(null, "NewRegistration", new Object[]{fullname, this.email});
         } else {
-
           message(null, "NewCommunityRegistration", new Object[]{fullname, commName, this.email});
         }
       } else {
@@ -370,8 +369,7 @@ public class UserBean extends AbstractBean implements Serializable {
             setIsCommunity(1);
           }
           message(null, "ActivateSuccessful", new Object[]{});
-          this.editable = -1;
-          return_string = pbean.load_ud(user_id);
+          return_string = pbean.load_ud("-1");
         } else {
           message(null, "ActivateFailed", null);
           return_string = "login";
@@ -459,21 +457,21 @@ public class UserBean extends AbstractBean implements Serializable {
 
       } else if ((hs > 0)) {
         Participant part = (Participant) hasComplete.get(0);
-        this.setParticipant_id(part.getParticipant_id());
         Integer gw = part.getGoodwill();
         Integer i18 = part.getAge18OrMore();
         String un = part.getFirstName();
         if ((gw == 1) && (i18 == 1) && (un == null)) {
-          this.editable = 1;
-          return_string = pbean.load_ud(this.participant_id);
+          this.editable = 0;
+          return_string = pbean.load_ud(part.getParticipant_id());
         } else if ((gw == 1) && (i18 == 1) && (un != null)) {
+          this.setParticipant_id(part.getParticipant_id());
           List hasCompleteCP = completeContactPreferences(this.participant_id);
           hs = hasCompleteCP.size();
           if (hs == 0) {
-            this.editable = 1;
+            this.editable = 0;
             return_string = cpbean.load_ud(this.participant_id);
           } else {
-            this.editable = 1;
+            this.editable = 0;
             if (this.userType.contains("borrow")) {
               return_string = ibean.load_ud("borrow", null);
             } else if (this.userType.contains("lend")) {
@@ -1095,9 +1093,7 @@ public class UserBean extends AbstractBean implements Serializable {
       a_array = (Map) results.get(0);
     } catch (Exception ex) {
       tx.rollback();
-      Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on SendEmail, line ");
     } finally {
       tx = null;
