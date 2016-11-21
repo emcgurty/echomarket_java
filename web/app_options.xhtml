@@ -1,66 +1,72 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"                >
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" >
 
 
-    <h:form id="index_options">
-        <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
-           <div class="top" id="index_div" style="font-size:20px;margin-left:5px;border-top:#3B5998 double thin;">
-            <div style="position:relative;float:left;width:45%;margin-left:25px;margin-top:5px;margin-bottom:5px;"   >
-                <p>Welcome to EchoMarket!</p>
-                <p><span class="index_text" >Your goodwill resource for lending, borrowing and even trading or donating some of life's necessities, or items that you just once, and you want to avoid that one-time purchase.</span></p>
-                <p><span class="index_text" >Folks borrowing or lending as individuals or members within a Sharing Community.</span></p>
-                <p><span class="index_text" >In order to seek an item to borrow or offer an item to lend, you must be registered with EchoMarket.</span></p>
-                <p><span class="index_text" >Otherwise, go ahead and search EchoMarket for items to borrow, or items to lend...</span></p>
-                <h:commandLink id="search_items" action="search" >
-                    <h:outputText value="#{bundle.BorrowerSearch}"/>
-                </h:commandLink>
-                <br />
-            </div>
-        </div>
-    </h:form>
+  <h:form id="index_options">
+    <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
 
-    
-    <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
-        <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
-        
-        <c:if test="#{userLoggedIn}" >
-            <c:choose>
-                <c:when test="#{userBean.userAction == 'forgotUserPassword'}">
-                    <ui:include src="forgotUserPassword.xhtml" id="forgotUserPassword"  /> 
-                </c:when>
-                <c:when test="#{userBean.userAction == 'forgotUsername'}">
-                    <ui:include src="forgotUsername.xhtml" id="forgotUsername"  /> 
-                </c:when>
-                <c:otherwise>
-                    <ui:include  src="b_login.xhtml" id="body_login"  /> 
-                </c:otherwise>
-            </c:choose>
-        </c:if>
-        <c:if test="#{not userLoggedIn}" >
-            <c:choose>
-                <c:when test="#{userBean.parseUserType('borrower')}">
-                    <ui:include rendered="true" src="b_history.xhtml" id="b_history"  /> 
-                </c:when>
-                <c:when test="#{userBean.parseUserType('lender')}">
-                    <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
-                </c:when>
-                
-                <c:otherwise>
-                    <div>
-                        <p>Your registration type was not found.</p>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-            
-        </c:if>
-
+    <div class="message.color">
+      <h:messages showSummary="true" 
+                  showDetail="false"
+                  errorStyle="color: #d20005" 
+                  infoStyle="color: blue"/>
     </div>
+
+    <div class="top" id="index_div" style="font-size:20px;margin-left:5px;border-top:#3B5998 double thin;">
+      <div style="position:relative;float:left;width:45%;margin-left:25px;margin-top:5px;margin-bottom:5px;"   >
+        <p>Welcome to EchoMarket!</p>
+        <p><span class="index_text" >Your goodwill resource for lending, borrowing and even trading or donating some of life's necessities, or items that you just once, and you want to avoid that one-time purchase.</span></p>
+        <p><span class="index_text" >Folks borrowing or lending as individuals or members within a Sharing Community.</span></p>
+        <p><span class="index_text" >In order to seek an item to borrow or offer an item to lend, you must be registered with EchoMarket.</span></p>
+        <p><span class="index_text" >Otherwise, go ahead and search EchoMarket for items to borrow, or items to lend...</span></p>
+        <h:commandLink id="search_items" action="search" >
+          <h:outputText value="#{bundle.BorrowerSearch}"/>
+        </h:commandLink>
+        <br />
+      </div>
+    </div>
+  </h:form>
+
+
+  <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
+    <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
+
+    <c:if test="#{userLoggedIn}" >
+      <c:choose>
+        <c:when test="#{userBean.userAction == 'forgotUserPassword'}">
+          <ui:include src="forgotUserPassword.xhtml" id="forgotUserPassword"  /> 
+        </c:when>
+        <c:when test="#{userBean.userAction == 'forgotUsername'}">
+          <ui:include src="forgotUsername.xhtml" id="forgotUsername"  /> 
+        </c:when>
+        <c:otherwise>
+          <ui:include  src="b_login.xhtml" id="body_login"  /> 
+        </c:otherwise>
+      </c:choose>
+    </c:if>
+    <c:if test="#{not userLoggedIn}" >
+      <c:choose>
+        <c:when test="#{userBean.parseUserType('borrower')}">
+          <ui:include rendered="true" src="b_history.xhtml" id="b_history"  /> 
+        </c:when>
+        <c:when test="#{userBean.parseUserType('lender')}">
+          <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
+        </c:when>
+
+        <c:otherwise>
+          <p>User has not yet logged in..</p>
+        </c:otherwise>
+      </c:choose>
+
+    </c:if>
+
+  </div>
 
 
 
