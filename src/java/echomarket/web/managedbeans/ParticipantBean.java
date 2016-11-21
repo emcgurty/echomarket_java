@@ -90,8 +90,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if ("-1".equals(uid)) {
       ubean.setEditable(-1);
       uid = ubean.getUser_id();
+    } else if (ubean.getEditable() == 0) {
+      ubean.setEditable(1);
+    } else {
+      ubean.setEditable(0);
     }
-
+   
     List partlist = null;
     partlist = getCurrentParticipant(uid);
     if (partlist.size() == 1) {
@@ -113,12 +117,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.emailAlternative = pp.getEmailAlternative();
       this.displayHomePhone = pp.getDisplayHomePhone();
       this.displayCellPhone = pp.getDisplayCellPhone();
-      this.displayAlternativePhone = pp.getDisplayAlternativeAddress();
+      this.displayAlternativePhone = pp.getDisplayAlternativePhone();
       this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
       this.goodwill = pp.getGoodwill();
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
     }
+   
     if (ubean.getEditable() == -1) {
       return "user_agreement";
     } else {
@@ -197,7 +202,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx.commit();
       updateSuccess = true;
     } catch (Exception ex) {
-      updateSuccess = false;
       System.out.println("Error in Save/Update Particpant, line 187");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
       tx.rollback();
@@ -237,7 +241,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx.commit();
       updateSuccess = true;
     } catch (Exception ex) {
-      updateSuccess = false;
       tx.rollback();
       System.out.println("Error in Save/Update Particpant, line 228");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -246,7 +249,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       Addresses balt = (Addresses) aadrs.get(0);
       reqPO = balt.getPostalCode();
       if (reqPO != null) {
-        balt.setParticipant_id(pid);
 
         if (sb.isOpen() == false) {
           sb = hib_session();
@@ -257,6 +259,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         try {
           if (balt.getAddressId() == null) {
+            balt.setParticipant_id(pid);
             balt.setAddressId(UUID.randomUUID().toString());
             sb.save(balt);
           } else {
@@ -265,7 +268,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
           tx.commit();
           updateSuccess = true;
         } catch (Exception ex) {
-          updateSuccess = false;
           tx.rollback();
           System.out.println("Error in Save/Update Particpant, line 254");
           Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -278,7 +280,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     Addresses ba = (Addresses) padrs.get(0);
     reqPO = ba.getPostalCode();
     if (reqPO != null) {
-      ba.setParticipant_id(pid);
+
       if (sb.isOpen() == false) {
         sb = hib_session();
       }
@@ -288,17 +290,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
       try {
         if (ba.getAddressId() == null) {
-            ba.setAddressId(UUID.randomUUID().toString());
-            sb.save(ba);
-          } else {
-            sb.update(ba);
-          }
-       
+          ba.setParticipant_id(pid);
+          ba.setAddressId(UUID.randomUUID().toString());
+          sb.save(ba);
+        } else {
+          sb.update(ba);
+        }
+
         tx.commit();
         updateSuccess = true;
         message(null, "RecordSaved", null);
       } catch (Exception ex) {
-        updateSuccess = false;
         tx.rollback();
         System.out.println("Error in Save/Update Particpant, 276");
         Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -310,9 +312,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
-      ubean.setEditable(0);
-    } else {
       ubean.setEditable(1);
+    } else {
+      ubean.setEditable(0);
     }
     return load_ud(ubean.getUser_id());
 
@@ -323,7 +325,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     String return_string = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
       message(null, "threeStrikesYourOut", null);
-      ubean.setEditable(-1);
+      return_string = ubean.Logout();
     } else {
       Session sb = hib_session();
       Transaction tx = sb.beginTransaction();
@@ -331,11 +333,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       try {
         sb.save(part);
         tx.commit();
-        ubean.setEditable(1);
+        ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
+        return_string = load_ud(ubean.getUser_id());
         message(null, "thanksForAcceptingAgreement", null);
       } catch (Exception ex) {
-        ubean.setEditable(-1);
+
         message(null, "failedToSaveAgreement", null);
+        return_string = ubean.Logout();
         tx.rollback();
         System.out.println("Error in Save/Update Particpant");
         Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -345,7 +349,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
       }
     }
-    return this.load_ud(ubean.getUser_id());
+    return return_string;
 
   }
 
