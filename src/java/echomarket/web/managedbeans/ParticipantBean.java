@@ -822,7 +822,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
     try {
       result = hib.createQuery(queryString)
-              .setParameter("bid", ubean.getUserAction())
+              .setParameter("bid", ubean.getParticipant_id())
               .setParameter("which", which)
               .list();
       tx.commit();
