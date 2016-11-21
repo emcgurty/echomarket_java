@@ -23,6 +23,7 @@
                       errorStyle="color: #d20005" 
                       infoStyle="color: blue"/>
         </div>
+        <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_item" ></ui:include>  
         <div class="top" >
           <div >
             <h:outputText value="NEW ITEM"  />
@@ -162,7 +163,7 @@
                   <span class="file_image_error"></span>
                 </h:outputLabel>
                 <br />
-                <input type="button" onclick="removeImage()" alt="Click to remove elected image.."  value="Remove Image" ></input>
+                <input type="button" onclick="removeImage()" alt="Click to remove selected image.."  value="Remove Image" ></input>
               </div>    
               <br />
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
