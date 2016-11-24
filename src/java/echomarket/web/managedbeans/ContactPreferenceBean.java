@@ -8,12 +8,14 @@ import java.io.Serializable;
 //import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 //import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.Id;
 import org.hibernate.Session;
@@ -301,9 +303,17 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     Transaction tx;
     sb = null;
     tx = null;
-    cp_list = getCurrentCP(ubean.getParticipant_id());
 
-    if (cp_list.size() == 0) {
+    Map<String, String> params = null;
+    String addNewCP = null;
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      addNewCP = params.get("action");
+    } catch (Exception ex) {
+    }
+
+    if ((contactPreferenceId.isEmpty() == true) || ("add_cp".equals(addNewCP))) {
+
       /// Create new record
       ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
 
@@ -324,6 +334,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     } else {
 
+      cp_list = getCurrentCP(ubean.getParticipant_id());
       ContactPreference part = (ContactPreference) cp_list.get(0);
       part.setItemId(itemId);
       part.setUseWhichContactAddress(useWhichContactAddress);
@@ -371,17 +382,57 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
   public String load_ud(String pid) {
 
+    Map<String, String> params = null;
+    String strIid = null;
+    String action = null;
+
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      strIid = params.get("iid");
+    } catch (Exception ex) {
+    }
+
     if (ubean.getEditable() == 0) {
       ubean.setEditable(1);
     } else {
       ubean.setEditable(0);
     }
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      action = params.get("action");
+    } catch (Exception ex) {
+    }
+
+    if (action != null) {
+      if ("cp".equals(action)) {
+        ubean.setEditable(1);
+      }
+    }
     List partlist = null;
-    partlist = getCurrentCP(pid);
+    if (strIid != null) {
+      partlist = getCurrentCP_Iid(pid, strIid);
+    } else {
+      strIid = itemId;
+      partlist = getCurrentCP_Iid(pid, itemId);
+    }
+    //  if item does not have a record yet, still retrieve existing contact preferences.
+
+    if (partlist.size() == 0) {
+      partlist = getCurrentCP(pid);
+    }
+
+    /// partList size  should never be zero
     if (partlist.size() == 1) {
       ContactPreference pp = (ContactPreference) partlist.get(0);
       this.contactPreferenceId = pp.getContactPreferenceId();
-      this.itemId = pp.getItemId();
+      if (pp.getItemId().isEmpty() == true) {
+        if (strIid.isEmpty() == false) {
+          this.itemId = strIid;
+        }
+      } else {
+        this.itemId = pp.getItemId();
+      }
+
       this.participant_id = pp.getParticipant_id();
       this.useWhichContactAddress = pp.getUseWhichContactAddress();
       this.contactByChat = pp.getContactByChat();
@@ -414,7 +465,36 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       query = "FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
       result = session.createQuery(query)
               .setParameter("pid", pid)
+              .setMaxResults(1)
               .list();
+
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentCP");
+      e.printStackTrace();
+      tx.rollback();
+      return null;
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return result;
+  }
+
+  public List getCurrentCP_Iid(String pid, String iid) {
+
+    List result = null;
+    Session session = hib_session();
+    Transaction tx = session.beginTransaction();
+    String query = null;
+    try {
+      query = "FROM ContactPreference WHERE participant_id = :pid  and item_id = :iid ORDER BY participant_id, dateCreated";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", iid)
+              .list();
+
       tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getCurrentCP");
