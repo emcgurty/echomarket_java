@@ -5,11 +5,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.Id;
 import org.hibernate.Session;
@@ -47,7 +49,21 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
   public String load_ud(String pid) {
 
-    List result = getCurrentLT(pid);
+    List result = null;
+    Map<String, String> params = null;
+    String strIid = null;
+
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      strIid = params.get("iid");
+    } catch (Exception ex) {
+    }
+    if (strIid != null) {
+      result = getCurrentLT_Iid(pid, strIid);
+    } else {
+      result = getCurrentLT(pid);
+    }
+
     LenderTransfer ltr = (LenderTransfer) result.get(0);
     if (result.size() > 0) {
       this.lenderTransferId = ltr.getLenderTransferId();
@@ -103,6 +119,37 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     return result;
   }
 
+  public List getCurrentLT_Iid(String pid, String iid) {
+
+    List result = null;
+    Session session = hib_session();
+    Transaction tx = session.beginTransaction();
+    String query = null;
+    try {
+      query = "SELECT ltr Participant part "
+              + " left join part.item itm "
+              + " left join itm.lenderTransfer ltr "
+              + "WHERE part.participant_id = :pid"
+              + " AND itm.item_id = :iid ";
+
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", iid)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentCP");
+      e.printStackTrace();
+      tx.rollback();
+      return null;
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return result;
+  }
+
   public String updateLIT() {
     Session sb;
     Transaction tx;
@@ -137,7 +184,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     }
     sb = null;
     tx = null;
-    
+
     return load_ud(ubean.getUser_id());
 
   }
