@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Id;
@@ -95,7 +98,16 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     } else {
       ubean.setEditable(0);
     }
-   
+
+    Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+    String action = params.get("action");
+
+    if (action != null) {
+      if ("participant".equals(action)) {
+        ubean.setEditable(1);
+      }
+    }
+
     List partlist = null;
     partlist = getCurrentParticipant(uid);
     if (partlist.size() == 1) {
@@ -123,7 +135,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
     }
-   
+
     if (ubean.getEditable() == -1) {
       return "user_agreement";
     } else {
@@ -312,6 +324,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
+      ubean.setParticipant_id(pid);
       ubean.setEditable(1);
     } else {
       ubean.setEditable(0);
