@@ -5,11 +5,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.Id;
 import org.hibernate.Session;
@@ -56,7 +58,19 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
   public String load_ud(String pid) {
 
     List condList = null;
-    condList = getCurrentItemConditions(pid);
+    Map<String, String> params = null;
+    String strIid = null;
+
+    try {params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+    strIid = params.get("iid");
+    } catch (Exception ex) {
+    }
+
+    if (strIid != null) {
+      condList = getCurrentItemConditions_Iid(pid, strIid);
+    } else {
+      condList = getCurrentItemConditions(pid);
+    }
     if (condList.size() == 1) {
       LenderItemConditions pp = (LenderItemConditions) condList.get(0);
       this.setItemId(pp.getItemId());
@@ -85,8 +99,12 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       ubean.setEditable(1);
     }
     condList = null;
+    if (strIid == null) {
+      return "lender_conditions";
+    } else {
+      return "lender_conditions?faces-redirect=true";
+    }
 
-    return "lender_conditions";
 //        return "user_detail?faces-redirect=true";
   }
 
@@ -103,6 +121,37 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
               + "WHERE part.participant_id = :pid";
       result = session.createQuery(query)
               .setParameter("pid", pid)
+              .setMaxResults(1)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentCP");
+      e.printStackTrace();
+      tx.rollback();
+      return null;
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return result;
+  }
+
+  public List getCurrentItemConditions_Iid(String pid, String iid) {
+
+    List result = null;
+    Session session = hib_session();
+    Transaction tx = session.beginTransaction();
+    String query = null;
+    try {
+      query = "SELECT lic FROM Participant part "
+              + " left join part.item itm "
+              + " left join itm.lenderItemConditions lic "
+              + " WHERE part.participant_id = :pid "
+              + " AND itm.item_id = :iid ";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", iid)
               .setMaxResults(1)
               .list();
       tx.commit();
