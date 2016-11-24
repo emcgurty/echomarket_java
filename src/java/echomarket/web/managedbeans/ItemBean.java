@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Id;
@@ -54,37 +56,18 @@ public class ItemBean extends AbstractBean implements Serializable {
           ));
 
   public ArrayList<ItemImages> getPicture() {
+    if (ubean.getEditable() != null) {
+      if (ubean.getEditable() == 1) {
+        ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
+        setPicture(tmp_picture);
+      }
+    }
     return picture;
+
   }
 
   public static void setPicture(ArrayList<ItemImages> aPicture) {
     picture = aPicture;
-  }
-
-  public String load_ud(String which, String iid) {
-
-    List result = null;
-
-    if (iid != null) {
-      result = getCurrentItem(iid);
-      if (result.size() == 1) {
-        Items ir = (Items) result.get(0);
-        this.setItemId(ir.getItemId());
-        this.participant_id = ir.getParticipant_id();
-        this.categoryId = ir.getCategoryId();
-        this.otherItemCategory = ir.getOtherItemCategory();
-        this.itemModel = ir.getItemModel();
-        this.itemDescription = ir.getItemDescription();
-        this.itemConditionId = ir.getItemConditionId();
-        this.itemCount = ir.getItemCount();
-        this.itemType = ir.getItemType();
-        //    this.comment = ir.getComment();  Later, not in gui yet
-        this.notify = ir.getNotify();
-        // Image detail will be retrieved from gui
-      }
-    }
-    return "user_item";
-
   }
 
   private String doesImageExist(String iid) {
@@ -198,6 +181,53 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   }
 
+  public String load_ud(String which, String iid) {
+
+    List result = null;
+    if ((ubean.getEditable().toString().isEmpty() == true) && (iid == null)) {
+      ubean.setEditable(1);
+    }
+
+    Map<String, String> params = null;
+    String action = null;
+
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      action = params.get("action");
+      if (action != null) {
+        if ("item".equals(action)) {
+          ubean.setEditable(1);
+        }
+      }
+    } catch (Exception ex) {
+    }
+
+    if (iid != null) {
+      result = getCurrentItem(iid);
+      if (result.size() == 1) {
+        Items ir = (Items) result.get(0);
+        this.itemId = ir.getItemId();
+        this.participant_id = ir.getParticipant_id();
+        this.categoryId = ir.getCategoryId();
+        this.otherItemCategory = ir.getOtherItemCategory();
+        this.itemModel = ir.getItemModel();
+        this.itemDescription = ir.getItemDescription();
+        this.itemConditionId = ir.getItemConditionId();
+        this.itemCount = ir.getItemCount();
+        this.itemType = ir.getItemType();
+        //    this.comment = ir.getComment();  Later, not in gui yet
+        this.notify = ir.getNotify();
+        // Image detail will be retrieved from gui
+      }
+    } else {
+      ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
+      setPicture(tmp_picture);
+
+    }
+    return "user_item";
+
+  }
+
   public String saveItem() {
 
     Session sb;
@@ -276,8 +306,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     }
 
-    if (bret
-            == true) {
+    if (bret == true) {
       strRetId = doesImageExist(new_iid);
       if (strRetId != null) {
         bret = deleteExistingUserImage(strRetId);
@@ -291,16 +320,18 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     }
 
-    if (bret
-            == true) {
+    if (bret == true) {
 
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(0);
-      return this.load_ud(itemId, ubean.getParticipant_id());
+      if (itemId.isEmpty() == true) {
+        this.itemId = new_iid;
+      }
+      return this.load_ud(itemType, itemId);
 
     } else {
       message(null, "ItemRecordNotUpdated", null);
-      return "item";
+      return "user_item";
     }
 
   }
@@ -487,7 +518,8 @@ public class ItemBean extends AbstractBean implements Serializable {
     //String sPath1 = new File(".").getCanonicalPath();  -- tested many 
     // Just for development purposes.... Need to make this into separate function
     String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
-    String sPath2 = "//borrower_images//";
+
+    String sPath2 = "//" + this.itemType + "_images//";
     String buildFileName = bid + "_" + getFileName(ui);
     String sPath3 = buildFileName;
     File files = new File(sPath1 + sPath2);
@@ -548,11 +580,11 @@ public class ItemBean extends AbstractBean implements Serializable {
   }
 
   public List getCurrentItemImage(String iid) {
-    return getExistingPicture();
+    return getExistingPicture(iid);
 
   }
 
-  public List getExistingPicture() {
+  public List getExistingPicture(String iid) {
 
     List result = null;
     Session hib = hib_session();
@@ -561,7 +593,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     String queryString = "from ItemImages where item_id = :iid ";
     try {
       result = hib.createQuery(queryString)
-              .setParameter("iid", ubean.getUserAction())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
     } catch (Exception e) {
@@ -671,7 +703,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     Boolean return_delete_true = false;
     String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
-    String sPath2 = "//borrower_images//";
+    String sPath2 = "//" + this.itemType + "_images//";
     String sPath3 = fileName;
     File files = new File(sPath1 + sPath2);
     //Boolean makeDirectory = files.mkdirs();
