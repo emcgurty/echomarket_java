@@ -23,10 +23,12 @@
                       errorStyle="color: #d20005" 
                       infoStyle="color: blue"/>
         </div>
+
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_item" ></ui:include>  
         <div class="top" >
           <div >
             <h:outputText value="NEW ITEM"  />
+            <h:outputText value="#{itemBean.itemId}"  />
             <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
           </div> 
@@ -37,8 +39,8 @@
             <h:outputText value="The Item you would like to  ${itemBean.itemType}" rendered="#{itemBean.itemType ne 'both'}"/>
             <h:outputText value="The Item you would like to... Please select: " rendered="#{itemBean.itemType == 'both'}"/>
             <h:selectOneMenu id="which_type" value="#{itemBean.itemType}" rendered="#{itemBean.itemType == 'both'}" >
-              <f:selectItem itemValue="0" itemLabel="Borrow" />	
-              <f:selectItem itemValue="1" itemLabel="Lend" />
+              <f:selectItem itemValue="0" itemLabel="borrow" />	
+              <f:selectItem itemValue="1" itemLabel="lend" />
             </h:selectOneMenu>    
           </div>
         </div>
@@ -62,7 +64,7 @@
                                    itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
                     </f:selectItems>
                   </h:selectOneMenu>
-                  <h:outputText  id="categoryIdString" value="#{cats.getCategoryName(itemBean.categoryId)}"   rendered="#{userBean.editable == 0}"/>
+                  <h:outputText  id="categoryIdString" value="#{cats.getCategoryName(itemBean.categoryId)}"   rendered="#{userBean.editable == 0}" class="RO_text"/>
                 </h:outputLabel>  
                 <br /><span class="error-message" id="categoryId" ></span>
               </div>
@@ -168,7 +170,7 @@
               <br />
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                 <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                  <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
+                  <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
                 </h:outputLabel> 
               </div>
               <br />
@@ -184,8 +186,8 @@
             <h:column rowHeader="">
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                 <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                  <h:graphicImage name="#{image.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
-                  <img id="imagePreview" height="200" width="200" src=""  />
+                  <h:graphicImage name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
+
                 </h:outputLabel> 
               </div>
               <br />
