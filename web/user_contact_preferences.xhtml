@@ -27,7 +27,9 @@
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-            <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 1}" />
+            <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 1}" >
+               <f:param name="action" value="add_cp" rendered="#{!empty contactPreferenceBean.itemId}"/>
+            </h:commandLink>
             <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
             <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Review Lender 'Item Transfer'"  rendered="#{(userBean.editable == 1) and (userBean.useIsWhichType() == 'lend')}"  />
             <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Review Lender 'Item Conditions'"  rendered="#{(userBean.editable == 1) and (userBean.useIsWhichType() == 'lend')}"  />
@@ -46,7 +48,7 @@
 
         <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
           <h:inputText id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  style="display:none;"/>
-          <h:inputText id="itemId" value="#{contactPreferenceBean.itemId}"  style="display:none;"/>
+          <h:inputText id="itemId" value="#{contactPreferenceBean.itemId}"   style="display:none;"/>
           <div style="float:left;margin-left:25px">
             <div id="postalWithContactAddress" >    
               <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
