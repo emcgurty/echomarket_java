@@ -156,4 +156,9 @@
         <managed-bean-class>echomarket.web.managedbeans.LenderItemConditionsBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>readOnlyBean</managed-bean-name>
+        <managed-bean-class>echomarket.web.managedbeans.ReadOnlyBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>
