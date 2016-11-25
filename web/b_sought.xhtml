@@ -15,7 +15,7 @@
             <h:outputText value="ITEMS SOUGHT"  />
         </div> 
           
-        <c:set var="currentHistory"  value="#{itemBean.getAllSoughtItems('borrow')}" />
+        <c:set var="currentHistory"  value="#{itemROBean.getAllSoughtItems('borrow')}" />
         <h:dataTable id="history"  value="#{currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
             <h:column rowHeader="">
                 <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
@@ -27,14 +27,14 @@
                         <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
                     </h:outputLabel>
 
-                    <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
+                    <h:dataTable id="image"  value="#{itemROBean.getCurrentItemImage(history.itemId)}" var="i" >
                         <h:column rowHeader="">
-                            <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
+                            <h:graphicImage name="#{i.imageFileName}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
                         </h:column>
                     </h:dataTable>
 
                     <br />
-                    <h:commandButton value="View Details"  action="index">
+                    <h:commandButton value="View Details"  action="#{readOnlyBean.load_RO('borrow', history.itemId)}">
                     </h:commandButton>    
 
                 </div>
