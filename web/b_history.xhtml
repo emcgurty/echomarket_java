@@ -29,7 +29,7 @@
 
                     <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
                         <h:column rowHeader="">
-                            <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
+                            <h:graphicImage name="#{i.imageFileName}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
                         </h:column>
                     </h:dataTable>
 
