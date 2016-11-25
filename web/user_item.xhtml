@@ -157,7 +157,7 @@
         <br />
         <div style="margin-left:25px;margin-top:5px;float:left;">
 
-          <h:dataTable id="picture"  value="#{itemBean.picture}" var="image"   rendered="#{userBean.editable == 1}" >
+          <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 1}" >
             <h:column rowHeader="">
               <div style="margin-left:25px;margin-top:5px;float:left;">
                 <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
@@ -170,7 +170,7 @@
               <br />
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                 <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                  <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
+                  <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}" />
                 </h:outputLabel> 
               </div>
               <br />
@@ -182,7 +182,7 @@
             </h:column>
           </h:dataTable>
 
-          <h:dataTable id="pictureRO"  value="#{itemBean.picture}" var="image"   rendered="#{userBean.editable == 0}">
+          <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 0}">
             <h:column rowHeader="">
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                 <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
