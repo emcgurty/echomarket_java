@@ -457,6 +457,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
       } else if ((hs > 0)) {
         Participant part = (Participant) hasComplete.get(0);
+        this.participant_id = part.getParticipant_id();
         Integer gw = part.getGoodwill();
         Integer i18 = part.getAge18OrMore();
         String un = part.getFirstName();
@@ -471,7 +472,7 @@ public class UserBean extends AbstractBean implements Serializable {
             this.editable = 0;
             return_string = cpbean.load_ud(this.participant_id);
           } else {
-            this.editable = 0;
+            this.editable = 1;
             if (this.userType.contains("borrow")) {
               return_string = ibean.load_ud("borrow", null);
             } else if (this.userType.contains("lend")) {
