@@ -25,7 +25,10 @@
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{userBean.userAlias}: LENDER ITEM CONDITIONS"  />
               <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="Save Item Condition Update"  rendered="#{userBean.editable == 1}" />
-              <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Coonditions"  rendered="#{userBean.editable == 0}" />
+              <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Coonditions"  rendered="#{userBean.editable == 0}" >
+                <f:param name="iid" value="#{lenderItemConditionsBean.itemId}" />
+                <f:param name="action" value="edit" />
+              </h:commandLink>
             </div> 
           </div>
           <div  class="div_p" id="menu_item_6" >
