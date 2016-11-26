@@ -1,8 +1,8 @@
 package echomarket.web.managedbeans;
 
+import echomarket.hibernate.LenderItemConditions;
 import echomarket.hibernate.LenderTransfer;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -58,52 +58,63 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       strIid = params.get("iid");
     } catch (Exception ex) {
     }
-    if (strIid != null) {
+    if (strIid == null) {
+      strIid = "";
+    }
+    if (strIid.isEmpty() == false) {
       result = getCurrentLT_Iid(pid, strIid);
     } else {
       result = getCurrentLT(pid);
     }
-
-    LenderTransfer ltr = (LenderTransfer) result.get(0);
-    if (result.size() > 0) {
-      this.lenderTransferId = ltr.getLenderTransferId();
-      this.itemId = ltr.getItemId();
-      this.participant_id = ltr.getParticipant_id();
-      this.borrowerComesToWhichAddress = ltr.getBorrowerComesToWhichAddress();
-      this.meetBorrowerAtAgreedL2b = ltr.getMeetBorrowerAtAgreedL2b();
-      this.meetBorrowerAtAgreedB2l = ltr.getMeetBorrowerAtAgreedL2b();
-      this.willDeliverToBorrower = ltr.getWillDeliverToBorrower();
-      this.thirdPartyPresenceL2b = ltr.getThirdPartyPresenceL2b();
-      this.thirdPartyPresenceB2l = ltr.getThirdPartyPresenceB2l();
-      this.borrowerThirdPartyChoice = ltr.getBorrowerThirdPartyChoice();
-      this.agreedThirdPartyChoiceL2b = ltr.getAgreedThirdPartyChoiceL2b();
-      this.agreedThirdPartyChoiceB2l = ltr.getAgreedThirdPartyChoiceB2l();
-      this.borrowerReturnsToWhichAddress = ltr.getBorrowerReturnsToWhichAddress();
-      this.willPickUpPreferredLocationB2l = ltr.getWillPickUpPreferredLocationB2l();
-      this.lenderThirdPartyChoiceB2l = ltr.getLenderThirdPartyChoiceB2l();
-      this.lenderThirdPartyChoiceL2b = ltr.getLenderThirdPartyChoiceL2b();
-      this.borrowerChoice = ltr.getBorrowerChoice();
-    } else {
-      ubean.setEditable(1);
-
+    
+    if (result != null) {
+      if (result.size() == 1) {
+        LenderTransfer ltr = null;
+        ltr = (LenderTransfer) result.get(0);
+        if (ltr != null) {
+          this.lenderTransferId = ltr.getLenderTransferId();
+          this.itemId = ltr.getItemId();
+          this.participant_id = ltr.getParticipant_id();
+          this.borrowerComesToWhichAddress = ltr.getBorrowerComesToWhichAddress();
+          this.meetBorrowerAtAgreedL2b = ltr.getMeetBorrowerAtAgreedL2b();
+          this.meetBorrowerAtAgreedB2l = ltr.getMeetBorrowerAtAgreedL2b();
+          this.willDeliverToBorrower = ltr.getWillDeliverToBorrower();
+          this.thirdPartyPresenceL2b = ltr.getThirdPartyPresenceL2b();
+          this.thirdPartyPresenceB2l = ltr.getThirdPartyPresenceB2l();
+          this.borrowerThirdPartyChoice = ltr.getBorrowerThirdPartyChoice();
+          this.agreedThirdPartyChoiceL2b = ltr.getAgreedThirdPartyChoiceL2b();
+          this.agreedThirdPartyChoiceB2l = ltr.getAgreedThirdPartyChoiceB2l();
+          this.borrowerReturnsToWhichAddress = ltr.getBorrowerReturnsToWhichAddress();
+          this.willPickUpPreferredLocationB2l = ltr.getWillPickUpPreferredLocationB2l();
+          this.lenderThirdPartyChoiceB2l = ltr.getLenderThirdPartyChoiceB2l();
+          this.lenderThirdPartyChoiceL2b = ltr.getLenderThirdPartyChoiceL2b();
+          this.borrowerChoice = ltr.getBorrowerChoice();
+          ltr = null;
+          result = null;
+        }
+      } else {
+        ubean.setEditable(1);
+      }
     }
-    ltr = null;
+    
     return "lender_transfer";
   }
 
   public List getCurrentLT(String pid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
-      query = "SELECT ltr Participant part "
-              + " left join part.item itm "
-              + " left join itm.lenderTransfer ltr "
-              + "WHERE part.participant_id = :pid";
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = "FROM LenderTransfer ltr "
+              + " WHERE ltr.participant_id = :pid"
+              + " ORDER BY ltr.dateCreated";
       result = session.createQuery(query)
               .setParameter("pid", pid)
+              .setMaxResults(1)
               .list();
       tx.commit();
     } catch (Exception e) {
@@ -122,15 +133,15 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   public List getCurrentLT_Iid(String pid, String iid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
-      query = "SELECT ltr Participant part "
-              + " left join part.item itm "
-              + " left join itm.lenderTransfer ltr "
-              + "WHERE part.participant_id = :pid"
-              + " AND itm.item_id = :iid ";
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = "from LenderTransfer ltr "
+              + "WHERE ltr.participant_id = :pid"
+              + " AND ltr.itemId = :iid ";
 
       result = session.createQuery(query)
               .setParameter("pid", pid)
@@ -138,7 +149,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
               .list();
       tx.commit();
     } catch (Exception e) {
-      System.out.println("Error in getCurrentCP");
+      System.out.println("Error in getCurrentLt");
       e.printStackTrace();
       tx.rollback();
       return null;
@@ -151,21 +162,25 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   public String updateLIT() {
+
     Session sb;
     Transaction tx;
     sb = null;
     tx = null;
-    sb = hib_session();
-    tx = sb.beginTransaction();
+    List litList = null;
+    Boolean successTransaction = false;
 
-    if (itemId != null && participant_id != null) {
-      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, this.participant_id, this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
+    if (this.lenderTransferId.isEmpty() == true) {
+
+      LenderTransfer lt = new LenderTransfer(getId(), "NA", ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
 
       try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
         sb.save(lt);
         tx.commit();
         message(null, "LenderTransferSaved", null);
-        ubean.setEditable(0);
+        successTransaction = true;
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in saveLenderItemCon");
@@ -173,19 +188,57 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         message(null, "LenderTransferNotSaved", null);
         ubean.setEditable(1);
       } finally {
-        if (sb != null) {
-          sb.close();
-        }
+        sb = null;
         tx = null;
 
       }
     } else {
       // Do update
-    }
-    sb = null;
-    tx = null;
+      litList = getCurrentLT_Iid(participant_id, itemId);
+      if (litList.size() == 1) {
+        LenderTransfer lit = (LenderTransfer) litList.get(0);
+        lit.setItemId(itemId);
+        lit.setParticipant_id(participant_id);
+        lit.setBorrowerComesToWhichAddress(borrowerComesToWhichAddress);
+        lit.setMeetBorrowerAtAgreedL2b(meetBorrowerAtAgreedL2b);
+        lit.setMeetBorrowerAtAgreedB2l(meetBorrowerAtAgreedB2l);
+        lit.setWillDeliverToBorrower(willDeliverToBorrower);
+        lit.setThirdPartyPresenceL2b(thirdPartyPresenceL2b);
+        lit.setThirdPartyPresenceB2l(thirdPartyPresenceB2l);
+        lit.setBorrowerThirdPartyChoice(borrowerThirdPartyChoice);
+        lit.setAgreedThirdPartyChoiceL2b(agreedThirdPartyChoiceL2b);
+        lit.setAgreedThirdPartyChoiceB2l(agreedThirdPartyChoiceB2l);
+        lit.setBorrowerReturnsToWhichAddress(borrowerReturnsToWhichAddress);
+        lit.setWillPickUpPreferredLocationB2l(willPickUpPreferredLocationB2l);
+        lit.setLenderThirdPartyChoiceB2l(lenderThirdPartyChoiceB2l);
+        lit.setLenderThirdPartyChoiceL2b(lenderThirdPartyChoiceL2b);
 
-    return load_ud(ubean.getUser_id());
+        sb = hib_session();
+        tx = sb.beginTransaction();
+
+        try {
+          sb.update(lit);
+          tx.commit();
+          successTransaction = true;
+          message(null, "LenderTransferUpdated", null);
+        } catch (Exception ex) {
+          message(null, "LenderTransferUpdatedFailed", null);
+          tx.rollback();
+          System.out.println("Error in Update Lender Transfer Perferenes");
+          Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+          sb = null;
+          tx = null;
+        }
+      }
+    }
+    if (successTransaction == true) {
+      ubean.setEditable(0);
+    } else {
+      ubean.setEditable(1);
+    }
+
+    return load_ud(ubean.getParticipant_id());
 
   }
 
