@@ -60,12 +60,20 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     List condList = null;
     Map<String, String> params = null;
     String strIid = null;
+    String action = null;
 
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
     } catch (Exception ex) {
     }
+
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      action = params.get("action");
+    } catch (Exception ex) {
+    }
+
     if (strIid == null) {
       strIid = "";
     }
@@ -108,19 +116,23 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       }
     }
 
-    return "lender_conditions";
+    if ("edit".equals(action)) {
+      ubean.setEditable(1);
+    }
 
-//        return "user_detail?faces-redirect=true";
+    return "lender_conditions";
   }
 
   public List getCurrentItemConditions(String pid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
-      query = "SELECT LenderItemConditions lic "
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = "from  LenderItemConditions lic "
               + " WHERE lic.participant_id = :pid"
               + " ORDER BY lic.dateCreated ";
       result = session.createQuery(query)
@@ -144,11 +156,13 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
   public List getCurrentItemConditions_Iid(String pid, String iid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
-      query = "FROM LenderItemConditions lic "
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = " from LenderItemConditions lic "
               + " WHERE lic.participant_id = :pid "
               + " AND lic.itemId = :iid ";
       result = session.createQuery(query)
@@ -179,7 +193,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     List icList = null;
     Boolean successTransaction = false;
 
-    if (lender_item_condition_id != null) {
+    if (this.lender_item_condition_id.isEmpty() == false) {
 
       icList = getCurrentItemConditions(ubean.getParticipant_id());
       if (icList.size() == 1) {
@@ -214,7 +228,6 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           successTransaction = true;
           message(null, "LenderItemConditionsUpdated", null);
         } catch (Exception ex) {
-
           message(null, "LenderItemConditionsUpdatedFailed", null);
           tx.rollback();
           System.out.println("Error in Update Lender ITem Conditions");
