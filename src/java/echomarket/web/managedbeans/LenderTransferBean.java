@@ -52,12 +52,20 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     List result = null;
     Map<String, String> params = null;
     String strIid = null;
+    String action = null;
 
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
     } catch (Exception ex) {
     }
+    
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      action = params.get("action");
+    } catch (Exception ex) {
+    }
+    
     if (strIid == null) {
       strIid = "";
     }
@@ -95,6 +103,10 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       } else {
         ubean.setEditable(1);
       }
+    }
+    
+    if ("edit".equals(action)) {
+        ubean.setEditable(1);
     }
     
     return "lender_transfer";
@@ -194,11 +206,11 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       }
     } else {
       // Do update
-      litList = getCurrentLT_Iid(participant_id, itemId);
+      litList = getCurrentLT_Iid(ubean.getParticipant_id(), itemId);
       if (litList.size() == 1) {
         LenderTransfer lit = (LenderTransfer) litList.get(0);
         lit.setItemId(itemId);
-        lit.setParticipant_id(participant_id);
+        lit.setParticipant_id(ubean.getParticipant_id());
         lit.setBorrowerComesToWhichAddress(borrowerComesToWhichAddress);
         lit.setMeetBorrowerAtAgreedL2b(meetBorrowerAtAgreedL2b);
         lit.setMeetBorrowerAtAgreedB2l(meetBorrowerAtAgreedB2l);
