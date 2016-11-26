@@ -51,22 +51,22 @@ public class ItemBean extends AbstractBean implements Serializable {
   private String itemType;
   private String whichType;
   private Part imageFileNamePart;
-  private static ArrayList<ItemImages> picture
+  private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
 
   public ArrayList<ItemImages> getPicture() {
-    if (ubean.getEditable() != null) {
-      if (ubean.getEditable() == 1) {
-        ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
-        setPicture(tmp_picture);
-      }
-    }
+//    if (this.itemId == null) {
+////      if (ubean.getEditable() == 1) {
+//        ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
+//        setPicture(tmp_picture);
+////      }
+//    }
     return picture;
 
   }
 
-  public static void setPicture(ArrayList<ItemImages> aPicture) {
+  public void setPicture(ArrayList<ItemImages> aPicture) {
     picture = aPicture;
   }
 
@@ -201,6 +201,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     } catch (Exception ex) {
     }
+    
 
     if (iid != null) {
       result = getCurrentItem(iid);
@@ -220,9 +221,6 @@ public class ItemBean extends AbstractBean implements Serializable {
         // Image detail will be retrieved from gui
       }
     } else {
-      ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
-      setPicture(tmp_picture);
-
     }
     return "user_item";
 
@@ -590,6 +588,9 @@ public class ItemBean extends AbstractBean implements Serializable {
     Session hib = hib_session();
     Transaction tx = hib.beginTransaction();
     String[] results = null;
+    if (iid == null) {
+      return getPicture();
+    } else {
     String queryString = "from ItemImages where item_id = :iid ";
     try {
       result = hib.createQuery(queryString)
@@ -619,6 +620,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       a_array = null;
       tmp_picture = null;
       return getPicture();
+    }
     }
   }
 
