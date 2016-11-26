@@ -463,7 +463,7 @@ public class UserBean extends AbstractBean implements Serializable {
         String un = part.getFirstName();
         if ((gw == 1) && (i18 == 1) && (un == null)) {
           this.editable = 0;
-          return_string = pbean.load_ud(part.getParticipant_id());
+          return_string = pbean.load_ud(this.participant_id);
         } else if ((gw == 1) && (i18 == 1) && (un != null)) {
           this.setParticipant_id(part.getParticipant_id());
           List hasCompleteCP = completeContactPreferences(this.participant_id);
