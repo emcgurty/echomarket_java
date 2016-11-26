@@ -27,13 +27,6 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
-//  public static ArrayList<Addresses> getParticipant_alternative() {
-//    return participant_alternative;
-//  }
-//
-//  public static void setParticipant_alternative(ArrayList<Addresses> aParticipant_alternative) {
-//    participant_alternative = aParticipant_alternative;
-//  }
   @Inject
   UserBean ubean;
   private String contactPreferenceId;
@@ -51,9 +44,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private String contactByLinkedIn;
   private String contactByOtherSocialMedia;
   private String contactByOtherSocialMediaAccess;
-
-//  private static ArrayList<Addresses> participant_alternative
-//          = new ArrayList<Addresses>(Arrays.asList(new Addresses(UUID.randomUUID().toString(), UUID.randomUUID().toString(), null, null, null, null, null, "99", null, "99", "alternative")));
   public ContactPreferenceBean() {
   }
 
