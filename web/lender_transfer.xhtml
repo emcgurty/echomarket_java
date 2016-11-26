@@ -18,7 +18,7 @@
 
       <div id="form_lender_to_borrower" class="contact_information" >
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_contact_preferences"></ui:include>  
-        
+
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: LENDER ITEM TRANSFER PREFERENCES"  />
@@ -40,9 +40,9 @@
         <div  class="div_p"  >
           <div style="margin:10px;" >
             <h:outputText value="How would you like a borrower to receive your item?" />
-            <h:inputText id="lenderTransferId" value="#{lenderTransferBean.lenderTransferId}" style="display:none;"/>
-            <h:inputText id="itemId" value="#{lenderTransferBean.itemId}" style="display:none;"/>
-            
+            <h:inputHidden id="lenderTransferId" value="#{lenderTransferBean.lenderTransferId}" />
+            <h:inputHidden id="itemId" value="#{lenderTransferBean.itemId}" />
+
           </div>
         </div>
 
