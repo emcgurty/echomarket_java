@@ -87,6 +87,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         LenderItemConditions pp = (LenderItemConditions) condList.get(0);
         if (pp != null) {
           this.setItemId(pp.getItemId());
+          this.lender_item_condition_id = pp.getLender_item_condition_id();
           this.participant_id = pp.getParticipant_id();
           this.forFree = pp.getForFree();
           this.availableForPurchase = pp.getAvailableForPurchase();
@@ -193,7 +194,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     List icList = null;
     Boolean successTransaction = false;
 
-    if (this.lender_item_condition_id.isEmpty() == false) {
+    if (lender_item_condition_id.isEmpty() == false) {
 
       icList = getCurrentItemConditions(ubean.getParticipant_id());
       if (icList.size() == 1) {
