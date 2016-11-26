@@ -18,11 +18,15 @@
 
       <div id="form_lender_to_borrower" class="contact_information" >
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_contact_preferences"></ui:include>  
+        
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: LENDER ITEM TRANSFER PREFERENCES"  />
             <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Save Item Transfer Preferences"  rendered="#{userBean.editable == 1}" />
-            <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="#{userBean.editable == 0}" />
+            <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="#{userBean.editable == 0}" >
+              <f:param name="iid" value="#{lenderTransferBean.itemId}" />
+              <f:param name="action" value="edit" />
+            </h:commandLink>
           </div> 
         </div>
 
@@ -38,6 +42,7 @@
             <h:outputText value="How would you like a borrower to receive your item?" />
             <h:inputText id="lenderTransferId" value="#{lenderTransferBean.lenderTransferId}" style="display:none;"/>
             <h:inputText id="itemId" value="#{lenderTransferBean.itemId}" style="display:none;"/>
+            
           </div>
         </div>
 
@@ -201,10 +206,10 @@
         <div style="margin-left:25px;margin-top:5px;float:left;">
 
           <div id="borrowerReturnsToWhichAddressGroup" >    
-            <h:outputLabel value="Borrower returns to your...:" for="borrowerReturnsToWhichAddress">
+            <h:outputLabel value="Borrower returns to your:" for="borrowerReturnsToWhichAddress">
               <h:selectOneRadio id="borrowerReturnsToWhichAddress" value="#{lenderTransferBean.borrowerReturnsToWhichAddress}"  rendered="#{userBean.editable == 1}">
-                <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
-                <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
+                <f:selectItem itemValue="3" itemLabel="... Primary Address?" />
+                <f:selectItem itemValue="2" itemLabel="... Alternative Address?" />	
                 <f:selectItem itemValue="1" itemLabel="Either address is fine." />
                 <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
               </h:selectOneRadio>    
@@ -217,10 +222,10 @@
                     <c:set var="cbe" value="Either address is fine"/>
                   </c:when>
                   <c:when test="#{lenderTransferBean.borrowerReturnsToWhichAddress == 2}">
-                    <c:set var="cbe" value="To your alternative address"/>
+                    <c:set var="cbe" value="Alternative address"/>
                   </c:when>
                   <c:when test="#{lenderTransferBean.borrowerReturnsToWhichAddress == 3}">
-                    <c:set var="cbe" value="To your primary address"/>
+                    <c:set var="cbe" value="Primary address"/>
                   </c:when>
                   <c:otherwise>
                     <c:set var="cbe" value="No preference provided"/>
