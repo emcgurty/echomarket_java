@@ -188,7 +188,7 @@ public class Items implements java.io.Serializable {
    */
   @OneToMany
   @JoinTable(name = "echomarket.hibernate.LenderTransfer")
-  @JoinColumn(name = "item_id")
+  @JoinColumn(name = "itemId")
   public Set<LenderTransfer> getLenderTransfer() {
     return lenderTransfer;
   }
@@ -205,7 +205,7 @@ public class Items implements java.io.Serializable {
    */
   @OneToMany
   @JoinTable(name = "echomarket.hibernate.LenderItemConditions")
-  @JoinColumn(name = "item_id")
+  @JoinColumn(name = "itemId")
   public Set<LenderItemConditions> getLenderItemConditions() {
     return lenderItemConditions;
   }
