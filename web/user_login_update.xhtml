@@ -21,11 +21,11 @@
         <div style="margin:10px;margin-top:25px;" >
           <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
           <h:commandLink  action="#{userBean.updateUserLogin()}"  class="right_div" value="Save Login Update"  rendered="#{userBean.editable == 1}" />
-          <h:commandLink  action="#{userBean.editUserLogin()}"  class="right_div" value="Edit Login Information"  rendered="#{userBean.editable == 0}" />
+          <h:commandLink  action="#{userBean.load_ud(1)}"  class="right_div" value="Edit Login Information"  rendered="#{userBean.editable == 0}" />
         </div> 
         <div style="margin:10px;" >
           <h:outputText value="Login Information..." />
-          <h:commandLink  action="#{userBean.editNAE()}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" />
+          <h:commandLink  action="#{participant.load_ud(userBean.user_id)}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" />
           <h:inputHidden id="roleId"  value="#{userBean.roleId}" />                  
         </div>
       </div> 
