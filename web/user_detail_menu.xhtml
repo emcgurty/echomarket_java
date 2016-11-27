@@ -47,7 +47,7 @@
             <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
           </c:when>
         </c:choose>
-        <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  immediate="true" rendered="true">
+        <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
           <f:param name="iid" value="#{itemBean.itemId}" />
         </h:commandLink>   
       </li>
@@ -60,7 +60,7 @@
             <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
           </c:when>
         </c:choose>
-        <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  immediate="true"  rendered="true">
+        <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
           <f:param name="iid" value="#{itemBean.itemId}" />
         </h:commandLink>   
       </li>
