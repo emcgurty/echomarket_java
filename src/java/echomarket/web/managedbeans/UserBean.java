@@ -39,6 +39,10 @@ public class UserBean extends AbstractBean implements Serializable {
   ParticipantBean pbean;
   @Inject
   ItemBean ibean;
+  @Inject
+  LenderItemConditionsBean licibean;
+  @Inject
+  LenderTransferBean ltribean;
   private String user_id;
   private String participant_id;
   private String username;
@@ -476,7 +480,18 @@ public class UserBean extends AbstractBean implements Serializable {
             if (this.userType.contains("borrow")) {
               return_string = ibean.load_ud("borrow", null);
             } else if (this.userType.contains("lend")) {
-              return_string = ibean.load_ud("lend", null);
+              List hasCompleteLIT = completeLIT(this.participant_id);
+              if (hasCompleteLIT.size() == 0) {
+                return_string = ltribean.load_ud(this.participant_id);
+              } else {
+                List hasCompleteLIC = completeLIC(this.participant_id);
+                if (hasCompleteLIC.size() == 0) {
+                  return_string = licibean.load_ud(this.participant_id);
+                } else {
+                  return_string = ibean.load_ud("lend", null);
+                }
+              }
+
             } else {
               return_string = ibean.load_ud("both", null);
             }
@@ -948,6 +963,56 @@ public class UserBean extends AbstractBean implements Serializable {
               .getLogger(UserBean.class
                       .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return results;
+
+  }
+
+  private List completeLIC(String pid) {
+
+    List results = null;
+    Session hib = hib_session();
+    Transaction tx = hib.beginTransaction();
+
+    try {
+      results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid")
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      System.out.println("Error on completeLIC");
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return results;
+
+  }
+
+  private List completeLIT(String pid) {
+
+    List results = null;
+    Session hib = hib_session();
+    Transaction tx = hib.beginTransaction();
+
+    try {
+      results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid")
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
+      System.out.println("Error on completeLIT");
       return null;
     } finally {
       tx = null;
