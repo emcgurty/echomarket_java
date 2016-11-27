@@ -3,6 +3,8 @@ package echomarket.web.managedbeans;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import echomarket.hibernate.Items;
 import echomarket.hibernate.ItemImages;
+import echomarket.hibernate.LenderItemConditions;
+import echomarket.hibernate.LenderTransfer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -201,7 +203,6 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     } catch (Exception ex) {
     }
-    
 
     if (iid != null) {
       result = getCurrentItem(iid);
@@ -263,9 +264,17 @@ public class ItemBean extends AbstractBean implements Serializable {
         Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
         bret = false;
       } finally {
-//            sb = null;
-//            tx = null;
+           sb = null;
+           tx = null;
       }
+      if (bret == true) {
+        bret = removeNAFromLIC(ubean.getParticipant_id(), new_iid);
+      }
+
+      if (bret == true) {
+        bret = removeNAFromLIT(ubean.getParticipant_id(), new_iid);
+      }
+
     } else {
       result = getCurrentItem(itemId);
       if (result.size() == 1) {
@@ -301,7 +310,6 @@ public class ItemBean extends AbstractBean implements Serializable {
       } else {
         bret = false;
       }
-
     }
 
     if (bret == true) {
@@ -591,36 +599,36 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (iid == null) {
       return getPicture();
     } else {
-    String queryString = "from ItemImages where item_id = :iid ";
-    try {
-      result = hib.createQuery(queryString)
-              .setParameter("iid", iid)
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      tx.rollback();
-      System.out.println("Error in getExistingPicture");
-      e.printStackTrace();
-    } finally {
-      tx = null;
-      hib = null;
-    }
+      String queryString = "from ItemImages where item_id = :iid ";
+      try {
+        result = hib.createQuery(queryString)
+                .setParameter("iid", iid)
+                .list();
+        tx.commit();
+      } catch (Exception e) {
+        tx.rollback();
+        System.out.println("Error in getExistingPicture");
+        e.printStackTrace();
+      } finally {
+        tx = null;
+        hib = null;
+      }
 
-    Integer size_of_list = result.size();
-    if (size_of_list == 0) {
-      return getPicture();
-    } else {
-      ItemImages a_array = (ItemImages) result.get(0);
-      ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-              new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
-                      a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
-      ));
-      setPicture(tmp_picture);
+      Integer size_of_list = result.size();
+      if (size_of_list == 0) {
+        return getPicture();
+      } else {
+        ItemImages a_array = (ItemImages) result.get(0);
+        ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
+                new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
+                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
+        ));
+        setPicture(tmp_picture);
 
-      a_array = null;
-      tmp_picture = null;
-      return getPicture();
-    }
+        a_array = null;
+        tmp_picture = null;
+        return getPicture();
+      }
     }
   }
 
@@ -828,4 +836,98 @@ public class ItemBean extends AbstractBean implements Serializable {
     this.itemType = itemType;
   }
 
+  private Boolean removeNAFromLIC(String pid, String iid) {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    Boolean return_value = false;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = " from LenderItemConditions lic "
+              + " WHERE lic.participant_id = :pid "
+              + " AND lic.itemId = :iid ";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", "NA")
+              .setMaxResults(1)
+              .list();
+
+      if (result != null) {
+        if (result.size() == 1) {
+          LenderItemConditions na_lic = (LenderItemConditions) result.get(0);
+          LenderItemConditions new_lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), iid, 
+                  na_lic.getForFree(), na_lic.getAvailableForPurchase(), na_lic.getAvailableForPurchaseAmount(), na_lic.getSmallFee(), 
+                  na_lic.getSmallFeeAmount(), na_lic.getAvailableForDonation(), na_lic.getDonateAnonymous(), 
+                  na_lic.getTrade(), na_lic.getTradeItem(), na_lic.getAgreedNumberOfDays(), na_lic.getAgreedNumberOfHours(), na_lic.getIndefiniteDuration(), 
+                  na_lic.getPresentDuringBorrowingPeriod(), na_lic.getEntirePeriod(), na_lic.getPartialPeriod(), na_lic.getProvideProperUseTraining(), 
+                  na_lic.getSpecificConditions(), na_lic.getSecurityDepositAmount(), na_lic.getSecurityDeposit(), "NA", na_lic.getComment(), new Date(), new Date());
+           session.save(new_lic);
+          /// should create new record
+          tx.commit();
+          return_value = true;
+        }
+        return_value = true;
+      }
+    } catch (Exception e) {
+      System.out.println("Error in removeNAFromLIC");
+      e.printStackTrace();
+      tx.rollback();
+
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return return_value;
+  }
+
+  private Boolean removeNAFromLIT(String pid, String iid) {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    Boolean return_value = false;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = " from LenderTransfer lit "
+              + " WHERE lit.participant_id = :pid "
+              + " AND lit.itemId = :iid ";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", "NA")
+              .setMaxResults(1)
+              .list();
+
+      if (result != null) {
+        if (result.size() == 1) {
+          LenderTransfer na_lit = (LenderTransfer) result.get(0);
+          LenderTransfer new_lt = new LenderTransfer(getId(), iid, ubean.getParticipant_id(), 
+                  na_lit.getBorrowerComesToWhichAddress(), na_lit.getMeetBorrowerAtAgreedL2b(), na_lit.getMeetBorrowerAtAgreedB2l(), na_lit.getWillDeliverToBorrower(), 
+                  na_lit.getThirdPartyPresenceL2b(), na_lit.getThirdPartyPresenceB2l(), na_lit.getBorrowerThirdPartyChoice(), na_lit.getAgreedThirdPartyChoiceL2b(), 
+                  na_lit.getAgreedThirdPartyChoiceB2l(), na_lit.getBorrowerReturnsToWhichAddress(), na_lit.getWillPickUpPreferredLocationB2l(), na_lit.getLenderThirdPartyChoiceB2l(), 
+                  na_lit.getBorrowerChoice(), "NA", na_lit.getComment(), new Date(), new Date(), null);
+          session.save(new_lt);
+          /// should create new record
+          tx.commit();
+          return_value = true;
+        }
+        return_value = true;
+      }
+    } catch (Exception e) {
+      System.out.println("Error in removeNAFromLIC");
+      e.printStackTrace();
+      tx.rollback();
+
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return return_value;
+  }
 }
