@@ -110,13 +110,13 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           this.securityDeposit = pp.getSecurityDeposit();
 //this.comment= pp.get(); // Later
           pp = null;
-          condList = null;
+
         }
       } else if (condList.size() == 0) {
         ubean.setEditable(1);
       }
     }
-
+    condList = null;
     if ("edit".equals(action)) {
       ubean.setEditable(1);
     }
