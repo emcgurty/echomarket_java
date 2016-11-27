@@ -31,6 +31,9 @@
             <h:outputText value="#{itemBean.itemId}"  />
             <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
+            <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="Revise LIT?"  rendered="#{userBean.editable == 0}">
+              <f:param name="iid" value="#{itemBean.itemId}" />
+            </h:commandLink> 
           </div> 
         </div> 
 
