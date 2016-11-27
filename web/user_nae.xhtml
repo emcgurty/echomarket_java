@@ -18,10 +18,10 @@
       <div id="form_NAE" class="contact_information" >
         <c:choose>
           <c:when  test="#{userBean.editable == 1}" >
-          <c:set var="div_display" value="none" />    
+            <c:set var="div_display" value="none" />    
           </c:when>
           <c:otherwise >
-          <c:set var="div_display" value="block" />    
+            <c:set var="div_display" value="block" />    
           </c:otherwise>
         </c:choose>
         <c:set var="states_list" value="#{uss.buildUsStates()}"   rendered="#{userBean.editable == 1}" />    
@@ -41,7 +41,7 @@
           </div> 
           <div style="margin:10px;" >
             <h:outputText value="EchoMarket participant information..." />
-            <h:commandLink  action="#{userBean.editCP()}"  class="right_div" value="Continue to 'Item Transfer Contact Preferences'"  />
+            <h:commandLink  action="#{cpb.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Initial Contact Preferences'"  />
 
           </div>
         </div> 
@@ -54,9 +54,8 @@
               </div>
             </div>
 
-            <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+            <div style="display:block;float:left;height:auto;width:100%;margin-top:5px;">
               <div style="float:left;margin-left:25px">
-
                 <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
                   <br />
                   <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 1}" >
@@ -66,9 +65,9 @@
                   <h:outputText value="#{cd.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
                 </h:outputLabel>
                 <span class="error-message" id="contactDescribeId" ></span>
-              </div>
 
-              <div id="otherDescribeYourselfText"  style="float:left;margin-left:25px;visibility: hidden;">    
+              </div>
+              <div id="otherDescribeYourselfText"  style="margin-left:15px;display: none;">    
                 <h:outputLabel  value="Please provide an 'Other' description:" for="otherDescribeYourself"  style="margin-left:25px">
                   <br />
                   <h:inputText id="otherDescribeYourself" value="#{participantBean.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"  rendered="#{userBean.editable == 1}" /> 
@@ -76,11 +75,11 @@
                 </h:outputLabel>
                 <h:message styleClass="error-message" for="otherDescribeYourself"/>
                 <span class="error-message" id="otherDescribeYourself" ></span>
-
               </div>
             </div>
 
-            <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+
+            <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;margin-right:50px;">
               <div style="float:left;margin-left:25px">
                 <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" >
                   <h:inputText  id="organizationName" class="org_name"  value="#{participantBean.organizationName}"  rendered="#{userBean.editable == 1}" />
