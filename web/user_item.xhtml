@@ -28,12 +28,10 @@
         <div class="top" >
           <div >
             <h:outputText value="NEW ITEM"  />
-            <h:outputText value="#{itemBean.itemId}"  />
+            <h:outputText value="#{userBean.itemId}"  />
             <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
-            <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="Revise LIT?"  rendered="#{userBean.editable == 0}">
-              <f:param name="iid" value="#{itemBean.itemId}" />
-            </h:commandLink> 
+
           </div> 
         </div> 
 
@@ -159,8 +157,9 @@
         </table>
         <br />
         <div style="margin-left:25px;margin-top:5px;float:left;">
-
-          <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 1}" >
+          <h:outputText value="HERE "  />
+          <h:outputText value="#{userBean.itemId}"  />
+          <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(userBean.itemId)}" var="image"   rendered="#{userBean.editable == 1}" >
             <h:column rowHeader="">
               <div style="margin-left:25px;margin-top:5px;float:left;">
                 <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
@@ -172,8 +171,8 @@
               </div>    
               <br />
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-                <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                  <h:graphicImage id="imagePreview" name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}" />
+                <h:outputLabel for="imagePreview" value="Uploaded Image:"  >
+                  <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="lend_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
                 </h:outputLabel> 
               </div>
               <br />
@@ -185,12 +184,16 @@
             </h:column>
           </h:dataTable>
 
-          <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 0}">
+          <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(userBean.itemId)}" var="image"   rendered="#{userBean.editable == 0}">
             <h:column rowHeader="">
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                 <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                  <h:graphicImage name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
-
+                  <h:inputText id="image_directory" value="#{'lend_images'}" />
+                  <c:set var="iii" value="#{image.imageFileName}" />
+                  <h:inputText id="image_name" value="#{iii}" />
+                  <!--<img src="resources/lend_images/04bfb4d1-3bb8-4500-a11d-6ec0f36ad80d_1[1].jpg" alt="1"/>-->
+                  <img id="viewImage"  src=""/>
+                 
                 </h:outputLabel> 
               </div>
               <br />
