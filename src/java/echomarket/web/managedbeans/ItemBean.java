@@ -223,7 +223,12 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     } else {
     }
-    return "user_item";
+       if (ubean.getUserType() == "lend") {
+        return "lender_user_item.xhtml?faces-redirect=true";
+      } else {
+        return "borrower_user_item.xhtml?faces-redirect=true";
+      }
+    
 
   }
 
@@ -258,14 +263,15 @@ public class ItemBean extends AbstractBean implements Serializable {
         sb.save(ii);
         tx.commit();
         bret = true;
+        ubean.setItemId(new_iid);
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in Save Item");
         Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
         bret = false;
       } finally {
-           sb = null;
-           tx = null;
+        sb = null;
+        tx = null;
       }
       if (bret == true) {
         bret = removeNAFromLIC(ubean.getParticipant_id(), new_iid);
@@ -286,6 +292,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         uitem.setItemConditionId(itemConditionId);
         uitem.setItemCount(itemCount);
         uitem.setItemType(itemType);
+
         if (sb.isOpen() == false) {
           sb = hib_session();
         }
@@ -297,6 +304,7 @@ public class ItemBean extends AbstractBean implements Serializable {
           sb.save(uitem);
           tx.commit();
           bret = true;
+          ubean.setItemId(itemId);
         } catch (Exception ex) {
           bret = false;
           tx.rollback();
@@ -337,9 +345,13 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     } else {
       message(null, "ItemRecordNotUpdated", null);
-      return "user_item";
-    }
 
+      if (itemType == "lend") {
+        return "lender_user_item";
+      } else {
+        return "borower_user_item";
+      }
+    }
   }
 
   /**
@@ -621,7 +633,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         ItemImages a_array = (ItemImages) result.get(0);
         ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
                 new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
-                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
+                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName().toString(), a_array.getItemImageCaption())
         ));
         setPicture(tmp_picture);
 
@@ -632,7 +644,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
   }
 
-  public List getCurrentItem(String iid) {
+  private List getCurrentItem(String iid) {
 
     List result = null;
     Session session = hib_session();
@@ -654,6 +666,33 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
 
     return result;
+  }
+
+  public String getCurrentItemDescription(String iid) {
+
+    List result = null;
+    Session session = hib_session();
+    Transaction tx = session.beginTransaction();
+    String local_string = null;
+
+    try {
+      local_string = "FROM Items WHERE item_id = '" + iid + "'";
+      result = session.createQuery(local_string).list();
+      tx.commit();
+      Items item_d = (Items) result.get(0);
+      local_string = item_d.getItemDescription();
+    } catch (Exception e) {
+      tx.rollback();
+      System.out.println("Error in getCurrentItem");
+      e.printStackTrace();
+
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+
+    return local_string;
   }
 
   public List getAllSoughtItems(String which) {
@@ -854,26 +893,36 @@ public class ItemBean extends AbstractBean implements Serializable {
               .setParameter("iid", "NA")
               .setMaxResults(1)
               .list();
-
+      tx.commit();
       if (result != null) {
         if (result.size() == 1) {
           LenderItemConditions na_lic = (LenderItemConditions) result.get(0);
-          LenderItemConditions new_lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), iid, 
-                  na_lic.getForFree(), na_lic.getAvailableForPurchase(), na_lic.getAvailableForPurchaseAmount(), na_lic.getSmallFee(), 
-                  na_lic.getSmallFeeAmount(), na_lic.getAvailableForDonation(), na_lic.getDonateAnonymous(), 
-                  na_lic.getTrade(), na_lic.getTradeItem(), na_lic.getAgreedNumberOfDays(), na_lic.getAgreedNumberOfHours(), na_lic.getIndefiniteDuration(), 
-                  na_lic.getPresentDuringBorrowingPeriod(), na_lic.getEntirePeriod(), na_lic.getPartialPeriod(), na_lic.getProvideProperUseTraining(), 
+          LenderItemConditions new_lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), iid,
+                  na_lic.getForFree(), na_lic.getAvailableForPurchase(), na_lic.getAvailableForPurchaseAmount(), na_lic.getSmallFee(),
+                  na_lic.getSmallFeeAmount(), na_lic.getAvailableForDonation(), na_lic.getDonateAnonymous(),
+                  na_lic.getTrade(), na_lic.getTradeItem(), na_lic.getAgreedNumberOfDays(), na_lic.getAgreedNumberOfHours(), na_lic.getIndefiniteDuration(),
+                  na_lic.getPresentDuringBorrowingPeriod(), na_lic.getEntirePeriod(), na_lic.getPartialPeriod(), na_lic.getProvideProperUseTraining(),
                   na_lic.getSpecificConditions(), na_lic.getSecurityDepositAmount(), na_lic.getSecurityDeposit(), "NA", na_lic.getComment(), new Date(), new Date());
-           session.save(new_lic);
+          if (session.isOpen() == false) {
+            session = hib_session();
+          }
+          if (tx.isActive() == false) {
+
+            tx = session.beginTransaction();
+          } else {
+            tx.rollback();
+          }
+          session.save(new_lic);
           /// should create new record
           tx.commit();
           return_value = true;
         }
         return_value = true;
       }
-    } catch (Exception e) {
+    } catch (Exception ex) {
       System.out.println("Error in removeNAFromLIC");
-      e.printStackTrace();
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
+      ex.printStackTrace();
       tx.rollback();
 
     } finally {
@@ -902,15 +951,23 @@ public class ItemBean extends AbstractBean implements Serializable {
               .setParameter("iid", "NA")
               .setMaxResults(1)
               .list();
-
+      tx.commit();
       if (result != null) {
         if (result.size() == 1) {
           LenderTransfer na_lit = (LenderTransfer) result.get(0);
-          LenderTransfer new_lt = new LenderTransfer(getId(), iid, ubean.getParticipant_id(), 
-                  na_lit.getBorrowerComesToWhichAddress(), na_lit.getMeetBorrowerAtAgreedL2b(), na_lit.getMeetBorrowerAtAgreedB2l(), na_lit.getWillDeliverToBorrower(), 
-                  na_lit.getThirdPartyPresenceL2b(), na_lit.getThirdPartyPresenceB2l(), na_lit.getBorrowerThirdPartyChoice(), na_lit.getAgreedThirdPartyChoiceL2b(), 
-                  na_lit.getAgreedThirdPartyChoiceB2l(), na_lit.getBorrowerReturnsToWhichAddress(), na_lit.getWillPickUpPreferredLocationB2l(), na_lit.getLenderThirdPartyChoiceB2l(), 
+          LenderTransfer new_lt = new LenderTransfer(getId(), iid, ubean.getParticipant_id(),
+                  na_lit.getBorrowerComesToWhichAddress(), na_lit.getMeetBorrowerAtAgreedL2b(), na_lit.getMeetBorrowerAtAgreedB2l(), na_lit.getWillDeliverToBorrower(),
+                  na_lit.getThirdPartyPresenceL2b(), na_lit.getThirdPartyPresenceB2l(), na_lit.getBorrowerThirdPartyChoice(), na_lit.getAgreedThirdPartyChoiceL2b(),
+                  na_lit.getAgreedThirdPartyChoiceB2l(), na_lit.getBorrowerReturnsToWhichAddress(), na_lit.getWillPickUpPreferredLocationB2l(), na_lit.getLenderThirdPartyChoiceB2l(),
                   na_lit.getBorrowerChoice(), "NA", na_lit.getComment(), new Date(), new Date(), null);
+          if (session.isOpen() == false) {
+            session = hib_session();
+          }
+          if (tx.isActive() == false) {
+            tx = session.beginTransaction();
+          } else {
+            tx.rollback();
+          }
           session.save(new_lt);
           /// should create new record
           tx.commit();
@@ -918,9 +975,10 @@ public class ItemBean extends AbstractBean implements Serializable {
         }
         return_value = true;
       }
-    } catch (Exception e) {
+    } catch (Exception ex) {
       System.out.println("Error in removeNAFromLIC");
-      e.printStackTrace();
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
+      ex.printStackTrace();
       tx.rollback();
 
     } finally {
