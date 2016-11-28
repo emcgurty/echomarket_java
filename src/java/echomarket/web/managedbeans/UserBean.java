@@ -58,6 +58,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private String communityName;
   private Integer isCommunity;
   private Integer editable;
+  private String itemId;
   private Integer roleId;
 
   public String Logout() {
@@ -1196,6 +1197,16 @@ public class UserBean extends AbstractBean implements Serializable {
    */
   public void setParticipant_id(String participant_id) {
     this.participant_id = participant_id;
+  }
+
+ 
+  public String getItemId() {
+    return itemId;
+  }
+
+
+  public void setItemId(String itemId) {
+    this.itemId = itemId;
   }
 
 }
