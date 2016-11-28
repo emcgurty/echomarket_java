@@ -8,13 +8,12 @@ $(document).ready(function () {
     checkType(this);
   });
 
+  // For the momenot, okay.  Need to test for which case lending or borrowing
   var imageViewID = $("img[id$=viewImage]");
-  alert(imageViewID);
   var imageDirectory = $("input[id$=image_directory]");
-  alert(imageDirectory.val());
   var imageName = $("input[id$=image_name]");
-  alert(imageName.val());
   imageViewID.attr('src', "resources/" + imageDirectory.val() + "/" + imageName.val());
+  
 });
 
 function checkLegal() {
