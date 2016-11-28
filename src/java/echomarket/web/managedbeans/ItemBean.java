@@ -223,11 +223,8 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     } else {
     }
-       if (ubean.getUserType() == "lend") {
-        return "lender_user_item.xhtml?faces-redirect=true";
-      } else {
-        return "borrower_user_item.xhtml?faces-redirect=true";
-      }
+
+        return which + "_user_item";
     
 
   }
