@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  alert("kjjhk");
+
   $(".contact_information").css("display", "block");
   $('input').on('change', function () {
     checkLegal();
@@ -8,12 +8,14 @@ $(document).ready(function () {
     checkType(this);
   });
 
-  // For the momenot, okay.  Need to test for which case lending or borrowing
+  // For the moment okay.  Need to test for which case lending or borrowing
   var imageViewID = $("img[id$=viewImage]");
-  var imageDirectory = $("input[id$=image_directory]");
-  var imageName = $("input[id$=image_name]");
-  imageViewID.attr('src', "resources/" + imageDirectory.val() + "/" + imageName.val());
-  
+  if (imageViewID) {
+    var imageDirectory = $("input[id$=image_directory]");
+    var imageName = $("input[id$=image_name]");
+    imageViewID.attr('src', "resources/" + imageDirectory.val() + "/" + imageName.val());
+  }
+
 });
 
 function checkLegal() {
