@@ -47,6 +47,160 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   public LenderTransferBean() {
   }
 
+  private List getCurrentLT(String pid) {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = "FROM LenderTransfer ltr "
+              + " WHERE ltr.participant_id = :pid"
+              + " ORDER BY ltr.participant_id, ltr.dateCreated";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setMaxResults(1)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentCP");
+      e.printStackTrace();
+      tx.rollback();
+      return null;
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return result;
+  }
+
+  private List getCurrentLT_Iid(String pid, String iid) {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = "from LenderTransfer ltr "
+              + "WHERE ltr.participant_id = :pid"
+              + " AND ltr.itemId = :iid "
+              + " ORDER BY ltr.participant_id, ltr.itemId, ltr.dateCreated";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", iid)
+              .setMaxResults(1)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentLt");
+      e.printStackTrace();
+      tx.rollback();
+      return null;
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return result;
+  }
+
+  public String updateLIT() {
+
+    Session sb;
+    Transaction tx;
+    sb = null;
+    tx = null;
+    List litList = null;
+    Boolean successTransaction = false;
+
+    Map<String, String> params = null;
+    String addNewCP = null;
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      addNewCP = params.get("action");
+    } catch (Exception ex) {
+    }
+
+    if (((lenderTransferId.isEmpty() == true) && (itemId == null)) && (addNewCP != null)) {
+
+      LenderTransfer lt = new LenderTransfer(getId(), itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
+
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        sb.save(lt);
+        tx.commit();
+        message(null, "LenderTransferSaved", null);
+        successTransaction = true;
+        ubean.setEditable(1);
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in saveLenderItemCon");
+        Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+        message(null, "LenderTransferNotSaved", null);
+        ubean.setEditable(0);
+      } finally {
+        sb = null;
+        tx = null;
+
+      }
+    } else {
+      // Do update
+      if ((addNewCP != null) && (itemId != null)) {
+        litList = getCurrentLT_Iid(ubean.getParticipant_id(), itemId);
+      } else {
+        litList = getCurrentLT(ubean.getParticipant_id());
+      }
+      if (litList != null) {
+        if (litList.size() == 1) {
+          LenderTransfer lit = (LenderTransfer) litList.get(0);
+          lit.setItemId(itemId);
+          lit.setParticipant_id(ubean.getParticipant_id());
+          lit.setBorrowerComesToWhichAddress(borrowerComesToWhichAddress);
+          lit.setMeetBorrowerAtAgreedL2b(meetBorrowerAtAgreedL2b);
+          lit.setMeetBorrowerAtAgreedB2l(meetBorrowerAtAgreedB2l);
+          lit.setWillDeliverToBorrower(willDeliverToBorrower);
+          lit.setThirdPartyPresenceL2b(thirdPartyPresenceL2b);
+          lit.setThirdPartyPresenceB2l(thirdPartyPresenceB2l);
+          lit.setBorrowerThirdPartyChoice(borrowerThirdPartyChoice);
+          lit.setAgreedThirdPartyChoiceL2b(agreedThirdPartyChoiceL2b);
+          lit.setAgreedThirdPartyChoiceB2l(agreedThirdPartyChoiceB2l);
+          lit.setBorrowerReturnsToWhichAddress(borrowerReturnsToWhichAddress);
+          lit.setWillPickUpPreferredLocationB2l(willPickUpPreferredLocationB2l);
+          lit.setLenderThirdPartyChoiceB2l(lenderThirdPartyChoiceB2l);
+          lit.setLenderThirdPartyChoiceL2b(lenderThirdPartyChoiceL2b);
+
+          sb = hib_session();
+          tx = sb.beginTransaction();
+
+          try {
+            sb.update(lit);
+            tx.commit();
+            successTransaction = true;
+            message(null, "LenderTransferUpdated", null);
+            ubean.setEditable(1);
+          } catch (Exception ex) {
+            message(null, "LenderTransferUpdatedFailed", null);
+            tx.rollback();
+            System.out.println("Error in Update Lender Transfer Perferenes");
+            Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+            ubean.setEditable(0);
+          } finally {
+            sb = null;
+            tx = null;
+          }
+        }
+      }
+    }
+
+    return load_ud(ubean.getParticipant_id());
+  }
+
   public String load_ud(String pid) {
 
     List result = null;
@@ -57,7 +211,16 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
+      /// This doesn't work, hence below try/catch on strIid
+      if (strIid.isEmpty() == true) {
+        strIid = null;
+      }
     } catch (Exception ex) {
+    }
+    if (ubean.getEditable() == 0) {
+      ubean.setEditable(1);
+    } else {
+      ubean.setEditable(0);
     }
     
     try {
@@ -65,16 +228,28 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       action = params.get("action");
     } catch (Exception ex) {
     }
-    
-    if (strIid == null) {
-      strIid = "";
-    }
-    if (strIid.isEmpty() == false) {
+
+  try {
+    if (strIid != null) {
       result = getCurrentLT_Iid(pid, strIid);
-    } else {
+    } else if (itemId != null) {
+      strIid = itemId;
+      result = getCurrentLT_Iid(pid, itemId);
+    }
+  } catch(Exception ex) {
+       if (strIid.isEmpty() == false) {
+      result = getCurrentLT_Iid(pid, strIid);
+    } else if (itemId != null) {
+      strIid = itemId;
+      result = getCurrentLT_Iid(pid, itemId);
+    }
+    
+  }  
+    
+    if (result == null) {
       result = getCurrentLT(pid);
     }
-    
+
     if (result != null) {
       if (result.size() == 1) {
         LenderTransfer ltr = null;
@@ -104,154 +279,12 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         ubean.setEditable(1);
       }
     }
-    
+
     if ("edit".equals(action)) {
-        ubean.setEditable(1);
-    }
-    
-    return "lender_transfer";
-  }
-
-  public List getCurrentLT(String pid) {
-
-    List result = null;
-    Session session = null;
-    Transaction tx = null;
-    String query = null;
-    try {
-      session = hib_session();
-      tx = session.beginTransaction();
-      query = "FROM LenderTransfer ltr "
-              + " WHERE ltr.participant_id = :pid"
-              + " ORDER BY ltr.dateCreated";
-      result = session.createQuery(query)
-              .setParameter("pid", pid)
-              .setMaxResults(1)
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      System.out.println("Error in getCurrentCP");
-      e.printStackTrace();
-      tx.rollback();
-      return null;
-    } finally {
-      tx = null;
-      session = null;
-
-    }
-    return result;
-  }
-
-  public List getCurrentLT_Iid(String pid, String iid) {
-
-    List result = null;
-    Session session = null;
-    Transaction tx = null;
-    String query = null;
-    try {
-      session = hib_session();
-      tx = session.beginTransaction();
-      query = "from LenderTransfer ltr "
-              + "WHERE ltr.participant_id = :pid"
-              + " AND ltr.itemId = :iid ";
-
-      result = session.createQuery(query)
-              .setParameter("pid", pid)
-              .setParameter("iid", iid)
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      System.out.println("Error in getCurrentLt");
-      e.printStackTrace();
-      tx.rollback();
-      return null;
-    } finally {
-      tx = null;
-      session = null;
-
-    }
-    return result;
-  }
-
-  public String updateLIT() {
-
-    Session sb;
-    Transaction tx;
-    sb = null;
-    tx = null;
-    List litList = null;
-    Boolean successTransaction = false;
-
-    if (this.lenderTransferId.isEmpty() == true) {
-
-      LenderTransfer lt = new LenderTransfer(getId(), "NA", ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
-
-      try {
-        sb = hib_session();
-        tx = sb.beginTransaction();
-        sb.save(lt);
-        tx.commit();
-        message(null, "LenderTransferSaved", null);
-        successTransaction = true;
-      } catch (Exception ex) {
-        tx.rollback();
-        System.out.println("Error in saveLenderItemCon");
-        Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
-        message(null, "LenderTransferNotSaved", null);
-        ubean.setEditable(1);
-      } finally {
-        sb = null;
-        tx = null;
-
-      }
-    } else {
-      // Do update
-      litList = getCurrentLT_Iid(ubean.getParticipant_id(), itemId);
-      if (litList.size() == 1) {
-        LenderTransfer lit = (LenderTransfer) litList.get(0);
-        lit.setItemId(itemId);
-        lit.setParticipant_id(ubean.getParticipant_id());
-        lit.setBorrowerComesToWhichAddress(borrowerComesToWhichAddress);
-        lit.setMeetBorrowerAtAgreedL2b(meetBorrowerAtAgreedL2b);
-        lit.setMeetBorrowerAtAgreedB2l(meetBorrowerAtAgreedB2l);
-        lit.setWillDeliverToBorrower(willDeliverToBorrower);
-        lit.setThirdPartyPresenceL2b(thirdPartyPresenceL2b);
-        lit.setThirdPartyPresenceB2l(thirdPartyPresenceB2l);
-        lit.setBorrowerThirdPartyChoice(borrowerThirdPartyChoice);
-        lit.setAgreedThirdPartyChoiceL2b(agreedThirdPartyChoiceL2b);
-        lit.setAgreedThirdPartyChoiceB2l(agreedThirdPartyChoiceB2l);
-        lit.setBorrowerReturnsToWhichAddress(borrowerReturnsToWhichAddress);
-        lit.setWillPickUpPreferredLocationB2l(willPickUpPreferredLocationB2l);
-        lit.setLenderThirdPartyChoiceB2l(lenderThirdPartyChoiceB2l);
-        lit.setLenderThirdPartyChoiceL2b(lenderThirdPartyChoiceL2b);
-
-        sb = hib_session();
-        tx = sb.beginTransaction();
-
-        try {
-          sb.update(lit);
-          tx.commit();
-          successTransaction = true;
-          message(null, "LenderTransferUpdated", null);
-        } catch (Exception ex) {
-          message(null, "LenderTransferUpdatedFailed", null);
-          tx.rollback();
-          System.out.println("Error in Update Lender Transfer Perferenes");
-          Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-          sb = null;
-          tx = null;
-        }
-      }
-    }
-    if (successTransaction == true) {
-      ubean.setEditable(0);
-    } else {
       ubean.setEditable(1);
     }
 
-    return load_ud(ubean.getParticipant_id());
-
+    return "lender_transfer";
   }
 
   /**
