@@ -54,7 +54,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
 
   public LenderItemConditionsBean() {
   }
- 
+
   private List getCurrentItemConditions(String pid) {
 
     List result = null;
@@ -136,7 +136,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
 
     if (((lender_item_condition_id.isEmpty() == true) && (itemId == null)) && (addNewCP != null)) {
 
-      LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), "NA", this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
+      LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), itemId, this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
 
       try {
         sb = hib_session();
@@ -145,25 +145,27 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         tx.commit();
         message(null, "LenderItemConditionsSaved", null);
         successTransaction = true;
+        ubean.setEditable(1);
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in saveLenderItemCon");
         Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
         message(null, "LenderItemConditionsNotSaved", null);
-        } finally {
+        ubean.setEditable(0);
+      } finally {
         sb = null;
         tx = null;
       }
     } else {
-      
+
     }
-      if ((addNewCP != null) && (itemId.isEmpty() == false)) {
-        icList = getCurrentItemConditions_Iid(ubean.getParticipant_id(), itemId);
-      } else {
-        icList = getCurrentItemConditions(ubean.getParticipant_id());
-      }
-      
-      if (icList != null) {
+    if ((addNewCP != null) && (itemId != null)) {
+      icList = getCurrentItemConditions_Iid(ubean.getParticipant_id(), itemId);
+    } else {
+      icList = getCurrentItemConditions(ubean.getParticipant_id());
+    }
+
+    if (icList != null) {
       if (icList.size() == 1) {
         LenderItemConditions ic = (LenderItemConditions) icList.get(0);
         ic.setItemId(itemId);
@@ -194,32 +196,26 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           sb.update(ic);
           tx.commit();
           successTransaction = true;
+          ubean.setEditable(1);
           message(null, "LenderItemConditionsUpdated", null);
         } catch (Exception ex) {
           message(null, "LenderItemConditionsUpdatedFailed", null);
           tx.rollback();
           System.out.println("Error in Update Lender ITem Conditions");
           Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+          ubean.setEditable(0);
         } finally {
           sb = null;
           tx = null;
         }
-      } else {
-        successTransaction = false;
-      }
-      }
-    
-
-    if (successTransaction == true) {
-      ubean.setEditable(0);
-    } else {
-      ubean.setEditable(1);
+      } 
     }
+    
     return load_ud(ubean.getParticipant_id());
 
   }
-  
-   public String load_ud(String pid) {
+
+  public String load_ud(String pid) {
 
     List condList = null;
     Map<String, String> params = null;
@@ -229,6 +225,10 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
+      /// This doesn't work, hence below try/catch on strIid
+      if (strIid.isEmpty() == true){
+        strIid = null;
+      }
     } catch (Exception ex) {
     }
     
@@ -243,17 +243,27 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       action = params.get("action");
     } catch (Exception ex) {
     }
-
+  try {
     if (strIid != null) {
       condList = getCurrentItemConditions_Iid(pid, strIid);
-    } else {
+    } else if (itemId != null) {
       strIid = itemId;
       condList = getCurrentItemConditions_Iid(pid, itemId);
     }
-     if (condList.size() == 0) {
-      condList = getCurrentItemConditions(pid);
+  } catch(Exception ex) {
+       if (strIid.isEmpty() == false) {
+      condList = getCurrentItemConditions_Iid(pid, strIid);
+    } else if (itemId != null) {
+      strIid = itemId;
+      condList = getCurrentItemConditions_Iid(pid, itemId);
     }
     
+  }  
+    
+    if (condList == null) {
+      condList = getCurrentItemConditions(pid);
+    }
+
     if (condList != null) {
       if (condList.size() == 1) {
         LenderItemConditions pp = (LenderItemConditions) condList.get(0);
