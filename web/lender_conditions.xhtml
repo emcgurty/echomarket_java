@@ -25,6 +25,8 @@
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{userBean.userAlias}: LENDER ITEM CONDITIONS"  />
               <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="Save Item Condition Update"  rendered="#{userBean.editable == 1}" />
+              <f:param name="action" value="add_item_lic" rendered="#{!empty userBean.itemId}"/>  
+              </h:commandLink>
               <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Coonditions"  rendered="#{userBean.editable == 0}" >
                 <f:param name="iid" value="#{lenderItemConditionsBean.itemId}" />
                 <f:param name="action" value="edit" />
@@ -34,7 +36,13 @@
           <div  class="div_p" id="menu_item_6" >
             <div style="margin:10px;" >
               <h:outputText value="Lending Terms: Monetary" />
-              <h:inputHidden id="itemId" value="#{lenderItemConditionsBean.itemId}" />
+              <c:if test="#{userBean.itemId != null}" >
+                <c:set var="currentItemId" value="#{userBean.itemId}"  />
+              </c:if>  
+              <c:if test="#{lenderItemConditionsBean.itemId != null}" >
+                <c:set var="currentItemId" value="#{lenderItemConditionsBean.itemId}"   />
+              </c:if>  
+              <h:inputText id="itemId" value="#{currentItemId}"  />
               <h:inputHidden id="lender_item_condition_id" value="#{lenderItemConditionsBean.lender_item_condition_id}" />
             </div>
           </div>
