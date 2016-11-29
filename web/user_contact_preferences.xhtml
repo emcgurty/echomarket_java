@@ -28,11 +28,10 @@
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
             <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 1}" >
-               <f:param name="action" value="add_cp" rendered="#{!empty contactPreferenceBean.itemId}"/>
+              <f:param name="action" value="add_item_cp" rendered="#{!empty userBean.itemId}"/>  
             </h:commandLink>
             <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
-            <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Review Lender 'Item Transfer'"  rendered="#{(userBean.editable == 1) and (userBean.useIsWhichType() == 'lend')}"  />
-            <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Review Lender 'Item Conditions'"  rendered="#{(userBean.editable == 1) and (userBean.useIsWhichType() == 'lend')}"  />
+
           </div> 
           <div style="margin:10px;" >
             <h:outputText value="Initial Contact Preferences" />
@@ -47,8 +46,16 @@
         </div>
 
         <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-          <h:inputText id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  style="display:none;"/>
-          <h:inputText id="itemId" value="#{contactPreferenceBean.itemId}"   style="display:none;"/>
+          <h:inputText id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  />
+          
+            <c:if test="#{userBean.itemId != null}" >
+              <c:set var="currentItemId" value="#{userBean.itemId}"  />
+            </c:if>  
+            <c:if test="#{contactPreferenceBean.itemId != null}" >
+              <c:set var="currentItemId" value="#{contactPreferenceBean.itemId}"   />
+            </c:if>  
+            <h:inputText id="itemId" value="#{currentItemId}"  />
+          <h:outputText value="Initial Contact Preferences" />
           <div style="float:left;margin-left:25px">
             <div id="postalWithContactAddress" >    
               <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
