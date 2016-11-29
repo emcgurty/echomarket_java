@@ -9,13 +9,15 @@ $(document).ready(function () {
   });
 
   // For the moment okay.  Need to test for which case lending or borrowing
-  var imageViewID = $("img[id$=viewImage]");
-  if (imageViewID) {
-    var imageDirectory = $("input[id$=image_directory]");
-    var imageName = $("input[id$=image_name]");
-    imageViewID.attr('src', "resources/" + imageDirectory.val() + "/" + imageName.val());
-  }
 
+  function updatePicture() {
+    var imageViewID = $("img[id$=viewImage]");
+    if (imageViewID) {
+      var imageDirectory = $("input[id$=image_directory]");
+      var imageName = $("input[id$=image_name]");
+      imageViewID.attr('src', "resources/" + imageDirectory.val() + "/" + imageName.val());
+    }
+  }
 });
 
 function checkLegal() {
