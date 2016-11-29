@@ -222,30 +222,30 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     } else {
       ubean.setEditable(0);
     }
-    
+
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
     } catch (Exception ex) {
     }
 
-  try {
-    if (strIid != null) {
-      result = getCurrentLT_Iid(pid, strIid);
-    } else if (itemId != null) {
-      strIid = itemId;
-      result = getCurrentLT_Iid(pid, itemId);
+    try {
+      if (strIid != null) {
+        result = getCurrentLT_Iid(pid, strIid);
+      } else if (itemId != null) {
+        strIid = itemId;
+        result = getCurrentLT_Iid(pid, itemId);
+      }
+    } catch (Exception ex) {
+      if (strIid.isEmpty() == false) {
+        result = getCurrentLT_Iid(pid, strIid);
+      } else if (itemId != null) {
+        strIid = itemId;
+        result = getCurrentLT_Iid(pid, itemId);
+      }
+
     }
-  } catch(Exception ex) {
-       if (strIid.isEmpty() == false) {
-      result = getCurrentLT_Iid(pid, strIid);
-    } else if (itemId != null) {
-      strIid = itemId;
-      result = getCurrentLT_Iid(pid, itemId);
-    }
-    
-  }  
-    
+
     if (result == null) {
       result = getCurrentLT(pid);
     }
@@ -273,13 +273,12 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           this.lenderThirdPartyChoiceL2b = ltr.getLenderThirdPartyChoiceL2b();
           this.borrowerChoice = ltr.getBorrowerChoice();
           ltr = null;
-          result = null;
         }
-      } else {
+      } else if (result.size() == 0) {
         ubean.setEditable(1);
       }
     }
-
+    result = null;
     if ("edit".equals(action)) {
       ubean.setEditable(1);
     }
