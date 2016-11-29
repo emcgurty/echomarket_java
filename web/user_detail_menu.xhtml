@@ -32,7 +32,7 @@
         </c:when>
       </c:choose>
       <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="#{userBean.editable != -1}" >
-        <f:param name="action" value="cp" />
+        <f:param name="action" value="edit" />
         <f:param name="iid" value="#{itemBean.itemId}" />
       </h:commandLink>
     </li>
