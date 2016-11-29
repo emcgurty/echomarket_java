@@ -221,7 +221,7 @@ public class UserBean extends AbstractBean implements Serializable {
     } else if (this.userType.contains("borrow")) {
       returnType = "borrow";
     }
-    if ((this.userType.contains("borrower")) && (this.userType.contains("borrower"))) {
+    if ((this.userType.contains("borrow")) && (this.userType.contains("lend"))) {
       returnType = "both";
     }
     return returnType;
@@ -448,6 +448,7 @@ public class UserBean extends AbstractBean implements Serializable {
       setUserAlias(users_Array.getUserAlias());
       setUsername(users_Array.getUsername());
       setEmail(users_Array.getEmail());
+      setItemId(null);
       if (users_Array.getRoleId() == 2) {
         setIsCommunity(1);
       }
