@@ -44,6 +44,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private String contactByLinkedIn;
   private String contactByOtherSocialMedia;
   private String contactByOtherSocialMediaAccess;
+
   public ContactPreferenceBean() {
   }
 
@@ -302,7 +303,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } catch (Exception ex) {
     }
 
-    if ((contactPreferenceId.isEmpty() == true) || ("add_cp".equals(addNewCP))) {
+    if (((contactPreferenceId.isEmpty() == true) && (itemId == null)) && (addNewCP != null)) {
 
       /// Create new record
       ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
@@ -324,38 +325,46 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     } else {
 
-      cp_list = getCurrentCP(ubean.getParticipant_id());
-      ContactPreference part = (ContactPreference) cp_list.get(0);
-      part.setItemId(itemId);
-      part.setUseWhichContactAddress(useWhichContactAddress);
-      part.setContactByChat(contactByChat);
-      part.setContactByEmail(contactByEmail);
-      part.setContactByHomePhone(contactByHomePhone);
-      part.setContactByAlternativePhone(contactByAlternativePhone);
-      part.setContactByCellPhone(contactByCellPhone);
-      part.setContactByAlternativePhone(contactByAlternativePhone);
-      part.setContactByFacebook(contactByFacebook);
-      part.setContactByTwitter(contactByTwitter);
-      part.setContactByInstagram(contactByInstagram);
-      part.setContactByLinkedIn(contactByLinkedIn);
-      part.setContactByOtherSocialMedia(contactByOtherSocialMedia);
-      part.setContactByOtherSocialMediaAccess(contactByOtherSocialMediaAccess);
-      part.setDateUpdated(new Date());
+      if ((addNewCP != null) && (itemId.isEmpty() == false)) {
+        cp_list = getCurrentCP_Iid(ubean.getParticipant_id(), itemId);
+      } else {
+        cp_list = getCurrentCP(ubean.getParticipant_id());
+      }
+      if (cp_list != null) {
+        if (cp_list.size() == 1) {
+          ContactPreference part = (ContactPreference) cp_list.get(0);
+          part.setItemId(itemId);
+          part.setUseWhichContactAddress(useWhichContactAddress);
+          part.setContactByChat(contactByChat);
+          part.setContactByEmail(contactByEmail);
+          part.setContactByHomePhone(contactByHomePhone);
+          part.setContactByAlternativePhone(contactByAlternativePhone);
+          part.setContactByCellPhone(contactByCellPhone);
+          part.setContactByAlternativePhone(contactByAlternativePhone);
+          part.setContactByFacebook(contactByFacebook);
+          part.setContactByTwitter(contactByTwitter);
+          part.setContactByInstagram(contactByInstagram);
+          part.setContactByLinkedIn(contactByLinkedIn);
+          part.setContactByOtherSocialMedia(contactByOtherSocialMedia);
+          part.setContactByOtherSocialMediaAccess(contactByOtherSocialMediaAccess);
+          part.setDateUpdated(new Date());
 
-      sb = hib_session();
-      tx = sb.beginTransaction();
+          sb = hib_session();
+          tx = sb.beginTransaction();
 
-      try {
-        sb.update(part);
-        tx.commit();
-        successTransaction = true;
-      } catch (Exception ex) {
-        tx.rollback();
-        System.out.println("Error in Update Contact Preferences");
-        Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
-      } finally {
-        sb = null;
-        tx = null;
+          try {
+            sb.update(part);
+            tx.commit();
+            successTransaction = true;
+          } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in Update Contact Preferences");
+            Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
+          } finally {
+            sb = null;
+            tx = null;
+          }
+        }
       }
     }
 
@@ -414,28 +423,28 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     /// partList size  should never be zero
     if (partlist.size() == 1) {
       ContactPreference pp = (ContactPreference) partlist.get(0);
-      this.contactPreferenceId = pp.getContactPreferenceId();
-      if (pp.getItemId().isEmpty() == true) {
-        if (strIid.isEmpty() == false) {
-          this.itemId = strIid;
+      contactPreferenceId = pp.getContactPreferenceId();
+      if (pp.getItemId() == null) {
+        if (strIid != null) {
+          itemId = strIid;
         }
       } else {
-        this.itemId = pp.getItemId();
+        itemId = pp.getItemId();
       }
-
-      this.participant_id = pp.getParticipant_id();
-      this.useWhichContactAddress = pp.getUseWhichContactAddress();
-      this.contactByChat = pp.getContactByChat();
-      this.contactByEmail = pp.getContactByEmail();
-      this.contactByHomePhone = pp.getContactByHomePhone();
-      this.contactByCellPhone = pp.getContactByCellPhone();
-      this.contactByAlternativePhone = pp.getContactByAlternativePhone();
-      this.contactByFacebook = pp.getContactByFacebook();
-      this.contactByTwitter = pp.getContactByTwitter();
-      this.contactByInstagram = pp.getContactByInstagram();
-      this.contactByLinkedIn = pp.getContactByLinkedIn();
-      this.contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
-      this.contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
+      
+      participant_id = pp.getParticipant_id();
+      useWhichContactAddress = pp.getUseWhichContactAddress();
+      contactByChat = pp.getContactByChat();
+      contactByEmail = pp.getContactByEmail();
+      contactByHomePhone = pp.getContactByHomePhone();
+      contactByCellPhone = pp.getContactByCellPhone();
+      contactByAlternativePhone = pp.getContactByAlternativePhone();
+      contactByFacebook = pp.getContactByFacebook();
+      contactByTwitter = pp.getContactByTwitter();
+      contactByInstagram = pp.getContactByInstagram();
+      contactByLinkedIn = pp.getContactByLinkedIn();
+      contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
+      contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
       //this.setParticipant_alternative((List)getAddress().get(0));
     }
 
@@ -445,7 +454,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
   }
 
-  public List getCurrentCP(String pid) {
+  private List getCurrentCP(String pid) {
 
     List result = null;
     Session session = hib_session();
@@ -472,17 +481,18 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     return result;
   }
 
-  public List getCurrentCP_Iid(String pid, String iid) {
+  private List getCurrentCP_Iid(String pid, String iid) {
 
     List result = null;
     Session session = hib_session();
     Transaction tx = session.beginTransaction();
     String query = null;
     try {
-      query = "FROM ContactPreference WHERE participant_id = :pid  and item_id = :iid ORDER BY participant_id, dateCreated";
+      query = "FROM ContactPreference WHERE participant_id = :pid  and item_id = :iid ORDER BY participant_id, item_id, dateCreated";
       result = session.createQuery(query)
               .setParameter("pid", pid)
               .setParameter("iid", iid)
+              .setMaxResults(1)
               .list();
 
       tx.commit();
