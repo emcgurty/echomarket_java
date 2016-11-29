@@ -30,7 +30,6 @@
         <div class="top" >
           <div >
             <h:outputText value="NEW ITEM"  />
-            <h:outputText value="#{userBean.itemId}"  />
             <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
 
@@ -39,7 +38,6 @@
 
         <div  class="div_p" id="menu_item_3" >
           <div style="margin:10px;" >
-
             <h:outputText value="The Item you would like to Lend" rendered="#{itemBean.itemType ne 'both'}"/>
             <h:outputText value="The Item you would like to... Please select: " rendered="#{itemBean.itemType == 'both'}"/>
             <h:selectOneMenu id="which_type" value="#{itemBean.itemType}" rendered="#{itemBean.itemType == 'both'}" >
@@ -51,9 +49,11 @@
 
         <div  class="div_p"  >
           <div style="margin:10px;" >
+            
             <h:outputText value="Item Detail..." />
-            <h:inputText id="itemType" value="#{itemBean.itemType}"  style="display:none;" />
-            <h:inputText id="itemId" value="#{itemBean.itemId}"  style="display:none;" />
+            <h:inputHidden id="itemId"  value="#{userBean.itemId}"  />
+            <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
+            <!--<h:inputText id="itemId" value="#{itemBean.itemId}"  style="display:none;" />-->
             <h:inputText id="participant_id" value="#{itemBean.participant_id}"  style="display:none;" />
           </div>
         </div>
