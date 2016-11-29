@@ -305,7 +305,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     if (((contactPreferenceId.isEmpty() == true) && (itemId == null)) && (addNewCP != null)) {
 
-      /// Create new record
       ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
 
       try {
@@ -313,6 +312,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         tx = sb.beginTransaction();
         sb.save(part);
         tx.commit();
+        message(null, "CPSaved", null);
         successTransaction = true;
       } catch (Exception ex) {
         tx.rollback();
@@ -351,11 +351,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
           sb = hib_session();
           tx = sb.beginTransaction();
-
           try {
             sb.update(part);
             tx.commit();
             successTransaction = true;
+             message(null, "CPUpdated", null);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update Contact Preferences");
@@ -381,6 +381,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
   public String load_ud(String pid) {
 
+    List partlist = null;
     Map<String, String> params = null;
     String strIid = null;
     String action = null;
@@ -403,11 +404,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     }
 
     if (action != null) {
-      if ("cp".equals(action)) {
+      if ("edit".equals(action)) {
         ubean.setEditable(1);
       }
     }
-    List partlist = null;
+   
     if (strIid != null) {
       partlist = getCurrentCP_Iid(pid, strIid);
     } else {
@@ -421,6 +422,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     }
 
     /// partList size  should never be zero
+    if (partlist != null) {
     if (partlist.size() == 1) {
       ContactPreference pp = (ContactPreference) partlist.get(0);
       contactPreferenceId = pp.getContactPreferenceId();
@@ -431,7 +433,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       } else {
         itemId = pp.getItemId();
       }
-      
+
       participant_id = pp.getParticipant_id();
       useWhichContactAddress = pp.getUseWhichContactAddress();
       contactByChat = pp.getContactByChat();
@@ -447,7 +449,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
       //this.setParticipant_alternative((List)getAddress().get(0));
     }
-
+    }
     partlist = null;
 
     return "user_contact_preferences";
