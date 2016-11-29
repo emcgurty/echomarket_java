@@ -97,7 +97,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       query = " from LenderItemConditions lic "
               + " WHERE lic.participant_id = :pid "
               + " AND lic.itemId = :iid "
-              + " ORDER BY lic.participant_id, lic.item_id, lic.dateCreated ";
+              + " ORDER BY lic.participant_id, lic.itemId, lic.dateCreated ";
       result = session.createQuery(query)
               .setParameter("pid", pid)
               .setParameter("iid", iid)
@@ -208,9 +208,9 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           sb = null;
           tx = null;
         }
-      } 
+      }
     }
-    
+
     return load_ud(ubean.getParticipant_id());
 
   }
@@ -226,12 +226,12 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
       /// This doesn't work, hence below try/catch on strIid
-      if (strIid.isEmpty() == true){
+      if (strIid.isEmpty() == true) {
         strIid = null;
       }
     } catch (Exception ex) {
     }
-    
+
     if (ubean.getEditable() == 0) {
       ubean.setEditable(1);
     } else {
@@ -243,23 +243,24 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       action = params.get("action");
     } catch (Exception ex) {
     }
-  try {
-    if (strIid != null) {
-      condList = getCurrentItemConditions_Iid(pid, strIid);
-    } else if (itemId != null) {
-      strIid = itemId;
-      condList = getCurrentItemConditions_Iid(pid, itemId);
+
+    try {
+      if (strIid != null) {
+        condList = getCurrentItemConditions_Iid(pid, strIid);
+      } else if (itemId != null) {
+        strIid = itemId;
+        condList = getCurrentItemConditions_Iid(pid, itemId);
+      }
+    } catch (Exception ex) {
+      if (strIid.isEmpty() == false) {
+        condList = getCurrentItemConditions_Iid(pid, strIid);
+      } else if (itemId != null) {
+        strIid = itemId;
+        condList = getCurrentItemConditions_Iid(pid, itemId);
+      }
+
     }
-  } catch(Exception ex) {
-       if (strIid.isEmpty() == false) {
-      condList = getCurrentItemConditions_Iid(pid, strIid);
-    } else if (itemId != null) {
-      strIid = itemId;
-      condList = getCurrentItemConditions_Iid(pid, itemId);
-    }
-    
-  }  
-    
+
     if (condList == null) {
       condList = getCurrentItemConditions(pid);
     }
@@ -292,7 +293,6 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           this.securityDeposit = pp.getSecurityDeposit();
 //this.comment= pp.get(); // Later
           pp = null;
-
         }
       } else if (condList.size() == 0) {
         ubean.setEditable(1);
