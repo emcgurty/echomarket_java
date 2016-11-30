@@ -1,58 +1,86 @@
-<ui:composition 
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://xmlns.jcp.org/jsf/html"
-  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-  >
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-  <h:form id="personal_information" >
-    <div id="form_NAE" class="contact_information" >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./userDetailROTemplate.xhtml">
 
-      <h:dataTable value="#{readOnlyBean.getByNAE()}" id="ro_nae"   var="nae" >    
-        <h:column rowHeader="">
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
+  </ui:define>
 
-          <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-            <div style="margin-left: 25px;float:left">
+  <ui:define name="content"  >
+    <h:form  >
+      <div id="form_NAE"  >
 
-              <div  class="div_p" >
-                <div style="margin:5px;" >
-                  <h:outputText value="About the #{nae.itemType}er..." />
-                </div>
-              </div>
+        <h:dataTable value="${readOnlyBean.getByNAE()}" id="ro_nae"   var="nae" >    
+          <h:column rowHeader="">
 
-              <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-                <div style="float:left;margin-left:25px">
-                  <c:set var="cdes"  value=="#{cd.getOneCD(nae.contactDescribeId)}" />
-                  <h:outputLabel for="contactDescribeId"  value="#{nae.itemType}er describes his/herself as:"   >
-                    <h:outputText value="#{cdes}" class="RO_text" rendered="#{cdes ne 'other'}" />
-                    <h:outputText value="#{cdes}" class="RO_text" rendered="#{cdes ne 'other'}" />
-                  </h:outputLabel>
+            <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+              <div style="margin-left: 25px;float:left">
 
-                  <div style="float:left;margin-left:25px">
-                    <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" rendered="#{nae.displayOrganization == 1}" >
-                      <h:outputText value="#{nae.organizationName}" rendered="#{nae.displayOrganization == 1}" />
-                    </h:outputLabel>
-                  </div>
-                </div>
-              </div>
-
-              <c:if test="#{nae.displayName == 1}"  
-                    <div  class="div_p"  >
+                <div  class="div_p" >
                   <div style="margin:5px;" >
-                    <h:outputText value="#{nae.itemType}er's name:" />
-                    <h:outputText  value="#{nae.firstName} #{nae.mi}. #{nae.LastName}" rendered="#{nae.mi != null}" />
-                    <h:outputText  value="#{nae.firstName} #{nae.LastName}" rendered="#{nae.mi == null}" />
+                    <h:outputText value="About the ${'itemType'}er..." />
                   </div>
                 </div>
-              </c:if>
+
+                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+                  <div style="float:left;margin-left:25px">
+                    <c:set var="cdes"  scope="session" value="${cd.getOneCD(nae.contactDescribeId)}" />
+                    <h:outputLabel for="contactDescribeId"  value="${'itemType'}er describes his/herself as:"   >
+                      <c:choose  >
+                        <c:when test="${cdes != 'other'}"  >
+                          <h:outputText value="${cdes}" class="RO_text"  />
+                        </c:when>
+                        <c:otherwise  >
+                          <h:outputText value="${nae.otherDescribeYourself}" class="RO_text"  />
+                        </c:otherwise>
+                      </c:choose> 
+                    </h:outputLabel>
+
+                    <c:if test="${nae.displayOrganization eq 1}" >
+                      <div style="float:left;margin-left:25px">
+                        <h:outputLabel value="${bundle.OrganizationName}"  >
+                          <h:outputText value="${nae.organizationName}"  />
+                        </h:outputLabel>
+                      </div>
+                    </c:if>
+                  </div>
+
+                </div>
 
 
+
+                <div  class="div_p"  >
+                  <div style="margin:5px;" >
+                    <h:outputText value="${'itemType'}er's name:" />
+                    <c:set var="dn"  scope="session" value="${nae.displayName}" />   
+                    <h:outputText  value="${dn}"  />
+                    <c:choose>
+
+                      <c:when test="${dn eq 1}" >
+                        <h:outputText  value="${nae.firstName} ${nae.mi} ${nae.lastName}"  />
+                      </c:when>
+                      <c:otherwise>
+                        <h:outputText  value="userType name not available for public display."  />
+                      </c:otherwise>
+                    </c:choose>
+
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </h:column>
-      </h:dataTable>
-
-    </div>
-  </h:form>
+          </h:column>
+        </h:dataTable>
+      </div>
+    </h:form>
+  </ui:define>
+  <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+    </ui:define>
 </ui:composition>
