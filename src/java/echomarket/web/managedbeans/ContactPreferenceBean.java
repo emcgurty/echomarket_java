@@ -303,7 +303,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } catch (Exception ex) {
     }
 
-    if (((contactPreferenceId.isEmpty() == true) && (itemId == null)) && (addNewCP != null)) {
+    if (contactPreferenceId.isEmpty() == true) {
 
       ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date());
 
@@ -325,7 +325,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     } else {
 
-      if ((addNewCP != null) && (itemId.isEmpty() == false)) {
+      if (itemId.isEmpty() == false) {
         cp_list = getCurrentCP_Iid(ubean.getParticipant_id(), itemId);
       } else {
         cp_list = getCurrentCP(ubean.getParticipant_id());
@@ -356,10 +356,13 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             tx.commit();
             successTransaction = true;
              message(null, "CPUpdated", null);
+             ubean.setEditable(0);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update Contact Preferences");
             Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
+            message(null, "UpdateOrSaveOfCPNotSuccessful", null);
+            ubean.setEditable(1);
           } finally {
             sb = null;
             tx = null;
@@ -367,15 +370,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         }
       }
     }
-
-    if (successTransaction = true) {
-      ubean.setEditable(1);
-    } else {
-      message(null, "UpdateOrSaveOfCPNotSuccessful", null);
-      ubean.setEditable(0);
-    }
-//        return "user_detail?faces-redirect=true";
-
     return load_ud(ubean.getParticipant_id());
   }
 
@@ -412,10 +406,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     if (strIid != null) {
       partlist = getCurrentCP_Iid(pid, strIid);
     } else {
-      strIid = itemId;
       partlist = getCurrentCP_Iid(pid, itemId);
     }
-    //  if item does not have a record yet, still retrieve existing contact preferences.
 
     if (partlist.size() == 0) {
       partlist = getCurrentCP(pid);
@@ -447,7 +439,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       contactByLinkedIn = pp.getContactByLinkedIn();
       contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
       contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
-      //this.setParticipant_alternative((List)getAddress().get(0));
+      
     }
     }
     partlist = null;
@@ -490,7 +482,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     Transaction tx = session.beginTransaction();
     String query = null;
     try {
-      query = "FROM ContactPreference WHERE participant_id = :pid  and item_id = :iid ORDER BY participant_id, item_id, dateCreated";
+      query = "FROM ContactPreference WHERE participant_id = :pid  and itemId = :iid ORDER BY participant_id, itemId, dateCreated";
       result = session.createQuery(query)
               .setParameter("pid", pid)
               .setParameter("iid", iid)
