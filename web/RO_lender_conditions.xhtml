@@ -1,0 +1,391 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./userDetailROTemplate.xhtml">
+
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
+  </ui:define>
+
+  <ui:define name="content"  >
+
+    <div id="lender_registration" class="lender_registration" >
+
+      <div id="form_monetary" class="contact_information" >
+        <div class="top" >
+          <div style="margin:10px;margin-top:25px;" >
+            <h:outputText value="LENDER ITEM CONDITIONS"  />
+          </div> 
+        </div>
+        <div  class="div_p" id="menu_item_6" >
+          <div style="margin:10px;" >
+            <h:outputText value="Lending Terms: Monetary" />
+          </div>
+        </div>
+        <h:dataTable value="#{readOnlyBean.getLIC()}" id="lic"  var="pa" >    
+          <h:column rowHeader="">
+            <table class="personal">
+              <tr>
+                <td>
+                  <div style="display:inline-table;margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="forFree" value="Item available for Free?"  >
+
+                      <c:choose>
+                        <c:when test="#{lic.forFree == 0}">
+                          <c:set var="cbe" value="No"/>
+                        </c:when>
+                        <c:when test="#{lic.forFree == 1}">
+                          <c:set var="cbe" value="Yes"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="No preference provided"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="forFreeString"   value="#{cbe}" class="RO_text" />
+
+                    </h:outputLabel>
+
+                  </div>
+                </td>
+                <td>
+                  <div>
+
+                  </div></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
+                      <c:choose>
+                        <c:when test="#{lic.smallFee == 0}">
+                          <c:set var="cbe" value="No"/>
+                        </c:when>
+                        <c:when test="#{lic.smallFee == 1}">
+                          <c:set var="cbe" value="Yes, #{lic.smallFeeAmount}"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="No preference provided"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="smallFeeString"   value="#{cbe}" class="RO_text" />
+                    </h:outputLabel>
+                  </div>
+                </td>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="availableForPurchase" value="Item available for small purchase amount?:"  >
+
+                      <c:choose>
+                        <c:when test="#{lic.availableForPurchase == 0}">
+                          <c:set var="cbe" value="No"/>
+                        </c:when>
+                        <c:when test="#{lic.availableForPurchase == 1}">
+                          <c:set var="cbe" value="Yes, for #{lic.availableForPurchaseAmount}"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="No preference provided"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="availableForPurchaseString"   value="#{cbe}" class="RO_text" />
+                    </h:outputLabel>
+                  </div>
+                </td>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="availableForDonation" value="Item available for donation?:"  >
+                      <c:choose>
+                        <c:when test="#{lic.availableForDonation == 0}">
+                          <c:set var="cbe" value="No"/>
+                        </c:when>
+                        <c:when test="#{lic.availableForDonation == 1}">
+                          <c:set var="cbe" value="Yes"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="No preference provided"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="availableForDonationString"   value="#{cbe}" class="RO_text" />
+
+                    </h:outputLabel>
+
+                  </div>
+                </td>
+                <td>
+                  <div style="margin-top:5px;margin-left:25px;">
+                    <h:outputLabel for="donateAnonymous" value="Lender would like to anonymously donate:"  >
+                      <c:choose>
+                        <c:when test="#{lic.donateAnonymous == 0}">
+                          <c:set var="cbe" value="No"/>
+                        </c:when>
+                        <c:when test="#{lic.donateAnonymous == 1}">
+                          <c:set var="cbe" value="Yes"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="No preference provided"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="donateAnonymousString"   value="#{cbe}" class="RO_text" />
+
+                    </h:outputLabel>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="trade" value="Lender would be interested in trading?:"  >
+                      <c:choose>
+                        <c:when test="#{lic.trade == 0}">
+                          <c:set var="cbe" value="No"/>
+                        </c:when>
+                        <c:when test="#{lic.trade == 1}">
+                          <c:set var="cbe" value="Yes. Lender seeking #{lic.tradeItem}"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="No preference provided"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="tradeString"   value="#{cbe}" class="RO_text" />
+                    </h:outputLabel>
+
+                  </div>
+                </td>
+                <td>
+                  <div style="margin-top:5px;margin-left:25px;">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="margin-top:5px;margin-left:25px;">
+
+                    <h:outputLabel for="securityDeposit" value="Lender requires a security deposit?:"  >
+
+                      <c:choose>
+                        <c:when test="#{lic.securityDeposit == 0}">
+                          <c:set var="cbe" value="No"/>
+                        </c:when>
+                        <c:when test="#{lic.securityDeposit == 1}">
+                          <c:set var="cbe" value="Yes, lender requiring #{lic.securityDepositAmount}"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="No preference provided"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="securityDepositString"   value="#{cbe}" class="RO_text" />
+                    </h:outputLabel>
+
+                  </div>
+                </td>
+                <td>
+                </td>
+              </tr>
+            </table>
+          </h:column>
+        </h:dataTable>
+      </div>
+
+      <div id="form_duration" class="contact_information" >
+
+        <div  class="div_p" id="menu_item_126" >
+          <div style="margin:10px;" >
+            <h:outputText value="Lending Terms: Duration" />
+
+          </div>
+        </div>
+
+        <div style="float:left;width:33%;margin-left:25px;">
+
+
+          <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  >
+
+
+            <c:choose>
+              <c:when test="#{lic.agreedNumberOfDays == 0}">
+                <c:set var="cbe" value="No"/>
+              </c:when>
+              <c:when test="#{lic.agreedNumberOfDays == 1}">
+                <c:set var="cbe" value="Yes"/>
+              </c:when>
+              <c:otherwise>
+                <c:set var="cbe" value="No preference provided"/>
+              </c:otherwise>
+            </c:choose>
+            <h:outputText id="agreedNumberOfDaysString"   value="#{cbe}" class="RO_text" />
+
+          </h:outputLabel>
+
+        </div>
+
+
+        <div style="float:left;">
+          <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:"  >
+            <c:choose>
+              <c:when test="#{lic.agreedNumberOfHours == 0}">
+                <c:set var="cbe" value="No"/>
+              </c:when>
+              <c:when test="#{lic.agreedNumberOfHours == 1}">
+                <c:set var="cbe" value="Yes"/>
+              </c:when>
+              <c:otherwise>
+                <c:set var="cbe" value="No preference provided"/>
+              </c:otherwise>
+            </c:choose>
+            <h:outputText id="agreedNumberOfHoursString"   value="#{cbe}" class="RO_text" />
+
+          </h:outputLabel>
+
+
+
+
+        </div>
+        <div style="float:left;margin-left:40px;">
+
+          <h:outputLabel for="indefiniteDuration" value="Indefinite?"  >
+            <c:choose>
+              <c:when test="#{lic.indefiniteDuration == 0}">
+                <c:set var="cbe" value="No"/>
+              </c:when>
+              <c:when test="#{lic.indefiniteDuration == 1}">
+                <c:set var="cbe" value="Yes"/>
+              </c:when>
+              <c:otherwise>
+                <c:set var="cbe" value="No preference provided"/>
+              </c:otherwise>
+            </c:choose>
+            <h:outputText id="indefiniteDurationString"   value="#{cbe}" class="RO_text" />
+          </h:outputLabel>
+        </div>
+      </div>
+
+      <div id="form_conditions" class="contact_information" >
+
+        <div  class="div_p" id="menu_item_64" >
+          <div style="margin:10px;" >
+            <h:outputText value="Lending Terms: Conditions" />
+
+          </div>
+        </div>
+
+        <table class="personal" >
+          <tr>
+            <td style="vertical-align:top;">
+              <div style="margin-left:25px;margin-top:5px;">
+
+                <h:outputLabel for="presentDuringBorrowingPeriod" value="Would you like to be present during borrowing period?"  >
+                  <c:choose>
+                    <c:when test="#{lic.presentDuringBorrowingPeriod == 0}">
+                      <c:set var="cbe" value="No"/>
+                    </c:when>
+                    <c:when test="#{lic.presentDuringBorrowingPeriod == 1}">
+                      <c:set var="cbe" value="Yes"/>
+                    </c:when>
+                    <c:otherwise>
+                      <c:set var="cbe" value="No preference provided"/>
+                    </c:otherwise>
+                  </c:choose>
+                  <h:outputText id="presentDuringBorrowingPeriodString"   value="#{cbe}" class="RO_text" />
+                </h:outputLabel>
+
+              </div>
+            </td>
+            <td style="vertical-align:top;">
+
+              <div style="display:block;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
+                <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+                  <h:outputLabel for="entirePeriod" value="During the entire lending period?:"  >
+                    <c:choose>
+                      <c:when test="#{lic.entirePeriod == 0}">
+                        <c:set var="cbe" value="No"/>
+                      </c:when>
+                      <c:when test="#{lic.entirePeriod == 1}">
+                        <c:set var="cbe" value="Yes"/>
+                      </c:when>
+                      <c:otherwise>
+                        <c:set var="cbe" value="No preference provided"/>
+                      </c:otherwise>
+                    </c:choose>
+                    <h:outputText id="entirePeriodString"   value="#{cbe}" class="RO_text" />
+                  </h:outputLabel>
+
+                </div>
+                <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+
+                  <h:outputLabel for="partialPeriod" value="During lending period partially?:"  >
+                    <c:choose>
+                      <c:when test="#{lic.partialPeriod == 0}">
+                        <c:set var="cbe" value="No"/>
+                      </c:when>
+                      <c:when test="#{lic.partialPeriod == 1}">
+                        <c:set var="cbe" value="Yes"/>
+                      </c:when>
+                      <c:otherwise>
+                        <c:set var="cbe" value="No preference provided"/>
+                      </c:otherwise>
+                    </c:choose>
+                    <h:outputText id="partialPeriodString"   value="#{cbe}" class="RO_text" />
+                  </h:outputLabel>
+
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align:top;">
+              <div style="margin-left:25px;margin-top:5px;">
+                <h:outputLabel for="provideProperUseTraining" value="Would you like to provide item proper-use training?"  >
+                  <c:choose>
+                    <c:when test="#{lic.provideProperUseTraining == 0}">
+                      <c:set var="cbe" value="No"/>
+                    </c:when>
+                    <c:when test="#{lic.provideProperUseTraining == 1}">
+                      <c:set var="cbe" value="Yes"/>
+                    </c:when>
+                    <c:otherwise>
+                      <c:set var="cbe" value="No preference provided"/>
+                    </c:otherwise>
+                  </c:choose>
+                  <h:outputText id="provideProperUseTrainingString"   value="#{cbe}" class="RO_text" />
+                </h:outputLabel>
+
+              </div>
+            </td>
+            <td style="vertical-align:top;">
+              <div style="margin-left:15px;margin-top:5px;">
+                <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
+                  <h:outputText id="specificConditionsString"   value="#{lic.specificConditions}" class="RO_text" />
+                </h:outputLabel>
+              </div>
+            </td>
+          </tr>
+
+        </table>
+          </div>  
+      </div>  
+  </ui:define>
+  <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+  </ui:define>
+</ui:composition>
+
+
