@@ -1,0 +1,54 @@
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+  <h:head>        
+  </h:head>
+
+  <ul id="nav" class="user_detail_menu">
+      
+    <li class="subs" id="tab_item_3" >
+      <c:choose>
+        <c:when  test="#{userBean.itemId != null}" >
+          <c:set var="newItemLabel" value="New item #{itemBean.getCurrentItemDescription(userBean.itemId)}: Revise Initial Contact Preferences?"  />
+        </c:when>
+        <c:when  test="#{userBean.itemId == null}" >
+          <c:set var="newItemLabel" value="Initial Contact Preferences"  />
+        </c:when>
+      </c:choose>
+      <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="#{userBean.editable != -1}" >
+        <f:param name="action" value="edit" />
+        <f:param name="iid" value="#{userBean.itemId}" />
+      </h:commandLink>
+    </li>
+
+    <c:if test="#{(userBean.useIsWhichType() == 'both') or (userBean.useIsWhichType() == 'lend')}" >
+      <li >
+        <c:choose>
+          <c:when  test="#{userBean.itemId!= null}" >
+            <c:set var="newItemLabelTrans" value="Provide Item Transfer Preferences..."  />
+          </c:when>
+        </c:choose>
+        <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
+          <f:param name="iid" value="#{userBean.itemId}" />
+          <f:param name="action" value="edit" />
+        </h:commandLink>   
+      </li>
+      <li>
+        <c:choose>
+          <c:when  test="#{userBean.itemId!= null}" >
+            <c:set var="newItemLabelCond" value="Provide Item Lending Conditions..."  />
+          </c:when>
+        </c:choose>
+        <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
+          <f:param name="iid" value="#{itemBean.itemId}" />
+          <f:param name="action" value="edit" />
+        </h:commandLink>   
+      </li>
+
+    </c:if>     
+ 
+  </ul>
+</ui:composition>
