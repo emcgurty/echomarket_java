@@ -31,7 +31,15 @@ public class LenderTransfer implements java.io.Serializable {
     public LenderTransfer() {
     }
 
-    
+       public LenderTransfer(String lenderTransferId, String participant_id, String itemId, Date dateCreated, Date dateUpdated, Date dateDeleted) {
+        this.lenderTransferId = lenderTransferId;
+        this.participant_id = participant_id;
+        this.itemId = itemId;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+        this.dateDeleted = dateDeleted;
+    }
+       
     public LenderTransfer(String lenderTransferId, String itemId, String participant_id, Integer borrowerComesToWhichAddress, Integer meetBorrowerAtAgreedL2b, Integer meetBorrowerAtAgreedB2l, Integer willDeliverToBorrower, Integer thirdPartyPresenceL2b, Integer thirdPartyPresenceB2l, Integer borrowerThirdPartyChoice, Integer agreedThirdPartyChoiceL2b, Integer agreedThirdPartyChoiceB2l, Integer borrowerReturnsToWhichAddress, Integer willPickUpPreferredLocationB2l, Integer lenderThirdPartyChoiceB2l, Integer borrowerChoice, String remoteIp, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted) {
         this.lenderTransferId = lenderTransferId;
         this.itemId = itemId;
