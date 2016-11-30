@@ -1,12 +1,19 @@
-<ui:composition 
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://xmlns.jcp.org/jsf/html"
-  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-  >
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./userDetailROTemplate.xhtml">
 
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
+  </ui:define>
+
+  <ui:define name="content"  >
     <div  class="div_p" id="menu_item_3" >
       <div style="margin:10px;" >
         <h:outputText value="Item Transfer Preferences from Lender to Borrowers..." />
@@ -15,7 +22,7 @@
 
     <div  class="div_p"  >
       <div style="margin:10px;" >
-        <h:outputText value="How would like a borrower to receive your item?" />
+        <h:outputText value="How would youlike a borrower to receive your item?" />
       </div>
     </div>
 
@@ -165,46 +172,45 @@
 
     </div>
 
-  <div id="form_lender_to_borrower" class="contact_information" >
-    <h:dataTable value="#{readOnlyBean.getLenderTransfer()}" id="lender_transfer_DT"   var="pa" >    
-      <h:column rowHeader="">
-        <div style="margin-left:25px;margin-top:5px;float:left;">                    
-          <c:if test="#{lenderTransfer.meetBorrowerAtAgreedL2b == 1}">
-            <h:outputText value="Will meet with borrower at an agreed location" class="RO_text" />
-            <br />
-          </c:if>
-        </div>
+    <div id="form_lender_to_borrower" class="contact_information" >
+      <h:dataTable value="#{readOnlyBean.getLenderTransferData()}" id="lender_transfer_DT"   var="pa" >    
+        <h:column rowHeader="">
+          <div style="margin-left:25px;margin-top:5px;float:left;">                    
+            <c:if test="#{lenderTransfer.meetBorrowerAtAgreedL2b == 1}">
+              <h:outputText value="Lender will meet with borrower at an agreed location" class="RO_text" />
+              <br />
+            </c:if>
+          </div>
 
-        <div style="margin-left:25px;margin-top:5px;float:left;">                    
-          <c:if test="#{lenderTransfer.willDeliverToBorrower == 1}">
-            <h:outputText value="Will deliver to borrower preferred location." class="RO_text" />
-            <br />
-          </c:if>
-        </div>
+          <div style="margin-left:25px;margin-top:5px;float:left;">                    
+            <c:if test="#{lenderTransfer.willDeliverToBorrower == 1}">
+              <h:outputText value="Lender deliver to borrower preferred location." class="RO_text" />
+              <br />
+            </c:if>
+          </div>
 
-        <div style="margin-left:25px;margin-top:5px;float:left;">                    
-          <c:if test="#{lenderTransfer.thirdPartyPresenceL2b == 1}">
-            <h:outputText value="Would like a third-party present during transfer to borrower." class="RO_text" />
-            <br />
-          </c:if>     
-        </div>
+          <div style="margin-left:25px;margin-top:5px;float:left;">                    
+            <c:if test="#{lenderTransfer.thirdPartyPresenceL2b == 1}">
+              <h:outputText value="Lender would like a third-party present during transfer to borrower." class="RO_text" />
+              <br />
+            </c:if>     
+          </div>
 
 
-        <div id="thirdPartyPresenceL2BGroup" style="margin-left:25px;margin-top:5px;float:left">
-          <c:if test="#{lenderTransfer.lenderThirdPartyChoiceL2b == 1}">
-            <h:outputText value="Borrower may choose third-party during transfer." class="RO_text" />
-            <br />
-          </c:if>   
-        </div>  
+          <div id="thirdPartyPresenceL2BGroup" style="margin-left:25px;margin-top:5px;float:left">
+            <c:if test="#{lenderTransfer.lenderThirdPartyChoiceL2b == 1}">
+              <h:outputText value="Lender will choose third-party during transfer." class="RO_text" />
+              <br />
+            </c:if>   
+          </div>  
 
-        <div id="agreedThirdPartyChoiceL2bGroup" style="margin-left:25px;margin-top:5px;float:left">     
+          <div id="agreedThirdPartyChoiceL2bGroup" style="margin-left:25px;margin-top:5px;float:left">     
             <c:if test="#{lenderTransfer.agreedThirdPartyChoiceL2b == 1}">
-              <h:outputText value="Choose a third-party during transfer by mutal agreement." class="RO_text" />
+              <h:outputText value="Third-party choice during transfer by mutal agreement." class="RO_text" />
               <br />
             </c:if>   
 
-        </div>
-
+          </div>
 
           <div  class="div_p"  >
             <div style="margin:10px;" >
@@ -216,50 +222,31 @@
           <div style="margin-left:25px;margin-top:5px;float:left;">
 
             <div id="borrowerReturnsToWhichAddressGroup" >    
-              <h:outputLabel value="Borrower returns to your...:" for="borrowerReturnsToWhichAddress">
 
-                <c:if test="#{userBean.editable == 8}" >
-                  <c:choose>
-                    <c:when test="#{lenderTransfer.borrowerReturnsToWhichAddress == 0}">
-                      <c:set var="cbe" value="Neither, no pick up at any address"/>
-                    </c:when>
-                    <c:when test="#{lenderTransfer.borrowerReturnsToWhichAddress == 1}">
-                      <c:set var="cbe" value="Either address is fine"/>
-                    </c:when>
-                    <c:when test="#{lenderTransfer.borrowerReturnsToWhichAddress == 2}">
-                      <c:set var="cbe" value="To your alternative address"/>
-                    </c:when>
-                    <c:when test="#{lenderTransfer.borrowerReturnsToWhichAddress == 3}">
-                      <c:set var="cbe" value="To your primary address"/>
-                    </c:when>
-                    <c:otherwise>
-                      <c:set var="cbe" value="No preference provided"/>
-                    </c:otherwise>
-                  </c:choose>
-                  <h:outputText id="borrowerReturnsToWhichAddressString"   value="#{cbe}" class="RO_text" />
-                </c:if>  
+              <h:outputLabel value="Borrower returns to lender's...:" for="borrowerReturnsToWhichAddress">
+                <c:choose>
+                  <c:when test="#{lenderTransfer.borrowerReturnsToWhichAddress == 1}">
+                    <c:set var="cbe" value="primary or alternative address"/>
+                  </c:when>
+                  <c:when test="#{lenderTransfer.borrowerReturnsToWhichAddress == 2}">
+                    <c:set var="cbe" value="alternative address"/>
+                  </c:when>
+                  <c:when test="#{lenderTransfer.borrowerReturnsToWhichAddress == 3}">
+                    <c:set var="cbe" value="primary address"/>
+                  </c:when>
+                </c:choose>
+                <h:outputText id="borrowerReturnsToWhichAddressString"   value="#{cbe}" class="RO_text" />
+
               </h:outputLabel>
             </div>
 
-            <h:outputLabel for="meetBorrowerAtAgreedB2l" value="Will meet with borrower at an agreed location?:"  >
+            <c:if test="#{lenderTransfer.meetBorrowerAtAgreedB2l == 1}">
+              <h:outputText value="Lender meet with borrower at an agreed location" class="RO_text" />
+              <br />
+            </c:if>   
 
-              <c:if test="#{userBean.editable == 8}" >
-                <c:choose>
-                  <c:when test="#{lenderTransfer.meetBorrowerAtAgreedB2l == 0}">
-                    <c:set var="cbe" value="No"/>
-                  </c:when>
-                  <c:when test="#{lenderTransfer.meetBorrowerAtAgreedB2l == 1}">
-                    <c:set var="cbe" value="Yes"/>
-                  </c:when>
-                  <c:otherwise>
-                    <c:set var="cbe" value="No preference provided"/>
-                  </c:otherwise>
-                </c:choose>
-                <h:outputText id="meetBorrowerAtAgreedB2lString"   value="#{cbe}" class="RO_text" />
-              </c:if>  
-            </h:outputLabel>  
 
-            <h:outputLabel for="willPickUpPreferredLocationB2l" value="Will pick up at borrower's location?:"  >
+            <h:outputLabel for="willPickUpPreferredLocationB2l" value="Lender will pick up at borrower's location?:"  >
 
               <c:if test="#{userBean.editable == 8}" >
                 <c:choose>
@@ -281,7 +268,7 @@
 
           <div style="margin-left:25px;margin-top:5px;float:left;">
 
-            <h:outputLabel for="thirdPartyPresenceB2l" value="Would you like a third-party present during transfer from borrower?:"  >
+            <h:outputLabel for="thirdPartyPresenceB2l" value="Lender would like a third-party present during transfer from borrower?:"  >
 
               <c:if test="#{userBean.editable == 8}" >
                 <c:choose>
@@ -301,46 +288,50 @@
           </div>
 
           <div id="thirdPartyPresenceB2lGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
-            <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceB2l">
+            <h:outputLabel value="Lender's choice?:" for="lenderThirdPartyChoiceB2l">
 
-              <c:if test="#{userBean.editable == 8}" >
-                <c:choose>
-                  <c:when test="#{lenderTransfer.lenderThirdPartyChoiceB2l == 0}">
-                    <c:set var="cbe" value="No"/>
-                  </c:when>
-                  <c:when test="#{lenderTransfer.lenderThirdPartyChoiceB2l == 1}">
-                    <c:set var="cbe" value="Yes"/>
-                  </c:when>
-                  <c:otherwise>
-                    <c:set var="cbe" value="No preference provided"/>
-                  </c:otherwise>
-                </c:choose>
-                <h:outputText id="lenderThirdPartyChoiceB2lString"   value="#{cbe}" class="RO_text" />
-              </c:if>  
+
+              <c:choose>
+                <c:when test="#{lenderTransfer.lenderThirdPartyChoiceB2l == 0}">
+                  <c:set var="cbe" value="No"/>
+                </c:when>
+                <c:when test="#{lenderTransfer.lenderThirdPartyChoiceB2l == 1}">
+                  <c:set var="cbe" value="Yes"/>
+                </c:when>
+                <c:otherwise>
+                  <c:set var="cbe" value="No preference provided"/>
+                </c:otherwise>
+              </c:choose>
+              <h:outputText id="lenderThirdPartyChoiceB2lString"   value="#{cbe}" class="RO_text" />
+
             </h:outputLabel>
             <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceB2l">
 
-              <c:if test="#{userBean.editable == 8}" >
-                <c:choose>
-                  <c:when test="#{lenderTransfer.agreedThirdPartyChoiceB2l == 0}">
-                    <c:set var="cbe" value="No"/>
-                  </c:when>
-                  <c:when test="#{lenderTransfer.agreedThirdPartyChoiceB2l == 1}">
-                    <c:set var="cbe" value="Yes"/>
-                  </c:when>
-                  <c:otherwise>
-                    <c:set var="cbe" value="No preference provided"/>
-                  </c:otherwise>
-                </c:choose>
-                <h:outputText id="agreedThirdPartyChoiceB2lString"   value="#{cbe}" class="RO_text" />
-              </c:if>  
+
+              <c:choose>
+                <c:when test="#{lenderTransfer.agreedThirdPartyChoiceB2l == 0}">
+                  <c:set var="cbe" value="No"/>
+                </c:when>
+                <c:when test="#{lenderTransfer.agreedThirdPartyChoiceB2l == 1}">
+                  <c:set var="cbe" value="Yes"/>
+                </c:when>
+                <c:otherwise>
+                  <c:set var="cbe" value="No preference provided"/>
+                </c:otherwise>
+              </c:choose>
+              <h:outputText id="agreedThirdPartyChoiceB2lString"   value="#{cbe}" class="RO_text" />
+
             </h:outputLabel>
 
           </div>
 
-      </h:column>
-    </h:dataTable>
-  </div>
+        </h:column>
+      </h:dataTable>
+    </div>
+  </ui:define>
+  <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+    </ui:define>
 </ui:composition>
 
 
