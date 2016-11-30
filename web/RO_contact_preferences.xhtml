@@ -1,282 +1,295 @@
-<ui:composition 
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://xmlns.jcp.org/jsf/html"
-  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-  xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-  <div id="form_contact_preference" class="contact_information" >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./userDetailROTemplate.xhtml">
 
-    <h:dataTable value="#{readOnlyBean.getPrimaryAddress(readOnlyBean.itemId)}" id="primary"   var="pa" >    
-      <h:column rowHeader="">
-        <div  class="div_p"  >
-          <div style="margin:10px;" >
-            <h:outputText value="Contact Option: By Primary Adddress.." />
-          </div>
-        </div>
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
+  </ui:define>
 
-        <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-          <div style="float:left;margin-left:25px">
-            <div id="postalWithContactAddress" >    
-              <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                <div style="margin-left: 15px;float:left">
+  <ui:define name="content"  >
 
-                  <table >
-                    <tr>
-                      <td>
-                        <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
-                        <h:outputText value="#{pa.addressLine1}" class="RO_text" />
+    <div id="RO_form_contact_preference" class="contact_information" >
 
-                      </td>
-                      <td>
-                        <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
-                        <h:outputText value="#{pa.addressLine2}" class="RO_text" />
-                      </td>
-                    </tr> 
-                    <tr>
-                      <td>
-                        <h:outputLabel for="city" value="#{bundle.City}"/>
-                        <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
-
-                      </td>
-                      <td>
-                        <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
-                        <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <h:outputLabel for="province" value="#{bundle.Province}"  />
-                        <h:outputText value="#{pa.province}" class="RO_text" />
-
-                      </td>
-                      <td>
-                        <h:outputLabel for="region" value="#{bundle.Region}" />
-                        <h:outputText value="#{pa.region}" class="RO_text" />
-                      </td>
-                    </tr>
-                    <tr >
-                      <td >
-                        <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
-                        <h:outputText value="#{pa.postalCode}" class="RO_text" />
-                      </td>
-                      <td >
-                        <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
-                        <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
-                      </td>
-                    </tr>
-                  </table>
-
-
-                </div>
-              </div>    
-
+      <h:dataTable value="#{readOnlyBean.getPrimaryAddress(readOnlyBean.itemId)}" id="primary"   var="pa" >    
+        <h:column rowHeader="">
+          <div  class="div_p"  >
+            <div style="margin:10px;" >
+              <h:outputText value="Contact Option: By Primary Adddress.." />
             </div>
           </div>
-        </div>
-      </h:column>
-    </h:dataTable>
 
-    <h:dataTable value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}" id="alternative"   var="pa" >    
-      <h:column rowHeader="">
+          <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+            <div style="float:left;margin-left:25px">
+              <div id="postalWithContactAddress" >    
+                <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                  <div style="margin-left: 15px;float:left">
 
-        <div  class="div_p"  >
-          <div style="margin:10px;" >
-            <h:outputText value="Contact Option: By Alternative Adddress.." />
-          </div>
-        </div>
+                    <table >
+                      <tr>
+                        <td>
+                          <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
+                          <h:outputText value="#{pa.addressLine1}" class="RO_text" />
 
-        <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-          <div style="float:left;margin-left:25px">
-            <div id="postalWithContactAddress" >    
-              <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                <div style="margin-left: 15px;float:left">
+                        </td>
+                        <td>
+                          <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                          <h:outputText value="#{pa.addressLine2}" class="RO_text" />
+                        </td>
+                      </tr> 
+                      <tr>
+                        <td>
+                          <h:outputLabel for="city" value="#{bundle.City}"/>
+                          <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
 
-                  <table >
-                    <tr>
-                      <td>
-                        <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
-                        <h:outputText value="#{pa.addressLine1}" class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                          <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <h:outputLabel for="province" value="#{bundle.Province}"  />
+                          <h:outputText value="#{pa.province}" class="RO_text" />
 
-                      </td>
-                      <td>
-                        <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
-                        <h:outputText value="#{pa.addressLine2}" class="RO_text" />
-                      </td>
-                    </tr> 
-                    <tr>
-                      <td>
-                        <h:outputLabel for="city" value="#{bundle.City}"/>
-                        <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="region" value="#{bundle.Region}" />
+                          <h:outputText value="#{pa.region}" class="RO_text" />
+                        </td>
+                      </tr>
+                      <tr >
+                        <td >
+                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
+                          <h:outputText value="#{pa.postalCode}" class="RO_text" />
+                        </td>
+                        <td >
+                          <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                          <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
+                        </td>
+                      </tr>
+                    </table>
 
-                      </td>
-                      <td>
-                        <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
-                        <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <h:outputLabel for="province" value="#{bundle.Province}"  />
-                        <h:outputText value="#{pa.province}" class="RO_text" />
 
-                      </td>
-                      <td>
-                        <h:outputLabel for="region" value="#{bundle.Region}" />
-                        <h:outputText value="#{pa.region}" class="RO_text" />
-                      </td>
-                    </tr>
-                    <tr >
-                      <td >
-                        <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
-                        <h:outputText value="#{pa.postalCode}" class="RO_text" />
-                      </td>
-                      <td >
-                        <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
-                        <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              </div>    
+                  </div>
+                </div>    
+
+              </div>
             </div>
           </div>
-        </div>
-      </h:column>
-    </h:dataTable>
+        </h:column>
+      </h:dataTable>
 
-    <h:dataTable value="#{readOnlyBean.getByChat()}" id="byChat" >    
-      <h:column rowHeader="">
+      <h:dataTable value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}" id="alternative"   var="pa" >    
+        <h:column rowHeader="">
 
-        <div  class="div_p"  >
-          <div style="margin:10px;" >
-            <h:outputText value="Contact Option: By Chat..." />
+          <div  class="div_p"  >
+            <div style="margin:10px;" >
+              <h:outputText value="Contact Option: By Alternative Adddress.." />
+            </div>
           </div>
-        </div>
 
-        <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+          <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+            <div style="float:left;margin-left:25px">
+              <div id="postalWithContactAddress" >    
+                <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+                  <div style="margin-left: 15px;float:left">
+
+                    <table >
+                      <tr>
+                        <td>
+                          <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
+                          <h:outputText value="#{pa.addressLine1}" class="RO_text" />
+
+                        </td>
+                        <td>
+                          <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                          <h:outputText value="#{pa.addressLine2}" class="RO_text" />
+                        </td>
+                      </tr> 
+                      <tr>
+                        <td>
+                          <h:outputLabel for="city" value="#{bundle.City}"/>
+                          <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
+
+                        </td>
+                        <td>
+                          <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                          <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <h:outputLabel for="province" value="#{bundle.Province}"  />
+                          <h:outputText value="#{pa.province}" class="RO_text" />
+
+                        </td>
+                        <td>
+                          <h:outputLabel for="region" value="#{bundle.Region}" />
+                          <h:outputText value="#{pa.region}" class="RO_text" />
+                        </td>
+                      </tr>
+                      <tr >
+                        <td >
+                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
+                          <h:outputText value="#{pa.postalCode}" class="RO_text" />
+                        </td>
+                        <td >
+                          <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                          <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>    
+              </div>
+            </div>
+          </div>
+        </h:column>
+      </h:dataTable>
+
+      <h:dataTable value="#{readOnlyBean.getByChat()}" id="byChat" >    
+        <h:column rowHeader="">
+
+          <div  class="div_p"  >
+            <div style="margin:10px;" >
+              <h:outputText value="Contact Option: By Chat..." />
+            </div>
+          </div>
+
+          <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+            <div style="float:left;margin-left:25px;">
+
+              <h:outputLabel for="contactByChat" value="Contact by chat?:"  >
+                <h:outputText id="contactByChatString"   value="Yes" class="RO_text" />
+
+              </h:outputLabel>
+            </div>
+          </div>
+        </h:column>
+      </h:dataTable>
+
+      <h:dataTable value="#{readOnlyBean.getByEmail()}" id="byEmail" var="bye">    
+        <h:column rowHeader="">
+          <div  class="div_p"  >
+            <div style="margin:10px;" >
+              <h:outputText value="Contact Option: By Email..." />
+            </div>
+          </div>
+
+          <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+            <div style="float:left;margin-left:25px;">
+              <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
+                <c:choose>
+                  <c:when test="#{bye.contactByEmail== 1}">
+                    <h:outputText id="contactByEmailAltString"   value="By email: #{bye.altemail} "  class="RO_text" />
+                    <h:outputText id="contactByEmailAndString"   value="and #{bye.lemail}"  class="RO_text" rendered="#{bye.contactByEmail == '1'}"/>
+                  </c:when>
+                  <c:when test="#{bye.contactByEmail == 2}">
+                    <h:outputText id="contactByEmailString"   value="By email: #{bye.altemail}"  class="RO_text" />
+                  </c:when>
+                  <c:when test="#{bye.contactByEmail== 3}">
+                    <h:outputText id="contactByEmailString"   value="By email: #{bye.lemail}"  class="RO_text" />
+                  </c:when>
+                </c:choose>
+              </h:outputLabel>
+            </div>
+          </div>
+        </h:column>
+      </h:dataTable>
+
+      <h:dataTable value="#{readOnlyBean.getByPhone()}" id="byPhone" var="byp">    
+        <h:column rowHeader="">
+          <div  class="div_p"  id="display_phone">
+            <div style="margin:10px;" >
+              <h:outputText value="Contact Option: By Phone..." />
+            </div>
+          </div>
+          <div style="float:left;margin-left:25px;display:block;" >
+            <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
+              <h:outputLabel value="er home phone?:"  for="contactByHomePhone" rendered="#{byp.contactByHomePhone == 1 and byp.displayHomePhone == 1}" >
+                <h:outputText id="contactByHomePhoneString"   value="#{byp.homePhone}"  class="RO_text"  rendered="#{byp.contactByHomePhone == 1 and byp.displayHomePhone == 1}" />
+              </h:outputLabel> 
+            </div>
+            <div style="margin-left:25px;float:left;" id="display_cellPhone" class="phone" >
+              <h:outputLabel value="... cell phone?:"  for="contactByCellPhone"  rendered="#{byp.contactByCellPhone = 1 and byp.displayCellPhone == 1}" >
+                <h:outputText id="contactByCellPhoneString"   value="#{participantBean.getCellPhone}"  class="RO_text"  rendered="#{byp.contactByCellPhone = 1 and byp.displayCellPhone == 1}" />
+              </h:outputLabel>
+            </div>
+            <div style="margin-left:25px;float:left;" id="display_alternativePhone" class="phone" >
+              <h:outputLabel value="... by phone?:"  for="contactByAlternativePhone" rendered="#{byp.contactByAlternativePhone = 1 and byp.displayAlternativePhone == 1}" >
+                <h:outputText id="contactByAlternativePhoneString"   value="#{byp.alternativePhone}"   class="RO_text" rendered="#{byp.contactByAlternativePhone = 1 and byp.displayAlternativePhone == 1}" />
+              </h:outputLabel>
+            </div>
+          </div>
+        </h:column>
+      </h:dataTable>
+
+      <h:dataTable value="#{readOnlyBean.getBySocialMedia()}" id="bySocialMedia" var="bysm">    
+        <h:column rowHeader="">
+
+          <div  class="div_p"  >
+            <div style="margin:10px;" >
+              <h:outputText value="Contact Option: By Social Media..." />
+            </div>
+          </div>
+
           <div style="float:left;margin-left:25px;">
+            <c:if test="#{bysm.contactByFacebook != null}" >
+              <div style="margin-left:25px;float:left;" class="phone" >
+                <h:outputLabel value="Your Facebook Account:" for="contactByFacebook" >
+                  <h:outputText  id="contactByFacebook" value="#{contactPreferenceBean.contactByFacebook}" style="margin-left:5px;"    class="RO_text" /> 
+                </h:outputLabel>
+              </div> 
+            </c:if>
+            <c:if test="#{bysm.contactByLinkedIn != null}" >
+              <div style="margin-left:25px;float:left;" class="phone" >          
+                <h:outputLabel value="Your LinkedIn Account:" for="contactByLinkedIn" >
+                  <h:outputText  id="contactByLinkedIno" value="#{contactPreferenceBean.contactByLinkedIn}" style="margin-left:5px;"   class="RO_text"  /> 
+                </h:outputLabel>
+              </div>
+            </c:if>
+            <c:if test="#{bysm.contactByTwitter != null}" >
+              <div style="margin-left:25px;float:left;" class="phone" >          
+                <h:outputLabel value="Your Twitter Account:" for="contactByTwitter" >
+                  <h:outputText   value="#{contactPreferenceBean.contactByTwitter}" style="margin-left:5px;" class="RO_text"  />
+                </h:outputLabel>
+              </div>
+            </c:if>
+            <c:if test="#{bysm.contactByInstagram != null}" >
+              <div style="margin-left:25px;float:left;" class="phone" >          
+                <h:outputLabel value="Your Instagram Account:" for="contactByInstagram" >
+                  <h:outputText value="#{contactPreferenceBean.contactByInstagram}" style="margin-left:5px;"  class="RO_text"  />                                
+                </h:outputLabel>
+              </div>
+            </c:if>
+            <c:if test="#{bysm.contactByOtherSocialMedia != null}" >
+              <div style="margin-left:25px;float:left;" class="phone" >
+                <h:outputLabel value="Other Social Media:" for="contactByOtherSocialMedia" >
+                  <h:outputText  value="#{contactPreferenceBean.contactByOtherSocialMedia}" style="margin-left:5px;"  class="RO_text" />
+                </h:outputLabel>
+                <br />
 
-            <h:outputLabel for="contactByChat" value="Contact by chat?:"  >
-              <h:outputText id="contactByChatString"   value="Yes" class="RO_text" />
-
-            </h:outputLabel>
+                <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess" >
+                  <h:outputText  value="#{contactPreferenceBean.contactByOtherSocialMediaAccess}" style="margin-left:5px;" class="RO_text" /> 
+                </h:outputLabel>
+              </div>
+            </c:if>
           </div>
-        </div>
-      </h:column>
-    </h:dataTable>
+        </h:column>
+      </h:dataTable>
 
-    <h:dataTable value="#{readOnlyBean.getByEmail()}" id="byEmail" var="bye">    
-      <h:column rowHeader="">
-        <div  class="div_p"  >
-          <div style="margin:10px;" >
-            <h:outputText value="Contact Option: By Email..." />
-          </div>
-        </div>
-
-        <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-          <div style="float:left;margin-left:25px;">
-            <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
-              <c:choose>
-                <c:when test="#{bye.contactByEmail== 1}">
-                  <h:outputText id="contactByEmailAltString"   value="By email: #{bye.altemail} "  class="RO_text" />
-                  <h:outputText id="contactByEmailAndString"   value="and #{bye.lemail}"  class="RO_text" rendered="#{bye.contactByEmail == '1'}"/>
-                </c:when>
-                <c:when test="#{bye.contactByEmail == 2}">
-                  <h:outputText id="contactByEmailString"   value="By email: #{bye.altemail}"  class="RO_text" />
-                </c:when>
-                <c:when test="#{bye.contactByEmail== 3}">
-                  <h:outputText id="contactByEmailString"   value="By email: #{bye.lemail}"  class="RO_text" />
-                </c:when>
-              </c:choose>
-            </h:outputLabel>
-          </div>
-        </div>
-      </h:column>
-    </h:dataTable>
-
-    <h:dataTable value="#{readOnlyBean.getByPhone()}" id="byPhone" var="byp">    
-      <h:column rowHeader="">
-        <div  class="div_p"  id="display_phone">
-          <div style="margin:10px;" >
-            <h:outputText value="Contact Option: By Phone..." />
-          </div>
-        </div>
-        <div style="float:left;margin-left:25px;display:block;" >
-          <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
-            <h:outputLabel value="#{fn:toUpperCase(byp.itemType)}er home phone?:"  for="contactByHomePhone" rendered="#{byp.contactByHomePhone == 1 and byp.displayHomePhone == 1}" >
-              <h:outputText id="contactByHomePhoneString"   value="#{byp.homePhone}"  class="RO_text"  rendered="#{byp.contactByHomePhone == 1 and byp.displayHomePhone == 1}" />
-            </h:outputLabel> 
-          </div>
-          <div style="margin-left:25px;float:left;" id="display_cellPhone" class="phone" >
-            <h:outputLabel value="... cell phone?:"  for="contactByCellPhone"  rendered="#{byp.contactByCellPhone = 1 and byp.displayCellPhone == 1}" >
-              <h:outputText id="contactByCellPhoneString"   value="#{participantBean.getCellPhone}"  class="RO_text"  rendered="#{byp.contactByCellPhone = 1 and byp.displayCellPhone == 1}" />
-            </h:outputLabel>
-          </div>
-          <div style="margin-left:25px;float:left;" id="display_alternativePhone" class="phone" >
-            <h:outputLabel value="... by phone?:"  for="contactByAlternativePhone" rendered="#{byp.contactByAlternativePhone = 1 and byp.displayAlternativePhone == 1}" >
-              <h:outputText id="contactByAlternativePhoneString"   value="#{byp.alternativePhone}"   class="RO_text" rendered="#{byp.contactByAlternativePhone = 1 and byp.displayAlternativePhone == 1}" />
-            </h:outputLabel>
-          </div>
-        </div>
-      </h:column>
-    </h:dataTable>
-
-    <h:dataTable value="#{readOnlyBean.getBySocialMedia()}" id="bySocialMedia" var="bysm">    
-      <h:column rowHeader="">
-
-        <div  class="div_p"  >
-          <div style="margin:10px;" >
-            <h:outputText value="Contact Option: By Social Media..." />
-          </div>
-        </div>
-
-        <div style="float:left;margin-left:25px;">
-          <c:if test="#{bysm.contactByFacebook != null}" >
-            <div style="margin-left:25px;float:left;" class="phone" >
-              <h:outputLabel value="Your Facebook Account:" for="contactByFacebook" >
-                <h:outputText  id="contactByFacebook" value="#{cpb.contactByFacebook}" style="margin-left:5px;"    class="RO_text" /> 
-              </h:outputLabel>
-            </div> 
-          </c:if>
-          <c:if test="#{bysm.contactByLinkedIn != null}" >
-            <div style="margin-left:25px;float:left;" class="phone" >          
-              <h:outputLabel value="Your LinkedIn Account:" for="contactByLinkedIn" >
-                <h:outputText  id="contactByLinkedIno" value="#{cpb.contactByLinkedIn}" style="margin-left:5px;"   class="RO_text"  /> 
-              </h:outputLabel>
-            </div>
-          </c:if>
-          <c:if test="#{bysm.contactByTwitter != null}" >
-            <div style="margin-left:25px;float:left;" class="phone" >          
-              <h:outputLabel value="Your Twitter Account:" for="contactByTwitter" >
-                <h:outputText   value="#{cpb.contactByTwitter}" style="margin-left:5px;" class="RO_text"  />
-              </h:outputLabel>
-            </div>
-          </c:if>
-          <c:if test="#{bysm.contactByInstagram != null}" >
-            <div style="margin-left:25px;float:left;" class="phone" >          
-              <h:outputLabel value="Your Instagram Account:" for="contactByInstagram" >
-                <h:outputText value="#{cpb.contactByInstagram}" style="margin-left:5px;"  class="RO_text"  />                                
-              </h:outputLabel>
-            </div>
-          </c:if>
-          <c:if test="#{bysm.contactByOtherSocialMedia != null}" >
-            <div style="margin-left:25px;float:left;" class="phone" >
-              <h:outputLabel value="Other Social Media:" for="contactByOtherSocialMedia" >
-                <h:outputText  value="#{cpb.contactByOtherSocialMedia}" style="margin-left:5px;"  class="RO_text" />
-              </h:outputLabel>
-              <br />
-
-              <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess" >
-                <h:outputText  value="#{cpb.contactByOtherSocialMediaAccess}" style="margin-left:5px;" class="RO_text" /> 
-              </h:outputLabel>
-            </div>
-          </c:if>
-        </div>
-      </h:column>
-    </h:dataTable>
-
-  </div>
-
+    </div>
+  </ui:define>
+  
+  <ui:define name="footer"  >
+        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+    </ui:define>
 </ui:composition>
