@@ -24,16 +24,16 @@
     </li>
     <li class="subs" id="tab_item_3" >
       <c:choose>
-        <c:when  test="#{userBean.itemId!= null}" >
+        <c:when  test="#{userBean.itemId != null}" >
           <c:set var="newItemLabel" value="New item #{itemBean.getCurrentItemDescription(userBean.itemId)}: Revise Initial Contact Preferences?"  />
         </c:when>
-        <c:when  test="#{userBean.itemId== null}" >
+        <c:when  test="#{userBean.itemId == null}" >
           <c:set var="newItemLabel" value="Initial Contact Preferences"  />
         </c:when>
       </c:choose>
       <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="#{userBean.editable != -1}" >
         <f:param name="action" value="edit" />
-        <f:param name="iid" value="#{itemBean.itemId}" />
+        <f:param name="iid" value="#{userBean.itemId}" />
       </h:commandLink>
     </li>
 
@@ -48,7 +48,7 @@
           </c:when>
         </c:choose>
         <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
-          <f:param name="iid" value="#{itemBean.itemId}" />
+          <f:param name="iid" value="#{userBean.itemId}" />
           <f:param name="action" value="edit" />
         </h:commandLink>   
       </li>
