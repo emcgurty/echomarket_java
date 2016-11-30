@@ -117,16 +117,11 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     tx = null;
     List litList = null;
     Boolean successTransaction = false;
-
     Map<String, String> params = null;
     String addNewCP = null;
-    try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-      addNewCP = params.get("action");
-    } catch (Exception ex) {
-    }
+    String strIid = null;
 
-    if (((lenderTransferId.isEmpty() == true) && (itemId == null)) && (addNewCP != null)) {
+    if (lenderTransferId.isEmpty()) {
 
       LenderTransfer lt = new LenderTransfer(getId(), itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
 
@@ -147,13 +142,12 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       } finally {
         sb = null;
         tx = null;
-
       }
     } else {
       // Do update
-      if ((addNewCP != null) && (itemId != null)) {
+      if (itemId.isEmpty() == false) {
         litList = getCurrentLT_Iid(ubean.getParticipant_id(), itemId);
-      } else {
+      }else {
         litList = getCurrentLT(ubean.getParticipant_id());
       }
       if (litList != null) {
@@ -228,19 +222,20 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       action = params.get("action");
     } catch (Exception ex) {
     }
+    if ("edit".equals(action)) {
+        ubean.setEditable(1);
+      }
 
     try {
       if (strIid != null) {
         result = getCurrentLT_Iid(pid, strIid);
       } else if (itemId != null) {
-        strIid = itemId;
         result = getCurrentLT_Iid(pid, itemId);
       }
     } catch (Exception ex) {
       if (strIid.isEmpty() == false) {
         result = getCurrentLT_Iid(pid, strIid);
       } else if (itemId != null) {
-        strIid = itemId;
         result = getCurrentLT_Iid(pid, itemId);
       }
 
@@ -274,15 +269,10 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           this.borrowerChoice = ltr.getBorrowerChoice();
           ltr = null;
         }
-      } else if (result.size() == 0) {
-        ubean.setEditable(1);
       }
     }
     result = null;
-    if ("edit".equals(action)) {
-      ubean.setEditable(1);
-    }
-
+    
     return "lender_transfer";
   }
 
