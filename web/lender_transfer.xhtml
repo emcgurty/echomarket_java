@@ -15,19 +15,20 @@
 
   <ui:define name="content">
     <h:form id="lender_transfer_content" >
-
+      <div class="message.color">
+        <h:messages showSummary="true" 
+                    showDetail="false"
+                    errorStyle="color: #d20005" 
+                    infoStyle="color: blue"/>
+      </div>
       <div id="form_lender_to_borrower" class="contact_information" >
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_contact_preferences"></ui:include>  
 
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: LENDER ITEM TRANSFER PREFERENCES"  />
-            <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Save Item Transfer Preferences"  rendered="#{userBean.editable == 1}" >
-              <f:param name="action" value="add_item_lit" rendered="#{!empty userBean.itemId}"/>  
-            </h:commandLink>
-
+            <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Save Item Transfer Preferences"  rendered="#{userBean.editable == 1}"  />
             <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="#{userBean.editable == 0}" >
-              <f:param name="iid" value="#{lenderTransferBean.itemId}" />
               <f:param name="action" value="edit" />
             </h:commandLink>
           </div> 
@@ -44,14 +45,7 @@
           <div style="margin:10px;" >
             <h:outputText value="How would you like a borrower to receive your item?" />
             <h:inputHidden id="lenderTransferId" value="#{lenderTransferBean.lenderTransferId}" />
-            <c:if test="#{userBean.itemId != null}" >
-              <c:set var="currentItemId" value="#{userBean.itemId}"  />
-            </c:if>  
-            <c:if test="#{lenderTransferBean.itemId != null}" >
-              <c:set var="currentItemId" value="#{lenderTransferBean.itemId}"   />
-            </c:if>  
-            <h:inputText id="itemId" value="#{currentItemId}"  />
-            
+            <h:inputHidden id="itemId" value="#{lenderTransferBean.itemId}"  />
           </div>
         </div>
 
