@@ -21,7 +21,6 @@ import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-//See for https://github.com/lovelle/jquery-chat
 @Named
 @ManagedBean(name = "cpb")
 @SessionScoped
