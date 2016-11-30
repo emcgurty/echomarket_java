@@ -1,6 +1,7 @@
 package echomarket.web.managedbeans;
 
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
+import echomarket.hibernate.ContactPreference;
 import echomarket.hibernate.Items;
 import echomarket.hibernate.ItemImages;
 import echomarket.hibernate.LenderItemConditions;
@@ -249,7 +250,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     }
 
-    if (itemId.isEmpty() == true) {
+    if (itemId == null) {
 
       Items ii = new Items(new_iid, ubean.getParticipant_id(), categoryId, otherItemCategory,
               itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, itemType);
@@ -271,13 +272,18 @@ public class ItemBean extends AbstractBean implements Serializable {
         tx = null;
       }
       if (bret == true) {
-        bret = removeNAFromLIC(ubean.getParticipant_id(), new_iid);
+        bret = removeNullInLIC(ubean.getParticipant_id(), new_iid);
       }
 
       if (bret == true) {
-        bret = removeNAFromLIT(ubean.getParticipant_id(), new_iid);
+        bret = removeNullInLIT(ubean.getParticipant_id(), new_iid);
       }
 
+      if (bret == true) {
+        bret = removeNullInCP(ubean.getParticipant_id(), new_iid);
+      }
+
+      
     } else {
       result = getCurrentItem(itemId);
       if (result.size() == 1) {
@@ -332,17 +338,16 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
 
     if (bret == true) {
-
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
-      ubean.setEditable(0);
-      if (itemId.isEmpty() == true) {
+      ubean.setEditable(1);
+      if (itemId == null) {
         this.itemId = new_iid;
       }
       return this.load_ud(itemType, itemId);
 
     } else {
       message(null, "ItemRecordNotUpdated", null);
-
+ubean.setEditable(1);
       if (itemType == "lend") {
         return "lender_user_item";
       } else {
@@ -872,7 +877,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     this.itemType = itemType;
   }
 
-  private Boolean removeNAFromLIC(String pid, String iid) {
+  private Boolean removeNullInLIC(String pid, String iid) {
 
     List result = null;
     Session session = null;
@@ -887,7 +892,7 @@ public class ItemBean extends AbstractBean implements Serializable {
               + " AND lic.itemId = :iid ";
       result = session.createQuery(query)
               .setParameter("pid", pid)
-              .setParameter("iid", "NA")
+              .setParameter("iid", "")
               .setMaxResults(1)
               .list();
       tx.commit();
@@ -917,7 +922,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         return_value = true;
       }
     } catch (Exception ex) {
-      System.out.println("Error in removeNAFromLIC");
+      System.out.println("Error in removeNullInLIC");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
       ex.printStackTrace();
       tx.rollback();
@@ -930,7 +935,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     return return_value;
   }
 
-  private Boolean removeNAFromLIT(String pid, String iid) {
+  private Boolean removeNullInLIT(String pid, String iid) {
 
     List result = null;
     Session session = null;
@@ -945,7 +950,7 @@ public class ItemBean extends AbstractBean implements Serializable {
               + " AND lit.itemId = :iid ";
       result = session.createQuery(query)
               .setParameter("pid", pid)
-              .setParameter("iid", "NA")
+              .setParameter("iid", "")
               .setMaxResults(1)
               .list();
       tx.commit();
@@ -973,7 +978,63 @@ public class ItemBean extends AbstractBean implements Serializable {
         return_value = true;
       }
     } catch (Exception ex) {
-      System.out.println("Error in removeNAFromLIC");
+      System.out.println("Error in removeNullInLIC");
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
+      ex.printStackTrace();
+      tx.rollback();
+
+    } finally {
+      tx = null;
+      session = null;
+
+    }
+    return return_value;
+  }
+  
+  private Boolean removeNullInCP(String pid, String iid) {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    Boolean return_value = false;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = " from ContactPreference cp "
+              + " WHERE cp.participant_id = :pid "
+              + " AND cp.itemId = :iid ";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", "")
+              .setMaxResults(1)
+              .list();
+      tx.commit();
+      if (result != null) {
+        if (result.size() == 1) {
+          ContactPreference na_cp = (ContactPreference) result.get(0);
+          ContactPreference new_cp = new ContactPreference(getId(), ubean.getParticipant_id(), iid,
+                  na_cp.getUseWhichContactAddress(), na_cp.getContactByChat(), na_cp.getContactByEmail(), na_cp.getContactByHomePhone(),
+                  na_cp.getContactByCellPhone(), na_cp.getContactByAlternativePhone(), na_cp.getContactByFacebook(), na_cp.getContactByTwitter(),
+                  na_cp.getContactByInstagram(), na_cp.getContactByLinkedIn(), na_cp.getContactByOtherSocialMedia(), na_cp.getContactByOtherSocialMediaAccess(),
+                  new Date());
+          if (session.isOpen() == false) {
+            session = hib_session();
+          }
+          if (tx.isActive() == false) {
+            tx = session.beginTransaction();
+          } else {
+            tx.rollback();
+          }
+          session.save(new_cp);
+          /// should create new record
+          tx.commit();
+          return_value = true;
+        }
+        return_value = true;
+      }
+    } catch (Exception ex) {
+      System.out.println("Error in removeNullInLIC");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
       ex.printStackTrace();
       tx.rollback();
