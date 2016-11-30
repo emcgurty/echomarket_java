@@ -36,10 +36,21 @@ public class LenderItemConditions implements java.io.Serializable {
     public LenderItemConditions() {
     }
 
-    public LenderItemConditions(String lender_item_condition_id, String participant_id, Integer forFree, Integer availableForPurchase, BigDecimal availableForPurchaseAmount, Integer smallFee, BigDecimal smallFeeAmount, Integer availableForDonation, Integer donateAnonymous, Integer trade, String tradeItem, Integer agreedNumberOfDays,             Integer agreedNumberOfHours, Integer indefiniteDuration,             Integer presentDuringBorrowingPeriod, Integer entirePeriod,             Integer partialPeriod, Integer provideProperUseTraining,             String specificConditions, BigDecimal securityDepositAmount,             Integer securityDeposit, String remoteIp,            String comment, Date dateCreated, Date dateUpdated) 
+    // Need a blank record
+    public LenderItemConditions(String lender_item_condition_id, String participant_id, String itemId, Date dateCreated, Date dateUpdated, Date dateDeleted) {
+        this.lender_item_condition_id = lender_item_condition_id;
+        this.participant_id = participant_id;
+        this.itemId = itemId;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+        this.dateDeleted = dateDeleted;
+    }
+
+    public LenderItemConditions(String lender_item_condition_id, String participant_id, String itemId, Integer forFree, Integer availableForPurchase, BigDecimal availableForPurchaseAmount, Integer smallFee, BigDecimal smallFeeAmount, Integer availableForDonation, Integer donateAnonymous, Integer trade, String tradeItem, Integer agreedNumberOfDays,             Integer agreedNumberOfHours, Integer indefiniteDuration,             Integer presentDuringBorrowingPeriod, Integer entirePeriod,             Integer partialPeriod, Integer provideProperUseTraining,             String specificConditions, BigDecimal securityDepositAmount,             Integer securityDeposit, String remoteIp,            String comment, Date dateCreated, Date dateUpdated) 
     {
         this.lender_item_condition_id = lender_item_condition_id;
         this.participant_id = participant_id;
+        this.itemId = itemId;
         this.forFree = forFree;
         this.availableForPurchase = availableForPurchase;
         this.availableForPurchaseAmount = availableForPurchaseAmount;
