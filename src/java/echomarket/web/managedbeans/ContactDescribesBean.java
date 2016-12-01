@@ -10,11 +10,12 @@ import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-@ManagedBean(name = "cd")
+@Named
+@ManagedBean
 @RequestScoped
 public class ContactDescribesBean extends AbstractBean implements Serializable {
 
