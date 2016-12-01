@@ -12,10 +12,10 @@
 
         <c:choose>
             <c:when test="${userBean.userAlias == null}">
-                <c:set var="username" scope="session" value="Friend" />
+                <c:set var="username" value="Friend" />
             </c:when>
             <c:otherwise>
-                <c:set var="username" scope="session"  value="#{userBean.userAlias}" />
+                <c:set var="username" value="#{userBean.userAlias}" />
             </c:otherwise>
         </c:choose>
 
