@@ -15,7 +15,7 @@
       <h:messages showSummary="true" 
                   showDetail="false"
                   errorStyle="color: #d20005" 
-                  infoStyle="color: blue"/>
+                  infoStyle="color: indigo"/>
     </div>
 
     <div class="top" id="index_div" style="font-size:20px;margin-left:5px;border-top:#3B5998 double thin;">
@@ -51,19 +51,23 @@
       </c:choose>
     </c:if>
     <c:if test="#{not userLoggedIn}" >
+      <c:set var="whichUserType" value="#{userBean.userType}"  />
       <c:choose>
-        <c:when test="#{userBean.parseUserType('borrower')}">
+        <c:when test="#{whichUserType == 'borrow'}">
           <ui:include rendered="true" src="b_history.xhtml" id="b_history"  /> 
         </c:when>
-        <c:when test="#{userBean.parseUserType('lender')}">
+        <c:when test="#{whichUserType == 'lend'}">
           <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
         </c:when>
-
+        <c:when test="#{whichUserType == 'both'}">
+          <ui:include rendered="true" src="b_history.xhtml" id="b_history"  /> 
+          <br />
+          <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
+        </c:when>
         <c:otherwise>
-          <p>User has not yet logged in..</p>
+          <p>Perform a quick search here to see what available to lend or borrow</p>
         </c:otherwise>
       </c:choose>
-
     </c:if>
 
   </div>
