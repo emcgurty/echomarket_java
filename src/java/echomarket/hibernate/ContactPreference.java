@@ -7,9 +7,9 @@ public class ContactPreference implements java.io.Serializable {
     private String contactPreferenceId;
     private String participant_id;
     private String itemId;
-    private int useWhichContactAddress;
-    private String contactByChat;
-    private String contactByEmail;
+    private Integer useWhichContactAddress;
+    private Integer contactByChat;
+    private Integer contactByEmail;
     private Integer contactByHomePhone;
     private Integer contactByCellPhone;
     private Integer contactByAlternativePhone;
@@ -35,7 +35,7 @@ public class ContactPreference implements java.io.Serializable {
     }
 
     //update
-    public ContactPreference(String contactPreferenceId, String participant_id, String itemId, int useWhichContactAddress, String contactByChat, String contactByEmail, Integer contactByHomePhone, Integer contactByCellPhone, Integer contactByAlternativePhone, String contactByFacebook, String contactByTwitter, String contactByInstagram, String contactByLinkedIn, String contactByOtherSocialMedia, String contactByOtherSocialMediaAccess, Date dateUpdated) {
+    public ContactPreference(String contactPreferenceId, String participant_id, String itemId, Integer useWhichContactAddress, Integer contactByChat, Integer contactByEmail, Integer contactByHomePhone, Integer contactByCellPhone, Integer contactByAlternativePhone, String contactByFacebook, String contactByTwitter, String contactByInstagram, String contactByLinkedIn, String contactByOtherSocialMedia, String contactByOtherSocialMediaAccess, Date dateUpdated) {
     
         this.contactPreferenceId = contactPreferenceId;
         this.participant_id = participant_id;
@@ -80,19 +80,19 @@ public class ContactPreference implements java.io.Serializable {
         this.useWhichContactAddress = useWhichContactAddress;
     }
 
-    public String getContactByChat() {
+    public Integer getContactByChat() {
         return this.contactByChat;
     }
 
-    public void setContactByChat(String contactByChat) {
+    public void setContactByChat(Integer contactByChat) {
         this.contactByChat = contactByChat;
     }
 
-    public String getContactByEmail() {
+    public Integer getContactByEmail() {
         return this.contactByEmail;
     }
 
-    public void setContactByEmail(String contactByEmail) {
+    public void setContactByEmail(Integer contactByEmail) {
         this.contactByEmail = contactByEmail;
     }
 
