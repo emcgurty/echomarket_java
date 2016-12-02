@@ -237,9 +237,11 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       action = params.get("action");
     } catch (Exception ex) {}
 
+    if (action != null) {
       if ("edit".equals(action)) {
         ubean.setEditable(1);
       }
+    }
  
       try {
         if (strIid != null) {
