@@ -20,8 +20,6 @@
                                      required="true"
                                      requiredMessage="#{bundle.ReqUserName}"
                                      style="margin-left:5px">
-
-
                         </h:inputText>
                     </h:outputLabel>
                 </td>
@@ -41,40 +39,9 @@
                     </h:outputLabel>
                 </td>
             </tr>
-            <tr style="margin:15px;">
-                <td style="width:50%;padding-bottom: 15px;">
-
-                    <h:outputLabel for="firstName"  value="#{bundle.firstName}">       
-                        <h:inputText id="firstName"
-                                     size="16"
-                                     value="#{userBean.firstName}"
-
-                                     required="true"
-                                     requiredMessage="#{bundle.ReqFirstName}" style="margin-left:5px">
-
-
-                        </h:inputText>
-                    </h:outputLabel>
-                </td>
-                <td style="width:50%;padding-bottom: 15px;">
-                    <h:outputLabel for="lastName"  value="#{bundle.lastName}" >       
-                        <h:inputText id="lastName"
-                                     size="16"
-                                     value="#{userBean.lastName}"
-                                     required="true"
-                                     requiredMessage="#{bundle.ReqLastName}" style="margin-left:5px">
-
-
-                        </h:inputText>
-                    </h:outputLabel>
-
-                </td>
-            </tr>
             <tr >
                 <td style="width:50%;padding-bottom: 15px;">
                     <f:event listener="#{userBean.validatePassword}" type="postValidate" />
-
-
                     <h:outputLabel for="password" value="#{bundle.password}" >       
                         <h:inputSecret id="password"
                                        size="16"
