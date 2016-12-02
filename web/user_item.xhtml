@@ -7,12 +7,15 @@
   xmlns:h="http://xmlns.jcp.org/jsf/html"
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
   template="./UserDetailTemplate.xhtml">
 
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
   </ui:define>  
+
   <ui:define name="content">
+
     <h:form id="item_content" enctype="multipart/form-data" >
       <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
 
@@ -21,14 +24,13 @@
           <h:messages showSummary="true" 
                       showDetail="false"
                       errorStyle="color: #d20005" 
-                      infoStyle="color: blue"/>
+                      infoStyle="color: indigo"/>
         </div>
 
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_item" ></ui:include>  
         <div class="top" >
-          <div >
+          <div style="margin-left:10px;margin-top:5px;font-size: large;color:indigo;">
             <h:outputText value="NEW ITEM"  />
-            <h:outputText value="#{userBean.itemId}"  />
             <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
 
@@ -37,21 +39,17 @@
 
         <div  class="div_p" id="menu_item_3" >
           <div style="margin:10px;" >
-            <h:outputText value="The Item you would like to  ${itemBean.itemType}" rendered="#{itemBean.itemType ne 'both'}"/>
-            <h:outputText value="The Item you would like to... Please select: " rendered="#{itemBean.itemType == 'both'}"/>
-            <h:selectOneMenu id="which_type" value="#{itemBean.itemType}" rendered="#{itemBean.itemType == 'both'}" >
-              <f:selectItem itemValue="0" itemLabel="borrow" />	
-              <f:selectItem itemValue="1" itemLabel="lend" />
-            </h:selectOneMenu>    
+            <h:outputText value="The item you would like to #{fn:toUpperCase(itemBean.itemType)} ..." style="font-size: large;color:indigo;"/>
           </div>
         </div>
 
         <div  class="div_p"  >
           <div style="margin:10px;" >
+
             <h:outputText value="Item Detail..." />
-            <h:inputText id="itemType" value="#{itemBean.itemType}"  style="display:none;" />
-            <h:inputText id="itemId" value="#{itemBean.itemId}"  style="display:none;" />
-            <h:inputText id="participant_id" value="#{itemBean.participant_id}"  style="display:none;" />
+            <h:inputHidden id="itemId"  value="#{userBean.itemId}"  />
+            <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
+            <h:inputHidden id="participant_id" value="#{itemBean.participant_id}"   />
           </div>
         </div>
 
@@ -88,7 +86,8 @@
                 <h:outputLabel value="#{bundle.BasedOnB}"  for="notify" >
                   <h:selectOneRadio id="notify" value="#{itemBean.notify}"   rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
-                    <f:selectItem itemValue="0" itemLabel="No" />	
+                    <f:selectItem itemValue="0" itemLabel="No" />
+                    <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                   </h:selectOneRadio>    
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
@@ -99,7 +98,7 @@
                         <c:set var="cbe" value="Yes"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="No preference provided"/>
+                        <c:set var="cbe" value="Indifferent"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="notifyString"   value="#{cbe}" class="RO_text" />
@@ -157,8 +156,6 @@
         </table>
         <br />
         <div style="margin-left:25px;margin-top:5px;float:left;">
-          <h:outputText value="HERE "  />
-          <h:outputText value="#{userBean.itemId}"  />
           <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(userBean.itemId)}" var="image"   rendered="#{userBean.editable == 1}" >
             <h:column rowHeader="">
               <div style="margin-left:25px;margin-top:5px;float:left;">
@@ -187,13 +184,8 @@
           <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(userBean.itemId)}" var="image"   rendered="#{userBean.editable == 0}">
             <h:column rowHeader="">
               <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-                <h:outputLabel for="imagePreview" value="Uploaded Image:"  >	
-                  <h:inputText id="image_directory" value="#{'lend_images'}" />
-                  <c:set var="iii" value="#{image.imageFileName}" />
-                  <h:inputText id="image_name" value="#{iii}" />
-                  <!--<img src="resources/lend_images/04bfb4d1-3bb8-4500-a11d-6ec0f36ad80d_1[1].jpg" alt="1"/>-->
-                  <img id="viewImage"  src=""/>
-                 
+                <h:outputLabel for="viewImage" value="Uploaded Image:"  >
+                  <h:graphicImage  id="imageView" name="${image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/> 
                 </h:outputLabel> 
               </div>
               <br />
