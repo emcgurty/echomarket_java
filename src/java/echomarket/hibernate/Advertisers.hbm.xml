@@ -11,7 +11,7 @@
         <property name="title" type="string">
             <column name="title" length="50" not-null="true" />
         </property>
-        <property name="categoryId" type="int">
+        <property name="categoryId" type="java.lang.Integer">
             <column name="category_id" not-null="true" />
         </property>
         <property name="categoryOther" type="string">
@@ -26,7 +26,7 @@
         <property name="advertiserEmail" type="string">
             <column name="advertiser_email" length="50" not-null="true" />
         </property>
-        <property name="approved" type="int">
+        <property name="approved" type="java.lang.Integer">
             <column name="approved" not-null="true" />
         </property>
         <property name="dateCreated" type="timestamp">
