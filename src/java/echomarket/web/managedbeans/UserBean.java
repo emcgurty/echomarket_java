@@ -213,7 +213,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return "index";
   }
 
-  public String useIsWhichType() {
+  public String userIsWhichType() {
 
     String returnType = null;
     if (this.userType.contains("lend")) {
@@ -1037,9 +1037,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
       return null;
     } finally {
@@ -1200,11 +1198,9 @@ public class UserBean extends AbstractBean implements Serializable {
     this.participant_id = participant_id;
   }
 
- 
   public String getItemId() {
     return itemId;
   }
-
 
   public void setItemId(String itemId) {
     this.itemId = itemId;
