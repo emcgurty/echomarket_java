@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -9,89 +9,88 @@
 
 
 
-    <h:form  id="user_login" >
+  <h:form  id="user_login" >
+    <div class="messagecolor">
+      <h:messages showSummary="true" 
+                  showDetail="false"
+                  errorStyle="color: #d20005" 
+                  infoStyle="color: indigo"/>
+    </div>
 
-        <div class="messagecolor">
-            <h:messages showSummary="true" 
-                        showDetail="false"
-                        errorStyle="color: #d20005" 
-                        infoStyle="color: blue"/>
-        </div>
+    <table style="width:100%;margin-left: 5px" align="center" id="user_login_table">
+      <tr >
+        <td style="padding-top: 15px;padding-bottom: 15px;color:black;font-size: large">
+          <h:outputText value="User Login" />
+        </td>
 
-        <table style="width:100%;margin-left: 5px" align="center" id="user_login_table">
-            <tr >
-                <td style="padding-top: 15px;padding-bottom: 15px;color:black;font-size: large">
-                    <h:outputText value="User Login" />
-                </td>
+      </tr>    
+      <tr>
+        <td style="padding-bottom: 15px;">
 
-            </tr>    
-            <tr>
-                <td style="padding-bottom: 15px;">
+          <h:panelGroup>
+            <h:outputLabel for="username" value="#{bundle.username}" >       
+              <h:inputText id="username"
+                           value="#{userBean.username}"
+                           size="16"
+                           required="true"
+                           requiredMessage="#{bundle.ReqUserName}"
+                           autocomplete="off"
+                           style="margin-left: 5px;" >
+              </h:inputText>
+            </h:outputLabel>
+            <h:message for="username" errorClass="error" />
+          </h:panelGroup>
 
-                    <h:panelGroup>
-                        <h:outputLabel for="username" value="#{bundle.username}" >       
-                            <h:inputText id="username"
-                                         value="#{userBean.username}"
-                                         size="16"
-                                         required="true"
-                                         requiredMessage="#{bundle.ReqUserName}"
-                                         autocomplete="off"
-                                         style="margin-left: 5px;" >
-                            </h:inputText>
-                        </h:outputLabel>
-                        <h:message for="username" errorClass="error" />
-                    </h:panelGroup>
-
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-bottom: 15px;">
-                    <h:panelGroup>
-                        <h:outputLabel for="password" value="#{bundle.password}" >       
-                            <h:inputSecret id="password"
-                                           size="16"
-                                           value="#{userBean.password}"
-                                           title="#{bundle.password}"
-                                           required="true"
-                                           requiredMessage="#{bundle.ReqPassword}"
-                                           autocomplete="off"
-                                           style="margin-left: 5px;"
-                                           >
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-bottom: 15px;">
+          <h:panelGroup>
+            <h:outputLabel for="password" value="#{bundle.password}" >       
+              <h:inputSecret id="password"
+                             size="16"
+                             value="#{userBean.password}"
+                             title="#{bundle.password}"
+                             required="true"
+                             requiredMessage="#{bundle.ReqPassword}"
+                             autocomplete="off"
+                             style="margin-left: 5px;"
+                             >
 
 
-                            </h:inputSecret>
-                        </h:outputLabel>
-                        <h:message for="password" errorClass="error" />
-                    </h:panelGroup>
+              </h:inputSecret>
+            </h:outputLabel>
+            <h:message for="password" errorClass="error" />
+          </h:panelGroup>
 
-                </td>
-            </tr>
-            <tr>
-                <td style="padding-bottom: 15px;">  
-                    <p>
-                        <h:commandLink  action="#{userBean.loginUser()}" id="user_login_command" value="Login" />
-                        <br />
-                        <br />
-                        <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
-                            <f:ajax />
-                        </h:commandLink>
-                        <h:outputText value=" | " />
-                        <h:commandLink  action="#{userBean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password" immediate="false"   >
-                            <f:ajax />
-                        </h:commandLink>
-                        <br />
-                        <br />
-                        <h:commandLink  action="#{userBean.load_user_registration()}" id="i_register" value="Individual or Organization Registration"   >
-                            <f:ajax />
-                        </h:commandLink>
-                        <h:outputText value=" | " />
-                        <h:commandLink  action="#{userBean.load_community_registration()}" id="c_register" value="Community Registration"   >
-                            <f:ajax />
-                        </h:commandLink>
-                    </p>     
-                </td> 
-            </tr>
-        </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-bottom: 15px;">  
+          <p>
+            <h:commandLink  action="#{userBean.loginUser()}" id="user_login_command" value="Login" />
+            <br />
+            <br />
+            <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
+              <f:ajax />
+            </h:commandLink>
+            <h:outputText value=" | " />
+            <h:commandLink  action="#{userBean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password" immediate="false"   >
+              <f:ajax />
+            </h:commandLink>
+            <br />
+            <br />
+            <h:commandLink  action="#{userBean.load_user_registration()}" id="i_register" value="Individual or Organization Registration"   >
+              <f:ajax />
+            </h:commandLink>
+            <h:outputText value=" | " />
+            <h:commandLink  action="#{userBean.load_community_registration()}" id="c_register" value="Community Registration"   >
+              <f:ajax />
+            </h:commandLink>
+          </p>     
+        </td> 
+      </tr>
+    </table>
 
-    </h:form>
+  </h:form>
 </ui:composition>
