@@ -23,7 +23,6 @@
       </h:commandLink>
     </li>
     <li class="subs" id="tab_item_3" >
-    
       <c:choose>
         <c:when  test="#{userBean.itemId == null}" >
           <a href="#s1">Default Item Preferences/Conditions</a>
@@ -49,7 +48,7 @@
           </h:commandLink>
         </li>
 
-        <c:if test="#{(userBean.useIsWhichType() == 'both') or (userBean.useIsWhichType() == 'lend')}" >
+        <c:if test="#{(userBean.userIsWhichType() == 'both') or (userBean.userIsWhichType() == 'lend')}" >
           <li >
             <c:choose>
               <c:when  test="#{userBean.itemId!= null}" >
@@ -78,21 +77,45 @@
               <f:param name="action" value="edit" />
             </h:commandLink>   
           </li>
-
         </c:if>     
       </ul>
-    </li>  
-    <li class="subs" id="tab_item_5" >
-      <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    >
-        <f:param name="action" value="item" />
-      </h:commandLink>
-
     </li>
-    <li class="subs" id="tab_item_6" >
-      <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"    >
-        <f:param name="action" value="item" />
-      </h:commandLink>
-
+    <li class="subs" id="tab_item_5" >
+      <c:set var="whichType" value="#{userBean.userIsWhichType()}" />
+      <c:choose>                                
+        <c:when test="#{whichType == 'borrow'}"  >
+          <li>
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    >
+              <f:param name="action" value="item" />
+            </h:commandLink>
+          </li>
+        </c:when >  
+        <c:when test="#{whichType == 'lend'}"  >
+          <li>
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"    >
+              <f:param name="action" value="item" />
+            </h:commandLink>
+          </li>
+        </c:when >  
+        <c:when test="#{whichType == 'both'}"  >
+          <li class="subs">
+            <a href="#s1">Lend or Borrow?</a>
+            <ul>
+              <li>
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"     >
+                  <f:param name="action" value="item" />
+                </h:commandLink>
+              </li>
+              <li>
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    >
+                  <f:param name="action" value="item" />
+                </h:commandLink>
+              </li>
+            </ul>
+          </li>
+        </c:when >  
+      </c:choose>
     </li>
   </ul>
+
 </ui:composition>
