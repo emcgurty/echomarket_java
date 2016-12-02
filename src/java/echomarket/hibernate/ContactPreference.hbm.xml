@@ -3,63 +3,62 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="echomarket.hibernate.ContactPreference" table="contact_preference" catalog="echomarket" optimistic-lock="version">
-        <id name="contactPreferenceId" type="string">
-            <column name="contact_preference_id" length="40" />
-            <generator class="assigned" />
-        </id>
-        <property name="participant_id" type="string">
-            <column name="participant_id" length="40" />
-        </property>
-        <property name="itemId" type="string">
-            <column name="item_id" length="40" />
-        </property>
-        <property name="useWhichContactAddress" type="int">
-            <column name="use_which_contact_address"  />
-        </property>
-               
-        <property name="contactByChat" type="string">
-            <column name="contact_by_chat" length="3" />
-        </property>
-        <property name="contactByEmail" type="string">
-            <column name="contact_by_email" length="3" />
-        </property>
-        <property name="contactByHomePhone" type="java.lang.Integer">
-            <column name="contact_by_home_phone" />
-        </property>
-        <property name="contactByCellPhone" type="java.lang.Integer">
-            <column name="contact_by_cell_phone" />
-        </property>
-        <property name="contactByAlternativePhone" type="java.lang.Integer">
-            <column name="contact_by_alternative_phone" />
-        </property>
-        <property name="contactByFacebook" type="string">
-            <column name="contact_by_Facebook" length="30" />
-        </property>
-        <property name="contactByTwitter" type="string">
-            <column name="contact_by_Twitter" length="30" />
-        </property>
-        <property name="contactByInstagram" type="string">
-            <column name="contact_by_Instagram" length="30" />
-        </property>
-        <property name="contactByLinkedIn" type="string">
-            <column name="contact_by_LinkedIn" length="30" />
-        </property>
-        <property name="contactByOtherSocialMedia" type="string">
-            <column name="contact_by_other_social_media" length="30" />
-        </property>
-        <property name="contactByOtherSocialMediaAccess" type="string">
-            <column name="contact_by_other_social_media_access" length="30" />
-        </property>
-        <property name="dateCreated" type="timestamp">
-            <column name="date_created" length="19" not-null="true" />
-        </property>
-        <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19" not-null="true" />
-        </property>
-        <property name="dateDeleted" type="timestamp">
-            <column name="date_deleted" length="19" not-null="true" />
-        </property>
+  <class name="echomarket.hibernate.ContactPreference" table="contact_preference" catalog="echomarket" optimistic-lock="version">
+    <id name="contactPreferenceId" type="string">
+      <column name="contact_preference_id" length="40" />
+      <generator class="assigned" />
+    </id>
+    <property name="participant_id" type="string">
+      <column name="participant_id" length="40" />
+    </property>
+    <property name="itemId" type="string">
+      <column name="item_id" length="40" />
+    </property>
+    <property name="useWhichContactAddress" type="java.lang.Integer">
+      <column name="use_which_contact_address"  />
+    </property>
+    <property name="contactByChat" type="java.lang.Integer">
+      <column name="contact_by_chat"  />
+    </property>
+    <property name="contactByEmail" type="java.lang.Integer">
+      <column name="contact_by_email"  />
+    </property>
+    <property name="contactByHomePhone" type="java.lang.Integer">
+      <column name="contact_by_home_phone" />
+    </property>
+    <property name="contactByCellPhone" type="java.lang.Integer">
+      <column name="contact_by_cell_phone" />
+    </property>
+    <property name="contactByAlternativePhone" type="java.lang.Integer">
+      <column name="contact_by_alternative_phone" />
+    </property>
+    <property name="contactByFacebook" type="string">
+      <column name="contact_by_Facebook" length="30" />
+    </property>
+    <property name="contactByTwitter" type="string">
+      <column name="contact_by_Twitter" length="30" />
+    </property>
+    <property name="contactByInstagram" type="string">
+      <column name="contact_by_Instagram" length="30" />
+    </property>
+    <property name="contactByLinkedIn" type="string">
+      <column name="contact_by_LinkedIn" length="30" />
+    </property>
+    <property name="contactByOtherSocialMedia" type="string">
+      <column name="contact_by_other_social_media" length="30" />
+    </property>
+    <property name="contactByOtherSocialMediaAccess" type="string">
+      <column name="contact_by_other_social_media_access" length="30" />
+    </property>
+    <property name="dateCreated" type="timestamp">
+      <column name="date_created" length="19" not-null="true" />
+    </property>
+    <property name="dateUpdated" type="timestamp">
+      <column name="date_updated" length="19" not-null="true" />
+    </property>
+    <property name="dateDeleted" type="timestamp">
+      <column name="date_deleted" length="19" not-null="true" />
+    </property>
         
-    </class>
+  </class>
 </hibernate-mapping>
