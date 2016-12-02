@@ -26,13 +26,13 @@
     <property name="communityId" type="string">
       <column name="community_id" length="40" />
     </property>
-    <property name="contactDescribeId" type="int">
+    <property name="contactDescribeId" type="java.lang.Integer">
       <column name="contact_describe_id"  />
     </property>
     <property name="organizationName" type="string">
       <column name="organization_name" length="50" />
     </property>
-    <property name="displayOrganization" type="int">
+    <property name="displayOrganization" type="java.lang.Integer">
       <column name="display_organization"  />
     </property>
     <property name="otherDescribeYourself" type="string">
@@ -50,10 +50,10 @@
     <property name="alias" type="string">
       <column name="alias" length="24"  />
     </property>
-    <property name="displayName" type="int">
+    <property name="displayName" type="java.lang.Integer">
       <column name="display_name"  />
     </property>
-    <property name="displayAddress" type="int">
+    <property name="displayAddress" type="java.lang.Integer">
       <column name="display_address"  />
     </property>
     <property name="homePhone" type="string">
@@ -69,11 +69,11 @@
       <column name="email_alternative" length="50" />
     </property>
         
-    <property name="questionAltEmail" type="int">
+    <property name="questionAltEmail" type="java.lang.Integer">
       <column name="question_alt_email"  />
     </property>
         
-    <property name="questionAltAddress" type="int">
+    <property name="questionAltAddress" type="java.lang.Integer">
       <column name="question_alt_address"  />
     </property>
     <property name="displayHomePhone" type="java.lang.Integer">
@@ -115,7 +115,7 @@
     <property name="remoteIp" type="string">
       <column name="remote_ip" length="50" />
     </property>
-    <property name="approved" type="int">
+    <property name="approved" type="java.lang.Integer">
       <column name="approved" not-null="true" />
     </property>
   </class>
