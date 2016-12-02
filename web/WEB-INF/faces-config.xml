@@ -144,7 +144,7 @@
     <managed-bean>
         <managed-bean-name>contactPreferenceBean</managed-bean-name>
         <managed-bean-class>echomarket.web.managedbeans.ContactPreferenceBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
+        <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>lenderTransferBean</managed-bean-name>
