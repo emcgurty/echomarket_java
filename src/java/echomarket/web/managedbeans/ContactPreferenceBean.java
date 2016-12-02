@@ -26,9 +26,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private String contactPreferenceId;
   private String participant_id;
   private String itemId;
-  private int useWhichContactAddress;
-  private String contactByChat;
-  private String contactByEmail;
+  private Integer useWhichContactAddress;
+  private Integer contactByChat;
+  private Integer contactByEmail;
   private Integer contactByHomePhone;
   private Integer contactByCellPhone;
   private Integer contactByAlternativePhone;
@@ -82,21 +82,21 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   /**
    * @return the useWhichContactAddress
    */
-  public int getUseWhichContactAddress() {
+  public Integer getUseWhichContactAddress() {
     return useWhichContactAddress;
   }
 
   /**
    * @param useWhichContactAddress the useWhichContactAddress to set
    */
-  public void setUseWhichContactAddress(int useWhichContactAddress) {
+  public void setUseWhichContactAddress(Integer useWhichContactAddress) {
     this.useWhichContactAddress = useWhichContactAddress;
   }
 
   /**
    * @return the contactByChat
    */
-  public String getContactByChat() {
+  public Integer getContactByChat() {
 
     return contactByChat;
 
@@ -105,21 +105,21 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   /**
    * @param contactByChat the contactByChat to set
    */
-  public void setContactByChat(String contactByChat) {
+  public void setContactByChat(Integer contactByChat) {
     this.contactByChat = contactByChat;
   }
 
   /**
    * @return the contactByEmail
    */
-  public String getContactByEmail() {
+  public Integer getContactByEmail() {
     return contactByEmail;
   }
 
   /**
    * @param contactByEmail the contactByEmail to set
    */
-  public void setContactByEmail(String contactByEmail) {
+  public void setContactByEmail(Integer contactByEmail) {
     this.contactByEmail = contactByEmail;
   }
 
