@@ -1,19 +1,14 @@
 package echomarket.web.managedbeans;
 
-//import echomarket.hibernate.Addresses;
 import echomarket.hibernate.ContactPreference;
-//import echomarket.hibernate.Purpose;
 import java.io.Serializable;
-//import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-//import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -22,8 +17,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "cpb")
-@SessionScoped
+@ManagedBean
+@RequestScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
   @Inject
@@ -354,14 +349,14 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             sb.update(part);
             tx.commit();
             successTransaction = true;
-             message(null, "CPUpdated", null);
-             ubean.setEditable(0);
+            message(null, "CPUpdated", null);
+            ubean.setEditable(1);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update Contact Preferences");
             Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
             message(null, "UpdateOrSaveOfCPNotSuccessful", null);
-            ubean.setEditable(1);
+            ubean.setEditable(0);
           } finally {
             sb = null;
             tx = null;
@@ -382,6 +377,10 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
+      /// This doesn't work, hence below try/catch on strIid
+      if (strIid.isEmpty() == true) {
+        strIid = null;
+      }
     } catch (Exception ex) {
     }
 
@@ -390,6 +389,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } else {
       ubean.setEditable(0);
     }
+
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
@@ -401,45 +401,45 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         ubean.setEditable(1);
       }
     }
-   
-    if (strIid != null) {
-      partlist = getCurrentCP_Iid(pid, strIid);
-    } else {
-      partlist = getCurrentCP_Iid(pid, itemId);
+
+    try {
+      if (strIid != null) {
+        partlist = getCurrentCP_Iid(pid, strIid);
+      } else if (itemId != null) {
+        partlist = getCurrentCP_Iid(pid, itemId);
+      }
+    } catch (Exception ex) {
+      if (strIid.isEmpty() == false) {
+        partlist = getCurrentCP_Iid(pid, strIid);
+      } else if (itemId != null) {
+        partlist = getCurrentCP_Iid(pid, itemId);
+      }
     }
 
-    if (partlist.size() == 0) {
+    if (partlist == null) {
       partlist = getCurrentCP(pid);
     }
-
-    /// partList size  should never be zero
     if (partlist != null) {
-    if (partlist.size() == 1) {
-      ContactPreference pp = (ContactPreference) partlist.get(0);
-      contactPreferenceId = pp.getContactPreferenceId();
-      if (pp.getItemId() == null) {
-        if (strIid != null) {
-          itemId = strIid;
+      if (partlist.size() == 1) {
+        ContactPreference pp = (ContactPreference) partlist.get(0);
+        if (pp != null) {
+          setContactPreferenceId(pp.getContactPreferenceId());
+          setItemId(pp.getItemId());
+          setParticipant_id(pp.getParticipant_id());
+          useWhichContactAddress = pp.getUseWhichContactAddress();
+          contactByChat = pp.getContactByChat();
+          contactByEmail = pp.getContactByEmail();
+          contactByHomePhone = pp.getContactByHomePhone();
+          contactByCellPhone = pp.getContactByCellPhone();
+          contactByAlternativePhone = pp.getContactByAlternativePhone();
+          contactByFacebook = pp.getContactByFacebook();
+          contactByTwitter = pp.getContactByTwitter();
+          contactByInstagram = pp.getContactByInstagram();
+          contactByLinkedIn = pp.getContactByLinkedIn();
+          contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
+          contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
         }
-      } else {
-        itemId = pp.getItemId();
       }
-
-      participant_id = pp.getParticipant_id();
-      useWhichContactAddress = pp.getUseWhichContactAddress();
-      contactByChat = pp.getContactByChat();
-      contactByEmail = pp.getContactByEmail();
-      contactByHomePhone = pp.getContactByHomePhone();
-      contactByCellPhone = pp.getContactByCellPhone();
-      contactByAlternativePhone = pp.getContactByAlternativePhone();
-      contactByFacebook = pp.getContactByFacebook();
-      contactByTwitter = pp.getContactByTwitter();
-      contactByInstagram = pp.getContactByInstagram();
-      contactByLinkedIn = pp.getContactByLinkedIn();
-      contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
-      contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
-      
-    }
     }
     partlist = null;
 
