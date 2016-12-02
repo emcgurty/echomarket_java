@@ -12,7 +12,7 @@
     <h:form enctype="multipart/form-data" id="b_history" >
 
         <div class="top" >
-            <h:outputText value="ITEMS SOUGHT"  />
+            <h:outputText value="ITEMS SOUGHT TO BORROW"  />
         </div> 
           
         <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(userBean.user_id, 'borrow')}" />
