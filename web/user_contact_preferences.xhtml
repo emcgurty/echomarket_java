@@ -25,16 +25,17 @@
             <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
           </div> 
 
-          <div class="message.color">
-            <h:messages showSummary="true" 
-                        showDetail="false"
-                        errorStyle="color: #d20005" 
-                        infoStyle="color: blue"/>
-          </div>
 
           <div style="margin:10px;" >
             <h:outputText value="Initial Contact Preferences" />
             <h:commandLink  action="#{userBean.editBH()}"  class="right_div" value="Continue to 'Borrowing History'"  />
+          </div>
+        
+          <div class="message.color">
+             <h:messages showSummary="true" 
+                        showDetail="false"
+                        errorStyle="color: #d20005" 
+                        infoStyle="color: indigo"/>
           </div>
         </div> 
 
