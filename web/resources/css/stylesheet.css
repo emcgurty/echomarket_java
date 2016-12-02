@@ -10,12 +10,15 @@ input[type=radio]:checked + label {
   font-style: normal;
 } 
 
+input {
+  margin-left:5px;
+}
+
 label {
   margin-left: 5px;
   color:#0B5345;
   font-size:14px;
   font-weight: bold;
-
 }
 
 .RO_text {
