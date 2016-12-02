@@ -123,9 +123,10 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
       tx.commit();
       retResult = true;
-    } catch (Exception e) {
+    } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error on Retreiving Image by Id");
+      System.out.println("Error in deleteExistingImage");
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       sb = null;
