@@ -18,7 +18,7 @@ public class Participant implements java.io.Serializable {
   private String participant_id;
   private String userId;
   private String communityId;
-  private int contactDescribeId;
+  private Integer contactDescribeId;
   private String organizationName;
   private Integer displayOrganization;
   private String otherDescribeYourself;
@@ -47,7 +47,7 @@ public class Participant implements java.io.Serializable {
   private Date dateUpdated;
   private Date dateDeleted;
   private String remoteIp;
-  private int approved;
+  private Integer approved;
   private Set<Addresses> addresses = new HashSet<Addresses>();
   private Set<ContactPreference> contactPreference = new HashSet<ContactPreference>();
   private Set<Items> item = new HashSet<Items>();
@@ -68,7 +68,7 @@ public class Participant implements java.io.Serializable {
   }
   // Update 
 
-  public Participant(String participant_id, String userId, int contactDescribeId, String organizationName, int displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, int displayName, int displayAddress, String homePhone, String cellPhone,
+  public Participant(String participant_id, String userId, Integer contactDescribeId, String organizationName, Integer displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, Integer displayName, Integer displayAddress, String homePhone, String cellPhone,
           String alternativePhone, String emailAlternative, Integer displayHomePhone, Integer displayCellPhone, Integer displayAlternativePhone, Integer displayAlternativeAddress, String remoteIp) {
     this.participant_id = participant_id;
     this.userId = userId;
@@ -128,11 +128,11 @@ public class Participant implements java.io.Serializable {
     this.communityId = communityId;
   }
 
-  public int getContactDescribeId() {
+  public Integer getContactDescribeId() {
     return this.contactDescribeId;
   }
 
-  public void setContactDescribeId(int contactDescribeId) {
+  public void setContactDescribeId(Integer contactDescribeId) {
     this.contactDescribeId = contactDescribeId;
   }
 
@@ -144,11 +144,11 @@ public class Participant implements java.io.Serializable {
     this.organizationName = organizationName;
   }
 
-  public int getDisplayOrganization() {
+  public Integer getDisplayOrganization() {
     return this.displayOrganization;
   }
 
-  public void setDisplayOrganization(int displayOrganization) {
+  public void setDisplayOrganization(Integer displayOrganization) {
     this.displayOrganization = displayOrganization;
   }
 
@@ -192,19 +192,19 @@ public class Participant implements java.io.Serializable {
     this.alias = alias;
   }
 
-  public int getDisplayName() {
+  public Integer getDisplayName() {
     return this.displayName;
   }
 
-  public void setDisplayName(int displayName) {
+  public void setDisplayName(Integer displayName) {
     this.displayName = displayName;
   }
 
-  public int getDisplayAddress() {
+  public Integer getDisplayAddress() {
     return this.displayAddress;
   }
 
-  public void setDisplayAddress(int displayAddress) {
+  public void setDisplayAddress(Integer displayAddress) {
     this.displayAddress = displayAddress;
   }
 
@@ -344,39 +344,39 @@ public class Participant implements java.io.Serializable {
     this.remoteIp = remoteIp;
   }
 
-  public int getApproved() {
+  public Integer getApproved() {
     return this.approved;
   }
 
-  public void setApproved(int approved) {
+  public void setApproved(Integer approved) {
     this.approved = approved;
   }
 
   /**
    * @return the questionAltEmail
    */
-  public int getQuestionAltEmail() {
+  public Integer getQuestionAltEmail() {
     return questionAltEmail;
   }
 
   /**
    * @param questionAltEmail the questionAltEmail to set
    */
-  public void setQuestionAltEmail(int questionAltEmail) {
+  public void setQuestionAltEmail(Integer questionAltEmail) {
     this.questionAltEmail = questionAltEmail;
   }
 
   /**
    * @return the questionAltAddress
    */
-  public int getQuestionAltAddress() {
+  public Integer getQuestionAltAddress() {
     return questionAltAddress;
   }
 
   /**
    * @param questionAltAddress the questionAltAddress to set
    */
-  public void setQuestionAltAddress(int questionAltAddress) {
+  public void setQuestionAltAddress(Integer questionAltAddress) {
     this.questionAltAddress = questionAltAddress;
   }
 
