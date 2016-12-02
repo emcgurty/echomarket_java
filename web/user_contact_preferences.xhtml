@@ -16,12 +16,6 @@
     <h:form id="contact_preference_content" >
 
       <div id="form_contact_preference" class="contact_information" >
-        <div class="message.color">
-          <h:messages showSummary="true" 
-                      showDetail="false"
-                      errorStyle="color: #d20005" 
-                      infoStyle="color: blue"/>
-        </div>
 
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_contact_preferences"></ui:include>  
         <div class="top" >
@@ -29,8 +23,15 @@
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
             <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
-
           </div> 
+
+          <div class="message.color">
+            <h:messages showSummary="true" 
+                        showDetail="false"
+                        errorStyle="color: #d20005" 
+                        infoStyle="color: blue"/>
+          </div>
+
           <div style="margin:10px;" >
             <h:outputText value="Initial Contact Preferences" />
             <h:commandLink  action="#{userBean.editBH()}"  class="right_div" value="Continue to 'Borrowing History'"  />
@@ -46,7 +47,7 @@
         <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
           <h:inputHidden id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  />
           <h:inputHidden id="itemId" value="#{contactPreferenceBean.itemId}"  />
-          <h:outputText value="Initial Contact Preferences" />
+
           <div style="float:left;margin-left:25px">
             <div id="postalWithContactAddress" >    
               <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
@@ -71,7 +72,7 @@
                       <c:set var="whichAddress" value="Use your Primary Address"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="whichAddress" value="No preference provided"/>
+                      <c:set var="whichAddress" value="Indifferent"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="useWhichContactAddressString"   value="#{whichAddress}" class="RO_text" />
@@ -94,7 +95,8 @@
             <h:outputLabel for="contactByChat" value="Contact by chat?:"  >
               <h:selectOneRadio id="contactByChat" value="#{contactPreferenceBean.contactByChat}"  rendered="#{userBean.editable == 1}" >
                 <f:selectItem itemValue="1" itemLabel="Yes" /> 
-                <f:selectItem itemValue="0" itemLabel="No" />	
+                <f:selectItem itemValue="0" itemLabel="No" />
+                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -105,7 +107,7 @@
                     <c:set var="cbe" value="Yes"/>
                   </c:when>
                   <c:otherwise>
-                    <c:set var="cbe" value="No preference provided"/>
+                    <c:set var="cbe" value="Indifferent"/>
                   </c:otherwise>
                 </c:choose>
                 <h:outputText id="contactByChatString"   value="#{cbe}" class="RO_text" />
@@ -154,7 +156,7 @@
                     <c:set var="cbe" value="Login email address"/>
                   </c:when>
                   <c:otherwise>
-                    <c:set var="cbe" value="No preference provided"/>
+                    <c:set var="cbe" value="Indifferent"/>
                   </c:otherwise>
                 </c:choose>
                 <h:outputText id="contactByEmailString"   value="#{cbe}"  class="RO_text" />
@@ -176,7 +178,8 @@
             <h:outputLabel value="Can interested EchoMarket participants call you at your home phone?:"  for="contactByHomePhone" >
               <h:selectOneRadio id="contactByHomePhone" value="#{contactPreferenceBean.contactByHomePhone}"  rendered="#{userBean.editable == 1}" >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
-                <f:selectItem itemValue="0" itemLabel="No" />	
+                <f:selectItem itemValue="0" itemLabel="No" />
+                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -187,7 +190,7 @@
                     <c:set var="yn" value="Yes"/>
                   </c:when>
                   <c:otherwise>
-                    <c:set var="yn" value="No preference provided"/>
+                    <c:set var="yn" value="Indifferent"/>
                   </c:otherwise>
                 </c:choose>
                 <h:outputText id="contactByHomePhoneString"   value="#{yn}"  class="RO_text"  />
@@ -199,7 +202,8 @@
             <h:outputLabel value="... by your cell phone?:"  for="contactByCellPhone" >
               <h:selectOneRadio id="contactByCellPhone" value="#{contactPreferenceBean.contactByCellPhone}"  rendered="#{userBean.editable == 1}">
                 <f:selectItem itemValue="1" itemLabel="Yes" />
-                <f:selectItem itemValue="0" itemLabel="No" />	
+                <f:selectItem itemValue="0" itemLabel="No" />
+                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -210,7 +214,7 @@
                     <c:set var="yn" value="Yes"/>
                   </c:when>
                   <c:otherwise>
-                    <c:set var="yn" value="No preference provided"/>
+                    <c:set var="yn" value="Indifferent"/>
                   </c:otherwise>
                 </c:choose>
                 <h:outputText id="contactByCellPhoneString"   value="#{yn}"  class="RO_text"  />
@@ -222,7 +226,8 @@
             <h:outputLabel value="... by your alternative phone?:"  for="contactByAlternativePhone" >
               <h:selectOneRadio id="contactByAlternativePhone" value="#{contactPreferenceBean.contactByAlternativePhone}"  rendered="#{userBean.editable == 1}"  >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
-                <f:selectItem itemValue="0" itemLabel="No" />	
+                <f:selectItem itemValue="0" itemLabel="No" />
+                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -233,7 +238,7 @@
                     <c:set var="yn" value="Yes"/>
                   </c:when>
                   <c:otherwise>
-                    <c:set var="yn" value="No preference provided"/>
+                    <c:set var="yn" value="Indifferent"/>
                   </c:otherwise>
                 </c:choose>
                 <h:outputText id="contactByAlternativePhoneString"   value="#{yn}"   class="RO_text" />
