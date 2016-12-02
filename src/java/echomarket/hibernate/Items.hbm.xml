@@ -49,10 +49,10 @@
     <property name="dateDeleted" type="timestamp">
       <column name="date_deleted" length="19" not-null="true" />
     </property>
-    <property name="approved" type="int">
+    <property name="approved" type="java.lang.Integer">
       <column name="approved" not-null="true" />
     </property>
-    <property name="notify" type="int">
+    <property name="notify" type="java.lang.Integer">
       <column name="notify" not-null="true" />
     </property>
     <property name="itemType" type="string">
