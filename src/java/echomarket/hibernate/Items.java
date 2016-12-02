@@ -21,8 +21,8 @@ public class Items implements java.io.Serializable {
   private Date dateCreated;
   private Date dateUpdated;
   private Date dateDeleted;
-  private int approved;
-  private int notify;
+  private Integer approved;
+  private Integer notify;
   private String itemType;
   private Set<LenderTransfer> lenderTransfer = new HashSet<LenderTransfer>();
   private Set<LenderItemConditions> lenderItemConditions = new HashSet<LenderItemConditions>();
@@ -30,7 +30,7 @@ public class Items implements java.io.Serializable {
   public Items() {
   }
 
-  public Items(String itemId, Date dateCreated, Date dateUpdated, Date dateDeleted, int approved, int notify) {
+  public Items(String itemId, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer approved, Integer notify) {
     this.itemId = itemId;
     this.dateCreated = dateCreated;
     this.dateUpdated = dateUpdated;
@@ -39,7 +39,7 @@ public class Items implements java.io.Serializable {
     this.notify = notify;
   }
 
-  public Items(String itemId, String participant_id, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, int approved, int notify, String itemType) {
+  public Items(String itemId, String participant_id, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer approved, Integer notify, String itemType) {
     this.itemId = itemId;
     this.participant_id = participant_id;
     this.categoryId = categoryId;
@@ -153,19 +153,19 @@ public class Items implements java.io.Serializable {
     this.dateDeleted = dateDeleted;
   }
 
-  public int getApproved() {
+  public Integer getApproved() {
     return this.approved;
   }
 
-  public void setApproved(int approved) {
+  public void setApproved(Integer approved) {
     this.approved = approved;
   }
 
-  public int getNotify() {
+  public Integer getNotify() {
     return this.notify;
   }
 
-  public void setNotify(int notify) {
+  public void setNotify(Integer notify) {
     this.notify = notify;
   }
 
