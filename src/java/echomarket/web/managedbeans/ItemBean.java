@@ -49,8 +49,8 @@ public class ItemBean extends AbstractBean implements Serializable {
   private Date dateCreated;
   private Date dateUpdated;
   private Date dateDeleted;
-  private int approved;
-  private int notify;
+  private Integer approved;
+  private Integer notify;
   private String itemType;
   private String whichType;
   private Part imageFileNamePart;
@@ -473,14 +473,14 @@ public class ItemBean extends AbstractBean implements Serializable {
   /**
    * @return the approved
    */
-  public int getApproved() {
+  public Integer getApproved() {
     return approved;
   }
 
   /**
    * @param approved the approved to set
    */
-  public void setApproved(int approved) {
+  public void setApproved(Integer approved) {
     this.approved = approved;
   }
 
