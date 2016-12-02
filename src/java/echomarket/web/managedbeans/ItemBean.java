@@ -177,8 +177,10 @@ public class ItemBean extends AbstractBean implements Serializable {
   public String load_ud(String which, String iid) {
 
     List result = null;
-    if ((ubean.getEditable().toString().isEmpty() == true) && (iid == null)) {
+    if (iid == null) {
       ubean.setEditable(1);
+    } else {
+      ubean.setEditable(0);
     }
 
     Map<String, String> params = null;
@@ -324,24 +326,18 @@ public class ItemBean extends AbstractBean implements Serializable {
         bret = sendNotification(itemType);  // This needs to be written...
       }
     }
-
+    if (itemId == null) {
+      this.itemId = new_iid;
+    }
     if (bret == true) {
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
-      ubean.setEditable(1);
-      if (itemId == null) {
-        this.itemId = new_iid;
-      }
-      return this.load_ud(itemType, itemId);
-
+      ubean.setEditable(0);
     } else {
       message(null, "ItemRecordNotUpdated", null);
       ubean.setEditable(1);
-      if (itemType == "lend") {
-        return "lender_user_item";
-      } else {
-        return "borower_user_item";
-      }
+
     }
+    return load_ud(itemType, itemId);
   }
 
   /**
@@ -867,17 +863,47 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   private Boolean removeNullInLIC(String pid, String iid) {
 
+    List result = null;
     Session session = null;
     Transaction tx = null;
+    String query = null;
     Boolean return_value = false;
-
-    LenderItemConditions new_lic = new LenderItemConditions(getId(), pid, iid, new Date(), new Date(), new Date());
     try {
       session = hib_session();
       tx = session.beginTransaction();
-      session.save(new_lic);
+      query = " from LenderItemConditions lic "
+              + " WHERE lic.participant_id = :pid "
+              + " AND lic.itemId = :iid ";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", "")
+              .setMaxResults(1)
+              .list();
       tx.commit();
-      return_value = true;
+      if (result != null) {
+        if (result.size() == 1) {
+          LenderItemConditions na_lic = (LenderItemConditions) result.get(0);
+          LenderItemConditions new_lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), iid,
+                  na_lic.getForFree(), na_lic.getAvailableForPurchase(), na_lic.getAvailableForPurchaseAmount(), na_lic.getSmallFee(),
+                  na_lic.getSmallFeeAmount(), na_lic.getAvailableForDonation(), na_lic.getDonateAnonymous(),
+                  na_lic.getTrade(), na_lic.getTradeItem(), na_lic.getAgreedNumberOfDays(), na_lic.getAgreedNumberOfHours(), na_lic.getIndefiniteDuration(),
+                  na_lic.getPresentDuringBorrowingPeriod(), na_lic.getEntirePeriod(), na_lic.getPartialPeriod(), na_lic.getProvideProperUseTraining(),
+                  na_lic.getSpecificConditions(), na_lic.getSecurityDepositAmount(), na_lic.getSecurityDeposit(), "NA", na_lic.getComment(), new Date(), new Date());
+          if (session.isOpen() == false) {
+            session = hib_session();
+          }
+          if (tx.isActive() == false) {
+
+            tx = session.beginTransaction();
+          } else {
+            tx.rollback();
+          }
+          session.save(new_lic);
+          tx.commit();
+          return_value = true;
+        }
+        return_value = true;
+      }
     } catch (Exception ex) {
       System.out.println("Error in removeNullInLIC");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -893,6 +919,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   private Boolean removeNullInLIT(String pid, String iid) {
 
+    List result = null;
     Session session = null;
     Transaction tx = null;
     String query = null;
@@ -900,10 +927,38 @@ public class ItemBean extends AbstractBean implements Serializable {
     try {
       session = hib_session();
       tx = session.beginTransaction();
-      LenderTransfer new_lt = new LenderTransfer(getId(), iid, pid, new Date(), new Date(), new Date());
-      session.save(new_lt);
+      query = " from LenderTransfer lit "
+              + " WHERE lit.participant_id = :pid "
+              + " AND lit.itemId = :iid ";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setParameter("iid", "")
+              .setMaxResults(1)
+              .list();
       tx.commit();
-      return_value = true;
+      if (result != null) {
+        if (result.size() == 1) {
+          LenderTransfer na_lit = (LenderTransfer) result.get(0);
+          LenderTransfer new_lt = new LenderTransfer(getId(), iid, ubean.getParticipant_id(),
+                  na_lit.getBorrowerComesToWhichAddress(), na_lit.getMeetBorrowerAtAgreedL2b(), na_lit.getMeetBorrowerAtAgreedB2l(), na_lit.getWillDeliverToBorrower(),
+                  na_lit.getThirdPartyPresenceL2b(), na_lit.getThirdPartyPresenceB2l(), na_lit.getBorrowerThirdPartyChoice(), na_lit.getAgreedThirdPartyChoiceL2b(),
+                  na_lit.getAgreedThirdPartyChoiceB2l(), na_lit.getBorrowerReturnsToWhichAddress(), na_lit.getWillPickUpPreferredLocationB2l(), na_lit.getLenderThirdPartyChoiceB2l(),
+                  na_lit.getBorrowerChoice(), "NA", na_lit.getComment(), new Date(), new Date(), null);
+          if (session.isOpen() == false) {
+            session = hib_session();
+          }
+          if (tx.isActive() == false) {
+            tx = session.beginTransaction();
+          } else {
+            tx.rollback();
+          }
+          session.save(new_lt);
+          /// should create new record
+          tx.commit();
+          return_value = true;
+        }
+        return_value = true;
+      }
     } catch (Exception ex) {
       System.out.println("Error in removeNullInLIC");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
