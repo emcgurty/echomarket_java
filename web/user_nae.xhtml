@@ -27,12 +27,7 @@
         <c:set var="states_list" value="#{uss.buildUsStates()}"   rendered="#{userBean.editable == 1}" />    
         <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 1}" />    
         <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" rendered="#{userBean.participant_id != null}" ></ui:include>  
-        <div class="messagecolor">
-          <h:messages showSummary="true" 
-                      showDetail="false"
-                      errorStyle="color: #d20005" 
-                      infoStyle="color: blue"/>
-        </div>
+
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
@@ -42,7 +37,13 @@
           <div style="margin:10px;" >
             <h:outputText value="EchoMarket participant information..." />
             <h:commandLink  action="#{cpb.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Initial Contact Preferences'"  />
+          </div>
 
+          <div class="messagecolor">
+            <h:messages showSummary="true" 
+                        showDetail="false"
+                        errorStyle="color: #d20005" 
+                        infoStyle="color: indigo"/>
           </div>
         </div> 
 
@@ -59,10 +60,10 @@
                 <h:outputLabel for="contactDescribeId"  value="How would you describe yourself?" ><span class="required_fields">*</span>
                   <br />
                   <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 1}" >
-                    <f:selectItems id="contact_describe_id_values" value="#{cd.buildContactDArray()}"  
+                    <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray()}"  
                                    var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
                   </h:selectOneMenu>
-                  <h:outputText value="#{cd.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
+                  <h:outputText value="#{contactDescribesBean.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
                 </h:outputLabel>
                 <span class="error-message" id="contactDescribeId" ></span>
 
@@ -93,7 +94,8 @@
                   <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayOrganization" >
                     <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                       <f:selectItem itemValue="1" itemLabel="Yes" />
-                      <f:selectItem itemValue="0" itemLabel="No" />	
+                      <f:selectItem itemValue="0" itemLabel="No" />
+                      <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                     </h:selectOneRadio>    
                     <c:if test="#{userBean.editable == 0}" >
                       <c:choose>
@@ -104,7 +106,7 @@
                           <c:set var="yn" value="Yes"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="yn" value="No preference provided"/>
+                          <c:set var="yn" value="Indifferent"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="displayOrganizationString"   value="#{yn}" class="RO_text" />
@@ -153,7 +155,8 @@
                 <h:outputLabel value="Allow public to see your Name?"  for="displayName" >
                   <h:selectOneRadio id="displayName" value="#{participantBean.displayName}" layout="pageDirection"  rendered="#{userBean.editable == 1}">
                     <f:selectItem itemValue="1" itemLabel="Yes" />
-                    <f:selectItem itemValue="0" itemLabel="No" />	
+                    <f:selectItem itemValue="0" itemLabel="No" />
+                    <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                   </h:selectOneRadio>    
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
@@ -164,7 +167,7 @@
                         <c:set var="yn" value="Yes"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="yn" value="No preference provided"/>
+                        <c:set var="yn" value="Indifferent"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="displayNameString"   value="#{yn}" class="RO_text" />
@@ -193,7 +196,8 @@
                 <h:outputLabel value="Would you like to provide an alternative email address?"  for="questionAltEmail" rendered="#{userBean.editable == 1}" >
                   <h:selectOneRadio id="questionAltEmail" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
-                    <f:selectItem itemValue="0" itemLabel="No" />	
+                    <f:selectItem itemValue="0" itemLabel="No" />
+                    <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                   </h:selectOneRadio>
                 </h:outputLabel>
               </div>
@@ -296,7 +300,8 @@
                           <h:outputLabel value="Allow public to see your Primary Address?"  for="displayAddress" >
                             <h:selectOneRadio id="displayAddress" value="#{participantBean.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 1}">
                               <f:selectItem itemValue="1" itemLabel="Yes" />
-                              <f:selectItem itemValue="0" itemLabel="No" />	
+                              <f:selectItem itemValue="0" itemLabel="No" />
+                              <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                             </h:selectOneRadio>    
                             <c:if test="#{userBean.editable == 0}" >
                               <c:choose>
@@ -307,7 +312,7 @@
                                   <c:set var="yn" value="Yes"/>
                                 </c:when>
                                 <c:otherwise>
-                                  <c:set var="yn" value="No preference provided"/>
+                                  <c:set var="yn" value="Indifferent"/>
                                 </c:otherwise>
                               </c:choose>
                               <h:outputText id="displayAddressString"   value="#{yn}" class="RO_text" />
@@ -326,7 +331,8 @@
               <h:outputLabel value="Would you like to provide an alternative address?"  for="questionAltAddress" rendered="#{userBean.editable == 1}" >
                 <h:selectOneRadio id="questionAltAddress" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
-                  <f:selectItem itemValue="0" itemLabel="No" />	
+                  <f:selectItem itemValue="0" itemLabel="No" />
+                  <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                 </h:selectOneRadio>
               </h:outputLabel>
             </div>
@@ -420,7 +426,8 @@
                             <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayAlternativeAddress" >
                               <h:selectOneRadio id="displayAlternativeAddress" value="#{participantBean.displayAlternativeAddress}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
-                                <f:selectItem itemValue="0" itemLabel="No" />	
+                                <f:selectItem itemValue="0" itemLabel="No" />
+                                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                               </h:selectOneRadio>    
                               <c:if test="#{userBean.editable == 0}" >
                                 <c:choose>
@@ -431,7 +438,7 @@
                                     <c:set var="yn" value="Yes"/>
                                   </c:when>
                                   <c:otherwise>
-                                    <c:set var="yn" value="No preference provided"/>
+                                    <c:set var="yn" value="Indifferent"/>
                                   </c:otherwise>
                                 </c:choose>
                                 <h:outputText id="displayAlternativeAddressString"   value="#{yn}" class="RO_text" />
@@ -465,7 +472,8 @@
                         <h:outputLabel value="Allow public to see your Home Phone Number?"  for="displayHomePhone"  >
                           <h:selectOneRadio id="displayHomePhone" value="#{participantBean.displayHomePhone}" rendered="#{userBean.editable == 1}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
-                            <f:selectItem itemValue="0" itemLabel="No" />	
+                            <f:selectItem itemValue="0" itemLabel="No" />
+                            <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                           </h:selectOneRadio>   
                           <c:if test="#{userBean.editable == 0}" >
                             <c:choose>
@@ -476,7 +484,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="No preference provided"/>
+                                <c:set var="yn" value="Indifferent"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayHomePhoneString"   value="#{yn}" class="RO_text" />
@@ -495,7 +503,8 @@
                         <h:outputLabel value=".. to see your Cell Phone Number?"  for="displayCellPhone" >
                           <h:selectOneRadio id="displayCellPhone" value="#{participantBean.displayCellPhone}" rendered="#{userBean.editable == 1}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
-                            <f:selectItem itemValue="0" itemLabel="No" />	
+                            <f:selectItem itemValue="0" itemLabel="No" />
+                            <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                           </h:selectOneRadio>    
                           <c:if test="#{userBean.editable == 0}" >
                             <c:choose>
@@ -506,7 +515,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="No preference provided"/>
+                                <c:set var="yn" value="Indifferent"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayCellPhoneString"   value="#{yn}"  class="RO_text" />
@@ -535,7 +544,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="No preference provided"/>
+                                <c:set var="yn" value="Indifferent"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayAlternativePhoneString"   value="#{yn}" class="RO_text" />
