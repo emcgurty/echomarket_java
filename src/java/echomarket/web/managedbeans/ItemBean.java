@@ -217,7 +217,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } else {
     }
 
-    return which + "_user_item";
+    return "user_item";
 
   }
 
@@ -848,7 +848,7 @@ public class ItemBean extends AbstractBean implements Serializable {
    */
   public String getItemType() {
     if (itemType == null && ubean.getEditable() == 1) {
-      return ubean.useIsWhichType();
+      return ubean.userIsWhichType();
     } else {
       return itemType;
     }
