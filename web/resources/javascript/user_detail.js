@@ -7,10 +7,12 @@ $(document).ready(function () {
   $('select').on('change', function () {
     checkType(this);
   });
-
+//  Does not work...
+//  $('input').on('focus', function () {
+//    $(this).css("background", "#F2F3F4")
+//  });
 
 });
-
 function checkLegal() {
 
   var legal_check = $("input[type=radio]");
@@ -81,7 +83,6 @@ function checkType(input) {
   var select_value = input.value;
   var select_id = input.id;
   var which_type_ = "";
-
   if (select_id.includes('which_type')) {
     if (select_value == 1) {
       which_type_ = "lend";
@@ -90,7 +91,6 @@ function checkType(input) {
     }
     $("input[name='user_detail:whichType']").val(which_type_);
     $("image#imagePreview").css("src", which_type + "_images");
-
   }
 
 
