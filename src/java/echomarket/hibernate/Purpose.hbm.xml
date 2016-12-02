@@ -11,7 +11,7 @@
         <property name="purposeType" type="string">
             <column name="purpose_type" length="20" not-null="true" />
         </property>
-        <property name="purposeOrder" type="int">
+        <property name="purposeOrder" type="java.lang.Integer">
             <column name="purpose_order" not-null="true" />
         </property>
         <property name="purposeShort" type="string">
