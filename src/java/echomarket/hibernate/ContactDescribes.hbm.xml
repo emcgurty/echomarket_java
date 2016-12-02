@@ -11,7 +11,7 @@
         <property name="purposeType" type="string">
             <column name="purpose_type" length="10" />
         </property>
-        <property name="optionValue" type="int">
+        <property name="optionValue" type="java.lang.Integer">
             <column name="option_value" not-null="true" />
         </property>
         <property name="borrowerOrLenderText" type="string">
