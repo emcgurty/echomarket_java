@@ -199,25 +199,28 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
 
     if (iid != null) {
-      result = getCurrentItem(iid);
-      if (result.size() == 1) {
-        Items ir = (Items) result.get(0);
-        this.itemId = ir.getItemId();
-        this.participant_id = ir.getParticipant_id();
-        this.categoryId = ir.getCategoryId();
-        this.otherItemCategory = ir.getOtherItemCategory();
-        this.itemModel = ir.getItemModel();
-        this.itemDescription = ir.getItemDescription();
-        this.itemConditionId = ir.getItemConditionId();
-        this.itemCount = ir.getItemCount();
-        this.itemType = ir.getItemType();
-        //    this.comment = ir.getComment();  Later, not in gui yet
-        this.notify = ir.getNotify();
-        // Image detail will be retrieved from gui
+      result = getCurrentItem(iid, which);
+      if (result != null) {
+        if (result.size() == 1) {
+          Items ir = (Items) result.get(0);
+          this.itemId = ir.getItemId();
+          this.participant_id = ir.getParticipant_id();
+          this.categoryId = ir.getCategoryId();
+          this.otherItemCategory = ir.getOtherItemCategory();
+          this.itemModel = ir.getItemModel();
+          this.itemDescription = ir.getItemDescription();
+          this.itemConditionId = ir.getItemConditionId();
+          this.itemCount = ir.getItemCount();
+          this.itemType = ir.getItemType();
+          //    this.comment = ir.getComment();  Later, not in gui yet
+          this.notify = ir.getNotify();
+          // Image detail will be retrieved from gui
+        }
       }
     } else {
-    }
 
+    }
+    setItemType(which);
     return "user_item";
 
   }
@@ -276,7 +279,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
 
     } else {
-      result = getCurrentItem(itemId);
+      result = getCurrentItem(itemId, itemType);
       if (result.size() == 1) {
         Items uitem = (Items) result.get(0);
         uitem.setCategoryId(categoryId);
@@ -631,15 +634,19 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
   }
 
-  private List getCurrentItem(String iid) {
+  private List getCurrentItem(String iid, String which) {
 
     List result = null;
     Session session = hib_session();
     Transaction tx = session.beginTransaction();
     String query = null;
     try {
-      query = "FROM Items WHERE item_id = '" + iid + "'";
-      result = session.createQuery(query).list();
+      query = "FROM Items WHERE item_id = :iid";
+      result = session.createQuery(query)
+              .setParameter("iid", iid)
+              .setParameter("which", which)
+              .list();
+
       tx.commit();
     } catch (Exception e) {
       tx.rollback();
