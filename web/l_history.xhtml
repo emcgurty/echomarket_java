@@ -12,10 +12,10 @@
     <h:form enctype="multipart/form-data" id="l_history" >
 
         <div class="top" >
-            <h:outputText value="ITEMS OFFERED"  />
+            <h:outputText value="ITEMS OFFERED TO LEND"  />
         </div> 
 
-        <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(userBean.user_id, 'lend')}" />
+        <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(userBean.participant_id, 'lend')}" />
         <h:dataTable id="history"  value="#{currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
             <h:column rowHeader="">
                 <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
@@ -29,7 +29,7 @@
 
                     <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
                         <h:column rowHeader="">
-                            <h:graphicImage name="#{i.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
+                            <h:graphicImage name="#{i.imageFileName}" library="lend_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
                         </h:column>
                     </h:dataTable>
 
