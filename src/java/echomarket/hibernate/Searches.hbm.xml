@@ -32,7 +32,7 @@
         <property name="lenderOrBorrower" type="java.lang.Integer">
             <column name="lender_or_borrower" />
         </property>
-        <property name="isCommunity" type="int">
+        <property name="isCommunity" type="java.lang.Integer">
             <column name="is_community" not-null="true" />
         </property>
         <property name="userId" type="string">
