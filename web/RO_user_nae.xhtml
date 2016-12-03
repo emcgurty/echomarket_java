@@ -7,80 +7,193 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                template="./userDetailROTemplate.xhtml">
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="./UserDetailROTemplate.xhtml">
 
   <ui:define name="header"  >
-    <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
+    <ui:include rendered="true" src="application_header.xhtml" id="RO_NAEHeader" />
   </ui:define>
 
   <ui:define name="content"  >
     <h:form  >
-      <div id="form_NAE"  >
+      <div id="form_RO_NAE"  >
 
-        <h:dataTable value="${readOnlyBean.getByNAE()}" id="ro_nae"   var="nae" >    
+        <h:dataTable value="#{readOnlyBean.getByNAE()}" id="ro_nae"   var="nae" >    
           <h:column rowHeader="">
-
+            <c:set var="ut"  scope="view" value="#{readOnlyBean.which}"  />
             <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 25px;float:left">
+                <div  class="div_p" >
+                  <div style="margin:5px;" >
+                    <h:outputText value="About the #{ut}er" />
+                  </div>
+                </div>
+                <!--                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">-->
+                <c:set var="cdes"  value="#{contactDescribesBean.getOneCD(nae.contactDescribeId)}" />
 
                 <div  class="div_p" >
                   <div style="margin:5px;" >
-                    <h:outputText value="About the ${'itemType'}er..." />
+                    <h:outputLabel value="#{ut}er describes his/herself as:"  style="text-transform: capitalize" >
+                      <h:outputText value="#{cdes}" class="RO_text" rendered="#{cdes != 'other'}" />
+                      <h:outputText value="#{nae.otherDescribeYourself}" class="RO_text"  rendered="#{cdes == 'other'}"/>
+                    </h:outputLabel>
                   </div>
                 </div>
 
-                <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-                  <div style="float:left;margin-left:25px">
-                    <c:set var="cdes"  scope="session" value="${cd.getOneCD(nae.contactDescribeId)}" />
-                    <h:outputLabel for="contactDescribeId"  value="${'itemType'}er describes his/herself as:"   >
-                      <c:choose  >
-                        <c:when test="${cdes != 'other'}"  >
-                          <h:outputText value="${cdes}" class="RO_text"  />
-                        </c:when>
-                        <c:otherwise  >
-                          <h:outputText value="${nae.otherDescribeYourself}" class="RO_text"  />
-                        </c:otherwise>
-                      </c:choose> 
+                <div  class="div_p" >
+                  <div style="margin:5px;" >
+                    <h:outputLabel value="#{bundle.OrganizationName}"  rendered="#{nae.displayOrganization eq 1}" >
+                      <h:outputText value="#{nae.organizationName}"  rendered="#{nae.displayOrganization eq 1}" />
                     </h:outputLabel>
 
-                    <c:if test="${nae.displayOrganization eq 1}" >
-                      <div style="float:left;margin-left:25px">
-                        <h:outputLabel value="${bundle.OrganizationName}"  >
-                          <h:outputText value="${nae.organizationName}"  />
-                        </h:outputLabel>
-                      </div>
-                    </c:if>
                   </div>
-
                 </div>
-
-
-
-                <div  class="div_p"  >
+                <div  class="div_p" >
                   <div style="margin:5px;" >
-                    <h:outputText value="${'itemType'}er's name:" />
-                    <c:set var="dn"  scope="session" value="${nae.displayName}" />   
-                    <h:outputText  value="${dn}"  />
-                    <c:choose>
-
-                      <c:when test="${dn eq 1}" >
-                        <h:outputText  value="${nae.firstName} ${nae.mi} ${nae.lastName}"  />
-                      </c:when>
-                      <c:otherwise>
-                        <h:outputText  value="userType name not available for public display."  />
-                      </c:otherwise>
-                    </c:choose>
-
+                    <h:outputLabel value="${ut}er's name:" style="text-transform: capitalize"  rendered="#{nae.displayName == 1}"/>
+                    <h:outputText  value="${nae.firstName} ${nae.mi} ${nae.lastName}"  class="RO_text" rendered="#{nae.displayName == 1}"/>
                   </div>
                 </div>
+                <div  class="div_p" >
+                  <div style="margin:5px;" >
+                    <h:outputLabel value="${bundle.homePhone}" rendered="#{nae.displayHomePhone == 1}"/>
+                    <h:outputText  value="${nae.homePhone}"  rendered="#{nae.displayHomePhone == 1}" class="RO_text" />
+
+                    <h:outputLabel value="${bundle.cellPhone}" rendered="#{nae.displayCellPhone == 1}"/>
+                    <h:outputText  value="${nae.cellPhone}"  rendered="#{nae.displayCellPhone == 1}" class="RO_text" />
+
+                    <h:outputLabel value="${bundle.alternativePhone}" rendered="#{nae.displayAlternativePhone == 1}"/>
+                    <h:outputText  value="${nae.alternativePhone}"  rendered="#{nae.displayAlternativePhone == 1}" class="RO_text" />
+                  </div>
+                </div>
+
+                <div  class="div_p" >
+                  <div style="margin:5px;" >
+                    <h:outputLabel value="Email: " rendered="#{!empty nae.emailAlternative}"/>
+                    <h:outputFormat  value="#{nae.emailAlternative}"  rendered="#{!empty nae.emailAlternative}" class="RO_text" />
+                  </div>
+                </div>
+
+                <!--</div>-->
               </div>
             </div>
+
+            <div style="display:block;float:left;height:auto;width:inherit;margin-top:15px;">
+              <div style="margin-left: 15px;float:left">
+                <c:set var="eadd" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'primary' )}" />
+                <h:dataTable value="#{eadd}" var="pa"  rendered="${nae.displayAddress == 1 and fn:length(eadd) > 0}"  >    
+                  <h:column rowHeader="">
+                    <table >
+                      <tr>
+                        <td>
+                          <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
+                          <h:outputText value="#{pa.addressLine1}"    class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                          <h:outputText value="#{pa.addressLine2}"   class="RO_text" />
+                        </td>
+                      </tr> 
+                      <tr>
+                        <td>
+                          <h:outputLabel for="city" value="#{bundle.City}"/>
+                          <h:outputText value="#{pa.city}" class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                          <h:outputText value="#{uss.getOneState(pa.usStateId)}"   class="RO_text" />
+                          <h:message styleClass="error-message" for="usStateId"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <h:outputLabel for="province" value="#{bundle.Province}"  />
+                          <h:outputText value="#{pa.province}" style="margin-left: 5px;"   class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="region" value="#{bundle.Region}" />
+                          <h:outputText value="#{pa.region}" style="margin-left: 5px;"   class="RO_text" />
+                        </td>
+                      </tr>
+                      <tr >
+                        <td >
+                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
+                          <h:outputText value="#{pa.postalCode}" style="margin-left: 5px;" class="RO_text"    />
+                        </td>
+                        <td >
+                          <h:outputLabel for="countryId" value="#{bundle.Country}"/>
+                          <h:outputText value="#{country.getOneCountry(pa.countryId)}" style="margin-left: 5px;"   class="RO_text" />
+                        </td>
+                      </tr>
+
+                    </table>
+                  </h:column>
+                </h:dataTable>
+              </div>
+            </div>    
+            <br/><br/>
+            <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+              <div style="margin-left: 15px;float:left">
+                <c:set var="ealt" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'alternative' )}" />
+                <h:dataTable value="#{ealt}" var="pa"  rendered="${nae.displayAlternativeAddress == 1 and fn:length(ealt) > 0}"  >    
+                  <h:column rowHeader="">
+                    <table >
+                      <tr>
+                        <td>
+                          <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
+                          <h:outputText value="#{pa.addressLine1}"    class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                          <h:outputText value="#{pa.addressLine2}"   class="RO_text" />
+                        </td>
+                      </tr> 
+                      <tr>
+                        <td>
+                          <h:outputLabel for="city" value="#{bundle.City}"/>
+                          <h:outputText value="#{pa.city}" class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                          <h:outputText value="#{uss.getOneState(pa.usStateId)}"   class="RO_text" />
+                          <h:message styleClass="error-message" for="usStateId"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <h:outputLabel for="province" value="#{bundle.Province}"  />
+                          <h:outputText value="#{pa.province}" style="margin-left: 5px;"   class="RO_text" />
+                        </td>
+                        <td>
+                          <h:outputLabel for="region" value="#{bundle.Region}" />
+                          <h:outputText value="#{pa.region}" style="margin-left: 5px;"   class="RO_text" />
+                        </td>
+                      </tr>
+                      <tr >
+                        <td >
+                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
+                          <h:outputText value="#{pa.postalCode}" style="margin-left: 5px;" class="RO_text"    />
+                        </td>
+                        <td >
+                          <h:outputLabel for="countryId" value="#{bundle.Country}"/>
+                          <h:outputText value="#{country.getOneCountry(pa.countryId)}" style="margin-left: 5px;"   class="RO_text" />
+                        </td>
+                      </tr>
+
+                    </table>
+                  </h:column>
+                </h:dataTable>
+
+              </div>
+            </div>    
           </h:column>
         </h:dataTable>
+
+
       </div>
     </h:form>
   </ui:define>
   <ui:define name="footer"  >
-        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
-    </ui:define>
+    <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+  </ui:define>
 </ui:composition>
