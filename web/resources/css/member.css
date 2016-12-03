@@ -22,3 +22,28 @@
 	background:none repeat scroll 0 0 #FAF0E6;
 	member-top:1px solid #BBBBBB;
 }
+
+.member-table{
+	member-collapse:collapse;
+        align-content: center;
+        margin: 5px;padding:5px;width:98%;
+}
+
+.cp-table-header{
+	text-align:left;
+	background:none repeat scroll 0 0 #b5d3d3;
+	cp-bottom:1px solid #BBBBBB;
+	padding:8px;
+}
+
+.cp-table-odd-row{
+	text-align:left;
+	background:none repeat scroll 0 0 #FFFFFFF;
+	cp-top:1px solid #BBBBBB;
+}
+
+.member-table-even-row{
+	text-align:center;
+	background:none repeat scroll 0 0 #FAF0E6;
+	member-top:1px solid #BBBBBB;
+}
