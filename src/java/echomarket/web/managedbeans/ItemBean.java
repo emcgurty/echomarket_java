@@ -49,8 +49,8 @@ public class ItemBean extends AbstractBean implements Serializable {
   private Date dateCreated;
   private Date dateUpdated;
   private Date dateDeleted;
-  private Integer approved;
-  private Integer notify;
+  private int approved;
+  private int notify;
   private String itemType;
   private String whichType;
   private Part imageFileNamePart;
@@ -141,8 +141,8 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     Boolean b_return = false;
     List ii = this.getPicture();
-    Session sb = hib_session();
-    Transaction tx = sb.beginTransaction();
+    Session sb = null;
+    Transaction tx = null;
 
     try {
       b_return = SaveUserItemImage(getImageFileNamePart(), iid);
@@ -159,11 +159,12 @@ public class ItemBean extends AbstractBean implements Serializable {
       iii.setImageContentType(getImageFileNamePart().getContentType());
 
       try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
         sb.save(iii);
         tx.commit();
         b_return = true;
       } catch (Exception e) {
-        b_return = false;
         tx.rollback();
         System.out.println("Error on Retreiving Image by Id");
       } finally {
@@ -183,7 +184,8 @@ public class ItemBean extends AbstractBean implements Serializable {
     } else {
       ubean.setEditable(0);
     }
-
+    
+   
     Map<String, String> params = null;
     String action = null;
 
@@ -235,13 +237,10 @@ public class ItemBean extends AbstractBean implements Serializable {
     String strRetId = null;
     String new_iid = getId();
     List result = null;
-    String which_type = null;
 
-    if (itemType.isEmpty() == true) {
+    if ("both".equals(itemType)) {
       if (whichType.isEmpty() == false) {
         itemType = whichType;
-      } else {
-        itemType = "NA";   /// wrong but will help with bebugging...
       }
     }
 
@@ -637,10 +636,13 @@ public class ItemBean extends AbstractBean implements Serializable {
   private List getCurrentItem(String iid, String which) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
+      session = hib_session();
+      tx = session.beginTransaction();
+
       query = "FROM Items WHERE item_id = :iid";
       result = session.createQuery(query)
               .setParameter("iid", iid)
