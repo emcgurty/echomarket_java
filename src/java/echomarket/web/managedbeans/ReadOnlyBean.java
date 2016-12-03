@@ -1,21 +1,26 @@
 /*
+
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package echomarket.web.managedbeans;
 
+import echomarket.hibernate.Users;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "readOnly")
-@RequestScoped
+@SessionScoped
 public class ReadOnlyBean extends AbstractBean implements Serializable {
 
   private String participant_id;
@@ -23,9 +28,66 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   private String which;
 
   public String load_RO(String strwhich, String iid) {
+    if ((strwhich.isEmpty() == false) && (iid.isEmpty() == false)) {
+      // will be null if called from menu.... values assigned when user clicks Item Details from panels
     this.setItemId(iid);
     this.setWhich(strwhich);
-    return "read_only";
+    }
+    // Get action
+    Map<String, String> params = null;
+    String action = null;
+
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      action = params.get("action");
+      } catch (Exception ex) {
+    }
+    return action;
+  }
+
+  public String getUserType(String pid) {
+
+    List result = null;
+    Session hib = hib_session();
+    Transaction tx = null;
+    String queryString = null;
+    String return_string = null;
+
+    try {
+      tx = hib.beginTransaction();
+      queryString = "SELECT u "
+              + " FROM Users u "
+              + " left join u.participant part "
+              + " WHERE  (part.participant_id = :pid)";
+
+      result = hib.createQuery(queryString)
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+
+    } catch (Exception e) {
+      System.out.println("Error in getLIC in ReadONlyBean");
+      e.printStackTrace();
+      tx.rollback();
+
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    if (result != null) {
+      if (result.size() == 1) {
+        Users uu = (Users) result.get(0);
+        queryString = uu.getUserType();
+      }
+    }
+
+    result = null;
+    if (queryString.contains("lend")) {
+      return_string = "lend";
+    } else if (queryString.contains("borrow")) {
+      return_string = "borrow";
+    }
+    return return_string;
   }
 
   public List getLIC() {
@@ -98,7 +160,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     try {
       tx = hib.beginTransaction();
       queryString = "FROM Items WHERE  (itemId = :iid)";
-   System.out.println(queryString);
+      System.out.println(queryString);
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
@@ -330,11 +392,9 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
 
     try {
       tx = hib.beginTransaction();
-      queryString = "SELECT addr.addressLine1, addr.addressLine2, addr.postalCode, "
-              + " addr.city, addr.province, addr.usStateId, addr.region, addr.countryId "
+      queryString = "SELECT addr "
               + " FROM Participant part "
               + " left join part.addresses addr"
-              + " left join part.contactPreference cp "
               + " left join part.item it "
               + " WHERE (cp.useWhichContactAddress = 1 OR cp.useWhichContactAddress = 3)"
               + " AND  (it.itemId = :iid)"
@@ -460,6 +520,32 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
    */
   public void setWhich(String which) {
     this.which = which;
+  }
+
+  public List getExistingAddress(String pid, String which) {
+
+    List result = null;
+    Session hib = hib_session();
+    Transaction tx = hib.beginTransaction();
+
+    String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
+    try {
+      result = hib.createQuery(queryString)
+              .setParameter("pid", pid)
+              .setParameter("which", which)
+              .list();
+      tx.commit();
+
+    } catch (Exception e) {
+      tx.rollback();
+      System.out.println("Error in getExistingAddress in ROBean");
+      e.printStackTrace();
+
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return result;
   }
 
 }
