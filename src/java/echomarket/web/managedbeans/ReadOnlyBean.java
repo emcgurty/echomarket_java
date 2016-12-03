@@ -30,8 +30,8 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public String load_RO(String strwhich, String iid) {
     if ((strwhich.isEmpty() == false) && (iid.isEmpty() == false)) {
       // will be null if called from menu.... values assigned when user clicks Item Details from panels
-    this.setItemId(iid);
-    this.setWhich(strwhich);
+      this.setItemId(iid);
+      this.setWhich(strwhich);
     }
     // Get action
     Map<String, String> params = null;
@@ -40,7 +40,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
-      } catch (Exception ex) {
+    } catch (Exception ex) {
     }
     return action;
   }
@@ -48,12 +48,13 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public String getUserType(String pid) {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
     String return_string = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT u "
               + " FROM Users u "
@@ -93,15 +94,15 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getLIC() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = " FROM LenderItemConditions lic "
               + " WHERE  (lic.itemId = :iid)";
-
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
@@ -123,15 +124,15 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getLenderTransferData() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = " FROM LenderTransfer lt "
               + " WHERE  (lt.itemId = :iid)";
-
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
               .list();
@@ -153,11 +154,12 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getItemData() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "FROM Items WHERE  (itemId = :iid)";
       System.out.println(queryString);
@@ -182,11 +184,12 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getByNAE() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT part FROM Participant part "
               + " left join part.item it "
@@ -213,17 +216,15 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getBySocialMedia() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
-      queryString = "SELECT cp"
-              + " FROM Participant part "
-              + " left join part.item it "
-              + " left join part.contactPreference cp "
-              + " WHERE  (it.itemId = :iid)";
+      queryString = "FROM ContactPreference "
+              + " WHERE  (itemId = :iid)";
 
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
@@ -245,21 +246,19 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getByPhone() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT cp.contactByHomePhone, cp.contactByCellPhone, cp.contactByAlternativePhone, "
               + " part.homePhone, part.cellPhone, part.alternativePhone, "
-              + " part.displayHomePhone, part.displayCellPhone, part.displayAlternativePhone, "
-              + " it.itemType "
-              + " FROM Users us, Participant part "
-              + " left join us.participant part "
-              + " left join part.item it "
-              + " left join part.contactPreference cp "
-              + " WHERE  (it.itemId = :iid)";
+              + " part.displayHomePhone, part.displayCellPhone, part.displayAlternativePhone "
+              + " FROM Participant part "
+              + " INNER join part.contactPreference cp "
+              + " WHERE  (cp.itemId = :iid)";
 
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
@@ -281,19 +280,18 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getByEmail() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT part.emailAlternative as altemail, us.email as lemail, cp.contactByEmail  "
-              + " FROM Users us, Participant part "
-              + " left join us.participant part "
-              + " left join part.item it "
-              + " left join part.contactPreference cp "
-              + " WHERE (cp.contactByEmail = 1)"
-              + " AND  (it.itemId = :iid)";
+              + " FROM Users us "
+              + " INNER join us.participant part "
+              + " INNER join part.contactPreference cp "
+              + " WHERE (cp.itemId = :iid)";
 
       result = hib.createQuery(queryString)
               .setParameter("iid", this.getItemId())
@@ -315,20 +313,20 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getBorrowerComesToPrimaryAddress() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT addr.addressLine1, addr.addressLine2, addr.postalCode, "
               + " addr.city, addr.province, addr.usStateId, addr.region, addr.countryId "
               + " FROM Participipant part "
-              + " left join part.item it "
-              + " left join part.addresses addr "
-              + " left join it.lenderTransfer ltrans "
+              + " inner join part.addresses addr "
+              + " inner join it.lenderTransfer ltrans "
               + " WHERE (ltrans.borrowerComesToWhichAddress = 1 OR ltrans.borrowerComesToWhichAddress = 3)"
-              + " AND  (it.itemId = :iid)"
+              + " AND  (ltrans.itemId = :iid)"
               + " AND  (part.displayAddress = 1)"
               + " AND  (addr.addressType = 'primary')";
       result = hib.createQuery(queryString)
@@ -351,20 +349,20 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getBorrowerComesToAlternativeAddress() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT addr.addressLine1, addr.addressLine2, addr.postalCode, "
               + " addr.city, addr.province, addr.usStateId, addr.region, addr.countryId "
               + " FROM Participipant part "
-              + " left join part.item it "
-              + " left join part.addresses addr "
-              + " left join it.lenderTransfer ltrans "
+              + " inner join part.addresses addr "
+              + " inner join it.lenderTransfer ltrans "
               + " WHERE (ltrans.borrowerComesToWhichAddress = 1 OR ltrans.borrowerComesToWhichAddress = 2)"
-              + " AND  (it.itemId = :iid)"
+              + " AND  (ltrans.itemId = :iid)"
               + " AND  (addr.addressType = 'alternative')";
       result = hib.createQuery(queryString)
               .setParameter("iid", this.itemId)
@@ -386,18 +384,19 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getPrimaryAddress(String iid) {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT addr "
               + " FROM Participant part "
-              + " left join part.addresses addr"
-              + " left join part.item it "
+              + " inner join part.addresses addr "
+              + " inner join part.contactPreference cp "
               + " WHERE (cp.useWhichContactAddress = 1 OR cp.useWhichContactAddress = 3)"
-              + " AND  (it.itemId = :iid)"
+              + " AND  (cp.itemId = :iid)"
               + " AND  (part.displayAddress = 1)"
               + " AND  (addr.addressType = 'primary')";
       result = hib.createQuery(queryString)
@@ -420,11 +419,12 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getAlternativeAddress(String iid) {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT addr.addressLine1, addr.addressLine2, addr.postalCode, "
               + " addr.city, addr.province, addr.usStateId, addr.region, addr.countryId "
@@ -456,11 +456,12 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getByChat() {
 
     List result = null;
-    Session hib = hib_session();
+    Session hib = null;
     Transaction tx = null;
     String queryString = null;
 
     try {
+      hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "SELECT cp.contactByChat "
               + " FROM ContactPreference cp "
