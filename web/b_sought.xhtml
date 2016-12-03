@@ -34,7 +34,8 @@
           </h:dataTable>
 
           <br />
-          <h:commandButton value="View Details"  action="#{readOnlyBean.load_RO('borrow', history.itemId)}">
+          <c:set var="hid" value="#{history.itemId}" />
+          <h:commandButton value="View Details"  action="#{readOnlyBean.load_RO('borrow', hid)}">
             <f:param name="action" value="RO_item" />
           </h:commandButton>    
 
