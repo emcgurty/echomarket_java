@@ -7,16 +7,17 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                template="./userDetailROTemplate.xhtml">
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="./UserDetailROTemplate.xhtml">
 
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
   </ui:define>
 
   <ui:define name="content"  >
+
     <h:form id="RO_item" enctype="multipart/form-data" >
       <div id="RO_form_item" class="contact_information" >
-
         <div >
           <div style="margin:10px;" >
             <h:outputText value="An item available to #{readOnlyBean.which}:"  />
@@ -66,21 +67,20 @@
               </h:outputLabel>
 
             </div>
-
+           
             <div style="margin-left:25px;margin-top:5px;float:left;">
-              <c:if test="#{!empty image.imageFileName}" >
-                <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-                  <h:outputLabel value="Uploaded Image:"  >	
-                    <h:graphicImage name="#{ii.imageFileName}" library="borrower_images" alt="Item Image"   height="100" width="100" />
-                  </h:outputLabel> 
-                </div>
-                <br />
-                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                  <h:outputLabel for="itemImageCaption" value="Provided aption for your item image:" >
-                    <h:outputText  id="itemImageCaption" value="#{ii.itemImageCaption}" class="RO_text" />
-                  </h:outputLabel>
-                </div>
-              </c:if>
+              <c:set var="item_image_data"  value="#{itemROBean.getCurrentItemImage(ii.itemId)}"  />
+              <h:dataTable id="image"  value="#{item_image_data}" var="i" rendered="#{fn:length(item_image_data) > 0 }">
+                <h:column rowHeader="">
+                  <h:outputLabel value="Uploaded Image:"  />	
+                  <h:graphicImage name="#{i.imageFileName}" library="${readOnlyBean.which}_images" alt="Item Image"   height="200" width="200" />
+                  <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+                    <h:outputLabel for="itemImageCaption" value="Item image caption:" rendered="#{!empty i.itemImageCaption}" >
+                      <h:outputText  id="itemImageCaption" value="#{i.itemImageCaption}" class="RO_text"  rendered="#{!empty i.itemImageCaption}" />
+                    </h:outputLabel>
+                  </div>
+                </h:column>
+              </h:dataTable>
             </div>
           </h:column>
         </h:dataTable>
@@ -89,8 +89,8 @@
     </h:form>
   </ui:define>
   <ui:define name="footer"  >
-        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
-    </ui:define>
+    <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+  </ui:define>
 </ui:composition>
 
 
