@@ -7,7 +7,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                template="./userDetailROTemplate.xhtml">
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="./UserDetailROTemplate.xhtml">
 
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
@@ -16,8 +17,11 @@
   <ui:define name="content"  >
 
     <div id="RO_form_contact_preference" class="contact_information" >
-
-      <h:dataTable value="#{readOnlyBean.getPrimaryAddress(readOnlyBean.itemId)}" id="primary"   var="pa" >    
+     <c:set value="#{readOnlyBean.getPrimaryAddress(readOnlyBean.itemId)}"  var="pa_data" />    
+      <h:dataTable value="#{pa_data}"  id="cp" var="pa" rendered="${fn:length(pa_data) > 0}"  
+                             styleClass="cp-table"
+                             headerClass="cp-table-header"
+                             rowClasses="cp-table-odd-row,cp-table-even-row">    
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
@@ -87,7 +91,11 @@
         </h:column>
       </h:dataTable>
 
-      <h:dataTable value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}" id="alternative"   var="pa" >    
+      <c:set value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}"  var="aa_data" />    
+      <h:dataTable value="#{aa_data}"   var="pa" rendered="${fn:length(aa_data) > 0}"  
+                             styleClass="cp-table"
+                             headerClass="cp-table-header"
+                             rowClasses="cp-table-odd-row,cp-table-even-row">    
         <h:column rowHeader="">
 
           <div  class="div_p"  >
@@ -154,58 +162,29 @@
           </div>
         </h:column>
       </h:dataTable>
-
-      <h:dataTable value="#{readOnlyBean.getByChat()}" id="byChat" >    
-        <h:column rowHeader="">
-
-          <div  class="div_p"  >
-            <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Chat..." />
-            </div>
-          </div>
-
-          <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-            <div style="float:left;margin-left:25px;">
-
-              <h:outputLabel for="contactByChat" value="Contact by chat?:"  >
-                <h:outputText id="contactByChatString"   value="Yes" class="RO_text" />
-
-              </h:outputLabel>
-            </div>
-          </div>
-        </h:column>
-      </h:dataTable>
-
-      <h:dataTable value="#{readOnlyBean.getByEmail()}" id="byEmail" var="bye">    
+     <c:set value="#{readOnlyBean.getByEmail().toArray()}"  var="bye_data" />    
+      <h:dataTable value="${bye_data}" var="bye" rendered="${fn:length(bye_data) > 0}"  >    
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Email..." />
             </div>
           </div>
-
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <div style="float:left;margin-left:25px;">
-              <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
-                <c:choose>
-                  <c:when test="#{bye.contactByEmail== 1}">
-                    <h:outputText id="contactByEmailAltString"   value="By email: #{bye.altemail} "  class="RO_text" />
-                    <h:outputText id="contactByEmailAndString"   value="and #{bye.lemail}"  class="RO_text" rendered="#{bye.contactByEmail == '1'}"/>
-                  </c:when>
-                  <c:when test="#{bye.contactByEmail == 2}">
-                    <h:outputText id="contactByEmailString"   value="By email: #{bye.altemail}"  class="RO_text" />
-                  </c:when>
-                  <c:when test="#{bye.contactByEmail== 3}">
-                    <h:outputText id="contactByEmailString"   value="By email: #{bye.lemail}"  class="RO_text" />
-                  </c:when>
-                </c:choose>
+              <h:outputLabel value="Which E-Mail Address?:"  >
+                <h:outputText  value="By email: #{bye[0]} "  class="RO_text" rendered="#{bye[2] == 1}"  />
+                <h:outputText  value="and #{bye[1]}"  class="RO_text" rendered="#{bye[2] == 1}"  />
+                <h:outputText  value="By email: #{bye[0]}"  class="RO_text" rendered="#{bye[2] == 2}"  />
+                <h:outputText  value="By email: #{bye[1]}"  class="RO_text" rendered="#{bye[2] == 3}"  />
               </h:outputLabel>
             </div>
           </div>
         </h:column>
       </h:dataTable>
-
-      <h:dataTable value="#{readOnlyBean.getByPhone()}" id="byPhone" var="byp">    
+     
+      <c:set  var="gbp"   scope="view"  value="${readOnlyBean.getByPhone().toArray()}" />
+      <h:dataTable value="#{gbp}" var="byp"   rendered="${fn:length(gpb) > 0}" >    
         <h:column rowHeader="">
           <div  class="div_p"  id="display_phone">
             <div style="margin:10px;" >
@@ -214,26 +193,41 @@
           </div>
           <div style="float:left;margin-left:25px;display:block;" >
             <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
-              <h:outputLabel value="er home phone?:"  for="contactByHomePhone" rendered="#{byp.contactByHomePhone == 1 and byp.displayHomePhone == 1}" >
-                <h:outputText id="contactByHomePhoneString"   value="#{byp.homePhone}"  class="RO_text"  rendered="#{byp.contactByHomePhone == 1 and byp.displayHomePhone == 1}" />
+              <h:outputLabel value="By home phone?:"  for="contactByHomePhone"  rendered="#{byp[0] == 1 and byp[6] == 1}" >
+                <h:outputText   value="#{byp[3]}"  class="RO_text"  rendered="#{byp[0] == 1 and byp[6] == 1}" />
               </h:outputLabel> 
             </div>
             <div style="margin-left:25px;float:left;" id="display_cellPhone" class="phone" >
-              <h:outputLabel value="... cell phone?:"  for="contactByCellPhone"  rendered="#{byp.contactByCellPhone = 1 and byp.displayCellPhone == 1}" >
-                <h:outputText id="contactByCellPhoneString"   value="#{participantBean.getCellPhone}"  class="RO_text"  rendered="#{byp.contactByCellPhone = 1 and byp.displayCellPhone == 1}" />
+              <h:outputLabel value="... cell phone?:"  for="contactByCellPhone"  rendered="#{byp[1] == 1 and byp[7] == 1}" >
+                <h:outputText  value="#{byp[4]}"  class="RO_text"  rendered="#{byp[1] == 1 and byp[7] == 1}" />
               </h:outputLabel>
             </div>
             <div style="margin-left:25px;float:left;" id="display_alternativePhone" class="phone" >
-              <h:outputLabel value="... by phone?:"  for="contactByAlternativePhone" rendered="#{byp.contactByAlternativePhone = 1 and byp.displayAlternativePhone == 1}" >
-                <h:outputText id="contactByAlternativePhoneString"   value="#{byp.alternativePhone}"   class="RO_text" rendered="#{byp.contactByAlternativePhone = 1 and byp.displayAlternativePhone == 1}" />
+              <h:outputLabel value="... by alternative phone?:"  for="contactByAlternativePhone" rendered="#{byp[2] == 1 and byp[8] == 1}" >
+                <h:outputText  value="#{byp[5]}"   class="RO_text"   rendered="#{byp[2] == 1 and byp[8] == 1}" />
               </h:outputLabel>
             </div>
           </div>
         </h:column>
       </h:dataTable>
 
-      <h:dataTable value="#{readOnlyBean.getBySocialMedia()}" id="bySocialMedia" var="bysm">    
+      <c:set value="#{readOnlyBean.getBySocialMedia()}" var="data_bysm"   />   
+      <h:dataTable value="#{data_bysm}" var="bysm" rendered="#{fn:length(data_bysm)  == 1}" >   
         <h:column rowHeader="">
+
+          <div  class="div_p"  >
+            <div style="margin:10px;" >
+              <h:outputText value="Contact Option: By Chat..." />
+            </div>
+          </div>
+          <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+            <div style="float:left;margin-left:25px;">
+              <h:outputLabel value="Contact by chat?:"   >
+                <h:outputText value="Yes" class="RO_text"  rendered="#{bysm.contactByChat == 1}"/>
+                <h:outputText value="No"  class="RO_text"  rendered="#{bysm.contactByChat == 0}"/>
+              </h:outputLabel>
+            </div>
+          </div>
 
           <div  class="div_p"  >
             <div style="margin:10px;" >
@@ -241,55 +235,52 @@
             </div>
           </div>
 
-          <div style="float:left;margin-left:25px;">
-            <c:if test="#{bysm.contactByFacebook != null}" >
-              <div style="margin-left:25px;float:left;" class="phone" >
-                <h:outputLabel value="Your Facebook Account:" for="contactByFacebook" >
-                  <h:outputText  id="contactByFacebook" value="#{contactPreferenceBean.contactByFacebook}" style="margin-left:5px;"    class="RO_text" /> 
-                </h:outputLabel>
-              </div> 
-            </c:if>
-            <c:if test="#{bysm.contactByLinkedIn != null}" >
-              <div style="margin-left:25px;float:left;" class="phone" >          
-                <h:outputLabel value="Your LinkedIn Account:" for="contactByLinkedIn" >
-                  <h:outputText  id="contactByLinkedIno" value="#{contactPreferenceBean.contactByLinkedIn}" style="margin-left:5px;"   class="RO_text"  /> 
-                </h:outputLabel>
-              </div>
-            </c:if>
-            <c:if test="#{bysm.contactByTwitter != null}" >
-              <div style="margin-left:25px;float:left;" class="phone" >          
-                <h:outputLabel value="Your Twitter Account:" for="contactByTwitter" >
-                  <h:outputText   value="#{contactPreferenceBean.contactByTwitter}" style="margin-left:5px;" class="RO_text"  />
-                </h:outputLabel>
-              </div>
-            </c:if>
-            <c:if test="#{bysm.contactByInstagram != null}" >
-              <div style="margin-left:25px;float:left;" class="phone" >          
-                <h:outputLabel value="Your Instagram Account:" for="contactByInstagram" >
-                  <h:outputText value="#{contactPreferenceBean.contactByInstagram}" style="margin-left:5px;"  class="RO_text"  />                                
-                </h:outputLabel>
-              </div>
-            </c:if>
-            <c:if test="#{bysm.contactByOtherSocialMedia != null}" >
-              <div style="margin-left:25px;float:left;" class="phone" >
-                <h:outputLabel value="Other Social Media:" for="contactByOtherSocialMedia" >
-                  <h:outputText  value="#{contactPreferenceBean.contactByOtherSocialMedia}" style="margin-left:5px;"  class="RO_text" />
-                </h:outputLabel>
-                <br />
+          <div style="margin-left:25px;float:left;" >
+            <h:outputLabel value="Your Facebook Account:" rendered="#{!empty nbysm.contactByFacebook != null}" >
+              <h:outputText   value="#{bysm.contactByFacebook}"   class="RO_text"  rendered="#{!empty bysm.contactByFacebook}" /> 
+            </h:outputLabel>
+          </div> 
 
-                <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess" >
-                  <h:outputText  value="#{contactPreferenceBean.contactByOtherSocialMediaAccess}" style="margin-left:5px;" class="RO_text" /> 
-                </h:outputLabel>
-              </div>
-            </c:if>
+
+          <div style="margin-left:25px;float:left;" >          
+            <h:outputLabel value="Your LinkedIn Account:" rendered="#{!empty bysm.contactByLinkedIn}" >
+              <h:outputText  value="#{bysm.contactByLinkedIn}" class="RO_text"  rendered="#{!empty bysm.contactByLinkedIn}" /> 
+            </h:outputLabel>
+          </div>
+
+          <div style="margin-left:25px;float:left;"  >          
+            <h:outputLabel value="Your Twitter Account:" rendered="#{!empty bysm.contactByTwitter}" >
+              <h:outputText   value="#{bysm.contactByTwitter}" class="RO_text"  rendered="#{!empty bysm.contactByTwitter}" />
+            </h:outputLabel>
+          </div>
+
+
+
+          <div style="margin-left:25px;float:left;">          
+            <h:outputLabel value="Your Instagram Account:"   rendered="#{!empty bysm.contactByInstagram}" >
+              <h:outputText value="#{bysm.contactByInstagram}"  class="RO_text"  rendered="#{!empty bysm.contactByInstagram}" />                                
+            </h:outputLabel>
+          </div>
+
+
+
+          <div style="margin-left:25px;float:left;"  >
+            <h:outputLabel value="Other Social Media:"   rendered="#{!empty bysm.contactByOtherSocialMedia}" >
+              <h:outputText  value="#{bysm.contactByOtherSocialMedia}"  class="RO_text"   rendered="#{!empty bysm.contactByOtherSocialMedia}"  />
+            </h:outputLabel>
+            <br />
+
+            <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess"  rendered="#{!empty bysm.contactByOtherSocialMediaAccess}"  >
+              <h:outputText  value="#{bysm.contactByOtherSocialMediaAccess}" class="RO_text"   rendered="#{!empty bysm.contactByOtherSocialMediaAccess}"  /> 
+            </h:outputLabel>
           </div>
         </h:column>
       </h:dataTable>
 
     </div>
   </ui:define>
-  
+
   <ui:define name="footer"  >
-        <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
-    </ui:define>
+    <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
+  </ui:define>
 </ui:composition>
