@@ -41,7 +41,7 @@ public class ItemROBean extends AbstractBean implements Serializable {
     Transaction tx = hib.beginTransaction();
     String[] results = null;
     if (iid == null) {
-      return getPicture();
+      return null;
     } else {
     String queryString = "from ItemImages where item_id = :iid ";
     try {
@@ -60,7 +60,7 @@ public class ItemROBean extends AbstractBean implements Serializable {
 
     Integer size_of_list = result.size();
     if (size_of_list == 0) {
-      return getPicture();
+      return null;
     } else {
       ItemImages a_array = (ItemImages) result.get(0);
       ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
