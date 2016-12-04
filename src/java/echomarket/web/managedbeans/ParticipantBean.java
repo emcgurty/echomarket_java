@@ -618,10 +618,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   private List getCurrentParticipant(String uid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
+     session = hib_session();
+     tx = session.beginTransaction();
       query = "FROM Participant WHERE user_id = :uid";
       result = session.createQuery(query)
               .setParameter("uid", uid)
