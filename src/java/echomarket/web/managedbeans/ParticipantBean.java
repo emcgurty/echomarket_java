@@ -58,14 +58,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   private String remoteIp;
   private int approved;
 
-  private static ArrayList<Addresses> primary
+  private ArrayList<Addresses> primary
           = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "primary")));
 
-  private static ArrayList<Addresses> alternative
+  private ArrayList<Addresses> alternative
           = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "alternative")));
-
-  private Addresses[] existing_primary;
-  private Addresses[] existing_alternative;
 
   public ArrayList<Addresses> getPrimary() {
     return primary;
@@ -75,11 +72,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     return alternative;
   }
 
-  public static void setPrimary(ArrayList<Addresses> aPrimary) {
+  public void setPrimary(ArrayList<Addresses> aPrimary) {
     primary = aPrimary;
   }
 
-  public static void setAlternative(ArrayList<Addresses> aAlternative) {
+  public void setAlternative(ArrayList<Addresses> aAlternative) {
     alternative = aAlternative;
   }
 
@@ -336,14 +333,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   public String userAgreement() {
 
     String return_string = null;
+    Session sb = null;
+    Transaction tx = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
       message(null, "threeStrikesYourOut", null);
       return_string = ubean.Logout();
     } else {
-      Session sb = hib_session();
-      Transaction tx = sb.beginTransaction();
-      Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
+            
       try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
         sb.save(part);
         tx.commit();
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
@@ -801,41 +801,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.isCreator = isCreator;
   }
 
-  public List getExisting_primary() {
-    return getExistingAddress("primary");
-  }
-
-  /**
-   * @param existing_primary the existing_primary to set
-   */
-  public void setExisting_primary(Addresses[] existing_primary) {
-    this.existing_primary = existing_primary;
-  }
-
-  /**
-   * @return the existing_alternative
-   */
-  public List getExisting_alternative() {
-    return getExistingAddress("alternative");
-  }
-
-  /**
-   * @param existing_alternative the existing_alternative to set
-   */
-  public void setExisting_alternative(Addresses[] existing_alternative) {
-    this.existing_alternative = existing_alternative;
-  }
-
-  private List getExistingAddress(String which) {
+  public List getExistingAddress(String which) {
 
     List result = null;
+    List return_result = null;
     Session hib = hib_session();
     Transaction tx = hib.beginTransaction();
 
-    String queryString = "from Addresses where participant_id = :bid AND address_type = :which";
+    String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
     try {
       result = hib.createQuery(queryString)
-              .setParameter("bid", ubean.getParticipant_id())
+              .setParameter("pid", ubean.getParticipant_id())
               .setParameter("which", which)
               .list();
       tx.commit();
@@ -852,12 +828,25 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
     Integer size_of_list = result.size();
     if ((size_of_list == 0) && (which == "alternative")) {
-      return getAlternative();
+      return_result = getAlternative();
     } else if ((size_of_list == 0) && (which == "primary")) {
-      return getPrimary();
-    } else {
-      return result;
+      return_result = getPrimary();
+    } else if ((size_of_list == 1) && (which == "alternative")) {
+      Addresses alt = (Addresses) result.get(0);
+      ArrayList<Addresses> new_alternative
+              = new ArrayList<Addresses>(Arrays.asList(new Addresses(alt.getAddressId(), alt.getParticipant_id(), alt.getAddressLine1(), alt.getAddressLine2(),
+                      alt.getPostalCode(), alt.getCity(), alt.getProvince(), alt.getUsStateId(), alt.getRegion(), alt.getCountryId(), alt.getAddressType())));
+      setAlternative(new_alternative);
+      return_result = getAlternative();
+    } else if ((size_of_list == 1) && (which == "primary")) {
+      Addresses pri = (Addresses) result.get(0);
+      ArrayList<Addresses> new_primary
+              = new ArrayList<Addresses>(Arrays.asList(new Addresses(pri.getAddressId(), pri.getParticipant_id(), pri.getAddressLine1(), pri.getAddressLine2(),
+                      pri.getPostalCode(), pri.getCity(), pri.getProvince(), pri.getUsStateId(), pri.getRegion(), pri.getCountryId(), pri.getAddressType())));
+      setAlternative(new_primary);
+      return_result = getPrimary();
     }
+    return return_result;
 
   }
 
