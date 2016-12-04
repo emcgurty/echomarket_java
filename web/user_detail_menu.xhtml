@@ -102,12 +102,12 @@
             <a href="#s1">Lend or Borrow?</a>
             <ul>
               <li>
-                <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"     >
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="I want to lend!"  rendered="#{userBean.editable != -1}"     >
                   <f:param name="action" value="item" />
                 </h:commandLink>
               </li>
               <li>
-                <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    >
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="I want to borrow!"  rendered="#{userBean.editable != -1}"    >
                   <f:param name="action" value="item" />
                 </h:commandLink>
               </li>
