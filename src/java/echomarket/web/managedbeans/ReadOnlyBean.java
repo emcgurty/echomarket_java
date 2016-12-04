@@ -290,15 +290,16 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      queryString = "SELECT addr.addressLine1, addr.addressLine2, addr.postalCode, "
-              + " addr.city, addr.province, addr.usStateId, addr.region, addr.countryId "
-              + " FROM Participipant part "
+      queryString = "SELECT addr "
+              + " FROM Participant part "
               + " inner join part.addresses addr "
-              + " inner join it.lenderTransfer ltrans "
+              + " inner join part.item itm "
+              + " inner join itm.lenderTransfer ltrans "
               + " WHERE (ltrans.borrowerComesToWhichAddress = 1 OR ltrans.borrowerComesToWhichAddress = 3)"
-              + " AND  (ltrans.itemId = :iid)"
+              + " AND  (ltrans.itemId = :iid) "
               + " AND  (part.displayAddress = 1)"
               + " AND  (addr.addressType = 'primary')";
+
       result = hib.createQuery(queryString)
               .setParameter("iid", this.itemId)
               .list();
@@ -326,11 +327,11 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      queryString = "SELECT addr.addressLine1, addr.addressLine2, addr.postalCode, "
-              + " addr.city, addr.province, addr.usStateId, addr.region, addr.countryId "
-              + " FROM Participipant part "
+      queryString = "SELECT addr "
+              + " FROM Participant part "
               + " inner join part.addresses addr "
-              + " inner join it.lenderTransfer ltrans "
+              + " inner join part.item itm "
+              + " inner join itm.lenderTransfer ltrans "
               + " WHERE (ltrans.borrowerComesToWhichAddress = 1 OR ltrans.borrowerComesToWhichAddress = 2)"
               + " AND  (ltrans.itemId = :iid)"
               + " AND  (addr.addressType = 'alternative')";
