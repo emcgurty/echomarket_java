@@ -6,49 +6,40 @@
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
   <h:head>        
   </h:head>
-
+  <h:form>
   <ul id="nav" class="user_detail_menu">
-      
-    <li class="subs" id="tab_item_3" >
-      <c:choose>
-        <c:when  test="#{userBean.itemId != null}" >
-          <c:set var="newItemLabel" value="New item #{itemBean.getCurrentItemDescription(userBean.itemId)}: Revise Initial Contact Preferences?"  />
-        </c:when>
-        <c:when  test="#{userBean.itemId == null}" >
-          <c:set var="newItemLabel" value="Initial Contact Preferences"  />
-        </c:when>
-      </c:choose>
-      <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="#{userBean.editable != -1}" >
-        <f:param name="action" value="edit" />
-        <f:param name="iid" value="#{userBean.itemId}" />
+
+    <li class="subs" id="tab_item_1" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null)}"  value="Item"  rendered="#{userBean.editable != -1}" >
+        <f:param name="action" value="RO_item" />
       </h:commandLink>
     </li>
 
-    <c:if test="#{(userBean.useIsWhichType() == 'both') or (userBean.useIsWhichType() == 'lend')}" >
-      <li >
-        <c:choose>
-          <c:when  test="#{userBean.itemId!= null}" >
-            <c:set var="newItemLabelTrans" value="Provide Item Transfer Preferences..."  />
-          </c:when>
-        </c:choose>
-        <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
-          <f:param name="iid" value="#{userBean.itemId}" />
-          <f:param name="action" value="edit" />
+    <li class="subs" id="tab_item_2" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null)}"  value="About the lender/borrower"  rendered="#{userBean.editable != -1}" >
+        <f:param name="action" value="RO_user_nae" />
+      </h:commandLink>
+    </li>    
+    <li class="subs" id="tab_item_3" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null)}"  value="Initial Contact Preferences"  rendered="#{userBean.editable != -1}" >
+        <f:param name="action" value="RO_contact_preferences" />
+      </h:commandLink>
+    </li>
+
+    <c:if test="#{(readOnlyBean.which == 'both') or (readOnlyBean.which == 'lend')}" >
+      <li class="subs" id="tab_item_4" >
+        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null)}"  value="Item  transfer Preferences"  rendered="true">
+          <f:param name="action" value="RO_lender_transfer" />
         </h:commandLink>   
       </li>
-      <li>
-        <c:choose>
-          <c:when  test="#{userBean.itemId!= null}" >
-            <c:set var="newItemLabelCond" value="Provide Item Lending Conditions..."  />
-          </c:when>
-        </c:choose>
-        <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
-          <f:param name="iid" value="#{itemBean.itemId}" />
-          <f:param name="action" value="edit" />
+      <li class="subs" id="tab_item_5" >
+        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null)}"  value="Item Conditions"  rendered="true">
+          <f:param name="action" value="RO_lender_conditions" />
         </h:commandLink>   
       </li>
 
     </c:if>     
- 
+
   </ul>
+  </h:form>
 </ui:composition>
