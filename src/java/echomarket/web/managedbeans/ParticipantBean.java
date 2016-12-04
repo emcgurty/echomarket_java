@@ -255,8 +255,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
 
-      Addresses balt = (Addresses) aadrs.get(0);
-      reqPO = balt.getPostalCode();
+      Addresses aalt = (Addresses) aadrs.get(0);
+      reqPO = aalt.getPostalCode();
       if (reqPO != null) {
 
         if (sb.isOpen() == false) {
@@ -267,15 +267,16 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         }
 
         try {
-          if (balt.getAddressId() == null) {
-            balt.setParticipant_id(pid);
-            balt.setAddressId(UUID.randomUUID().toString());
-            sb.save(balt);
+          if (aalt.getAddressId() == null) {
+            aalt.setParticipant_id(pid);
+            aalt.setAddressId(UUID.randomUUID().toString());
+            sb.save(aalt);
           } else {
-            sb.update(balt);
+            sb.update(aalt);
           }
           tx.commit();
           updateSuccess = true;
+          aalt = null;
         } catch (Exception ex) {
           tx.rollback();
           System.out.println("Error in Save/Update Particpant, line 254");
@@ -827,25 +828,26 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     Integer size_of_list = result.size();
-    if ((size_of_list == 0) && (which == "alternative")) {
+    if ((size_of_list == 0) && ("alternative".equals(which))) {
       return_result = getAlternative();
-    } else if ((size_of_list == 0) && (which == "primary")) {
+    } else if ((size_of_list == 0) && ("primary".equals(which))) {
       return_result = getPrimary();
-    } else if ((size_of_list == 1) && (which == "alternative")) {
+    } else if ((size_of_list == 1) && ("alternative".equals(which))) {
       Addresses alt = (Addresses) result.get(0);
       ArrayList<Addresses> new_alternative
               = new ArrayList<Addresses>(Arrays.asList(new Addresses(alt.getAddressId(), alt.getParticipant_id(), alt.getAddressLine1(), alt.getAddressLine2(),
                       alt.getPostalCode(), alt.getCity(), alt.getProvince(), alt.getUsStateId(), alt.getRegion(), alt.getCountryId(), alt.getAddressType())));
       setAlternative(new_alternative);
       return_result = getAlternative();
-    } else if ((size_of_list == 1) && (which == "primary")) {
+    } else if ((size_of_list == 1) && ("primary".equals(which))) {
       Addresses pri = (Addresses) result.get(0);
       ArrayList<Addresses> new_primary
               = new ArrayList<Addresses>(Arrays.asList(new Addresses(pri.getAddressId(), pri.getParticipant_id(), pri.getAddressLine1(), pri.getAddressLine2(),
                       pri.getPostalCode(), pri.getCity(), pri.getProvince(), pri.getUsStateId(), pri.getRegion(), pri.getCountryId(), pri.getAddressType())));
-      setAlternative(new_primary);
+      setPrimary(new_primary);
       return_result = getPrimary();
-    }
+    } else{}
+    
     return return_result;
 
   }
