@@ -1038,4 +1038,9 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     return return_value;
   }
+  
+  public Boolean deleteCurrentRecord(String iid) {
+    ///Needs to be written
+    return true;
+  }
 }
