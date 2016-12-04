@@ -50,7 +50,7 @@
         </c:otherwise>
       </c:choose>
     </c:if>
-    <c:if test="#{not userLoggedIn}" >
+    <c:if test="#{not userLoggedIn and userBean.action == 'current'}" >
       <c:set var="whichUserType" value="#{userBean.userType}"  />
       <c:choose>
         <c:when test="#{whichUserType == 'borrow'}">
@@ -64,10 +64,10 @@
           <br />
           <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
         </c:when>
-        <c:otherwise>
-          <p>Perform a quick search here to see what available to lend or borrow</p>
-        </c:otherwise>
       </c:choose>
+    </c:if>
+    <c:if test="#{not userLoggedIn and userBean.action == 'new'}" >
+        <p>Perform a quick search here to see what available to lend or borrow</p>
     </c:if>
 
   </div>
