@@ -7,7 +7,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                template="./userDetailROTemplate.xhtml">
+                template="./UserDetailROTemplate.xhtml">
 
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
@@ -28,53 +28,35 @@
             <h:outputText value="Lending Terms: Monetary" />
           </div>
         </div>
-        <h:dataTable value="#{readOnlyBean.getLIC()}" id="lic"  var="pa" >    
+        <c:set var="lic_data" value="#{readOnlyBean.getLIC(readOnlyBean.itemId, readOnlyBean.which)}"  />
+        <h:dataTable value="#{lic_data}"  var="lic" >    
           <h:column rowHeader="">
+            <h:outputText value="#{lic.availableForPurchaseAmount}"/>
+            <h:outputText value="${lic.availableForPurchaseAmount}"/>
             <table class="personal">
               <tr>
                 <td>
                   <div style="display:inline-table;margin-top:5px;margin-left:25px;">
 
                     <h:outputLabel for="forFree" value="Item available for Free?"  >
-
-                      <c:choose>
-                        <c:when test="#{lic.forFree == 0}">
-                          <c:set var="cbe" value="No"/>
-                        </c:when>
-                        <c:when test="#{lic.forFree == 1}">
-                          <c:set var="cbe" value="Yes"/>
-                        </c:when>
-                        <c:otherwise>
-                          <c:set var="cbe" value="No preference provided"/>
-                        </c:otherwise>
-                      </c:choose>
-                      <h:outputText id="forFreeString"   value="#{cbe}" class="RO_text" />
-
+                      <h:outputText  value="No" class="RO_text"  rendered="${lic.forFree == 0}"/>
+                      <h:outputText  value="Yes" class="RO_text"  rendered="${lic.forFree == 1}"/>
                     </h:outputLabel>
 
                   </div>
                 </td>
                 <td>
                   <div>
-
-                  </div></td>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td>
                   <div style="margin-top:5px;margin-left:25px;">
                     <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
-                      <c:choose>
-                        <c:when test="#{lic.smallFee == 0}">
-                          <c:set var="cbe" value="No"/>
-                        </c:when>
-                        <c:when test="#{lic.smallFee == 1}">
-                          <c:set var="cbe" value="Yes, #{lic.smallFeeAmount}"/>
-                        </c:when>
-                        <c:otherwise>
-                          <c:set var="cbe" value="No preference provided"/>
-                        </c:otherwise>
-                      </c:choose>
-                      <h:outputText id="smallFeeString"   value="#{cbe}" class="RO_text" />
+                      <c:set var="cbe" value="No" rendered="#{lic.smallFee == 0}"/>
+                      <c:set var="cbe" value="Yes, for #{lic.smallFeeAmount}" rendered="${lic.smallFee == 1}" />
+                      <h:outputText   value="${cbe}" class="RO_text"   />
                     </h:outputLabel>
                   </div>
                 </td>
@@ -89,17 +71,17 @@
                     <h:outputLabel for="availableForPurchase" value="Item available for small purchase amount?:"  >
 
                       <c:choose>
-                        <c:when test="#{lic.availableForPurchase == 0}">
+                        <c:when test="${lic.availableForPurchase == 0}">
                           <c:set var="cbe" value="No"/>
                         </c:when>
-                        <c:when test="#{lic.availableForPurchase == 1}">
-                          <c:set var="cbe" value="Yes, for #{lic.availableForPurchaseAmount}"/>
+                        <c:when test="${lic.availableForPurchase == 1}">
+                          <c:set var="cbe" value="Yes, for ${lic.availableForPurchaseAmount}"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="cbe" value="No preference provided"/>
+                          <c:set var="cbe" value="Indifferent"/>
                         </c:otherwise>
                       </c:choose>
-                      <h:outputText id="availableForPurchaseString"   value="#{cbe}" class="RO_text" />
+                      <h:outputText id="availableForPurchaseString"   value="${cbe}" class="RO_text" />
                     </h:outputLabel>
                   </div>
                 </td>
@@ -120,7 +102,7 @@
                           <c:set var="cbe" value="Yes"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="cbe" value="No preference provided"/>
+                          <c:set var="cbe" value="Indifferent"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="availableForDonationString"   value="#{cbe}" class="RO_text" />
@@ -140,7 +122,7 @@
                           <c:set var="cbe" value="Yes"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="cbe" value="No preference provided"/>
+                          <c:set var="cbe" value="Indifferent"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="donateAnonymousString"   value="#{cbe}" class="RO_text" />
@@ -162,7 +144,7 @@
                           <c:set var="cbe" value="Yes. Lender seeking #{lic.tradeItem}"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="cbe" value="No preference provided"/>
+                          <c:set var="cbe" value="Indifferent"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="tradeString"   value="#{cbe}" class="RO_text" />
@@ -189,7 +171,7 @@
                           <c:set var="cbe" value="Yes, lender requiring #{lic.securityDepositAmount}"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="cbe" value="No preference provided"/>
+                          <c:set var="cbe" value="Indifferent"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="securityDepositString"   value="#{cbe}" class="RO_text" />
@@ -228,7 +210,7 @@
                 <c:set var="cbe" value="Yes"/>
               </c:when>
               <c:otherwise>
-                <c:set var="cbe" value="No preference provided"/>
+                <c:set var="cbe" value="Indifferent"/>
               </c:otherwise>
             </c:choose>
             <h:outputText id="agreedNumberOfDaysString"   value="#{cbe}" class="RO_text" />
@@ -248,7 +230,7 @@
                 <c:set var="cbe" value="Yes"/>
               </c:when>
               <c:otherwise>
-                <c:set var="cbe" value="No preference provided"/>
+                <c:set var="cbe" value="Indifferent"/>
               </c:otherwise>
             </c:choose>
             <h:outputText id="agreedNumberOfHoursString"   value="#{cbe}" class="RO_text" />
@@ -270,7 +252,7 @@
                 <c:set var="cbe" value="Yes"/>
               </c:when>
               <c:otherwise>
-                <c:set var="cbe" value="No preference provided"/>
+                <c:set var="cbe" value="Indifferent"/>
               </c:otherwise>
             </c:choose>
             <h:outputText id="indefiniteDurationString"   value="#{cbe}" class="RO_text" />
@@ -301,7 +283,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="No preference provided"/>
+                      <c:set var="cbe" value="Indifferent"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="presentDuringBorrowingPeriodString"   value="#{cbe}" class="RO_text" />
@@ -322,7 +304,7 @@
                         <c:set var="cbe" value="Yes"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="No preference provided"/>
+                        <c:set var="cbe" value="Indifferent"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="entirePeriodString"   value="#{cbe}" class="RO_text" />
@@ -340,7 +322,7 @@
                         <c:set var="cbe" value="Yes"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="No preference provided"/>
+                        <c:set var="cbe" value="Indifferent"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="partialPeriodString"   value="#{cbe}" class="RO_text" />
@@ -362,7 +344,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="No preference provided"/>
+                      <c:set var="cbe" value="Indifferent"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="provideProperUseTrainingString"   value="#{cbe}" class="RO_text" />
@@ -380,8 +362,8 @@
           </tr>
 
         </table>
-          </div>  
       </div>  
+    </div>  
   </ui:define>
   <ui:define name="footer"  >
     <ui:include rendered="true" src="application_footer.xhtml" id="borrowersFooter" /> 
