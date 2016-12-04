@@ -349,33 +349,33 @@
                       <table >
                         <tr>
                           <td>
-                            <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
-                            <h:inputText id="addressLine1" value="#{pa.addressLine1}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
+                            <h:outputLabel for="addressLine1a" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
+                            <h:inputText id="addressLine1a" value="#{pa.addressLine1}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
                             <h:outputText value="#{pa.addressLine1}" style="margin-left: 5px;" class="RO_text"  rendered="#{userBean.editable == 0}" />
                             <span class="error-message" id="addressLine1" ></span>
                           </td>
                           <td>
-                            <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
-                            <h:inputText id="addressLine2" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
+                            <h:outputLabel for="addressLine2a" value="#{bundle.AddressLine2}" />
+                            <h:inputText id="addressLine2a" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
                             <h:outputText value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" class="RO_text" />
 
                           </td>
                         </tr> 
                         <tr>
                           <td>
-                            <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
-                            <h:inputText id="city" value="#{pa.city}" style="margin-left: 5px;" class="primary"  rendered="#{userBean.editable == 1}" />
+                            <h:outputLabel for="citya" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
+                            <h:inputText id="citya" value="#{pa.city}" style="margin-left: 5px;" class="primary"  rendered="#{userBean.editable == 1}" />
                             <h:outputText value="#{pa.city}" style="margin-left: 5px;" class="RO_text"   rendered="#{userBean.editable == 0}" />
 
                             <span class="error-message" id="city" ></span>
                           </td>
                           <td>
-                            <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
-                            <h:selectOneMenu id="usStateId" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}">
+                            <h:outputLabel for="usStateIda" value="#{bundle.UsStates}"/>
+                            <h:selectOneMenu id="usStateIda" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}">
                               <f:validator validatorId="selectOneMenuValidator" />  
                               <f:selectItems id="us_state_id" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
                               </f:selectItems>    
-                              <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text"  rendered="#{userBean.editable == 0}" />    
+                              <h:outputText value="${usStatesBean.getOneState(pa.usStateId)}" class="RO_text"  rendered="#{userBean.editable == 0}" />    
                             </h:selectOneMenu>
 
                             <h:message styleClass="error-message" for="usStateId"/>
@@ -384,13 +384,13 @@
                         </tr>
                         <tr>
                           <td>
-                            <h:outputLabel for="province" value="#{bundle.Province}"/>
+                            <h:outputLabel for="provincea" value="#{bundle.Province}"/>
                             <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
                             <h:outputText value="#{pa.province}" class="RO_text" rendered="#{userBean.editable == 0}" />
 
                           </td>
                           <td>
-                            <h:outputLabel for="region" value="#{bundle.Region}"/>
+                            <h:outputLabel for="regiona" value="#{bundle.Region}"/>
                             <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
                             <h:outputText value="#{pa.region}" class="RO_text"  rendered="#{userBean.editable == 0}" />
 
@@ -398,14 +398,14 @@
                         </tr>
                         <tr >
                           <td >
-                            <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
-                            <h:inputText id="postalCode" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
+                            <h:outputLabel for="postalCodea" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
+                            <h:inputText id="postalCodea" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
                             <h:outputText value="#{pa.postalCode}" class="RO_text"   rendered="#{userBean.editable == 0}" />
                             <span class="error-message" id="postalCode" ></span>
                           </td>
                           <td >
-                            <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
-                            <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}"  >
+                            <h:outputLabel for="countryIda" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                            <h:selectOneMenu id="countryIda" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}"  >
                               <f:validator validatorId="selectOneMenuValidator" />  
                               <f:selectItems id="country_id" value="#{country_list}"  var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                               </f:selectItems>    
