@@ -629,9 +629,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
               .setParameter("uid", uid)
               .list();
       tx.commit();
-    } catch (Exception e) {
+    } catch (Exception ex) {
       System.out.println("Error in getCurrentParticipant");
-      e.printStackTrace();
+      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
       tx.rollback();
     } finally {
       tx = null;
@@ -662,9 +662,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
     } catch (Exception ex) {
       System.out.println("Error in deleting borrower record");
-      Logger
-              .getLogger(ParticipantBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
 
       result = null;
