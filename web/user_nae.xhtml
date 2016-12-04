@@ -375,10 +375,9 @@
                               <f:validator validatorId="selectOneMenuValidator" />  
                               <f:selectItems id="us_state_id" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
                               </f:selectItems>    
-                              <h:outputText value="${usStatesBean.getOneState(pa.usStateId)}" class="RO_text"  rendered="#{userBean.editable == 0}" />    
-                            </h:selectOneMenu>
-
-                            <h:message styleClass="error-message" for="usStateId"/>
+                           </h:selectOneMenu>
+                              <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text"  rendered="#{userBean.editable == 0}" />    
+                              <h:message styleClass="error-message" for="usStateId"/>
                             <span class="error-message" id="usStates" ></span>
                           </td>
                         </tr>
