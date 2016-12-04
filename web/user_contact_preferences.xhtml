@@ -97,7 +97,6 @@
               <h:selectOneRadio id="contactByChat" value="#{contactPreferenceBean.contactByChat}"  rendered="#{userBean.editable == 1}" >
                 <f:selectItem itemValue="1" itemLabel="Yes" /> 
                 <f:selectItem itemValue="0" itemLabel="No" />
-                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -180,7 +179,6 @@
               <h:selectOneRadio id="contactByHomePhone" value="#{contactPreferenceBean.contactByHomePhone}"  rendered="#{userBean.editable == 1}" >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
-                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -204,7 +202,7 @@
               <h:selectOneRadio id="contactByCellPhone" value="#{contactPreferenceBean.contactByCellPhone}"  rendered="#{userBean.editable == 1}">
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
-                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -228,7 +226,7 @@
               <h:selectOneRadio id="contactByAlternativePhone" value="#{contactPreferenceBean.contactByAlternativePhone}"  rendered="#{userBean.editable == 1}"  >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
-                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
