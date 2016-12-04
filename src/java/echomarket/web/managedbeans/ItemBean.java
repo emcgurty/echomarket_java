@@ -205,7 +205,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (result != null) {
         if (result.size() == 1) {
           Items ir = (Items) result.get(0);
-          this.itemId = ir.getItemId();
+          setItemId(ir.getItemId());
           this.participant_id = ir.getParticipant_id();
           this.categoryId = ir.getCategoryId();
           this.otherItemCategory = ir.getOtherItemCategory();
@@ -643,11 +643,11 @@ public class ItemBean extends AbstractBean implements Serializable {
       session = hib_session();
       tx = session.beginTransaction();
 
-      query = "FROM Items WHERE item_id = :iid";
+      query = "FROM Items WHERE item_id = :iid and itemType = :which";
       result = session.createQuery(query)
               .setParameter("iid", iid)
               .setParameter("which", which)
-              .list();
+             .list();
 
       tx.commit();
     } catch (Exception e) {
@@ -882,11 +882,11 @@ public class ItemBean extends AbstractBean implements Serializable {
       session = hib_session();
       tx = session.beginTransaction();
       query = " from LenderItemConditions lic "
-              + " WHERE lic.participant_id = :pid "
-              + " AND lic.itemId = :iid ";
+              + " WHERE lic.participant_id = :pid ";
+//              + " AND lic.itemId = :iid ";
       result = session.createQuery(query)
               .setParameter("pid", pid)
-              .setParameter("iid", "")
+//              .setParameter("iid", "")
               .setMaxResults(1)
               .list();
       tx.commit();
