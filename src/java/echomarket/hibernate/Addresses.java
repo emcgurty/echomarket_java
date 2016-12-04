@@ -25,6 +25,19 @@ public class Addresses implements java.io.Serializable {
   private String region;
   private String countryId;
   private String addressType;
+  
+    /// On the user_nae gui there are two possible instances of addresses
+  /// In the browser on autocomplete the other address objects is being changed
+  private String addressLine1a;
+  private String addressLine2a;
+  private String postalCodea;
+  private String citya;
+  private String provincea;
+  private String usStateIda;
+  private String regiona;
+  private String countryIda;
+  private String addressTypea;
+  
 
   public Addresses() {
   }
@@ -144,6 +157,132 @@ public class Addresses implements java.io.Serializable {
    */
   public void setParticipant_id(String participant_id) {
     this.participant_id = participant_id;
+  }
+
+  /**
+   * @return the addressLine1a
+   */
+  public String getAddressLine1a() {
+    return addressLine1a;
+  }
+
+  /**
+   * @param addressLine1a the addressLine1a to set
+   */
+  public void setAddressLine1a(String addressLine1a) {
+    this.addressLine1a = addressLine1a;
+  }
+
+  /**
+   * @return the addressLine2a
+   */
+  public String getAddressLine2a() {
+    return addressLine2a;
+  }
+
+  /**
+   * @param addressLine2a the addressLine2a to set
+   */
+  public void setAddressLine2a(String addressLine2a) {
+    this.addressLine2a = addressLine2a;
+  }
+
+  /**
+   * @return the postalCodea
+   */
+  public String getPostalCodea() {
+    return postalCodea;
+  }
+
+  /**
+   * @param postalCodea the postalCodea to set
+   */
+  public void setPostalCodea(String postalCodea) {
+    this.postalCodea = postalCodea;
+  }
+
+  /**
+   * @return the citya
+   */
+  public String getCitya() {
+    return citya;
+  }
+
+  /**
+   * @param citya the citya to set
+   */
+  public void setCitya(String citya) {
+    this.citya = citya;
+  }
+
+  /**
+   * @return the provincea
+   */
+  public String getProvincea() {
+    return provincea;
+  }
+
+  /**
+   * @param provincea the provincea to set
+   */
+  public void setProvincea(String provincea) {
+    this.provincea = provincea;
+  }
+
+  /**
+   * @return the usStateIda
+   */
+  public String getUsStateIda() {
+    return usStateIda;
+  }
+
+  /**
+   * @param usStateIda the usStateIda to set
+   */
+  public void setUsStateIda(String usStateIda) {
+    this.usStateIda = usStateIda;
+  }
+
+  /**
+   * @return the regiona
+   */
+  public String getRegiona() {
+    return regiona;
+  }
+
+  /**
+   * @param regiona the regiona to set
+   */
+  public void setRegiona(String regiona) {
+    this.regiona = regiona;
+  }
+
+  /**
+   * @return the countryIda
+   */
+  public String getCountryIda() {
+    return countryIda;
+  }
+
+  /**
+   * @param countryIda the countryIda to set
+   */
+  public void setCountryIda(String countryIda) {
+    this.countryIda = countryIda;
+  }
+
+  /**
+   * @return the addressTypea
+   */
+  public String getAddressTypea() {
+    return addressTypea;
+  }
+
+  /**
+   * @param addressTypea the addressTypea to set
+   */
+  public void setAddressTypea(String addressTypea) {
+    this.addressTypea = addressTypea;
   }
 
 }
