@@ -253,7 +253,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         ltr = (LenderTransfer) result.get(0);
         if (ltr != null) {
           this.lenderTransferId = ltr.getLenderTransferId();
-          this.itemId = itemId;
+          this.itemId = ltr.getItemId();
           this.participant_id = ltr.getParticipant_id();
           this.borrowerComesToWhichAddress = ltr.getBorrowerComesToWhichAddress();
           this.meetBorrowerAtAgreedL2b = ltr.getMeetBorrowerAtAgreedL2b();
