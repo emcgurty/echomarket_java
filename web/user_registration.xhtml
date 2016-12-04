@@ -11,7 +11,6 @@
 
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="registrationHeader" /> 
-
   </ui:define>
 
   <ui:define name="content">
@@ -27,6 +26,7 @@
         <div style="margin:10px;" >
           <h:outputText value="Individual or Organization Registration" />
           <h:commandLink  action="#{userBean.registerUser()}" id="add_registration" value="Register" class="right_div">
+            <f:param id="new" value="action"  />
           </h:commandLink>
         </div>
 
