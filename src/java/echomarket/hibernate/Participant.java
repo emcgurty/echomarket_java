@@ -129,7 +129,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getContactDescribeId() {
-    return this.contactDescribeId;
+    return (null == this.contactDescribeId) ? -9 : contactDescribeId;
   }
 
   public void setContactDescribeId(Integer contactDescribeId) {
@@ -145,7 +145,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getDisplayOrganization() {
-    return this.displayOrganization;
+    return (this.displayOrganization == null) ? -9 : displayOrganization;
   }
 
   public void setDisplayOrganization(Integer displayOrganization) {
@@ -193,15 +193,19 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getDisplayName() {
-    return this.displayName;
+    return (this.displayName == null) ? -9 : displayName;
+    
   }
 
   public void setDisplayName(Integer displayName) {
     this.displayName = displayName;
+    
   }
 
   public Integer getDisplayAddress() {
-    return this.displayAddress;
+     return (this.displayAddress == null) ? -9 : displayAddress;
+    
+    
   }
 
   public void setDisplayAddress(Integer displayAddress) {
@@ -241,7 +245,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getDisplayHomePhone() {
-    return this.displayHomePhone;
+    return (this.displayHomePhone == null) ? -9 : displayHomePhone;
   }
 
   public void setDisplayHomePhone(Integer displayHomePhone) {
@@ -249,15 +253,16 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getDisplayCellPhone() {
-    return this.displayCellPhone;
+    return (this.displayCellPhone == null) ? -9 : displayCellPhone;
   }
 
   public void setDisplayCellPhone(Integer displayCellPhone) {
     this.displayCellPhone = displayCellPhone;
+    
   }
 
   public Integer getDisplayAlternativePhone() {
-    return this.displayAlternativePhone;
+    return (this.displayAlternativePhone == null) ? -9 : displayAlternativePhone;
   }
 
   public void setDisplayAlternativePhone(Integer displayAlternativePhone) {
@@ -265,7 +270,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getDisplayAlternativeAddress() {
-    return this.displayAlternativeAddress;
+    return (this.displayAlternativeAddress == null) ? -9 : displayAlternativeAddress;
   }
 
   public void setDisplayAlternativeAddress(Integer displayAlternativeAddress) {
@@ -289,7 +294,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getIsActive() {
-    return this.isActive;
+    return (this.isActive == null) ? -9 : isActive;
   }
 
   public void setIsActive(Integer isActive) {
@@ -305,7 +310,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getIsCreator() {
-    return this.isCreator;
+    return (this.isCreator == null) ? -9 : isCreator;
   }
 
   public void setIsCreator(Integer isCreator) {
@@ -345,7 +350,7 @@ public class Participant implements java.io.Serializable {
   }
 
   public Integer getApproved() {
-    return this.approved;
+    return (this.approved == null) ? -9 : approved;
   }
 
   public void setApproved(Integer approved) {
