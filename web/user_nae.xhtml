@@ -95,7 +95,7 @@
                     <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                       <f:selectItem itemValue="1" itemLabel="Yes" />
                       <f:selectItem itemValue="0" itemLabel="No" />
-                      <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                      
                     </h:selectOneRadio>    
                     <c:if test="#{userBean.editable == 0}" >
                       <c:choose>
@@ -156,7 +156,7 @@
                   <h:selectOneRadio id="displayName" value="#{participantBean.displayName}" layout="pageDirection"  rendered="#{userBean.editable == 1}">
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
-                    <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                    
                   </h:selectOneRadio>    
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
@@ -197,7 +197,7 @@
                   <h:selectOneRadio id="questionAltEmail" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
-                    <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                    
                   </h:selectOneRadio>
                 </h:outputLabel>
               </div>
@@ -221,7 +221,7 @@
 
             <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
-                <h:dataTable value="#{participantBean.existing_primary}" id="primary"   var="pa" >    
+                <h:dataTable value="#{participantBean.getExistingAddress('primary')}" id="primary"   var="pa" >    
                   <h:column rowHeader="">
 
                     <table >
@@ -301,7 +301,7 @@
                             <h:selectOneRadio id="displayAddress" value="#{participantBean.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 1}">
                               <f:selectItem itemValue="1" itemLabel="Yes" />
                               <f:selectItem itemValue="0" itemLabel="No" />
-                              <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                              
                             </h:selectOneRadio>    
                             <c:if test="#{userBean.editable == 0}" >
                               <c:choose>
@@ -332,7 +332,7 @@
                 <h:selectOneRadio id="questionAltAddress" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
-                  <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                  
                 </h:selectOneRadio>
               </h:outputLabel>
             </div>
@@ -344,7 +344,7 @@
               </div>
               <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                 <div style="margin-left: 15px;float:left">
-                  <h:dataTable value="#{participantBean.existing_alternative}" id="alternative"   var="pa"           >    
+                  <h:dataTable value="#{participantBean.getExistingAddress('alternative')}" id="alternative"   var="pa"           >    
                     <h:column rowHeader="">
                       <table >
                         <tr>
@@ -427,7 +427,7 @@
                               <h:selectOneRadio id="displayAlternativeAddress" value="#{participantBean.displayAlternativeAddress}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
                                 <f:selectItem itemValue="0" itemLabel="No" />
-                                <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                                
                               </h:selectOneRadio>    
                               <c:if test="#{userBean.editable == 0}" >
                                 <c:choose>
@@ -473,7 +473,7 @@
                           <h:selectOneRadio id="displayHomePhone" value="#{participantBean.displayHomePhone}" rendered="#{userBean.editable == 1}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />
-                            <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                            
                           </h:selectOneRadio>   
                           <c:if test="#{userBean.editable == 0}" >
                             <c:choose>
@@ -504,7 +504,7 @@
                           <h:selectOneRadio id="displayCellPhone" value="#{participantBean.displayCellPhone}" rendered="#{userBean.editable == 1}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />
-                            <f:selectItem itemValue="-1" itemLabel="Indifferent" />
+                            
                           </h:selectOneRadio>    
                           <c:if test="#{userBean.editable == 0}" >
                             <c:choose>
