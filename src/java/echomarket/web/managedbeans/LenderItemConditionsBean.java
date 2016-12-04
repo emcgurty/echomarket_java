@@ -222,6 +222,8 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       /// This doesn't work, hence below try/catch on strIid
       if (strIid.isEmpty() == true) {
         strIid = null;
+      } else {
+      
       }
     } catch (Exception ex) {
     }
@@ -245,6 +247,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
  
       try {
         if (strIid != null) {
+          itemId = strIid;
           condList = getCurrentItemConditions_Iid(pid, strIid);
         } else if (itemId != null) {
           condList = getCurrentItemConditions_Iid(pid, itemId);
@@ -252,6 +255,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       } catch (Exception ex) {
         if (strIid.isEmpty() == false) {
           condList = getCurrentItemConditions_Iid(pid, strIid);
+          itemId = strIid;
         } else if (itemId != null) {
           condList = getCurrentItemConditions_Iid(pid, itemId);
         }
