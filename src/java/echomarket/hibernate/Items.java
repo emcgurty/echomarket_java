@@ -21,8 +21,8 @@ public class Items implements java.io.Serializable {
   private Date dateCreated;
   private Date dateUpdated;
   private Date dateDeleted;
-  private Integer approved;
-  private Integer notify;
+  private int approved;
+  private int notify;
   private String itemType;
   private Set<LenderTransfer> lenderTransfer = new HashSet<LenderTransfer>();
   private Set<LenderItemConditions> lenderItemConditions = new HashSet<LenderItemConditions>();
@@ -153,19 +153,19 @@ public class Items implements java.io.Serializable {
     this.dateDeleted = dateDeleted;
   }
 
-  public Integer getApproved() {
+  public int getApproved() {
     return this.approved;
   }
 
-  public void setApproved(Integer approved) {
+  public void setApproved(int approved) {
     this.approved = approved;
   }
 
-  public Integer getNotify() {
+  public int getNotify() {
     return this.notify;
   }
 
-  public void setNotify(Integer notify) {
+  public void setNotify(int notify) {
     this.notify = notify;
   }
 
