@@ -8,7 +8,7 @@
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-  template="./UserDetailTemplate.xhtml">
+  template="./UserDetailTemplate.xhtml" >
 
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
@@ -31,9 +31,10 @@
         <div class="top" >
           <div style="margin-left:10px;margin-top:5px;font-size: large;color:indigo;">
             <c:set var="itype" value="${itemBean.itemType}" />
+            <c:set var="iid" value="${itemBean.itemId}" />
             <h:outputText value="NEW ITEM"  />
             <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
-            <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
+            <h:commandLink  action="${itemBean.load_ud(itemBean.itemType, iid)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
 
           </div> 
         </div> 
@@ -93,7 +94,6 @@
                   <h:selectOneRadio id="notify" value="#{itemBean.notify}"   rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
-                    <f:selectItem itemValue="-1" itemLabel="Indifferent" />
                   </h:selectOneRadio>    
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
