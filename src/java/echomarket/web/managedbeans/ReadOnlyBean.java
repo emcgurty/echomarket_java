@@ -45,54 +45,10 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return action;
   }
 
-  public String getUserType(String pid) {
+  public List getLIC(String iid, String which) {
 
-    List result = null;
-    Session hib = null;
-    Transaction tx = null;
-    String queryString = null;
-    String return_string = null;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      queryString = "SELECT u "
-              + " FROM Users u "
-              + " left join u.participant part "
-              + " WHERE  (part.participant_id = :pid)";
-
-      result = hib.createQuery(queryString)
-              .setParameter("pid", pid)
-              .list();
-      tx.commit();
-
-    } catch (Exception e) {
-      System.out.println("Error in getLIC in ReadONlyBean");
-      e.printStackTrace();
-      tx.rollback();
-
-    } finally {
-      tx = null;
-      hib = null;
-    }
-    if (result != null) {
-      if (result.size() == 1) {
-        Users uu = (Users) result.get(0);
-        queryString = uu.getUserType();
-      }
-    }
-
-    result = null;
-    if (queryString.contains("lend")) {
-      return_string = "lend";
-    } else if (queryString.contains("borrow")) {
-      return_string = "borrow";
-    }
-    return return_string;
-  }
-
-  public List getLIC() {
-
+    setItemId(iid);
+    setWhich(which);
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -104,7 +60,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       queryString = " FROM LenderItemConditions lic "
               + " WHERE  (lic.itemId = :iid)";
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
 
@@ -121,8 +77,11 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getLenderTransferData() {
+  public List getLenderTransferData(String iid, String which) {
 
+    setItemId(iid);
+    setWhich(which);
+    
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -134,7 +93,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       queryString = " FROM LenderTransfer lt "
               + " WHERE  (lt.itemId = :iid)";
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
 
@@ -151,8 +110,11 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getItemData() {
+  public List getItemData(String iid, String which) {
 
+    setItemId(iid);
+    setWhich(which);
+    
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -164,12 +126,12 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       queryString = "FROM Items WHERE  (itemId = :iid)";
       System.out.println(queryString);
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
 
     } catch (Exception e) {
-      System.out.println("Error in getItemData in ReadONlyBean");
+      System.out.println("Error in getItemData in ReadOnlyBean");
       e.printStackTrace();
       tx.rollback();
 
@@ -181,8 +143,10 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getByNAE() {
+  public List getByNAE(String iid, String which) {
 
+    setItemId(iid);
+    setWhich(which);
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -196,12 +160,12 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               + " WHERE  (it.itemId = :iid)";
 
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
 
     } catch (Exception e) {
-      System.out.println("Error in getByNAE in ReadONlyBean");
+      System.out.println("Error in getByNAE in ReadOnlyBean");
       e.printStackTrace();
       tx.rollback();
 
@@ -213,8 +177,10 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getBySocialMedia() {
+  public List getBySocialMedia(String iid, String which) {
 
+    setItemId(iid);
+    setWhich(which);
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -227,7 +193,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               + " WHERE  (itemId = :iid)";
 
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
     } catch (Exception e) {
@@ -243,8 +209,10 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getByPhone() {
+  public List getByPhone(String iid, String which) {
 
+    setItemId(iid);
+    setWhich(which);
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -261,7 +229,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               + " WHERE  (cp.itemId = :iid)";
 
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
     } catch (Exception e) {
@@ -277,8 +245,10 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getByEmail() {
+  public List getByEmail(String iid, String which) {
 
+    setItemId(iid);
+    setWhich(which);
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -294,7 +264,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               + " WHERE (cp.itemId = :iid)";
 
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
+              .setParameter("iid", iid)
               .list();
       tx.commit();
     } catch (Exception e) {
@@ -453,38 +423,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getByChat() {
-
-    List result = null;
-    Session hib = null;
-    Transaction tx = null;
-    String queryString = null;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      queryString = "SELECT cp.contactByChat "
-              + " FROM ContactPreference cp "
-              + " WHERE (cp.itemId = :iid)";
-
-      result = hib.createQuery(queryString)
-              .setParameter("iid", this.getItemId())
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      System.out.println("Error in getByChat in ReadOnlyBean");
-      e.printStackTrace();
-      tx.rollback();
-
-    } finally {
-      tx = null;
-      hib = null;
-    }
-
-    return result;
-  }
-
-  public String getParticipant_id() {
+ public String getParticipant_id() {
     return participant_id;
   }
 
