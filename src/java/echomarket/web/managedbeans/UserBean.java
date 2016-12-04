@@ -22,6 +22,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -60,6 +61,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private Integer editable;
   private String itemId;
   private Integer roleId;
+  private String action;
 
   public String Logout() {
     this.user_id = null;
@@ -191,11 +193,9 @@ public class UserBean extends AbstractBean implements Serializable {
           hib = null;
           hib = null;
         }
-
       }
 
       if (savedRecord == true) {
-
         savedRecord = sendActivationEmail(ac);
       }
       if (savedRecord == true) {
@@ -206,7 +206,13 @@ public class UserBean extends AbstractBean implements Serializable {
         }
       } else {
         message(null, "NewRegistrationFailed", new Object[]{fullname});
+      }
 
+      try {
+        java.util.Map<String, String> params = null;
+        params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        setAction(params.get("action"));
+      } catch (Exception ex) {
       }
     }
 
@@ -449,6 +455,7 @@ public class UserBean extends AbstractBean implements Serializable {
       setUsername(users_Array.getUsername());
       setEmail(users_Array.getEmail());
       setItemId(null);
+      setAction("current");
       if (users_Array.getRoleId() == 2) {
         setIsCommunity(1);
       }
@@ -1204,6 +1211,20 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public void setItemId(String itemId) {
     this.itemId = itemId;
+  }
+
+  /**
+   * @return the action
+   */
+  public String getAction() {
+    return action;
+  }
+
+  /**
+   * @param action the action to set
+   */
+  public void setAction(String action) {
+    this.action = action;
   }
 
 }
