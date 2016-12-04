@@ -162,7 +162,7 @@
           </div>
         </h:column>
       </h:dataTable>
-     <c:set value="#{readOnlyBean.getByEmail().toArray()}"  var="bye_data" />    
+      <c:set value="#{readOnlyBean.getByEmail(readOnlyBean.itemId, readOnlyBean.which).toArray()}"  var="bye_data" />    
       <h:dataTable value="${bye_data}" var="bye" rendered="${fn:length(bye_data) > 0}"  >    
         <h:column rowHeader="">
           <div  class="div_p"  >
@@ -183,7 +183,7 @@
         </h:column>
       </h:dataTable>
      
-      <c:set  var="gbp"   scope="view"  value="${readOnlyBean.getByPhone().toArray()}" />
+     <c:set  var="gbp"   scope="view"  value="${readOnlyBean.getByPhone(readOnlyBean.itemId, readOnlyBean.which).toArray()}" />
       <h:dataTable value="#{gbp}" var="byp"   rendered="${fn:length(gpb) > 0}" >    
         <h:column rowHeader="">
           <div  class="div_p"  id="display_phone">
@@ -211,7 +211,7 @@
         </h:column>
       </h:dataTable>
 
-      <c:set value="#{readOnlyBean.getBySocialMedia()}" var="data_bysm"   />   
+     <c:set value="#{readOnlyBean.getBySocialMedia(readOnlyBean.itemId, readOnlyBean.which)}" var="data_bysm"   />   
       <h:dataTable value="#{data_bysm}" var="bysm" rendered="#{fn:length(data_bysm)  == 1}" >   
         <h:column rowHeader="">
 
