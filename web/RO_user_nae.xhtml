@@ -16,9 +16,10 @@
 
   <ui:define name="content"  >
     <h:form  >
+      
       <div id="form_RO_NAE"  >
-
-        <h:dataTable value="#{readOnlyBean.getByNAE(readOnlyBean.itemId, readOnlyBean.which)}" id="ro_nae"   var="nae" >    
+        <c:set var="nae_data" value="#{readOnlyBean.getByNAE(readOnlyBean.itemId, readOnlyBean.which)}" scope="view" />
+        <h:dataTable value="#{nae_data}" id="ro_nae"   var="nae" >    
           <h:column rowHeader="">
             <c:set var="ut"  scope="view" value="#{readOnlyBean.which}"  />
             <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
