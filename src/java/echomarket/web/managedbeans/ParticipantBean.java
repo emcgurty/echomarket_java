@@ -133,10 +133,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.isCreator = pp.getIsCreator();
     }
 
+
     if (ubean.getEditable() == -1) {
       return "user_agreement";
     } else {
-//      ubean.setEditable(1);
+      this.questionAltAddress = -9;
+      this.questionAltEmail = -9;
+      
       return "user_nae";
     }
 
@@ -180,7 +183,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String updateNAE() {
-
+    // if questionAltAddress  == 1, delete alternative address
     List padrs = getPrimary();
     List aadrs = getAlternative();
     String query = null;
@@ -245,6 +248,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setDisplayCellPhone(displayCellPhone);
       part.setDisplayAlternativePhone(displayAlternativePhone);
       part.setDisplayAlternativeAddress(displayAlternativeAddress);
+      if (this.questionAltEmail == 0) {
+        part.setEmailAlternative(null);
+      } else {
+        part.setEmailAlternative(emailAlternative);
+      }
+        
+      
 
       sb.update(part);
       tx.commit();
@@ -267,13 +277,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         }
 
         try {
-          if (aalt.getAddressId() == null) {
+          if (aalt.getAddressId() == null  && this.questionAltAddress != 1) {
             aalt.setParticipant_id(pid);
             aalt.setAddressId(UUID.randomUUID().toString());
             sb.save(aalt);
-          } else {
+          } else if (aalt.getAddressId() != null  && this.questionAltAddress != 1){
             sb.update(aalt);
-          }
+          } else if ((aalt.getAddressId() != null) && this.questionAltAddress == 1){
+            
+            sb.delete(aalt.getAddressId());
+          } else {}
+          
           tx.commit();
           updateSuccess = true;
           aalt = null;
