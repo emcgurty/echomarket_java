@@ -1157,7 +1157,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = hib.beginTransaction();
     } catch (Exception ex) {
       System.out.println("Error in SendActivationEmail, line 1003");
-      ex.printStackTrace();
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     try {
