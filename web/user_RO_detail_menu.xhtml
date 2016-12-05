@@ -10,30 +10,30 @@
   <ul id="nav" class="user_detail_menu">
 
     <li class="subs" id="tab_item_1" >
-      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null)}"  value="Item"  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="Item"  rendered="#{userBean.editable != -1}" >
         <f:param name="action" value="RO_item" />
       </h:commandLink>
     </li>
 
     <li class="subs" id="tab_item_2" >
-      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null)}"  value="About the lender/borrower"  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="About the lender/borrower"  rendered="#{userBean.editable != -1}" >
         <f:param name="action" value="RO_user_nae" />
       </h:commandLink>
     </li>    
     <li class="subs" id="tab_item_3" >
-      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null)}"  value="Initial Contact Preferences"  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="Initial Contact Preferences"  rendered="#{userBean.editable != -1}" >
         <f:param name="action" value="RO_contact_preferences" />
       </h:commandLink>
     </li>
 
     <c:if test="#{(readOnlyBean.which == 'both') or (readOnlyBean.which == 'lend')}" >
       <li class="subs" id="tab_item_4" >
-        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null)}"  value="Item  transfer Preferences"  rendered="true">
+        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null,null)}"  value="Item  transfer Preferences"  rendered="true">
           <f:param name="action" value="RO_lender_transfer" />
         </h:commandLink>   
       </li>
       <li class="subs" id="tab_item_5" >
-        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null)}"  value="Item Conditions"  rendered="true">
+        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null,null)}"  value="Item Conditions"  rendered="true">
           <f:param name="action" value="RO_lender_conditions" />
         </h:commandLink>   
       </li>
