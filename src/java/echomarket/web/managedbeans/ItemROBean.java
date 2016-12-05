@@ -101,7 +101,7 @@ public class ItemROBean extends AbstractBean implements Serializable {
   }
 
   public List getAllSoughtItems(String which) {
-   
+    // TO DO: Why is this function call so many time.
     List result = null;
     Session session = hib_session();
     Transaction tx = session.beginTransaction();
