@@ -7,6 +7,7 @@
   xmlns:h="http://xmlns.jcp.org/jsf/html"
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
   template="./UserDetailTemplate.xhtml">
 
   <ui:define name="header"  >
@@ -115,7 +116,6 @@
             <div  class="div_p"  >
               <div style="margin:5px;" >
                 <h:outputText value="Your Name..." />
-
               </div>
             </div>
 
@@ -188,23 +188,21 @@
 
               <div style="margin-left: 25px;float:left" >
                 <h:outputLabel value="Would you like to provide an alternative email address?"  for="questionAltEmail" rendered="#{userBean.editable == 1 }" >
-                  <h:selectOneRadio id="questionAltEmail" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
+                  <h:selectOneRadio id="questionAltEmail"  value="#{participantBean.questionAltEmail}"  layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
                   </h:selectOneRadio>
                 </h:outputLabel>
               </div>
 
-              <div id="emailAlternative" style="margin-left: 25px;float:left;" rendered="#{!empty participantBean.emailAlternative}" >
+              <div id="emailAlternative" style="margin-left: 25px;margin-bottom:5px;float:left;display:none;" >
                 <h:outputLabel value="Your alternative email address:"  for="emailAlternative" >
                   <h:inputText  id="emailAlternative" value="#{participantBean.emailAlternative}" maxlength="50" size="25" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
                   <h:outputText  id="emailAlternativeRO" value="#{participantBean.emailAlternative}"   rendered="#{userBean.editable == 0}" class="RO_text" />
                   <span class="error-message" id="emailAlternative" ></span>
                 </h:outputLabel>
               </div>
-
             </div>     
-
 
             <div  class="div_p"  >
               <div style="margin:5px;" >
@@ -319,17 +317,20 @@
                 </h:dataTable>
               </div>
             </div>    
-            
-            <div id="addressAlternative" style="margin-left: 25px;float:left;display:#{div_display}};"  >
+
+            <c:set var="alternative_address_data" value="#{participantBean.getExistingAddress('alternative')}" />   
+            <c:set var="alternative_address_data_empty" value="#{fn:length(alternative_address_data) > 0}" />     
+            <div id="addressAlternative" style="float:left;display:block;"  >
               <div  class="div_p"  >
                 <div style="margin:5px;" >
-                  <h:outputText value="An Alternative Address...(Optional. Fields with asterisk are required if pursued.)"  rendered="#{userBean.editable == 1}" />
-                  <h:outputText value="Your Alternative Address..."  rendered="#{userBean.editable == 0}" />
+                  <h:outputText value="An Alternative Address...(Optional. Fields with asterisk are required if pursued.)"  rendered="#{(userBean.editable == 1) and (alternative_address_data_empty) }" />
+                  <h:outputText value="Your Alternative Address..."  rendered="#{(userBean.editable == 0) and (alternative_address_data_empty) }" />
+
                 </div>
               </div>
               <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                 <div style="margin-left: 15px;float:left">
-                  <h:dataTable value="#{participantBean.getExistingAddress('alternative')}" id="alternative"   var="pa"  >    
+                  <h:dataTable value="#{alternative_address_data}" id="alternative"   var="pa"   rendered="#{alternative_address_data_empty}"  >    
                     <h:column rowHeader="">
                       <table >
                         <tr>
@@ -427,7 +428,14 @@
                                 </c:choose>
                                 <h:outputText id="displayAlternativeAddressString"   value="#{yn}" class="RO_text" />
                               </c:if>
-                            </h:outputLabel>     
+                            </h:outputLabel>   
+                            
+                             <h:outputLabel value="Would you like to delete your Alternative Address?"  for="questionAltAddress" rendered="#{userBean.editable == 1}">
+                               <h:selectOneRadio id="questionAltAddress" value="#{participantBean.questionAltAddress}"  rendered="#{userBean.editable == 1}" >
+                                <f:selectItem itemValue="1" itemLabel="Yes" />
+                                <f:selectItem itemValue="0" itemLabel="No" />
+                              </h:selectOneRadio>    
+                            </h:outputLabel>   
                           </td>
                         </tr>
 
