@@ -1,6 +1,5 @@
 package echomarket.web.managedbeans;
 
-import echomarket.hibernate.LenderItemConditions;
 import echomarket.hibernate.LenderTransfer;
 import java.io.Serializable;
 import java.util.Date;
@@ -208,9 +207,12 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       /// This doesn't work, hence below try/catch on strIid
       if (strIid.isEmpty() == true) {
         strIid = null;
+      } else {
+      
       }
     } catch (Exception ex) {
     }
+
     if (ubean.getEditable() == 0) {
       ubean.setEditable(1);
     } else {
