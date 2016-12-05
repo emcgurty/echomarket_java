@@ -1,191 +1,195 @@
 <ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    <h:head>
-        <h:outputStylesheet library="css" name="menu_nav.css"/>
-    </h:head>
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+  <h:head>
+    <h:outputStylesheet library="css" name="menu_nav.css"/>
+  </h:head>
 
-    <h:form id="application_menu">
+  <h:form id="application_menu">
 
-        <c:choose>
-            <c:when test="${userBean.userAlias == null}">
-                <c:set var="username" value="Friend" />
-            </c:when>
-            <c:otherwise>
-                <c:set var="username" value="#{userBean.userAlias}" />
-            </c:otherwise>
-        </c:choose>
-
-
-        <ul id="nav" class="menu">
-            <li class="subs">
-                <h:commandLink id="index" action="index" value="EchoMarket: Welcome #{username}!" hreflang="#s1"/>
-                <ul>
-                    <li>
-                        <h:commandLink id="allItemsListing" action="all_items_listing">
-                            <h:outputText value="All Items Listing"/>
-                        </h:commandLink>
-
-                    </li>
-                    <li>
-                        <h:commandLink id="legal" action="EchoMarket_agreement" value="EchoMarket Agreement" />
-                    </li>
-                    <li>
-                        <h:commandLink id="about" action="about">
-                            <h:outputText value="About"/>
-                        </h:commandLink>
-                    </li>
-                    <li>
-                        <h:commandLink id="donate" action="donate">
-                            <h:outputText value="Donate!"/>
-                        </h:commandLink>
-                    </li>
+    <c:choose>
+      <c:when test="${userBean.userAlias == null}">
+        <c:set var="username" value="Friend" />
+      </c:when>
+      <c:otherwise>
+        <c:set var="username" value="#{userBean.userAlias}" />
+      </c:otherwise>
+    </c:choose>
 
 
+    <ul id="nav" class="menu">
+      <li class="subs">
+        <h:commandLink id="index" action="index" value="EchoMarket: Welcome #{username}!" hreflang="#s1"/>
+        <ul>
+          <li>
+            <h:commandLink id="allItemsListing" action="all_items_listing">
+              <h:outputText value="All Items Listing"/>
+            </h:commandLink>
 
-                </ul>
-            </li>
-
-            <li class="subs">
-                <a href="#s1">Borrowing</a>
-                <ul>
-                    <li>
-                        <h:commandLink id="borrowListing" action="borrower_lsting">
-
-                            <h:outputText value="What's available to borrow"/>
-
-                        </h:commandLink>                  
-                    </li>
-                    <li>
-                        <h:commandLink id="borrowHistory" action="borrower_history">
-
-                            <h:outputText value="My borrowing history"/>
-
-                        </h:commandLink>                  
-                    </li>
-                </ul>
-            </li>
-
-            <li class="subs">
-                <a href="#s1">Lending</a>
-                <ul>
-                    <li>
-                        <h:commandLink id="lenderListing" action="lender_listing">
-                            <h:outputText value="What's available from lenders"/>
-
-                        </h:commandLink>                  
-                    </li>
-                    <c:if test="#{userBean.username != null}" >
-                        <li>
-                            <h:commandLink id="lender_offering" action="lender_offering">
-                                <h:outputText value="I want to lend"/>
-
-                            </h:commandLink>
-
-                        </li>
-                        <li>
-                            <h:commandLink id="lenderHistory" action="lender_history">
-                                <h:outputText value="My lending history"/>
-
-                            </h:commandLink>                  
-                        </li>
-                        <li>
-                            <h:commandLink id="lenderUpdate" action="lender_update">
-                                <h:outputText value="Change my lending requirements"/>
-
-                            </h:commandLink>                  
-                        </li>
-                    </c:if>
-
-                </ul>
-            </li>
-
-            <c:if test="#{userBean.user_id == null}" >
-                <li class="subs">
-                    <a href="#s1">Login</a>
-                    <ul>
-
-                        <li>
-                            <h:commandLink id="login" action="#{userBean.load_login()}">
-                                <h:outputText value="Login"/>
-                            </h:commandLink>                 
-
-                        </li>
-                        <li>
-                            <h:commandLink id="forgotUsername" action="#{userBean.load_forgotUsername()}">
-                                <h:outputText value="Forgot Username"/>
-                            </h:commandLink>                 
-
-                        </li>
-                        <li>
-                            <h:commandLink id="forgotUserPassword" action="#{userBean.load_forgotUserPassword()}">
-                                <h:outputText value="Forgot Password"/>
-                            </h:commandLink>                 
-
-                        </li>
-
-                    </ul>
-                </li>   
-
-                <li class="subs">   
-                    <a href="#s1">Register</a>                      
-                    <ul>
-                        <li>
-                            <h:commandLink id="ir" action="#{userBean.load_user_registration()}">
-                                <h:outputText value="As an Individual or Organization"/>
-                            </h:commandLink>
-
-                        </li>
-
-                        <li>
-                            <h:commandLink id="cr" action="#{userBean.load_community_registration()}">
-                                <h:outputText value="As a Community!"/>
-                            </h:commandLink>
-                        </li>
-                    </ul>
-
-                </li>
-            </c:if>
-
-            <c:if test="#{userBean.isCommunity == 1}" >
-                <li class="subs">
-                    <a href="#s1">Community</a>
-                    <ul>
-
-                        <li>
-                            <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}">
-                                <h:outputText value="Community Detail"/>
-                            </h:commandLink>                 
-
-                        </li>
-                        <li>
-                            <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}">
-                                <h:outputText value="Community Members"/>
-                            </h:commandLink>                 
-
-                        </li>
+          </li>
+          <li>
+            <h:commandLink id="legal" action="EchoMarket_agreement" value="EchoMarket Agreement" />
+          </li>
+          <li>
+            <h:commandLink id="about" action="about">
+              <h:outputText value="About"/>
+            </h:commandLink>
+          </li>
+          <li>
+            <h:commandLink id="donate" action="donate">
+              <h:outputText value="Donate!"/>
+            </h:commandLink>
+          </li>
 
 
-                    </ul>
-                </li>   
-
-
-            </c:if>
-
-
-            <c:if test="#{userBean.user_id != null}" >
-                <li class="subs">
-                    <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
-                        <f:actionListener  type="echomarket.listeners.EndSession"  /> 
-                    </h:commandLink>
-                </li>
-
-            </c:if>
 
         </ul>
+      </li>
 
-    </h:form>
+      <li class="subs">
+        <a href="#s1">Borrowing</a>
+        <ul>
+          <li>
+            <h:commandLink id="borrowListing" action="borrower_lsting">
+              <h:outputText value="What's available to borrow"/>
+            </h:commandLink>                  
+          </li>
+          <c:if test="#{((userBean.username != null) and (userBean.action == 'current'))}" >
+            <li>
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="I want to borrow"  >
+                <f:param name="action" value="item" />
+              </h:commandLink>
+            </li>
+            <li>
+              <h:commandLink id="borrowHistory" action="borrower_history">
+                <h:outputText value="My borrowing history"/>
+              </h:commandLink>                  
+            </li>
+            <li>
+              <h:commandLink id="borrowUpdate" action="borrower_update">
+                <h:outputText value="Change my borrowing requirements"/>
+              </h:commandLink>                  
+            </li>
+          </c:if>
+        </ul>
+      </li>
+
+      <li class="subs">
+        <a href="#s1">Lending</a>
+        <ul>
+          <li>
+            <h:commandLink id="lenderListing" action="lender_listing">
+              <h:outputText value="What's available from lenders"/>
+
+            </h:commandLink>                  
+          </li>
+          <c:if test="#{((userBean.username != null) and (userBean.action == 'current'))}" >
+            <li>
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="I want to lend"  >
+                <f:param name="action" value="item" />
+              </h:commandLink>
+            </li>
+            <li>
+              <h:commandLink id="lenderHistory" action="lender_history">
+                <h:outputText value="My lending history"/>
+              </h:commandLink>                  
+            </li>
+            <li>
+              <h:commandLink id="lenderUpdate" action="lender_update">
+                <h:outputText value="Change my lending requirements"/>
+              </h:commandLink>                  
+            </li>
+          </c:if>
+
+        </ul>
+      </li>
+
+      <c:if test="#{userBean.user_id == null}" >
+        <li class="subs">
+          <a href="#s1">Login</a>
+          <ul>
+
+            <li>
+              <h:commandLink id="login" action="#{userBean.load_login()}">
+                <h:outputText value="Login"/>
+              </h:commandLink>                 
+
+            </li>
+            <li>
+              <h:commandLink id="forgotUsername" action="#{userBean.load_forgotUsername()}">
+                <h:outputText value="Forgot Username"/>
+              </h:commandLink>                 
+
+            </li>
+            <li>
+              <h:commandLink id="forgotUserPassword" action="#{userBean.load_forgotUserPassword()}">
+                <h:outputText value="Forgot Password"/>
+              </h:commandLink>                 
+
+            </li>
+
+          </ul>
+        </li>   
+
+        <li class="subs">   
+          <a href="#s1">Register</a>                      
+          <ul>
+            <li>
+              <h:commandLink id="ir" action="#{userBean.load_user_registration()}">
+                <h:outputText value="As an Individual or Organization"/>
+              </h:commandLink>
+
+            </li>
+
+            <li>
+              <h:commandLink id="cr" action="#{userBean.load_community_registration()}">
+                <h:outputText value="As a Community!"/>
+              </h:commandLink>
+            </li>
+          </ul>
+
+        </li>
+      </c:if>
+
+      <c:if test="#{userBean.isCommunity == 1}" >
+        <li class="subs">
+          <a href="#s1">Community</a>
+          <ul>
+
+            <li>
+              <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}">
+                <h:outputText value="Community Detail"/>
+              </h:commandLink>                 
+
+            </li>
+            <li>
+              <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}">
+                <h:outputText value="Community Members"/>
+              </h:commandLink>                 
+
+            </li>
+
+
+          </ul>
+        </li>   
+
+
+      </c:if>
+
+
+      <c:if test="#{userBean.user_id != null}" >
+        <li class="subs">
+          <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
+            <f:actionListener  type="echomarket.listeners.EndSession"  /> 
+          </h:commandLink>
+        </li>
+
+      </c:if>
+
+    </ul>
+
+  </h:form>
 </ui:composition>
