@@ -174,27 +174,28 @@
     </div>
 
     <div id="form_lender_to_borrower" class="contact_information" >
-      <h:dataTable value="#{readOnlyBean.getLenderTransferData(readOnlyBean.itemId, readOnlyBean.which)}" id="lender_transfer_DT"   var="pa" >    
+    <c:set var="lt_data"  value="#{readOnlyBean.getLenderTransferData(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
+      <h:dataTable value="#{lt_data}"   var="lit" >  
         <h:column rowHeader="">
           <div style="margin-left:25px;margin-top:5px;float:left;">                    
-            <h:outputText value="Lender will meet with borrower at an agreed location" class="RO_text"  rendered="#{lenderTransfer.meetBorrowerAtAgreedL2b == 1}" />
+            <h:outputText value="Lender will meet with borrower at an agreed location" class="RO_text"  rendered="#{lit.meetBorrowerAtAgreedL2b == 1}" />
           </div>
 
           <div style="margin-left:25px;margin-top:5px;float:left;">                    
-            <h:outputText value="Lender deliver to borrower preferred location." class="RO_text" rendered="#{lenderTransfer.willDeliverToBorrower == 1}" />
+            <h:outputText value="Lender deliver to borrower preferred location." class="RO_text" rendered="#{lit.willDeliverToBorrower == 1}" />
           </div>
 
           <div style="margin-left:25px;margin-top:5px;float:left;">                    
-            <h:outputText value="Lender would like a third-party present during transfer to borrower." class="RO_text" rendered="#{lenderTransfer.thirdPartyPresenceL2b == 1}" />
+            <h:outputText value="Lender would like a third-party present during transfer to borrower." class="RO_text" rendered="#{lit.thirdPartyPresenceL2b == 1}" />
           </div>
 
 
           <div id="thirdPartyPresenceL2BGroup" style="margin-left:25px;margin-top:5px;float:left">
-            <h:outputText value="Lender will choose third-party during transfer." class="RO_text" rendered="#{lenderTransfer.lenderThirdPartyChoiceL2b == 1}" />
+            <h:outputText value="Lender will choose third-party during transfer." class="RO_text" rendered="#{lit.lenderThirdPartyChoiceL2b == 1}" />
           </div>  
 
           <div id="agreedThirdPartyChoiceL2bGroup" style="margin-left:25px;margin-top:5px;float:left">     
-            <h:outputText value="Third-party choice during transfer by mutal agreement." class="RO_text" rendered="#{lenderTransfer.agreedThirdPartyChoiceL2b == 1}" />
+            <h:outputText value="Third-party choice during transfer by mutal agreement." class="RO_text" rendered="#{lit.agreedThirdPartyChoiceL2b == 1}" />
           </div>
 
           <div  class="div_p"  >
@@ -206,40 +207,40 @@
 
           <div style="margin-left:25px;margin-top:5px;float:left;">
             <div id="borrowerReturnsToWhichAddressGroup" >    
-              <h:outputLabel value="Borrower returns to lender's...:" rendered="#{!empty lenderTransfer.borrowerReturnsToWhichAddress}" >
-                <h:outputText    value="Yes" class="RO_text" rendered="#{lenderTransfer.borrowerReturnsToWhichAddress == 1}" />
-                <h:outputText  value="No" class="RO_text" rendered="#{lenderTransfer.borrowerReturnsToWhichAddress == 0}" />
+              <h:outputLabel value="Borrower returns to lender's...:" rendered="#{!empty lit.borrowerReturnsToWhichAddress}" >
+                <h:outputText    value="Yes" class="RO_text" rendered="#{lit.borrowerReturnsToWhichAddress == 1}" />
+                <h:outputText  value="No" class="RO_text" rendered="#{lit.borrowerReturnsToWhichAddress == 0}" />
               </h:outputLabel>
             </div>
 
             <div style="margin-left:25px;margin-top:5px;float:left;">
-              <h:outputText value="Lender wants to meet borrower at an agreed location?" class="RO_text"  rendered="#{lenderTransfer.meetBorrowerAtAgreedB2l == 1}"/>
+              <h:outputText value="Lender wants to meet borrower at an agreed location?" class="RO_text"  rendered="#{lit.meetBorrowerAtAgreedB2l == 1}"/>
             </div>
 
             <div style="margin-left:25px;margin-top:5px;float:left;">`
-              <h:outputLabel value="Lender will pick up at borrower's location?:"  rendered="#{!empty lenderTransfer.willPickUpPreferredLocationB2l}" >
-                <h:outputText    value="No" class="RO_text" rendered="#{lenderTransfer.willPickUpPreferredLocationB2l == 0}"/>
-                <h:outputText    value="Yes" class="RO_text" rendered="#{lenderTransfer.willPickUpPreferredLocationB2l == 1}"/>
+              <h:outputLabel value="Lender will pick up at borrower's location?:"  rendered="#{!empty lit.willPickUpPreferredLocationB2l}" >
+                <h:outputText    value="No" class="RO_text" rendered="#{lit.willPickUpPreferredLocationB2l == 0}"/>
+                <h:outputText    value="Yes" class="RO_text" rendered="#{lit.willPickUpPreferredLocationB2l == 1}"/>
               </h:outputLabel>                        
             </div>
           </div>
 
           <div style="margin-left:25px;margin-top:5px;float:left;">
-            <h:outputLabel value="Lender would like a third-party present during transfer from borrower?:" rendered="#{!empty lenderTransfer.thirdPartyPresenceB2l}" >
-              <h:outputText value="No" class="RO_text" rendered="#{lenderTransfer.thirdPartyPresenceB2l == 0}" />
-              <h:outputText value="Yes" class="RO_text" rendered="#{lenderTransfer.thirdPartyPresenceB2l == 1}" />
+            <h:outputLabel value="Lender would like a third-party present during transfer from borrower?:" rendered="#{!empty lit.thirdPartyPresenceB2l}" >
+              <h:outputText value="No" class="RO_text" rendered="#{lit.thirdPartyPresenceB2l == 0}" />
+              <h:outputText value="Yes" class="RO_text" rendered="#{lit.thirdPartyPresenceB2l == 1}" />
             </h:outputLabel>                        
           </div>
 
           <div id="thirdPartyPresenceB2lGroup" style="margin-left:25px;margin-top:5px;float:left;">
-            <h:outputLabel value="Lender's choice?:" rendered="#{!empty lenderTransfer.lenderThirdPartyChoiceB2l}">
-              <h:outputText value="No" class="RO_text" rendered="#{lenderTransfer.lenderThirdPartyChoiceB2l == 0}" />
-              <h:outputText value="Yes" class="RO_text" rendered="#{lenderTransfer.lenderThirdPartyChoiceB2l == 1}" />
+            <h:outputLabel value="Lender's choice?:" rendered="#{!empty lit.lenderThirdPartyChoiceB2l}">
+              <h:outputText value="No" class="RO_text" rendered="#{lit.lenderThirdPartyChoiceB2l == 0}" />
+              <h:outputText value="Yes" class="RO_text" rendered="#{lit.lenderThirdPartyChoiceB2l == 1}" />
             </h:outputLabel>
 
-            <h:outputLabel value="Mutually agreed?:" rendered="#{!empty lenderTransfer.agreedThirdPartyChoiceB2l}">
-              <h:outputText   value="No" class="RO_text" rendered="#{lenderTransfer.agreedThirdPartyChoiceB2l == 0}" />
-              <h:outputText   value="Yes" class="RO_text" rendered="#{lenderTransfer.agreedThirdPartyChoiceB2l == 1}" />
+            <h:outputLabel value="Mutually agreed?:" rendered="#{!empty lit.agreedThirdPartyChoiceB2l}">
+              <h:outputText   value="No" class="RO_text" rendered="#{lit.agreedThirdPartyChoiceB2l == 0}" />
+              <h:outputText   value="Yes" class="RO_text" rendered="#{lit.agreedThirdPartyChoiceB2l == 1}" />
             </h:outputLabel>
           </div>
 
