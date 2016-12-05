@@ -35,7 +35,8 @@
 
           <br />
           <c:set var="hid" value="#{history.itemId}" />
-          <h:commandButton value="View Details"  action="#{readOnlyBean.load_RO('borrow', hid)}">
+          <c:set var="pid" value="#{history.participant_id}" />
+          <h:commandButton value="View Details"  action="#{readOnlyBean.load_RO('borrow', hid, pid)}">
             <f:param name="action" value="RO_item" />
           </h:commandButton>    
 
