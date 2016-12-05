@@ -116,7 +116,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-
+  
     return result;
   }
 
@@ -140,7 +140,6 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               .setParameter("pid", pid)
               .list();
       tx.commit();
-
     } catch (Exception e) {
       System.out.println("Error in getItemData in ReadOnlyBean");
       Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
@@ -178,7 +177,6 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
         if (result.size() == 1) {
           Participant part = (Participant) result.get(0);
           setParticipant_id(part.getParticipant_id());
-          result = null;
         }
       }
     } catch (Exception e) {
@@ -187,6 +185,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx.rollback();
 
     } finally {
+      
       tx = null;
       hib = null;
     }
@@ -382,6 +381,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
+  //// Probably do not need arg String iid, should just be using item_id property
   public List getPrimaryAddress(String iid) {
 
     List result = null;
