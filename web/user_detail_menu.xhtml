@@ -50,30 +50,16 @@
 
         <c:if test="#{(userBean.userIsWhichType() == 'both') or (userBean.userIsWhichType() == 'lend')}" >
           <li >
-            <c:choose>
-              <c:when  test="#{userBean.itemId!= null}" >
-                <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
-              </c:when>
-              <c:when  test="#{userBean.itemId== null}" >
-                <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
-              </c:when>
-            </c:choose>
-            <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
+            <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
+            <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans} - #{userBean.itemId}"  rendered="true">
               <f:param name="iid" value="#{userBean.itemId}" />
               <f:param name="action" value="edit" />
             </h:commandLink>   
           </li>
           <li>
-            <c:choose>
-              <c:when  test="#{userBean.itemId!= null}" >
-                <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
-              </c:when>
-              <c:when  test="#{userBean.itemId== null}" >
-                <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
-              </c:when>
-            </c:choose>
-            <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
-              <f:param name="iid" value="#{itemBean.itemId}" />
+            <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
+            <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond} - #{userBean.itemId}"  rendered="true">
+              <f:param name="iid" value="#{userBean.itemId}" />
               <f:param name="action" value="edit" />
             </h:commandLink>   
           </li>
