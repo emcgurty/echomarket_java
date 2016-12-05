@@ -40,8 +40,8 @@
                         <ui:include src="user_nae.xhtml" id="name_address_email" />
                     </c:when>
                     <c:when test="#{(userBean.editable == 4) or (userBean.editable == 5) }">
-                        <ui:include src="borrower_menu.xhtml" id="borrowersMenu"  rendered="#{userBean.useIsWhichType() == 'borrow'}" />
-                        <ui:include src="lender_menu.xhtml" id="lendersMenu" rendered="#{(userBean.useIsWhichType() == 'lend') or (userBean.useIsWhichType() == 'both')}" />
+                        <ui:include src="borrower_menu.xhtml" id="borrowersMenu"  rendered="#{userBean.userIsWhichType() == 'borrow'}" />
+                        <ui:include src="lender_menu.xhtml" id="lendersMenu" rendered="#{(userBean.userIsWhichType() == 'lend') or (userBean.userIsWhichType() == 'both')}" />
                         <ui:include src="user_contact_preferences.xhtml" id="contact_preferences" />
                     </c:when>     
                                         
