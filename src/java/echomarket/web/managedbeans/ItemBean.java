@@ -179,6 +179,8 @@ public class ItemBean extends AbstractBean implements Serializable {
   public String load_ud(String which, String iid) {
 
     List result = null;
+    ubean.setItemId(iid);
+    
     if (iid == null) {
       ubean.setEditable(1);
     } else {
@@ -278,6 +280,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
 
     } else {
+      
       result = getCurrentItem(itemId, itemType);
       if (result.size() == 1) {
         Items uitem = (Items) result.get(0);
