@@ -101,13 +101,13 @@ public class ItemROBean extends AbstractBean implements Serializable {
   }
 
   public List getAllSoughtItems(String which) {
-    System.out.println("getAllSoughtItems Called");
+   
     List result = null;
     Session session = hib_session();
     Transaction tx = session.beginTransaction();
     String query = null;
     try {
-      query = "FROM Items WHERE itemType = :it ORDER BY dateCreated";
+      query = "FROM Items WHERE itemType = :it ORDER BY dateCreated desc";
       result = session.createQuery(query)
               .setParameter("it", which)
               .list();
