@@ -29,8 +29,8 @@
             <h:outputText value="Item Detail..." />
           </div>
         </div>
-
-        <h:dataTable value="#{readOnlyBean.getItemData()}" id="RO_item"   var="ii" >    
+ 
+        <h:dataTable value="#{readOnlyBean.getItemData(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}" id="RO_item"   var="ii" >    
           <h:column rowHeader="">
             <div style="margin-left:25px;margin-top:5px;">
               <h:outputLabel value="Category:" >
