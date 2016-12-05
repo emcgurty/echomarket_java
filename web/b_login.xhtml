@@ -6,27 +6,24 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-
+  
+         <div class="messagecolor">
+        <h:messages showSummary="true" 
+                    showDetail="false"
+                    errorStyle="color: #d20005" 
+                    infoStyle="color: indigo"/>
+      </div>
 
 
   <h:form  id="user_login" >
-    <div class="messagecolor">
-      <h:messages showSummary="true" 
-                  showDetail="false"
-                  errorStyle="color: #d20005" 
-                  infoStyle="color: indigo"/>
-    </div>
-
     <table style="width:100%;margin-left: 5px" align="center" id="user_login_table">
       <tr >
         <td style="padding-top: 15px;padding-bottom: 15px;color:black;font-size: large">
           <h:outputText value="User Login" />
         </td>
-
       </tr>    
       <tr>
         <td style="padding-bottom: 15px;">
-
           <h:panelGroup>
             <h:outputLabel for="username" value="#{bundle.username}" >       
               <h:inputText id="username"
@@ -38,9 +35,7 @@
                            style="margin-left: 5px;" >
               </h:inputText>
             </h:outputLabel>
-            <h:message for="username" errorClass="error" />
           </h:panelGroup>
-
         </td>
       </tr>
       <tr>
@@ -56,19 +51,15 @@
                              autocomplete="off"
                              style="margin-left: 5px;"
                              >
-
-
               </h:inputSecret>
             </h:outputLabel>
-            <h:message for="password" errorClass="error" />
           </h:panelGroup>
-
         </td>
       </tr>
       <tr>
         <td style="padding-bottom: 15px;">  
           <p>
-            <h:commandLink  action="#{userBean.loginUser()}" id="user_login_command" value="Login" />
+            <h:commandLink  action="#{userBean.loginUser()}" id="user_login_command" value="Login"  />
             <br />
             <br />
             <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
