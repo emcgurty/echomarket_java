@@ -7,10 +7,13 @@ $(document).ready(function () {
   $('select').on('change', function () {
     checkType(this);
   });
-//  Does not work...
-//  $('input').on('focus', function () {
-//    $(this).css("background", "#F2F3F4")
-//  });
+  
+//  var edit_check = $("input[id$=editable]");
+//  alert(edit_check);
+//  alert($(edit_check).val());
+//  if ($(edit_check).val()  == 1) {
+//    $("div#addressAlternative").css("display", "block");
+//  }
 
 });
 function checkLegal() {
@@ -56,16 +59,16 @@ function checkLegal() {
           }
         }
         foundValue++;
-      } else if (id.includes('questionAltAddress')) {
-        if (legal_check[i].value == 1) {
-          if (legal_check[i].checked == false) {
-            $("div#addressAlternative").css("display", "none");
-          } else {
-            $("div#addressAlternative").css("display", "block");
-            getValue = true;
-          }
-        }
-        foundValue++;
+//      } else if (id.includes('questionAltAddress')) {
+//        if (legal_check[i].value == 1) {
+//          if (legal_check[i].checked == false) {
+//            $("div#addressAlternative").css("display", "none");
+//          } else {
+//            $("div#addressAlternative").css("display", "block");
+//            getValue = true;
+//          }
+//        }
+//        foundValue++;
       } else if (foundValue == 3) {
         break;
       }
