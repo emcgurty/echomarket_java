@@ -28,7 +28,7 @@
             <h:outputText value="Lending Terms: Monetary" />
           </div>
         </div>
-        <c:set var="lic_data" value="#{readOnlyBean.getLIC(readOnlyBean.itemId, readOnlyBean.which)}"  />
+        <c:set var="lic_data" value="#{readOnlyBean.getLIC(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
         <h:dataTable value="#{lic_data}"  var="lic" >    
           <h:column rowHeader="">
             <table class="personal">
