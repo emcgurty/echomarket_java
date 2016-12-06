@@ -12,16 +12,15 @@
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
   </ui:define>  
-
-  <ui:define name="content">
-    <h:form id="lender_transfer_content" >
-      <div class="message.color">
+   <div class="message.color">
         <h:messages showSummary="true" 
                     showDetail="false"
                     errorStyle="color: #d20005" 
                     infoStyle="color: indigo"/>
       </div>
-
+  <ui:define name="content">
+    <h:form id="lender_transfer_content" >
+   
       <div id="lender_registration" class="lender_registration" >
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_contact_preferences"></ui:include>  
         <div id="form_monetary" class="contact_information" >
@@ -69,14 +68,11 @@
                       <h:outputText id="forFreeString"   value="#{cbe}" class="RO_text" />
                     </c:if>  
                   </h:outputLabel>
-
                 </div>
               </td>
               <td>
                 <div>
-
                 </div>
-
               </td>
             </tr>
             <tr>
@@ -109,9 +105,9 @@
                 <div style="margin-top:5px;margin-left:25px;">
                   <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
                     <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" rendered="#{userBean.editable == 1}"  />
-                    <c:if test="#{userBean.editable == 0}" >
-                      <h:outputText id="smallFeeAmountString"   value="#{lenderItemConditionsBean.smallFeeAmount}" class="RO_text" />
-                    </c:if> 
+                    <span class="error-message" id="smallFee" ></span>       
+                    <h:outputText id="smallFeeAmountString"   value="#{lenderItemConditionsBean.smallFeeAmount}" class="RO_text" rendered="#{userBean.editable == 0}" />
+                    
                   </h:outputLabel>
                 </div>
               </td>
@@ -380,20 +376,12 @@
                 <h:outputText id="indefiniteDurationString"   value="#{cbe}" class="RO_text" />
               </c:if> 
             </h:outputLabel>
-
-
           </div>
-
-
-
         </div>
-
         <div id="form_conditions" class="contact_information" >
-
           <div  class="div_p" id="menu_item_64" >
             <div style="margin:10px;" >
               <h:outputText value="Lending Terms: Conditions" />
-
             </div>
           </div>
 
