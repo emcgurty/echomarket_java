@@ -18,22 +18,16 @@
 
             <f:event listener="#{userBean.validatePassword}" type="postValidate" />
             <div  class="top" id="activate_div">
-
                 <table style="width:75%;margin-left: 50px" align="center" id="activate_table">
                     <tr >
                         <td style="padding-top: 15px;padding-bottom: 15px;">
-
                             <h:outputText value="Please Login to Complete Activation Process" />
                             <h:commandLink  action="#{userBean.processActivation()}" class="right_div" value="Activate!">
                             </h:commandLink>
-
                         </td>
-
                     </tr> 
-
                     <tr >
                         <td style="padding-top: 15px;padding-bottom: 15px;">
-
                             <h:outputLabel for="username"  value="#{bundle.username}">       
                                 <h:inputText id="username"
                                              value="#{userBean.username}"
@@ -51,8 +45,6 @@
                                                value="#{userBean.password}"
                                                required="true"
                                                requiredMessage="#{bundle.ReqPassword}"  style="margin-left:10px">
-
-
                                 </h:inputSecret>
                             </h:outputLabel>
                         </td>
@@ -69,9 +61,7 @@
                             </h:outputLabel>
                         </td>
                     </tr>
-
                 </table>
-
             </div>
         </h:form>
     </ui:define>
