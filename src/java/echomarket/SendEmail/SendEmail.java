@@ -62,7 +62,7 @@ public class SendEmail implements java.io.Serializable {
         } else if ("forgotPassword" == this.whichEmail) {
             //SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, returnApplicationAddress(), returnApplicationPwd(), null, reset_code);
             // random is user_id
-            this.reset_code = random;
+            this.reset_code = rc;
             sendForgotPasswordEmail(sess);
         } else if ("forgotUserName" == this.whichEmail) {
     
