@@ -9,7 +9,6 @@
   </h:head>
 
   <h:form id="application_menu">
-
     <c:choose>
       <c:when test="${userBean.userAlias == null}">
         <c:set var="username" value="Friend" />
@@ -18,8 +17,6 @@
         <c:set var="username" value="#{userBean.userAlias}" />
       </c:otherwise>
     </c:choose>
-
-
     <ul id="nav" class="menu">
       <li class="subs">
         <h:commandLink id="index" action="index" value="EchoMarket: Welcome #{username}!" hreflang="#s1"/>
@@ -163,23 +160,15 @@
               <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}">
                 <h:outputText value="Community Detail"/>
               </h:commandLink>                 
-
             </li>
             <li>
               <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}">
                 <h:outputText value="Community Members"/>
               </h:commandLink>                 
-
             </li>
-
-
           </ul>
         </li>   
-
-
       </c:if>
-
-
       <c:if test="#{userBean.user_id != null}" >
         <li class="subs">
           <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
