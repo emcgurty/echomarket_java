@@ -11,13 +11,6 @@
   <h:form id="index_options">
     <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
 
-    <div class="message.color">
-      <h:messages showSummary="true" 
-                  showDetail="false"
-                  errorStyle="color: #d20005" 
-                  infoStyle="color: indigo"/>
-    </div>
-
     <div class="top" id="index_div" style="font-size:20px;margin-left:5px;border-top:#3B5998 double thin;">
       <div style="position:relative;float:left;width:45%;margin-left:25px;margin-top:5px;margin-bottom:5px;"   >
         <p>Welcome to EchoMarket!</p>
@@ -33,10 +26,9 @@
     </div>
   </h:form>
 
-
   <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
+    
     <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
-
     <c:if test="#{userLoggedIn}" >
       <c:choose>
         <c:when test="#{userBean.userAction == 'forgotUserPassword'}">
@@ -69,9 +61,6 @@
     <c:if test="#{not userLoggedIn and userBean.action == 'new'}" >
         <p>Perform a quick search here to see what available to lend or borrow</p>
     </c:if>
-
   </div>
-
-
 
 </ui:composition>
