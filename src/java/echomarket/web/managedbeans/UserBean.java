@@ -64,6 +64,11 @@ public class UserBean extends AbstractBean implements Serializable {
   private String action;
 
   public String Logout() {
+    setUserToNull();
+    return "index?faces-redirect=true";
+  }
+
+  private void setUserToNull() {
     this.user_id = null;
     this.username = null;
     this.userAlias = null;
@@ -75,8 +80,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.appEmail = null;
     this.isCommunity = null;
     this.roleId = null;
-
-    return "index?faces-redirect=true";
   }
 
   public String getEmail() {
@@ -130,6 +133,9 @@ public class UserBean extends AbstractBean implements Serializable {
     Communities comm = null;
     Participant participant = null;
     String commName = null;
+    Session hib = null;
+    Transaction tx = null;
+
     String fullname = this.username;
     String ac = null;  // holds reset_code
     try {
@@ -140,9 +146,8 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     Boolean savedRecord = false;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
     String current_user_id = null;
+
     try {
       current_user_id = getId();
       // Should do a look-up for id on 'creator'
@@ -155,6 +160,8 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       hib.save(create_record);
       tx.commit();
       ac = create_record.getResetCode();
@@ -165,7 +172,6 @@ public class UserBean extends AbstractBean implements Serializable {
       System.out.println("Error on Update User");
       message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
     } finally {
-
       tx = null;
       hib = null;
       create_record = null;
@@ -174,11 +180,12 @@ public class UserBean extends AbstractBean implements Serializable {
     if (savedRecord == true) {
 
       if (this.communityName != null) {
-        hib = hib_session();
-        tx = hib.beginTransaction();
+
         //participant = new Participant(getId(), current_user_id, -9, 0, "NA", "NA", "NA", 0, 0, 0, 1);
         //hib.save(participant);
         try {
+          hib = hib_session();
+          tx = hib.beginTransaction();
           comm = new Communities(current_user_id, this.communityName, 0, "NA", "?", "NA", "NA", "NA", "NA", "NA", "NA", "99", "99", "NA", "NA", this.email, 1, "NA", "NA");
           hib.save(comm);
           tx.commit();
@@ -434,7 +441,6 @@ public class UserBean extends AbstractBean implements Serializable {
         getp = pes.authenticate(password, crypted_password, salt);
       } catch (NoSuchAlgorithmException ex) {
         Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
       } catch (InvalidKeySpecException ex) {
         Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       } finally {
@@ -442,12 +448,8 @@ public class UserBean extends AbstractBean implements Serializable {
         crypted_password = null;
         pes = null;
       }
-    } else {
-      message(null, "LogInFailed", null);
-      return_string = "login";
     }
 
-    //
     if (getp == true) {
       setUser_id(users_Array.getUser_id());
       setUserType(users_Array.getUserType());
@@ -508,11 +510,13 @@ public class UserBean extends AbstractBean implements Serializable {
         }
       }
     } else {
-      message(null, "LogInSuccessful", new Object[]{this.username});
-      return_string = "login";
+      message(null, "LogInFailedSuccessful", new Object[]{this.username});
+      this.username = null;
+      return_string = "index";
     }
 
-    return return_string + "?faces-redirect=true";
+    return return_string;
+//    + "?faces-redirect=true";
 
   }
 
@@ -554,49 +558,69 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String managePasswordChange() {
-
+    Session hib = null;
+    Transaction tx = null;
+    Users userArray = null;
     List results = ValidateUserNameResetCode();
     if (results != null) {
-      Users userArray = (Users) results.get(0);
-      Session hib = hib_session();
-      Transaction tx = hib.beginTransaction();
-      Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
-      uu.setResetCode(null);
-      PasswordEncryptionService pes = new PasswordEncryptionService();
+
       try {
-        uu.setCryptedPassword(pes.getEncryptedPassword(this.password, uu.getSalt()));
+        userArray = (Users) results.get(0);
+        hib = hib_session();
+        tx = hib.beginTransaction();
+        Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
+        uu.setResetCode(null);
+        PasswordEncryptionService pes = new PasswordEncryptionService();
+        try {
+          uu.setCryptedPassword(pes.getEncryptedPassword(this.password, uu.getSalt()));
 
-      } catch (NoSuchAlgorithmException ex) {
-        Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
 
-      } catch (InvalidKeySpecException ex) {
-        Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tx.commit();
+        message(null, "PasswordChangeSuccess", new Object[]{});
+      } catch (Exception ex) {
+        tx.rollback();
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        message(null, "PasswordChangeSuccessFailed", new Object[]{});
+      } finally {
+        userArray = null;
+        tx = null;
+        hib = null;
+        results = null;
       }
-      tx.commit();
-      tx = null;
     }
-    //PasswordChangeSuccess
-    message(
-            null,
-            "PasswordChangeSuccess",
-            new Object[]{});
-    return "index?faces-redirect=true";
+    setUserToNull();
+    this.userAction = "login";
+    return "index";
   }
 
   public String forgotUserPassword() {
     String buildReset_Code = null;
+    Users userArray = null;
+    Session hib = null;
+    Transaction tx = null;
+
     List results = ValidateEmail(email);
     if (results != null) {
-      Users userArray = (Users) results.get(0);
-      //// Update the user to generate reset_code
-      Session hib = hib_session();
-      Transaction tx = hib.beginTransaction();
-      Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
-      buildReset_Code = uu.BuildRandomValue();
-      uu.setResetCode(buildReset_Code);
-      tx.commit();
+      try {
+        if (results.size() == 1) {
+          userArray = (Users) results.get(0);
+          hib = hib_session();
+          tx = hib.beginTransaction();
+          Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
+          buildReset_Code = uu.BuildRandomValue();
+          uu.setResetCode(buildReset_Code);
+          tx.commit();
+        }
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Tx commit failed..");
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      }
 
       if (hib.isOpen() == false) {
         hib = hib_session();
@@ -618,12 +642,12 @@ public class UserBean extends AbstractBean implements Serializable {
         System.out.println("Send Mail Failed");
       }
       message(null, "ForgotUserPasswordSuccess", new Object[]{email});
-      this.username = null;
+      setUserToNull();
       this.userAction = "login";
       return "index";
     } else {
       message(null, "ForgotUserPasswordFailed", new Object[]{email});
-      this.username = null;
+      setUserToNull();
       this.userAction = "login";
       return "index";
     }
@@ -633,24 +657,17 @@ public class UserBean extends AbstractBean implements Serializable {
 
     String results = ValidateEmailAndPassword(getEmail(), getPassword());
     if (results != null) {
-
-      message(
-              null,
-              "FoundUsername",
-              new Object[]{results});
-      results = null;
-      this.username = null;
-      this.userAction = "login";
-      return "index";
+      message(null, "FoundUsername", new Object[]{results});
     } else {
-      message(
-              null,
-              "UserNameNotFound",
-              null);
-      results = null;
-      this.userAction = "login";
-      return "index";
+      message(null, "UserNameNotFound", null);
     }
+
+    results = null;
+    setUserToNull();
+    this.userAction = "login";
+
+    return "index";
+
   }
 
   private String ValidateEmailAndPassword(String em, String pw) {
@@ -676,12 +693,10 @@ public class UserBean extends AbstractBean implements Serializable {
         auth_pw = pes.authenticate(pw, crypted_password, salt);
 
       } catch (NoSuchAlgorithmException ex) {
-        Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
 
       } catch (InvalidKeySpecException ex) {
-        Logger.getLogger(UserBean.class
-                .getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       }
 
     }
@@ -751,9 +766,7 @@ public class UserBean extends AbstractBean implements Serializable {
       msg.setSeverity(FacesMessage.SEVERITY_ERROR);
       context().addMessage(passwordId, msg);
       context().renderResponse();
-      message(null,
-              "PasswordsDoNotMatch",
-              null);
+//      message(null, "PasswordsDoNotMatch", null);
     } else {
       PasswordValidator pv = new PasswordValidator();
       Boolean is_valid = pv.validate(password);
@@ -762,10 +775,7 @@ public class UserBean extends AbstractBean implements Serializable {
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         context().addMessage(passwordId, msg);
         context().renderResponse();
-        message(
-                null,
-                "PasswordMustContain",
-                null);
+//        message(null, "PasswordMustContain", null);
 
       } else {
 
