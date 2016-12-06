@@ -1,102 +1,87 @@
 $(document).ready(function () {
 
   $(".contact_information").css("display", "block");
-  $('input').on('change', function () {
-    checkLegal();
-  });
-  $('select').on('change', function () {
-    checkType(this);
-  });
-  
-//  var edit_check = $("input[id$=editable]");
-//  alert(edit_check);
-//  alert($(edit_check).val());
-//  if ($(edit_check).val()  == 1) {
-//    $("div#addressAlternative").css("display", "block");
-//  }
+  $("input[type=radio]").on('change', function () {
+    var getid = this.id;
+    if (getid.includes('questionAltAddress'))
+      checkAltAddress(this);
+    if (getid.includes('questionAltEmail'))
+      checkAltEmailProvide(this);
+    if (getid.includes('age18OrMore'))
+      check18OrMore(this);
+    if (getid.includes('gooodwill'))
+      checkGoodWill(this);
+        if (getid.includes('smallFee'))
+      checkSmallFee(this);
 
+  });
 });
-function checkLegal() {
 
-  var legal_check = $("input[type=radio]");
-  var getValue = false;
-  var foundValue = 0;
-  try {
-    for (var i = 0; i < legal_check.length; i++) {
-      var id = legal_check[i].id;
-      if (id.includes('age18OrMore')) {
-        if (legal_check[i].value == 0) {
-          if (legal_check[i].checked == true) {
-            $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
-            $("span#age18OrMore_span.error-message").css("visibility", "visible");
-          } else {
-            $("span#age18OrMore_span.error-message").text("");
-            $("span#age18OrMore_span.error-message").css("visibility", "hidden");
-            getValue = true;
+function checkSmallFee(input) {
+  
+        if (input.value == 1) {
+          if (input.checked == true) {
+            $("span#smallFeeAmount").css("visibility", "visible");
+            $("span#smallFee").text("Please provide an amount.");
+          }
+        } else {
+          if (input.checked == true) {
+            $("span#smallFeeAmount").css("visibility", "hidden");
+            $("span#smallFee").text("");
           }
         }
-        foundValue++;
-      } else if (id.includes('goodwill')) {
-
-        if (legal_check[i].value == 0) {
-          if (legal_check[i].checked == true) {
-            $("span#goodwill_span.error-message").text("You must be acting in goodwill.");
-            $("span#goodwill_span.error-message").css("visibility", "visible");
-          } else {
-            $("span#goodwill_span.error-message").text("");
-            $("span#goodwill_span.error-message").css("visibility", "hidden");
-            getValue = true;
-          }
-        }
-        foundValue++;
-      } else if (id.includes('questionAltEmail')) {
-        if (legal_check[i].value == 1) {
-          if (legal_check[i].checked == false) {
-            $("div#emailAlternative").css("display", "none");
-          } else {
-            $("div#emailAlternative").css("display", "block");
-            getValue = true;
-          }
-        }
-        foundValue++;
-//      } else if (id.includes('questionAltAddress')) {
-//        if (legal_check[i].value == 1) {
-//          if (legal_check[i].checked == false) {
-//            $("div#addressAlternative").css("display", "none");
-//          } else {
-//            $("div#addressAlternative").css("display", "block");
-//            getValue = true;
-//          }
-//        }
-//        foundValue++;
-      } else if (foundValue == 3) {
-        break;
-      }
-    }
-
-  } catch (err) {
-  }
-
-  return getValue;
 }
 
+function checkGoodWill(input) {
 
-function checkType(input) {
-
-  var select_value = input.value;
-  var select_id = input.id;
-  var which_type_ = "";
-  if (select_id.includes('which_type')) {
-    if (select_value == 1) {
-      which_type_ = "lend";
+  if (input.value == 0) {
+    if (input.checked == true) {
+      $("span#goodwill_span.error-message").text("You must be acting in goodwill.");
+      $("span#goodwill_span.error-message").css("visibility", "visible");
     } else {
-      which_type_ = "borrow";
+      $("span#goodwill_span.error-message").text("");
+      $("span#goodwill_span.error-message").css("visibility", "hidden");
     }
-    $("input[name='user_detail:whichType']").val(which_type_);
-    $("image#imagePreview").css("src", which_type + "_images");
   }
-
-
-
-  return;
 }
+
+function check18OrMore(input) {
+  if (input.value == 1) {
+    if (input.checked == true) {
+      $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
+      $("span#age18OrMore_span.error-message").css("visibility", "visible");
+    } else {
+      $("span#age18OrMore_span.error-message").text("");
+      $("span#age18OrMore_span.error-message").css("visibility", "hidden");
+    }
+  }
+}
+
+function checkAltEmailProvide(input) {
+  if (input.value == 1) {
+    if (input.checked == false) {
+      $("div#emailAlternative").css("display", "none");
+    } else {
+      $("div#emailAlternative").css("display", "block");
+    }
+  }
+}
+
+function checkAltAddress(input) {
+  if (input.value == 1) {
+    if (input.checked == true) {
+      $("div#addressAlternative").css("display", "block");
+    } else {
+      $("div#addressAlternative").css("display", "none");
+    }
+  } else {
+    if (input.checked == true) {
+      $("div#addressAlternative").css("display", "none");
+    }
+  }
+}
+
+
+
+
+
