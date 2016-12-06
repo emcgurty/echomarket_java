@@ -198,7 +198,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
         } finally {
           hib = null;
-          hib = null;
+          tx = null;
         }
       }
 
@@ -222,6 +222,8 @@ public class UserBean extends AbstractBean implements Serializable {
       } catch (Exception ex) {
       }
     }
+    setUserToNull();
+    this.userAction = "login";
 
     return "index";
   }
