@@ -5,29 +5,24 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    <!--template="./echomarketTemplate.xhtml"-->
-    <!--    <ui:define name="header"  >
-            <ui:include rendered="true" src="application_header.xhtml" id="ForgotUsernameHeader" /> 
-        </ui:define>
-    
-        <ui:define name="content">-->
-    <h:form  id="forgotUserName"  >
+
+   <div class="messagecolor">
+    <h:messages showSummary="true" 
+                showDetail="false"
+                errorStyle="color: #d20005" 
+                infoStyle="color: indigo"/>
+  </div>
+  <h:form  id="forgotUserName"  >
         <h:head>
             <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
         </h:head>
-       
-        <div  class="top" id="form_forgot_username">
-
+          <div  class="top" id="form_forgot_username">
             <table style="width:75%;margin-left: 50px" align="center" id="forgot_username_table">
                 <tr >
                     <td style="padding-top: 15px;padding-bottom: 15px;">
-
                         <h:outputText value="Forgot Username" />
-
                     </td>
-
                 </tr> 
                 <tr>
                     <td style="padding-top: 15px;padding-bottom: 15px;">
@@ -38,7 +33,6 @@
                                          requiredMessage="#{bundle.ReqUserEmail}" style="margin-left:10px">
                             </h:inputText>
                         </h:outputLabel>
-
                     </td>
                 </tr>
                 <tr>
@@ -55,7 +49,6 @@
                 <tr>
                     <td style="padding-top: 15px;padding-bottom: 5px;">
                         <h:commandLink  action="#{userBean.forgotUserName()}" id="forgot_username" value="Get Username" >
-                            <!--<f:ajax />-->
                         </h:commandLink>
                     </td>
 
@@ -64,24 +57,10 @@
                 <tr>
                     <td style="padding-top: 15px;padding-bottom: 15px;">
                         <h:commandLink  action="#{userBean.load_login()}" id="nevermind" value="Nevermind, found it!" immediate="true">
-                            <!--<f:ajax />-->
                         </h:commandLink>
                     </td>
-
-
-                </tr>
-
+               </tr>
             </table>
-
-
-
-
         </div>
-
     </h:form>
-    <!--    </ui:define>
-    
-        <ui:define name="footer"  >
-            <ui:include rendered="true" src="application_footer.xhtml" id="ForgotUsernameFooter" /> 
-        </ui:define>-->
 </ui:composition>
