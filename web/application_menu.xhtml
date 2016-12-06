@@ -147,15 +147,12 @@
               </h:commandLink>
             </li>
           </ul>
-
         </li>
       </c:if>
-
       <c:if test="#{userBean.isCommunity == 1}" >
         <li class="subs">
           <a href="#s1">Community</a>
           <ul>
-
             <li>
               <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}">
                 <h:outputText value="Community Detail"/>
