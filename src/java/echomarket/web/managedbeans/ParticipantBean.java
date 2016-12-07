@@ -139,7 +139,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     } else {
       this.questionAltAddress = -9;
       this.questionAltEmail = -9;
-      
       return "user_nae";
     }
 
@@ -243,19 +242,18 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setHomePhone(homePhone);
       part.setCellPhone(cellPhone);
       part.setAlternativePhone(alternativePhone);
-      part.setEmailAlternative(emailAlternative);
-      part.setDisplayHomePhone(displayHomePhone);
-      part.setDisplayCellPhone(displayCellPhone);
-      part.setDisplayAlternativePhone(displayAlternativePhone);
-      part.setDisplayAlternativeAddress(displayAlternativeAddress);
-      if (this.questionAltEmail == 0) {
+      
+      if (this.questionAltEmail == 1) {
         part.setEmailAlternative(null);
       } else {
         part.setEmailAlternative(emailAlternative);
       }
-        
       
-
+      part.setDisplayHomePhone(displayHomePhone);
+      part.setDisplayCellPhone(displayCellPhone);
+      part.setDisplayAlternativePhone(displayAlternativePhone);
+      part.setDisplayAlternativeAddress(displayAlternativeAddress);
+   
       sb.update(part);
       tx.commit();
       updateSuccess = true;
@@ -284,8 +282,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
           } else if (aalt.getAddressId() != null  && this.questionAltAddress != 1){
             sb.update(aalt);
           } else if ((aalt.getAddressId() != null) && this.questionAltAddress == 1){
-            
-            sb.delete(aalt.getAddressId());
+           
+            sb.delete(aalt);
           } else {}
           
           tx.commit();
