@@ -330,145 +330,149 @@
 
           <c:set var="alternative_address_data" value="#{participantBean.getExistingAddress('alternative')}" />   
           <c:forEach items="${alternative_address_data}" var="aid"  >
-            <c:set var="alternative_address_data_empty"  value="${empty aid.postalCode}" />
+            <c:set var="alternative_address_data_empty"  value="${empty aid.addressId}" />
           </c:forEach>
 
           <div style="margin-left: 25px;float:left">
             <c:set var="wouldYou" value="#{(userBean.editable == 1 and alternative_address_data_empty)}" />
             <h:outputLabel value="Would you like to provide an alternative address?"  for="questionAltAddressProvide" rendered="#{wouldYou}" >
-              <h:selectOneRadio id="questionAltAddressProvide" value="#{participantBean.questionAltAddress}" layout='lineDirection'  rendered="#{wouldYou}" >
+              <h:selectOneRadio id="questionAltAddressProvide" layout='lineDirection'  rendered="#{wouldYou}" >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
               </h:selectOneRadio>
             </h:outputLabel>
           </div>
 
-          <h:panelGroup id="addressAlternative" style="float:left;"  rendered="#{!alternative_address_data_empty}" >
-          
-            <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-              <div style="margin-left: 15px;float:left">
-                <h:dataTable value="#{alternative_address_data}" id="alternative"   var="pa"    >    
-                  <h:column rowHeader="">
-                    <div  class="div_p"  >
-                      <div style="margin:5px;" >
-                        <h:outputText value="An Alternative Address...(Optional. Fields with asterisk are required if pursued.)"  rendered="#{(userBean.editable == 1) }" />
-                        <h:outputText value="Your Alternative Address..."  rendered="#{userBean.editable == 0}" />
-                      </div>
+          <c:if test="#{!alternative_address_data_empty}" >
+            <c:set var="a_display" value="block" />
+          </c:if>  
+          <c:if test="#{alternative_address_data_empty}" >
+            <c:set var="a_display" value="none" />
+          </c:if>  
+
+          <div id="addressAlternative"  style="display:#{a_float};float:left;height:auto;width:inherit;margin-top:10px;">
+            <div style="margin-left: 15px;float:left">
+              <h:dataTable value="#{alternative_address_data}" id="alternative" var="pa" >    
+                <h:column rowHeader="">
+                  <div  class="div_p"  >
+                    <div style="margin:5px;" >
+                      <h:outputText value="An Alternative Address...(Optional. Fields with asterisk are required if pursued.)"  rendered="#{(userBean.editable == 1) }" />
+                      <h:outputText value="Your Alternative Address..."  rendered="#{userBean.editable == 0}" />
                     </div>
-                    <table >
-                      <tr>
-                        <td>
-                          <h:outputLabel for="addressLine1a" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
-                          <h:inputText id="addressLine1a" value="#{pa.addressLine1}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
-                          <h:outputText value="#{pa.addressLine1}" style="margin-left: 5px;" class="RO_text"  rendered="#{userBean.editable == 0}" />
-                          <span class="error-message" id="addressLine1" ></span>
-                        </td>
-                        <td>
-                          <h:outputLabel for="addressLine2a" value="#{bundle.AddressLine2}" />
-                          <h:inputText id="addressLine2a" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
-                          <h:outputText value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" class="RO_text" />
+                  </div>
+                  <table>
+                    <tr>
+                      <td>
+                        <h:outputLabel for="addressLine1a" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
+                        <h:inputText id="addressLine1a" value="#{pa.addressLine1}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
+                        <h:outputText value="#{pa.addressLine1}" style="margin-left: 5px;" class="RO_text"  rendered="#{userBean.editable == 0}" />
+                        <span class="error-message" id="addressLine1" ></span>
+                      </td>
+                      <td>
+                        <h:outputLabel for="addressLine2a" value="#{bundle.AddressLine2}" />
+                        <h:inputText id="addressLine2a" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
+                        <h:outputText value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" class="RO_text" />
 
-                        </td>
-                      </tr> 
-                      <tr>
-                        <td>
-                          <h:outputLabel for="citya" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
-                          <h:inputText id="citya" value="#{pa.city}" style="margin-left: 5px;" class="primary"  rendered="#{userBean.editable == 1}" />
-                          <h:outputText value="#{pa.city}" style="margin-left: 5px;" class="RO_text"   rendered="#{userBean.editable == 0}" />
+                      </td>
+                    </tr> 
+                    <tr>
+                      <td>
+                        <h:outputLabel for="citya" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
+                        <h:inputText id="citya" value="#{pa.city}" style="margin-left: 5px;" class="primary"  rendered="#{userBean.editable == 1}" />
+                        <h:outputText value="#{pa.city}" style="margin-left: 5px;" class="RO_text"   rendered="#{userBean.editable == 0}" />
 
-                          <span class="error-message" id="city" ></span>
-                        </td>
-                        <td>
-                          <h:outputLabel for="usStateIda" value="#{bundle.UsStates}"/>
-                          <h:selectOneMenu id="usStateIda" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}">
-                            <f:validator validatorId="selectOneMenuValidator" />  
-                            <f:selectItems id="us_state_id" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
-                            </f:selectItems>    
-                          </h:selectOneMenu>
-                          <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text"  rendered="#{userBean.editable == 0}" />    
-                          <h:message styleClass="error-message" for="usStateId"/>
-                          <span class="error-message" id="usStates" ></span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <h:outputLabel for="provincea" value="#{bundle.Province}"/>
-                          <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
-                          <h:outputText value="#{pa.province}" class="RO_text" rendered="#{userBean.editable == 0}" />
+                        <span class="error-message" id="city" ></span>
+                      </td>
+                      <td>
+                        <h:outputLabel for="usStateIda" value="#{bundle.UsStates}"/>
+                        <h:selectOneMenu id="usStateIda" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}">
+                          <f:validator validatorId="selectOneMenuValidator" />  
+                          <f:selectItems id="us_state_id" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
+                          </f:selectItems>    
+                        </h:selectOneMenu>
+                        <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text"  rendered="#{userBean.editable == 0}" />    
+                        <h:message styleClass="error-message" for="usStateId"/>
+                        <span class="error-message" id="usStates" ></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h:outputLabel for="provincea" value="#{bundle.Province}"/>
+                        <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
+                        <h:outputText value="#{pa.province}" class="RO_text" rendered="#{userBean.editable == 0}" />
 
-                        </td>
-                        <td>
-                          <h:outputLabel for="regiona" value="#{bundle.Region}"/>
-                          <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
-                          <h:outputText value="#{pa.region}" class="RO_text"  rendered="#{userBean.editable == 0}" />
+                      </td>
+                      <td>
+                        <h:outputLabel for="regiona" value="#{bundle.Region}"/>
+                        <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
+                        <h:outputText value="#{pa.region}" class="RO_text"  rendered="#{userBean.editable == 0}" />
 
-                        </td>
-                      </tr>
-                      <tr >
-                        <td >
-                          <h:outputLabel for="postalCodea" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
-                          <h:inputText id="postalCodea" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
-                          <h:outputText value="#{pa.postalCode}" class="RO_text"   rendered="#{userBean.editable == 0}" />
-                          <span class="error-message" id="postalCode" ></span>
-                        </td>
-                        <td >
-                          <h:outputLabel for="countryIda" value="#{bundle.Country}"/><span class="required_fields">*</span>
-                          <h:selectOneMenu id="countryIda" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}"  >
-                            <f:validator validatorId="selectOneMenuValidator" />  
-                            <f:selectItems id="country_id" value="#{country_list}"  var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
-                            </f:selectItems>    
-                          </h:selectOneMenu>
-                          <h:outputText value="#{country.getOneCountry(pa.countryId)}" rendered="#{userBean.editable == 0}" class="RO_text" />
-                          <span class="error-message" id="countryId" ></span>
-                        </td>
-                      </tr>
+                      </td>
+                    </tr>
+                    <tr >
+                      <td >
+                        <h:outputLabel for="postalCodea" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
+                        <h:inputText id="postalCodea" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
+                        <h:outputText value="#{pa.postalCode}" class="RO_text"   rendered="#{userBean.editable == 0}" />
+                        <span class="error-message" id="postalCode" ></span>
+                      </td>
+                      <td >
+                        <h:outputLabel for="countryIda" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                        <h:selectOneMenu id="countryIda" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}"  >
+                          <f:validator validatorId="selectOneMenuValidator" />  
+                          <f:selectItems id="country_id" value="#{country_list}"  var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
+                          </f:selectItems>    
+                        </h:selectOneMenu>
+                        <h:outputText value="#{country.getOneCountry(pa.countryId)}" rendered="#{userBean.editable == 0}" class="RO_text" />
+                        <span class="error-message" id="countryId" ></span>
+                      </td>
+                    </tr>
 
-                      <tr >
-                        <td colspan="2">
+                    <tr >
+                      <td colspan="2">
 
-                        </td>
-                      </tr>
+                      </td>
+                    </tr>
 
-                      <tr >
-                        <td colspan="2">
-                          <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayAlternativeAddress" >
-                            <h:selectOneRadio id="displayAlternativeAddress" value="#{participantBean.displayAlternativeAddress}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
-                              <f:selectItem itemValue="1" itemLabel="Yes" />
-                              <f:selectItem itemValue="0" itemLabel="No" />
+                    <tr >
+                      <td colspan="2">
+                        <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayAlternativeAddress" >
+                          <h:selectOneRadio id="displayAlternativeAddress" value="#{participantBean.displayAlternativeAddress}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />
 
-                            </h:selectOneRadio>    
-                            <c:if test="#{userBean.editable == 0}" >
-                              <c:choose>
-                                <c:when test="#{participantBean.displayAlternativeAddress == 0}">
-                                  <c:set var="yn" value="No"/>
-                                </c:when>
-                                <c:when test="#{participantBean.displayAlternativeAddress == 1}">
-                                  <c:set var="yn" value="Yes"/>
-                                </c:when>
-                                <c:otherwise>
-                                  <c:set var="yn" value="Indifferent"/>
-                                </c:otherwise>
-                              </c:choose>
-                              <h:outputText id="displayAlternativeAddressString"   value="#{yn}" class="RO_text" />
-                            </c:if>
-                          </h:outputLabel>   
+                          </h:selectOneRadio>    
+                          <c:if test="#{userBean.editable == 0}" >
+                            <c:choose>
+                              <c:when test="#{participantBean.displayAlternativeAddress == 0}">
+                                <c:set var="yn" value="No"/>
+                              </c:when>
+                              <c:when test="#{participantBean.displayAlternativeAddress == 1}">
+                                <c:set var="yn" value="Yes"/>
+                              </c:when>
+                              <c:otherwise>
+                                <c:set var="yn" value="Indifferent"/>
+                              </c:otherwise>
+                            </c:choose>
+                            <h:outputText id="displayAlternativeAddressString"   value="#{yn}" class="RO_text" />
+                          </c:if>
+                        </h:outputLabel>   
 
-                          <h:outputLabel value="Would you like to delete your Alternative Address?"  for="questionAltAddress" rendered="#{(userBean.editable == 1) and (!empty pa.postalCode)}">
-                            <h:selectOneRadio id="questionAltAddress" value="#{participantBean.questionAltAddress}"  rendered="#{userBean.editable == 1}" >
-                              <f:selectItem itemValue="1" itemLabel="Yes" />
-                              <f:selectItem itemValue="0" itemLabel="No" />
-                            </h:selectOneRadio>    
-                          </h:outputLabel>   
-                        </td>
-                      </tr>
+                        <h:outputLabel value="Would you like to delete your Alternative Address?"  for="questionAltAddress" rendered="#{(userBean.editable == 1) and (!empty pa.postalCode)}">
+                          <h:selectOneRadio id="questionAltAddress" value="#{participantBean.questionAltAddress}"  rendered="#{userBean.editable == 1}" >
+                            <f:selectItem itemValue="1" itemLabel="Yes" />
+                            <f:selectItem itemValue="0" itemLabel="No" />
+                          </h:selectOneRadio>    
+                        </h:outputLabel>   
+                      </td>
+                    </tr>
 
-                    </table>
-                  </h:column>
-                </h:dataTable>
-              </div>
-            </div>    
-          
-          </h:panelGroup>
+                  </table>
+                </h:column>
+              </h:dataTable>
+            </div>
+          </div>    
+
           <div  class="div_p"  >
             <div style="margin:10px;" >
               <h:outputText value="Your Phone Access..." />
