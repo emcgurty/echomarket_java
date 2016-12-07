@@ -59,10 +59,10 @@ function check18OrMore(input) {
 
 function checkAltEmailProvide(input) {
   if (input.value == 1) {
-    if (input.checked == false) {
-      $("div#emailAlternative").css("display", "none");
-    } else {
+    if (input.checked == true) {
       $("div#emailAlternative").css("display", "block");
+    } else {
+      $("div#emailAlternative").css("display", "none");
     }
   } else if (input.value == 0) {
       $("div#emailAlternative").css("display", "none");
@@ -72,13 +72,14 @@ function checkAltEmailProvide(input) {
 function checkAltAddress(input) {
   if (input.value == 1) {
     if (input.checked == true) {
-      $("span#addressAlternative").css("visibility", "visible");
+      alert("asd");
+      $("div#addressAlternative").css("display", "block");
     } else {
-      $("span#addressAlternative").css("visibility", "hidden");
+      $("div#addressAlternative").css("display", "none");
     }
   } else {
     if (input.checked == true) {
-      $("span#addressAlternative").css("visibility", "none");
+      $("div#addressAlternative").css("display", "none");
     }
   }
 }
