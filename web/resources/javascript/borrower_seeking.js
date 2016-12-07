@@ -4,7 +4,6 @@ if ($("input[id$='organizationName']").val()) {
         $("div[id$='yesNoOrganization']").css("display", "block");
     }
 
-
     var contactAddressCheck = $("input");
     findContactAddressValue(contactAddressCheck);
     function findContactAddressValue(cad) {
@@ -20,7 +19,7 @@ if ($("input[id$='organizationName']").val()) {
                     }
                 }
             }
-            
+          
             if (id.includes('thirdPartyPresenceL2b')) {
 
                 if (id.includes('0')) {
@@ -61,10 +60,10 @@ if ($("input[id$='organizationName']").val()) {
         }
 
         if ((select_id == 'contactDescribeId') && (select_value == '10')) {
-            $("div#otherDescribeYourselfText").css("visibility", "visible");
+            $("div#otherDescribeYourselfText").css("display", "block");
         } else {
             $("input#otherDescribeYourself").html("");
-            $("div#otherDescribeYourselfText").css("visibility", "hidden");
+            $("div#otherDescribeYourselfText").css("display", "none");
         }
 
         if ((select_id == 'categoryId') && (select_value == 0)) {
@@ -105,13 +104,6 @@ if ($("input[id$='organizationName']").val()) {
                 $("div#buildAlternativeAddress").css("display", "block");
             } else {
                 $("div#buildAlternativeAddress").css("display", "none");
-            }
-        } else if (this.id.includes('questionAltEmail')) {
-            y_n = $(this).val();
-            if ((y_n == 1) || (y_n == 2)) {
-                $("div#emailAlternative").css("display", "block");
-            } else {
-                $("div#emailAlternative").css("display", "none");
             }
         } else if (this.id.includes('thirdPartyPresenceL2b')) {
             y_n = $(this).val();
