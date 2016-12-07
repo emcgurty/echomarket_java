@@ -1,5 +1,5 @@
-tr:nth-child(odd) {background: #DEEBEC;} 
-tr:nth-child(even) {background: #F2F3F4;}
+/*tr:nth-child(odd) {background: #DEEBEC;} 
+tr:nth-child(even) {background: #F2F3F4;}*/
 
 input[type=radio] + label {
   color: #6fa9a9;
@@ -134,6 +134,7 @@ div.contact_information {
   display:block;
   background-color: #ffffff;
   color: #000033;
+  font-weight: bold;
   width:100%;
   padding: inherit;
   align-content: left;
