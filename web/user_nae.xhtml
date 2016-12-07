@@ -205,7 +205,7 @@
                 <span class="error-message" id="emailAlternative" ></span>
               </h:outputLabel>
               <br />
-              <h:outputLabel value="Would you like to delete your Alternative Email?"  for="questionAltAddress" rendered="#{(userBean.editable == 1) and (!empty participantBean.questionAltAddress )}">
+              <h:outputLabel value="Would you like to delete your Alternative Email?"  for="questionAltEmail" rendered="#{(userBean.editable == 1) and (!empty participantBean.questionAltEmail )}">
                 <h:selectOneRadio id="questionAltEmail" value="#{participantBean.questionAltEmail}"  rendered="#{userBean.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
@@ -330,19 +330,21 @@
 
           <c:set var="alternative_address_data" value="#{participantBean.getExistingAddress('alternative')}" />   
           <c:forEach items="${alternative_address_data}" var="aid"  >
-            <c:set var="alternative_address_data_empty"  value="${empty aid.addressId}" />
+            <c:set var="alternative_address_data_empty"  value="${empty aid.postalCode}" />
           </c:forEach>
 
           <div style="margin-left: 25px;float:left">
-            <h:outputLabel value="Would you like to provide an alternative address?"  for="questionAltAddress" rendered="#{(userBean.editable == 1 and !alternative_address_data_empty)}" >
-              <h:selectOneRadio id="questionAltAddress" value="#{participantBean.questionAltAddress}" layout='lineDirection'  rendered="#{(userBean.editable == 1 and !alternative_address_data_empty)}" >
+            <c:set var="wouldYou" value="#{(userBean.editable == 1 and alternative_address_data_empty)}" />
+            <h:outputLabel value="Would you like to provide an alternative address?"  for="questionAltAddressProvide" rendered="#{wouldYou}" >
+              <h:selectOneRadio id="questionAltAddressProvide" value="#{participantBean.questionAltAddress}" layout='lineDirection'  rendered="#{wouldYou}" >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
               </h:selectOneRadio>
             </h:outputLabel>
           </div>
 
-          <div id="addressAlternative" style="float:left;display:none;"  >
+          <h:panelGroup id="addressAlternative" style="float:left;"  rendered="#{!alternative_address_data_empty}" >
+          
             <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
                 <h:dataTable value="#{alternative_address_data}" id="alternative"   var="pa"    >    
@@ -465,7 +467,8 @@
                 </h:dataTable>
               </div>
             </div>    
-          </div>
+          
+          </h:panelGroup>
           <div  class="div_p"  >
             <div style="margin:10px;" >
               <h:outputText value="Your Phone Access..." />
