@@ -3,9 +3,9 @@ $(document).ready(function () {
   $(".contact_information").css("display", "block");
   $("input[type=radio]").on('change', function () {
     var getid = this.id;
-    if (getid.includes('questionAltAddress'))
+    if (getid.includes('questionAltAddressP'))
       checkAltAddress(this);
-    if (getid.includes('questionAltEmail'))
+    if (getid.includes('questionAltEmailP'))
       checkAltEmailProvide(this);
     if (getid.includes('age18OrMore'))
       check18OrMore(this);
@@ -64,19 +64,21 @@ function checkAltEmailProvide(input) {
     } else {
       $("div#emailAlternative").css("display", "block");
     }
+  } else if (input.value == 0) {
+      $("div#emailAlternative").css("display", "none");
   }
 }
 
 function checkAltAddress(input) {
   if (input.value == 1) {
     if (input.checked == true) {
-      $("div#addressAlternative").css("display", "block");
+      $("span#addressAlternative").css("visibility", "visible");
     } else {
-      $("div#addressAlternative").css("display", "none");
+      $("span#addressAlternative").css("visibility", "hidden");
     }
   } else {
     if (input.checked == true) {
-      $("div#addressAlternative").css("display", "none");
+      $("span#addressAlternative").css("visibility", "none");
     }
   }
 }
