@@ -129,7 +129,6 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String registerUser() {
 
-    String test_mb = getAppEmail();
     Users create_record = null;
     Communities comm = null;
     Participant participant = null;
@@ -145,7 +144,6 @@ public class UserBean extends AbstractBean implements Serializable {
 
     try {
       current_user_id = getId();
-      // Should do a look-up for id on 'creator'
       // Role ID, indivdual = 0; community creator = 1; community member = 2
       if (this.communityName != null) {
         create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 1);
@@ -153,6 +151,7 @@ public class UserBean extends AbstractBean implements Serializable {
         create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 0);
       }
     } catch (Exception ex) {
+      // Need to learn error on creating new entity object
     }
 
     try {
@@ -164,8 +163,8 @@ public class UserBean extends AbstractBean implements Serializable {
       savedRecord = true;
     } catch (Exception ex) {
       tx.rollback();
+      System.out.println("Error in registerUser");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      System.out.println("Error on Update User");
       message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
     } finally {
       tx = null;
@@ -265,152 +264,134 @@ public class UserBean extends AbstractBean implements Serializable {
     Boolean act_results = false;
     Boolean query_results = false;
     String return_string = null;
+    List results = null;
     if (getResetCode() != null) {
       act_results = ActivateUser();
     }
 
     if (act_results == true) {
+      results = verifyUserIsActivated();
+    }
 
-      Session hib = hib_session();
-      Transaction tx = hib.beginTransaction();
-      List results = null;
-      return_string = null;
-      Boolean getp = false;
-      String queryString = "from Users where username = :un  and activated_at != null";
+    if (results.size() == 1) {
+      query_results = validatePassword(results);
+    }
 
-      try {
-        results = hib.createQuery(queryString).setParameter("un", this.username).list();
-        tx.commit();
-        query_results = true;
-      } catch (Exception ex) {
-        tx.rollback();
-        System.out.println("Error at line 326 in UserLogin");
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-        query_results = false;
-      } finally {
-        hib = null;
-        tx = null;
-      }
-
-      if ((query_results == true) || (results.size() == 1)) {
-
-        Users users_Array = new Users();
-        users_Array = (Users) results.get(0);
-        results = null;
-        byte[] salt = users_Array.getSalt();
-        byte[] crypted_password = users_Array.getCryptedPassword();
-
-        PasswordEncryptionService pes = new PasswordEncryptionService();
-        try {
-          getp = pes.authenticate(password, crypted_password, salt);
-        } catch (NoSuchAlgorithmException ex) {
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (getp == true) {
-          setUser_id(users_Array.getUser_id());
-          setUserType(users_Array.getUserType());
-          setUserAlias(users_Array.getUserAlias());
-          setUsername(users_Array.getUsername());
-          setEmail(users_Array.getEmail());
-          setRoleId(users_Array.getRoleId());
-          if (users_Array.getRoleId() == 1) {
-            setIsCommunity(1);
-          } else {
-            setIsCommunity(0);
-          }
-          message(null, "ActivateSuccessful", new Object[]{});
-          return_string = pbean.load_ud("-1");
-        } else {
-          message(null, "ActivateFailed", null);
-          return_string = "login";
-        }
-      } else {
-        message(null, "ActivateFailed", null);
-        return_string = "login";
-      }
-    } else if (act_results == false) {
+    if (query_results == true) {
+      message(null, "LogInSuccessful", new Object[]{this.username});
+      return_string = "index";
+    } else {
       message(null, "ActivateFailed", null);
       return_string = "login";
-
     }
     return return_string + "?faces-redirect=true";
-  }
-
-  public Boolean buildNewCommunityRecord(String uid) {
-
-    Session hib = null;
-    Transaction tx = null;
-    Communities comm = null;
-    Boolean savedRecord = false;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      comm = new Communities(uid, this.communityName, 0, null, null, null, null, null, null, null, null, "-9", "-9", null, null, this.email, 1, null, null);
-      hib.save(comm);
-      tx.commit();
-      savedRecord = true;
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error in buildNewCommunityRecord ");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      comm = null;
-      hib = null;
-      tx = null;
-    }
-
-    return savedRecord;
   }
 
   public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
-    Session hib = null;
-    Transaction tx = null;
+    Boolean b_local_results = false;
     List results = null;
     String return_string = null;
-    Boolean getp = false;
-    Boolean query_ok = false;
-    Users users_Array = null;
-    String queryString = "from Users where username = :un  and activated_at != null";
+    results = verifyUserIsActivated();
 
+    if (results.size() == 1) {
+      b_local_results = validatePassword(results);
+    }
+
+    if (b_local_results == true) {
+      message(null, "LogInSuccessful", new Object[]{this.username});
+    }
+
+    Integer memberCreator = this.isCommunity;
+    switch (memberCreator) {
+      case 0:  // Individual not with a community
+        return_string = findWhatIsComplete();
+        break;
+      case 1:  // A community creator
+        break;
+      case 2:  // A member of a community
+        return_string = findWhatIsComplete();
+        break;
+      default:
+        break;
+    }
+
+    return return_string;
+
+  }
+
+  private String findWhatIsComplete() {
+    // After testing I will break this into finer functions
+    String return_string = null;
+    List hasComplete = completeParticipantRecord();
+    Integer hs = hasComplete.size();
+    if (hs == 0) {
+      hasComplete = null;
+      this.editable = -1;
+      return_string = pbean.load_ud(this.user_id);
+
+    } else if ((hs > 0)) {
+      Participant part = (Participant) hasComplete.get(0);
+      this.participant_id = part.getParticipant_id();
+      this.communityId = part.getCommunityId();
+      Integer gw = part.getGoodwill();
+      Integer i18 = part.getAge18OrMore();
+      String un = part.getFirstName();
+      if ((gw == 1) && (i18 == 1) && (un == null)) {
+        this.editable = 0;
+        return_string = pbean.load_ud(this.participant_id);
+      } else if ((gw == 1) && (i18 == 1) && (un != null)) {
+        this.setParticipant_id(part.getParticipant_id());
+        List hasCompleteCP = completeContactPreferences(this.participant_id);
+        hs = hasCompleteCP.size();
+        if (hs == 0) {
+          this.editable = 0;
+          return_string = cpbean.load_ud(this.participant_id);
+        } else {
+          this.editable = 1;
+          if (this.userType.contains("borrow")) {
+            return_string = ibean.load_ud("borrow", null);
+          } else if (this.userType.contains("lend")) {
+            List hasCompleteLIT = completeLIT(this.participant_id);
+            if (hasCompleteLIT.size() == 0) {
+              return_string = ltribean.load_ud(this.participant_id);
+            } else {
+              List hasCompleteLIC = completeLIC(this.participant_id);
+              if (hasCompleteLIC.size() == 0) {
+                return_string = licibean.load_ud(this.participant_id);
+              } else {
+                return_string = ibean.load_ud("lend", null);
+              }
+            }
+          } else {
+            return_string = ibean.load_ud("both", null);
+          }
+        }
+      }
+    }
+    return return_string;
+  }
+
+  private Boolean validatePassword(List auth_result) {
+
+    Users users_Array = null;
+    users_Array = new Users();
+    Boolean getp = false;
+    users_Array = (Users) auth_result.get(0);
+    byte[] salt = users_Array.getSalt();
+    byte[] crypted_password = users_Array.getCryptedPassword();
+    PasswordEncryptionService pes = new PasswordEncryptionService();
     try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      results = hib.createQuery(queryString).setParameter("un", this.username).list();
-      tx.commit();
-      query_ok = true;
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error at line 420 in UserLogin");
+      getp = pes.authenticate(password, crypted_password, salt);
+    } catch (NoSuchAlgorithmException ex) {
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (InvalidKeySpecException ex) {
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
-      hib = null;
-      tx = null;
-    }
-    if ((query_ok == true) && (results.size() == 1)) {
-      getp = false;
-      users_Array = new Users();
-      users_Array = (Users) results.get(0);
-      results = null;
-      byte[] salt = users_Array.getSalt();
-      byte[] crypted_password = users_Array.getCryptedPassword();
-      PasswordEncryptionService pes = new PasswordEncryptionService();
-      try {
-        getp = pes.authenticate(password, crypted_password, salt);
-      } catch (NoSuchAlgorithmException ex) {
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (InvalidKeySpecException ex) {
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      } finally {
-        salt = null;
-        crypted_password = null;
-        pes = null;
-      }
+      salt = null;
+      crypted_password = null;
+      pes = null;
     }
 
     if (getp == true) {
@@ -421,67 +402,37 @@ public class UserBean extends AbstractBean implements Serializable {
       setEmail(users_Array.getEmail());
       setItemId(null);
       setAction("current");
-      if (users_Array.getRoleId() == 2) {
+      if (users_Array.getRoleId() > 0) {
         setIsCommunity(1);
       } else {
         setIsCommunity(0);
       }
+    }
+    return getp;
+  }
 
-      message(null, "LogInSuccessful", new Object[]{this.username});
-      List hasComplete = completeParticipantRecord(this.user_id);
-      Integer hs = hasComplete.size();
-      if (hs == 0) {
-        hasComplete = null;
-        this.editable = -1;
-        return_string = pbean.load_ud(this.user_id);
+  private List verifyUserIsActivated() {
 
-      } else if ((hs > 0)) {
-        Participant part = (Participant) hasComplete.get(0);
-        this.participant_id = part.getParticipant_id();
-        this.communityId = part.getCommunityId();
-        Integer gw = part.getGoodwill();
-        Integer i18 = part.getAge18OrMore();
-        String un = part.getFirstName();
-        if ((gw == 1) && (i18 == 1) && (un == null)) {
-          this.editable = 0;
-          return_string = pbean.load_ud(this.participant_id);
-        } else if ((gw == 1) && (i18 == 1) && (un != null)) {
-          this.setParticipant_id(part.getParticipant_id());
-          List hasCompleteCP = completeContactPreferences(this.participant_id);
-          hs = hasCompleteCP.size();
-          if (hs == 0) {
-            this.editable = 0;
-            return_string = cpbean.load_ud(this.participant_id);
-          } else {
-            this.editable = 1;
-            if (this.userType.contains("borrow")) {
-              return_string = ibean.load_ud("borrow", null);
-            } else if (this.userType.contains("lend")) {
-              List hasCompleteLIT = completeLIT(this.participant_id);
-              if (hasCompleteLIT.size() == 0) {
-                return_string = ltribean.load_ud(this.participant_id);
-              } else {
-                List hasCompleteLIC = completeLIC(this.participant_id);
-                if (hasCompleteLIC.size() == 0) {
-                  return_string = licibean.load_ud(this.participant_id);
-                } else {
-                  return_string = ibean.load_ud("lend", null);
-                }
-              }
-            } else {
-              return_string = ibean.load_ud("both", null);
-            }
-          }
-        }
-      }
-    } else {
-      message(null, "LogInFailedSuccessful", new Object[]{this.username});
-      this.username = null;
-      return_string = "index";
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
+    String queryString = "from Users where username = :un  and activated_at != null";
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      results = hib.createQuery(queryString).setParameter("un", this.user_id).list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error at in verifyUserIsActivated");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      hib = null;
+      tx = null;
     }
 
-    return return_string;
-
+    return results;
   }
 
   private Boolean ActivateUser() {
@@ -531,16 +482,6 @@ public class UserBean extends AbstractBean implements Serializable {
       }
     }
 
-    if ((resultSuccess == true) && (whatRoleId == 1)) {
-
-      if (session.isOpen() == false) {
-        session = hib_session();
-      }
-      if (tx.isActive() == false) {
-        tx = session.beginTransaction();
-      }
-      resultSuccess = buildNewCommunityRecord(users_Array.getUser_id());
-    }
     return resultSuccess;
   }
 
@@ -739,7 +680,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "from Users where username = :un and reset_code = :rc";
-      results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", getResetCode()).list();
+      results = hib.createQuery(queryString).setParameter("un", this.username).setParameter("rc", getResetCode()).list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
@@ -791,12 +732,9 @@ public class UserBean extends AbstractBean implements Serializable {
 //        message(null, "PasswordMustContain", null);
 
       } else {
-
         return;
       }
-
     }
-
   }
 
   /**
@@ -952,7 +890,7 @@ public class UserBean extends AbstractBean implements Serializable {
     this.isCommunity = isCommunity;
   }
 
-  private List completeParticipantRecord(String user_id) {
+  private List completeParticipantRecord() {
 
     List results = null;
     Session hib = null;
@@ -962,7 +900,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       results = hib.createQuery("from Participant WHERE user_id = :uid")
-              .setParameter("uid", user_id)
+              .setParameter("uid", this.user_id)
               .list();
       tx.commit();
     } catch (Exception ex) {
