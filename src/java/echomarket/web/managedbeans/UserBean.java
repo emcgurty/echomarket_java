@@ -56,6 +56,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private String appEmail;
   private String userAction;
   private String registrationType;
+  private String communityId;
   private String communityName;
   private Integer isCommunity;
   private Integer editable;
@@ -138,23 +139,18 @@ public class UserBean extends AbstractBean implements Serializable {
 
     String fullname = this.username;
     String ac = null;  // holds reset_code
-    try {
-      if (this.communityName != null) {
-        commName = this.communityName;
-      }
-    } catch (Exception ex) {
-    }
-
+    commName = this.communityName;
     Boolean savedRecord = false;
     String current_user_id = null;
 
     try {
       current_user_id = getId();
       // Should do a look-up for id on 'creator'
+      // Role ID, indivdual = 0; community creator = 1; community member = 2
       if (this.communityName != null) {
-        create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 2);
+        create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 1);
       } else {
-        create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), -1);
+        create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 0);
       }
     } catch (Exception ex) {
     }
@@ -178,50 +174,25 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     if (savedRecord == true) {
-
-      if (this.communityName != null) {
-
-        //participant = new Participant(getId(), current_user_id, -9, 0, "NA", "NA", "NA", 0, 0, 0, 1);
-        //hib.save(participant);
-        try {
-          hib = hib_session();
-          tx = hib.beginTransaction();
-          comm = new Communities(current_user_id, this.communityName, 0, "NA", "?", "NA", "NA", "NA", "NA", "NA", "NA", "99", "99", "NA", "NA", this.email, 1, "NA", "NA");
-          hib.save(comm);
-          tx.commit();
-          Boolean txw = tx.wasCommitted();
-          savedRecord = true;
-        } catch (Exception ex) {
-          tx.rollback();
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-          System.out.println("Error on Update User");
-
-        } finally {
-          hib = null;
-          tx = null;
-        }
-      }
-
-      if (savedRecord == true) {
-        savedRecord = sendActivationEmail(ac);
-      }
-      if (savedRecord == true) {
-        if (commName == null) {
-          message(null, "NewRegistration", new Object[]{fullname, this.email});
-        } else {
-          message(null, "NewCommunityRegistration", new Object[]{fullname, commName, this.email});
-        }
-      } else {
-        message(null, "NewRegistrationFailed", new Object[]{fullname});
-      }
-
-      try {
-        java.util.Map<String, String> params = null;
-        params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        setAction(params.get("action"));
-      } catch (Exception ex) {
-      }
+      savedRecord = sendActivationEmail(ac);
     }
+    if (savedRecord == true) {
+      if (commName == null) {
+        message(null, "NewRegistration", new Object[]{fullname, this.email});
+      } else {
+        message(null, "NewCommunityRegistration", new Object[]{fullname, commName, this.email});
+      }
+    } else {
+      message(null, "NewRegistrationFailed", new Object[]{fullname});
+    }
+
+    try {
+      java.util.Map<String, String> params = null;
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      setAction(params.get("action"));
+    } catch (Exception ex) {
+    }
+
     setUserToNull();
     this.userAction = "login";
 
@@ -242,13 +213,6 @@ public class UserBean extends AbstractBean implements Serializable {
     return returnType;
   }
 
-  public void resetForm() {
-
-    this.setUsername("");
-    this.setEmail("");
-    this.setPassword("");
-  }
-
   public Boolean parseUserType(String whichType) {
     if (this.userType != null) {
       return this.userType.contains(whichType);
@@ -259,73 +223,39 @@ public class UserBean extends AbstractBean implements Serializable {
 
   private String[] buildTypeList() {
 
-    List rl = null;
-    Session hib;
-    Transaction tx;
-    hib = null;
-    tx = null;
+    List p_list = null;
+    Session hib = null;
+    Transaction tx = null;
+    String[] results = null;
 
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
     } catch (Exception ex) {
-      System.out.println("Error at line 242 in UserBean");
-      ex.printStackTrace();
+      System.out.println("Error at line 233 in UserBean");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    String[] results = null;
     String queryString = "from Purpose order by purpose_order";
     try {
-      rl = hib.createQuery(queryString).list();
+      p_list = hib.createQuery(queryString).list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error at line 250 in US Bean");
-      ex.printStackTrace();
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
-      try {
-        hib.close();
-      } catch (Exception ex) {
-      }
+      hib = null;
       tx = null;
     }
-    results = new String[rl.size()];
+    Integer p_list_size = p_list.size();
+    results = new String[p_list_size];
 
-    for (int i = 0; i < rl.size(); i++) {
-      Purpose p_a = (Purpose) rl.get(i);
+    for (int i = 0; i < p_list_size; i++) {
+      Purpose p_a = (Purpose) p_list.get(i);
       String tmp = p_a.getPurposeType();
       results[i] = tmp;
     }
-
-    return results;
-  }
-
-  private String[] buildTypeListStored() {
-
-    Session hib;
-    Transaction tx;
-    hib = null;
-    tx = null;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-    } catch (Exception ex) {
-    }
-
-    String[] results = null;
-    String queryString = "from Purpose order by purpose_order";
-    List rl = hib.createQuery(queryString).list();
-    tx.commit();
-    results = new String[rl.size()];
-
-    for (int i = 0; i < rl.size(); i++) {
-      Purpose p_a = (Purpose) rl.get(i);
-      String tmp = p_a.getPurposeShort();
-      results[i] = tmp;
-    }
-    hib = null;
-    tx = null;
 
     return results;
   }
@@ -355,7 +285,7 @@ public class UserBean extends AbstractBean implements Serializable {
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error at line 326 in UserLogin");
-        ex.printStackTrace();
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
         query_results = false;
       } finally {
         hib = null;
@@ -385,8 +315,11 @@ public class UserBean extends AbstractBean implements Serializable {
           setUserAlias(users_Array.getUserAlias());
           setUsername(users_Array.getUsername());
           setEmail(users_Array.getEmail());
-          if (users_Array.getRoleId() == 2) {
+          setRoleId(users_Array.getRoleId());
+          if (users_Array.getRoleId() == 1) {
             setIsCommunity(1);
+          } else {
+            setIsCommunity(0);
           }
           message(null, "ActivateSuccessful", new Object[]{});
           return_string = pbean.load_ud("-1");
@@ -406,11 +339,38 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string + "?faces-redirect=true";
   }
 
+  public Boolean buildNewCommunityRecord(String uid) {
+
+    Session hib = null;
+    Transaction tx = null;
+    Communities comm = null;
+    Boolean savedRecord = false;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      comm = new Communities(uid, this.communityName, 0, null, null, null, null, null, null, null, null, "-9", "-9", null, null, this.email, 1, null, null);
+      hib.save(comm);
+      tx.commit();
+      savedRecord = true;
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error in buildNewCommunityRecord ");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      comm = null;
+      hib = null;
+      tx = null;
+    }
+
+    return savedRecord;
+  }
+
   public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
     List results = null;
     String return_string = null;
     Boolean getp = false;
@@ -419,14 +379,15 @@ public class UserBean extends AbstractBean implements Serializable {
     String queryString = "from Users where username = :un  and activated_at != null";
 
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       results = hib.createQuery(queryString).setParameter("un", this.username).list();
       tx.commit();
       query_ok = true;
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error at line 420 in UserLogin");
-      ex.printStackTrace();
-      query_ok = false;
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -462,6 +423,8 @@ public class UserBean extends AbstractBean implements Serializable {
       setAction("current");
       if (users_Array.getRoleId() == 2) {
         setIsCommunity(1);
+      } else {
+        setIsCommunity(0);
       }
 
       message(null, "LogInSuccessful", new Object[]{this.username});
@@ -475,6 +438,7 @@ public class UserBean extends AbstractBean implements Serializable {
       } else if ((hs > 0)) {
         Participant part = (Participant) hasComplete.get(0);
         this.participant_id = part.getParticipant_id();
+        this.communityId = part.getCommunityId();
         Integer gw = part.getGoodwill();
         Integer i18 = part.getAge18OrMore();
         String un = part.getFirstName();
@@ -504,7 +468,6 @@ public class UserBean extends AbstractBean implements Serializable {
                   return_string = ibean.load_ud("lend", null);
                 }
               }
-
             } else {
               return_string = ibean.load_ud("both", null);
             }
@@ -518,7 +481,6 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     return return_string;
-//    + "?faces-redirect=true";
 
   }
 
@@ -526,37 +488,60 @@ public class UserBean extends AbstractBean implements Serializable {
 
     List results = null;
     Date ndate = new Date();
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
-    String queryString = "from Users where reset_code = :rc";
-    results = session.createQuery(queryString).setParameter("rc", getResetCode()).list();
-    tx.commit();
-    Users users_Array = (Users) results.get(0);
-    String u_id = users_Array.getUser_id();
-    users_Array = null;
+    Session session = null;
+    Transaction tx = null;
+    String queryString = null;
+    String u_id = null;
+    Boolean resultSuccess = false;
+    Users users_Array = null;
+    Integer whatRoleId = -9;
 
-    // Should return only one row
-    if (results.size() == 1) {
+    try {
+      queryString = "from Users where reset_code = :rc";
+      session = hib_session();
+      tx = session.beginTransaction();
+      results = session.createQuery(queryString).setParameter("rc", getResetCode()).list();
+      tx.commit();
+      resultSuccess = true;
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    if (resultSuccess == true) {
+      if (results != null) {
+        if (results.size() == 1) {
+          try {
+            users_Array = (Users) results.get(0);
+            u_id = users_Array.getUser_id();
+            whatRoleId = users_Array.getRoleId();
+            users_Array.setActivatedAt(ndate);
+            users_Array.setResetCode(null);
+            tx.commit();
+            resultSuccess = true;
+          } catch (Exception ex) {
+            tx.rollback();
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          } finally {
+            users_Array = null;
+            resultSuccess = true;
+            session = null;
+            tx = null;
+          }
+        }
+      }
+    }
+
+    if ((resultSuccess == true) && (whatRoleId == 1)) {
+
       if (session.isOpen() == false) {
         session = hib_session();
       }
       if (tx.isActive() == false) {
         tx = session.beginTransaction();
       }
-
-      Users uu = (Users) session.get(Users.class, u_id);
-      uu.setActivatedAt(ndate);
-      uu.setResetCode(null);
-      tx.commit();
-      session = null;
-      tx = null;
-      uu = null;
-
-      return true;
-    } else {
-      return false;
+      resultSuccess = buildNewCommunityRecord(users_Array.getUser_id());
     }
-
+    return resultSuccess;
   }
 
   public String managePasswordChange() {
@@ -674,53 +659,69 @@ public class UserBean extends AbstractBean implements Serializable {
 
   private String ValidateEmailAndPassword(String em, String pw) {
 
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
     // Validate email and password
     String return_user_name = null;
     Boolean auth_pw = false;
     Boolean auth_em = false;
     String queryString = "from Users where email  = :em";
-    List results = hib.createQuery(queryString).setParameter("em", em).list();
-    tx.commit();
-    if (results.size() == 1) {
-      auth_em = true;
-      Users users_Array = (Users) results.get(0);
-      return_user_name = users_Array.getUsername();
-      byte[] salt = users_Array.getSalt();
-      byte[] crypted_password = users_Array.getCryptedPassword();
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      results = hib.createQuery(queryString).setParameter("em", em).list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+    } finally {
+      hib = null;
+      tx = null;
+    }
+    if (results != null) {
+      if (results.size() == 1) {
+        auth_em = true;
+        Users users_Array = (Users) results.get(0);
+        return_user_name = users_Array.getUsername();
+        byte[] salt = users_Array.getSalt();
+        byte[] crypted_password = users_Array.getCryptedPassword();
 
-      PasswordEncryptionService pes = new PasswordEncryptionService();
-      try {
-        auth_pw = pes.authenticate(pw, crypted_password, salt);
+        PasswordEncryptionService pes = new PasswordEncryptionService();
+        try {
+          auth_pw = pes.authenticate(pw, crypted_password, salt);
 
-      } catch (NoSuchAlgorithmException ex) {
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
 
-      } catch (InvalidKeySpecException ex) {
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
       }
-
     }
 
     if (auth_pw == true && auth_em == true) {
-      hib = null;
-      tx = null;
       return return_user_name;
     } else {
-      hib = null;
-      tx = null;
       return null;
     }
   }
 
   private List ValidateEmail(String email) {
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
-    // Validate email
-    String queryString = "from Users where email  = :em";
-    List results = hib.createQuery(queryString).setParameter("em", email).list();
-    tx.commit();
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
+    String queryString = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = "from Users where email  = :em";
+      results = hib.createQuery(queryString).setParameter("em", email).list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+    }
+
     if (results.size() == 1) {
       return results;
     } else {
@@ -729,13 +730,23 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   private List ValidateUserNameResetCode() {
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
-    // Validate email
-    String queryString = "from Users where username = :un and reset_code = :rc";
-    List results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", getResetCode()).list();
-    tx.commit();
-    tx = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    List results = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = "from Users where username = :un and reset_code = :rc";
+      results = hib.createQuery(queryString).setParameter("un", username).setParameter("rc", getResetCode()).list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+    } finally {
+      hib = null;
+      tx = null;
+    }
     if (results.size() == 1) {
       return results;
     } else {
@@ -835,22 +846,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.appEmail = appEmail;
   }
 
-  private void setSessionVariables() {
-//        /// Actually not necessary in @Inject success.... just retaining for now
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        java.util.Map<String, Object> requestMap = context.getExternalContext().getSessionMap();
-//
-//        requestMap.put("user_id", getUser_id());
-//        requestMap.put("user_alias", getUserAlias());
-//        requestMap.put("user_type", getUserType());
-//        requestMap.put("username", getUsername());
-//        if (getIsCommunity() != 1) {
-//            requestMap.put("is_community", getIsCommunity());
-//
-//        }
-
-  }
-
   /**
    * @return the user_id
    */
@@ -912,17 +907,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.communityName = communityName;
   }
 
-  public String userNameLabel(Integer IsCommunity) {
-
-    if (IsCommunity == 1) {
-      return "Community Username:";
-    } else {
-      return "Username:";
-
-    }
-
-  }
-
   public String load_login() {
     this.username = null;
     this.userAction = "login";
@@ -949,6 +933,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String load_community_registration() {
     this.isCommunity = 1;
+    this.communityName = null;
     return "community_registration?faces-redirect=true";
 
   }
@@ -970,20 +955,20 @@ public class UserBean extends AbstractBean implements Serializable {
   private List completeParticipantRecord(String user_id) {
 
     List results = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
 
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       results = hib.createQuery("from Participant WHERE user_id = :uid")
               .setParameter("uid", user_id)
               .list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1006,8 +991,8 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeLIC");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1030,10 +1015,8 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeLIT");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1046,18 +1029,20 @@ public class UserBean extends AbstractBean implements Serializable {
   private List completeContactPreferences(String user_id) {
 
     List results = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
 
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       results = hib.createQuery("from ContactPreference WHERE participant_id = :uid")
               .setParameter("uid", user_id)
               .list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on completeParticipantRecord");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1085,43 +1070,31 @@ public class UserBean extends AbstractBean implements Serializable {
 
     Boolean updateSuccess = false;
     String resetCodeString = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
-    Users uu = new Users(this.user_id, this.username, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
-    hib.update(uu);
+    Session hib = null;
+    Transaction tx = null;
+
     try {
+      Users uu = new Users(this.user_id, this.username, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
+      hib.update(uu);
+      hib = hib_session();
+      tx = hib.beginTransaction();
       tx.commit();
       resetCodeString = uu.getResetCode();
       updateSuccess = true;
     } catch (Exception ex) {
       tx.rollback();
-      Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User");
-      message(
-              null,
-              "LoginNotUpdated",
-              new Object[]{this.username, this.email});
+      message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
     } finally {
-      if (hib.isOpen() == true) {
-        hib.close();
-      }
       tx = null;
       hib = null;
     }
     if (updateSuccess == true) {
-
       sendActivationEmail(resetCodeString);
-      message(
-              null,
-              "LoginUpdated",
-              new Object[]{this.username, this.email});
+      message(null, "LoginUpdated", new Object[]{this.username, this.email});
     } else {
-      message(
-              null,
-              "LoginUpdateFailed",
-              new Object[]{this.username, this.email});
+      message(null, "LoginUpdateFailed", new Object[]{this.username, this.email});
 
     }
 
@@ -1178,12 +1151,11 @@ public class UserBean extends AbstractBean implements Serializable {
       a_array = (Map) results.get(0);
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on SendEmail, line ");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
-
     }
 
     try {
@@ -1196,8 +1168,9 @@ public class UserBean extends AbstractBean implements Serializable {
       }
       a_array = null;
       return true;
-    } catch (Exception e) {
+    } catch (Exception ex) {
       System.out.println("Send Mail Failed");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       return false;
     }
 
@@ -1237,6 +1210,20 @@ public class UserBean extends AbstractBean implements Serializable {
    */
   public void setAction(String action) {
     this.action = action;
+  }
+
+  /**
+   * @return the community_id
+   */
+  public String getCommunityId() {
+    return communityId;
+  }
+
+  /**
+   * @param community_id the community_id to set
+   */
+  public void setCommunityId(String communityId) {
+    this.communityId = communityId;
   }
 
 }
