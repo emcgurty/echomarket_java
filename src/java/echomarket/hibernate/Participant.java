@@ -54,6 +54,12 @@ public class Participant implements java.io.Serializable {
 
   public Participant() {
   }
+  public Participant(String userId, String alias) {
+    
+    this.userId = userId;
+    this.alias = alias;
+    
+  }
 
   /// User agreement
   public Participant(String participant_id, String userId, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, String remoteIp) {
@@ -94,6 +100,23 @@ public class Participant implements java.io.Serializable {
     this.remoteIp = remoteIp;
 
   }
+  
+  /// Community Members
+   public Participant(String participant_id, String communityId, String userId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Date dateCreated, Date dateUpdated, Integer isCreator) {
+        this.participant_id = participant_id;
+        this.communityId = communityId;
+        this.remoteIp = remoteIp;
+        this.firstName = firstName;
+        this.mi = mi;
+        this.lastName = lastName;
+        this.alias = alias;
+        this.isActive = isActive;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+        this.isCreator = isCreator;
+        this.userId = userId;
+    }
+
 
   /**
    * @return the addresses
