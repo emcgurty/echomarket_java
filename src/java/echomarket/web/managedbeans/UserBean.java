@@ -128,19 +128,33 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String registerUser() {
+    Boolean savedRecord = false;
+    String returnString = null;
+    savedRecord = checkForDuplicateEmail();
+    if (savedRecord == true) {
+      savedRecord = checkForDuplicateUserName();
+    }
 
+    if (savedRecord == false) {
+      returnString = "user_registration";
+      message(null, "EitherEmailOrUsernameExistOnDateBase", null);
+    } else {
+      returnString = registerValidUser();
+    }
+
+    return returnString;
+  }
+
+  private String registerValidUser() {
+    Boolean savedRecord = false;
     Users create_record = null;
-    Communities comm = null;
-    Participant participant = null;
     String commName = null;
     Session hib = null;
     Transaction tx = null;
-
+    String current_user_id = null;
     String fullname = this.username;
     String ac = null;  // holds reset_code
     commName = this.communityName;
-    Boolean savedRecord = false;
-    String current_user_id = null;
 
     try {
       current_user_id = getId();
@@ -268,7 +282,6 @@ public class UserBean extends AbstractBean implements Serializable {
     if (getResetCode() != null) {
       act_results = ActivateUser();
     }
-
     if (act_results == true) {
       results = verifyUserIsActivated();
     }
@@ -394,20 +407,6 @@ public class UserBean extends AbstractBean implements Serializable {
       pes = null;
     }
 
-    if (getp == true) {
-      setUser_id(users_Array.getUser_id());
-      setUserType(users_Array.getUserType());
-      setUserAlias(users_Array.getUserAlias());
-      setUsername(users_Array.getUsername());
-      setEmail(users_Array.getEmail());
-      setItemId(null);
-      setAction("current");
-      if (users_Array.getRoleId() > 0) {
-        setIsCommunity(1);
-      } else {
-        setIsCommunity(0);
-      }
-    }
     return getp;
   }
 
@@ -421,7 +420,7 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery(queryString).setParameter("un", this.user_id).list();
+      results = hib.createQuery(queryString).setParameter("un", this.username).list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
@@ -442,10 +441,8 @@ public class UserBean extends AbstractBean implements Serializable {
     Session session = null;
     Transaction tx = null;
     String queryString = null;
-    String u_id = null;
     Boolean resultSuccess = false;
     Users users_Array = null;
-    Integer whatRoleId = -9;
 
     try {
       queryString = "from Users where reset_code = :rc";
@@ -457,16 +454,20 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      session = null;
+      tx = null;
     }
     if (resultSuccess == true) {
       if (results != null) {
         if (results.size() == 1) {
           try {
+            session = hib_session();
+            tx = session.beginTransaction();
             users_Array = (Users) results.get(0);
-            u_id = users_Array.getUser_id();
-            whatRoleId = users_Array.getRoleId();
             users_Array.setActivatedAt(ndate);
             users_Array.setResetCode(null);
+            session.update(users_Array);
             tx.commit();
             resultSuccess = true;
           } catch (Exception ex) {
@@ -1079,7 +1080,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
     } catch (Exception ex) {
-      System.out.println("Error in SendActivationEmail, line 1003");
+      System.out.println("Error in sendActivationEmail");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     }
 
@@ -1089,7 +1090,7 @@ public class UserBean extends AbstractBean implements Serializable {
       a_array = (Map) results.get(0);
     } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error on SendEmail, line ");
+      System.out.println("Error in sendActivationEmail");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
@@ -1164,4 +1165,89 @@ public class UserBean extends AbstractBean implements Serializable {
     this.communityId = communityId;
   }
 
+  private Boolean checkForDuplicateEmail() {
+    String currentEmail = this.email;
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
+    Map a_array = null;
+    Boolean foundEmail = false;
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+    } catch (Exception ex) {
+      System.out.println("Error in checkForDuplicateUserEmail");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+
+    }
+
+    try {
+      results = hib.createQuery("from Users where email = :email").setParameter("email", currentEmail).list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on checkForDuplicateEmail");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    if (results == null) {
+      foundEmail = false;
+    } else if (results != null) {
+      if (results.size() > 0) {
+
+        foundEmail = false;
+      } else {
+
+        foundEmail = true;
+      }
+    }
+    results = null;
+    return foundEmail;
+  }
+
+  private Boolean checkForDuplicateUserName() {
+    String currentUserName = this.username;
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
+    Map a_array = null;
+    Boolean foundEmail = false;
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+    } catch (Exception ex) {
+      System.out.println("Error in checkForDuplicateUserEmail");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+
+    }
+
+    try {
+      results = hib.createQuery("from Users where username = :username").setParameter("username", currentUserName).list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error in checkForDuplicateUserName");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    if (results == null) {
+      foundEmail = false;
+    } else if (results != null) {
+      if (results.size() > 0) {
+
+        foundEmail = false;
+      } else {
+
+        foundEmail = true;
+      }
+    }
+    results = null;
+    return foundEmail;
+  }
 }
