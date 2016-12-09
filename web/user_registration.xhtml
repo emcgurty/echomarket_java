@@ -21,16 +21,14 @@
     </h:head>
     <h:form id="user_registration" >
       <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
-
-      <div  class="top" id="form_user_registration" style="width:75%;align-content: center;">
+      <div  class="top" id="form_user_registration" >
         <div style="margin:10px;" >
           <h:outputText value="Individual or Organization Registration" />
           <h:commandLink  action="#{userBean.registerUser()}" id="add_registration" value="Register" class="right_div">
             <f:param id="new" value="action"  />
           </h:commandLink>
         </div>
-
-        <div id="individualNameGroup" style="float:left;margin:10px;margin-top:25px;width:75%;"  >
+        <div id="individualNameGroup" style="float:left;margin:5px;width:95%;"  >
           <ui:include src="individual_registration_detail.xhtml" />
         </div>
       </div>
