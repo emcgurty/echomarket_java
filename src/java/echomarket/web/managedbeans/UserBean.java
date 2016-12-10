@@ -287,13 +287,20 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     if (results.size() == 1) {
-      query_results = validatePassword(results);
+      query_results = validateUserPassword(results);
     }
 
     if (query_results == true) {
-      message(null, "LogInSuccessful", new Object[]{this.username});
-      return_string = "index";
+      message(null, "ActivationSuccessful", new Object[]{this.username});
+       this.editable = -1;
+       Users uu = (Users) results.get(0);
+       setUser_id(uu.getUser_id());
+       setUserType(uu.getUser_id());
+       results = null;
+       return_string = pbean.load_ud("-1");
+     
     } else {
+      results = null;
       message(null, "ActivateFailed", null);
       return_string = "login";
     }
@@ -304,19 +311,29 @@ public class UserBean extends AbstractBean implements Serializable {
     // debugging with password assignment
     this.password = "Emcgurty123!";
     Boolean b_local_results = false;
+    Integer memberCreator = -9;
     List results = null;
     String return_string = null;
     results = verifyUserIsActivated();
-
-    if (results.size() == 1) {
-      b_local_results = validatePassword(results);
+    if (results != null) {
+      if (results.size() == 1) {
+        b_local_results = validateUserPassword(results);
+      }
     }
 
     if (b_local_results == true) {
       message(null, "LogInSuccessful", new Object[]{this.username});
+      Users uu = (Users) results.get(0);
+      memberCreator = uu.getRoleId();
+      setIsCommunity(memberCreator);
+      setEmail(uu.getEmail());
+      setUserAlias(uu.getUserAlias());
+      setAction("current");
+      setUsername(this.username);
+      setUserType(uu.getUserType());
+      results = null;
     }
 
-    Integer memberCreator = this.isCommunity;
     switch (memberCreator) {
       case 0:  // Individual not with a community
         return_string = findWhatIsComplete();
@@ -386,7 +403,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-  private Boolean validatePassword(List auth_result) {
+  private Boolean validateUserPassword(List auth_result) {
 
     Users users_Array = null;
     users_Array = new Users();
@@ -396,7 +413,7 @@ public class UserBean extends AbstractBean implements Serializable {
     byte[] crypted_password = users_Array.getCryptedPassword();
     PasswordEncryptionService pes = new PasswordEncryptionService();
     try {
-      getp = pes.authenticate(password, crypted_password, salt);
+      getp = pes.authenticate(this.password, crypted_password, salt);
     } catch (NoSuchAlgorithmException ex) {
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } catch (InvalidKeySpecException ex) {
