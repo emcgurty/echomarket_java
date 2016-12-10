@@ -101,7 +101,9 @@ public class ItemROBean extends AbstractBean implements Serializable {
   }
 
   public List getAllSoughtItems(String which) {
-    // TO DO: Why is this function call so many time.
+    // TO DO: Why is this function call so many times.
+    // TO DO: Error here I have not cascaded in event that particpant is deleted 
+    
     List result = null;
     Session session = hib_session();
     Transaction tx = session.beginTransaction();
