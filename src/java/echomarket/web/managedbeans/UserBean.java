@@ -292,13 +292,13 @@ public class UserBean extends AbstractBean implements Serializable {
 
     if (query_results == true) {
       message(null, "ActivationSuccessful", new Object[]{this.username});
-       this.editable = -1;
-       Users uu = (Users) results.get(0);
-       setUser_id(uu.getUser_id());
-       setUserType(uu.getUser_id());
-       results = null;
-       return_string = pbean.load_ud("-1");
-     
+      this.editable = -1;
+      Users uu = (Users) results.get(0);
+      setUser_id(uu.getUser_id());
+      setUserType(uu.getUser_id());
+      results = null;
+      return_string = pbean.load_ud("-1");
+
     } else {
       results = null;
       message(null, "ActivateFailed", null);
@@ -331,27 +331,108 @@ public class UserBean extends AbstractBean implements Serializable {
       setAction("current");
       setUsername(this.username);
       setUserType(uu.getUserType());
+      setUser_id(uu.getUser_id());
       results = null;
     }
 
-    switch (memberCreator) {
-      case 0:  // Individual not with a community
-        return_string = findWhatIsComplete();
-        break;
-      case 1:  // A community creator
-        break;
-      case 2:  // A member of a community
-        return_string = findWhatIsComplete();
-        break;
-      default:
-        break;
+    results = hasAcceptedAgreement();
+    if (results != null) {
+      if (results.size() == 1) {
+        switch (memberCreator) {
+          case 0:  // Individual not with a community
+            break;
+          case 1:  // A community creator
+            break;
+          case 2:  // A member of a community
+            break;
+          default:
+            break;
+        }
+      } else {
+        return_string = pbean.load_ud("-1");
+      }
     }
-
     return return_string;
 
   }
 
   private String findWhatIsComplete() {
+    // After testing I will break this into finer functions
+    String return_string = null;
+    List hasComplete = completeParticipantRecord();
+    Integer hs = hasComplete.size();
+    if (hs == 0) {
+      hasComplete = null;
+      this.editable = -1;
+      return_string = pbean.load_ud(this.user_id);
+
+    } else if ((hs > 0)) {
+      Participant part = (Participant) hasComplete.get(0);
+      this.participant_id = part.getParticipant_id();
+      this.communityId = part.getCommunityId();
+      Integer gw = part.getGoodwill();
+      Integer i18 = part.getAge18OrMore();
+      String un = part.getFirstName();
+      if ((gw == 1) && (i18 == 1) && (un == null)) {
+        this.editable = 0;
+        return_string = pbean.load_ud(this.participant_id);
+      } else if ((gw == 1) && (i18 == 1) && (un != null)) {
+        this.setParticipant_id(part.getParticipant_id());
+        List hasCompleteCP = completeContactPreferences(this.participant_id);
+        hs = hasCompleteCP.size();
+        if (hs == 0) {
+          this.editable = 0;
+          return_string = cpbean.load_ud(this.participant_id);
+        } else {
+          this.editable = 1;
+          if (this.userType.contains("borrow")) {
+            return_string = ibean.load_ud("borrow", null);
+          } else if (this.userType.contains("lend")) {
+            List hasCompleteLIT = completeLIT(this.participant_id);
+            if (hasCompleteLIT.size() == 0) {
+              return_string = ltribean.load_ud(this.participant_id);
+            } else {
+              List hasCompleteLIC = completeLIC(this.participant_id);
+              if (hasCompleteLIC.size() == 0) {
+                return_string = licibean.load_ud(this.participant_id);
+              } else {
+                return_string = ibean.load_ud("lend", null);
+              }
+            }
+          } else {
+            return_string = ibean.load_ud("both", null);
+          }
+        }
+      }
+    }
+    return return_string;
+  }
+
+  private List hasAcceptedAgreement() {
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      results = hib.createQuery("from Participant WHERE user_id = :uid AND goodwill = 1 AND age18OrMore = 1")
+              .setParameter("uid", this.user_id)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on hasAcceptedAgreement");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return results;
+  }
+
+  private String findWhatIsCommunityComplete() {
     // After testing I will break this into finer functions
     String return_string = null;
     List hasComplete = completeParticipantRecord();
