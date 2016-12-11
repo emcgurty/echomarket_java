@@ -44,6 +44,8 @@ public class UserBean extends AbstractBean implements Serializable {
   LenderItemConditionsBean licibean;
   @Inject
   LenderTransferBean ltribean;
+  @Inject
+  CommunitiesBean commbean;
   private String user_id;
   private String participant_id;
   private String username;
@@ -353,6 +355,11 @@ public class UserBean extends AbstractBean implements Serializable {
                   Users uu = (Users) results.get(0);  /// User result that has current user data
                   memberCreator = uu.getRoleId();
                   setIsCommunity(memberCreator);
+                  if (memberCreator == 1) {
+                    String current_commuity_id = getCurrentUserCommunityId(uu.getUser_id());
+                    setCommunityId(current_commuity_id);
+                  }
+
                   setEmail(uu.getEmail());
                   setUserAlias(uu.getUserAlias());
                   setAction("current");
@@ -366,7 +373,10 @@ public class UserBean extends AbstractBean implements Serializable {
                       return_string = findWhatIsComplete();
                       break;
                     case 1:  // A community creator
-                      return_string = findWhatIsComplete();  // hold needs to be written
+                      return_string = findWhatIsCommunityComplete();
+                      if (return_string.isEmpty() == true) {
+                        return_string = findWhatIsComplete();  // hold needs to be written
+                      }
                       break;
                     case 2:  // A member of a community
                       return_string = findWhatIsComplete(); // hold needs to be written
@@ -447,6 +457,101 @@ public class UserBean extends AbstractBean implements Serializable {
       return_string = "index";
     }
     return return_string;
+  }
+
+  private String findWhatIsCommunityComplete() {
+
+    String return_string = "";
+    String pid = null;
+    List partList = completeParticipantRecord();
+    if (partList != null) {
+      if (partList.size() == 1) {
+        Participant part = (Participant) partList.get(0);
+        pid = part.getParticipant_id();
+        setParticipant_id(pid);
+        setCommunityId(part.getCommunityId());
+      } else {
+        setEditable(0);
+        return_string = pbean.load_ud(this.user_id);
+      }
+
+      if (return_string.isEmpty() == true) {
+        List completCD = completeCommunityDetail();
+        Integer hs = completCD.size();
+        if (hs == 0) {
+          return_string = commbean.load_community_detail();
+        } else {
+          ////  Check for Community members??
+        }
+      }
+    } else {
+      message(null, "ParticpantNotFound", null);
+      return_string = "index";
+    }
+    return return_string;
+  }
+
+  private String getCurrentUserCommunityId(String uid) {
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = " FROM Participant "
+              + " WHERE user_id = :uid";
+      results = hib.createQuery(queryString)
+              .setParameter("uid", uid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on getCurrentUserCommunityId");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+
+    if (results != null) {
+      if (results.size() == 1) {
+        Participant getPID = (Participant) results.get(0);
+        queryString = getPID.getParticipant_id();
+        results = null;
+        getPID = null;
+      }
+    }
+    return queryString;
+  }
+
+  private List completeCommunityDetail() {
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = " FROM Communities "
+              + " WHERE community_id = :cid";
+      results = hib.createQuery(queryString)
+              .setParameter("cid", this.communityId)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on completeCommunityDetail");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return results;
   }
 
   private List hasAcceptedAgreement() {
