@@ -36,6 +36,7 @@
             <h:outputText value="EchoMarket participant information..." />
             <h:commandLink  action="#{cpb.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Initial Contact Preferences'"  />
             <h:inputHidden id="editable"  value="#{userBean.editable}"  />
+            <h:inputHidden id="communityId"  value="#{participantBean.communityId}"  />
           </div>
         </div> 
         <div class="messagecolor">
