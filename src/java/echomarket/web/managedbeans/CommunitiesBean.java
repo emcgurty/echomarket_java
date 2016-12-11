@@ -1,6 +1,8 @@
 package echomarket.web.managedbeans;
 
+import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Communities;
+import echomarket.hibernate.Participant;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.Date;
@@ -87,12 +89,87 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         this.countryId = comm_Array.getCountryId();
         this.homePhone = comm_Array.getHomePhone();
         this.cellPhone = comm_Array.getCellPhone();
-        this.email = comm_Array.getEmail();
 
+      } else if (result.size() == 0) {
+        try {
+          hib = hib_session();
+          tx = hib.beginTransaction();
+        } catch (Exception ex) {
+          tx.rollback();
+        }
+        queryString = "FROM Participant where community_id = :cid";
+        try {
+          result = hib.createQuery(queryString)
+                  .setParameter("cid", ubean.getCommunityId())
+                  .list();
+          tx.commit();
+        } catch (Exception ex) {
+          tx.rollback();
+          Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+          hib = null;
+          tx = null;
+        }
+
+        if (result != null) {
+          if (result.size() == 1) {
+            Participant part_array = (Participant) result.get(0);
+            this.communityId = part_array.getCommunityId();
+            this.firstName = part_array.getFirstName();
+            this.lastName = part_array.getLastName();
+            this.email = ubean.getEmail();
+            this.cellPhone = part_array.getCellPhone();
+            
+            List getPrimaryAddress = getCommunityPrimaryAddress();
+            if (getPrimaryAddress != null) {
+              if (getPrimaryAddress.size() == 1) {
+                Addresses addr = (Addresses) getPrimaryAddress.get(0);
+                this.addressLine1 = addr.getAddressLine1();
+                this.addressLine2 = addr.getAddressLine2();
+                this.postalCode = addr.getPostalCode();
+                this.city = addr.getCity();
+                this.province = addr.getProvince();
+                this.region = addr.getRegion();
+                this.usStateId = addr.getUsStateId();
+                this.countryId = addr.getCountryId();
+              }
+            }
+          }
+        }
+
+      } else {
       }
     }
 
-    return "community_detail.xhtml?faces-redirect=true";
+    return "community_detail";
+  }
+
+  private List getCommunityPrimaryAddress() {
+
+    List primaryAddress = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = " FROM Addresses "
+              + " WHERE participant_id = :pid AND addressType = 'primary'";
+      primaryAddress = hib.createQuery(queryString)
+              .setParameter("pid", ubean.getCommunityId())
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on getCommunityPrimaryAddress");
+      Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return primaryAddress;
   }
 
   public String saveCommunityDetail() {
