@@ -29,6 +29,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   @Inject
   UserBean ubean;
   private String participant_id;
+  private String communityId;
   private int contactDescribeId;
   private String organizationName;
   private int displayOrganization;
@@ -109,7 +110,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     partlist = getCurrentParticipant(uid);
     if (partlist.size() == 1) {
       Participant pp = (Participant) partlist.get(0);
+
       this.participant_id = pp.getParticipant_id();
+      this.communityId = pp.getParticipant_id();
       this.contactDescribeId = pp.getContactDescribeId();
       this.organizationName = pp.getOrganizationName();
       this.displayOrganization = pp.getDisplayOrganization();
@@ -132,7 +135,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
     }
-
 
     if (ubean.getEditable() == -1) {
       return "user_agreement";
@@ -201,7 +203,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       updateSuccess = true;
     } catch (Exception ex) {
       updateSuccess = false;
-      System.out.println("Error in Save/Update Particpant, line 177");
+      System.out.println("Error in Save/Update Particpant");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     }
 
@@ -217,19 +219,16 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
       tx.rollback();
     } finally {
-//            tx = null;
-//            sb = null;
+      tx = null;
+      sb = null;
     }
 
     try {
-      if (sb.isOpen() == false) {
-        sb = hib_session();
-      }
-      if (tx.isActive() == false) {
-        tx = sb.beginTransaction();
-      }
+      sb = hib_session();
+      tx = sb.beginTransaction();
       Participant part = (Participant) result.get(0);
       pid = part.getParticipant_id();
+      part.setCommunityId(communityId);
       part.setContactDescribeId(contactDescribeId);
       part.setOrganizationName(organizationName);
       part.setDisplayOrganization(displayOrganization);
@@ -242,18 +241,18 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setHomePhone(homePhone);
       part.setCellPhone(cellPhone);
       part.setAlternativePhone(alternativePhone);
-      
+
       if (this.questionAltEmail == 1) {
         part.setEmailAlternative(null);
       } else {
         part.setEmailAlternative(emailAlternative);
       }
-      
+
       part.setDisplayHomePhone(displayHomePhone);
       part.setDisplayCellPhone(displayCellPhone);
       part.setDisplayAlternativePhone(displayAlternativePhone);
       part.setDisplayAlternativeAddress(displayAlternativeAddress);
-   
+
       sb.update(part);
       tx.commit();
       updateSuccess = true;
@@ -275,17 +274,18 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         }
 
         try {
-          if (aalt.getAddressId() == null  && this.questionAltAddress != 1) {
+          if (aalt.getAddressId() == null && this.questionAltAddress != 1) {
             aalt.setParticipant_id(pid);
             aalt.setAddressId(UUID.randomUUID().toString());
             sb.save(aalt);
-          } else if (aalt.getAddressId() != null  && this.questionAltAddress != 1){
+          } else if (aalt.getAddressId() != null && this.questionAltAddress != 1) {
             sb.update(aalt);
-          } else if ((aalt.getAddressId() != null) && this.questionAltAddress == 1){
-           
+          } else if ((aalt.getAddressId() != null) && this.questionAltAddress == 1) {
+
             sb.delete(aalt);
-          } else {}
-          
+          } else {
+          }
+
           tx.commit();
           updateSuccess = true;
           aalt = null;
@@ -352,7 +352,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       message(null, "threeStrikesYourOut", null);
       return_string = ubean.Logout();
     } else {
-            
+
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
@@ -635,8 +635,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     String query = null;
     try {
-     session = hib_session();
-     tx = session.beginTransaction();
+      session = hib_session();
+      tx = session.beginTransaction();
       query = "FROM Participant WHERE user_id = :uid";
       result = session.createQuery(query)
               .setParameter("uid", uid)
@@ -858,8 +858,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
                       pri.getPostalCode(), pri.getCity(), pri.getProvince(), pri.getUsStateId(), pri.getRegion(), pri.getCountryId(), pri.getAddressType())));
       setPrimary(new_primary);
       return_result = getPrimary();
-    } else{}
-    
+    } else {
+    }
+
     return return_result;
 
   }
@@ -913,5 +914,19 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   public void setParticipant_id(String participant_id) {
     this.participant_id = participant_id;
   }
-  
+
+  /**
+   * @return the communityId
+   */
+  public String getCommunityId() {
+    return communityId;
+  }
+
+  /**
+   * @param communityId the communityId to set
+   */
+  public void setCommunityId(String communityId) {
+    this.communityId = communityId;
+  }
+
 }
