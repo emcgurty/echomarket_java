@@ -11,25 +11,35 @@ $(document).ready(function () {
       check18OrMore(this);
     if (getid.includes('gooodwill'))
       checkGoodWill(this);
-        if (getid.includes('smallFee'))
+    if (getid.includes('smallFee'))
       checkSmallFee(this);
 
   });
 });
 
+function clearCommunityDefaultAddress() {
+ var getAddresValue = $("input[type=text]");
+   
+  for (var i = 0; i < getAddresValue.length; i++) {
+    var id = getAddresValue[i].id;
+    if (id.includes("addressLine1")) {
+      
+      }
+  }
+}
 function checkSmallFee(input) {
-  
-        if (input.value == 1) {
-          if (input.checked == true) {
-            $("span#smallFeeAmount").css("visibility", "visible");
-            $("span#smallFee").text("Please provide an amount.");
-          }
-        } else {
-          if (input.checked == true) {
-            $("span#smallFeeAmount").css("visibility", "hidden");
-            $("span#smallFee").text("");
-          }
-        }
+
+  if (input.value == 1) {
+    if (input.checked == true) {
+      $("span#smallFeeAmount").css("visibility", "visible");
+      $("span#smallFee").text("Please provide an amount.");
+    }
+  } else {
+    if (input.checked == true) {
+      $("span#smallFeeAmount").css("visibility", "hidden");
+      $("span#smallFee").text("");
+    }
+  }
 }
 
 function checkGoodWill(input) {
@@ -46,7 +56,7 @@ function checkGoodWill(input) {
 }
 
 function check18OrMore(input) {
-  if (input.value == 1) {
+  if (input.value == 0) {
     if (input.checked == true) {
       $("span#age18OrMore_span.error-message").text("You must be 18 years of age.");
       $("span#age18OrMore_span.error-message").css("visibility", "visible");
@@ -65,7 +75,7 @@ function checkAltEmailProvide(input) {
       $("div#emailAlternative").css("display", "none");
     }
   } else if (input.value == 0) {
-      $("div#emailAlternative").css("display", "none");
+    $("div#emailAlternative").css("display", "none");
   }
 }
 
