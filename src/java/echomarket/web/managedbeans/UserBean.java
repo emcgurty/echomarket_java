@@ -404,11 +404,20 @@ public class UserBean extends AbstractBean implements Serializable {
   private String findWhatIsComplete() {
 
     String return_string = null;
-    List completCP = completeContactPreferences(this.user_id);
+    String pid = null;
+    List partList = completeParticipantRecord();
+    if (partList != null) {
+      if (partList.size() == 1) {
+        Participant part = (Participant) partList.get(0);
+        pid = part.getParticipant_id();
+        this.participant_id = pid;
+      }
+                
+    List completCP = completeContactPreferences(this.participant_id );
     Integer hs = completCP.size();
     if (hs == 0) {
       this.editable = 0;
-      return_string = cpbean.load_ud(this.participant_id);
+      return_string = cpbean.load_ud(pid);
     } else {
       this.editable = 1;
       if (this.userType.contains("borrow")) {
@@ -429,6 +438,10 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = ibean.load_ud("both", null);
       }
     }
+    } else {
+      message(null,  "ParticpantNotFound", null);
+      return_string = "index";
+    }
     return return_string;
   }
 
@@ -441,10 +454,8 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      queryString = " SELECT u "
-              + " FROM Users u "
-              + " left join u.participant part "
-              + " WHERE u.user_id = :uid AND part.goodwill = 1 AND part.age18OrMore = 1 AND u.activatedAt = null ";
+      queryString = " FROM Participant "
+                    + " WHERE user_id  = :uid AND goodwill = 1 AND age18OrMore = 1";
       results = hib.createQuery(queryString)
               .setParameter("uid", this.user_id)
               .list();
@@ -1064,7 +1075,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  private List completeContactPreferences(String user_id) {
+  private List completeContactPreferences(String pid) {
 
     List results = null;
     Session hib = null;
@@ -1073,13 +1084,13 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery("from ContactPreference WHERE user_id = :uid")
-              .setParameter("uid", user_id)
+      results = hib.createQuery("from ContactPreference WHERE participant_id = :pid")
+              .setParameter("pid", pid)
               .list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error on completeParticipantRecord");
+      System.out.println("Error on completeContactPreferences");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
