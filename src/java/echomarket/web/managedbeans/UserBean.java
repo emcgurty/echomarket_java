@@ -374,8 +374,6 @@ public class UserBean extends AbstractBean implements Serializable {
                     default:
                       break;
                   }
-
-                  return_string = "index";  // holder for the moment
                 }
               } else {
                 message(null, "UserHasNotAccepted", new Object[]{this.username});
@@ -403,7 +401,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   private String findWhatIsComplete() {
 
-    String return_string = null;
+    String return_string = "";
     String pid = null;
     List partList = completeParticipantRecord();
     if (partList != null) {
@@ -411,35 +409,41 @@ public class UserBean extends AbstractBean implements Serializable {
         Participant part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
         this.participant_id = pid;
+      } else {
+        this.editable = 0;
+        return_string = pbean.load_ud(this.user_id);
+
       }
-                
-    List completCP = completeContactPreferences(this.participant_id );
-    Integer hs = completCP.size();
-    if (hs == 0) {
-      this.editable = 0;
-      return_string = cpbean.load_ud(pid);
-    } else {
-      this.editable = 1;
-      if (this.userType.contains("borrow")) {
-        return_string = ibean.load_ud("borrow", null);
-      } else if (this.userType.contains("lend")) {
-        List hasCompleteLIT = completeLIT(this.participant_id);
-        if (hasCompleteLIT.size() == 0) {
-          return_string = ltribean.load_ud(this.participant_id);
+
+      if (return_string.isEmpty() == true) {
+        List completCP = completeContactPreferences(this.participant_id);
+        Integer hs = completCP.size();
+        if (hs == 0) {
+          setEditable(0);
+          return_string = cpbean.load_ud(pid);
         } else {
-          List hasCompleteLIC = completeLIC(this.participant_id);
-          if (hasCompleteLIC.size() == 0) {
-            return_string = licibean.load_ud(this.participant_id);
+          this.editable = 0;
+          if (this.userType.contains("borrow")) {
+            return_string = ibean.load_ud("borrow", null);
+          } else if (this.userType.contains("lend")) {
+            List hasCompleteLIT = completeLIT(this.participant_id);
+            if (hasCompleteLIT.size() == 0) {
+              return_string = ltribean.load_ud(this.participant_id);
+            } else {
+              List hasCompleteLIC = completeLIC(this.participant_id);
+              if (hasCompleteLIC.size() == 0) {
+                return_string = licibean.load_ud(this.participant_id);
+              } else {
+                return_string = ibean.load_ud("lend", null);
+              }
+            }
           } else {
-            return_string = ibean.load_ud("lend", null);
+            return_string = ibean.load_ud("both", null);
           }
         }
-      } else {
-        return_string = ibean.load_ud("both", null);
       }
-    }
     } else {
-      message(null,  "ParticpantNotFound", null);
+      message(null, "ParticpantNotFound", null);
       return_string = "index";
     }
     return return_string;
@@ -455,7 +459,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       queryString = " FROM Participant "
-                    + " WHERE user_id  = :uid AND goodwill = 1 AND age18OrMore = 1";
+              + " WHERE user_id  = :uid AND goodwill = 1 AND age18OrMore = 1";
       results = hib.createQuery(queryString)
               .setParameter("uid", this.user_id)
               .list();
@@ -1010,7 +1014,7 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery("from Participant WHERE user_id = :uid")
+      results = hib.createQuery("from Participant WHERE user_id = :uid AND contactDescribeId != -9")
               .setParameter("uid", this.user_id)
               .list();
       tx.commit();
