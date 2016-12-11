@@ -12,6 +12,10 @@
 
   <ui:define name="content">
     <h:form  id="form_community_detail"  >
+      <h:head >
+         <h:outputScript library="javascript" name="user_detail.js"  />
+        
+      </h:head>
       <div class="message.color">
         <h:messages showSummary="true" 
                     showDetail="false"
@@ -187,7 +191,7 @@
         </table>
 
       </div>
-      <input type="button" value="Clear Address Detail" onclick="alert('need to finish')"  />
+      <input type="button" value="Clear Address Detail" onclick="clearCommunityDefaultAddress();"  />
     </h:form>
   </ui:define>
 
