@@ -50,7 +50,7 @@
             </div> 
           </div> 
 
-          <c:if test="#{userBean.isCommunity == 1}" >
+          <c:if test="#{userBean.roleId == 1}" >
             <div  class="div_p" id="community_alias" >
               <div style="margin:10px;" >
                 <h:outputText value="Please choose your Community alias:" />
@@ -74,7 +74,7 @@
           </div>
 
 
-          <c:if test="#{userBean.isCommunity == 0}" >
+          <c:if test="#{userBean.roleId == 0}" >
             <div  class="div_p" >
               <div style="margin:10px;" >
                 <h:outputText value="Yourself generally, your affiliation" />
@@ -539,7 +539,6 @@
                 <h:selectOneRadio id="borrowerContactByCellPhone" value="#{bb.borrowerContactByCellPhone}"  >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
-             
                 </h:selectOneRadio>    
               </h:outputLabel>
 
