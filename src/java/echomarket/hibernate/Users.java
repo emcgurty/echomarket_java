@@ -21,6 +21,7 @@ public class Users implements java.io.Serializable {
 
   private String user_id;
   private String username;
+  private String communityName;
   private String email;
   private Date dateCreated;
   private Date dateUpdated;
@@ -38,10 +39,11 @@ public class Users implements java.io.Serializable {
   }
 
   // This constructor is used to create new, non-activated user
-  public Users(String id, String username, String email, String password, String resetCode, String userAlias, String userType, Integer roleId) {
+  public Users(String id, String username, String communityName, String email, String password, String resetCode, String userAlias, String userType, Integer roleId) {
     String local_password = password;
     this.user_id = id;
     this.username = username;
+    this.communityName = communityName;
     this.email = email;
     this.userAlias = userAlias;
     this.userType = userType;
@@ -55,7 +57,6 @@ public class Users implements java.io.Serializable {
 
   }
   // This constructor is used for non-password updates
-
   public Users(String id, String username, String email, String userAlias, String userType) {
     this.user_id = id;
     this.username = username;
@@ -241,6 +242,20 @@ public class Users implements java.io.Serializable {
    */
   public void setParticipant(Set<Participant> participant) {
     this.participant = participant;
+  }
+
+  /**
+   * @return the communityName
+   */
+  public String getCommunityName() {
+    return communityName;
+  }
+
+  /**
+   * @param communityName the communityName to set
+   */
+  public void setCommunityName(String communityName) {
+    this.communityName = communityName;
   }
 
 }
