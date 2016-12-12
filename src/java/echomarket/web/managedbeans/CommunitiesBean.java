@@ -47,6 +47,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     List result = null;
     Session hib = null;
     Transaction tx = null;
+    String queryString = null;
+    Communities comm_Array = null;
 
     try {
       hib = hib_session();
@@ -54,8 +56,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
     }
-    String queryString = null;
-    Communities comm_Array = new Communities();
+    
     queryString = "FROM Communities where community_id = :cid";
     try {
       result = hib.createQuery(queryString)
@@ -180,13 +181,13 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     String query = null;
     List result = null;
     Communities comm_result = null;
-    if (this.communityId == null) {
+    if (this.communityId.isEmpty() == true) {
       ///Do save
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
         String new_cid = getId();
-        comm = new Communities(new_cid, this.communityName, 0, this.firstName, null, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
+        comm = new Communities(new_cid, this.communityName, 0, this.firstName, this.mi, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
         sb.save(comm);
         tx.commit();
         updateSuccess = true;
@@ -268,7 +269,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       }
 
     }
-    return "index";
+    return "community_members";
   }
 
   /**
