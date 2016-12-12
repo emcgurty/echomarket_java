@@ -102,7 +102,7 @@
                 <h:inputText id="addressLine1"
                              value="#{communitiesBean.addressLine1}"
                              required="true"
-                             requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left:10px">
+                             requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left:10px"  class="address">
                 </h:inputText>
               </h:outputLabel>
 
@@ -111,7 +111,7 @@
 
               <h:outputLabel for="addressLine2"  value="#{bundle.AddressLine2}">       
                 <h:inputText id="addressLine2"
-                             value="#{communitiesBean.addressLine2}" style="margin-left:10px"  >
+                             value="#{communitiesBean.addressLine2}" style="margin-left:10px"  class="address">
                 </h:inputText>
               </h:outputLabel>
             </td>
@@ -122,14 +122,14 @@
               <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
               <h:inputText id="city" value="#{communitiesBean.city}"
                            required="true"
-                           requiredMessage="#{bundle.ReqCity}" style="margin-left:10px" >
+                           requiredMessage="#{bundle.ReqCity}" style="margin-left:10px" class="address">
               </h:inputText>
 
             </td>
             <td style="padding-top: 15px;padding-bottom: 15px;">
 
               <h:outputLabel for="usStates" value="#{bundle.UsStates}"/>
-              <h:selectOneMenu id="usStates" value="#{communitiesBean.usStateId}" style="margin-left: 5px;">
+              <h:selectOneMenu id="usStates" value="#{communitiesBean.usStateId}" style="margin-left: 5px;" class="address">
                 <f:validator validatorId="selectOneMenuValidator" />  
                 <f:selectItems id="us_state_id" value="#{uss.buildUsStates()}"  
                                var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" 
@@ -143,13 +143,13 @@
           <tr >
             <td style="padding-top: 15px;padding-bottom: 15px;">
               <h:outputLabel for="province" value="#{bundle.Province}"/>
-              <h:inputText id="province" value="#{communitiesBean.province}" style="margin-left: 5px;">
+              <h:inputText id="province" value="#{communitiesBean.province}" style="margin-left: 5px;" class="address">
               </h:inputText>
 
             </td>
             <td style="padding-top: 15px;padding-bottom: 15px;">
               <h:outputLabel for="region" value="#{bundle.Region}"/>
-              <h:inputText id="region" value="#{communitiesBean.region}" style="margin-left: 5px;">
+              <h:inputText id="region" value="#{communitiesBean.region}" style="margin-left: 5px;" class="address">
               </h:inputText>
             </td>
           </tr>
@@ -158,13 +158,13 @@
               <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
               <h:inputText id="postalCode" value="#{communitiesBean.postalCode}" 
                            required="true"
-                           requiredMessage="#{bundle.ReqPostalCode}" style="margin-left:10px" >
+                           requiredMessage="#{bundle.ReqPostalCode}" style="margin-left:10px" class="address">
               </h:inputText>
 
             </td>
             <td style="padding-top: 15px;padding-bottom: 15px;">
               <h:outputLabel for="countryId" value="#{bundle.Country}"/><span id="countryId" class="required_fields">*</span>
-              <h:selectOneMenu id="countryId" value="#{communitiesBean.countryId}" style="margin-left: 5px;"  >
+              <h:selectOneMenu id="countryId" value="#{communitiesBean.countryId}" style="margin-left: 5px;"  class="address" >
                 <f:validator validatorId="selectOneMenuValidator" />  
                 <f:selectItems id="country_id" value="#{country.buildCountries()}"  
                                var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
