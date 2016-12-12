@@ -18,14 +18,11 @@ $(document).ready(function () {
 });
 
 function clearCommunityDefaultAddress() {
- var getAddresValue = $("input[type=text]");
-   
-  for (var i = 0; i < getAddresValue.length; i++) {
-    var id = getAddresValue[i].id;
-    if (id.includes("addressLine1")) {
-      
-      }
-  }
+
+  $("input.address").val("");
+  $("select.address").val("-2");
+
+
 }
 function checkSmallFee(input) {
 
