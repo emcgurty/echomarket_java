@@ -14,10 +14,8 @@
   </div>
 
   <h:form  id="individual_registration"  >
-
-    <h:inputHidden id="isCommunity" value="#{userBean.isCommunity}" />
-
-    <c:if test="#{userBean.isCommunity == 1}"  >
+    
+    <c:if test="#{userBean.roleId == 1}"  >
       <c:set var="b_alias" scope="view" value="#{bundle.c_userAlias}" />
       <c:set var="b_username" scope="view" value="#{bundle.c_username}" />
       <c:set var="b_password" scope="view" value="#{bundle.c_password}" />
@@ -26,7 +24,7 @@
       <c:set var="b_userType" scope="view" value="#{bundle.c_userType}" />
     </c:if>
 
-    <c:if test="#{userBean.isCommunity == 0}"  >
+    <c:if test="#{userBean.roleId == 0}"  >
       <c:set var="b_alias" scope="view" value="#{bundle.userAlias}" />
       <c:set var="b_username" scope="view" value="#{bundle.username}" />
       <c:set var="b_password" scope="view" value="#{bundle.password}" />
@@ -36,9 +34,9 @@
     </c:if>
 
     
-    <table style="width:75%;margin-left: 50px" align="center" id="user_registration_table">
+    <table style="width:95%;margin-left: 50px" align="center" id="user_registration_table">
       <tr >
-        <td style="width:50%;padding-bottom: 15px;">
+        <td style="padding-bottom: 15px;">
           <h:outputLabel for="username" value="#{b_username}" >       
             <h:inputText id="username"
                          value="#{userBean.username}"
@@ -49,7 +47,7 @@
             </h:inputText>
           </h:outputLabel>
         </td>
-        <td style="width:50%;  padding-bottom: 15px;">
+        <td style=" padding-bottom: 15px;">
 
           <h:outputLabel for="user_alias"  value="#{b_alias}">       
             <h:inputText id="user_alias"
@@ -64,7 +62,7 @@
         </td>
       </tr>
       <tr >
-        <td style="width:50%;padding-bottom: 15px;">
+        <td style="padding-bottom: 15px;">
           <f:event listener="#{userBean.validatePassword}" type="postValidate" />
           <h:outputLabel for="password" value="#{b_password}" >       
             <h:inputSecret id="password"
@@ -78,7 +76,7 @@
           </h:outputLabel>
 
         </td>
-        <td style="width:50%;padding-bottom: 15px;">
+        <td style="padding-bottom: 15px;">
           <h:outputLabel for="confirmPassword" value="#{b_confirm}" >       
             <h:inputSecret id="confirmPassword"
                            size="16"
