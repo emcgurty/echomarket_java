@@ -16,7 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean
+@ManagedBean(name = "communitiesBean")
 @RequestScoped
 public class CommunitiesBean extends AbstractBean implements Serializable {
 
@@ -40,7 +40,6 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
   private String cellPhone;
   private String email;
   private Integer isActive;
-  private Integer isSaved;
   private String remoteIp;
 
   public String load_community_detail() {
@@ -114,12 +113,12 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         if (result != null) {
           if (result.size() == 1) {
             Participant part_array = (Participant) result.get(0);
-            this.communityId = part_array.getCommunityId();
+            this.communityName = part_array.getOrganizationName();
             this.firstName = part_array.getFirstName();
             this.lastName = part_array.getLastName();
             this.email = ubean.getEmail();
             this.cellPhone = part_array.getCellPhone();
-            
+
             List getPrimaryAddress = getCommunityPrimaryAddress();
             if (getPrimaryAddress != null) {
               if (getPrimaryAddress.size() == 1) {
@@ -177,20 +176,97 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     Session sb = null;
     Transaction tx = null;
     Communities comm = null;
+    Boolean updateSuccess = false;
+    String query = null;
+    List result = null;
+    Communities comm_result = null;
+    if (this.communityId == null) {
+      ///Do save
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        String new_cid = getId();
+        comm = new Communities(new_cid, this.communityName, 0, this.firstName, null, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
+        sb.save(comm);
+        tx.commit();
+        updateSuccess = true;
+        ubean.setCommunityId(new_cid);
+        ubean.setCommunityName(this.communityName);
+        message(null, "CommunityDetailRecordSaved", null);
+      } catch (Exception ex) {
+        System.out.println("Error in saveCommunityDetail");
+        Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+        message(null, "CommunityDetailRecordWasNotSaved", null);
+      } finally {
+        sb = null;
+        tx = null;
+      }
+    } else {
 
-    try {
-      sb = hib_session();
-      tx = sb.beginTransaction();
-      comm = new Communities(getId(), this.communityName, 0, this.firstName, null, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
-      sb.update(comm);
-      tx.commit();
-      message(null, "CommunityDetailRecordSaved", null);
-    } catch (Exception ex) {
-      Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-      message(null, "CommunityDetailRecordWasNotSaved", null);
-    } finally {
-      sb = null;
-      tx = null;
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+      } catch (Exception ex) {
+        System.out.println("Error in saveCommunityDetail");
+        Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      try {
+        query = "FROM Communities WHERE community_id = :cid";
+        result = sb.createQuery(query)
+                .setParameter("cid", this.communityId)
+                .list();
+        tx.commit();
+      } catch (Exception ex) {
+        System.out.println("Error in saveCommunityDetail on save");
+        Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+        tx.rollback();
+      } finally {
+        tx = null;
+        sb = null;
+      }
+
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        if (result != null) {
+          if (result.size() == 1) {
+            comm_result = (Communities) result.get(0);
+            comm_result.setAddressLine1(addressLine1);
+            comm_result.setAddressLine2(addressLine2);
+            comm_result.setCellPhone(cellPhone);
+            comm_result.setHomePhone(homePhone);
+            comm_result.setCommunityName(communityName);
+            comm_result.setCountryId(countryId);
+            comm_result.setUsStateId(usStateId);
+            comm_result.setCity(city);
+            comm_result.setEmail(email);
+            comm_result.setFirstName(firstName);
+            comm_result.setMi(mi);
+            comm_result.setLastName(lastName);
+            comm_result.setPostalCode(postalCode);
+            comm_result.setProvince(province);
+            comm_result.setRegion(region);
+            comm_result.setRemoteIp("NA");
+            comm_result.setIsActive(1);
+            sb.update(comm_result);
+            tx.commit();
+            updateSuccess = true;
+            ubean.setCommunityId(comm_result.getCommunityId());
+            ubean.setCommunityName(this.communityName);
+            message(null, "CommunityDetailRecordUpdated", null);
+          }
+        }
+      } catch (Exception ex) {
+        System.out.println("Error in saveCommunityDetail on update");
+        Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
+        tx.rollback();
+      } finally {
+        comm_result = null;
+        tx = null;
+        sb = null;
+      }
+
     }
     return "index";
   }
@@ -417,20 +493,6 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
    */
   public void setIsActive(Integer isActive) {
     this.isActive = isActive;
-  }
-
-  /**
-   * @return the isSaved
-   */
-  public Integer getIsSaved() {
-    return isSaved;
-  }
-
-  /**
-   * @param isSaved the isSaved to set
-   */
-  public void setIsSaved(Integer isSaved) {
-    this.isSaved = isSaved;
   }
 
   /**
