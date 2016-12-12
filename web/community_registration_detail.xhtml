@@ -17,7 +17,7 @@
         <c:set var="b_confirm" scope="session" value="#{bundle.c_confirmPassword}" />
         <c:set var="b_email" scope="session" value="#{bundle.c_email}" />
         <c:set var="b_type" scope="session" value="#{bundle.c_userType}" />
-        <h:inputHidden id="isCommunity" value="1" />
+        
         <table style="width:100%;margin-left: 50px" align="center" id="user_registration_table">
 
             <tr style="margin:15px;">
@@ -56,13 +56,10 @@
                                      required="true"
                                      requiredMessage="#{bundle.ReqUserName}"
                                      style="margin-left:5px">
-
-
                         </h:inputText>
                     </h:outputLabel>
                 </td>
                 <td style="width:50%;  padding-bottom: 15px;">
-
                     <h:outputLabel for="user_alias"  value="#{b_alias}">       
                         <h:inputText id="user_alias"
                                      size="16"
@@ -72,17 +69,13 @@
                                      requiredMessage="#{bundle.ReqUserAlias}"
                                      style="margin-left:5px">
 
-
                         </h:inputText>
                     </h:outputLabel>
                 </td>
             </tr>
-
             <tr >
                 <td style="width:50%;padding-bottom: 15px;">
                     <f:event listener="#{userBean.validatePassword}" type="postValidate" />
-
-
                     <h:outputLabel for="password" value="#{b_password}" >       
                         <h:inputSecret id="password"
                                        size="16"
@@ -126,12 +119,10 @@
                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                         </h:inputText>
                     </h:outputLabel>
-
                 </td>
             </tr >
             <tr >
                 <td colspan="2" style="width:100%;padding-bottom: 15px;">
-
                     <h:outputLabel for="userTypeArray" value="#{b_type}" >
                         <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate...">
                             <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
@@ -141,7 +132,6 @@
                     </h:outputLabel>   
                 </td>
             </tr>
-
         </table>
     </h:form>
 
