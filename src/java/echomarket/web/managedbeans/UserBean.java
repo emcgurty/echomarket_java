@@ -30,7 +30,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean
+@ManagedBean(name = "userBean")
 @SessionScoped
 public class UserBean extends AbstractBean implements Serializable {
 
@@ -60,7 +60,6 @@ public class UserBean extends AbstractBean implements Serializable {
   private String registrationType;
   private String communityId;
   private String communityName;
-  private Integer isCommunity;
   private Integer editable;
   private String itemId;
   private Integer roleId;
@@ -81,7 +80,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.email = null;
     this.resetCode = null;
     this.appEmail = null;
-    this.isCommunity = null;
     this.roleId = null;
   }
 
@@ -148,6 +146,7 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   private String registerValidUser() {
+
     Boolean savedRecord = false;
     Users create_record = null;
     String commName = null;
@@ -161,10 +160,10 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       current_user_id = getId();
       // Role ID, indivdual = 0; community creator = 1; community member = 2
-      if (this.communityName != null) {
-        create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 1);
+      if (commName != null) {
+        create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 1);
       } else {
-        create_record = new Users(current_user_id, this.username, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 0);
+        create_record = new Users(current_user_id, this.username, null, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 0);
       }
     } catch (Exception ex) {
       // Need to learn error on creating new entity object
@@ -354,10 +353,8 @@ public class UserBean extends AbstractBean implements Serializable {
                   message(null, "LogInSuccessful", new Object[]{this.username});
                   Users uu = (Users) results.get(0);  /// User result that has current user data
                   memberCreator = uu.getRoleId();
-                  setIsCommunity(memberCreator);
                   if (memberCreator == 1) {
-                    String current_commuity_id = getCurrentUserCommunityId(uu.getUser_id());
-                    setCommunityId(current_commuity_id);
+                    setCurrentUserCommunityIdName(uu.getUser_id());
                   }
 
                   setEmail(uu.getEmail());
@@ -463,10 +460,11 @@ public class UserBean extends AbstractBean implements Serializable {
 
     String return_string = "";
     String pid = null;
+    Participant part = null;
     List partList = completeParticipantRecord();
     if (partList != null) {
       if (partList.size() == 1) {
-        Participant part = (Participant) partList.get(0);
+        part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
         setParticipant_id(pid);
         setCommunityId(part.getCommunityId());
@@ -482,6 +480,7 @@ public class UserBean extends AbstractBean implements Serializable {
           return_string = commbean.load_community_detail();
         } else {
           ////  Check for Community members??
+          ///   Or return to a Community Menu ???
         }
       }
     } else {
@@ -491,7 +490,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-  private String getCurrentUserCommunityId(String uid) {
+  private void setCurrentUserCommunityIdName(String uid) {
     List results = null;
     Session hib = null;
     Transaction tx = null;
@@ -510,7 +509,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on getCurrentUserCommunityId");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      return null;
+
     } finally {
       tx = null;
       hib = null;
@@ -519,12 +518,13 @@ public class UserBean extends AbstractBean implements Serializable {
     if (results != null) {
       if (results.size() == 1) {
         Participant getPID = (Participant) results.get(0);
-        queryString = getPID.getParticipant_id();
+        setParticipant_id(getPID.getParticipant_id());
+        setCommunityId(getPID.getCommunityId());
         results = null;
         getPID = null;
       }
     }
-    return queryString;
+
   }
 
   private List completeCommunityDetail() {
@@ -1084,30 +1084,13 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String load_user_registration() {
-    this.isCommunity = 0;
-    this.communityName = null;
-    return "user_registration?faces-redirect=true";
+    this.roleId = 0;
+    return "user_registration.xhtml?faces-redirect=true";
   }
 
   public String load_community_registration() {
-    this.isCommunity = 1;
-    this.communityName = null;
-    return "community_registration?faces-redirect=true";
-
-  }
-
-  /**
-   * @return the isCommunity
-   */
-  public Integer getIsCommunity() {
-    return isCommunity;
-  }
-
-  /**
-   * @param isCommunity the isCommunity to set
-   */
-  public void setIsCommunity(Integer isCommunity) {
-    this.isCommunity = isCommunity;
+    this.roleId = 1;
+    return "community_registration.xhtml?faces-redirect=true";
   }
 
   private List completeParticipantRecord() {
@@ -1232,7 +1215,7 @@ public class UserBean extends AbstractBean implements Serializable {
     Transaction tx = null;
 
     try {
-      Users uu = new Users(this.user_id, this.username, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
+      Users uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
       hib.update(uu);
       hib = hib_session();
       tx = hib.beginTransaction();
