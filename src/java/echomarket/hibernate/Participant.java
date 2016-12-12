@@ -62,9 +62,10 @@ public class Participant implements java.io.Serializable {
   }
 
   /// User agreement
-  public Participant(String participant_id, String userId, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, String remoteIp) {
+  public Participant(String participant_id, String userId, String communityId, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, String remoteIp) {
     this.participant_id = participant_id;
     this.userId = userId;
+    this.communityId = communityId;
     this.goodwill = goodwill;
     this.age18OrMore = age18OrMore;
     this.isActive = isActive;
