@@ -2,6 +2,7 @@ package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Participant;
+import echomarket.hibernate.Users;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -202,7 +203,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx = sb.beginTransaction();
       updateSuccess = true;
     } catch (Exception ex) {
-      updateSuccess = false;
       System.out.println("Error in Save/Update Particpant");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -356,14 +356,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-        Participant part = new Participant(getId(), ubean.getUser_id(), goodwill, age18OrMore, 1, new Date(), "NA");
+        Participant part = new Participant(getId(), ubean.getUser_id(), ubean.getCommunityId(), goodwill, age18OrMore, 1, new Date(), "NA");
         sb.save(part);
         tx.commit();
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
         return_string = load_ud(ubean.getUser_id());
         message(null, "thanksForAcceptingAgreement", null);
       } catch (Exception ex) {
-
         message(null, "failedToSaveAgreement", null);
         return_string = ubean.Logout();
         tx.rollback();
@@ -375,7 +374,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
       }
     }
-    return return_string;
+    return return_string + ".xhtml?faces-redirect=true";
 
   }
 
@@ -390,9 +389,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       b_return = true;
     } catch (Exception ex) {
       tx.rollback();
-      Logger
-              .getLogger(ParticipantBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       if (sb != null) {
         sb.close();
@@ -657,35 +654,32 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   public String deleteCurrentRecord(String bid, String itemDesc) {
 
     List result = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
 
     String queryString = "from Participant where borrower_id = :bid";
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("bid", bid)
               .list();
-
-      if (result.size() > 0) {
-
-        hib.delete((Participant) result.get(0));
-        tx.commit();
-      } else {
+      if (result != null) {
+        if (result.size() == 1) {
+          hib.delete((Participant) result.get(0));
+          tx.commit();
+        }
       }
-
     } catch (Exception ex) {
-      System.out.println("Error in deleting borrower record");
+      tx.rollback();
+      System.out.println("Error in deleteCurrentRecord");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
-
       result = null;
       tx = null;
       hib = null;
 
-      message(
-              null,
-              "DeleteSelecteParticipant",
-              new Object[]{itemDesc});
+      message(null, "DeleteSelecteParticipant", new Object[]{itemDesc});
     }
     return "borrower_history";
   }
