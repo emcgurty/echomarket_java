@@ -26,6 +26,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import static jdk.nashorn.internal.objects.NativeString.trim;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -103,7 +104,11 @@ public class UserBean extends AbstractBean implements Serializable {
     if (this.editable == 1) {
       return userType;
     } else {
-      return userType.replace(";", " ");
+      String hold_UT = userType;
+      hold_UT = hold_UT.replace(";", " ");
+      hold_UT = trim(hold_UT).replace(" ", "ing and ");
+      return hold_UT;
+      
     }
   }
 
