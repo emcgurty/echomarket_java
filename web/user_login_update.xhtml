@@ -7,6 +7,7 @@
   xmlns:h="http://xmlns.jcp.org/jsf/html"
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
   template="./UserDetailTemplate.xhtml">
   >
 
@@ -25,7 +26,9 @@
         </div> 
         <div style="margin:10px;" >
           <h:outputText value="Login Information..." />
-          <h:commandLink  action="#{participant.load_ud(userBean.user_id)}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" />
+          <h:commandLink  action="#{participant.load_ud(userBean.user_id)}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" >
+            <f:param name="action" value="edit" />
+          </h:commandLink>
           <h:inputHidden id="roleId"  value="#{userBean.roleId}" />                  
         </div>
       </div> 
@@ -33,6 +36,33 @@
       <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
         <div style="margin-left: 25px;float:left">
           <table style="width:100%;margin-left: 50px" align="center" id="user_registration_table">
+
+            <c:if test="#{userBean.communityName != null}"  >
+            <tr >
+              <td style="width:50%;padding-bottom: 15px;">
+                <h:outputLabel for="communityName" value="#{bundle.c_CommunityName}" >       
+                  <h:inputText id="communityName"
+                               value="#{userBean.communityName}"
+                               size="16"
+                               required="true"
+                               requiredMessage="#{bundle.ReqCommunityName}"
+                               style="margin-left:5px" rendered="#{userBean.editable == 1}">
+
+
+                  </h:inputText>
+                  <h:outputText 
+                    value="#{userBean.communityName}"
+                    style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                </h:outputLabel>
+              </td>
+              <td style="width:50%;  padding-bottom: 15px;">
+                <h:outputText value="" />
+                
+              </td>
+            </tr>
+            </c:if>
+
+
 
             <tr >
               <td style="width:50%;padding-bottom: 15px;">
@@ -123,6 +153,7 @@
             </tr >
             <tr >
               <td colspan="2" style="width:100%;padding-bottom: 15px;">
+                <c:set var="niceUT" value="#{fn:trim(userBean.userType).concat('ing')}" />
                 <h:outputLabel for="userTypeArray" value="#{bundle.userType}" rendered="#{userBean.editable == 1}">
                   <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate..." rendered="#{userBean.editable == 1}">
                     <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
@@ -131,8 +162,8 @@
                   </h:selectManyCheckbox>
                 </h:outputLabel>
                 <h:outputLabel for="userTypeArray0" value="Participation:" rendered="#{userBean.editable == 0}">
-                  <h:outputText id="userTypeArray0" value="#{userBean.userType}"
-                                style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                  <h:outputText id="userTypeArray0" value="#{niceUT}"
+                                style="margin-left:5px;text-transform: capitalize" rendered="#{userBean.editable == 0}"/>
                 </h:outputLabel>
               </td>
             </tr>
