@@ -24,16 +24,17 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   @Inject
   UserBean ubean;
-  private String community_member_id;
+  private String participant_id;
   private String community_id;
   private String remoteIp;
   private String firstName;
+  private String update_first_Name;
   private String mi;
   private String lastName;
   private String alias;
   private Integer isActive;
   private Integer isCreator;
-  private String email;
+  private String emailAlternative;
   private Integer editable;
   private String editWhichRecord;
   private Participant[] existing_member;
@@ -45,66 +46,45 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private String[] eemail;
   private Integer howManyRecords;
 
-  private static Date hold_date() {
-    Date hold_date = new Date();
-    return hold_date;
-  }
-
   private List getExistingMemberList() {
-
+    // TO DO: Need to code for when getHowMany = 0... May be not
     ArrayList<Participant> comm_member = new ArrayList<Participant>();
     Integer howMany = getHowManyRecords();
     Participant new_cm;
     for (int i = 0; i < howMany; i++) {
-      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), ubean.getUser_id(), null, null, null, null, null, 1, new Date(), new Date(), i);
+      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0);
       comm_member.add(new_cm);
     }
-    this.setComm_member_rows(comm_member);
+    this.comm_member_rows = comm_member;
     return comm_member;
 
   }
 
-  public Participant[] listCMAlias() {
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
-    String queryString = "from Participant where community_id = :cid order by alias";
-    List result = hib.createQuery(queryString)
-            .setParameter("cid", ubean.getCommunityId())
-            .list();
-    tx.commit();
-    Participant[] cmArray = null;
-    Integer size_of_result = result.size();
-    cmArray = new Participant[size_of_result];
-    for (int i = 0; i < size_of_result; i++) {
-      Participant to_Array = (Participant) result.get(i);
-      cmArray[i] = new Participant(to_Array.getUserId(), to_Array.getAlias());
-    }
-    tx = null;
-    hib = null;
-    return cmArray;
-  }
+  public String load_community_members() {  // editable = 0
 
-  public String load_community_members() {
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    this.firstName = "lis";
+    Session hib = null;
+    Transaction tx = null;
     String queryString = null;
     List result = null;
     Boolean isCreatorRights = false;
 
     queryString = "FROM Participant where community_id = :cid AND is_creator = 1";
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("cid", ubean.getCommunityId())
               .list();
       tx.commit();
-
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
-      // return with message
+
     } finally {
 
       if (result.size() > 0) {
+
         // Then person has right privs
         if (hib.isOpen() == false) {
           hib = hib_session();
@@ -117,7 +97,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         queryString = "FROM Participant where community_id = :cid";
         try {
           result = hib.createQuery(queryString)
-                  .setParameter("cid", ubean.getCommunityId())
+                  .setParameter("cid", ubean.getUser_id())
                   .list();
           for (int i = 0; i < result.size(); i++) {
             Participant cm = (Participant) result.get(i);
@@ -127,8 +107,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
           }
           tx.commit();
-
         } catch (Exception ex) {
+          tx.rollback();
           Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
 
@@ -140,7 +120,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             try {
               hib = null;
             } catch (Exception ex) {
-              Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
             }
           }
           isCreatorRights = true;
@@ -148,12 +127,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       }
 
       if (isCreatorRights == true) {
-        this.setEditable((Integer) 0);
+        this.editable = 0;
         tx = null;
-        try {
-          hib = null;
-        } catch (Exception ex) {
-        }
+        hib = null;
         return "community_members.xhtml?faces-redirect=true";
       } else {
         message(null, "MustBeCommunityCreatorAddMember", null);
@@ -163,30 +139,20 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     }
   }
 
-  public String getCName(String uid) {
-
-    return ubean.getCommunityName();
-  }
-
   public void editAction(Participant cmid) {
 
     Session hib = null;
     Transaction tx = null;
+    cmid.setEditable(1);
+    this.firstName = cmid.getFirstName();
+    this.lastName = cmid.getLastName();
+    this.alias = cmid.getAlias();
+    /// This is wrong
+    // this.setEmailAlternative(cmid.getEmailAlternative());
 
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-    } catch (Exception ex) {
-      tx.rollback();
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    cmid.setEditable(1);
-    this.setFirstName(cmid.getFirstName());
-    this.setLastName(cmid.getLastName());
-    this.setAlias(cmid.getAlias());
-    this.setCommunity_member_id(cmid.getParticipant_id());
-
-    try {
       hib.update(cmid);
       tx.commit();
     } catch (Exception ex) {
@@ -199,78 +165,121 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     }
   }
 
-  // AS you create new community memebers send them activation email
-  ///and in activation they have to create their own pssaword.
+  //http://stackoverflow.com/questions/8744162/difference-between-returning-null-and-from-a-jsf-action
+  //return "";
   public void addAction() {
-    this.setEditable((Integer) 3);
+    this.editable = 3;
     //this.isActive_boolean = "true";
   }
 
   public void saveAction() {
-
-    Session hib = null;
-    Transaction tx = null;
-    Participant cm = null;
+    Session hib = hib_session();
+    Transaction tx = hib.beginTransaction();
     List new_rows = getComm_member_rows();
-
+    Participant comm;
     String new_uuid = null;
 
     for (int i = 0; i < new_rows.size(); i++) {
-      cm = (Participant) new_rows.get(i);
+      Participant cm = (Participant) new_rows.get(i);
+      //new_uuid = UUID.randomUUID().toString();
+      /// Will eventually use Hibernate to check for duplicates.
       if (cm.getAlias() != null && cm.getFirstName() != null && cm.getLastName() != null) {
-        /// new user
-
+        cm.setEditable(0);
+        this.editable = 0;
+        //comm = new Participant();
         try {
-          hib = hib_session();
-          tx = hib.beginTransaction();
           hib.save(cm);
           tx.commit();
+          System.out.println("COMMUNITY MEMEBER SAVED" + new_uuid);
         } catch (Exception ex) {
           tx.rollback();
-          Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMBER NOT SAVED" + new_uuid, ex);
-        } finally {
-          hib = null;
-          tx = null;
-        }
+          Logger.getLogger(CommunitiesBean.class
+                  .getName()).log(Level.SEVERE, "COMMUNITY MEMEBER NOT SAVED" + new_uuid, ex);
 
+        } finally {
+          cm = null;
+          if (hib.isOpen() == false) {
+            hib = hib_session();
+          }
+          if (tx.isActive() == false) {
+            tx = hib.beginTransaction();
+          }
+        }
       }
     }
 
-    this.setEditable((Integer) 0);
+    if (hib.isOpen() == true) {
+      hib.close();
+
+    }
+    if (tx.isActive() == true) {
+      tx = null;
+      try {
+        hib = null;
+      } catch (Exception ex) {
+      }
+    }
+
+    this.editable = 0;
+
   }
 
-  public void cancelAction() {
-    load_community_members();
-  }
+  public void cancelAction(Participant cmid) {
 
-  public void updateAction(Participant cm) {
-    Participant comm = null;
     Session hib = null;
     Transaction tx = null;
-    Date today_date = new Date();
-    String newMemberName = getFirstName() + " " + getLastName();
+    Boolean cancelSuccess = false;
+    cmid.setEditable(0);
+    this.firstName = cmid.getFirstName();
+    this.lastName = cmid.getLastName();
+    this.alias = cmid.getAlias();
+    /// This is wrong
+    // this.setEmailAlternative(cmid.getEmailAlternative());
 
-    // Participant comm = new Participant(cm.getCommunity_member_id(), cm.getCommunity_id(), cm.getUser_id(), "NA", getFirstName(), getLastName(), getAlias(), getEmail(), getIsActive(), getIsCreator(), cm.getDateCreated());
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      hib.update(comm);
+      hib.update(cmid);
       tx.commit();
-      message(null, "MemberRecordUpdated", new Object[]{newMemberName});
+      cancelSuccess = true;
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMEBER NOT SAVED", ex);
-      message(null, "MemberRecordNotUpdated", new Object[]{newMemberName});
+      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
-
     }
-
-    //return "community_members.xhtml?faces-redirect=true";
+    if (cancelSuccess == true) {
+      message(null, "MemberRecordDeleted", null);
+    } else {
+      message(null, "MemberRecordNotDeleted", null);
+    }
   }
-//buildCommunityMemberCreators
 
+  public void updateAction() {
+    String nothing = null;
+//    Session hib = null;
+//    Transaction tx = null;
+//    String newMemberName = cm.getFirstName() + " " + cm.getLastName();
+//    cm.setEditable(0);
+//
+//    try {
+//      hib = hib_session();
+//      tx = hib.beginTransaction();
+//      hib.update(cm);
+//      tx.commit();
+//      message(null, "MemberRecordUpdated", new Object[]{newMemberName});
+//    } catch (Exception ex) {
+//      tx.rollback();
+//      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMEBER NOT SAVED", ex);
+//      message(null, "MemberRecordNotUpdated", new Object[]{newMemberName});
+//    } finally {
+//      tx = null;
+//      hib = null;
+//    }
+  }
+
+  //return "community_members.xhtml?faces-redirect=true";
   public List buildCommunityMemberCreators() {
     Session hib = hib_session();
     Transaction tx = hib.beginTransaction();
@@ -285,12 +294,22 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       tx.commit();
 
     } catch (Exception ex) {
-      tx.rollback();
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+      Logger.getLogger(CommunityMembersBean.class
+              .getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+      System.out.println("ERROR IN build Community Member list");
+      System.out.println(ex);
 
     } finally {
-      tx = null;
-      hib = null;
+      if (hib.isOpen() == true) {
+        hib.close();
+      }
+      if (tx.isActive() == true) {
+        tx = null;
+        try {
+          hib = null;
+        } catch (Exception ex) {
+        }
+      }
     }
 
     return result;
@@ -298,73 +317,42 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public List buildCommunityMembersList() {
+
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
     List result = null;
 
-    queryString = "FROM Participants where community_id = :cid";
+    queryString = "FROM Participant where community_id = :cid";
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-
       result = hib.createQuery(queryString)
               .setParameter("cid", ubean.getCommunityId())
               .list();
       tx.commit();
 
     } catch (Exception ex) {
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
-      tx.rollback();
+      Logger.getLogger(CommunityMembersBean.class
+              .getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+      System.out.println("ERROR IN build Community Member list");
+      System.out.println(ex);
 
     } finally {
-      tx = null;
-      hib = null;
+      if (hib.isOpen() == true) {
+        hib.close();
+      }
+      if (tx.isActive() == true) {
+        tx = null;
+        try {
+          hib = null;
+        } catch (Exception ex) {
+        }
+      }
     }
+
     return result;
 
-  }
-
-  /**
-   * @return the community_member_id
-   */
-  public String getCommunity_member_id() {
-    return community_member_id;
-  }
-
-  /**
-   * @param community_member_id the community_member_id to set
-   */
-  public void setCommunity_member_id(String community_member_id) {
-    this.community_member_id = community_member_id;
-  }
-
-  /**
-   * @return the community_id
-   */
-  public String getCommunity_id() {
-    return community_id;
-  }
-
-  /**
-   * @param community_id the community_id to set
-   */
-  public void setCommunity_id(String community_id) {
-    this.community_id = community_id;
-  }
-
-  /**
-   * @return the remoteIp
-   */
-  public String getRemoteIp() {
-    return remoteIp;
-  }
-
-  /**
-   * @param remoteIp the remoteIp to set
-   */
-  public void setRemoteIp(String remoteIp) {
-    this.remoteIp = remoteIp;
   }
 
   /**
@@ -410,20 +398,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the alias
-   */
-  public String getAlias() {
-    return alias;
-  }
-
-  /**
-   * @param alias the alias to set
-   */
-  public void setAlias(String alias) {
-    this.alias = alias;
-  }
-
-  /**
    * @return the isActive
    */
   public Integer getIsActive() {
@@ -438,31 +412,31 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the isCreator
+   * @return the remoteIp
    */
-  public Integer getIsCreator() {
-    return isCreator;
+  public String getRemoteIp() {
+    return remoteIp;
   }
 
   /**
-   * @param isCreator the isCreator to set
+   * @param remoteIp the remoteIp to set
    */
-  public void setIsCreator(Integer isCreator) {
-    this.isCreator = isCreator;
+  public void setRemoteIp(String remoteIp) {
+    this.remoteIp = remoteIp;
   }
 
   /**
-   * @return the email
+   * @return the community_id
    */
-  public String getEmail() {
-    return email;
+  public String getCommunity_id() {
+    return community_id;
   }
 
   /**
-   * @param email the email to set
+   * @param community_id the community_id to set
    */
-  public void setEmail(String email) {
-    this.email = email;
+  public void setCommunity_id(String community_id) {
+    this.community_id = community_id;
   }
 
   /**
@@ -480,6 +454,48 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   /**
+   * @return the alias
+   */
+  public String getAlias() {
+    return alias;
+  }
+
+  /**
+   * @param alias the alias to set
+   */
+  public void setAlias(String alias) {
+    this.alias = alias;
+  }
+
+  /**
+   * @return the isCreator
+   */
+  public Integer getIsCreator() {
+    return isCreator;
+  }
+
+  /**
+   * @param isCreator the isCreator to set
+   */
+  public void setIsCreator(Integer isCreator) {
+    this.isCreator = isCreator;
+  }
+
+  /**
+   * @return the existing_alternative
+   */
+  public List getExisting_member() {
+    return getExistingMemberList();
+  }
+
+  /**
+   * @param existing_alternative the existing_alternative to set
+   */
+  public void setExisting_member(Participant[] cm) {
+    this.setExisting_member(cm);
+  }
+
+  /**
    * @return the editWhichRecord
    */
   public String getEditWhichRecord() {
@@ -494,17 +510,17 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the existing_member
+   * @return the howManyRecords
    */
-  public Participant[] getExisting_member() {
-    return existing_member;
+  public Integer getHowManyRecords() {
+    return howManyRecords;
   }
 
   /**
-   * @param existing_member the existing_member to set
+   * @param howManyRecords the howManyRecords to set
    */
-  public void setExisting_member(Participant[] existing_member) {
-    this.existing_member = existing_member;
+  public void setHowManyRecords(Integer howManyRecords) {
+    this.howManyRecords = howManyRecords;
   }
 
   /**
@@ -592,17 +608,45 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the howManyRecords
+   * @return the participant_id
    */
-  public Integer getHowManyRecords() {
-    return howManyRecords;
+  public String getParticipant_id() {
+    return participant_id;
   }
 
   /**
-   * @param howManyRecords the howManyRecords to set
+   * @param participant_id the participant_id to set
    */
-  public void setHowManyRecords(Integer howManyRecords) {
-    this.howManyRecords = howManyRecords;
+  public void setParticipant_id(String participant_id) {
+    this.participant_id = participant_id;
+  }
+
+  /**
+   * @return the emailAlternative
+   */
+  public String getEmailAlternative() {
+    return emailAlternative;
+  }
+
+  /**
+   * @param emailAlternative the emailAlternative to set
+   */
+  public void setEmailAlternative(String emailAlternative) {
+    this.emailAlternative = emailAlternative;
+  }
+
+  /**
+   * @return the update_first_Name
+   */
+  public String getUpdate_first_Name() {
+    return update_first_Name;
+  }
+
+  /**
+   * @param update_first_Name the update_first_Name to set
+   */
+  public void setUpdate_first_Name(String update_first_Name) {
+    this.update_first_Name = update_first_Name;
   }
 
 }
