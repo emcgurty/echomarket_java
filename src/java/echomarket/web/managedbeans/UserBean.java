@@ -331,7 +331,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-public String loginUser() {
+  public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
 
@@ -382,7 +382,7 @@ public String loginUser() {
 
                   setEmail(uu.getEmail());
                   setUserAlias(uu.getUserAlias());
-                  setAction("current");
+//                  setAction("current");
                   setUsername(this.username);
                   setUserType(uu.getUserType());
                   setUser_id(uu.getUser_id());
@@ -429,7 +429,7 @@ public String loginUser() {
     return return_string;
   }
 
-private String findWhatIsComplete() {
+  private String findWhatIsComplete() {
 
     String return_string = "";
     String pid = null;
@@ -452,6 +452,7 @@ private String findWhatIsComplete() {
           setEditable(0);
           return_string = cpbean.load_ud(pid);
         } else {
+          setAction("current");
           this.editable = 0;
           if (this.userType.contains("borrow")) {
             return_string = ibean.load_ud("borrow", null);
@@ -464,6 +465,7 @@ private String findWhatIsComplete() {
               if (hasCompleteLIC.size() == 0) {
                 return_string = licibean.load_ud(this.participant_id);
               } else {
+
                 return_string = ibean.load_ud("lend", null);
               }
             }
