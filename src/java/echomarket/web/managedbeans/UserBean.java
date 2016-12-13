@@ -276,39 +276,62 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String processActivation() {
 
-    Boolean act_results = false;
-    Boolean query_results = false;
-    String return_string = null;
+    Boolean b_local_results = false;
+    Boolean activation_success = true;
     List results = null;
-    if (getResetCode() != null) {
-      act_results = ActivateUser();
-    }
-    if (act_results == true) {
-      results = verifyUserIsActivated();
-    }
-
-    if (results.size() == 1) {
-      query_results = validateUserPassword(results);
-    }
-
-    if (query_results == true) {
-      message(null, "ActivationSuccessful", new Object[]{this.username});
-      this.editable = -1;
-      Users uu = (Users) results.get(0);
-      setUser_id(uu.getUser_id());
-      setUserType(uu.getUser_id());
-      results = null;
-      return_string = pbean.load_ud("-1");
-
+    List accept_results = null;
+    Integer memberCreator = -9;
+    String return_string = null;
+    String holdResetCode = getResetCode();  // becuase if process fails, I will null all user values
+    results = findUserName();
+    if (results != null) {
+      if (results.size() == 0) {
+        message(null, "UserNameNotFound", new Object[]{this.username});
+        activation_success = false;
+      } else if (results.size() == 1) {
+        b_local_results = validateUserPassword(results);
+        if (b_local_results == false) {
+          message(null, "InvalidPassword", new Object[]{this.username});
+          activation_success = false;
+        } else if (b_local_results == true) {
+          b_local_results = ActivateUser();    /// returns true if database was updated with reset_code
+          if (b_local_results == false) {
+            activation_success = false;
+            message(null, "FailureToActivateUser", new Object[]{this.username});
+          } else {
+            // User is valid now needs to accept agreement
+            Users uu = (Users) results.get(0);  /// User result that has current user data
+            memberCreator = uu.getRoleId();
+            if (memberCreator == 1) {
+              setCurrentUserCommunityIdName(uu.getUser_id());
+            }
+            setRoleId(memberCreator);
+            setEmail(uu.getEmail());
+            setUserAlias(uu.getUserAlias());
+            setUsername(this.username);
+            setUserType(uu.getUserType());
+            setUser_id(uu.getUser_id());
+            results = null;
+            message(null, "ActivateSuccessful", new Object[]{this.username});
+          }
+        }
+      }
     } else {
-      results = null;
-      message(null, "ActivateFailed", null);
-      return_string = "login";
+      message(null, "UserNameNotFound", new Object[]{this.username});
+      activation_success = false;
     }
-    return return_string + "?faces-redirect=true";
+
+    if (activation_success == true) {
+      return_string = pbean.load_ud("-1");
+    } else {
+      setUserToNull();
+      return_string = "activate_user.xhtml?reset_code=" + holdResetCode;
+    }
+
+    return return_string;
   }
 
-  public String loginUser() {
+public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
 
@@ -321,7 +344,7 @@ public class UserBean extends AbstractBean implements Serializable {
     if (results != null) {
 
       if (results.size() == 0) {
-        message(null, "UserNameNotFoundOnDatabase", new Object[]{this.username});
+        message(null, "UserNameNotFound", new Object[]{this.username});
         this.username = null;
         return_string = "index";
       } else if (results.size() == 1) {
@@ -396,7 +419,7 @@ public class UserBean extends AbstractBean implements Serializable {
           }
 
         } else {  // Closes null findUserName
-          message(null, "UserNameNotFoundOnDatabase", new Object[]{this.username});
+          message(null, "UserNameNotFound", new Object[]{this.username});
           this.username = null;
           return_string = "index";
         }
@@ -406,7 +429,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-  private String findWhatIsComplete() {
+private String findWhatIsComplete() {
 
     String return_string = "";
     String pid = null;
@@ -669,7 +692,6 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = session.beginTransaction();
       results = session.createQuery(queryString).setParameter("rc", getResetCode()).list();
       tx.commit();
-      resultSuccess = true;
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -677,27 +699,25 @@ public class UserBean extends AbstractBean implements Serializable {
       session = null;
       tx = null;
     }
-    if (resultSuccess == true) {
-      if (results != null) {
-        if (results.size() == 1) {
-          try {
-            session = hib_session();
-            tx = session.beginTransaction();
-            users_Array = (Users) results.get(0);
-            users_Array.setActivatedAt(ndate);
-            users_Array.setResetCode(null);
-            session.update(users_Array);
-            tx.commit();
-            resultSuccess = true;
-          } catch (Exception ex) {
-            tx.rollback();
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-          } finally {
-            users_Array = null;
-            resultSuccess = true;
-            session = null;
-            tx = null;
-          }
+
+    if (results != null) {
+      if (results.size() == 1) {
+        try {
+          session = hib_session();
+          tx = session.beginTransaction();
+          users_Array = (Users) results.get(0);
+          users_Array.setActivatedAt(ndate);
+          users_Array.setResetCode(null);
+          session.update(users_Array);
+          tx.commit();
+          resultSuccess = true;
+        } catch (Exception ex) {
+          tx.rollback();
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+          users_Array = null;
+          session = null;
+          tx = null;
         }
       }
     }
