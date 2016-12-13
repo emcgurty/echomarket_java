@@ -19,7 +19,7 @@
             </div> 
             <div style="margin:10px;" >
                 <h:outputText value="You agreed to the following..." />
-                <h:commandLink  action="#{userBean.load_ud(-1)}"  class="right_div" value="Revise agreement"  />
+                <h:commandLink  action="#{participantBean.load_ud(-1)}"  class="right_div" value="Revise agreement"  />
             </div>
             <ui:include src="agreement_text.xhtml" rendered="true"  id="menuAgreement"  />
         </h:form>
