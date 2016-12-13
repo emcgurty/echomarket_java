@@ -51,6 +51,7 @@ public class Participant implements java.io.Serializable {
   private Set<Addresses> addresses = new HashSet<Addresses>();
   private Set<ContactPreference> contactPreference = new HashSet<ContactPreference>();
   private Set<Items> item = new HashSet<Items>();
+  private Integer rowIndex;
 
   public Participant() {
   }
@@ -103,7 +104,7 @@ public class Participant implements java.io.Serializable {
   }
   
   /// Community Members
-   public Participant(String participant_id, String communityId, String userId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Date dateCreated, Date dateUpdated, Integer isCreator) {
+   public Participant(String participant_id, String communityId, String userId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Integer editable, Date dateCreated, Date dateUpdated, Integer rowIndex, Integer goodwill, Integer age18OrMore) {
         this.participant_id = participant_id;
         this.communityId = communityId;
         this.remoteIp = remoteIp;
@@ -112,10 +113,13 @@ public class Participant implements java.io.Serializable {
         this.lastName = lastName;
         this.alias = alias;
         this.isActive = isActive;
+        this.editable = editable;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateUpdated;
-        this.isCreator = isCreator;
+        this.rowIndex = rowIndex;
         this.userId = userId;
+        this.age18OrMore = age18OrMore;
+        this.goodwill = goodwill;
     }
 
 
@@ -456,6 +460,20 @@ public class Participant implements java.io.Serializable {
    */
   public void setItem(Set<Items> item) {
     this.item = item;
+  }
+
+  /**
+   * @return the rowIndex
+   */
+  public Integer getRowIndex() {
+    return rowIndex;
+  }
+
+  /**
+   * @param rowIndex the rowIndex to set
+   */
+  public void setRowIndex(Integer rowIndex) {
+    this.rowIndex = rowIndex;
   }
 
 }
