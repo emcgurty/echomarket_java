@@ -308,7 +308,8 @@ public class UserBean extends AbstractBean implements Serializable {
             Users uu = (Users) results.get(0);  /// User result that has current user data
             memberCreator = uu.getRoleId();
             if (memberCreator == 1) {
-              setCurrentUserCommunityIdName(uu.getUser_id());
+              setCurrentUserCommunityId(uu.getUser_id());
+              setCommunityName(uu.getCommunityName());
             }
             setRoleId(memberCreator);
             setEmail(uu.getEmail());
@@ -382,12 +383,12 @@ public class UserBean extends AbstractBean implements Serializable {
                   Users uu = (Users) results.get(0);  /// User result that has current user data
                   memberCreator = uu.getRoleId();
                   if (memberCreator == 1) {
-                    setCurrentUserCommunityIdName(uu.getUser_id());
+                    setCurrentUserCommunityId(uu.getUser_id());
+                    setCommunityName(uu.getCommunityName());
                   }
 
                   setEmail(uu.getEmail());
                   setUserAlias(uu.getUserAlias());
-//                  setAction("current");
                   setUsername(this.username);
                   setUserType(uu.getUserType());
                   setUser_id(uu.getUser_id());
@@ -520,7 +521,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-  private void setCurrentUserCommunityIdName(String uid) {
+  private void setCurrentUserCommunityId(String uid) {
     List results = null;
     Session hib = null;
     Transaction tx = null;
