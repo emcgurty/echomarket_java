@@ -36,24 +36,24 @@
           </div>    
           <div style="float:left;margin:15px;margin-top:10px;" >
             <h:outputText value="View, Update, or Add Members..." style="color:black;font-weight:bold;"/>
-            <br /><br />
+            
             <c:if test="#{communityMembersBean.editable != 3}" >
-              <h:outputText value="To add, please entered the number of New Members and then click 'Add Member'..." style="color:indigo;font-weight:normal;"/>
-              <br />
-              <h:outputText value="Members with the same first name, last name and alias are considered duplicates. Distinguish a parent and child with the same name by their alias" style="color:indigo;font-weight:normal;"/>
-              <br />
-              <h:outputLabel for="howManyRecords" value="Number of new members? Please enter a value between 1 and 25." style="color:crimson;font-weight:normal;" >
-                <h:inputText id="howManyRecords"  value="#{communityMembersBean.howManyRecords}"  style="margin-left:5px;" maxlength="2" >
+              <br /><br />
+               <h:outputLabel for="howManyRecords" value="How many new members would you like to add?"><span id="newRange" style="margin-left: 10px;margin-right:10px;font-size: small;">Please enter a value between 1 and 25.</span>
+                <h:inputText id="howManyRecords"  value="#{communityMembersBean.howManyRecords}"  style="margin-left:5px;" maxlength="2" size="3" >
                 </h:inputText>   
               </h:outputLabel>
+              <h:commandLink value="Add Member(s)" action="#{communityMembersBean.addAction()}"  style="margin-left:15px;"/>    
               <span class="error-message" id="howManyRecords" ></span>
-              <br />
-              <h:commandLink value="Add Member" action="#{communityMembersBean.addAction()}"  style="margin-left:15px;"/>    
             </c:if>
             <c:if test="#{communityMembersBean.editable == 3}" >
-              <h:outputText value="Adding Member...Each field is required." />
-              <br />
-              <h:outputText value="Incomplete rows will be ignored." />    
+              <ul style="margin-left:5px;margin-bottom:5px;color:maroon;">
+                <li>All fields are required.</li>
+                <li>New members will receive email notification to complete the EchoMarket registration process.</li>
+                <li>Members with the same first name, last name and alias are considered duplicates. Distinguish folks with the same name by their aliases.</li>
+                <li>Incomplete rows will not be saved.</li>
+              </ul>
+              
               <h:commandLink value="Save New Member(s)" action="#{communityMembersBean.saveAction()}" style="margin-left: 5px;" />    
             </c:if>
           </div> 
@@ -70,11 +70,10 @@
                     <h:outputText value="Designated Community Creators" />
                 </f:facet>
 
+          
           <h:column >
             <f:facet name="header" >First Name</f:facet>
             <h:outputText value="#{creator.firstName}"  />
-
-
           </h:column>
           <h:column>
             <f:facet name="header">Last Name</f:facet>
@@ -100,9 +99,8 @@
 
           </h:column>
         </h:dataTable>
-
-        <h:dataTable value="#{communityMembersBean.buildCommunityMembersList()}" id="member" var="member" 
-
+        
+        <h:dataTable value="#{communityMembersBean.existing_member}" id="existing_member" var="member" 
                      styleClass="member-table"
                      headerClass="member-table-header"
                      rowClasses="member-table-odd-row,member-table-even-row"
@@ -111,29 +109,33 @@
                      >
            <f:facet name="header">
                     <h:outputText value="Community Members" />
-             </f:facet>
+          </f:facet>
 
+          <h:column >
+            <f:facet name="header" >Member</f:facet>
+            <h:outputText value="#{member.rowIndex + 1}"  />
+          </h:column>
 
           <h:column >
             <f:facet name="header" >First Name</f:facet>
             <h:outputText value="#{member.firstName}" rendered="#{member.editable == 0}" />
-            <h:inputText id="update_first_Name" value="#{communityMembersBean.firstName}" rendered="#{member.editable == 1}" />
+            <h:inputText id="firstName" value="#{communityMembersBean.firstName}" rendered="#{member.editable == 1}" />
           </h:column>
           <h:column>
             <f:facet name="header">Last Name</f:facet>
             <h:outputText value="#{member.lastName}" rendered="#{member.editable == 0}" />
-            <h:inputText value="#{member.lastName}" rendered="#{member.editable == 1}" />
+            <h:inputText id="lastName" value="#{communityMembersBean.lastName}" rendered="#{member.editable == 1}" />
 
           </h:column>
           <h:column>
             <f:facet name="header">Alias</f:facet>
             <h:outputText value="#{member.alias}" rendered="#{member.editable == 0}" />
-            <h:inputText value="#{member.alias}" rendered="#{member.editable == 1}" />
+            <h:inputText id="alias" value="#{communityMembersBean.alias}" rendered="#{member.editable == 1}" />
           </h:column>
           <h:column>
             <f:facet name="header">Email</f:facet>
             <h:outputText value="#{member.emailAlternative}" rendered="#{member.editable == 0}" />
-            <h:inputText value="#{member.emailAlternative}" rendered="#{member.editable == 1}" 
+            <h:inputText id="emailAlternative" value="#{communityMembersBean.emailAlternative}" rendered="#{member.editable == 1}" 
                          size="16"
                          required="true"
                          requiredMessage="#{bundle.ReqEmail}"
@@ -165,35 +167,32 @@
               <f:selectItem itemValue="0" itemLabel="No?" />	
             </h:selectOneRadio>    
 
-          </h:column>
+          </h:column  >
 
-          <h:column>
+          <h:column rendered="#{member.editable == 0}">
             <f:facet name="header">Completed Registration?</f:facet>
             <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.goodwill == 1)  and (member.age18OrMore == 1)}" />
             <h:outputText value="No" style="color: red; font-weight: bold;" rendered="#{(member.goodwill == 0)  and (member.age18OrMore == 0)}" />
           </h:column>
 
-          <h:column>
+          <h:column rendered="#{member.editable == 0}">
             <f:facet name="header">Date Created</f:facet>
             <!--  Eventually want to sort by date created, or toggle between date created, date updated.<h:commandLink value="#{member.dateCreated}" action="" style="color: green; font-weight: lighter;" />-->
             <h:outputText value="#{member.dateCreated}" style="color: green; font-weight: lighter;" />                       
-
           </h:column>
 
 
           <h:column>
             <f:facet name="header">Action</f:facet>
             <h:commandLink value="Edit" action="#{communityMembersBean.editAction(member)}" rendered="#{member.editable == 0}" />
-            <h:commandLink value="Update" action="#{communityMembersBean.updateAction()}" rendered="#{member.editable == 1}" />
+            <h:commandLink value="Update" action="#{communityMembersBean.updateAction(member.rowIndex)}" rendered="#{member.editable == 1}" />
             <h:outputText value=" | " style="color: green; font-weight: lighter;" rendered="#{member.editable == 1}" />
             <h:commandLink value="Cancel" action="#{communityMembersBean.cancelAction(member)}" rendered="#{member.editable == 1}" />
             <br />
-
-
           </h:column>
         </h:dataTable>
 
-        <h:dataTable value="#{communityMembersBean.existing_member}" id="new_rows" var="new" 
+        <h:dataTable value="#{communityMembersBean.new_member}" id="new_member" var="new" 
                      styleClass="member-table"
                      headerClass="member-table-header"
                      rowClasses="member-table-odd-row,member-table-even-row"
@@ -203,7 +202,12 @@
 
            <f:facet name="header">
                     <h:outputText value="New Community Members" />
-                </f:facet>
+          </f:facet>
+          
+          <h:column >
+            <f:facet name="header" >Member</f:facet>
+            <h:outputText value="#{new.rowIndex + 1}"  />
+          </h:column>
           <h:column >
             <f:facet name="header" >First Name</f:facet>
             <h:inputText id="firstName" value="#{new.firstName}"  />
