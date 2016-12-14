@@ -36,14 +36,13 @@
           </div>    
           <div style="float:left;margin:15px;margin-top:10px;" >
             <h:outputText value="View, Update, or Add Members..." style="color:black;font-weight:bold;"/>
-            
+
             <c:if test="#{communityMembersBean.editable != 3}" >
               <br /><br />
-               <h:outputLabel for="howManyRecords" value="How many new members would you like to add?"><span id="newRange" style="margin-left: 10px;margin-right:10px;font-size: small;">Please enter a value between 1 and 25.</span>
+              <h:outputLabel for="howManyRecords" value="How many new members would you like to add?"><span id="newRange" style="margin-left: 10px;margin-right:10px;font-size: small;">Please enter a value between 1 and 25.</span>
                 <h:inputText id="howManyRecords"  value="#{communityMembersBean.howManyRecords}"  style="margin-left:5px;" maxlength="2" size="3" >
                 </h:inputText>   
               </h:outputLabel>
-              <h:commandLink value="Add Member(s)" action="#{communityMembersBean.addAction()}"  style="margin-left:15px;"/>    
               <span class="error-message" id="howManyRecords" ></span>
             </c:if>
             <c:if test="#{communityMembersBean.editable == 3}" >
@@ -53,8 +52,6 @@
                 <li>Members with the same first name, last name and alias are considered duplicates. Distinguish folks with the same name by their aliases.</li>
                 <li>Incomplete rows will not be saved.</li>
               </ul>
-              
-              <h:commandLink value="Save New Member(s)" action="#{communityMembersBean.saveAction()}" style="margin-left: 5px;" />    
             </c:if>
           </div> 
         </div> 
@@ -70,7 +67,7 @@
                     <h:outputText value="Designated Community Creators" />
                 </f:facet>
 
-          
+
           <h:column >
             <f:facet name="header" >First Name</f:facet>
             <h:outputText value="#{creator.firstName}"  />
@@ -99,7 +96,7 @@
 
           </h:column>
         </h:dataTable>
-        
+
         <h:dataTable value="#{communityMembersBean.existing_member}" id="existing_member" var="member" 
                      styleClass="member-table"
                      headerClass="member-table-header"
@@ -108,7 +105,8 @@
 
                      >
            <f:facet name="header">
-                    <h:outputText value="Community Members" />
+            <h:outputText value="Community Members" />
+
           </f:facet>
 
           <h:column >
@@ -201,9 +199,10 @@
                      >
 
            <f:facet name="header">
-                    <h:outputText value="New Community Members" />
+            <h:outputText value="New Community Members" />
+
           </f:facet>
-          
+
           <h:column >
             <f:facet name="header" >Member</f:facet>
             <h:outputText value="#{new.rowIndex + 1}"  />
@@ -228,10 +227,13 @@
                          size="16"
                          value="#{new.emailAlternative}"
                          >
-
             </h:inputText>
             <br />
             <span class="error-message" id="email#{new.rowIndex}}" ></span>
+          </h:column>
+          <h:column rendered="#{new.editable == 0}">
+            <f:facet name="header">Notification Sent</f:facet>
+            <h:outputText value="hold" />
           </h:column>
           <h:column>
             <f:facet name="header">Is Active?</f:facet>
@@ -247,6 +249,14 @@
               <f:selectItem itemValue="0" itemLabel="No?" />	
             </h:selectOneRadio>    
           </h:column>
+          <h:column>
+            <f:facet name="header">Action</f:facet>
+            <h:commandLink value="Save" action="#{communityMembersBean.actionSaveMember(new.rowIndex)}" rendered="#{new.editable == 1}" />
+            <h:commandLink value="Update" action="#{communityMembersBean.actionUpdateMember(new.rowIndex)}" rendered="#{new.editable == 0}" />
+            <h:outputText value=" | " style="color: green; font-weight: lighter;" rendered="#{new.editable == 0}" />
+            <h:commandLink value="Cancel" action="#{communityMembersBean.cancelAction(new)}" rendered="#{member.editable == 0}" />
+            <br />
+          </h:column>  
         </h:dataTable>
 
       </h:form>
