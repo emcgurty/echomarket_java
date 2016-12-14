@@ -143,7 +143,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.lastName = cmid.getLastName();
     this.alias = cmid.getAlias();
     this.emailAlternative = cmid.getEmailAlternative();
-    
+
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -288,9 +288,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.new_comm_member_rows = new_comm_member_rows;
   }
 
-
 //return "community_members.xhtml?faces-redirect=true";
-public List buildCommunityMemberCreators() {
+  public List buildCommunityMemberCreators() {
     Session hib = hib_session();
     Transaction tx = hib.beginTransaction();
     String queryString = null;
@@ -303,9 +302,7 @@ public List buildCommunityMemberCreators() {
               .list();
       tx.commit();
 
-    
-
-} catch (Exception ex) {
+    } catch (Exception ex) {
       Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
       System.out.println("ERROR IN build Community Member list");
       System.out.println(ex);
@@ -341,12 +338,9 @@ public List buildCommunityMemberCreators() {
               .list();
       tx.commit();
 
-    
-
-} catch (Exception ex) {
+    } catch (Exception ex) {
       Logger.getLogger(CommunityMembersBean.class
-
-.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+              .getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
       System.out.println("ERROR IN build Community Member list");
       System.out.println(ex);
 
@@ -482,7 +476,6 @@ public List buildCommunityMemberCreators() {
     return isCreator;
   }
 
-
   public void setIsCreator(Integer isCreator) {
     this.isCreator = isCreator;
   }
@@ -543,4 +536,39 @@ public List buildCommunityMemberCreators() {
     this.emailAlternative = emailAlternative;
   }
 
+  private Boolean checkForDuplicate() {
+
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    List result = null;
+    Boolean isDuplicate = false;
+
+    queryString = " FROM Participant where community_id = :cid AND firstName = :fn AND lastName = :ln AND alias = :al";
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      result = hib.createQuery(queryString)
+              .setParameter("cid", ubean.getCommunityId())
+              .setParameter("fn", this.firstName)
+              .setParameter("ln", this.lastName)
+              .setParameter("al", this.alias)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    if (result.size() > 0) {
+      result = null;
+      return true;
+    } else {
+      result = null;
+      return false;
+    }
+
+  }
 }
