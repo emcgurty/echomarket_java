@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
@@ -19,7 +19,9 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "communityMembersBean")
-@RequestScoped
+
+////// Had to change to Session becuase interactive form.
+@SessionScoped
 public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   @Inject
@@ -41,6 +43,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private ArrayList<Participant> new_comm_member_rows;
   private ArrayList<Participant> comm_member_rows;
   private Integer howManyRecords;
+  private String errorMessage;
 
   private List getNewMemberList() {
     // TO DO: Need to code for when getHowMany = 0... May be not
@@ -48,12 +51,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Integer howMany = getHowManyRecords();
     Participant new_cm;
     for (int i = 0; i < howMany; i++) {
-      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0);
+      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
       comm_member.add(new_cm);
     }
-    this.comm_member_rows = comm_member;
+    this.new_comm_member_rows = comm_member;
     return comm_member;
-
   }
 
   public String load_community_members() {  // editable = 0
@@ -159,30 +161,37 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public void addAction() {
-    this.editable = 3;
+    if (this.howManyRecords > 0 && this.howManyRecords < 26) {
+      this.setErrorMessage("");
+      this.editable = 3;
+    } else {
+      this.setErrorMessage("Please provide a value between 1 and 25");
+    }
+    
   }
-
+  
   public void actionSaveMember(Integer whichRow) {
 
     Session hib = null;
     Transaction tx = null;
     List new_rows = getNew_comm_member_rows();
     Participant cm = (Participant) new_rows.get(whichRow);
-    if (cm.getAlias() != null && cm.getFirstName() != null && cm.getLastName() != null) {
-      if (checkForDuplicate() == false) {
+    if (this.firstName != null && this.lastName != null && this.alias != null) {
+       if (checkForDuplicate() == false) {
         cm.setEditable(0);
         cm.setFirstName(firstName);
         cm.setLastName(lastName);
         cm.setEmailAlternative(emailAlternative);
         cm.setAlias(alias);
-
+        cm.setIsCreator(isCreator);
+        cm.setIsActive(isActive);
+        
         try {
           hib = hib_session();
           tx = hib.beginTransaction();
           hib.update(cm);
           tx.commit();
-          this.editable = 0;
-          System.out.println("COMMUNITY MEMBER UPDATED");
+          System.out.println("COMMUNITY MEMBER Saved");
         } catch (Exception ex) {
           tx.rollback();
           Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
@@ -201,6 +210,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Participant cm = (Participant) new_rows.get(whichRow);
 
     if (cm.getAlias() != null && cm.getFirstName() != null && cm.getLastName() != null) {
+      this.lastName = cm.getLastName();
+      this.firstName = cm.getFirstName();
+      this.alias = cm.getAlias();
       if (checkForDuplicate() == false) {
         cm.setEditable(1);
         cm.setFirstName(firstName);
@@ -226,7 +238,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     }
 
   }
- 
+
   public void cancelAction(Participant cmid) {
 
     Session hib = null;
@@ -258,20 +270,22 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     }
   }
 
-  public void updateAction(Integer whichRow) {  /// For existing member
+  public void updateAction(Integer whichRow) {  /// For existing member: This works
 
     Session hib = null;
     Transaction tx = null;
     List new_rows = getComm_member_rows();
     Participant cm = (Participant) new_rows.get(whichRow);
 
-    if (cm.getAlias() != null && cm.getFirstName() != null && cm.getLastName() != null) {
+    if (this.firstName != null && this.lastName != null && this.alias != null) {
       if (checkForDuplicate() == false) {
         cm.setEditable(0);
         cm.setFirstName(firstName);
         cm.setLastName(lastName);
         cm.setEmailAlternative(emailAlternative);
         cm.setAlias(alias);
+        cm.setIsCreator(isCreator);
+        cm.setIsActive(isActive);
 
         try {
           hib = hib_session();
@@ -332,7 +346,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public List getExistingMemberList() {
+  private List getExistingMemberList() {
 
     Session hib = null;
     Transaction tx = null;
@@ -362,11 +376,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Participant existing_cm;
     for (int i = 0; i < result.size(); i++) {
       Participant pp = (Participant) result.get(i);
-      existing_cm = new Participant(pp.getParticipant_id(), pp.getCommunityId(), pp.getUserId(), "NA", pp.getFirstName(), pp.getMi(), pp.getLastName(), pp.getAlias(), pp.getIsActive(), pp.getEditable(), pp.getDateCreated(), pp.getDateUpdated(), i, pp.getGoodwill(), pp.getAge18OrMore());
+      existing_cm = new Participant(pp.getParticipant_id(), pp.getCommunityId(), pp.getUserId(), "NA", pp.getFirstName(), pp.getMi(), pp.getLastName(), pp.getAlias(), pp.getIsActive(), pp.getEditable(), pp.getDateCreated(), pp.getDateUpdated(), i, pp.getGoodwill(), pp.getAge18OrMore(), pp.getEmailAlternative(), pp.getIsCreator());
       comm_member.add(existing_cm);
     }
-    this.new_comm_member_rows = comm_member;
-    return new_comm_member_rows;
+    this.comm_member_rows = comm_member;
+    return comm_member_rows;
 
   }
 
@@ -530,5 +544,19 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       result = null;
       return false;
     }
+  }
+
+  /**
+   * @return the errorMessage
+   */
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+
+  /**
+   * @param errorMessage the errorMessage to set
+   */
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
   }
 }
