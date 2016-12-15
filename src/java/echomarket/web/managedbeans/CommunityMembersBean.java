@@ -68,7 +68,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
     for (int i = 0; i < new_rows.size(); i++) {
       cm = (Participant) new_rows.get(i);
-      if (cm.getAlias() != null && cm.getFirstName() != null && cm.getLastName() != null) {
+      if ((cm.getAlias().isEmpty() == false) && (cm.getFirstName().isEmpty() == false) && (cm.getLastName().isEmpty() == false)) {
         this.firstName = cm.getFirstName();
         this.lastName = cm.getLastName();
         this.alias = cm.getAlias();
@@ -135,11 +135,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       Session hib = null;
       Transaction tx = null;
       String queryString = null;
-      
       queryString = "FROM Participant where community_id = :cid";
       try {
         hib = hib_session();
-      tx = hib.beginTransaction();
+        tx = hib.beginTransaction();
         result = hib.createQuery(queryString)
                 .setParameter("cid", ubean.getCommunityId())
                 .list();
@@ -170,7 +169,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void editAction(Participant cmid) {
     this.errorMessage = null;
     if (this.currentRow > -1) {
-      cancelAction(comm_member_rows.get(this.currentRow ));
+      cancelAction(comm_member_rows.get(this.currentRow));
       this.currentRow = -1;
     }
     Session hib = null;
@@ -181,6 +180,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.lastName = cmid.getLastName();
     this.alias = cmid.getAlias();
     this.emailAlternative = cmid.getEmailAlternative();
+    this.isActive = cmid.getIsActive();
+    this.isCreator = cmid.getIsCreator();
     this.editable = 1;
 
     try {
@@ -200,8 +201,18 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     }
   }
 
+  public void actionReturn() {
+    this.editable = 0;
+
+  }
+
   public void addAction() {
+
     if (this.howManyRecords > 0 && this.howManyRecords < 26) {
+      if (this.currentRow > -1) {
+        cancelAction(comm_member_rows.get(this.currentRow));
+        this.currentRow = -1;
+      }
       this.setErrorMessage("");
       this.editable = 3;
 
@@ -217,7 +228,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     List new_rows = getNew_comm_member_rows();
     Participant cm = (Participant) new_rows.get(whichRow);
-    if (this.firstName != null && this.lastName != null && this.alias != null) {
+    if ((this.firstName.isEmpty() == false) && (this.lastName.isEmpty() == false) && (this.alias.isEmpty() == false)) {
       if (checkForDuplicate() == false) {
         cm.setEditable(0);
         cm.setFirstName(firstName);
@@ -251,7 +262,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     List new_rows = getNew_comm_member_rows();
     Participant cm = (Participant) new_rows.get(whichRow);
 
-    if (cm.getAlias() != null && cm.getFirstName() != null && cm.getLastName() != null) {
+    if ((cm.getAlias().isEmpty() == false) && (cm.getFirstName().isEmpty() == false) && (cm.getLastName().isEmpty() == false)) {
       this.lastName = cm.getLastName();
       this.firstName = cm.getFirstName();
       this.alias = cm.getAlias();
@@ -325,7 +336,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Participant cm = (Participant) new_rows.get(whichRow);
     Boolean foundDuplicate = false;
 
-    if (this.firstName != null && this.lastName != null && this.alias != null) {
+    if ((this.firstName.isEmpty() == false) && (this.lastName.isEmpty() == false) && (this.alias.isEmpty() == false)) {
 
       for (int i = 0; i < new_rows.size(); i++) {
         if (i != whichRow) {
@@ -374,7 +385,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void setNew_comm_member_rows(ArrayList<Participant> new_comm_member_rows) {
     this.new_comm_member_rows = new_comm_member_rows;
   }
-
 
   public List buildCommunityMemberCreators() {
     Session hib = hib_session();
