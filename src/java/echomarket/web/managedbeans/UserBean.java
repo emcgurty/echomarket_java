@@ -838,7 +838,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  private String[] getApplicationEmail() {
+  protected String[] getApplicationEmail() {
 
     Session hib = null;
     Transaction tx = null;
@@ -1331,24 +1331,17 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       System.out.println("Error in sendActivationEmail");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    try {
-      results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
-      tx.commit();
-      a_array = (Map) results.get(0);
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error in sendActivationEmail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
     }
 
+    String[] getMap = new String[2];
+    getMap = getApplicationEmail();
+
     try {
       if (this.communityName == null) {
-        SendEmail se = new SendEmail("registration", username, userAlias, email, a_array.getKeyText(), a_array.getValueText(), password, resetCodeString);
+        SendEmail se = new SendEmail("registration", username, userAlias, email, getMap[0], getMap[1], password, resetCodeString);
         se = null;
       } else {
         SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKeyText(), a_array.getValueText(), this.password, resetCodeString);
