@@ -36,8 +36,10 @@
 
         <div  class="div_p" id="menu_item_3" >
           <div style="margin:10px;" >
-            <h:outputText value="Item Transfer Preferences from Lender to Borrowers..." />
-            <a href="#menu_item_4" class="right_div" onclick="showBorrowerToLender()();">Continue to 'Transfer: Borrower Return to Lender'</a>
+            <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Lending Conditions'" >
+              <f:param name="action" value="edit" />
+            </h:commandLink>
+            
           </div>
         </div>
 

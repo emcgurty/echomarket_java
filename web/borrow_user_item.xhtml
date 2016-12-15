@@ -23,7 +23,7 @@
           <h:messages showSummary="true" 
                       showDetail="false"
                       errorStyle="color: #d20005" 
-                      infoStyle="color: blue"/>
+                      infoStyle="color: indigo"/>
         </div>
 
         <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_item" ></ui:include>  
@@ -91,7 +91,8 @@
                 <h:outputLabel value="#{bundle.BasedOnB}"  for="notify" >
                   <h:selectOneRadio id="notify" value="#{itemBean.notify}"   rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
-                    <f:selectItem itemValue="0" itemLabel="No" />	
+                    <f:selectItem itemValue="0" itemLabel="No" />
+
                   </h:selectOneRadio>    
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
@@ -102,7 +103,7 @@
                         <c:set var="cbe" value="Yes"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="No preference provided"/>
+                        <c:set var="cbe" value="Indifferent"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="notifyString"   value="#{cbe}" class="RO_text" />

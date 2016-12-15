@@ -28,11 +28,13 @@
 
           <div style="margin:10px;" >
             <h:outputText value="Initial Contact Preferences" />
-            <h:commandLink  action="#{userBean.editBH()}"  class="right_div" value="Continue to 'Borrowing History'"  />
+            <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'"  >
+              <f:param name="action" value="edit" />
+            </h:commandLink>
           </div>
-        
+
           <div class="message.color">
-             <h:messages showSummary="true" 
+            <h:messages showSummary="true" 
                         showDetail="false"
                         errorStyle="color: #d20005" 
                         infoStyle="color: indigo"/>
@@ -128,16 +130,8 @@
             <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
               <h:selectOneRadio id="contactByEmail" value="#{contactPreferenceBean.contactByEmail}"  rendered="#{userBean.editable == 1}" >
                 <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
-                <c:set var="udae"  value="#{participantBean.getUserDefinedAlternativeEmail(userBean.user_id)}" />
-                <c:choose>
-                  <c:when test="#{udae == null}">
-                    <c:set var="cbe" value="Not provided"/>
-                  </c:when>
-                  <c:when test="#{udae != null}">
-                    <c:set var="cbe" value="#{udae}"/>
-                  </c:when>
-                </c:choose>    
-                <f:selectItem itemValue="2" itemLabel="Your alternative email. (#{cbe})" />	
+                <c:set var="udae" scope="view" value="${participantBean.getUserDefinedAlternativeEmail(userBean.user_id)}" />
+                <f:selectItem itemValue="2" itemLabel="Your alternative email. (${udae})" />	
                 <f:selectItem itemValue="1" itemLabel="Either Email." />
                 <f:selectItem itemValue="0" itemLabel="Neither Email." />	
               </h:selectOneRadio>    
@@ -202,7 +196,7 @@
               <h:selectOneRadio id="contactByCellPhone" value="#{contactPreferenceBean.contactByCellPhone}"  rendered="#{userBean.editable == 1}">
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
-                
+
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>
@@ -226,7 +220,7 @@
               <h:selectOneRadio id="contactByAlternativePhone" value="#{contactPreferenceBean.contactByAlternativePhone}"  rendered="#{userBean.editable == 1}"  >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
-                
+
               </h:selectOneRadio>    
               <c:if test="#{userBean.editable == 0}" >
                 <c:choose>

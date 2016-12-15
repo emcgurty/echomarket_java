@@ -99,13 +99,14 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     String queryString = null;
     List result = null;
     Boolean isCreatorRights = false;
-    queryString = "FROM Participant where community_id = :cid AND is_creator = 1";
+    queryString = "FROM Participant where community_id = :cid AND is_creator = 1 AND user_id = :uid ";
 
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("cid", ubean.getCommunityId())
+              .setParameter("uid", ubean.getUser_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -174,6 +175,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.alias = cmid.getAlias();
     this.emailAlternative = cmid.getEmailAlternative();
     this.editable = 1;
+
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -365,6 +367,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.new_comm_member_rows = new_comm_member_rows;
   }
 
+
   public List buildCommunityMemberCreators() {
     Session hib = hib_session();
     Transaction tx = hib.beginTransaction();
@@ -379,6 +382,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       tx.commit();
 
     } catch (Exception ex) {
+      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
       System.out.println("ERROR IN build Community Member list");
       Logger.getLogger(CommunityMembersBean.class.getName())
               .log(Level.SEVERE, "ERROR IN build Community Member list", ex);
@@ -405,6 +409,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
               .setParameter("cid", ubean.getCommunityId())
               .list();
       tx.commit();
+
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(CommunityMembersBean.class.getName())
@@ -419,7 +424,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Participant existing_cm;
     for (int i = 0; i < result.size(); i++) {
       Participant pp = (Participant) result.get(i);
-//      pp.setEditable(0);
       existing_cm = new Participant(pp.getParticipant_id(), pp.getCommunityId(), pp.getUserId(), "NA", pp.getFirstName(), pp.getMi(), pp.getLastName(), pp.getAlias(), pp.getIsActive(), pp.getEditable(), pp.getDateCreated(), pp.getDateUpdated(), i, pp.getGoodwill(), pp.getAge18OrMore(), pp.getEmailAlternative(), pp.getIsCreator());
       comm_member.add(existing_cm);
     }
@@ -562,7 +566,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     String queryString = null;
     List result = null;
-
     queryString = " FROM Participant where community_id = :cid AND firstName = :fn AND lastName = :ln AND alias = :al";
     try {
       hib = hib_session();
@@ -579,6 +582,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       Logger
               .getLogger(CommunityMembersBean.class
                       .getName()).log(Level.SEVERE, null, ex);
+
     } finally {
       tx = null;
       hib = null;
