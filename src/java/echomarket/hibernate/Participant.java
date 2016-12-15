@@ -75,7 +75,6 @@ public class Participant implements java.io.Serializable {
     this.approved = 1;
   }
   // Update 
-
   public Participant(String participant_id, String userId, Integer contactDescribeId, String organizationName, Integer displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, Integer displayName, Integer displayAddress, String homePhone, String cellPhone,
           String alternativePhone, String emailAlternative, Integer displayHomePhone, Integer displayCellPhone, Integer displayAlternativePhone, Integer displayAlternativeAddress, String remoteIp) {
     this.participant_id = participant_id;
@@ -104,7 +103,7 @@ public class Participant implements java.io.Serializable {
   }
   
   /// Community Members
-   public Participant(String participant_id, String communityId, String userId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Integer editable, Date dateCreated, Date dateUpdated, Integer rowIndex, Integer goodwill, Integer age18OrMore) {
+   public Participant(String participant_id, String communityId, String userId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Integer editable, Date dateCreated, Date dateUpdated, Integer rowIndex, Integer goodwill, Integer age18OrMore, String emailAlternative, Integer isCreator) {
         this.participant_id = participant_id;
         this.communityId = communityId;
         this.remoteIp = remoteIp;
@@ -120,6 +119,8 @@ public class Participant implements java.io.Serializable {
         this.userId = userId;
         this.age18OrMore = age18OrMore;
         this.goodwill = goodwill;
+        this.emailAlternative = emailAlternative;
+        this.isCreator = isCreator;
     }
 
 
