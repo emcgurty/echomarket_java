@@ -57,6 +57,7 @@
             </ul>
             <br />
             <h:commandLink value="Save New Member(s)" action="#{communityMembersBean.actionSave()}"  style="font-size: large" />
+            <h:commandLink value="Return to Current Members listing" action="#{communityMembersBean.actionReturn()}"  class="right_div" style="font-size: large" />
           </c:if>
         </div> 
       </div> 
@@ -251,13 +252,7 @@
             <f:selectItem itemValue="0" itemLabel="No?" />	
           </h:selectOneRadio>    
         </h:column>
-        <h:column>
-          <f:facet name="header">Action</f:facet>
-          <h:commandLink value="Save" action="#{communityMembersBean.actionSaveMember(new.rowIndex)}" rendered="#{new.editable == 1}"  />
-          <h:commandLink value="Update" action="#{communityMembersBean.actionUpdateMember(new.rowIndex)}" rendered="#{new.editable == 0}" />
-          <h:outputText value=" | " style="color: green; font-weight: lighter;" rendered="#{new.editable == 0}" />
-          <h:commandLink value="Cancel" action="#{communityMembersBean.cancelAction(new)}" rendered="#{member.editable == 0}" immediate="true"/>
-        </h:column>  
+        
       </h:dataTable>
 
     </h:form>
