@@ -112,10 +112,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
               getMap = null;
             }
             if (savedRecord == true) {
-              if (new_row_size == 1)
-              this.errorMessage = "Your new memeber has been saved to your Community and an email notication was sent to him/her";
-              else 
-              this.errorMessage = "New Member(s) have been saved to your Community and an email notication was sent to them";  
+              if (new_row_size == 1) {
+              message(null, "Your new memeber has been saved to your Community and an email notication was sent to him/her", null);
+              } else {
+              message(null, "New Member(s) have been saved to your Community and an email notication was sent to them",  null);  
+              }
             }
           }
         }
