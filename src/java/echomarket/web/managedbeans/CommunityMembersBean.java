@@ -19,8 +19,7 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "communityMembersBean")
-
-////// Had to change to Session becuase interactive form.
+/// Had to change to Session becuase interactive form.
 @SessionScoped
 public class CommunityMembersBean extends AbstractBean implements Serializable {
 
@@ -46,7 +45,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private String errorMessage;
 
   private List getNewMemberList() {
-    // TO DO: Need to code for when getHowMany = 0... May be not
+    this.errorMessage = null;
+    // TO DO: Need to code for when getHowMany = 0... Managed in addAction()
     ArrayList<Participant> comm_member = new ArrayList<Participant>();
     Integer howMany = getHowManyRecords();
     Participant new_cm;
@@ -58,15 +58,49 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     return comm_member;
   }
 
-  public String load_community_members() {  // editable = 0
+  public String actionSave() {
+    this.errorMessage = null;
+    Session hib = null;
+    Transaction tx = null;
+    Participant cm = null;
+    List new_rows = getNew_comm_member_rows();
+
+    for (int i = 0; i < new_rows.size(); i++) {
+      cm = (Participant) new_rows.get(i);
+      if (cm.getAlias() != null && cm.getFirstName() != null && cm.getLastName() != null) {
+        this.firstName = cm.getFirstName();
+        this.lastName = cm.getLastName();
+        this.alias = cm.getAlias();
+
+        if (checkForDuplicate() == false) {
+
+          try {
+            hib = hib_session();
+            tx = hib.beginTransaction();
+            hib.save(cm);
+            tx.commit();
+          } catch (Exception ex) {
+            tx.rollback();
+            Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMBER NOT SAVED", ex);
+          } finally {
+            hib = null;
+            tx = null;
+          }
+        }
+      }
+    }
+    return load_community_members();
+  }
+
+  private Boolean hasCreatorRights() {
 
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
     List result = null;
     Boolean isCreatorRights = false;
-
     queryString = "FROM Participant where community_id = :cid AND is_creator = 1";
+
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -77,66 +111,61 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
-
     } finally {
+      tx = null;
+      hib = null;
+    }
 
-      if (result.size() > 0) {
-
-        // Then person has right privs
-        if (hib.isOpen() == false) {
-          hib = hib_session();
-        }
-        if (tx.isActive() == false) {
-          tx = hib.beginTransaction();
-        }
-
-        queryString = "FROM Participant where community_id = :cid";
-        try {
-          result = hib.createQuery(queryString)
-                  .setParameter("cid", ubean.getCommunityId())
-                  .list();
-          for (int i = 0; i < result.size(); i++) {
-            Participant cm = (Participant) result.get(i);
-            if (cm.getEditable() == 1) {
-              cm.setEditable(0);
-              hib.update(cm);
-            }
-          }
-          tx.commit();
-        } catch (Exception ex) {
-          tx.rollback();
-          Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-
-          if (hib.isOpen() == true) {
-            hib.close();
-          }
-          if (tx.isActive() == true) {
-            tx = null;
-            try {
-              hib = null;
-            } catch (Exception ex) {
-            }
-          }
-          isCreatorRights = true;
-        }
+    if (result != null) {
+      if (result.size() == 1) {
+        isCreatorRights = true;
       }
+    }
+    result = null;
+    return isCreatorRights;
+  }
 
-      if (isCreatorRights == true) {
-        this.editable = 0;
+  public String load_community_members() {
+    this.errorMessage = null;
+    List result = null;
+    if (hasCreatorRights() == true) {
+      Session hib = null;
+      Transaction tx = null;
+      String queryString = null;
+      
+      queryString = "FROM Participant where community_id = :cid";
+      try {
+        hib = hib_session();
+      tx = hib.beginTransaction();
+        result = hib.createQuery(queryString)
+                .setParameter("cid", ubean.getCommunityId())
+                .list();
+        for (int i = 0; i < result.size(); i++) {
+          Participant cm = (Participant) result.get(i);
+          if (cm.getEditable() == 1) {
+            cm.setEditable(0);
+            hib.update(cm);
+          }
+        }
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+      } finally {
         tx = null;
         hib = null;
-        return "community_members.xhtml?faces-redirect=true";
-      } else {
-        message(null, "MustBeCommunityCreatorAddMember", null);
-        return "index";
-
+        result = null;
       }
+
+      this.editable = 0;
+      return "community_members.xhtml?faces-redirect=true";
+    } else {
+      message(null, "MustBeCommunityCreatorAddMember", null);
+      return "index";
     }
   }
 
   public void editAction(Participant cmid) {
-
+    this.errorMessage = null;
     Session hib = null;
     Transaction tx = null;
     cmid.setEditable(1);
@@ -144,7 +173,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.lastName = cmid.getLastName();
     this.alias = cmid.getAlias();
     this.emailAlternative = cmid.getEmailAlternative();
-
+    this.editable = 1;
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -152,7 +181,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(CommunityMembersBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -164,20 +195,21 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     if (this.howManyRecords > 0 && this.howManyRecords < 26) {
       this.setErrorMessage("");
       this.editable = 3;
+
     } else {
       this.setErrorMessage("Please provide a value between 1 and 25");
     }
-    
-  }
-  
-  public void actionSaveMember(Integer whichRow) {
 
+  }
+
+  public void actionSaveMember(Integer whichRow) {
+    this.errorMessage = null;
     Session hib = null;
     Transaction tx = null;
     List new_rows = getNew_comm_member_rows();
     Participant cm = (Participant) new_rows.get(whichRow);
     if (this.firstName != null && this.lastName != null && this.alias != null) {
-       if (checkForDuplicate() == false) {
+      if (checkForDuplicate() == false) {
         cm.setEditable(0);
         cm.setFirstName(firstName);
         cm.setLastName(lastName);
@@ -185,7 +217,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         cm.setAlias(alias);
         cm.setIsCreator(isCreator);
         cm.setIsActive(isActive);
-        
+
         try {
           hib = hib_session();
           tx = hib.beginTransaction();
@@ -204,6 +236,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public void actionUpdateMember(Integer whichRow) {  // New member
+    this.errorMessage = null;
     Session hib = null;
     Transaction tx = null;
     List new_rows = getNew_comm_member_rows();
@@ -229,7 +262,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
           System.out.println("COMMUNITY MEMBER UPDATED");
         } catch (Exception ex) {
           tx.rollback();
-          Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
+          Logger.getLogger(CommunityMembersBean.class.getName())
+                  .log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
         } finally {
           hib = null;
           tx = null;
@@ -240,7 +274,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public void cancelAction(Participant cmid) {
-
+    this.errorMessage = null;
     Session hib = null;
     Transaction tx = null;
     Boolean cancelSuccess = false;
@@ -248,7 +282,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.firstName = cmid.getFirstName();
     this.lastName = cmid.getLastName();
     this.alias = cmid.getAlias();
-    //this.setEmailAlternative(cmid.getEmailAlternative());
+    this.emailAlternative = cmid.getEmailAlternative();
+    this.isCreator = cmid.getIsCreator();
+    this.isActive = cmid.getIsActive();
 
     try {
       hib = hib_session();
@@ -258,27 +294,40 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       cancelSuccess = true;
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(CommunityMembersBean.class.getName())
+              .log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
     }
     if (cancelSuccess == true) {
-      message(null, "MemberRecordDeleted", null);
+      //message(null, "MemberRecordDeleted", null);
     } else {
-      message(null, "MemberRecordNotDeleted", null);
+      //message(null, "MemberRecordNotDeleted", null);
     }
   }
 
   public void updateAction(Integer whichRow) {  /// For existing member: This works
-
+    this.errorMessage = null;
     Session hib = null;
     Transaction tx = null;
     List new_rows = getComm_member_rows();
     Participant cm = (Participant) new_rows.get(whichRow);
+    Boolean foundDuplicate = false;
 
     if (this.firstName != null && this.lastName != null && this.alias != null) {
-      if (checkForDuplicate() == false) {
+
+      for (int i = 0; i < new_rows.size(); i++) {
+        if (i != whichRow) {
+          Participant pp = (Participant) new_rows.get(i);
+          if ((pp.getFirstName().equalsIgnoreCase(this.firstName)) && (pp.getLastName().equalsIgnoreCase(this.lastName)) && (pp.getAlias().equalsIgnoreCase(this.alias))) {
+            foundDuplicate = true;
+            break;
+          }
+        }
+      }
+
+      if (foundDuplicate == false) {
         cm.setEditable(0);
         cm.setFirstName(firstName);
         cm.setLastName(lastName);
@@ -296,11 +345,14 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
           System.out.println("COMMUNITY MEMBER UPDATED");
         } catch (Exception ex) {
           tx.rollback();
-          Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
+          Logger.getLogger(CommunityMembersBean.class.getName())
+                  .log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
         } finally {
           hib = null;
           tx = null;
         }
+      } else {
+        this.errorMessage = "Name: " + this.firstName + " " + this.lastName + " with alias: " + this.alias + " is a duplicate record.";
       }
     }
   }
@@ -327,21 +379,13 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       tx.commit();
 
     } catch (Exception ex) {
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
       System.out.println("ERROR IN build Community Member list");
-      System.out.println(ex);
+      Logger.getLogger(CommunityMembersBean.class.getName())
+              .log(Level.SEVERE, "ERROR IN build Community Member list", ex);
 
     } finally {
-      if (hib.isOpen() == true) {
-        hib.close();
-      }
-      if (tx.isActive() == true) {
-        tx = null;
-        try {
-          hib = null;
-        } catch (Exception ex) {
-        }
-      }
+      tx = null;
+      hib = null;
     }
     return result;
   }
@@ -361,12 +405,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
               .setParameter("cid", ubean.getCommunityId())
               .list();
       tx.commit();
-
     } catch (Exception ex) {
-      Logger.getLogger(CommunityMembersBean.class
-              .getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+      tx.rollback();
+      Logger.getLogger(CommunityMembersBean.class.getName())
+              .log(Level.SEVERE, "ERROR IN build Community Member list", ex);
       System.out.println("ERROR IN build Community Member list");
-      System.out.println(ex);
 
     } finally {
       tx = null;
@@ -376,6 +419,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Participant existing_cm;
     for (int i = 0; i < result.size(); i++) {
       Participant pp = (Participant) result.get(i);
+//      pp.setEditable(0);
       existing_cm = new Participant(pp.getParticipant_id(), pp.getCommunityId(), pp.getUserId(), "NA", pp.getFirstName(), pp.getMi(), pp.getLastName(), pp.getAlias(), pp.getIsActive(), pp.getEditable(), pp.getDateCreated(), pp.getDateUpdated(), i, pp.getGoodwill(), pp.getAge18OrMore(), pp.getEmailAlternative(), pp.getIsCreator());
       comm_member.add(existing_cm);
     }
@@ -532,7 +576,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(CommunityMembersBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -559,4 +605,5 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
   }
+
 }
