@@ -44,6 +44,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private Integer howManyRecords;
   private String errorMessage;
   private Integer currentRow;
+  
+  ////   TODO New that member registration form is complete, 
+  ///    I need to code for new member notification which will lend to that new registration form.
 
   private List getNewMemberList() {
     this.errorMessage = null;
