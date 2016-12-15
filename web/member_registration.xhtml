@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./echomarketTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="registrationHeader" /> 
+  </ui:define>
+
+  <ui:define name="content">
+    <h:head>
+      <h:outputScript library="javascript" name="registration.js"  />
+      <title>#{bundle.EchoMarketTitle}</title>
+    </h:head>
+
+    <f:metadata>
+      <f:viewParam name="pid" id="pid" value="#{memberRegistrationBean.pid}" />
+    </f:metadata>         
+
+    <h:form id="user_registration" >
+      <c:set var="pid"  value="#{request.getParameter('pid')}"  />
+
+      <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+      <div  class="top" id="form_user_registration" >
+        <div style="margin:10px;" >
+          <h:outputText value="Community Member Registration" style="font-size:large;"/>
+        </div>
+        <div id="individualNameGroup" style="float:left;margin:5px;width:95%;"  >
+          <ui:include src="member_registration_detail.xhtml" />
+          <h:commandLink  action="#{memberRegistrationBean.processMemberRegistration()}" value="Register" style="font-size:large;color:maroon;margin-top:15px;"   >
+            <f:param id="new_m" value="action"  />
+          </h:commandLink>  
+        </div>
+     <br />   
+      
+      </div>
+    </h:form>
+
+  </ui:define>
+  <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="registrationHeader" /> 
+  </ui:define>
+
+</ui:composition>
