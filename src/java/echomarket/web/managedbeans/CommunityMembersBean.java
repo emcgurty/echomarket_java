@@ -43,6 +43,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private ArrayList<Participant> comm_member_rows;
   private Integer howManyRecords;
   private String errorMessage;
+  private Integer currentRow;
 
   private List getNewMemberList() {
     this.errorMessage = null;
@@ -127,6 +128,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public String load_community_members() {
+    this.currentRow = -1;
     this.errorMessage = null;
     List result = null;
     if (hasCreatorRights() == true) {
@@ -167,9 +169,14 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   public void editAction(Participant cmid) {
     this.errorMessage = null;
+    if (this.currentRow > -1) {
+      cancelAction(comm_member_rows.get(this.currentRow ));
+      this.currentRow = -1;
+    }
     Session hib = null;
     Transaction tx = null;
     cmid.setEditable(1);
+    this.currentRow = cmid.getRowIndex();
     this.firstName = cmid.getFirstName();
     this.lastName = cmid.getLastName();
     this.alias = cmid.getAlias();
@@ -277,6 +284,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   public void cancelAction(Participant cmid) {
     this.errorMessage = null;
+    this.currentRow = cmid.getRowIndex();
     Session hib = null;
     Transaction tx = null;
     Boolean cancelSuccess = false;
@@ -608,6 +616,20 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
    */
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
+  }
+
+  /**
+   * @return the currentRow
+   */
+  public Integer getCurrentRow() {
+    return currentRow;
+  }
+
+  /**
+   * @param currentRow the currentRow to set
+   */
+  public void setCurrentRow(Integer currentRow) {
+    this.currentRow = currentRow;
   }
 
 }
