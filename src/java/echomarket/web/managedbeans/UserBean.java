@@ -108,7 +108,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hold_UT = hold_UT.replace(";", " ");
       hold_UT = trim(hold_UT).replace(" ", "ing and ");
       return hold_UT;
-      
+
     }
   }
 
@@ -796,23 +796,15 @@ public class UserBean extends AbstractBean implements Serializable {
         tx.rollback();
         System.out.println("Tx commit failed..");
         Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+        tx = null;
+        hib = null;
       }
-
-      if (hib.isOpen() == false) {
-        hib = hib_session();
-      }
-
-      if (tx.isActive() == false) {
-        tx = hib.beginTransaction();
-      }
-
-      results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
-      Map a_array = (Map) results.get(0);
-      tx.commit();
-
+      String[] appEmail = getApplicationEmail();
+      /// if String not empty
       try {
         //  SendEmail .... You indicated that you forgot your user password, follow this link to change it
-        SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, a_array.getKeyText(), a_array.getValueText(), userArray.getUser_id(), buildReset_Code);
+        SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, appEmail[0], appEmail[1], userArray.getUser_id(), buildReset_Code);
         se = null;
       } catch (Exception e) {
         System.out.println("Send Mail Failed");
@@ -844,6 +836,33 @@ public class UserBean extends AbstractBean implements Serializable {
 
     return "index";
 
+  }
+
+  private String[] getApplicationEmail() {
+
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
+    String[] holdMap = new String[2];
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+    } finally {
+      hib = null;
+      tx = null;
+    }
+    if (results != null) {
+      if (results.size() == 1) {
+        Map map = (Map) results.get(0);
+        holdMap[0] = map.getKeyText();
+        holdMap[1] = map.getValueText();
+      }
+    }
+    return holdMap;
   }
 
   private String ValidateEmailAndPassword(String em, String pw) {
@@ -1400,7 +1419,6 @@ public class UserBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     List results = null;
-    Map a_array = null;
     Boolean foundEmail = false;
     try {
       hib = hib_session();
@@ -1423,14 +1441,8 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-    if (results == null) {
-      foundEmail = false;
-    } else if (results != null) {
-      if (results.size() > 0) {
-
-        foundEmail = false;
-      } else {
-
+    if (results != null) {
+     if (results.size() > 0) {
         foundEmail = true;
       }
     }
@@ -1443,8 +1455,7 @@ public class UserBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     List results = null;
-    Map a_array = null;
-    Boolean foundEmail = false;
+    Boolean foundUserName = false;
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1466,18 +1477,12 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-    if (results == null) {
-      foundEmail = false;
-    } else if (results != null) {
+     if (results != null) {
       if (results.size() > 0) {
-
-        foundEmail = false;
-      } else {
-
-        foundEmail = true;
+        foundUserName = true;
       }
     }
     results = null;
-    return foundEmail;
+    return foundUserName;
   }
 }
