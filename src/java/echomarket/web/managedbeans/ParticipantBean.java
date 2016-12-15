@@ -177,7 +177,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       sb = null;
 
     }
-    if (alt_email == null) {
+    if (alt_email.isEmpty() == true) {
       return "Not provided";
     } else {
       return alt_email;
@@ -241,6 +241,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setHomePhone(homePhone);
       part.setCellPhone(cellPhone);
       part.setAlternativePhone(alternativePhone);
+      if (ubean.getCommunityName() != null) {
+        part.setIsCreator(1);
+      } else {
+        part.setIsCreator(1);
+      }
+        
 
       if (this.questionAltEmail == 1) {
         part.setEmailAlternative(null);
@@ -321,12 +327,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         tx.commit();
         updateSuccess = true;
-        message(null, "RecordSaved", null);
+        message(null, "ParticipantInformationRecordSaved", null);
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in Save/Update Particpant, 276");
         Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-        message(null, "RecordSaved", null);
+        message(null, "ParticipantInformationRecordNotSaved", null);
       } finally {
         sb = null;
         tx = null;
