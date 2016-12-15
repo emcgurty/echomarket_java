@@ -1,5 +1,6 @@
 package echomarket.web.managedbeans;
 
+import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
 import javax.faces.bean.ManagedBean;
@@ -44,10 +45,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private Integer howManyRecords;
   private String errorMessage;
   private Integer currentRow;
-  
+
   ////   TODO New that member registration form is complete, 
   ///    I need to code for new member notification which will lend to that new registration form.
-
   private List getNewMemberList() {
     this.errorMessage = null;
     // TO DO: Need to code for when getHowMany = 0... Managed in addAction()
@@ -68,13 +68,18 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     Participant cm = null;
     List new_rows = getNew_comm_member_rows();
+    Integer new_row_size = new_rows.size();
+    SendEmail se = null;
+    String[] getMap = null;
+    Boolean savedRecord = false;
 
-    for (int i = 0; i < new_rows.size(); i++) {
+    for (int i = 0; i < new_row_size; i++) {
       cm = (Participant) new_rows.get(i);
       if ((cm.getAlias().isEmpty() == false) && (cm.getFirstName().isEmpty() == false) && (cm.getLastName().isEmpty() == false)) {
         this.firstName = cm.getFirstName();
         this.lastName = cm.getLastName();
         this.alias = cm.getAlias();
+        this.emailAlternative = cm.getEmailAlternative();
 
         if (checkForDuplicate() == false) {
 
@@ -83,12 +88,35 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             tx = hib.beginTransaction();
             hib.save(cm);
             tx.commit();
+            savedRecord = true;
           } catch (Exception ex) {
             tx.rollback();
             Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMBER NOT SAVED", ex);
           } finally {
             hib = null;
             tx = null;
+          }
+          if (savedRecord == true) {
+            getMap = new String[2];
+            getMap = ubean.getApplicationEmail();
+            try {
+              se = new SendEmail("member", this.firstName, this.lastName, this.alias, this.emailAlternative, getMap[0], getMap[1], ubean.getCommunityName(), ubean.getParticipant_id());
+              savedRecord = true;
+            } catch (Exception ex) {
+              System.out.println("Error in Send Member Notification");
+              Logger.getLogger(CommunityMembersBean.class.getName())
+                      .log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
+
+            } finally {
+              se = null;
+              getMap = null;
+            }
+            if (savedRecord == true) {
+              if (new_row_size == 1)
+              this.errorMessage = "Your new memeber has been saved to your Community and an email notication was sent to him/her";
+              else 
+              this.errorMessage = "New Member(s) have been saved to your Community and an email notication was sent to them";  
+            }
           }
         }
       }
@@ -221,77 +249,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
     } else {
       this.setErrorMessage("Please provide a value between 1 and 25");
-    }
-
-  }
-
-  public void actionSaveMember(Integer whichRow) {
-    this.errorMessage = null;
-    Session hib = null;
-    Transaction tx = null;
-    List new_rows = getNew_comm_member_rows();
-    Participant cm = (Participant) new_rows.get(whichRow);
-    if ((this.firstName.isEmpty() == false) && (this.lastName.isEmpty() == false) && (this.alias.isEmpty() == false)) {
-      if (checkForDuplicate() == false) {
-        cm.setEditable(0);
-        cm.setFirstName(firstName);
-        cm.setLastName(lastName);
-        cm.setEmailAlternative(emailAlternative);
-        cm.setAlias(alias);
-        cm.setIsCreator(isCreator);
-        cm.setIsActive(isActive);
-
-        try {
-          hib = hib_session();
-          tx = hib.beginTransaction();
-          hib.update(cm);
-          tx.commit();
-          System.out.println("COMMUNITY MEMBER Saved");
-        } catch (Exception ex) {
-          tx.rollback();
-          Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
-        } finally {
-          hib = null;
-          tx = null;
-        }
-      }
-    }
-  }
-
-  public void actionUpdateMember(Integer whichRow) {  // New member
-    this.errorMessage = null;
-    Session hib = null;
-    Transaction tx = null;
-    List new_rows = getNew_comm_member_rows();
-    Participant cm = (Participant) new_rows.get(whichRow);
-
-    if ((cm.getAlias().isEmpty() == false) && (cm.getFirstName().isEmpty() == false) && (cm.getLastName().isEmpty() == false)) {
-      this.lastName = cm.getLastName();
-      this.firstName = cm.getFirstName();
-      this.alias = cm.getAlias();
-      if (checkForDuplicate() == false) {
-        cm.setEditable(1);
-        cm.setFirstName(firstName);
-        cm.setLastName(lastName);
-        cm.setEmailAlternative(emailAlternative);
-        cm.setAlias(alias);
-
-        try {
-          hib = hib_session();
-          tx = hib.beginTransaction();
-          hib.update(cm);
-          tx.commit();
-          this.editable = 1;
-          System.out.println("COMMUNITY MEMBER UPDATED");
-        } catch (Exception ex) {
-          tx.rollback();
-          Logger.getLogger(CommunityMembersBean.class.getName())
-                  .log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
-        } finally {
-          hib = null;
-          tx = null;
-        }
-      }
     }
 
   }
