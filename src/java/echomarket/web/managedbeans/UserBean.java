@@ -136,11 +136,11 @@ public class UserBean extends AbstractBean implements Serializable {
     Boolean savedRecord = false;
     String returnString = null;
     savedRecord = checkForDuplicateEmail();
-    if (savedRecord == true) {
+    if (savedRecord == false) {
       savedRecord = checkForDuplicateUserName();
     }
 
-    if (savedRecord == false) {
+    if (savedRecord == true) {
       returnString = "user_registration";
       message(null, "EitherEmailOrUsernameExistOnDateBase", null);
     } else {
@@ -1321,40 +1321,27 @@ public class UserBean extends AbstractBean implements Serializable {
 
   private Boolean sendActivationEmail(String resetCodeString) {
 
-    Session hib = null;
-    Transaction tx = null;
-    List results = null;
-    Map a_array = null;
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-    } catch (Exception ex) {
-      System.out.println("Error in sendActivationEmail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      tx = null;
-      hib = null;
-    }
-
     String[] getMap = new String[2];
     getMap = getApplicationEmail();
+    Boolean return_string = false;
 
     try {
       if (this.communityName == null) {
-        SendEmail se = new SendEmail("registration", username, userAlias, email, getMap[0], getMap[1], password, resetCodeString);
+        SendEmail se = new SendEmail("registration", this.username, this.userAlias, this.email, getMap[0], getMap[1], this.password, resetCodeString);
         se = null;
       } else {
-        SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, a_array.getKeyText(), a_array.getValueText(), this.password, resetCodeString);
+        SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, getMap[0], getMap[1], this.password, resetCodeString);
         se = null;
       }
-      a_array = null;
-      return true;
+      return_string = true;
     } catch (Exception ex) {
       System.out.println("Send Mail Failed");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      return false;
+    } finally {
+      getMap = null;
     }
 
+    return return_string;
   }
 
   /**
@@ -1435,7 +1422,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = null;
     }
     if (results != null) {
-     if (results.size() > 0) {
+      if (results.size() > 0) {
         foundEmail = true;
       }
     }
@@ -1470,7 +1457,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-     if (results != null) {
+    if (results != null) {
       if (results.size() > 0) {
         foundUserName = true;
       }
