@@ -138,7 +138,7 @@ public class SendEmail implements java.io.Serializable {
     Object paramArray[] = new Object[2];
     paramArray[0] = getResetCode();
     url_string = MessageFormat.format(url_string, paramArray);
-    String buildMessage = "<html><h1>Your Community account has been created.</h1>"
+    String buildMessage = "<html><h2>Your Community account has been created.</h2>"
             + "<p>" + this.whichEmail + "</p>"
             + "<p> User Name: " + this.username + "</p>"
             + "<p> Password:  " + this.password + "</p>"
@@ -180,11 +180,11 @@ public class SendEmail implements java.io.Serializable {
     Object paramArray[] = new Object[2];
     paramArray[0] = getResetCode();
     url_string = MessageFormat.format(url_string, paramArray);
-    String buildMessage = "<html><h1>"
+    String buildMessage = "<html><h2>"
             + this.firstName + " " + this.lastName
             + " with alias, " + this.user_alias
             + ", you have been added to the EchoMarket Community: "
-            + this.commmunityName + ".</h1>"
+            + this.commmunityName + ".</h2>"
             + " <p>If you wish to participate in this Community, you need to complete two quick steps."
             + " First, you need to click on the link below or copy it into your browser's web address area, and complete Registration form. Then you will receive another email to activate your account.</p>"
             + " <h2> Visit this url to Register: </h2>"
