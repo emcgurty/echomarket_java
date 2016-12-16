@@ -136,8 +136,67 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String registerCommunityMember() {
-    // need to code
-    return "index";
+    Boolean updateEntities = false;
+    ///  Need to get the user_id the Community creator to learn whther borrower or lender
+    String return_string = registerUser();
+    if (this.user_id != null) {
+      updateEntities = updateParticipantRecord();
+    }
+     
+    return return_string;
+  }
+
+  private Boolean updateParticipantRecord() {
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    Boolean return_result = false;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = " FROM Participant "
+              + " WHERE participant_id  = :pid";
+      results = hib.createQuery(queryString)
+              .setParameter("pid", this.participant_id)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on updateParticipantRecord in Hibernate session");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+
+    if (results != null) {
+      if (results.size() == 1) {
+        Participant part = (Participant) results.get(0);
+        part.setEmailAlternative(null);
+        part.setFirstName(firstName);
+        part.setLastName(lastName);
+        part.setAlias(userAlias);
+        part.setUserId(user_id);
+        try {
+          hib = hib_session();
+          tx = hib.beginTransaction();
+          hib.update(part);
+          tx.commit();
+          return_result = true;
+        } catch (Exception ex) {
+          tx.rollback();
+          System.out.println("Error on updateParticipantRecord in updating");
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+          tx = null;
+          hib = null;
+        }
+      }
+    }
+
+    return return_result;
   }
 
   public String registerUser() {
@@ -172,6 +231,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
     try {
       current_user_id = getId();
+      this.user_id = current_user_id;
       // Role ID, indivdual = 0; community creator = 1; community member = 2
       if (commName != null) {
         create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 1);
@@ -191,6 +251,7 @@ public class UserBean extends AbstractBean implements Serializable {
       savedRecord = true;
     } catch (Exception ex) {
       tx.rollback();
+      this.user_id = null;
       System.out.println("Error in registerUser");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
@@ -222,7 +283,6 @@ public class UserBean extends AbstractBean implements Serializable {
 
     setUserToNull();
     this.userAction = "login";
-
     return "index";
   }
 
@@ -969,7 +1029,7 @@ public class UserBean extends AbstractBean implements Serializable {
       return null;
     }
   }
-  
+
   public void getMemberAlias(ComponentSystemEvent event) {
     UIComponent components = event.getComponent();
     UIInput uiInputAlias = (UIInput) components.findComponent("userAlias");
@@ -1444,7 +1504,7 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   private Boolean checkForDuplicateAlias(String alias) {
-    
+
     Session hib = null;
     Transaction tx = null;
     List results = null;
@@ -1584,6 +1644,7 @@ public class UserBean extends AbstractBean implements Serializable {
       if (result.size() == 1) {
         pt = (Participant) result.get(0);
         returnCID = pt.getCommunityId();
+        this.communityId = returnCID;
         this.firstName = pt.getFirstName();
         this.lastName = pt.getLastName();
         this.userAlias = pt.getAlias();
@@ -1642,6 +1703,5 @@ public class UserBean extends AbstractBean implements Serializable {
   public void setPid(String pid) {
     this.pid = pid;
   }
-
 
 }
