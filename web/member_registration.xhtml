@@ -33,7 +33,7 @@
         </div>
         <div id="individualNameGroup" style="float:left;margin:5px;width:95%;"  >
           <ui:include src="member_registration_detail.xhtml" />
-          <h:commandLink  action="#{memberRegistrationBean.processMemberRegistration()}" value="Register" style="font-size:large;color:maroon;margin-top:15px;"   >
+          <h:commandLink  action="#{userBean.registerCommunityMember()}" value="Register" style="font-size:large;color:maroon;margin-top:15px;"   >
             <f:param id="new_m" value="action"  />
           </h:commandLink>  
         </div>
