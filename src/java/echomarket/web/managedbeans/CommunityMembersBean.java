@@ -55,7 +55,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Integer howMany = getHowManyRecords();
     Participant new_cm;
     for (int i = 0; i < howMany; i++) {
-      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
+      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), ubean.getUser_id(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
       comm_member.add(new_cm);
     }
     this.new_comm_member_rows = comm_member;
