@@ -50,6 +50,8 @@ public class UserBean extends AbstractBean implements Serializable {
   private String user_id;
   private String participant_id;
   private String username;
+  private String firstName;
+  private String lastName;
   private String userAlias;
   private String userType;
   private List<String> userTypeArray;
@@ -65,6 +67,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private String itemId;
   private Integer roleId;
   private String action;
+  private String pid;
 
   public String Logout() {
     setUserToNull();
@@ -132,10 +135,15 @@ public class UserBean extends AbstractBean implements Serializable {
     this.password = password;
   }
 
+  public String registerCommunityMember() {
+    // need to code
+    return "index";
+  }
+
   public String registerUser() {
     Boolean savedRecord = false;
     String returnString = null;
-    savedRecord = checkForDuplicateEmail();
+    savedRecord = checkForDuplicateEmail(this.email);
     if (savedRecord == false) {
       savedRecord = checkForDuplicateUserName();
     }
@@ -961,6 +969,47 @@ public class UserBean extends AbstractBean implements Serializable {
       return null;
     }
   }
+  
+  public void getMemberAlias(ComponentSystemEvent event) {
+    UIComponent components = event.getComponent();
+    UIInput uiInputAlias = (UIInput) components.findComponent("userAlias");
+    String reg_alias = uiInputAlias.getLocalValue() == null ? "" : uiInputAlias.getLocalValue().toString();
+    String aliasId = uiInputAlias.getClientId();
+    if (reg_alias != null) {
+      if (checkForDuplicateAlias(reg_alias) == true) {
+        FacesMessage msg = new FacesMessage("Alias already belongs to an EchoMarket participant");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context().addMessage(aliasId, msg);
+        context().renderResponse();
+      } else {
+        return;
+      }
+    } else {
+      // Required true do its job 
+      return;
+    }
+  }
+
+  public void getMemberEmail(ComponentSystemEvent event) {
+
+    UIComponent components = event.getComponent();
+    UIInput uiInputEmail = (UIInput) components.findComponent("email");
+    String reg_email = uiInputEmail.getLocalValue() == null ? "" : uiInputEmail.getLocalValue().toString();
+    String emailId = uiInputEmail.getClientId();
+    if (reg_email != null) {
+      if (checkForDuplicateEmail(reg_email) == true) {
+        FacesMessage msg = new FacesMessage("Email address already belongs to an EchoMarket participant");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context().addMessage(emailId, msg);
+        context().renderResponse();
+      } else {
+        return;
+      }
+    } else {
+      // Required true do its job 
+      return;
+    }
+  }
 
   public void validatePassword(ComponentSystemEvent event) {
 
@@ -1394,24 +1443,45 @@ public class UserBean extends AbstractBean implements Serializable {
     this.communityId = communityId;
   }
 
-  private Boolean checkForDuplicateEmail() {
-    String currentEmail = this.email;
+  private Boolean checkForDuplicateAlias(String alias) {
+    
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
+    Boolean foundAlias = false;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      results = hib.createQuery("from Users where userAlias = :alias").setParameter("alias", alias).list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on checkForDuplicateEmail");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    if (results != null) {
+      if (results.size() > 0) {
+        foundAlias = true;
+      }
+    }
+    results = null;
+    return foundAlias;
+  }
+
+  private Boolean checkForDuplicateEmail(String em) {
     Session hib = null;
     Transaction tx = null;
     List results = null;
     Boolean foundEmail = false;
+
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-    } catch (Exception ex) {
-      System.out.println("Error in checkForDuplicateUserEmail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-
-    }
-
-    try {
-      results = hib.createQuery("from Users where email = :email").setParameter("email", currentEmail).list();
+      results = hib.createQuery("from Users where email = :email").setParameter("email", em).list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
@@ -1436,17 +1506,10 @@ public class UserBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     List results = null;
     Boolean foundUserName = false;
+
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-    } catch (Exception ex) {
-      System.out.println("Error in checkForDuplicateUserEmail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-
-    }
-
-    try {
       results = hib.createQuery("from Users where username = :username").setParameter("username", currentUserName).list();
       tx.commit();
     } catch (Exception ex) {
@@ -1465,4 +1528,120 @@ public class UserBean extends AbstractBean implements Serializable {
     results = null;
     return foundUserName;
   }
+
+  /**
+   * @return the firstName
+   */
+  public String getFirstName() {
+    return firstName;
+  }
+
+  /**
+   * @param firstName the firstName to set
+   */
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  /**
+   * @return the lastName
+   */
+  public String getLastName() {
+    return lastName;
+  }
+
+  /**
+   * @param lastName the lastName to set
+   */
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  private String getMemberInformation(String pid) {
+
+    List result = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    Participant pt = null;
+    String returnCID = null;
+    queryString = "FROM Participant where participant_id = :pid";
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      result = hib.createQuery(queryString)
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+    } finally {
+      tx = null;
+      hib = null;
+
+    }
+    if (result != null) {
+      if (result.size() == 1) {
+        pt = (Participant) result.get(0);
+        returnCID = pt.getCommunityId();
+        this.firstName = pt.getFirstName();
+        this.lastName = pt.getLastName();
+        this.userAlias = pt.getAlias();
+        this.email = pt.getEmailAlternative();
+        this.participant_id = pid;
+      }
+    }
+    return returnCID;
+  }
+
+  public String getCommunityName(String pid) {
+    List result = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    Communities pt = null;
+    String getCID = getMemberInformation(pid);
+    queryString = "FROM Communities where community_id = :cid";
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      result = hib.createQuery(queryString)
+              .setParameter("cid", getCID)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+    } finally {
+      tx = null;
+      hib = null;
+
+    }
+
+    if (result != null) {
+      if (result.size() == 1) {
+        pt = (Communities) result.get(0);
+        queryString = pt.getCommunityName();
+      }
+    }
+    result = null;
+    pt = null;
+    return queryString;
+
+  }
+
+  /**
+   * @return the pid
+   */
+  public String getPid() {
+    return pid;
+  }
+
+  /**
+   * @param pid the pid to set
+   */
+  public void setPid(String pid) {
+    this.pid = pid;
+  }
+
+
 }
