@@ -136,14 +136,85 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String registerCommunityMember() {
-    Boolean updateEntities = false;
+    Boolean updateEntity = false;
+    String strGetUserThatCreatedMember = getUserThatCreatedMember();
+    if (strGetUserThatCreatedMember != null) {
+      updateEntity = getCreatorDetail(strGetUserThatCreatedMember);   /// sets values needed for registerUser
+    }
     ///  Need to get the user_id the Community creator to learn whther borrower or lender
     String return_string = registerUser();
     if (this.user_id != null) {
-      updateEntities = updateParticipantRecord();
+      updateEntity = updateParticipantRecord();
     }
-     
     return return_string;
+  }
+
+  private Boolean getCreatorDetail(String uid) {
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    Boolean return_result = false;
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = " FROM Users "
+              + " WHERE user_id  = :uid";
+      results = hib.createQuery(queryString)
+              .setParameter("uid", uid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on updateParticipantRecord in Hibernate session");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+
+    if (results != null) {
+      if (results.size() == 1) {
+        Users user = (Users) results.get(0);
+        this.userType = user.getUserType();
+        this.communityName = user.getCommunityName();
+        return_result = true;
+      }
+    }
+    return return_result;
+  }
+
+  private String getUserThatCreatedMember() {
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    String return_result = null;
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      queryString = " FROM Participant "
+              + " WHERE participant_id  = :pid";
+      results = hib.createQuery(queryString)
+              .setParameter("pid", this.participant_id)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on updateParticipantRecord in Hibernate session");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+
+    if (results != null) {
+      if (results.size() == 1) {
+        Participant part = (Participant) results.get(0);
+        return_result = part.getUserId();
+      }
+    }
+    return return_result;
   }
 
   private Boolean updateParticipantRecord() {
