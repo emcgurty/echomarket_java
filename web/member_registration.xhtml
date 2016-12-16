@@ -8,10 +8,15 @@
                 template="./echomarketTemplate.xhtml"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="registrationHeader" /> 
   </ui:define>
+  <div class="messagecolor">
+    <h:messages showSummary="true" 
+                showDetail="false"
+                errorStyle="color: #d20005" 
+                infoStyle="color: indigo"/>
+  </div>
 
   <ui:define name="content">
     <h:head>
@@ -20,25 +25,130 @@
     </h:head>
 
     <f:metadata>
-      <f:viewParam name="pid" id="pid" value="#{memberRegistrationBean.pid}" />
+      <f:viewParam name="pid" id="pid" value="#{userBean.pid}" />
     </f:metadata>         
+    <c:set var="pid"  value="#{request.getParameter('pid')}"  />
 
-    <h:form id="user_registration" >
-      <c:set var="pid"  value="#{request.getParameter('pid')}"  />
-
+    <h:form id="community_member_registration" >
       <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
       <div  class="top" id="form_user_registration" >
         <div style="margin:10px;" >
           <h:outputText value="Community Member Registration" style="font-size:large;"/>
         </div>
         <div id="individualNameGroup" style="float:left;margin:5px;width:95%;"  >
-          <ui:include src="member_registration_detail.xhtml" />
-          <h:commandLink  action="#{userBean.registerCommunityMember()}" value="Register" style="font-size:large;color:maroon;margin-top:15px;"   >
-            <f:param id="new_m" value="action"  />
-          </h:commandLink>  
+          <c:set var="b_alias" scope="view" value="#{bundle.userAlias}" />
+          <c:set var="b_username" scope="view" value="#{bundle.username}" />
+          <c:set var="b_password" scope="view" value="#{bundle.password}" />
+          <c:set var="b_confirm" scope="view" value="#{bundle.confirmPassword}" />
+          <c:set var="b_email" scope="view" value="#{bundle.email}" />
+          
+          <div class="div_p" >
+              <p>Welcome To EchoMarket and to your Community Member Registration! </p>
+              <p>Your Community, #{userBean.getCommunityName(pid)}, has provided some preliminary information which you may change.  Please complete the remaining fields.  All fields are required.</p>  
+          </div>   
+          
+          <div style="width:95%;margin-left: 25px" >
+            <h:commandLink  action="#{userBean.registerCommunityMember()}" value="Register" style="font-size:large;color:maroon;margin-top:15px;"   >
+              <f:param id="new" value="action"  />
+            </h:commandLink>  
+
+          <table id="user_registration_table">
+              <tr >
+                <td style="padding-bottom: 15px;">
+                  <h:outputLabel for="firstName" value="#{bundle.firstName}" >
+                    <h:inputText id="firstName"  size="16"
+                                 value="#{userBean.firstName}"
+                                 required="true"
+                                 requiredMessage="#{bundle.ReqFirstName}"
+                                 />
+                  </h:outputLabel>
+                </td>
+                <td style=" padding-bottom: 15px;">
+                  <h:outputLabel for="lastName" value="#{bundle.lastName}" >
+                    <h:inputText id="lastName"  size="16"
+                                 value="#{userBean.lastName}"
+                                 required="true"
+                                 requiredMessage="#{bundle.ReqLastName}"
+                                 style="margin-left:5px" />
+                  </h:outputLabel>
+                </td>
+              </tr>
+              <tr >
+                <td style="padding-bottom: 15px;">
+                  <h:outputLabel for="username" value="#{b_username}" >       
+                    <h:inputText id="username"
+                                 value="#{userBean.username}"
+                                 size="16"
+                                 required="true"
+                                 requiredMessage="#{bundle.ReqUserName}"
+                                 />
+
+                  </h:outputLabel>
+                </td>
+                <td style=" padding-bottom: 15px;">
+                  <f:event listener="#{userBean.getMemberAlias}" type="postValidate" />
+                  <h:outputLabel for="userAlias"  value="#{b_alias}" >       
+                    <h:inputText id="userAlias"
+                                 size="16"
+                                 title="#{bundle.userAlias}"
+                                 required="true"
+                                 value="#{userBean.userAlias}"
+                                 requiredMessage="#{bundle.ReqUserAlias}"
+                                 style="margin-left:5px">
+                    </h:inputText>
+                  </h:outputLabel>
+                </td>
+              </tr>
+              <tr >
+                <td style="padding-bottom: 15px;">
+                  <f:event listener="#{userBean.validatePassword}" type="postValidate" />
+                  <h:outputLabel for="password" value="#{b_password}" >       
+                    <h:inputSecret id="password"
+                                   size="16"
+                                   title="#{bundle.password}"
+                                   value="#{userBean.password}"
+                                   required="true"
+                                   requiredMessage="#{bundle.ReqPassword}"
+                                   >
+                    </h:inputSecret>
+                  </h:outputLabel>
+
+                </td>
+                <td style="padding-bottom: 15px;">
+                  <h:outputLabel for="confirmPassword" value="#{b_confirm}" >       
+                    <h:inputSecret id="confirmPassword"
+                                   size="16"
+                                   title="#{bundle.confirmPassword}"
+                                   required="true"
+                                   requiredMessage="#{bundle.ReqConfirmPassword}"
+                                   style="margin-left:5px">
+                    </h:inputSecret>
+                  </h:outputLabel>
+                </td>
+              </tr>
+              <tr  >
+                <td colspan="2" style="width:100%;padding-bottom: 15px;">
+                  <f:event listener="#{userBean.getMemberEmail}" type="postValidate" />
+                  <h:outputLabel for="email" value="#{b_email}" >       
+                    <h:inputText id="email"
+                                 size="16"
+                                 title="#{b_email}"
+                                 required="true"
+                                 value="#{userBean.email}"
+                                 requiredMessage="#{bundle.ReqEmail}"
+                                 validatorMessage="#{bundle.ValidEmail}" 
+                                 >
+                      <f:validateRegex
+                        pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </h:inputText>
+                  </h:outputLabel>
+                </td>
+              </tr >
+              <tr >
+              </tr>
+            </table>
+          </div>   
         </div>
-     <br />   
-      
       </div>
     </h:form>
 
