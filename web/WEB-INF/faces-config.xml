@@ -43,6 +43,12 @@
       <value>#{param['reset_code']}</value>
     </managed-property>
     <managed-property>
+      <description>Gets the participant id from url</description>
+      <property-name>pid</property-name>
+      <property-class>java.lang.String</property-class>
+      <value>#{param['[pid']}</value>
+    </managed-property>
+    <managed-property>
       <description>Gets the username from the url</description>
       <property-name>username</property-name>
       <property-class>java.lang.String</property-class>
@@ -167,15 +173,5 @@
     <managed-bean-class>echomarket.web.managedbeans.CommunityMembersBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
-    <managed-bean>
-    <managed-bean-name>memberRegistrationBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.MemberRegistrationBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-     <managed-property>
-      <description>Gets the participant id from url</description>
-      <property-name>pid</property-name>
-      <property-class>java.lang.String</property-class>
-      <value>#{param['[pid']}</value>
-    </managed-property>
-  </managed-bean>
+    
 </faces-config>
