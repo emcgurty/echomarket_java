@@ -19,12 +19,9 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "memberRegistrationBean")
-/// Had to change to Session becuase interactive form.
 @RequestScoped
 public class MemberRegistrationBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
   private String pid;
   private String cid;
   private String remoteIp;
@@ -32,6 +29,8 @@ public class MemberRegistrationBean extends AbstractBean implements Serializable
   private String mi;
   private String lastName;
   private String alias;
+  private String username;
+  private String password;
   private Integer isActive;
   private Integer isCreator;
   private String emailAlternative;
@@ -105,10 +104,6 @@ public class MemberRegistrationBean extends AbstractBean implements Serializable
 
   }
   
-  public String processMemberRegistration() {
-    return ubean.registerUser();
-    
-  }
 
   public String getPid() {
     return pid;
@@ -256,5 +251,33 @@ public class MemberRegistrationBean extends AbstractBean implements Serializable
    */
   public void setCid(String cid) {
     this.cid = cid;
+  }
+
+  /**
+   * @return the username
+   */
+  public String getUsername() {
+    return username;
+  }
+
+  /**
+   * @param username the username to set
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  /**
+   * @return the password
+   */
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * @param password the password to set
+   */
+  public void setPassword(String password) {
+    this.password = password;
   }
 }
