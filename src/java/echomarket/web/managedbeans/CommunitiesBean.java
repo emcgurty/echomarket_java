@@ -186,7 +186,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-        String new_cid = ubean.getCommunityId();
+        String new_cid = getId();
         comm = new Communities(new_cid, this.communityName, 0, this.firstName, this.mi, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
         sb.save(comm);
         tx.commit();
