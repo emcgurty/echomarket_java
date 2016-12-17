@@ -85,6 +85,8 @@ public class UserBean extends AbstractBean implements Serializable {
     this.resetCode = null;
     this.appEmail = null;
     this.roleId = null;
+    this.communityId = null;
+    this.pid =  null;
   }
 
   public String getEmail() {
@@ -360,12 +362,11 @@ public class UserBean extends AbstractBean implements Serializable {
   public String userIsWhichType() {
 
     String returnType = null;
-    if (this.userType.contains("lend")) {
+    if ((this.userType.contains("lend")  == true) && (this.userType.contains("borrow") == false)) {
       returnType = "lend";
-    } else if (this.userType.contains("borrow")) {
+    } else if ((this.userType.contains("borrow")  == true) && (this.userType.contains("lend") == false)) {
       returnType = "borrow";
-    }
-    if ((this.userType.contains("borrow")) && (this.userType.contains("lend"))) {
+    } else if ((this.userType.contains("borrow") == true) && (this.userType.contains("lend") == true)) {
       returnType = "both";
     }
     return returnType;
@@ -521,8 +522,9 @@ public class UserBean extends AbstractBean implements Serializable {
                   message(null, "LogInSuccessful", new Object[]{this.username});
                   Users uu = (Users) results.get(0);  /// User result that has current user data
                   memberCreator = uu.getRoleId();
+                  setRoleId(memberCreator);
                   if (memberCreator == 1) {
-                    setCurrentUserCommunityId(uu.getUser_id());
+                    setCurrentUserCommunityId(uu.getUser_id());  // sets cid and pid
                     setCommunityName(uu.getCommunityName());
                   }
 
@@ -940,13 +942,13 @@ public class UserBean extends AbstractBean implements Serializable {
         hib = null;
       }
       String[] appEmail = getApplicationEmail();
-      /// if String not empty
+      /// if String not empty, need to code
       try {
-        //  SendEmail .... You indicated that you forgot your user password, follow this link to change it
         SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, appEmail[0], appEmail[1], userArray.getUser_id(), buildReset_Code);
         se = null;
-      } catch (Exception e) {
+      } catch (Exception ex) {
         System.out.println("Send Mail Failed");
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       }
       message(null, "ForgotUserPasswordSuccess", new Object[]{email});
       setUserToNull();
