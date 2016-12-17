@@ -29,8 +29,6 @@
         <title>#{bundle.communityTitle}</title>
       </h:head>
 
-
-
       <div  class="top" id="form_community_detail">
 
         <div class="top" >
@@ -51,16 +49,55 @@
             </h:commandLink>
           </div> 
         </div> 
+        
+        <h:dataTable value="#{communityMembersBean.buildCommunityMemberCreators()}" id="creator" var="creator" 
+                   styleClass="member-table"
+                   headerClass="member-table-header"
+                   rowClasses="member-table-odd-row,member-table-even-row"
+                   >
+
+         <f:facet name="header">
+                  <h:outputText value="Designated Community Creators" />
+              </f:facet>
+
+
+        <h:column >
+          <f:facet name="header" >First Name</f:facet>
+          <h:outputText value="#{creator[0]}"  />
+        </h:column>
+        <h:column>
+          <f:facet name="header">Last Name</f:facet>
+          <h:outputText value="#{creator[1]}"  />
+
+
+        </h:column>
+        <h:column>
+          <f:facet name="header">Alias</f:facet>
+          <h:outputText value="#{creator[2]}"  />
+
+        </h:column>
+        <h:column>
+          <f:facet name="header">Email</f:facet>
+          <h:outputText value="#{creator[3]}"  />
+
+        </h:column>
+
+        <h:column>
+          <f:facet name="header">Is Active?</f:facet>
+          <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{creator[4] == 1}"/>
+          <h:outputText value="No" style="color: crimson; font-weight: bold;" rendered="#{creator[4] == 0}"/>
+
+        </h:column>
+      </h:dataTable>
         <table style="width:75%;margin-left: 50px" align="center" id="community_detail_table">
           <tr >
             <td style="padding-top: 7px;padding-bottom: 7px;">
 
               <h:outputLabel for="communityName"  value="#{bundle.communityName}"><span id="communityName" class="required_fields">*</span>       
-                <h:inputText id="communityName"
+                <h:outputText id="communityName"
                              value="#{communitiesBean.communityName}"
-                             required="true"
-                             requiredMessage="#{bundle.ReqCommunityName}" style="margin-left:10px">
-                </h:inputText>
+                             style="margin-left:10px">
+                </h:outputText>
               </h:outputLabel>
 
             </td>
