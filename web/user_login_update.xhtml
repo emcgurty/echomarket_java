@@ -17,7 +17,15 @@
 
   <ui:define name="content">
     <h:form id="user_agreement_content" >
-      <ui:include rendered="true" src="/user_detail_menu.xhtml" id="menu_in_login_update"></ui:include>  
+      <c:set var="rid" value="#{userBean.roleId}"  />  
+      <c:choose >
+        <c:when test="#{rid == 0}" >
+          <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+        </c:when>
+        <c:when test="#{rid == 1}" >
+          <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
+        </c:when>
+      </c:choose>
       <div class="top" >
         <div style="margin:10px;margin-top:25px;" >
           <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
@@ -38,28 +46,28 @@
           <table style="width:100%;margin-left: 50px" align="center" id="user_registration_table">
 
             <c:if test="#{userBean.communityName != null}"  >
-            <tr >
-              <td style="width:50%;padding-bottom: 15px;">
-                <h:outputLabel for="communityName" value="#{bundle.c_CommunityName}" >       
-                  <h:inputText id="communityName"
-                               value="#{userBean.communityName}"
-                               size="16"
-                               required="true"
-                               requiredMessage="#{bundle.ReqCommunityName}"
-                               style="margin-left:5px" rendered="#{userBean.editable == 1}">
+              <tr >
+                <td style="width:50%;padding-bottom: 15px;">
+                  <h:outputLabel for="communityName" value="#{bundle.c_CommunityName}" >       
+                    <h:inputText id="communityName"
+                                 value="#{userBean.communityName}"
+                                 size="16"
+                                 required="true"
+                                 requiredMessage="#{bundle.ReqCommunityName}"
+                                 style="margin-left:5px" rendered="#{userBean.editable == 1}">
 
 
-                  </h:inputText>
-                  <h:outputText 
-                    value="#{userBean.communityName}"
-                    style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
-                </h:outputLabel>
-              </td>
-              <td style="width:50%;  padding-bottom: 15px;">
-                <h:outputText value="" />
-                
-              </td>
-            </tr>
+                    </h:inputText>
+                    <h:outputText 
+                      value="#{userBean.communityName}"
+                      style="margin-left:5px" rendered="#{userBean.editable == 0}"/>
+                  </h:outputLabel>
+                </td>
+                <td style="width:50%;  padding-bottom: 15px;">
+                  <h:outputText value="" />
+
+                </td>
+              </tr>
             </c:if>
 
 
