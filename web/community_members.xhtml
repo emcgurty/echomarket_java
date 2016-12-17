@@ -61,46 +61,7 @@
           </c:if>
         </div> 
       </div> 
-
-      <h:dataTable value="#{communityMembersBean.buildCommunityMemberCreators()}" id="creator" var="creator" 
-                   styleClass="member-table"
-                   headerClass="member-table-header"
-                   rowClasses="member-table-odd-row,member-table-even-row"
-                   >
-
-         <f:facet name="header">
-                  <h:outputText value="Designated Community Creators" />
-              </f:facet>
-
-
-        <h:column >
-          <f:facet name="header" >First Name</f:facet>
-          <h:outputText value="#{creator.firstName}"  />
-        </h:column>
-        <h:column>
-          <f:facet name="header">Last Name</f:facet>
-          <h:outputText value="#{creator.lastName}"  />
-
-
-        </h:column>
-        <h:column>
-          <f:facet name="header">Alias</f:facet>
-          <h:outputText value="#{creator.alias}"  />
-
-        </h:column>
-        <h:column>
-          <f:facet name="header">Email</f:facet>
-          <h:outputText value="#{creator.emailAlternative}"  />
-
-        </h:column>
-
-        <h:column>
-          <f:facet name="header">Is Active?</f:facet>
-          <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{creator.isActive == 1}"/>
-          <h:outputText value="No" style="color: crimson; font-weight: bold;" rendered="#{creator.isActive == 0}"/>
-
-        </h:column>
-      </h:dataTable>
+      
 
       <h:dataTable value="#{communityMembersBean.existing_member}" id="existing_member" var="member" 
                    styleClass="member-table"
