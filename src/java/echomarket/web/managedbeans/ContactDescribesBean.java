@@ -14,6 +14,7 @@ import javax.inject.Named;
 import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 @Named
 @ManagedBean
 @RequestScoped
@@ -63,10 +64,10 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     return returnCD;
   }
 
-  public ContactDescribes[] buildContactDArray() {
+  public ContactDescribes[] buildContactDArray(String which) {
     ContactDescribes[] cdArray = null;
     List cd_list = null;
-    cd_list = cd_list();
+    cd_list = cd_list(which);
     int size_of_list = cd_list.size();
     cdArray = new ContactDescribes[size_of_list];
     for (int i = 0; i < size_of_list; i++) {
@@ -76,36 +77,25 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     return cdArray;
   }
 
-  private List cd_list() {
-
+  private List cd_list(String which) {
     List result = null;
     Session session = null;
     Transaction tx = null;
-
     try {
       session = hib_session();
       tx = session.beginTransaction();
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error at line 87 in CDBeans");
-      ex.printStackTrace();
-    } finally {
-
-    }
-
-    try {
-      result = session.createQuery("FROM ContactDescribes ORDER BY optionValue")
+      result = session.createQuery("FROM ContactDescribes WHERE purposeType = :which ORDER BY optionValue")
+              .setParameter("which", which)
               .list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error at line 57 in CDBeans");
       ex.printStackTrace();
-
+    } finally {
+      session = null;
+      tx = null;
     }
-    session = null;
-    tx = null;
-
     return result;
   }
 
