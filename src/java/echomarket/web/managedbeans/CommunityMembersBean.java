@@ -353,8 +353,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Transaction tx = hib.beginTransaction();
     String queryString = null;
     List result = null;
-
-    queryString = "FROM Participant where community_id = :cid and isCreator = 1";
+    queryString = "SELECT part.firstName, part.lastName, part.alias, us.email, part.isActive  "
+              + " FROM Users us "
+              + " INNER join us.participant part "
+              + " WHERE where community_id = :cid and isCreator = 1";
     try {
       result = hib.createQuery(queryString)
               .setParameter("cid", ubean.getCommunityId())
