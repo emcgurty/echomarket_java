@@ -40,7 +40,17 @@
             <h:commandLink  action="#{participantBean.load_ud(userbean.user_id)}"  class="right_div" value="Edit EchoMarket participant information"   rendered="#{userBean.editable == 0}" />
           </div> 
           <div style="margin:10px;" >
-            <h:outputText value="EchoMarket participant information..." />
+            <c:set var="rid" value="#{userBean.roleId}"  />  
+            <c:choose >
+              <c:when test="#{rid == 0}" >
+                <h:outputText value="EchoMarket 'Participant Information'" />
+              </c:when>
+              <c:when test="#{rid == 1}" >
+                <h:outputText value="EchoMarket 'Creator Information'" />
+              </c:when>
+            </c:choose>
+
+
             <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Initial Contact Preferences'"  >
               <f:param name="action" value="edit" />
             </h:commandLink>              
@@ -60,17 +70,63 @@
           <div style="margin-left: 5px;float:left;">
             <div  class="div_p" >
               <div style="margin:5px;" >
-                <h:outputText value="Yourself generally, your affiliation" />
+                <c:choose >
+                  <c:when test="#{rid == 0}" >
+                    <h:outputText value="Yourself generally, your affiliation" />
+                  </c:when>
+                  <c:when test="#{rid == 1}" >
+                    <h:outputText value="Your Community generally.." />
+                  </c:when>
+                </c:choose>
               </div>
             </div>
             <div style="display:block;float:left;height:auto;width:100%;margin-top:5px;">
               <div style="float:left;margin-left:25px">
-                <c:set var="display_describe" value="How would you describe yourself?"   rendered="#{userBean.editable == 1}" />
-                <c:set var="display_describe" value="How you describe yourself:"   rendered="#{userBean.editable == 0}" />
+                <c:choose >
+                  <c:when test="#{rid == 0}" >
+                    <c:set var="display_describe" value="How would you describe yourself?"   rendered="#{userBean.editable == 1}" />
+                    <c:set var="display_describe" value="How you describe yourself:"   rendered="#{userBean.editable == 0}" />
+                  </c:when>
+                  <c:when test="#{rid == 1}" >
+                    <c:set var="display_describe" value="How would you describe your Community?"   rendered="#{userBean.editable == 1}" />
+                    <c:set var="display_describe" value="How you describe your Community:"   rendered="#{userBean.editable == 0}" />
+                  </c:when>
+                </c:choose>
                 <h:outputLabel for="contactDescribeId"  value="#{display_describe}" ><span class="required_fields">*</span>
                   <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 1}" >
-                    <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray()}"  
-                                   var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />   
+
+                    <c:choose >
+                      <c:when test="#{rid == 1}" >
+                        <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('community')}"  
+                                       var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />  
+                      </c:when>
+                      <c:when test="#{rid == 0}" >
+                        <c:set var="whichUseType" value="#{userBean.userIsWhichType()}" />
+                        <c:choose>
+                          <c:when test="#{whichUerType == 'borrow'}" >
+                            <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('borrow')}"  
+                                           var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
+                          </c:when>
+                          <c:when test="#{whichUerType == 'lend'}" >
+                            <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('lend')}"  
+                                           var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
+                          </c:when>
+                           <c:when test="#{whichUerType == 'both'}" >
+                            <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('community')}"  
+                                           var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
+                          </c:when>
+                        </c:choose>
+                        <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray()}"  
+                                       var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
+
+                      </c:when>
+                    </c:choose>
+
+
+
+
+
+
                   </h:selectOneMenu>
                   <h:outputText value="#{contactDescribesBean.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
                 </h:outputLabel>
@@ -121,6 +177,7 @@
               </div>
             </div>
           </div>
+
           <div style="margin-left: 5px;float:left;">
             <div  class="div_p"  >
               <div style="margin:5px;" >
