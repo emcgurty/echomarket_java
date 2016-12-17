@@ -24,8 +24,15 @@
         <c:set var="div_display" value="block" rendered="#{userBean.editable == 0}" />    
         <c:set var="states_list" value="#{uss.buildUsStates()}"   rendered="#{userBean.editable == 1}" />    
         <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 1}" />    
-        <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" rendered="#{userBean.participant_id != null}" ></ui:include>  
-
+        <c:set var="rid" value="#{userBean.roleId}"  />  
+        <c:choose >
+          <c:when test="#{rid == 0}" >
+            <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+          </c:when>
+          <c:when test="#{rid == 1}" >
+            <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
+          </c:when>
+        </c:choose>
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
@@ -35,7 +42,7 @@
           <div style="margin:10px;" >
             <h:outputText value="EchoMarket participant information..." />
             <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Initial Contact Preferences'"  >
-                <f:param name="action" value="edit" />
+              <f:param name="action" value="edit" />
             </h:commandLink>              
             <h:inputHidden id="editable"  value="#{userBean.editable}"  />
             <h:inputHidden id="communityId"  value="#{participantBean.communityId}"  />
