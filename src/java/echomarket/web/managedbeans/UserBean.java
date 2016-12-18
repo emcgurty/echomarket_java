@@ -86,7 +86,8 @@ public class UserBean extends AbstractBean implements Serializable {
     this.appEmail = null;
     this.roleId = null;
     this.communityId = null;
-    this.pid =  null;
+    this.communityName = null;
+    this.pid = null;
   }
 
   public String getEmail() {
@@ -151,7 +152,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-  private Boolean getCreatorDetail(String uid) {
+  protected Boolean getCreatorDetail(String uid) {
     List results = null;
     Session hib = null;
     Transaction tx = null;
@@ -362,9 +363,9 @@ public class UserBean extends AbstractBean implements Serializable {
   public String userIsWhichType() {
 
     String returnType = null;
-    if ((this.userType.contains("lend")  == true) && (this.userType.contains("borrow") == false)) {
+    if ((this.userType.contains("lend") == true) && (this.userType.contains("borrow") == false)) {
       returnType = "lend";
-    } else if ((this.userType.contains("borrow")  == true) && (this.userType.contains("lend") == false)) {
+    } else if ((this.userType.contains("borrow") == true) && (this.userType.contains("lend") == false)) {
       returnType = "borrow";
     } else if ((this.userType.contains("borrow") == true) && (this.userType.contains("lend") == true)) {
       returnType = "both";
@@ -427,7 +428,7 @@ public class UserBean extends AbstractBean implements Serializable {
     List accept_results = null;
     Integer memberCreator = -9;
     String return_string = null;
-    String holdResetCode = getResetCode();  // becuase if process fails, I will null all user values
+    String holdResetCode = getResetCode();  // because if process fails, I will null all user values
     results = findUserName();
     if (results != null) {
       if (results.size() == 0) {
@@ -447,10 +448,10 @@ public class UserBean extends AbstractBean implements Serializable {
             // User is valid now needs to accept agreement
             Users uu = (Users) results.get(0);  /// User result that has current user data
             memberCreator = uu.getRoleId();
-            if (memberCreator == 1) {
-              setCurrentUserCommunityId(uu.getUser_id());
-              setCommunityName(uu.getCommunityName());
-            }
+//            if (memberCreator == 1) {
+//              setCurrentUserCommunityId(uu.getUser_id());
+//              setCommunityName(uu.getCommunityName());
+//            }
             setRoleId(memberCreator);
             setEmail(uu.getEmail());
             setUserAlias(uu.getUserAlias());

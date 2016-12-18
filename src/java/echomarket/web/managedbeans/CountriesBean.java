@@ -12,137 +12,107 @@ import org.hibernate.Transaction;
 @RequestScoped
 public class CountriesBean extends AbstractBean implements Serializable {
 
-    private String countryId;
-    private String countryName;
+  private String countryId;
+  private String countryName;
 
-    public CountriesBean() {
+  public CountriesBean() {
+  }
+
+  public String getOneCountry(String one_country) {
+
+    String returnCountry = null;
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      result = session.createQuery("from Countries WHERE country_id = :one_country")
+              .setParameter("one_country", one_country)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
+      System.out.println("Error at line 32 in Country Bean");
+      e.printStackTrace();
+    } finally {
+      session = null;
+      tx = null;
+    }
+    if (result.size() > 0) {
+      Countries returnedCountryName = (Countries) result.get(0);
+      returnCountry = returnedCountryName.getCountryName();
+      returnedCountryName = null;
+    } else {
+      returnCountry = "Country Not Found";
     }
 
-    public String getOneCountry(String one_country) {
+    return returnCountry;
+  }
 
-        String returnCountry = null;
-        List result = null;
-        Session session = null;
-        Transaction tx = null;
-
-        try {
-            session = hib_session();
-            tx = session.beginTransaction();
-        } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("IS TX STILL ACTIVE 33 - close");
-            session = null;
-            tx = null;
-            message(
-                    null,
-                    "ApplicationError",
-                    new Object[]{ex});
-            return "index";
-        }
-        try {
-            result = session.createQuery("from Countries WHERE country_id = :one_country")
-                    .setParameter("one_country", one_country)
-                    .list();
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            System.out.println("Error at line 28 in Country Bean");
-            e.printStackTrace();
-
-        } finally {
-            //session.close();
-            System.out.println("IS TX STILL ACTIVE 49");
-            System.out.println(tx.isActive());
-            System.out.println("IS TX STILL ACTIVE 49 - close");
-            session = null;
-            tx = null;
-        }
-        if (result.size() > 0) {
-            Countries returnedCountryName = (Countries) result.get(0);
-            returnCountry = returnedCountryName.getCountryName();
-            returnedCountryName = null;
-        } else {
-            returnCountry = "Country Not Found";
-        }
-
-        return returnCountry;
+  public Countries[] buildCountries() {
+    Countries[] purposeArray = null;
+    List countrylist = null;
+    countrylist = country_list();
+    int size_of_list = countrylist.size();
+    purposeArray = new Countries[size_of_list];
+    for (int i = 0; i < size_of_list; i++) {
+      Countries to_Array = (Countries) countrylist.get(i);
+      purposeArray[i] = new Countries(to_Array.getCountryId(), to_Array.getCountryName());
     }
+    countrylist = null;
+    return purposeArray;
+  }
 
-    public Countries[] buildCountries() {
-        Countries[] purposeArray = null;
-        List countrylist = null;
-        countrylist = country_list();
-        int size_of_list = countrylist.size();
-        purposeArray = new Countries[size_of_list];
-        for (int i = 0; i < size_of_list; i++) {
-            Countries to_Array = (Countries) countrylist.get(i);
-            purposeArray[i] = new Countries(to_Array.getCountryId(), to_Array.getCountryName());
-        }
-        countrylist = null;
-        return purposeArray;
+  private List country_list() {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      result = session.createQuery("from Countries ORDER BY country_id").list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error at line 94 in Country Bean");
+      e.printStackTrace();
+    } finally {
+      session = null;
+      tx = null;
+
     }
+    return result;
+  }
 
-    private List country_list() {
+  /**
+   * @return the id
+   */
+  public String getCountryId() {
+    return countryId;
+  }
 
-        List result = null;
-        Session session = null;
-        Transaction tx = null;
+  /**
+   * @param id the id to set
+   */
+  public void setCountryId(String id) {
+    this.countryId = id;
+  }
 
-        try {
-            session = hib_session();
-            tx = session.beginTransaction();
-        } catch (Exception ex) {
-            message(
-                    null,
-                    "ApplicationError",
-                    new Object[]{ex});
+  /**
+   * @return the stateName
+   */
+  public String getCountryName() {
+    return countryName;
+  }
 
-        }
-
-        try {
-            result = session.createQuery("from Countries ORDER BY country_id").list();
-            tx.commit();
-        } catch (Exception e) {
-            System.out.println("Error at line 68 in Country Bean");
-            e.printStackTrace();
-        } finally {
-            //session.close();
-            System.out.println("IS TX STILL ACTIVE 102");
-            System.out.println(tx.isActive());
-            System.out.println("IS TX STILL ACTIVE 102 - close");
-            session = null;
-            tx = null;
-            
-        }
-        return result;
-    }
-
-    /**
-     * @return the id
-     */
-    public String getCountryId() {
-        return countryId;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setCountryId(String id) {
-        this.countryId = id;
-    }
-
-    /**
-     * @return the stateName
-     */
-    public String getCountryName() {
-        return countryName;
-    }
-
-    /**
-     * @param stateName the stateName to set
-     */
-    public void setCountryName(String cName) {
-        this.countryName = cName;
-    }
+  /**
+   * @param stateName the stateName to set
+   */
+  public void setCountryName(String cName) {
+    this.countryName = cName;
+  }
 
 }

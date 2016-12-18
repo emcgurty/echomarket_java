@@ -23,7 +23,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "participant")
+@ManagedBean(name = "participantBean")
 @SessionScoped
 public class ParticipantBean extends AbstractBean implements Serializable {
 
@@ -135,6 +135,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.goodwill = pp.getGoodwill();
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
+      ubean.setCommunityId(communityId);
+      ubean.setParticipant_id(participant_id);
     }
 
     if (ubean.getEditable() == -1) {
@@ -246,7 +248,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       } else {
         part.setIsCreator(1);
       }
-        
 
       if (this.questionAltEmail == 1) {
         part.setEmailAlternative(null);
@@ -362,10 +363,22 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-        Participant part = new Participant(getId(), ubean.getUser_id(), ubean.getCommunityId(), goodwill, age18OrMore, 1, new Date(), "NA");
+        String new_ID = getId();
+        Participant part = null;
+        ///  1218 changed
+        if (ubean.getRoleId() == 0) {
+          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, 1, new Date(), "NA");
+        } else {
+          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, 1, new Date(), "NA");
+        }
+
         sb.save(part);
         tx.commit();
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
+        ubean.setParticipant_id(new_ID);
+        if (ubean.getRoleId() > 0) {
+          ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
+        }
         return_string = load_ud(ubean.getUser_id());
         message(null, "thanksForAcceptingAgreement", null);
       } catch (Exception ex) {
@@ -818,11 +831,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
     List result = null;
     List return_result = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
 
     String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("pid", ubean.getParticipant_id())
               .setParameter("which", which)

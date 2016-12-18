@@ -7,9 +7,11 @@ import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
@@ -49,22 +51,30 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     String queryString = null;
     Communities comm_Array = null;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
+    Map<String, String> params = null;
+    String current_cid = null;
+    
+    if (ubean.getCommunityId() == null)  {
+      try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      current_cid = params.get("cid");
+      ubean.setCommunityId(current_cid);
     } catch (Exception ex) {
-      tx.rollback();
     }
+   }
+    
     
     queryString = "FROM Communities where community_id = :cid";
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("cid", ubean.getCommunityId())
               .list();
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
+      System.out.println("Error in load_community_detail, get result");
       Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
@@ -91,20 +101,18 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         this.cellPhone = comm_Array.getCellPhone();
 
       } else if (result.size() == 0) {
+        
+        queryString = "FROM Participant where community_id = :cid";
         try {
           hib = hib_session();
           tx = hib.beginTransaction();
-        } catch (Exception ex) {
-          tx.rollback();
-        }
-        queryString = "FROM Participant where community_id = :cid";
-        try {
           result = hib.createQuery(queryString)
                   .setParameter("cid", ubean.getCommunityId())
                   .list();
           tx.commit();
         } catch (Exception ex) {
           tx.rollback();
+          System.out.println("Error in load_community_detail, get result2");
           Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
           hib = null;
@@ -120,20 +128,20 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
             this.email = ubean.getEmail();
             this.cellPhone = part_array.getCellPhone();
 
-            List getPrimaryAddress = getCommunityPrimaryAddress();
-            if (getPrimaryAddress != null) {
-              if (getPrimaryAddress.size() == 1) {
-                Addresses addr = (Addresses) getPrimaryAddress.get(0);
-                this.addressLine1 = addr.getAddressLine1();
-                this.addressLine2 = addr.getAddressLine2();
-                this.postalCode = addr.getPostalCode();
-                this.city = addr.getCity();
-                this.province = addr.getProvince();
-                this.region = addr.getRegion();
-                this.usStateId = addr.getUsStateId();
-                this.countryId = addr.getCountryId();
-              }
-            }
+//            List getPrimaryAddress = getCommunityPrimaryAddress();
+//            if (getPrimaryAddress != null) {
+//              if (getPrimaryAddress.size() == 1) {
+//                Addresses addr = (Addresses) getPrimaryAddress.get(0);
+//                this.addressLine1 = addr.getAddressLine1();
+//                this.addressLine2 = addr.getAddressLine2();
+//                this.postalCode = addr.getPostalCode();
+//                this.city = addr.getCity();
+//                this.province = addr.getProvince();
+//                this.region = addr.getRegion();
+//                this.usStateId = addr.getUsStateId();
+//                this.countryId = addr.getCountryId();
+//              }
+//            }
           }
         }
 
@@ -157,7 +165,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       queryString = " FROM Addresses "
               + " WHERE participant_id = :pid AND addressType = 'primary'";
       primaryAddress = hib.createQuery(queryString)
-              .setParameter("pid", ubean.getCommunityId())
+              .setParameter("pid", ubean.getParticipant_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -186,12 +194,12 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-        String new_cid = getId();
-        comm = new Communities(new_cid, this.communityName, 0, this.firstName, this.mi, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
+        //// one-to-one particpant and community
+        comm = new Communities(ubean.getParticipant_id(), this.communityName, 0, this.firstName, this.mi, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
         sb.save(comm);
         tx.commit();
         updateSuccess = true;
-        ubean.setCommunityId(new_cid);
+        ubean.setCommunityId(ubean.getParticipant_id());
         ubean.setCommunityName(this.communityName);
         message(null, "CommunityDetailRecordSaved", null);
       } catch (Exception ex) {
@@ -203,16 +211,10 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         tx = null;
       }
     } else {
-
+      /// Do update 
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-      } catch (Exception ex) {
-        System.out.println("Error in saveCommunityDetail");
-        Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-      }
-
-      try {
         query = "FROM Communities WHERE community_id = :cid";
         result = sb.createQuery(query)
                 .setParameter("cid", this.communityId)
@@ -226,10 +228,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         tx = null;
         sb = null;
       }
-
+    
       try {
-        sb = hib_session();
-        tx = sb.beginTransaction();
         if (result != null) {
           if (result.size() == 1) {
             comm_result = (Communities) result.get(0);
@@ -267,7 +267,6 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         tx = null;
         sb = null;
       }
-
     }
     return "community_members";
   }

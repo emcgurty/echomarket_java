@@ -1,0 +1,120 @@
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+  <h:head>        
+  </h:head>
+
+  <ul id="nav" class="creator_menu">
+    <li class="subs" id="tab_item_0" >
+      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" immediate="true">
+        <h:outputText value="Community Detail"/>
+        <f:param name="cid" value="#{userBean.communityId}"  />
+      </h:commandLink>   
+    </li>
+    <li class="subs" id="tab_item_1" >
+      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" immediate="true">
+        <h:outputText value="Community Members"/>
+        <f:param name="cid" value="#{userBean.communityId}"  />
+      </h:commandLink>    
+    </li>
+    <li class="subs" id="tab_item_2" >
+      <h:commandLink immediate="true"  action="#{userBean.load_ud(0)}"  value="Login Information"  rendered="#{userBean.editable != -1}" >
+        <f:param name="action" value="login" />
+      </h:commandLink>
+    </li>
+
+    <li class="subs" id="tab_item_3" >
+      <h:commandLink immediate="true"  action="#{participantBean.load_ud(userBean.user_id)}"  value="Creator Information.."  rendered="#{userBean.editable != -1}" >
+        <f:param name="action" value="participant" />
+      </h:commandLink>
+    </li>
+    <li class="subs" id="tab_item_4" >
+      <c:choose>
+        <c:when  test="#{userBean.itemId == null}" >
+          <a href="#s1">Default Item Preferences/Conditions</a>
+        </c:when>
+        <c:when  test="#{userBean.itemId != null}" >
+          <a href="#s1">New item #{itemBean.getCurrentItemDescription(userBean.itemId)}: Revise Item Preferences/Conditions?</a>
+        </c:when>
+      </c:choose>
+
+      <ul>
+        <li>
+          <c:choose>
+            <c:when  test="#{userBean.itemId != null}" >
+              <c:set var="newItemLabel" value="Initial Contact Preferences"  />
+            </c:when>
+            <c:when  test="#{userBean.itemId == null}" >
+              <c:set var="newItemLabel" value="Initial Contact Preferences"  />
+            </c:when>
+          </c:choose>
+          <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="#{userBean.editable != -1}" >
+            <f:param name="action" value="edit" />
+            <f:param name="iid" value="#{userBean.itemId}" />
+          </h:commandLink>
+        </li>
+
+        <c:if test="#{(userBean.userIsWhichType() == 'both') or (userBean.userIsWhichType() == 'lend')}" >
+          <li >
+            <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
+            <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
+              <f:param name="iid" value="#{userBean.itemId}" />
+              <f:param name="action" value="edit" />
+            </h:commandLink>   
+          </li>
+          <li>
+            <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
+            <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
+              <f:param name="iid" value="#{userBean.itemId}" />
+              <f:param name="action" value="edit" />
+            </h:commandLink>   
+          </li>
+        </c:if>     
+      </ul>
+    </li>
+    <c:if test="#{userBean.action == 'current'}" >
+      <li class="subs" id="tab_item_5" >
+
+        <c:set var="whichType" value="#{userBean.userIsWhichType()}" />
+        <c:choose>                                
+          <c:when test="#{whichType == 'borrow'}"  >
+            <li>
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    >
+                <f:param name="action" value="item" />
+              </h:commandLink>
+            </li>
+          </c:when >  
+          <c:when test="#{whichType == 'lend'}"  >
+            <li>
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"    >
+                <f:param name="action" value="item" />
+              </h:commandLink>
+            </li>
+          </c:when >  
+          <c:when test="#{whichType == 'both'}"  >
+            <li class="subs">
+              <a href="#s1">Lend or Borrow?</a>
+              <ul>
+                <li>
+                  <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="I want to lend!"  rendered="#{userBean.editable != -1}"     >
+                    <f:param name="action" value="item" />
+                  </h:commandLink>
+                </li>
+                <li>
+                  <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="I want to borrow!"  rendered="#{userBean.editable != -1}"    >
+                    <f:param name="action" value="item" />
+                  </h:commandLink>
+                </li>
+              </ul>
+            </li>
+          </c:when >  
+        </c:choose>
+
+      </li>
+    </c:if>
+  </ul>
+
+</ui:composition>

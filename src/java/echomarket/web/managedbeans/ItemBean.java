@@ -180,14 +180,13 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     List result = null;
     ubean.setItemId(iid);
-    
+
     if (iid == null) {
       ubean.setEditable(1);
     } else {
       ubean.setEditable(0);
     }
-    
-   
+
     Map<String, String> params = null;
     String action = null;
 
@@ -280,7 +279,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
 
     } else {
-      
+
       result = getCurrentItem(itemId, itemType);
       if (result.size() == 1) {
         Items uitem = (Items) result.get(0);
@@ -650,7 +649,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       result = session.createQuery(query)
               .setParameter("iid", iid)
               .setParameter("which", which)
-             .list();
+              .list();
 
       tx.commit();
     } catch (Exception e) {
@@ -697,14 +696,30 @@ public class ItemBean extends AbstractBean implements Serializable {
   public List getAllSoughtItems(String which) {
     System.out.println("getAllSoughtItems Called");
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
-      query = "FROM Items WHERE itemType = :it ORDER BY dateCreated";
-      result = session.createQuery(query)
-              .setParameter("it", which)
-              .list();
+      session = hib_session();
+      tx = session.beginTransaction();
+      if (ubean.getCommunityId() == null) {
+        query = "  SELECT itm FROM Participant part "
+                + " INNER join part.item itm "
+                + " WHERE itm.itemType = :it AND part.communityId = null ORDER BY itm.dateCreated";
+        result = session.createQuery(query)
+                .setParameter("it", which)
+                .list();
+
+      } else {
+        query = "  SELECT itm FROM Participant part "
+                + " INNER join part.item itm "
+                + " WHERE itm.itemType = :it AND part.communityId = :cid ORDER BY itm.dateCreated";
+        result = session.createQuery(query)
+                .setParameter("it", which)
+                .setParameter("cid", ubean.getCommunityId())
+                .list();
+      }
+
       tx.commit();
     } catch (Exception e) {
       tx.rollback();
@@ -889,7 +904,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 //              + " AND lic.itemId = :iid ";
       result = session.createQuery(query)
               .setParameter("pid", pid)
-//              .setParameter("iid", "")
+              //              .setParameter("iid", "")
               .setMaxResults(1)
               .list();
       tx.commit();
@@ -1041,7 +1056,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     return return_value;
   }
-  
+
   public Boolean deleteCurrentRecord(String iid) {
     ///Needs to be written
     return true;

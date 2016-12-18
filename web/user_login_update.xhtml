@@ -34,7 +34,7 @@
         </div> 
         <div style="margin:10px;" >
           <h:outputText value="Login Information..." />
-          <h:commandLink  action="#{participant.load_ud(userBean.user_id)}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" >
+          <h:commandLink  action="#{participantBean.load_ud(userBean.user_id)}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" >
             <f:param name="action" value="edit" />
           </h:commandLink>
           <h:inputHidden id="roleId"  value="#{userBean.roleId}" />                  

@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
@@ -55,7 +57,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Integer howMany = getHowManyRecords();
     Participant new_cm;
     for (int i = 0; i < howMany; i++) {
-      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), ubean.getUser_id(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
+      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
       comm_member.add(new_cm);
     }
     this.new_comm_member_rows = comm_member;
@@ -114,9 +116,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (savedRecord == true) {
               if (new_row_size == 1) {
-              message(null, "Your new memeber has been saved to your Community and an email notication was sent to him/her", null);
+                message(null, "Your new memeber has been saved to your Community and an email notication was sent to him/her", null);
               } else {
-              message(null, "New Member(s) have been saved to your Community and an email notication was sent to them",  null);  
+                message(null, "New Member(s) have been saved to your Community and an email notication was sent to them", null);
               }
             }
           }
@@ -164,6 +166,18 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     this.currentRow = -1;
     this.errorMessage = null;
     List result = null;
+
+    Map<String, String> params = null;
+    String current_cid = null;
+
+    if (ubean.getCommunityId() == null) {
+      try {
+        params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        current_cid = params.get("cid");
+        ubean.setCommunityId(current_cid);
+      } catch (Exception ex) {
+      }
+    }
     if (hasCreatorRights() == true) {
       Session hib = null;
       Transaction tx = null;
@@ -192,7 +206,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       }
 
       this.editable = 0;
-      return "community_members.xhtml?faces-redirect=true";
+      return "community_members";
     } else {
       message(null, "MustBeCommunityCreatorAddMember", null);
       return "index";
@@ -354,17 +368,16 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     String queryString = null;
     List result = null;
     queryString = "SELECT part.firstName, part.lastName, part.alias, us.email, part.isActive  "
-              + " FROM Users us "
-              + " INNER join us.participant part "
-              + " WHERE where community_id = :cid and isCreator = 1";
+            + " FROM Users us "
+            + " INNER join us.participant part "
+            + " WHERE part.communityId = :cid and part.isCreator = 1";
     try {
       result = hib.createQuery(queryString)
               .setParameter("cid", ubean.getCommunityId())
               .list();
       tx.commit();
-
     } catch (Exception ex) {
-      Logger.getLogger(CommunityMembersBean.class.getName()).log(Level.SEVERE, "ERROR IN build Community Member list", ex);
+      tx.rollback();
       System.out.println("ERROR IN build Community Member list");
       Logger.getLogger(CommunityMembersBean.class.getName())
               .log(Level.SEVERE, "ERROR IN build Community Member list", ex);

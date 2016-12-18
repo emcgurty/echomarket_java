@@ -154,13 +154,13 @@
           <a href="#s1">Community</a>
           <ul>
             <li>
-              <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}">
+              <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}"   >
                 <h:outputText value="Community Detail"/>
                 <f:param name="cid" value="#{userBean.communityId}"  />
               </h:commandLink>                 
             </li>
             <li>
-              <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}">
+              <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" >
                 <h:outputText value="Community Members"/>
                  <f:param name="cid" value="#{userBean.communityId}"  />
               </h:commandLink>                 
