@@ -22,7 +22,6 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "communityMembersBean")
-/// Had to change to Session becuase interactive form.
 @SessionScoped
 public class CommunityMembersBean extends AbstractBean implements Serializable {
 
@@ -163,24 +162,14 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public String load_community_members() {
+
     this.currentRow = -1;
     this.errorMessage = null;
     List result = null;
+    Session hib = null;
+    Transaction tx = null;
 
-    Map<String, String> params = null;
-    String current_cid = null;
-
-    if (ubean.getCommunityId() == null) {
-      try {
-        params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        current_cid = params.get("cid");
-        ubean.setCommunityId(current_cid);
-      } catch (Exception ex) {
-      }
-    }
     if (hasCreatorRights() == true) {
-      Session hib = null;
-      Transaction tx = null;
       String queryString = null;
       queryString = "FROM Participant where community_id = :cid";
       try {
@@ -189,20 +178,46 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         result = hib.createQuery(queryString)
                 .setParameter("cid", ubean.getCommunityId())
                 .list();
-        for (int i = 0; i < result.size(); i++) {
-          Participant cm = (Participant) result.get(i);
-          if (cm.getEditable() == 1) {
-            cm.setEditable(0);
-            hib.update(cm);
-          }
-        }
         tx.commit();
       } catch (Exception ex) {
         tx.rollback();
+        System.out.println("Error in HasRights tx");
+        Logger
+                .getLogger(CommunityMembersBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
       } finally {
         tx = null;
         hib = null;
-        result = null;
+      }
+      try {
+        if (result != null) {
+          if (result.size() == 1) {
+
+            for (int i = 0; i < result.size(); i++) {
+              Participant cm = (Participant) result.get(i);
+
+              if (cm.getEditable() == 1) {
+                hib = hib_session();
+                tx = hib.beginTransaction();
+                cm.setEditable(0);
+                hib.update(cm);
+                tx.commit();
+                hib = null;
+                tx = null;
+              }
+            }
+          }
+        }
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in setting editable to 0");
+        Logger
+                .getLogger(CommunityMembersBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
+      } finally {
+        tx = null;
+        hib = null;
+
       }
 
       this.editable = 0;
@@ -215,9 +230,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   public void editAction(Participant cmid) {
     this.errorMessage = null;
-    if (this.currentRow > -1) {
-      cancelAction(comm_member_rows.get(this.currentRow));
-      this.currentRow = -1;
+    if (this.currentRow != null) {
+      if (this.currentRow > -1) {
+        cancelAction(comm_member_rows.get(this.currentRow));
+        this.currentRow = -1;
+      }
     }
     Session hib = null;
     Transaction tx = null;
