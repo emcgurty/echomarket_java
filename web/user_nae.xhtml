@@ -28,9 +28,11 @@
         <c:choose >
           <c:when test="#{rid == 0}" >
             <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+            <c:set var="allow" value="public"  />  
           </c:when>
-          <c:when test="#{rid == 1}" >
+          <c:when test="#{rid gt 0}" >
             <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
+            <c:set var="allow" value="Community"  />  
           </c:when>
         </c:choose>
         <div class="top" >
@@ -47,6 +49,9 @@
               </c:when>
               <c:when test="#{rid == 1}" >
                 <h:outputText value="EchoMarket 'Creator Information'" />
+              </c:when>
+              <c:when test="#{rid == 2}" >
+                <h:outputText value="EchoMarket 'Community Member Information'" />
               </c:when>
             </c:choose>
 
@@ -67,7 +72,16 @@
 
 
         <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-          <div style="margin-left: 5px;float:left;">
+          
+          <c:choose >
+          <c:when test="#{rid == 2}" >
+              <h:inputHidden id="contactDescribeId"  value="-9"  />
+              <h:inputHidden id="displayOrganization"  value="-9"  />
+              <h:inputHidden id="otherDescribeYourselfText"  value=""  />
+              <h:inputHidden id="organizationName"  value=""  />
+          </c:when>
+          <c:when test="#{rid lt 0}" >
+            <div style="margin-left: 5px;float:left;">
             <div  class="div_p" >
               <div style="margin:5px;" >
                 <c:choose >
@@ -121,12 +135,6 @@
 
                       </c:when>
                     </c:choose>
-
-
-
-
-
-
                   </h:selectOneMenu>
                   <h:outputText value="#{contactDescribesBean.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
                 </h:outputLabel>
@@ -152,8 +160,10 @@
                 <span class="error-message" id="organizationName" ></span>
               </div>
               <div style="float:left;margin">
-                <div id="yesNoOrganization" style="display:#{div_display};margin-left:15px;">
-                  <h:outputLabel value="Allow public to see your Organization Name?:"  for="displayOrganization" rendered="#{(userBean.editable == 1) or ( (userBean.editable == 0) and (!empty participantBean.organizationName) )  }">
+                <c:choose >
+                  <c:when test="#{rid == 0}" >
+                   <div id="yesNoOrganization" style="display:#{div_display};margin-left:15px;">
+                  <h:outputLabel value="Allow #{allow} to see your Organization Name?:"  for="displayOrganization" rendered="#{(userBean.editable == 1) or ( (userBean.editable == 0) and (!empty participantBean.organizationName) )  }">
                     <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                       <f:selectItem itemValue="1" itemLabel="Yes" />
                       <f:selectItem itemValue="0" itemLabel="No" />
@@ -174,10 +184,17 @@
                     </c:if>      
                   </h:outputLabel>     
                 </div>
+                  </c:when>
+                  <c:when test="#{rid gt 0}" >
+                    <h:inputHidden id="displayOrganization" value="-9"/>
+                  </c:when>
+                </c:choose>
               </div>
             </div>
           </div>
-
+          </c:when>
+        </c:choose>
+          
           <div style="margin-left: 5px;float:left;">
             <div  class="div_p"  >
               <div style="margin:5px;" >
@@ -213,7 +230,7 @@
 
               <div style="margin-left: 25px;float:left">
 
-                <h:outputLabel value="Allow public to see your Name?"  for="displayName" >
+                <h:outputLabel value="Allow #{allow} to see your Name?"  for="displayName" >
                   <h:selectOneRadio id="displayName" value="#{participantBean.displayName}" layout="pageDirection"  rendered="#{userBean.editable == 1}">
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
@@ -365,7 +382,7 @@
 
                     <tr >
                       <td colspan="2">
-                        <h:outputLabel value="Allow public to see your Primary Address?"  for="displayAddress" >
+                        <h:outputLabel value="Allow #{allow} to see your Primary Address?"  for="displayAddress" >
                           <h:selectOneRadio id="displayAddress" value="#{participantBean.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 1}">
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />
@@ -503,7 +520,7 @@
 
                     <tr >
                       <td colspan="2">
-                        <h:outputLabel value="Allow public to see your Alternative Address?"  for="displayAlternativeAddress" >
+                        <h:outputLabel value="Allow #{allow} to see your Alternative Address?"  for="displayAlternativeAddress" >
                           <h:selectOneRadio id="displayAlternativeAddress" value="#{participantBean.displayAlternativeAddress}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />
@@ -556,7 +573,7 @@
                       <h:outputText    value="#{participantBean.homePhone}" rendered="#{userBean.editable == 0}" class="RO_text"/> 
                     </h:outputLabel>
                     <div style="float:left" >
-                      <h:outputLabel value="Allow public to see your Home Phone Number?"  for="displayHomePhone"  >
+                      <h:outputLabel value="Allow #{allow} to see your Home Phone Number?"  for="displayHomePhone"  >
                         <h:selectOneRadio id="displayHomePhone" value="#{participantBean.displayHomePhone}" rendered="#{userBean.editable == 1}" >
                           <f:selectItem itemValue="1" itemLabel="Yes" />
                           <f:selectItem itemValue="0" itemLabel="No" />
