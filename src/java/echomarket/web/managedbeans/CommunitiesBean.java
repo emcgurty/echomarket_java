@@ -24,6 +24,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
 
   @Inject
   UserBean ubean;
+  @Inject
+  CommunityMembersBean cmBean;
   private String communityId;
   private String communityName;
   private Integer approved;
