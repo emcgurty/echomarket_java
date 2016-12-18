@@ -1,20 +1,16 @@
 package echomarket.web.managedbeans;
 
 import echomarket.SendEmail.SendEmail;
-import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
@@ -162,14 +158,13 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public String load_community_members() {
-
+  
     this.currentRow = -1;
     this.errorMessage = null;
     List result = null;
-    Session hib = null;
-    Transaction tx = null;
-
     if (hasCreatorRights() == true) {
+      Session hib = null;
+      Transaction tx = null;
       String queryString = null;
       queryString = "FROM Participant where community_id = :cid";
       try {
@@ -178,55 +173,29 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         result = hib.createQuery(queryString)
                 .setParameter("cid", ubean.getCommunityId())
                 .list();
+        for (int i = 0; i < result.size(); i++) {
+          Participant cm = (Participant) result.get(i);
+          if (cm.getEditable() == 1) {
+            cm.setEditable(0);
+            hib.update(cm);
+          }
+        }
         tx.commit();
       } catch (Exception ex) {
         tx.rollback();
-        System.out.println("Error in HasRights tx");
-        Logger
-                .getLogger(CommunityMembersBean.class
-                        .getName()).log(Level.SEVERE, null, ex);
       } finally {
         tx = null;
         hib = null;
-      }
-      try {
-        if (result != null) {
-          if (result.size() == 1) {
-
-            for (int i = 0; i < result.size(); i++) {
-              Participant cm = (Participant) result.get(i);
-
-              if (cm.getEditable() == 1) {
-                hib = hib_session();
-                tx = hib.beginTransaction();
-                cm.setEditable(0);
-                hib.update(cm);
-                tx.commit();
-                hib = null;
-                tx = null;
-              }
-            }
-          }
-        }
-      } catch (Exception ex) {
-        tx.rollback();
-        System.out.println("Error in setting editable to 0");
-        Logger
-                .getLogger(CommunityMembersBean.class
-                        .getName()).log(Level.SEVERE, null, ex);
-      } finally {
-        tx = null;
-        hib = null;
-
+        result = null;
       }
 
       this.editable = 0;
-      return "community_members";
+      return "community_members.xhtml?faces-redirect=true";
     } else {
       message(null, "MustBeCommunityCreatorAddMember", null);
       return "index";
     }
-  }
+    }
 
   public void editAction(Participant cmid) {
     this.errorMessage = null;
