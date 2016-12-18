@@ -43,36 +43,36 @@ public class ItemROBean extends AbstractBean implements Serializable {
     if (iid == null) {
       return null;
     } else {
-    String queryString = "from ItemImages where item_id = :iid ";
-    try {
-      result = hib.createQuery(queryString)
-              .setParameter("iid", iid)
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      tx.rollback();
-      System.out.println("Error in getExistingPicture");
-      e.printStackTrace();
-    } finally {
-      tx = null;
-      hib = null;
-    }
+      String queryString = "from ItemImages where item_id = :iid ";
+      try {
+        result = hib.createQuery(queryString)
+                .setParameter("iid", iid)
+                .list();
+        tx.commit();
+      } catch (Exception e) {
+        tx.rollback();
+        System.out.println("Error in getExistingPicture");
+        e.printStackTrace();
+      } finally {
+        tx = null;
+        hib = null;
+      }
 
-    Integer size_of_list = result.size();
-    if (size_of_list == 0) {
-      return null;
-    } else {
-      ItemImages a_array = (ItemImages) result.get(0);
-      ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-              new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
-                      a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
-      ));
-      setPicture(tmp_picture);
+      Integer size_of_list = result.size();
+      if (size_of_list == 0) {
+        return null;
+      } else {
+        ItemImages a_array = (ItemImages) result.get(0);
+        ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
+                new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
+                        a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
+        ));
+        setPicture(tmp_picture);
 
-      a_array = null;
-      tmp_picture = null;
-      return getPicture();
-    }
+        a_array = null;
+        tmp_picture = null;
+        return getPicture();
+      }
     }
   }
 
@@ -101,15 +101,17 @@ public class ItemROBean extends AbstractBean implements Serializable {
   }
 
   public List getAllSoughtItems(String which) {
-    // TO DO: Why is this function call so many times.
-    // TO DO: Error here I have not cascaded in event that particpant is deleted 
-    
+    System.out.println("getAllSoughtItems Called");
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
-    try {
-      query = "FROM Items WHERE itemType = :it ORDER BY dateCreated desc";
+    try {   // Don't display community items
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = "  SELECT itm FROM Participant part "
+              + " left join part.item itm "
+              + " WHERE itm.itemType = :it AND part.communityId = null ORDER BY itm.dateCreated";
       result = session.createQuery(query)
               .setParameter("it", which)
               .list();
@@ -128,6 +130,4 @@ public class ItemROBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  
-  
 }
