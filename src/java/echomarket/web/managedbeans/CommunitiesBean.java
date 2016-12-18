@@ -51,19 +51,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     String queryString = null;
     Communities comm_Array = null;
-    Map<String, String> params = null;
-    String current_cid = null;
-    
-    if (ubean.getCommunityId() == null)  {
-      try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-      current_cid = params.get("cid");
-      ubean.setCommunityId(current_cid);
-    } catch (Exception ex) {
-    }
-   }
-    
-    
+
     queryString = "FROM Communities where community_id = :cid";
     try {
       hib = hib_session();
@@ -101,7 +89,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         this.cellPhone = comm_Array.getCellPhone();
 
       } else if (result.size() == 0) {
-        
+
         queryString = "FROM Participant where community_id = :cid";
         try {
           hib = hib_session();
@@ -122,26 +110,27 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         if (result != null) {
           if (result.size() == 1) {
             Participant part_array = (Participant) result.get(0);
-            this.communityName = part_array.getOrganizationName();
+            Boolean needCommunityValues = ubean.getCreatorDetail(ubean.getUser_id());
+            this.communityName = ubean.getCommunityName();
             this.firstName = part_array.getFirstName();
             this.lastName = part_array.getLastName();
             this.email = ubean.getEmail();
             this.cellPhone = part_array.getCellPhone();
 
-//            List getPrimaryAddress = getCommunityPrimaryAddress();
-//            if (getPrimaryAddress != null) {
-//              if (getPrimaryAddress.size() == 1) {
-//                Addresses addr = (Addresses) getPrimaryAddress.get(0);
-//                this.addressLine1 = addr.getAddressLine1();
-//                this.addressLine2 = addr.getAddressLine2();
-//                this.postalCode = addr.getPostalCode();
-//                this.city = addr.getCity();
-//                this.province = addr.getProvince();
-//                this.region = addr.getRegion();
-//                this.usStateId = addr.getUsStateId();
-//                this.countryId = addr.getCountryId();
-//              }
-//            }
+            List getPrimaryAddress = getCommunityPrimaryAddress();
+            if (getPrimaryAddress != null) {
+              if (getPrimaryAddress.size() == 1) {
+                Addresses addr = (Addresses) getPrimaryAddress.get(0);
+                this.addressLine1 = addr.getAddressLine1();
+                this.addressLine2 = addr.getAddressLine2();
+                this.postalCode = addr.getPostalCode();
+                this.city = addr.getCity();
+                this.province = addr.getProvince();
+                this.region = addr.getRegion();
+                this.usStateId = addr.getUsStateId();
+                this.countryId = addr.getCountryId();
+              }
+            }
           }
         }
 
@@ -228,7 +217,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         tx = null;
         sb = null;
       }
-    
+
       try {
         if (result != null) {
           if (result.size() == 1) {
@@ -250,6 +239,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
             comm_result.setRegion(region);
             comm_result.setRemoteIp("NA");
             comm_result.setIsActive(1);
+            sb = hib_session();
+            tx = sb.beginTransaction();
             sb.update(comm_result);
             tx.commit();
             updateSuccess = true;
