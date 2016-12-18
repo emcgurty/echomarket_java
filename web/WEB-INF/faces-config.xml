@@ -125,7 +125,7 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
     
-  <navigation-rule>
+<!--  <navigation-rule>
     <from-view-id>index.xhtml</from-view-id>
     <navigation-case>
       <from-action>#{communitiesBean.load_community_detail()}</from-action>
@@ -137,7 +137,7 @@
       <from-outcome>build_community_members.xhtml?faces-redirect=true</from-outcome>
       <to-view-id>build_community_members.xhtml</to-view-id>
     </navigation-case>
-  </navigation-rule>
+  </navigation-rule>-->
   <managed-bean>
     <managed-bean-name>participantBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.ParticipantBean</managed-bean-class>
