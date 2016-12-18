@@ -22,6 +22,21 @@
     <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
 
     <h:form id="member_build" >
+      <c:set var="rid" value="#{userBean.roleId}"  />  
+      <c:choose >
+        <c:when test="#{rid == 0}" >
+          <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+          <c:set var="allow" value="public"  />  
+          <c:set var="title" value="USER"  />  
+
+        </c:when>
+        <c:when test="#{rid gt 0}" >
+          <ui:include src="/creator_menu.xhtml" id="community_detail_menu" />  
+          <c:set var="allow" value="Community"  />  
+          <c:set var="title" value="#{userBean.communityName}"  />  
+        </c:when>
+      </c:choose>
+
       <div class="message.color">
         <h:messages showSummary="true" 
                     showDetail="false"
@@ -61,9 +76,9 @@
           </c:if>
         </div> 
       </div> 
-      
 
-      <h:dataTable value="#{communityMembersBean.existing_member}" id="existing_member" var="member" 
+
+<!--      <h:dataTable value="#{communityMembersBean.existing_member}" id="existing_member" var="member" 
                    styleClass="member-table"
                    headerClass="member-table-header"
                    rowClasses="member-table-odd-row,member-table-even-row"
@@ -153,9 +168,9 @@
           <h:commandLink value="Cancel" action="#{communityMembersBean.cancelAction(member)}" rendered="#{member.editable == 1}" immediate="true"/>
           <br />
         </h:column>
-      </h:dataTable>
+      </h:dataTable>-->
 
-      <h:dataTable value="#{communityMembersBean.new_member}" id="new_member" var="new" 
+<!--      <h:dataTable value="#{communityMembersBean.new_member}" id="new_member" var="new" 
                    styleClass="member-table"
                    headerClass="member-table-header"
                    rowClasses="member-table-odd-row,member-table-even-row"
@@ -214,7 +229,7 @@
           </h:selectOneRadio>    
         </h:column>
         
-      </h:dataTable>
+      </h:dataTable>-->
 
     </h:form>
 
