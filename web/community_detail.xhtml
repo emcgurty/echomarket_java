@@ -13,6 +13,21 @@
   <ui:define name="content">
     <h:form  id="form_community_detail"  >
       <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+      <c:set var="rid" value="#{userBean.roleId}"  />  
+      <c:choose >
+        <c:when test="#{rid == 0}" >
+          <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+          <c:set var="allow" value="public"  />  
+          <c:set var="title" value="USER"  />  
+
+        </c:when>
+        <c:when test="#{rid gt 0}" >
+          <ui:include src="/creator_menu.xhtml" id="community_detail_menu" />  
+          <c:set var="allow" value="Community"  />  
+          <c:set var="title" value="#{userBean.communityName}"  />  
+        </c:when>
+      </c:choose>
+
       <h:head >
         <h:outputScript library="javascript" name="user_detail.js"  />
       </h:head>
