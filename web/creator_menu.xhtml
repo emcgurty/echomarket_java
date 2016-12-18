@@ -9,15 +9,11 @@
 
   <ul id="nav" class="creator_menu">
     <li class="subs" id="tab_item_0" >
-      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" immediate="true">
-        <h:outputText value="Community Detail"/>
-        <f:param name="cid" value="#{userBean.communityId}"  />
+      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" value="Community Detail" immediate="true" rendered="true">
       </h:commandLink>   
     </li>
     <li class="subs" id="tab_item_1" >
-      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" immediate="true">
-        <h:outputText value="Community Members"/>
-        <f:param name="cid" value="#{userBean.communityId}"  />
+      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" value="Community Members" immediate="true" rendered="true">
       </h:commandLink>    
     </li>
     <li class="subs" id="tab_item_2" >
