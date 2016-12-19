@@ -13,8 +13,7 @@
     <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
   </ui:define>  
   <ui:define name="content">
-    <h:form id="contact_preference_content" >
-
+    <h:form id="personal_information" class="user_contact_preferences">
       <div id="form_contact_preference" class="contact_information" >
 
         <c:set var="rid" value="#{userBean.roleId}"  />  
@@ -32,8 +31,6 @@
             <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 1}" />
             <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
           </div> 
-
-
           <div style="margin:10px;" >
             <h:outputText value="Initial Contact Preferences" />
             <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'"  >
@@ -41,12 +38,6 @@
             </h:commandLink>
           </div>
 
-          <div class="message.color">
-            <h:messages showSummary="true" 
-                        showDetail="false"
-                        errorStyle="color: #d20005" 
-                        infoStyle="color: indigo"/>
-          </div>
         </div> 
 
         <div  class="div_p"  >

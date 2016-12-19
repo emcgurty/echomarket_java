@@ -12,15 +12,9 @@
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="LoginHeader" /> 
   </ui:define>  
-  <div class="message.color">
-    <h:messages showSummary="true" 
-                showDetail="false"
-                errorStyle="color: #d20005" 
-                infoStyle="color: indigo"/>
-  </div>
-  <ui:define name="content">
-    <h:form id="lender_transfer_content" >
 
+  <ui:define name="content">
+    <h:form id="personal_information"  class="lender_conditions">
       <div id="lender_registration" class="lender_registration" >
         <c:set var="rid" value="#{userBean.roleId}"  />  
         <c:choose >
@@ -42,7 +36,7 @@
               </h:commandLink>
             </div> 
           </div>
-          <div  class="div_p" id="menu_item_6" >
+            <div  class="div_p" id="menu_item_6" >
             <div style="margin:10px;" >
               <h:outputText value="Lending Terms: Monetary" />
               <h:inputHidden id="lender_item_condition_id" value="#{lenderItemConditionsBean.lender_item_condition_id}" />

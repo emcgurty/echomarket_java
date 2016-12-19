@@ -14,13 +14,7 @@
   </ui:define>  
 
   <ui:define name="content">
-    <h:form id="lender_transfer_content" >
-      <div class="message.color">
-        <h:messages showSummary="true" 
-                    showDetail="false"
-                    errorStyle="color: #d20005" 
-                    infoStyle="color: indigo"/>
-      </div>
+   <h:form id="personal_information"  class="lender_transfer">
       <div id="form_lender_to_borrower" class="contact_information" >
         <c:set var="rid" value="#{userBean.roleId}"  />  
         <c:choose >

@@ -1,37 +1,48 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="#{localeBean.language}"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html">
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-        <h:outputScript library="javascript" name="appMenuSizing.js"  />
-        <h:outputStylesheet library="css" name="stylesheet.css"/>
-        <title>#{bundle.EchoMarketTitle}</title>
-    </h:head>
+  <h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <h:outputScript library="javascript" name="appMenuSizing.js"  />
+    <h:outputScript library="javascript" name="user_detail.js"  />`
+    <h:outputStylesheet library="css" name="stylesheet.css"/>
+    <h:outputScript library="javascript" name="community.js"  />`
+    <h:outputStylesheet library="css" name="member.css"/>
+    <title>#{bundle.EchoMarketTitle}</title>
+  </h:head>
 
-    <h:body>
+  <h:body>
 
-        <ui:include rendered="true" src="/application_menu.xhtml" id="application_menu"></ui:include>    
-        <ui:insert name="header">Header</ui:insert>
+    <ui:include rendered="true" src="/application_menu.xhtml" id="application_menu"></ui:include>    
+    <ui:insert name="header">Header</ui:insert>
 
-        <div id="left" class="app_panel" style="width:19%;float:left;background-color: white;height:auto;padding: 10px 0 10px 5px; ">
-            <!--<ui:include rendered="true" src="/b_sought.xhtml" id="b_sought"></ui:include>-->    
-        </div>
+    <div id="left" class="app_panel" style="width:19%;float:left;background-color: white;height:auto;padding: 10px 0 10px 5px; ">
+     <ui:include rendered="true" src="/b_sought.xhtml" id="b_sought"></ui:include>
+    </div>
 
 
-        <div id="content" class="center_content" >
-            <ui:insert name="content" />
-        </div>
+    <div id="content" class="center_content" >
+      <div class="message.color">
+        <h:messages showSummary="true" 
+                    showDetail="false"
+                    errorStyle="color: #d20005" 
+                    infoStyle="color: indigo"/>
+      </div>
+      <ui:insert name="content" >
+        
+      </ui:insert> 
+    </div>
 
-        <div id="right" class="app_panel" style="width:19%;float:right;background-color:white;height:auto;padding: 10px 0 10px 5px;">
-            <!--<ui:include rendered="true" src="/l_offered.xhtml" id="l_offered"></ui:include>-->    
-        </div>
-        <ui:insert name="footer">Footer</ui:insert>
-    </h:body>
+    <div id="right" class="app_panel" style="width:19%;float:right;background-color:white;height:auto;padding: 10px 0 10px 5px;">
+      <ui:include rendered="true" src="/l_offered.xhtml" id="l_offered"></ui:include>
+    </div>
+    <ui:insert name="footer">Footer</ui:insert>
+  </h:body>
 
 </html>

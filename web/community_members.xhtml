@@ -12,38 +12,23 @@
   </ui:define>
 
   <ui:define name="content">
-
-    <h:head>
-      <h:outputScript library="javascript" name="community.js"  />`
-      <h:outputStylesheet library="css" name="member.css"/>
-      <title>#{bundle.communityMemberTitle}</title>
-    </h:head>
-
-    <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
-
-    <h:form id="member_build" >
-      <div class="message.color">
-        <h:messages showSummary="true" 
-                    showDetail="false"
-                    errorStyle="color: #d20005" 
-                    infoStyle="color: indigo"/>
-      </div>
-      <div >
-        <c:set var="rid" value="#{userBean.roleId}"  />  
+  
+    <h:form id="personal_information" class="community_members" > 
+      <c:set var="rid" value="#{userBean.roleId}"  />  
       <c:choose >
         <c:when test="#{rid == 0}" >
           <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
-          
-
         </c:when>
         <c:when test="#{rid gt 0}" >
           <ui:include src="/creator_menu.xhtml" id="community_detail_menu" />  
-          
         </c:when>
       </c:choose>
-        <div style="margin:10px;margin-top:25px;" >
-          <h:outputText value="#{userBean.communityName} : Community Members" style="color:black;font-weight:bold;"/>
-        </div>    
+      <div id="community_members" class="contact_information" >
+        <div class="top" >
+          <div style="margin:10px;margin-top:25px;" >
+            <h:outputText value="#{userBean.communityName} : Community Members" style="color:black;font-weight:bold;"/>
+          </div>   
+        </div>
         <div style="float:left;margin:15px;margin-top:10px;" >
           <h:outputText value="View, Update, or Add Members..." style="color:black;font-weight:bold;"/>
 
@@ -72,118 +57,118 @@
             <h:commandLink value="Return to Current Members listing" action="#{communityMembersBean.actionReturn()}"  class="right_div" style="font-size: large" />
           </c:if>
         </div> 
-      </div> 
-
-      <h:dataTable value="#{communityMembersBean.buildCommunityMemberCreators()}" id="creator" var="creator" 
-                   styleClass="member-table"
-                   headerClass="member-table-header"
-                   rowClasses="member-table-odd-row,member-table-even-row"
-                   >
-
-         <f:facet name="header">
-                  <h:outputText value="Designated Community Creators" />
-              </f:facet>
 
 
-        <h:column >
-          <f:facet name="header" >First Name</f:facet>
-          <h:outputText value="#{creator[0]}"  />
-        </h:column>
-        <h:column>
-          <f:facet name="header">Last Name</f:facet>
-          <h:outputText value="#{creator[1]}"  />
+        <h:dataTable value="#{communityMembersBean.buildCommunityMemberCreators()}" id="creator" var="creator" 
+                     styleClass="member-table"
+                     headerClass="member-table-header"
+                     rowClasses="member-table-odd-row,member-table-even-row"
+                     >
+
+           <f:facet name="header">
+                    <h:outputText value="Designated Community Creators" />
+                </f:facet>
 
 
-        </h:column>
-        <h:column>
-          <f:facet name="header">Alias</f:facet>
-          <h:outputText value="#{creator[2]}"  />
+          <h:column >
+            <f:facet name="header" >First Name</f:facet>
+            <h:outputText value="#{creator[0]}"  />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Last Name</f:facet>
+            <h:outputText value="#{creator[1]}"  />
 
-        </h:column>
-        <h:column>
-          <f:facet name="header">Email</f:facet>
-          <h:outputText value="#{creator[3]}"  />
 
-        </h:column>
+          </h:column>
+          <h:column>
+            <f:facet name="header">Alias</f:facet>
+            <h:outputText value="#{creator[2]}"  />
 
-<!--        <h:column>
-          <f:facet name="header">Is Active?</f:facet>
-          <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{creator.isActive == 1}"/>
-          <h:outputText value="No" style="color: crimson; font-weight: bold;" rendered="#{creator.isActive == 0}"/>
+          </h:column>
+          <h:column>
+            <f:facet name="header">Email</f:facet>
+            <h:outputText value="#{creator[3]}"  />
 
-        </h:column>-->
-      </h:dataTable>
+          </h:column>
 
-      <h:dataTable value="#{communityMembersBean.existing_member}" id="existing_member" var="member" 
-                   styleClass="member-table"
-                   headerClass="member-table-header"
-                   rowClasses="member-table-odd-row,member-table-even-row"
-                   rendered="#{communityMembersBean.editable != 3}"
+          <!--        <h:column>
+                    <f:facet name="header">Is Active?</f:facet>
+                    <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{creator.isActive == 1}"/>
+                    <h:outputText value="No" style="color: crimson; font-weight: bold;" rendered="#{creator.isActive == 0}"/>
+          
+                  </h:column>-->
+        </h:dataTable>
 
-                   >
-         <f:facet name="header">
-          <h:outputText value="Community Members" />
+        <h:dataTable value="#{communityMembersBean.existing_member}" id="existing_member" var="member" 
+                     styleClass="member-table"
+                     headerClass="member-table-header"
+                     rowClasses="member-table-odd-row,member-table-even-row"
+                     rendered="#{communityMembersBean.editable != 3}"
 
-        </f:facet>
+                     >
+           <f:facet name="header">
+            <h:outputText value="Community Members" />
 
-        <h:column >
-          <f:facet name="header" >Member</f:facet>
-          <h:outputText value="#{member.rowIndex + 1}"  />
-        </h:column>
+          </f:facet>
 
-        <h:column >
-          <f:facet name="header" >First Name</f:facet>
-          <h:outputText value="#{member.firstName}" rendered="#{member.editable == 0}" />
-          <h:inputText id="firstName" value="#{communityMembersBean.firstName}" rendered="#{member.editable == 1}" />
-        </h:column>
-        <h:column>
-          <f:facet name="header">Last Name</f:facet>
-          <h:outputText value="#{member.lastName}" rendered="#{member.editable == 0}" />
-          <h:inputText id="lastName" value="#{communityMembersBean.lastName}" rendered="#{member.editable == 1}" />
+          <h:column >
+            <f:facet name="header" >Member</f:facet>
+            <h:outputText value="#{member.rowIndex + 1}"  />
+          </h:column>
 
-        </h:column>
-        <h:column>
-          <f:facet name="header">Alias</f:facet>
-          <h:outputText value="#{member.alias}" rendered="#{member.editable == 0}" />
-          <h:inputText id="alias" value="#{communityMembersBean.alias}" rendered="#{member.editable == 1}" />
-        </h:column>
-        <h:column>
-          <f:facet name="header">Email</f:facet>
-          <h:outputText value="#{member.emailAlternative}" rendered="#{member.editable == 0}" />
-          <h:inputText id="emailAlternative" value="#{communityMembersBean.emailAlternative}" rendered="#{member.editable == 1}" 
-                       size="16"
-                       required="true"
-                       requiredMessage="#{bundle.ReqEmail}"
-                       validatorMessage="#{bundle.ValidEmail}" 
-                       >
-            <f:validateRegex
-              pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-          </h:inputText>
-        </h:column>
-        <h:column>
-          <f:facet name="header">Is Active?</f:facet>
-          <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.isActive == 1) and (member.editable == 0)}" />
-          <h:outputText value="No" style="color: red; font-weight: bold;" rendered="#{(member.isActive == 0)  and (member.editable == 0)}" />
+          <h:column >
+            <f:facet name="header" >First Name</f:facet>
+            <h:outputText value="#{member.firstName}" rendered="#{member.editable == 0}" />
+            <h:inputText id="firstName" value="#{communityMembersBean.firstName}" rendered="#{member.editable == 1}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Last Name</f:facet>
+            <h:outputText value="#{member.lastName}" rendered="#{member.editable == 0}" />
+            <h:inputText id="lastName" value="#{communityMembersBean.lastName}" rendered="#{member.editable == 1}" />
 
-          <h:selectOneRadio id="isActive" value="#{communityMembersBean.isActive}" layout="pageDirection" rendered="#{member.editable == 1}"  >
-            <f:selectItem itemValue="1" itemLabel="Yes?" />
-            <f:selectItem itemValue="0" itemLabel="No?" />	
-          </h:selectOneRadio>    
+          </h:column>
+          <h:column>
+            <f:facet name="header">Alias</f:facet>
+            <h:outputText value="#{member.alias}" rendered="#{member.editable == 0}" />
+            <h:inputText id="alias" value="#{communityMembersBean.alias}" rendered="#{member.editable == 1}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Email</f:facet>
+            <h:outputText value="#{member.emailAlternative}" rendered="#{member.editable == 0}" />
+            <h:inputText id="emailAlternative" value="#{communityMembersBean.emailAlternative}" rendered="#{member.editable == 1}" 
+                         size="16"
+                         required="true"
+                         requiredMessage="#{bundle.ReqEmail}"
+                         validatorMessage="#{bundle.ValidEmail}" 
+                         >
+              <f:validateRegex
+                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+            </h:inputText>
+          </h:column>
+          <h:column>
+            <f:facet name="header">Is Active?</f:facet>
+            <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.isActive == 1) and (member.editable == 0)}" />
+            <h:outputText value="No" style="color: red; font-weight: bold;" rendered="#{(member.isActive == 0)  and (member.editable == 0)}" />
 
-        </h:column>
+            <h:selectOneRadio id="isActive" value="#{communityMembersBean.isActive}" layout="pageDirection" rendered="#{member.editable == 1}"  >
+              <f:selectItem itemValue="1" itemLabel="Yes?" />
+              <f:selectItem itemValue="0" itemLabel="No?" />	
+            </h:selectOneRadio>    
 
-        <h:column>
-          <f:facet name="header">Is Creator?</f:facet>
-          <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.isCreator == 1) and (member.editable == 0)}" />
-          <h:outputText value="No" style="color: red; font-weight: bold;" rendered="#{(member.isCreator == 0)  and (member.editable == 0)}" />
+          </h:column>
 
-          <h:selectOneRadio id="isCreator" value="#{communityMembersBean.isCreator}" layout="pageDirection" rendered="#{member.editable == 1}"  >
-            <f:selectItem itemValue="1" itemLabel="Yes?" />
-            <f:selectItem itemValue="0" itemLabel="No?" />	
-          </h:selectOneRadio>    
+          <h:column>
+            <f:facet name="header">Is Creator?</f:facet>
+            <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.isCreator == 1) and (member.editable == 0)}" />
+            <h:outputText value="No" style="color: red; font-weight: bold;" rendered="#{(member.isCreator == 0)  and (member.editable == 0)}" />
 
-        </h:column  >
-        
+            <h:selectOneRadio id="isCreator" value="#{communityMembersBean.isCreator}" layout="pageDirection" rendered="#{member.editable == 1}"  >
+              <f:selectItem itemValue="1" itemLabel="Yes?" />
+              <f:selectItem itemValue="0" itemLabel="No?" />	
+            </h:selectOneRadio>    
+
+          </h:column  >
+
           <h:column >
             <f:facet name="header" rendered="#{member.editable == 0}" >Completed Registration?</f:facet>
             <h:outputText value="Yes" style="color: green; font-weight: bold;" rendered="#{(member.goodwill == 1)  and (member.age18OrMore == 1) and (member.editable == 0)}" />
@@ -194,79 +179,79 @@
             <f:facet name="header" rendered="#{member.editable == 0}" >Date Created</f:facet>
             <h:outputText value="#{member.dateCreated}" style="color: green; font-weight: lighter;" rendered="#{member.editable == 0}" />                       
           </h:column>
-        
 
-        <h:column>
-          <f:facet name="header">Action</f:facet>
-          <h:commandLink value="Edit" action="#{communityMembersBean.editAction(member)}" rendered="#{member.editable == 0}" />
-          <h:commandLink value="Update" action="#{communityMembersBean.updateAction(member.rowIndex)}" rendered="#{member.editable == 1}" />
-          <h:outputText value=" | " style="color: green; font-weight: lighter;" rendered="#{member.editable == 1}" />
-          <h:commandLink value="Cancel" action="#{communityMembersBean.cancelAction(member)}" rendered="#{member.editable == 1}" immediate="true"/>
-          <br />
-        </h:column>
-      </h:dataTable>
 
-      <h:dataTable value="#{communityMembersBean.new_member}" id="new_member" var="new" 
-                   styleClass="member-table"
-                   headerClass="member-table-header"
-                   rowClasses="member-table-odd-row,member-table-even-row"
-                   style="margin: 25px;"
-                   rendered="#{communityMembersBean.editable == 3}" 
-                   >
+          <h:column>
+            <f:facet name="header">Action</f:facet>
+            <h:commandLink value="Edit" action="#{communityMembersBean.editAction(member)}" rendered="#{member.editable == 0}" />
+            <h:commandLink value="Update" action="#{communityMembersBean.updateAction(member.rowIndex)}" rendered="#{member.editable == 1}" />
+            <h:outputText value=" | " style="color: green; font-weight: lighter;" rendered="#{member.editable == 1}" />
+            <h:commandLink value="Cancel" action="#{communityMembersBean.cancelAction(member)}" rendered="#{member.editable == 1}" immediate="true"/>
+            <br />
+          </h:column>
+        </h:dataTable>
 
-         <f:facet name="header">
-          <h:outputText value="New Community Members" />
-        </f:facet>
+        <h:dataTable value="#{communityMembersBean.new_member}" id="new_member" var="new" 
+                     styleClass="member-table"
+                     headerClass="member-table-header"
+                     rowClasses="member-table-odd-row,member-table-even-row"
+                     style="margin: 25px;"
+                     rendered="#{communityMembersBean.editable == 3}" 
+                     >
 
-        <h:column >
-          <f:facet name="header" >Member</f:facet>
-          <h:outputText value="#{new.rowIndex + 1}"  />
-        </h:column>
-        <h:column >
-          <f:facet name="header" >First Name</f:facet>
-          <h:inputText id="firstName" value="#{new.firstName}"  />
+           <f:facet name="header">
+            <h:outputText value="New Community Members" />
+          </f:facet>
 
-        </h:column>
-        <h:column>
-          <f:facet name="header">Last Name</f:facet>
-          <h:inputText id="lastName"  value="#{new.lastName}" />
+          <h:column >
+            <f:facet name="header" >Member</f:facet>
+            <h:outputText value="#{new.rowIndex + 1}"  />
+          </h:column>
+          <h:column >
+            <f:facet name="header" >First Name</f:facet>
+            <h:inputText id="firstName" value="#{new.firstName}"  />
 
-        </h:column>
-        <h:column>
-          <f:facet name="header">Alias</f:facet>
-          <h:inputText id="alias"   value="#{new.alias}"  />
-        </h:column>
-        <h:column>
-          <f:facet name="header">Notification Email</f:facet>
-          <h:inputText id="emailAlternative"  
-                       size="16"
-                       value="#{new.emailAlternative}"
-                       >
-          </h:inputText>
-          <br />
-          <span class="error-message" id="email#{new.rowIndex}}" ></span>
-        </h:column>
-        <h:column rendered="#{new.editable == 0}">
-          <f:facet name="header">Notification Sent</f:facet>
-          <h:outputText value="Yes"  />
-        </h:column>
-        <h:column>
-          <f:facet name="header">Is Active?</f:facet>
-          <h:selectOneRadio id="isActive" value="#{new.isActive}" layout="pageDirection" >
-            <f:selectItem itemValue="1" itemLabel="Yes?" />
-            <f:selectItem itemValue="0" itemLabel="No?" />	
-          </h:selectOneRadio>    
-        </h:column>
-        <h:column>
-          <f:facet name="header">Creator Privilege?</f:facet>
-          <h:selectOneRadio id="isCreator" value="#{new.isCreator}" layout="pageDirection" >
-            <f:selectItem itemValue="1" itemLabel="Yes?" />
-            <f:selectItem itemValue="0" itemLabel="No?" />	
-          </h:selectOneRadio>    
-        </h:column>
-        
-      </h:dataTable>
+          </h:column>
+          <h:column>
+            <f:facet name="header">Last Name</f:facet>
+            <h:inputText id="lastName"  value="#{new.lastName}" />
 
+          </h:column>
+          <h:column>
+            <f:facet name="header">Alias</f:facet>
+            <h:inputText id="alias"   value="#{new.alias}"  />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Notification Email</f:facet>
+            <h:inputText id="emailAlternative"  
+                         size="16"
+                         value="#{new.emailAlternative}"
+                         >
+            </h:inputText>
+            <br />
+            <span class="error-message" id="email#{new.rowIndex}}" ></span>
+          </h:column>
+          <h:column rendered="#{new.editable == 0}">
+            <f:facet name="header">Notification Sent</f:facet>
+            <h:outputText value="Yes"  />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Is Active?</f:facet>
+            <h:selectOneRadio id="isActive" value="#{new.isActive}" layout="pageDirection" >
+              <f:selectItem itemValue="1" itemLabel="Yes?" />
+              <f:selectItem itemValue="0" itemLabel="No?" />	
+            </h:selectOneRadio>    
+          </h:column>
+          <h:column>
+            <f:facet name="header">Creator Privilege?</f:facet>
+            <h:selectOneRadio id="isCreator" value="#{new.isCreator}" layout="pageDirection" >
+              <f:selectItem itemValue="1" itemLabel="Yes?" />
+              <f:selectItem itemValue="0" itemLabel="No?" />	
+            </h:selectOneRadio>    
+          </h:column>
+
+        </h:dataTable>
+      </div>
     </h:form>
 
   </ui:define>

@@ -11,8 +11,7 @@
   </ui:define>
 
   <ui:define name="content">
-    <h:form  id="form_community_detail"  >
-      <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+    <h:form  id="personal_information" class="community_detail" >
       <c:set var="rid" value="#{userBean.roleId}"  />  
       <c:choose >
         <c:when test="#{rid == 0}" >
@@ -25,24 +24,8 @@
         </c:when>
       </c:choose>
 
-      <h:head >
-        <h:outputScript library="javascript" name="user_detail.js"  />
-      </h:head>
 
-      <div class="message.color">
-        <h:messages showSummary="true" 
-                    showDetail="false"
-                    errorStyle="color: #d20005" 
-                    infoStyle="color: indigo"/>
-      </div>
-
-      <h:head>
-        <h:outputScript library="javascript" name="community.js"  />
-        <title>#{bundle.communityTitle}</title>
-      </h:head>
-
-      <div  class="top" id="form_community_detail">
-
+       <div id="community_detail" class="contact_information" >
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{communitiesBean.communityName}: Community Detail" rendered="#{communitiesBean.communityName != null}"/>
