@@ -40,11 +40,13 @@
               <h:outputText value="Donate!"/>
             </h:commandLink>
           </li>
-
-
-
         </ul>
       </li>
+      <li class="subs" id="tab_item_2" >
+      
+      <h:commandLink id="search_items" action="search" value="SEARCH!"/>
+    </li>
+
 
       <li class="subs">
         <a href="#s1">Borrowing</a>
@@ -148,25 +150,6 @@
             </li>
           </ul>
         </li>
-      </c:if>
-      <c:if test="#{userBean.communityName != null}" >
-        <li class="subs">
-          <a href="#s1">Community</a>
-          <ul>
-            <li>
-              <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}"   >
-                <h:outputText value="Community Detail"/>
-                <f:param name="cid" value="#{userBean.communityId}"  />
-              </h:commandLink>                 
-            </li>
-            <li>
-              <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" >
-                <h:outputText value="Community Members"/>
-                 <f:param name="cid" value="#{userBean.communityId}"  />
-              </h:commandLink>                 
-            </li>
-          </ul>
-        </li>   
       </c:if>
       <c:if test="#{userBean.user_id != null}" >
         <li class="subs">

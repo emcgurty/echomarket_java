@@ -12,6 +12,7 @@
 
   <ui:define name="content">
     <h:form  id="personal_information" class="community_detail" >
+      <body onload="communityDetailLoad();"  >
       <c:set var="rid" value="#{userBean.roleId}"  />  
       <c:choose >
         <c:when test="#{rid == 0}" >
@@ -35,6 +36,12 @@
             <c:set var="cid" value="#{communitiesBean.communityId}"  />
             <h:inputHidden id="communityId" value="#{cid}"  />
           </div> 
+           <div class="messagecolor">
+              <h:messages showSummary="true" 
+                          showDetail="false"
+                          errorStyle="color: #d20005" 
+                          infoStyle="color: indigo"/>
+            </div>
         </div> 
 
         <div class="top" >
@@ -199,7 +206,7 @@
         </table>
 
       </div>
-
+      </body>
     </h:form>
   </ui:define>
 

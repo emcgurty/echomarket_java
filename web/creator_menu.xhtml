@@ -9,13 +9,13 @@
 
   <ul id="nav" class="creator_menu">
     <li class="subs" id="tab_item_2" >
-      <h:commandLink immediate="true"  action="#{userBean.load_ud(0)}"  value="Login Information"  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{userBean.load_ud(0)}"  value="Login Detail"  rendered="#{userBean.editable != -1}" >
         <f:param name="action" value="login" />
       </h:commandLink>
     </li>
 
     <li class="subs" id="tab_item_3" >
-      <h:commandLink immediate="true"  action="#{participantBean.load_ud(userBean.user_id)}"  value="Creator Information.."  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{participantBean.load_ud(userBean.user_id)}"  value="Creator Detail"  rendered="#{userBean.editable != -1}" >
         <f:param name="action" value="participant" />
       </h:commandLink>
     </li>
