@@ -5,7 +5,6 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       >
 
   <h:head>
@@ -28,8 +27,7 @@
     </div>
 
     <div id="content" class="center_content" >
-          
-          <ui:insert name="content" />
+      <ui:insert name="content" />
     </div>
 
     <div id="right" class="app_panel" style="width:19%;float:right;background-color:white;height:auto;padding: 10px 0 10px 5px;">
@@ -37,5 +35,6 @@
     </div>
     <ui:insert name="footer">Footer</ui:insert>
   </h:body>
+
 
 </html>
