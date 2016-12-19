@@ -15,33 +15,34 @@ $(document).ready(function () {
       checkSmallFee(this);
 
   });
-  
-  $("form").on('load', function () {
-//    $("li#tab_item_0").css("display", "none");
-  });
-  
-  $(function() {
-     $("li[id^='tab']").css("text-decoration", "none");
-     if ($("form.community_detail")) {
-       $("li#tab_item_0").css("text-decoration", "underline");
-     } else if ($("form.community_members")) {
-       $("li#tab_item_1").css("text-decoration", "underline");
-     } else if ($("form.user_login_update")) {
-       $("li#tab_item_2").css("text-decoration", "underline");
-     } else      if ($("form.user_nae")) {
-        $("li#tab_item_3").css("text-decoration", "underline");
-     } else      if ($("form.lender_conditions") || $("form.lender_transfer") || $("form.user_contact_preferences") ) {
-        $("li#tab_item_4").css("text-decoration", "underline");
-     } 
-     
+
+
 });
-  
-  
-  
-  
-  
-  
-});
+
+function communityDetailLoad() {
+        $("li").removeClass('active');
+        $("li#tab_item_0").addClass('active');
+}
+function communityMembersLoad() {
+        $("li").removeClass('active');
+        $("li#tab_item_1").addClass('active');
+}
+
+function userLoginUpdateLoad() {
+        $("li").removeClass('active');
+        $("li#tab_item_2").addClass('active');
+}
+
+function userNAELoad() {
+        $("li").removeClass('active');
+        $("li#tab_item_3").addClass('active');
+}
+
+function preferencesLoad() {
+        $("li").removeClass('active');
+        $("li#tab_item_4").addClass('active');
+}
+
 
 function clearCommunityDefaultAddress() {
 
