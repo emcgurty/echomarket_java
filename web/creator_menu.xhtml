@@ -8,14 +8,6 @@
   </h:head>
 
   <ul id="nav" class="creator_menu">
-    <li class="subs" id="tab_item_0" >
-      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" value="Community Detail" immediate="true" rendered="true">
-      </h:commandLink>   
-    </li>
-    <li class="subs" id="tab_item_1" >
-      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" value="Community Members" immediate="true" rendered="true">
-      </h:commandLink>    
-    </li>
     <li class="subs" id="tab_item_2" >
       <h:commandLink immediate="true"  action="#{userBean.load_ud(0)}"  value="Login Information"  rendered="#{userBean.editable != -1}" >
         <f:param name="action" value="login" />
@@ -27,6 +19,15 @@
         <f:param name="action" value="participant" />
       </h:commandLink>
     </li>
+    <li class="subs" id="tab_item_0" >
+      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" value="Community Detail" immediate="true" rendered="true">
+      </h:commandLink>   
+    </li>
+    <li class="subs" id="tab_item_1" >
+      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" value="Community Members" immediate="true" rendered="true">
+      </h:commandLink>    
+    </li>
+    
     <li class="subs" id="tab_item_4" >
       <c:choose>
         <c:when  test="#{userBean.itemId == null}" >
@@ -111,6 +112,12 @@
 
       </li>
     </c:if>
+        <li class="subs" id="tab_item_2" >
+          <h:commandLink immediate="true"  action="#{itemBean.load_ud(userBean.userType, null )}"  value="Item"  rendered="#{userBean.editable != -1}" >
+        <f:param name="action" value="login" />
+      </h:commandLink>
+    </li>
+
   </ul>
 
 </ui:composition>
