@@ -79,10 +79,12 @@ public class ItemROBean extends AbstractBean implements Serializable {
   public List getCurrentItem(String iid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
+      session = hib_session();
+      tx = session.beginTransaction();
       query = "FROM Items WHERE item_id = '" + iid + "'";
       result = session.createQuery(query).list();
       tx.commit();
