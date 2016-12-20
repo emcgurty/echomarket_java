@@ -69,17 +69,20 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   private String doesImageExist(String iid) {
 
-    Session sb = hib_session();
-    Transaction tx = sb.beginTransaction();
+    Session sb = null;
+    Transaction tx = null;
     List result = null;
     String existingImageFileId = null;
     ItemImages existingImageobj = null;
     String queryString = "from ItemImages where item_id = :iid ";
-
-    result = sb.createQuery(queryString)
-            .setParameter("iid", iid)
-            .list();
     try {
+
+      sb = hib_session();
+      tx = sb.beginTransaction();
+      result = sb.createQuery(queryString)
+              .setParameter("iid", iid)
+              .list();
+
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
@@ -180,8 +183,9 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     List result = null;
     ubean.setItemId(iid);
+    setItemType(which);
 
-    if (iid == null) {
+    if (iid.isEmpty() == true) {
       ubean.setEditable(1);
     } else {
       ubean.setEditable(0);
@@ -201,7 +205,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
     }
 
-    if (iid != null) {
+    if (iid.isEmpty() == false) {
       result = getCurrentItem(iid, which);
       if (result != null) {
         if (result.size() == 1) {
@@ -223,7 +227,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } else {
 
     }
-    setItemType(which);
+
     return "user_item";
 
   }
@@ -245,7 +249,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     }
 
-    if (itemId == null) {
+    if (itemId.isEmpty() == true) {
 
       Items ii = new Items(new_iid, ubean.getParticipant_id(), categoryId, otherItemCategory,
               itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, itemType);
@@ -331,7 +335,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         bret = sendNotification(itemType);  // This needs to be written...
       }
     }
-    if (itemId == null) {
+    if (itemId.isEmpty() == true) {
       this.itemId = new_iid;
     }
     if (bret == true) {
@@ -669,11 +673,13 @@ public class ItemBean extends AbstractBean implements Serializable {
   public String getCurrentItemDescription(String iid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String local_string = null;
 
     try {
+      session = hib_session();
+      tx = session.beginTransaction();
       local_string = "FROM Items WHERE item_id = '" + iid + "'";
       result = session.createQuery(local_string).list();
       tx.commit();
@@ -696,41 +702,41 @@ public class ItemBean extends AbstractBean implements Serializable {
   public List getAllSoughtItems(String which) {
     System.out.println("getAllSoughtItems Called");
     List result = null;
-    Session session = null;
-    Transaction tx = null;
-    String query = null;
-    try {
-      session = hib_session();
-      tx = session.beginTransaction();
-      if (ubean.getCommunityId() == null) {
-        query = "  SELECT itm FROM Participant part "
-                + " INNER join part.item itm "
-                + " WHERE itm.itemType = :it AND part.communityId = null ORDER BY itm.dateCreated";
-        result = session.createQuery(query)
-                .setParameter("it", which)
-                .list();
-
-      } else {
-        query = "  SELECT itm FROM Participant part "
-                + " INNER join part.item itm "
-                + " WHERE itm.itemType = :it AND part.communityId = :cid ORDER BY itm.dateCreated";
-        result = session.createQuery(query)
-                .setParameter("it", which)
-                .setParameter("cid", ubean.getCommunityId())
-                .list();
-      }
-
-      tx.commit();
-    } catch (Exception e) {
-      tx.rollback();
-      System.out.println("Error in getAllSoughtItems");
-      e.printStackTrace();
-
-    } finally {
-      tx = null;
-      session = null;
-
-    }
+//    Session session = null;
+//    Transaction tx = null;
+//    String query = null;
+//    try {
+//      session = hib_session();
+//      tx = session.beginTransaction();
+//      if (ubean.getCommunityId() == null) {
+//        query = "  SELECT itm FROM Participant part "
+//                + " INNER join part.item itm "
+//                + " WHERE itm.itemType = :it AND part.communityId = null ORDER BY itm.dateCreated";
+//        result = session.createQuery(query)
+//                .setParameter("it", which)
+//                .list();
+//
+//      } else {
+//        query = "  SELECT itm FROM Participant part "
+//                + " INNER join part.item itm "
+//                + " WHERE itm.itemType = :it AND part.communityId = :cid ORDER BY itm.dateCreated";
+//        result = session.createQuery(query)
+//                .setParameter("it", which)
+//                .setParameter("cid", ubean.getCommunityId())
+//                .list();
+//      }
+//
+//      tx.commit();
+//    } catch (Exception e) {
+//      tx.rollback();
+//      System.out.println("Error in getAllSoughtItems");
+//      e.printStackTrace();
+//
+//    } finally {
+//      tx = null;
+//      session = null;
+//
+//    }
 
     return result;
   }
