@@ -158,13 +158,14 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public String load_community_members() {
-  
+
     this.currentRow = -1;
     this.errorMessage = null;
     List result = null;
+    Session hib = null;
+    Transaction tx = null;
     if (hasCreatorRights() == true) {
-      Session hib = null;
-      Transaction tx = null;
+
       String queryString = null;
       queryString = "FROM Participant where community_id = :cid";
       try {
@@ -195,7 +196,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       message(null, "MustBeCommunityCreatorAddMember", null);
       return "index";
     }
-    }
+  }
 
   public void editAction(Participant cmid) {
     this.errorMessage = null;
@@ -353,7 +354,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Transaction tx = hib.beginTransaction();
     String queryString = null;
     List result = null;
-    queryString = "SELECT part.firstName, part.lastName, part.alias, us.email, part.isActive  "
+    queryString = "SELECT part.firstName, part.lastName, us.userAlias, us.email, part.isActive  "
             + " FROM Users us "
             + " INNER join us.participant part "
             + " WHERE part.communityId = :cid and part.isCreator = 1";
