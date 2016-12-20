@@ -14,7 +14,7 @@
   <ui:define name="content">
   
     <h:form id="personal_information" class="community_members" > 
-      <body onload="communityMembersLoad();"  >
+     <body onload="communityMembersLoad();"  >
       <c:set var="rid" value="#{userBean.roleId}"  />  
       <c:choose >
         <c:when test="#{rid == 0}" >
@@ -105,7 +105,7 @@
                      styleClass="member-table"
                      headerClass="member-table-header"
                      rowClasses="member-table-odd-row,member-table-even-row"
-                     rendered="#{(communityMembersBean.editable != 3) and (!empty member.firstName)}"
+                     rendered="#{communityMembersBean.editable != 3}"
                      >
            <f:facet name="header">
             <h:outputText value="Community Members" />
