@@ -16,15 +16,25 @@
     <h:form id="personal_information" class="user_contact_preferences">
       <body onload="preferencesLoad();"  >
         <div id="form_contact_preference" class="contact_information" >
+
+          <c:set var="iid" value="#{userBean.itemId}"  />  
           <c:set var="rid" value="#{userBean.roleId}"  />  
           <c:choose >
-            <c:when test="#{rid == 0}" >
-              <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+            <c:when test="#{empty iid }" >
+              <c:choose >
+                <c:when test="#{rid == 0}" >
+                  <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+                </c:when>
+                <c:when test="#{rid == 1}" >
+                  <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
+                </c:when>
+              </c:choose>   
             </c:when>
-            <c:when test="#{rid == 1}" >
-              <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
-            </c:when>
-          </c:choose>   
+            <c:when test="#{!empty iid }" >
+              <ui:include src="/item_menu.xhtml" id="item_menu" />  
+            </c:when>        
+          </c:choose>
+
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
