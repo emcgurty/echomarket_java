@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -9,21 +9,23 @@
                 >
 
 
-    <h:form>
-        <div id="application_footer_links" class="application_footer" >
-            <p style="color:indigo;font-size:10px;">
-                <h:commandLink value="About EchoMarket" action="aboutEchoMarket.xhtml"    />
-                <h:outputText value=" | " />
-                <h:commandLink value="About Me!" action="aboutMe.xhtml"   />
-                <h:outputText value=" | " />
-                <h:commandLink value="Donate?" action="donate.xhtml"   />
-                <h:outputText value=" | " />
-                <h:commandLink value="Contact EchoMarket" action="contact_us.xhtml"   />
-                <h:outputText value=" | " />
-                <h:commandLink value="Legal" action="legal.xhtml"   />
-            </p>
-        </div>
-    </h:form>
+  <h:form>
+
+    <div id="application_footer_links" class="application_footer" >
+      <p >
+        <h:commandLink value="About EchoMarket" action="aboutEchoMarket.xhtml"   style="color:black;font-style: italic;font-size:14px;" />
+        <h:outputText value=" | " />
+        <h:commandLink value="About Me!" action="aboutMe.xhtml"   style="color:black;font-style: italic;font-size:14px;" />
+        <h:outputText value=" | " />
+        <h:commandLink value="Donate?" action="donate.xhtml"  style="color:black;font-style: italic;font-size:14px;" />
+        <h:outputText value=" | " />
+        <h:commandLink value="Contact EchoMarket" action="contact_us.xhtml"   style="color:black;font-style: italic;font-size:14px;" />
+        <h:outputText value=" | " />
+        <h:commandLink value="Legal" action="legal.xhtml"    style="color:black;font-style: italic;font-size:14px;" />
+      </p>
+    </div>
+
+  </h:form>
 
 </ui:composition>
 
