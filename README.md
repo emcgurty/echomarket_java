@@ -10,13 +10,13 @@ What's going on with the application.
 The basic bones exist...
 
 I need to re-write Search functions because I changed the database.  And I also want to add search option for free, donated, security deposit-required, etc.. offered items to lend.  
-I need to build a Community menu.  
+I need to build a Community menu. -- done 
 I need to clean up presentation, sizing...   
 I need to learn how to code in the event of user reload.    
 I need to introduce an error page.  
 I need to complete Hibernate attributes.  
 I need to code for the event of a user deleted.  
-I need to understand why <h:graphicImage often fails.  
+I need to understand why <h:graphicImage often fails. -- done 
 I need to revisit early code to reflect what I have learned.  
 I need to implement address completion based on zip code.  
 I need to test and understand various browsers.  I know that IE does not find my Javascript.  
