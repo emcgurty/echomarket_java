@@ -2,24 +2,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                template="./echomarketTemplate.xhtml">
+                template="./UserDetailTemplate.xhtml">
 
     <ui:define name="header"  >
         <ui:include rendered="true" src="application_header.xhtml" id="lenderHistoryHeader" /> 
     </ui:define>
     <ui:define name="content"  >
-        <h:head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <title>#{bundle.lenderHistory}</title>
-        </h:head>
-         <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
         <ui:include rendered="true" src="l_history.xhtml" id="lenderHistoryBody" /> 
-
     </ui:define>
     <ui:define name="footer"  >
         <ui:include rendered="true" src="application_footer.xhtml" id="lendersFooter" /> 
