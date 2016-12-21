@@ -67,26 +67,26 @@
       </ul>
     </li>
     <c:if test="#{userBean.action == 'current'}" >
-    <li class="subs" id="tab_item_5" >
+    <li class="subs" >
       
       <c:set var="whichType" value="#{userBean.userIsWhichType()}" />
       <c:choose>                                
         <c:when test="#{whichType == 'borrow'}"  >
-          <li>
+          <li id="tab_item_5" >
             <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    >
               <f:param name="action" value="item" />
             </h:commandLink>
           </li>
         </c:when >  
         <c:when test="#{whichType == 'lend'}"  >
-          <li>
+          <li id="tab_item_5" >
             <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"    >
               <f:param name="action" value="item" />
             </h:commandLink>
           </li>
         </c:when >  
         <c:when test="#{whichType == 'both'}"  >
-          <li class="subs">
+          <li class="subs" id="tab_item_5" >
             <a href="#s1">Lend or Borrow?</a>
             <ul>
               <li>
