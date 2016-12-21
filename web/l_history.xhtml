@@ -9,8 +9,8 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 >
 
-  <h:form enctype="multipart/form-data" id="l_history" >
-
+  <h:form enctype="multipart/form-data" id="l_history"  >
+    <ui:include src="/item_menu.xhtml" id="item_menu" />  
     <div class="top" >
       <h:outputText value="ITEMS OFFERED TO LEND"  />
     </div> 
@@ -34,10 +34,11 @@
           </h:column>
         </h:dataTable>
         <br />
-        <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history.itemId)}" rendered="#{history.participant_id == userBean.participant_id}"  >
+        <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history.itemId)}" immediate="true" rendered="#{history.participant_id == userBean.participant_id}"  >
+          <f:param name="action" value="item" />     
         </h:commandButton>    
 
-        <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId)}"  rendered="#{history.participant_id == userBean.participant_id}"  >
+        <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId)}"  immediate="true"  rendered="#{history.participant_id == userBean.participant_id}"  >
         </h:commandButton>    
 
 
