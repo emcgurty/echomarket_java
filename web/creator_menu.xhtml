@@ -29,7 +29,7 @@
     </li>
     <c:if test="#{userBean.userIsWhichType() == 'borrow'}" >
       <li id="tab_item_4">
-        <c:set var="newItemLabel" value="Initial Contact Preferences"  />
+        <c:set var="newItemLabel" value="Default Contact Preferences"  />
         <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="true" >
           <f:param name="action" value="edit" />
           <f:param name="iid" value="#{userBean.itemId}" />
@@ -39,10 +39,10 @@
 
     <c:if test="#{(userBean.userIsWhichType() == 'both') or (userBean.userIsWhichType() == 'lend')}" >
       <li class="subs" id="tab_item_4" >
-        <a href="#s1">Item Preferences/Conditions</a>
+        <a href="#s1">Default Item Preferences/Conditions</a>
         <ul>
           <li >
-            <c:set var="newItemLabel" value="Initial Contact Preferences"  />
+            <c:set var="newItemLabel" value="Contact Preferences"  />
             <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="true" >
               <f:param name="action" value="edit" />
               <f:param name="iid" value="#{userBean.itemId}" />
