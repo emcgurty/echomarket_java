@@ -8,12 +8,7 @@
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="activateUser" /> 
   </ui:define>
-  <div class="messagecolor">
-    <h:messages showSummary="true" 
-                showDetail="false"
-                errorStyle="color: #d20005" 
-                infoStyle="color: indigo"/>
-  </div>
+
   <ui:define name="content">
     <h:form  id="form_activate"  >
       <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
@@ -24,6 +19,12 @@
 
       <f:event listener="#{userBean.validatePassword}" type="postValidate" />
       <div  class="top" id="activate_div">
+        <div class="messagecolor">
+          <h:messages showSummary="true" 
+                      showDetail="false"
+                      errorStyle="color: #d20005" 
+                      infoStyle="color: indigo"/>
+        </div>
         <table style="width:75%;margin-left: 50px" align="center" id="activate_table">
           <tr >
             <td style="padding-top: 15px;padding-bottom: 15px;">
