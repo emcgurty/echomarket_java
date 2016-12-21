@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -9,44 +9,44 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 >
 
-    <h:form enctype="multipart/form-data" id="b_history" >
+  <h:form enctype="multipart/form-data" id="b_history" >
 
-        <div class="top" >
-            <h:outputText value="ITEMS SOUGHT TO BORROW"  />
-        </div> 
-          
-        <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(userBean.user_id, 'borrow')}" />
-        <h:dataTable id="history"  value="#{currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
-            <h:column rowHeader="">
-                <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                    <h:outputLabel for="itemDescription" value="Item Description:" >
-                        <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
-                    </h:outputLabel>
-                    <br />
-                    <h:outputLabel for="itemModel" value="Item Model:" >
-                        <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
-                    </h:outputLabel>
+    <div class="top" >
+      <h:outputText value="ITEMS SOUGHT TO BORROW"  />
+    </div> 
 
-                    <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
-                        <h:column rowHeader="">
-                            <h:graphicImage name="#{i.imageFileName}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
-                        </h:column>
-                    </h:dataTable>
+    <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(itemBean.history_id, 'borrow')}" />
+    <c:forEach  items="#{currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
 
-                    <br />
-                    <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history.item_id)}">
-                    </h:commandButton>    
+      <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+        <h:outputLabel for="itemDescription" value="Item Description:" >
+          <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
+        </h:outputLabel>
+        <br />
+        <h:outputLabel for="itemModel" value="Item Model:" >
+          <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
+        </h:outputLabel>
 
-                    <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.item_id,history.itemDescription )}">
-                    </h:commandButton>    
-
-                </div>
-            </h:column>
+        <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
+          <h:column rowHeader="">
+            <h:graphicImage name="#{i.imageFileName}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
+          </h:column>
         </h:dataTable>
 
-        <div class="borrower_registration" >
-            <h:outputText value="No Borrower History Records Found" rendered="${fn:length(currentHistory) == 0}" />
-        </div>
-    </h:form>
+        <br />
+        <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history.item_id)}" immediate="true" rendered="#{history.participant_id == userBean.participant_id}"  >
+        </h:commandButton>    
+
+        <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.item_id,history.itemDescription )}"  immediate="true"  rendered="#{history.participant_id == userBean.participant_id}"  >
+        </h:commandButton>    
+
+      </div>
+
+    </c:forEach>
+
+    <div class="borrower_registration" >
+      <h:outputText value="No Borrower History Records Found" rendered="${fn:length(currentHistory) == 0}" />
+    </div>
+  </h:form>
 
 </ui:composition>
