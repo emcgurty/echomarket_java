@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,7 +32,7 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "itemBean")
-@RequestScoped
+@SessionScoped
 public class ItemBean extends AbstractBean implements Serializable {
 
   @Inject
@@ -53,6 +53,8 @@ public class ItemBean extends AbstractBean implements Serializable {
   private int notify;
   private String itemType;
   private String whichType;
+  private String history_id;
+  private Integer history_which;
   private Part imageFileNamePart;
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
@@ -65,6 +67,18 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   public void setPicture(ArrayList<ItemImages> aPicture) {
     picture = aPicture;
+  }
+
+  public String getLenderHistory(String whichId, Integer whichHistory) {
+    this.history_id = whichId;
+    this.setHistory_which(whichHistory);
+    return "lender_history";
+  }
+
+  public String getBorrowerHistory(String whichId, Integer whichHistory) {
+    this.history_id = whichId;
+    this.setHistory_which(whichHistory);
+    return "borrower_history";
   }
 
   private String doesImageExist(String iid) {
@@ -179,6 +193,10 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   }
 
+  public String editSelectedItem(String which, String iid) {
+        return this.load_ud(which, iid);
+  }
+  
   public String load_ud(String which, String iid) {
 
     List result = null;
@@ -227,10 +245,12 @@ public class ItemBean extends AbstractBean implements Serializable {
     } else {
 
     }
-
+    ubean.setItemId(this.itemId);
     return "user_item";
 
   }
+  
+  
 
   public String saveItem() {
 
@@ -248,7 +268,6 @@ public class ItemBean extends AbstractBean implements Serializable {
         itemType = whichType;
       }
     }
-
     if (itemId.isEmpty() == true) {
 
       Items ii = new Items(new_iid, ubean.getParticipant_id(), categoryId, otherItemCategory,
@@ -286,6 +305,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
       result = getCurrentItem(itemId, itemType);
       if (result.size() == 1) {
+
         Items uitem = (Items) result.get(0);
         uitem.setCategoryId(categoryId);
         uitem.setOtherItemCategory(otherItemCategory);
@@ -337,6 +357,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     if (itemId.isEmpty() == true) {
       this.itemId = new_iid;
+      ubean.setItemId(itemId);
     }
     if (bret == true) {
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
@@ -742,13 +763,22 @@ public class ItemBean extends AbstractBean implements Serializable {
   }
 
   public List getParticipantItems(String pid, String which) {
-    System.out.println("getParticipantItems Called");
+
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
-      query = "FROM Items WHERE participant_id = :pid and itemType = :it";
+      session = hib_session();
+      tx = session.beginTransaction();
+      if (this.history_which == 0) {
+        query = "FROM Items WHERE participant_id = :pid and itemType = :it";
+      } else if (this.history_which == 1) {
+        query = "SELECT itm FROM Participant part  INNER join part.item itm WHERE part.communityId_id = :pid AND itm.itemType = :it";
+      } else {
+        //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
+      }
+
       result = session.createQuery(query)
               .setParameter("pid", pid)
               .setParameter("it", which)
@@ -1066,5 +1096,33 @@ public class ItemBean extends AbstractBean implements Serializable {
   public Boolean deleteCurrentRecord(String iid) {
     ///Needs to be written
     return true;
+  }
+
+  /**
+   * @return the history_id
+   */
+  public String getHistory_id() {
+    return history_id;
+  }
+
+  /**
+   * @param history_id the history_id to set
+   */
+  public void setHistory_id(String history_id) {
+    this.history_id = history_id;
+  }
+
+  /**
+   * @return the history_which
+   */
+  public Integer getHistory_which() {
+    return history_which;
+  }
+
+  /**
+   * @param history_which the history_which to set
+   */
+  public void setHistory_which(Integer history_which) {
+    this.history_which = history_which;
   }
 }
