@@ -281,15 +281,13 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   }
 
   public String updateCP() {
-
+    Map<String, String> params = null;
     Boolean successTransaction = false;
     List cp_list = null;
     Session sb;
     Transaction tx;
     sb = null;
     tx = null;
-
-    Map<String, String> params = null;
     String addNewCP = null;
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -373,7 +371,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     Map<String, String> params = null;
     String strIid = null;
     String action = null;
-
+   
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
@@ -442,9 +440,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       }
     }
     partlist = null;
-
-    return "user_contact_preferences";
-
+      return "user_contact_preferences";
   }
 
   private List getCurrentCP(String pid) {
