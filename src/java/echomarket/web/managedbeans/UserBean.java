@@ -68,7 +68,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private Integer roleId;
   private String action;
   private String pid;
-
+  
   public String Logout() {
     setUserToNull();
     return "index?faces-redirect=true";
