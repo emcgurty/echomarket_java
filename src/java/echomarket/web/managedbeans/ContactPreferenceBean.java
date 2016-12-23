@@ -304,6 +304,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         tx = sb.beginTransaction();
         sb.save(part);
         tx.commit();
+        ubean.setCpId(true);
         message(null, "CPSaved", null);
         successTransaction = true;
       } catch (Exception ex) {
@@ -346,6 +347,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           try {
             sb.update(part);
             tx.commit();
+            ubean.setCpId(true);
             successTransaction = true;
             message(null, "CPUpdated", null);
             ubean.setEditable(1);
@@ -375,7 +377,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
-      /// This doesn't work, hence below try/catch on strIid
+      
       if (strIid.isEmpty() == true) {
         strIid = null;
       }
