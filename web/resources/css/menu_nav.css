@@ -45,9 +45,9 @@
     
 }
 #nav > li:hover > a, #nav > a:hover {
-    background-color: #7c45a4;
+    background-color: white;
     border-radius: 2px 2px 2px 2px;
-    color: #FFFFFF;
+    color: black;
     margin-right: -8px;
     padding: 0 9px 0 11px;
     position: relative;
