@@ -138,6 +138,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         tx = sb.beginTransaction();
         sb.save(lic);
         tx.commit();
+        ubean.setLICid(true);
         message(null, "LenderItemConditionsSaved", null);
         successTransaction = true;
         ubean.setEditable(1);
