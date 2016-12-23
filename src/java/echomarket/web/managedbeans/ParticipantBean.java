@@ -2,14 +2,12 @@ package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Participant;
-import echomarket.hibernate.Users;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -343,6 +341,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if (updateSuccess == true) {
       ubean.setParticipant_id(pid);
       ubean.setEditable(1);
+      ubean.setPartID(true);
+      
     } else {
       ubean.setEditable(0);
     }
@@ -376,6 +376,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         tx.commit();
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
         ubean.setParticipant_id(new_ID);
+        ubean.setAcceptID(true);
         if (ubean.getRoleId() > 0) {
           ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
         }
