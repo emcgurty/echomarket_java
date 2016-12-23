@@ -49,6 +49,12 @@ public class UserBean extends AbstractBean implements Serializable {
   CommunitiesBean commbean;
   private String user_id;
   private String participant_id;
+  //private String itemId;
+  private Boolean acceptID;
+  private Boolean partID;
+  private Boolean cpId;
+  private Boolean LITid;
+  private Boolean LICid;
   private String username;
   private String firstName;
   private String lastName;
@@ -64,11 +70,11 @@ public class UserBean extends AbstractBean implements Serializable {
   private String communityId;
   private String communityName;
   private Integer editable;
-  private String itemId;
+
   private Integer roleId;
   private String action;
   private String pid;
-  
+
   public String Logout() {
     setUserToNull();
     return "index?faces-redirect=true";
@@ -116,6 +122,15 @@ public class UserBean extends AbstractBean implements Serializable {
       return hold_UT;
 
     }
+  }
+  
+  public String getPrettyUserType() {
+  
+      String hold_UT = userType;
+      hold_UT = hold_UT.replace(";", " ");
+      hold_UT = trim(hold_UT).replace(" ", "ing or ");
+      return hold_UT.concat("ing");
+ 
   }
 
   public void setUserType(String ut) {
@@ -445,7 +460,7 @@ public class UserBean extends AbstractBean implements Serializable {
             activation_success = false;
             message(null, "FailureToActivateUser", new Object[]{this.username});
           } else {
-            // User is valid now needs to accept agreement
+            // User is valid
             Users uu = (Users) results.get(0);  /// User result that has current user data
             memberCreator = uu.getRoleId();
 //            if (memberCreator == 1) {
@@ -520,6 +535,7 @@ public class UserBean extends AbstractBean implements Serializable {
                   return_string = pbean.load_ud("-1");
                 } else if (accept_results.size() == 1) {
                   accept_results = null;
+                  this.acceptID = true;
                   message(null, "LogInSuccessful", new Object[]{this.username});
                   Users uu = (Users) results.get(0);  /// User result that has current user data
                   memberCreator = uu.getRoleId();
@@ -581,16 +597,20 @@ public class UserBean extends AbstractBean implements Serializable {
 
     String return_string = "";
     String pid = null;
+    List hasCompleteLIT = null;
+    List hasCompleteLIC = null;
+    String return_null = "";
     List partList = completeParticipantRecord();
     if (partList != null) {
       if (partList.size() == 1) {
         Participant part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
         this.participant_id = pid;
+        this.partID = true;
       } else {
         this.editable = 0;
+        this.partID = true;
         return_string = pbean.load_ud(this.user_id);
-
       }
 
       if (return_string.isEmpty() == true) {
@@ -598,34 +618,60 @@ public class UserBean extends AbstractBean implements Serializable {
         Integer hs = completCP.size();
         if (hs == 0) {
           setEditable(0);
+          this.cpId = true;
           return_string = cpbean.load_ud(pid);
         } else {
-          setAction("current");
           this.editable = 0;
-          if (this.userType.contains("borrow")) {
-            return_string = ibean.load_ud("borrow", null);
-          } else if (this.userType.contains("lend")) {
-            List hasCompleteLIT = completeLIT(this.participant_id);
-            if (hasCompleteLIT.size() == 0) {
-              return_string = ltribean.load_ud(this.participant_id);
-            } else {
-              List hasCompleteLIC = completeLIC(this.participant_id);
-              if (hasCompleteLIC.size() == 0) {
-                return_string = licibean.load_ud(this.participant_id);
+          this.cpId = true;
+          switch (this.userIsWhichType()) {
+            case "borrow":
+              setAction("current");
+              return_string = ibean.load_ud("borrow", return_null);
+              break;
+            case "lend":
+              hasCompleteLIT = completeLIT(this.participant_id);
+              if (hasCompleteLIT.size() == 0) {
+                this.LITid = true;
+                return_string = ltribean.load_ud(this.participant_id);
               } else {
-
-                return_string = ibean.load_ud("lend", null);
+                this.LITid = true;
+                hasCompleteLIC = completeLIC(this.participant_id);
+                if (hasCompleteLIC.size() == 0) {
+                  this.LICid = true;
+                  return_string = licibean.load_ud(this.participant_id);
+                } else {
+                  setAction("current");
+                  this.LICid = true;
+                  return_string = ibean.load_ud("lend", return_null);
+                }
               }
-            }
-          } else {
-            return_string = ibean.load_ud("both", null);
+              break;
+            case "both":
+              hasCompleteLIT = completeLIT(this.participant_id);
+              if (hasCompleteLIT.size() == 0) {
+                this.LITid = true;
+                return_string = ltribean.load_ud(this.participant_id);
+              } else {
+                this.LITid = true;
+                hasCompleteLIC = completeLIC(this.participant_id);
+                if (hasCompleteLIC.size() == 0) {
+                  this.LICid = true;
+                  return_string = licibean.load_ud(this.participant_id);
+                } else {
+                  setAction("current");
+                  this.LICid = true;
+                  return_string = ibean.load_ud("both", return_null);
+                }
+                break;
+              }
           }
         }
       }
     } else {
-      message(null, "ParticpantNotFound", null);
+      message(null, "ParticipantNotFound", null);
       return_string = "index";
     }
+
     return return_string;
   }
 
@@ -640,6 +686,7 @@ public class UserBean extends AbstractBean implements Serializable {
         part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
         setParticipant_id(pid);
+        setPartID(true);
         setCommunityId(part.getCommunityId());
       } else {
         setEditable(0);
@@ -1323,7 +1370,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return "community_registration.xhtml?faces-redirect=true";
   }
 
-  private List completeParticipantRecord() {
+  public List completeParticipantRecord() {
 
     List results = null;
     Session hib = null;
@@ -1332,7 +1379,7 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery("from Participant WHERE user_id = :uid AND contactDescribeId != -9")
+      results = hib.createQuery("from Participant WHERE user_id = :uid AND firstName != null")
               .setParameter("uid", this.user_id)
               .list();
       tx.commit();
@@ -1349,13 +1396,40 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
+  public List completeLIC_LIT(String PID) {
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      results = hib.createQuery("SELECT part from Participant part INNER JOIN part.lenderItemConditions INNER JOIN part.lenderTransfer WHERE part.participant_id = :pid")
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on completeLIC");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return results;
+
+  }
+
   private List completeLIC(String pid) {
 
     List results = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
 
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid")
               .setParameter("pid", pid)
               .list();
@@ -1376,10 +1450,12 @@ public class UserBean extends AbstractBean implements Serializable {
   private List completeLIT(String pid) {
 
     List results = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
 
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid")
               .setParameter("pid", pid)
               .list();
@@ -1397,7 +1473,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  private List completeContactPreferences(String pid) {
+  public List completeContactPreferences(String pid) {
 
     List results = null;
     Session hib = null;
@@ -1410,6 +1486,7 @@ public class UserBean extends AbstractBean implements Serializable {
               .setParameter("pid", pid)
               .list();
       tx.commit();
+
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on completeContactPreferences");
@@ -1445,10 +1522,10 @@ public class UserBean extends AbstractBean implements Serializable {
     Transaction tx = null;
 
     try {
-      Users uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
-      hib.update(uu);
       hib = hib_session();
       tx = hib.beginTransaction();
+      Users uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
+      hib.update(uu);
       tx.commit();
       resetCodeString = uu.getResetCode();
       updateSuccess = true;
@@ -1541,13 +1618,13 @@ public class UserBean extends AbstractBean implements Serializable {
     this.participant_id = participant_id;
   }
 
-  public String getItemId() {
-    return itemId;
-  }
-
-  public void setItemId(String itemId) {
-    this.itemId = itemId;
-  }
+//  public String getItemId() {
+//    return itemId;
+//  }
+//
+//  public void setItemId(String itemId) {
+//    this.itemId = itemId;
+//  }
 
   /**
    * @return the action
@@ -1730,6 +1807,7 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String getCommunityName(String pid) {
+
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -1776,6 +1854,70 @@ public class UserBean extends AbstractBean implements Serializable {
    */
   public void setPid(String pid) {
     this.pid = pid;
+  }
+
+  /**
+   * @return the acceptID
+   */
+  public Boolean getAcceptID() {
+    return acceptID;
+  }
+
+  /**
+   * @param acceptID the acceptID to set
+   */
+  public void setAcceptID(Boolean acceptID) {
+    this.acceptID = acceptID;
+  }
+
+  public Boolean getCpId() {
+    return cpId;
+  }
+
+  public void setCpId(Boolean cpId) {
+    this.cpId = cpId;
+  }
+
+  /**
+   * @return the LITid
+   */
+  public Boolean getLITid() {
+    return LITid;
+  }
+
+  /**
+   * @param LITid the LITid to set
+   */
+  public void setLITid(Boolean LITid) {
+    this.LITid = LITid;
+  }
+
+  /**
+   * @return the LICid
+   */
+  public Boolean getLICid() {
+    return LICid;
+  }
+
+  /**
+   * @param LICid the LICid to set
+   */
+  public void setLICid(Boolean LICid) {
+    this.LICid = LICid;
+  }
+
+  /**
+   * @return the partID
+   */
+  public Boolean getPartID() {
+    return partID;
+  }
+
+  /**
+   * @param partID the partID to set
+   */
+  public void setPartID(Boolean partID) {
+    this.partID = partID;
   }
 
 }
