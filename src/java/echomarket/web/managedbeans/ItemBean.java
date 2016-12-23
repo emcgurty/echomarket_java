@@ -193,14 +193,10 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   }
 
-  public String editSelectedItem(String which, String iid) {
-        return this.load_ud(which, iid);
-  }
-  
   public String load_ud(String which, String iid) {
 
     List result = null;
-    ubean.setItemId(iid);
+    //ubean.setItemId(iid);
     setItemType(which);
 
     if (iid.isEmpty() == true) {
@@ -243,14 +239,30 @@ public class ItemBean extends AbstractBean implements Serializable {
         }
       }
     } else {
+      itemId = null;
+      categoryId = -9;
+      participant_id = null;
+      otherItemCategory = null;
+      itemModel = null;
+      itemDescription = null;
+      itemConditionId = null;
+      itemCount = null;
+      comment = null;
+      dateCreated = null;
+      dateUpdated = null;
+      dateDeleted = null;
+      approved = -9;
+      notify = -9;
+      itemType = null;
+      whichType = null;
+      history_id = null;
+      history_which = null;
+      getPicture();
 
     }
-    ubean.setItemId(this.itemId);
-    return "user_item";
 
+    return "user_item";
   }
-  
-  
 
   public String saveItem() {
 
@@ -265,7 +277,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     if ("both".equals(itemType)) {
       if (whichType.isEmpty() == false) {
-        itemType = whichType;
+        this.itemType = whichType;
       }
     }
     if (itemId.isEmpty() == true) {
@@ -279,7 +291,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         sb.save(ii);
         tx.commit();
         bret = true;
-        ubean.setItemId(new_iid);
+        /// ubean.setItemId(new_iid);
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in Save Item");
@@ -326,7 +338,7 @@ public class ItemBean extends AbstractBean implements Serializable {
           sb.save(uitem);
           tx.commit();
           bret = true;
-          ubean.setItemId(itemId);
+          // ubean.setItemId(itemId);
         } catch (Exception ex) {
           bret = false;
           tx.rollback();
@@ -357,10 +369,10 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     if (itemId.isEmpty() == true) {
       this.itemId = new_iid;
-      ubean.setItemId(itemId);
+      //ubean.setItemId(itemId);
     }
     if (bret == true) {
-      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
+      message(null, "ItemRecordUpdated", new Object[]{itemDescription});
       ubean.setEditable(0);
     } else {
       message(null, "ItemRecordNotUpdated", null);
