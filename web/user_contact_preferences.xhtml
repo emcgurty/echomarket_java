@@ -17,7 +17,7 @@
       <body onload="preferencesLoad();"  >
         <div id="form_contact_preference" class="contact_information" >
 
-          <c:set var="iid" value="#{userBean.itemId}"  />  
+          <c:set var="iid" value="#{itemBean.itemId}"  />  
           <c:set var="rid" value="#{userBean.roleId}"  />  
           <c:choose >
             <c:when test="#{empty iid }" >
@@ -38,11 +38,11 @@
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-              <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Initial Contact Preferences"  rendered="#{userBean.editable == 1}" />
+              <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Default Contact Preferences"  rendered="#{userBean.editable == 1}" />
               <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
             </div> 
             <div style="margin:10px;" >
-              <h:outputText value="Initial Contact Preferences" />
+              <h:outputText value="Default Contact Preferences" />
               <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'"  >
                 <f:param name="action" value="edit" />
               </h:commandLink>
