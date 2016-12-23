@@ -20,9 +20,10 @@
         <div id="form_item" class="contact_information" >
           <div class="top" >
             <div >
-              <h:outputText value="NEW ITEM"  />
+              <h:outputText value="NEW ITEM"  rendered="#{userBean.editable == 1}" />
+              <h:outputText value="ITEM: #{itemBean.itemDescription}"  rendered="#{userBean.editable == 0}" />
               <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
-              <h:commandLink  action="#{itemBean.load_ud(itemBean.load_ud(itemBean.itemType, itemBean.itemId))}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
+              <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
             </div> 
             <div class="messagecolor">
               <h:messages showSummary="true" 
@@ -35,8 +36,8 @@
           <div  class="div_p" id="menu_item_3" >
             <div style="margin:10px;" >
               <c:set var="itype" value="#{userBean.userIsWhichType()}" />
-              <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{itemBean.itemType ne 'both'}" />
-              <h:inputHidden id="itemType" value="#{itemBean.itemType}" rendered="#{itype ne 'both'}" />
+              <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{itype ne 'both'}" />
+              <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
               <h:outputText value="The Item you would like to... Please select: " rendered="#{itype == 'both'}" />
               <h:selectOneMenu id="whichType" value="#{itemBean.whichType}" rendered="#{itype == 'both'}"  >
                 <f:selectItem itemValue="borrow" itemLabel="BORROW" />	
@@ -155,7 +156,7 @@
           </table>
           <br />
           <div style="margin-left:25px;margin-top:5px;float:left;">
-            <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(userBean.itemId)}" var="image"   rendered="#{userBean.editable == 1}" >
+            <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 1}" >
               <h:column rowHeader="">
                 <div style="margin-left:25px;margin-top:5px;float:left;">
                   <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
@@ -180,7 +181,7 @@
               </h:column>
             </h:dataTable>
 
-            <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(userBean.itemId)}" var="image"   rendered="#{userBean.editable == 0}">
+            <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 0}">
               <h:column rowHeader="">
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                   <h:outputLabel for="viewImage" value="Uploaded Image:"  >
