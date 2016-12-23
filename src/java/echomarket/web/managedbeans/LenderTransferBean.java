@@ -129,6 +129,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         tx = sb.beginTransaction();
         sb.save(lt);
         tx.commit();
+        ubean.setLITid(true);
         message(null, "LenderTransferSaved", null);
         successTransaction = true;
         ubean.setEditable(1);
