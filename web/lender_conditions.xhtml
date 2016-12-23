@@ -17,7 +17,7 @@
     <h:form id="personal_information"  class="lender_conditions">
       <body onload="preferencesLoad();"  >
         <div id="lender_registration" class="lender_registration" >
-          <c:set var="iid" value="#{userBean.itemId}"  />  
+          <c:set var="iid" value="#{itemBean.itemId}"  />  
           <c:set var="rid" value="#{userBean.roleId}"  />  
           <c:choose >
             <c:when test="#{empty iid }" >
