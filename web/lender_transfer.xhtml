@@ -18,7 +18,7 @@
       <div id="lender_transfer" class="contact_information" >
         <body onload="preferencesLoad();" >
           <div id="form_lender_to_borrower" class="contact_information" >
-            <c:set var="iid" value="#{userBean.itemId}"  />  
+            <c:set var="iid" value="#{itemBean.itemId}"  />  
             <c:set var="rid" value="#{userBean.roleId}"  />  
             <c:choose >
               <c:when test="#{empty iid }" >
