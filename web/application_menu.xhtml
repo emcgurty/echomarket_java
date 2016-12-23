@@ -58,7 +58,7 @@
           </li>
           <c:if test="#{((userBean.username != null) and (userBean.action == 'current'))}" >
             <li>
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="I want to borrow"  >
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', '')}"  value="I want to borrow"  >
                 <f:param name="action" value="item" />
               </h:commandLink>
             </li>
@@ -87,7 +87,7 @@
           </li>
           <c:if test="#{((userBean.username != null) and (userBean.action == 'current'))}" >
             <li>
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="I want to lend"  >
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', '')}"  value="I want to lend"  >
                 <f:param name="action" value="item" />
               </h:commandLink>
             </li>
