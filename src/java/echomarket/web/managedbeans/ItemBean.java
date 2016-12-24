@@ -69,15 +69,17 @@ public class ItemBean extends AbstractBean implements Serializable {
     picture = aPicture;
   }
 
-  public String getLenderHistory(String whichId, Integer whichHistory) {
+  public String getLenderHistory(String whichId, String iid, Integer whichHistory) {
     this.history_id = whichId;
     this.setHistory_which(whichHistory);
+    this.itemId = iid;
     return "lender_history";
   }
 
-  public String getBorrowerHistory(String whichId, Integer whichHistory) {
+  public String getBorrowerHistory(String whichId, String iid, Integer whichHistory) {
     this.history_id = whichId;
     this.setHistory_which(whichHistory);
+    this.itemId = iid;
     return "borrower_history";
   }
 
@@ -235,7 +237,7 @@ public class ItemBean extends AbstractBean implements Serializable {
           this.itemType = ir.getItemType();
           //    this.comment = ir.getComment();  Later, not in gui yet
           this.notify = ir.getNotify();
-          // Image detail will be retrieved from gui
+          getCurrentPicture(iid);
         }
       }
     } else {
@@ -253,11 +255,11 @@ public class ItemBean extends AbstractBean implements Serializable {
       dateDeleted = null;
       approved = -9;
       notify = -9;
-      itemType = null;
       whichType = null;
       history_id = null;
       history_which = null;
-      getPicture();
+      ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
+      setPicture(tmp_picture);
 
     }
 
@@ -266,10 +268,8 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   public String saveItem() {
 
-    Session sb;
-    Transaction tx;
-    sb = null;
-    tx = null;
+    Session sb = null;
+    Transaction tx = null;
     Boolean bret = false;
     String strRetId = null;
     String new_iid = getId();
@@ -317,8 +317,8 @@ public class ItemBean extends AbstractBean implements Serializable {
 
       result = getCurrentItem(itemId, itemType);
       if (result.size() == 1) {
-
         Items uitem = (Items) result.get(0);
+        new_iid = uitem.getItemId();
         uitem.setCategoryId(categoryId);
         uitem.setOtherItemCategory(otherItemCategory);
         uitem.setItemModel(itemModel);
@@ -327,18 +327,12 @@ public class ItemBean extends AbstractBean implements Serializable {
         uitem.setItemCount(itemCount);
         uitem.setItemType(itemType);
 
-        if (sb.isOpen() == false) {
-          sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-          tx = sb.beginTransaction();
-        }
-
         try {
-          sb.save(uitem);
+          sb = hib_session();
+          tx = sb.beginTransaction();
+          sb.update(uitem);
           tx.commit();
           bret = true;
-          // ubean.setItemId(itemId);
         } catch (Exception ex) {
           bret = false;
           tx.rollback();
@@ -350,10 +344,10 @@ public class ItemBean extends AbstractBean implements Serializable {
         }
 
       } else {
-        bret = false;
+        bret = false;  // Need to manage?
       }
     }
-
+    /// After save or update is completed...
     if (bret == true) {
       strRetId = doesImageExist(new_iid);
       if (strRetId != null) {
@@ -369,10 +363,9 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     if (itemId.isEmpty() == true) {
       this.itemId = new_iid;
-      //ubean.setItemId(itemId);
     }
     if (bret == true) {
-      message(null, "ItemRecordUpdated", new Object[]{itemDescription});
+      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(0);
     } else {
       message(null, "ItemRecordNotUpdated", null);
@@ -670,6 +663,46 @@ public class ItemBean extends AbstractBean implements Serializable {
         return getPicture();
       }
     }
+  }
+
+  public void getCurrentPicture(String iid) {
+
+    List result = null;
+    Session hib = hib_session();
+    Transaction tx = hib.beginTransaction();
+    String[] results = null;
+    ItemImages a_array = null;
+    ArrayList<ItemImages> tmp_picture = null;
+    String queryString = "from ItemImages where item_id = :iid ";
+    try {
+      result = hib.createQuery(queryString)
+              .setParameter("iid", iid)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
+      System.out.println("Error in getExistingPicture");
+      e.printStackTrace();
+    } finally {
+      tx = null;
+      hib = null;
+    }
+
+    Integer size_of_list = result.size();
+    if (size_of_list == 0) {
+      tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
+      ));
+      setPicture(tmp_picture);
+    } else {
+      a_array = (ItemImages) result.get(0);
+      tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
+              new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
+                      a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName().toString(), a_array.getItemImageCaption())
+      ));
+      setPicture(tmp_picture);
+    }
+    a_array = null;
+    tmp_picture = null;
   }
 
   private List getCurrentItem(String iid, String which) {
