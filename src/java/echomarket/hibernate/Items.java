@@ -26,6 +26,7 @@ public class Items implements java.io.Serializable {
   private String itemType;
   private Set<LenderTransfer> lenderTransfer = new HashSet<LenderTransfer>();
   private Set<LenderItemConditions> lenderItemConditions = new HashSet<LenderItemConditions>();
+  private Set<ItemImages> itemImages = new HashSet<ItemImages>();
 
   public Items() {
   }
@@ -215,6 +216,23 @@ public class Items implements java.io.Serializable {
    */
   public void setLenderItemConditions(Set<LenderItemConditions> lenderItemConditions) {
     this.lenderItemConditions = lenderItemConditions;
+  }
+
+  /**
+   * @return the itemImages
+   */
+  @OneToMany
+  @JoinTable(name = "echomarket.hibernate.ItemImages")
+  @JoinColumn(name = "itemId")
+  public Set<ItemImages> getItemImages() {
+    return itemImages;
+  }
+
+  /**
+   * @param itemImages the itemImages to set
+   */
+  public void setItemImages(Set<ItemImages> itemImages) {
+    this.itemImages = itemImages;
   }
 
 }

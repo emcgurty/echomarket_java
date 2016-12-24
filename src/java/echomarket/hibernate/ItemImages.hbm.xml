@@ -3,37 +3,37 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="echomarket.hibernate.ItemImages" table="item_images" catalog="echomarket" optimistic-lock="version">
-        <id name="itemImageId" type="string">
-            <column name="item_image_id" length="40" />
-            <generator class="assigned" />
-        </id>
-        <property name="item_id" type="string">
-            <column name="item_id" length="40" not-null="true" />
-        </property>
-        <property name="imageContentType" type="string">
-            <column name="image_content_type" length="20" />
-        </property>
-        <property name="imageHeight" type="java.lang.Integer">
-            <column name="image_height" />
-        </property>
-        <property name="imageWidth" type="java.lang.Integer">
-            <column name="image_width" />
-        </property>
-        <property name="imageFileName" type="string">
-            <column name="image_file_name" length="150" not-null="true" />
-        </property>
-        <property name="itemImageCaption" type="string">
-            <column name="item_image_caption" length="50" />
-        </property>
-        <property name="dateCreated" type="timestamp">
-            <column name="date_created" length="19" not-null="true" />
-        </property>
-        <property name="dateDeleted" type="timestamp">
-            <column name="date_deleted" length="19"  />
-        </property>
-        <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19"  />
-        </property>
-    </class>
+  <class name="echomarket.hibernate.ItemImages" table="item_images" catalog="echomarket" optimistic-lock="version">
+    <id name="itemImageId" type="string">
+      <column name="item_image_id" length="40" />
+      <generator class="assigned" />
+    </id>
+    <property name="itemId" type="string">
+      <column name="item_id" length="40"  />
+    </property>
+    <property name="imageContentType" type="string">
+      <column name="image_content_type" length="20" />
+    </property>
+    <property name="imageHeight" type="java.lang.Integer">
+      <column name="image_height" />
+    </property>
+    <property name="imageWidth" type="java.lang.Integer">
+      <column name="image_width" />
+    </property>
+    <property name="imageFileName" type="string">
+      <column name="image_file_name" length="150" not-null="true" />
+    </property>
+    <property name="itemImageCaption" type="string">
+      <column name="item_image_caption" length="50" />
+    </property>
+    <property name="dateCreated" type="timestamp">
+      <column name="date_created" length="19" not-null="true" />
+    </property>
+    <property name="dateDeleted" type="timestamp">
+      <column name="date_deleted" length="19"  />
+    </property>
+    <property name="dateUpdated" type="timestamp">
+      <column name="date_updated" length="19"  />
+    </property>
+  </class>
 </hibernate-mapping>

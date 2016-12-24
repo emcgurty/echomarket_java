@@ -8,6 +8,10 @@
       <column name="item_id" length="40" />
       <generator class="assigned" />
     </id>
+     <set name="itemImages" lazy="true" table="item_images">
+      <key column="item_id" />
+      <one-to-many class="echomarket.hibernate.ItemImages"  />
+    </set>
     <set name="lenderTransfer" lazy="true" table="lender_transfer">
       <key column="item_id" />
       <one-to-many class="echomarket.hibernate.LenderTransfer"  />

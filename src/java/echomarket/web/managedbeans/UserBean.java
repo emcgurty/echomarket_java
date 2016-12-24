@@ -571,7 +571,6 @@ public class UserBean extends AbstractBean implements Serializable {
                 }
               } else {
                 message(null, "UserHasNotAccepted", new Object[]{this.username});
-
                 return_string = pbean.load_ud("-1");
               }
             }

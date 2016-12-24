@@ -50,6 +50,8 @@ public class Participant implements java.io.Serializable {
   private Integer approved;
   private Set<Addresses> addresses = new HashSet<Addresses>();
   private Set<ContactPreference> contactPreference = new HashSet<ContactPreference>();
+  private Set<LenderTransfer> lenderTransfer = new HashSet<LenderTransfer>();
+  private Set<LenderItemConditions> lenderItemConditions = new HashSet<LenderItemConditions>();
   private Set<Items> item = new HashSet<Items>();
   private Integer rowIndex;
 
@@ -73,6 +75,7 @@ public class Participant implements java.io.Serializable {
     this.dateCreated = new Date();
     this.remoteIp = remoteIp;
     this.approved = 1;
+    this.editable = 1;
   }
   // Update 
   public Participant(String participant_id, String userId, Integer contactDescribeId, String organizationName, Integer displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, Integer displayName, Integer displayAddress, String homePhone, String cellPhone,
@@ -475,6 +478,42 @@ public class Participant implements java.io.Serializable {
    */
   public void setRowIndex(Integer rowIndex) {
     this.rowIndex = rowIndex;
+  }
+
+  /**
+   * @return the lenderTransfer
+   */
+  @OneToMany
+  @JoinTable(name = "echomarket.hibernate.LenderTransfer")
+  @JoinColumn(name = "participant_id")
+  public Set<LenderTransfer> getLenderTransfer() {
+    return lenderTransfer;
+  }
+
+  /**
+   * @param lenderTransfer the lenderTransfer to set
+   */
+ 
+  public void setLenderTransfer(Set<LenderTransfer> lenderTransfer) {
+    this.lenderTransfer = lenderTransfer;
+  }
+
+  /**
+   * @return the lenderItemConditions
+   */
+  @OneToMany
+  @JoinTable(name = "echomarket.hibernate.LenderItemConditions")
+  @JoinColumn(name = "participant_id")
+  public Set<LenderItemConditions> getLenderItemConditions() {
+    return lenderItemConditions;
+  }
+
+  /**
+   * @param lenderItemConditions the lenderItemConditions to set
+   */
+ 
+  public void setLenderItemConditions(Set<LenderItemConditions> lenderItemConditions) {
+    this.lenderItemConditions = lenderItemConditions;
   }
 
 }

@@ -178,6 +178,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             successTransaction = true;
             message(null, "LenderTransferUpdated", null);
             ubean.setEditable(1);
+             ubean.setLITid(true);
           } catch (Exception ex) {
             message(null, "LenderTransferUpdatedFailed", null);
             tx.rollback();

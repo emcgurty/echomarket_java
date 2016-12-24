@@ -173,7 +173,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (b_return == true) {
       ItemImages iii = (ItemImages) ii.get(0);
       iii.setItemImageId(getId());
-      iii.setItem_id(iid);
+      iii.setItemId(iid);
       iii.setImageFileName(iid + "_" + getFileName(getImageFileNamePart()));
       iii.setImageContentType(getImageFileNamePart().getContentType());
 
@@ -368,7 +368,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(0);
     } else {
-      message(null, "ItemRecordNotUpdated", null);
+       message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(1);
 
     }
@@ -632,10 +632,11 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (iid == null) {
       return getPicture();
     } else {
-      String queryString = "from ItemImages where item_id = :iid ";
+      String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid AND itms.itemType = :itype";
       try {
         result = hib.createQuery(queryString)
                 .setParameter("iid", iid)
+                .setParameter("itype", this.itemType)
                 .list();
         tx.commit();
       } catch (Exception e) {
@@ -653,7 +654,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       } else {
         ItemImages a_array = (ItemImages) result.get(0);
         ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
+                new ItemImages(a_array.getItemImageId(), a_array.getItemId(), a_array.getImageContentType(),
                         a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName().toString(), a_array.getItemImageCaption())
         ));
         setPicture(tmp_picture);
@@ -673,10 +674,11 @@ public class ItemBean extends AbstractBean implements Serializable {
     String[] results = null;
     ItemImages a_array = null;
     ArrayList<ItemImages> tmp_picture = null;
-    String queryString = "from ItemImages where item_id = :iid ";
+    String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid AND itms.itemType = :itype";
     try {
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
+              .setParameter("itype", this.itemType)
               .list();
       tx.commit();
     } catch (Exception e) {
@@ -696,7 +698,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } else {
       a_array = (ItemImages) result.get(0);
       tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-              new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
+              new ItemImages(a_array.getItemImageId(), a_array.getItemId(), a_array.getImageContentType(),
                       a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName().toString(), a_array.getItemImageCaption())
       ));
       setPicture(tmp_picture);
