@@ -16,7 +16,7 @@
 
   <ui:define name="content">
     <h:form id="user_agreement_content" >
-      <ui:include rendered="true" src="dumbyDiv.xhtml" id="dumbyDiv" /> 
+    
       <div class="top" >
         <div style="margin:10px;margin-top:25px;" >
           <h:outputText value="#{userBean.username}: USER DASHBOARD"  />
@@ -32,7 +32,7 @@
         <ul >
           <li style="margin:5px;">
             <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill"  ><span class="required_fields">*</span>
-              <h:selectOneRadio id="goodwill"  value="#{participantBean.goodwill}" >
+              <h:selectOneRadio id="goodwill"  value="#{participantBean.goodwill}"  required="true" requiredMessage="You are required to agree to participate in goodwill.">
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
               </h:selectOneRadio>    
@@ -41,7 +41,7 @@
           </li>
           <li style="margin:5px;">
             <h:outputLabel value="I have achieved the age of 18 years or more."  for="age18OrMore"  ><span class="required_fields">*</span>
-              <h:selectOneRadio  id="age18OrMore" value="#{participantBean.age18OrMore}" >
+              <h:selectOneRadio  id="age18OrMore" value="#{participantBean.age18OrMore}" required="true" requiredMessage="You are required to agree that you are 18 years of age or more." >
                 <f:selectItem itemValue="1" itemLabel="Yes" />
                 <f:selectItem itemValue="0" itemLabel="No" />
               </h:selectOneRadio>    
