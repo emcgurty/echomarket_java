@@ -16,14 +16,16 @@
   <ui:define name="content">
     <h:form id="item_content" enctype="multipart/form-data" >
       <body onload="itemLoad();"  >
-      <ui:include src="/item_menu.xhtml" id="item_menu" />  
+        <ui:include src="/item_menu.xhtml" id="item_menu" />  
         <div id="form_item" class="contact_information" >
           <div class="top" >
             <div >
               <h:outputText value="NEW ITEM"  rendered="#{userBean.editable == 1}" />
               <h:outputText value="ITEM: #{itemBean.itemDescription}"  rendered="#{userBean.editable == 0}" />
-              <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save New Item"  rendered="#{userBean.editable == 1}" />
-              <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" />
+              <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save Item"  rendered="#{userBean.editable == 1}" />
+              <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" >
+                <f:param name="action" value="item" />
+              </h:commandLink>
             </div> 
             <div class="messagecolor">
               <h:messages showSummary="true" 
@@ -33,13 +35,13 @@
             </div>
           </div> 
 
-          <div  class="div_p" id="menu_item_3" >
+          <div  class="div_p" >
             <div style="margin:10px;" >
-              <c:set var="itype" value="#{userBean.userIsWhichType()}" />
-              <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{itype ne 'both'}" />
+              <c:set var="itype" value="#{itemBean.itemType}" />
               <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
-              <h:outputText value="The Item you would like to... Please select: " rendered="#{itype == 'both'}" />
-              <h:selectOneMenu id="whichType" value="#{itemBean.whichType}" rendered="#{itype == 'both'}"  >
+              <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{(itype ne 'both') and (userBean.editable == 1)}" />
+              <h:outputText value="The Item you would like to... Please select: " rendered="#{(itype == 'both') and (userBean.editable == 1)}" />
+              <h:selectOneMenu id="whichType" value="#{itemBean.whichType}" rendered="#{(itype == 'both') and (userBean.editable == 1)}"  >
                 <f:selectItem itemValue="borrow" itemLabel="BORROW" />	
                 <f:selectItem itemValue="lend" itemLabel="LEND" />
               </h:selectOneMenu>   
@@ -84,7 +86,7 @@
             <tr class="even">
               <td colspan='2'>
                 <div style="margin-left:25px;margin-top:5px;">
-                  <h:outputLabel value="#{bundle.BasedOnB}"  for="notify" >
+                  <h:outputLabel value="#{bundle.BasedOnB}"  for="notify"  >
                     <h:selectOneRadio id="notify" value="#{itemBean.notify}"   rendered="#{userBean.editable == 1}" >
                       <f:selectItem itemValue="1" itemLabel="Yes" />
                       <f:selectItem itemValue="0" itemLabel="No" />
@@ -98,7 +100,7 @@
                           <c:set var="cbe" value="Yes"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="cbe" value="Indifferent"/>
+                          <c:set var="cbe" value="Selection not made"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="notifyString"   value="#{cbe}" class="RO_text" />
