@@ -21,28 +21,23 @@
 
         <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
           <h:outputLabel for="itemDescription" value="Item Description:" >
-            <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
+            <h:outputText  id="itemDescription" value="#{history[2]}" style="margin-left:10px;color:black;"/>
           </h:outputLabel>
           <br />
           <h:outputLabel for="itemModel" value="Item Model:" >
-            <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
+            <h:outputText  id="itemModel" value="#{history[3]}" style="margin-left:10px;color:black;"/>
           </h:outputLabel>
-
-          <h:dataTable id="image"  value="#{itemBean.getCurrentItemImage(history.itemId)}" var="i" >
-            <h:column rowHeader="">
-              <h:graphicImage name="#{i.imageFileName}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty i.imageFileName}"/>
-            </h:column>
-          </h:dataTable>
-
+          <h:outputText value="ITEMS OFFERED TO Borrow - #{history[0]}"  />
+          <h:graphicImage name="#{history[0]}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty history[0]}"/>
           <br />
-          <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history.itemId)}" immediate="true" rendered="#{history.participant_id == userBean.participant_id}"  >
+          <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history[1])}" immediate="true" rendered="#{history[4] == userBean.participant_id}"  >
+             <f:param name="action" value="item" />   
           </h:commandButton>    
 
-          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId,history.itemDescription )}"  immediate="true"  rendered="#{history.participant_id == userBean.participant_id}"  >
+          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history[1])}"  immediate="true"  rendered="#{history[4] == userBean.participant_id}"  >
           </h:commandButton>    
 
         </div>
-
       </c:forEach>
 
       <div class="borrower_registration" >
