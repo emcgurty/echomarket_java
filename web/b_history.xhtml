@@ -27,7 +27,6 @@
           <h:outputLabel for="itemModel" value="Item Model:" >
             <h:outputText  id="itemModel" value="#{history[3]}" style="margin-left:10px;color:black;"/>
           </h:outputLabel>
-          <h:outputText value="ITEMS OFFERED TO Borrow - #{history[0]}"  />
           <h:graphicImage name="#{history[0]}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty history[0]}"/>
           <br />
           <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history[1])}" immediate="true" rendered="#{history[4] == userBean.participant_id}"  >
