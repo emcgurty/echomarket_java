@@ -73,6 +73,11 @@
       </ul>
     </li>
     <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
+    <h:outputText value="#{userBean.LITid and userBean.LICid} -- herere" />
+    <h:outputText value="#{userBean.LITid} -- LIT" />
+    <h:outputText value="#{userBean.LICid} -- LIC" />
+     <h:outputText value="#{userBean.action} -- current" />
+     <h:outputText value="#{(userBean.action) or (completeLIC_LIT)} -- test" />
     <c:if test="#{(userBean.action == 'current') or (completeLIC_LIT) }" >
       <li class="subs" >
         <c:set var="whichType" value="#{userBean.userIsWhichType()}" />

@@ -89,7 +89,7 @@
                         <c:set var="whichAddress" value="Use your Primary Address"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="whichAddress" value="Indifferent"/>
+                        <c:set var="whichAddress" value="Selection not made"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="useWhichContactAddressString"   value="#{whichAddress}" class="RO_text" />
@@ -123,7 +123,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Indifferent"/>
+                      <c:set var="cbe" value="Selection not made"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="contactByChatString"   value="#{cbe}" class="RO_text" />
@@ -164,7 +164,7 @@
                       <c:set var="cbe" value="Login email address"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Indifferent"/>
+                      <c:set var="cbe" value="Selection not made"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="contactByEmailString"   value="#{cbe}"  class="RO_text" />
@@ -197,7 +197,7 @@
                       <c:set var="yn" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="yn" value="Indifferent"/>
+                      <c:set var="yn" value="Selection not made"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="contactByHomePhoneString"   value="#{yn}"  class="RO_text"  />
@@ -221,7 +221,7 @@
                       <c:set var="yn" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="yn" value="Indifferent"/>
+                      <c:set var="yn" value="Selection not made"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="contactByCellPhoneString"   value="#{yn}"  class="RO_text"  />
@@ -245,7 +245,7 @@
                       <c:set var="yn" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="yn" value="Indifferent"/>
+                      <c:set var="yn" value="Selection not made"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="contactByAlternativePhoneString"   value="#{yn}"   class="RO_text" />

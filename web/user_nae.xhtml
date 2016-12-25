@@ -185,7 +185,7 @@
                                     <c:set var="yn" value="Yes"/>
                                   </c:when>
                                   <c:otherwise>
-                                    <c:set var="yn" value="Indifferent"/>
+                                    <c:set var="yn" value="Selection not made"/>
                                   </c:otherwise>
                                 </c:choose>
                                 <h:outputText id="displayOrganizationString"   value="#{yn}" class="RO_text" />
@@ -238,7 +238,7 @@
 
                 <div style="margin-left: 25px;float:left">
 
-                  <h:outputLabel value="Allow #{allow} to see your Name?"  for="displayName" >
+                  <h:outputLabel value="Allow #{allow} to see your Name?"  for="displayName"  title="Your privacy is important to EchoMarket." >
                     <h:selectOneRadio id="displayName" value="#{participantBean.displayName}" layout="pageDirection"  rendered="#{userBean.editable == 1}">
                       <f:selectItem itemValue="1" itemLabel="Yes" />
                       <f:selectItem itemValue="0" itemLabel="No" />
@@ -253,7 +253,7 @@
                           <c:set var="yn" value="Yes"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="yn" value="Indifferent"/>
+                          <c:set var="yn" value="Selection not made"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="displayNameString"   value="#{yn}" class="RO_text" />
@@ -321,7 +321,7 @@
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
-                          <h:inputText id="addressLine1" value="#{pa.addressLine1}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
+                          <h:inputText id="addressLine1" value="#{pa.addressLine1}" style="margin-left: 5px;" title="You don't need to provide your numeric address." class="primary" rendered="#{userBean.editable == 1}" />
                           <h:outputText value="#{pa.addressLine1}" rendered="#{userBean.editable == 0}"  class="RO_text" />
                           <span class="error-message" id="addressLine1" ></span>
                         </td>
@@ -390,7 +390,7 @@
 
                       <tr >
                         <td colspan="2">
-                          <h:outputLabel value="Allow #{allow} to see your Primary Address?"  for="displayAddress" >
+                          <h:outputLabel value="Allow #{allow} to see your Primary Address?"  for="displayAddress" title="Your privacy is important to EchoMaket.  However in searching for available items, EchoMarket needs your address.">
                             <h:selectOneRadio id="displayAddress" value="#{participantBean.displayAddress}" layout='lineDirection' rendered="#{userBean.editable == 1}">
                               <f:selectItem itemValue="1" itemLabel="Yes" />
                               <f:selectItem itemValue="0" itemLabel="No" />
@@ -405,7 +405,7 @@
                                   <c:set var="yn" value="Yes"/>
                                 </c:when>
                                 <c:otherwise>
-                                  <c:set var="yn" value="Indifferent"/>
+                                  <c:set var="yn" value="Selection not made"/>
                                 </c:otherwise>
                               </c:choose>
                               <h:outputText id="displayAddressString"   value="#{yn}" class="RO_text" />
@@ -543,7 +543,7 @@
                                   <c:set var="yn" value="Yes"/>
                                 </c:when>
                                 <c:otherwise>
-                                  <c:set var="yn" value="Indifferent"/>
+                                  <c:set var="yn" value="Selection not made"/>
                                 </c:otherwise>
                               </c:choose>
                               <h:outputText id="displayAlternativeAddressString"   value="#{yn}" class="RO_text" />
@@ -596,7 +596,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="Indifferent"/>
+                                <c:set var="yn" value="Selection not made"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayHomePhoneString"   value="#{yn}" class="RO_text" />
@@ -627,7 +627,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="Indifferent"/>
+                                <c:set var="yn" value="Selection not made"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayCellPhoneString"   value="#{yn}"  class="RO_text" />
@@ -656,7 +656,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="Indifferent"/>
+                                <c:set var="yn" value="Selection not made"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayAlternativePhoneString"   value="#{yn}" class="RO_text" />

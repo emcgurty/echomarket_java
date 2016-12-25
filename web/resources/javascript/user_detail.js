@@ -19,29 +19,16 @@ $(document).ready(function () {
 
 });
 
-function communityDetailLoad() {
-        $("li").removeClass('active');
-        $("li#tab_item_0").addClass('active');
-}
-function communityMembersLoad() {
-        $("li").removeClass('active');
-        $("li#tab_item_1").addClass('active');
-}
-
-function userLoginUpdateLoad() {
-        $("li").removeClass('active');
-        $("li#tab_item_2").addClass('active');
+function changeMenuBackground(which) {
+  $("li").removeClass('active');
+  var menuID = "li#tab_item_" + which;
+  try {
+    $(menuID).addClass('active');
+  } catch (err) {
+  }
+  
 }
 
-function userNAELoad() {
-        $("li").removeClass('active');
-        $("li#tab_item_3").addClass('active');
-}
-
-function preferencesLoad() {
-        $("li").removeClass('active');
-        $("li#tab_item_4").addClass('active');
-}
 
 
 function clearCommunityDefaultAddress() {
