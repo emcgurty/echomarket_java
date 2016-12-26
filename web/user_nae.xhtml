@@ -64,7 +64,7 @@
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="#{sub_title}" />
-              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'"  >
+              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{userBean.partID}" >
                 <f:param name="action" value="edit" />
               </h:commandLink>              
               <h:inputHidden id="editable"  value="#{userBean.editable}"  />
