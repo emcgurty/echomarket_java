@@ -17,6 +17,8 @@
   <ui:define name="content">
     <h:head >
       <h:outputScript library="javascript" name="user_detail.js"  />
+      <c:set var="states_list" value="#{uss.buildUsStates()}"   rendered="#{userBean.editable == 1}" />    
+      <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 1}" />    
     </h:head>
     <h:form id="personal_information" class="user_nae" >
       <body onload="changeMenuBackground(3);"  >
@@ -37,23 +39,21 @@
         <div id="form_NAE" class="contact_information" >
           <c:set var="div_display" value="none"  rendered="#{userBean.editable == 1}" />    
           <c:set var="div_display" value="block" rendered="#{userBean.editable == 0}" />    
-          <c:set var="states_list" value="#{uss.buildUsStates()}"   rendered="#{userBean.editable == 1}" />    
-          <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 1}" />    
           <c:set var="rid" value="#{userBean.roleId}"  />  
-          
-              <c:set var="rid" value="#{userBean.roleId}"  />  
-              <c:choose >
-                <c:when test="#{rid == 0}" >
-                  <c:set var="sub_title" value="EchoMarket 'Participant Information'" />
-                </c:when>
-                <c:when test="#{rid == 1}" >
-                  <c:set var="sub_title"  value="EchoMarket 'Creator Detail'" />
-                </c:when>
-                <c:when test="#{rid == 2}" >
-                  <c:set var="sub_title"  value="EchoMarket 'Community Member Information'" />
-                </c:when>
-              </c:choose>
-          
+
+          <c:set var="rid" value="#{userBean.roleId}"  />  
+          <c:choose >
+            <c:when test="#{rid == 0}" >
+              <c:set var="sub_title" value="EchoMarket 'Participant Information'" />
+            </c:when>
+            <c:when test="#{rid == 1}" >
+              <c:set var="sub_title"  value="EchoMarket 'Creator Detail'" />
+            </c:when>
+            <c:when test="#{rid == 2}" >
+              <c:set var="sub_title"  value="EchoMarket 'Community Member Information'" />
+            </c:when>
+          </c:choose>
+
 
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
