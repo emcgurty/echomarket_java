@@ -11,10 +11,7 @@
   <h:head>
     <h:outputStylesheet library="css" name="creator_nav.css"/>
   </h:head>
-  <h:outputText value="#{empty userBean.participant_id}" />
-  <c:set var="completePartRecord" value="#{!empty userBean.participant_id}" />
-  <c:set var="completeContactPreference" value="#{userBean.cpId}" />
-  <h:outputText value="#{completeContactPreference}" />  
+    
 
   <ul id="nav" class="user_detail_menu">
     <li class="subs" id="tab_item_2" >
@@ -27,8 +24,7 @@
     </li>
 
     <li class="subs" id="tab_item_2" >
-      <h:commandLink immediate="true"  action="#{participantBean.load_ud(userBean.user_id)}"  value="Participant Information"  
-                     rendered="#{userBean.acceptID}" >
+      <h:commandLink immediate="true"  action="#{participantBean.load_ud(userBean.user_id)}"  value="Participant Information" rendered="#{userBean.acceptID}" >
         <f:param name="action" value="participant" />
       </h:commandLink>
     </li>
@@ -45,8 +41,7 @@
           <c:choose>
             <c:when  test="#{userBean.partID}" >
               <c:set var="newItemLabel" value="Default Contact Preferences"  />
-              <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  
-                             value="#{newItemLabel}"  >
+              <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"   value="#{newItemLabel}"  >
                 <f:param name="action" value="edit" />
                 <f:param name="iid" value="#{itemBean.itemId}" />
               </h:commandLink>
