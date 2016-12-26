@@ -5,28 +5,29 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 template="./echomarketTemplate.xhtml">
 
-    <ui:define name="header"  >
-        <ui:include rendered="true" src="application_header.xhtml" id="UserDetailHeader" /> </ui:define>
-    <ui:define name="content"  >
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="UserDetailHeader" /> </ui:define>
+  <ui:define name="content"  >
 
-        <h:head>
-            <title>#{bundle.echoMarketAgreement}</title>
-        </h:head>
-        <h:form  id="form_agreement"  >
-           
-            <div style="font-size:20px;margin:15px;" >
-                <h:outputText value="EchoMarket Agreement"  style="margin-top:15px;"/>
-            </div> 
-            <div style="margin:15px;" >
-                <h:outputText value="You agreed to the following..." style="font-size:18px;"  />
-                <h:commandLink  action="#{participantBean.load_ud(-1)}"  class="right_div" value="Revise agreement"  />
-            </div>
-            <ui:include src="agreement_text.xhtml" rendered="true"  id="menuAgreement"  />
-        </h:form>
-    </ui:define>
-    <ui:define name="footer"  >
-        <ui:include rendered="true" src="application_footer.xhtml" id="UserDetailFooter" /> 
-    </ui:define>
+    <h:head>
+      <title>#{bundle.echoMarketAgreement}</title>
+    </h:head>
+    <h:form  id="form_agreement"  >
+
+      <div style="font-size:20px;margin:15px;" >
+        <h:outputText value="EchoMarket Agreement"  style="margin-top:15px;"/>
+      </div> 
+      <div style="margin:15px;" >
+        <h:outputText value="You agreed to the following..." style="font-size:18px;"  />
+        <h:commandLink  action="#{participantBean.load_ud(-1)}"  class="right_div" value="Revise agreement"  />
+      </div>
+      <ui:include src="agreement_text.xhtml" rendered="true"  id="menuAgreement"  />
+    </h:form>
+    <br /><br />
+  </ui:define>
+  <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="UserDetailFooter" /> 
+  </ui:define>
 </ui:composition>
 
 
