@@ -110,6 +110,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
               getMap = null;
             }
             if (savedRecord == true) {
+              ubean.setPartID(savedRecord);  /// Allows preference to appear in menu
               if (new_row_size == 1) {
                 message(null, "Your new memeber has been saved to your Community and an email notication was sent to him/her", null);
               } else {
@@ -243,9 +244,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void addAction() {
 
     if (this.howManyRecords > 0 && this.howManyRecords < 26) {
+      if (this.currentRow != null){
       if (this.currentRow > -1) {
         cancelAction(comm_member_rows.get(this.currentRow));
         this.currentRow = -1;
+      }
       }
       this.setErrorMessage("");
       this.editable = 3;
@@ -490,17 +493,32 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     return getNewMemberList();
   }
 
-  public void setNew_member(Participant[] cm) {
-    this.setNew_member(cm);
+  /**
+   * @param new_member the new_member to set
+   */
+  public void setNew_member(List new_member) {
+    this.new_member = new_member;
   }
+   
+  
+//  public void setNew_member(Participant[] cm) {
+//    this.setNew_member(cm);
+//  }
 
   public List getExisting_member() {
     return getExistingMemberList();
   }
 
-  public void setExisting_member(Participant[] existing_member) {
-    this.setExisting_member(existing_member);
+ /**
+   * @param existing_member the existing_member to set
+   */
+  public void setExisting_member(List existing_member) {
+    this.existing_member = existing_member;
   }
+  
+//  public void setExisting_member(Participant[] existing_member) {
+//    this.existing_member = existing_member;
+//  }
 
   public String getEditWhichRecord() {
     return editWhichRecord;
@@ -605,5 +623,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void setCurrentRow(Integer currentRow) {
     this.currentRow = currentRow;
   }
+
+
+
+  
 
 }
