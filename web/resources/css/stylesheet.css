@@ -76,7 +76,7 @@ div.top {
 }
 
 div.application_footer {
-  position:fixed;
+  position:relative;
   float:left;
   bottom: 20px;
   width: 100%;
