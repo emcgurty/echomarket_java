@@ -26,15 +26,15 @@
                       infoStyle="color: indigo"/>
         </div>
         <table style="width:75%;margin-left: 50px" align="center" id="activate_table">
-          <tr >
-            <td style="padding-top: 15px;padding-bottom: 15px;">
+          <tr style="background-color:  #F0FFFF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
               <h:outputText value="Please Login to Complete Activation Process" />
               <h:commandLink  action="#{userBean.processActivation()}" class="right_div" value="Activate!">
               </h:commandLink>
             </td>
           </tr> 
-          <tr >
-            <td style="padding-top: 15px;padding-bottom: 15px;">
+          <tr style="background-color:  #FFF7FF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
               <h:outputLabel for="username"  value="#{bundle.username}">       
                 <h:inputText id="username"
                              value="#{userBean.username}"
@@ -44,8 +44,8 @@
               </h:outputLabel>
             </td>
           </tr>
-          <tr>
-            <td style="padding-top: 15px;padding-bottom: 15px;">
+          <tr style="background-color:  #F0FFFF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
               <f:event listener="#{userBean.validatePassword}" type="postValidate" />
               <h:outputLabel for="password"   value="#{bundle.password}">       
                 <h:inputSecret id="password"
@@ -56,8 +56,8 @@
               </h:outputLabel>
             </td>
           </tr>
-          <tr>
-            <td style="padding-top: 15px;padding-bottom: 15px;">
+          <tr style="background-color:  #FFF7FF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
               <h:outputLabel for="confirmPassword"  value="#{bundle.confirmPassword}">       
                 <h:inputSecret id="confirmPassword"
                                required="true"
