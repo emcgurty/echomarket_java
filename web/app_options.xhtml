@@ -9,7 +9,7 @@
 
 
   <h:form id="index_options">
-  
+
     <div class="top" id="index_div" style="font-size:20px;margin-left:5px;">
       <div style="position:relative;float:left;width:45%;margin-left:25px;margin-top:5px;margin-bottom:5px;"   >
         <p>Welcome to EchoMarket!</p>
@@ -23,10 +23,11 @@
         <br />
       </div>
     </div>
-  </h:form>
 
+  </h:form>
+  <br /><br />
   <div style="position:relative;float:right;width:45%;margin-right:2px;margin-left:5px;margin-top:5px;margin-bottom:5px;background-color: ghostwhite;"  >     
-    
+
     <c:set var="userLoggedIn" value="#{userBean.username == null}"  />
     <c:if test="#{userLoggedIn}" >
       <c:choose>
@@ -58,7 +59,7 @@
       </c:choose>
     </c:if>
     <c:if test="#{not userLoggedIn and userBean.action == 'new'}" >
-        <p>Perform a quick search here to see what available to lend or borrow</p>
+      <p>Perform a quick search here to see what available to lend or borrow</p>
     </c:if>
   </div>
 
