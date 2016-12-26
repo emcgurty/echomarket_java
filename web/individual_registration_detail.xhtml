@@ -14,7 +14,7 @@
   </div>
 
   <h:form  id="individual_registration"  >
-    
+
     <c:if test="#{userBean.roleId == 1}"  >
       <c:set var="b_alias" scope="view" value="#{bundle.c_userAlias}" />
       <c:set var="b_username" scope="view" value="#{bundle.c_username}" />
@@ -33,7 +33,7 @@
       <c:set var="b_userType" scope="view" value="#{bundle.userType}" />
     </c:if>
 
-    
+
     <table style="width:95%;margin-left: 50px" align="center" id="user_registration_table">
       <tr >
         <td style="padding-bottom: 15px;">
@@ -42,6 +42,7 @@
                          value="#{userBean.username}"
                          size="16"
                          required="true"
+                         title="Will not be displayed publicly"
                          requiredMessage="#{bundle.ReqUserName}"
                          style="margin-left:5px">
             </h:inputText>
@@ -53,7 +54,7 @@
             <h:inputText id="userAlias"
                          size="16"
                          value="#{userBean.userAlias}"
-                         title="#{bundle.userAlias}"
+                         title="Your alias will personalize your EchoMarket use."
                          required="true"
                          requiredMessage="#{bundle.ReqUserAlias}"
                          style="margin-left:5px">
@@ -68,7 +69,7 @@
             <h:inputSecret id="password"
                            size="16"
                            value="#{userBean.password}"
-                           title="#{bundle.password}"
+                           title="#{bundle.PasswordMustContain}"
                            required="true"
                            requiredMessage="#{bundle.ReqPassword}"
                            style="margin-left:5px">
@@ -80,7 +81,7 @@
           <h:outputLabel for="confirmPassword" value="#{b_confirm}" >       
             <h:inputSecret id="confirmPassword"
                            size="16"
-                           title="#{bundle.confirmPassword}"
+                           title="Must match Password entered"
                            required="true"
                            requiredMessage="#{bundle.ReqConfirmPassword}"
                            style="margin-left:5px">
