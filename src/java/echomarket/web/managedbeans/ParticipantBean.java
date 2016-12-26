@@ -73,11 +73,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public void setPrimary(ArrayList<Addresses> aPrimary) {
-    primary = aPrimary;
+    this.primary = aPrimary;
   }
 
   public void setAlternative(ArrayList<Addresses> aAlternative) {
-    alternative = aAlternative;
+    this.alternative = aAlternative;
   }
 
   public Boolean notifyLenders() {
@@ -87,6 +87,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String load_ud(String uid) {
 
+//    if (ubean.getEditable() != null) {
     if ("-1".equals(uid)) {
       ubean.setEditable(-1);
       uid = ubean.getUser_id();
@@ -95,6 +96,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     } else {
       ubean.setEditable(0);
     }
+//    } else {
+//      ubean.setEditable(1);
+//    }
 
     Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String action = params.get("action");
@@ -342,7 +346,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       ubean.setParticipant_id(pid);
       ubean.setEditable(1);
       ubean.setPartID(true);
-      
+      ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
+         
     } else {
       ubean.setEditable(0);
     }
@@ -367,9 +372,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         Participant part = null;
         ///  1218 changed
         if (ubean.getRoleId() == 0) {
-          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, 1, new Date(), "NA");
+          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, 1, new Date(), "NA", 0);
         } else {
-          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, 1, new Date(), "NA");
+          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, 1, new Date(), "NA", 1);
         }
 
         sb.save(part);
@@ -828,10 +833,10 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.isCreator = isCreator;
   }
 
-  public List getExistingAddress(String which) {
+  public ArrayList<Addresses> getExistingAddress(String which) {
 
     List result = null;
-    List return_result = null;
+    ArrayList<Addresses> return_result = null;
     Session hib = null;
     Transaction tx = null;
 
@@ -876,7 +881,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       return_result = getPrimary();
     } else {
     }
-
+    
+    result = null;
     return return_result;
 
   }
