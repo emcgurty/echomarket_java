@@ -39,7 +39,8 @@
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: LENDER ITEM TRANSFER PREFERENCES"  />
-                <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Save Item Transfer Preferences"  rendered="#{userBean.editable == 1}"  />
+                <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Save Item Transfer Preferences"  rendered="#{(userBean.editable == 1) and (empty lenderTransferBean.lenderTransferId)}"  />
+                <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Update Item Transfer Preferences"  rendered="#{(userBean.editable == 1) and (!empty lenderTransferBean.lenderTransferId)}"  />
                 <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="#{userBean.editable == 0}" >
                   <f:param name="action" value="edit" />
                 </h:commandLink>
@@ -54,7 +55,7 @@
 
             <div  class="div_p" id="menu_item_3" >
               <div style="margin:10px;" >
-                <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Lending Conditions'" >
+                <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Lending Conditions'" rendered="#{userBean.cpId}"  />
                   <f:param name="action" value="edit" />
                 </h:commandLink>
 
