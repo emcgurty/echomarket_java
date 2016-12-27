@@ -16,7 +16,7 @@
   <ui:define name="content">
     <h:form id="personal_information"  class="lender_transfer">
       <div id="lender_transfer" class="contact_information" >
-        <body onload="preferencesLoad();" >
+        <body onload="changeMenuBackground(3);"  >
           <div id="form_lender_to_borrower" class="contact_information" >
             <c:set var="iid" value="#{itemBean.itemId}"  />  
             <c:set var="rid" value="#{userBean.roleId}"  />  
@@ -38,9 +38,16 @@
 
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="#{userBean.userAlias}: LENDER ITEM TRANSFER PREFERENCES"  />
-                <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Save Item Transfer Preferences"  rendered="#{(userBean.editable == 1) and (empty lenderTransferBean.lenderTransferId)}"  />
-                <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="Update Item Transfer Preferences"  rendered="#{(userBean.editable == 1) and (!empty lenderTransferBean.lenderTransferId)}"  />
+                <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
+                <c:choose >
+                  <c:when test="#{empty lenderTransferBean.lenderTransferId}" >
+                    <c:set var="save_update"  value="Save Item Transfer Preferences" />
+                  </c:when >
+                  <c:when test="#{!empty lenderTransferBean.lenderTransferId}" >
+                    <c:set var="save_update"  value="Update Item Transfer Preferences" />
+                  </c:when >
+                </c:choose>
+                <h:commandLink  action="#{lenderTransferBean.updateLIT()}"  class="right_div" value="#{save_update}"  rendered="#{userBean.editable == 1}"  />
                 <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="#{userBean.editable == 0}" >
                   <f:param name="action" value="edit" />
                 </h:commandLink>
@@ -53,12 +60,12 @@
               </div>
             </div>
 
-            <div  class="div_p" id="menu_item_3" >
+            <div  class="div_p"  >
               <div style="margin:10px;" >
-                <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Lending Conditions'" rendered="#{userBean.cpId}"  />
+                 <h:outputText value="Lender Item Transfer Preferences"  />
+                <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Lending Conditions'" rendered="#{userBean.LITid}"  >
                   <f:param name="action" value="edit" />
                 </h:commandLink>
-
               </div>
             </div>
 
@@ -74,7 +81,7 @@
 
               <div id="BComesToWhichAddressGroup" >    
                 <h:outputLabel value="Borrower comes to which address?:" for="borrowerComesToWhichAddress">
-                  <h:selectOneRadio id="borrowerComesToWhichAddress" value="#{lenderTransferBean.borrowerComesToWhichAddress}" rendered="#{userBean.editable == 1}"  >
+                  <h:selectOneRadio id="borrowerComesToWhichAddress" value="#{lenderTransferBean.borrowerComesToWhichAddress}" rendered="#{userBean.editable == 1}"  layout="pageDirection" >
                     <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
                     <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
                     <f:selectItem itemValue="1" itemLabel="Either address is fine." />
