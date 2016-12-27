@@ -87,7 +87,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String load_ud(String uid) {
 
-//    if (ubean.getEditable() != null) {
     if ("-1".equals(uid)) {
       ubean.setEditable(-1);
       uid = ubean.getUser_id();
@@ -96,9 +95,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     } else {
       ubean.setEditable(0);
     }
-//    } else {
-//      ubean.setEditable(1);
-//    }
 
     Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String action = params.get("action");
