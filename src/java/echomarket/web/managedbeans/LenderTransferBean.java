@@ -119,7 +119,10 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     Map<String, String> params = null;
     String addNewCP = null;
     String strIid = null;
-
+    
+    // not necessary
+    if (lenderTransferId == null)
+      lenderTransferId = "";
     if (lenderTransferId.isEmpty()) {
 
       LenderTransfer lt = new LenderTransfer(getId(), itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
