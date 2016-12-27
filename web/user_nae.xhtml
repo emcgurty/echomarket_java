@@ -123,17 +123,17 @@
                                              var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />  
                             </c:when>
                             <c:when test="#{rid == 0}" >
-                              <c:set var="whichUseType" value="#{userBean.userIsWhichType()}" />
+                              <c:set var="whichUseType" value="#{userBean.userType}" />
                               <c:choose>
-                                <c:when test="#{whichUerType == 'borrow'}" >
+                                <c:when test="#{whichUseType == 'borrow'}" >
                                   <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('borrow')}"  
                                                  var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
-                                <c:when test="#{whichUerType == 'lend'}" >
+                                <c:when test="#{whichUseType == 'lend'}" >
                                   <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('lend')}"  
                                                  var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
-                                <c:when test="#{whichUerType == 'both'}" >
+                                <c:when test="#{whichUseType == 'both'}" >
                                   <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('community')}"  
                                                  var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
