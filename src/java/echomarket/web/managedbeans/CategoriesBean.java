@@ -90,21 +90,12 @@ public class CategoriesBean extends AbstractBean implements Serializable {
   private List cat_list() {
 
     List result = null;
-    Session session;
-    Transaction tx;
-    session = null;
-    tx = null;
-
+    Session session = null;
+    Transaction tx = null;
+    
     try {
       session = hib_session();
       tx = session.beginTransaction();
-    } catch (Exception ex) {
-      System.out.println("Error in establishing transaction in cat_list");
-      Logger.getLogger(CategoriesBean.class.getName()).log(Level.SEVERE, null, ex);
-      tx.rollback();
-    }
-
-    try {
       result = session.createQuery("from Categories Order By id").list();
       tx.commit();
     } catch (Exception e) {
@@ -112,10 +103,10 @@ public class CategoriesBean extends AbstractBean implements Serializable {
       System.out.println("Error line 108 CatBean");
       e.printStackTrace();
 
-    }
+    } finally {
     session = null;
     tx = null;
-
+    }
     return result;
   }
 
