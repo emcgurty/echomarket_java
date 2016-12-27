@@ -117,24 +117,27 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String getUserType() {
+    String hold_UT = null;
     if (this.editable == 1) {
       return userType;
     } else {
-      String hold_UT = userType;
-      hold_UT = hold_UT.replace(";", " ");
-      hold_UT = trim(hold_UT).replace(" ", "ing and ");
+      if (userType == "both") {
+        hold_UT = "Borrowing and Lending";
+      } else {
+        hold_UT = userType;
+      }
       return hold_UT;
-
     }
   }
 
   public String getPrettyUserType() {
-
-    String hold_UT = userType;
-    hold_UT = hold_UT.replace(";", " ");
-    hold_UT = trim(hold_UT).replace(" ", "ing or ");
-    return hold_UT.concat("ing");
-
+    String hold_UT = null;
+    if (userType == "both") {
+        hold_UT = "Borrowing and Lending";
+      } else {
+        hold_UT = userType;
+      }
+    return hold_UT;
   }
 
   public void setUserType(String ut) {
@@ -476,6 +479,7 @@ public class UserBean extends AbstractBean implements Serializable {
             setUserAlias(uu.getUserAlias());
             setUsername(this.username);
             setUserType(uu.getUserType());
+            setUserType(this.userIsWhichType());
             setUser_id(uu.getUser_id());
             results = null;
             message(null, "ActivateSuccessful", new Object[]{this.username});
@@ -553,6 +557,7 @@ public class UserBean extends AbstractBean implements Serializable {
                   setUserAlias(uu.getUserAlias());
                   setUsername(this.username);
                   setUserType(uu.getUserType());
+                  setUserType(this.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
                   setUser_id(uu.getUser_id());
                   results = null;
 
@@ -626,7 +631,7 @@ public class UserBean extends AbstractBean implements Serializable {
         } else {
           this.editable = 0;
           this.cpId = true;
-          switch (this.userIsWhichType()) {
+          switch (this.userType) {
             case "borrow":
               setAction("current");
               return_string = ibean.load_ud("borrow", return_null);
