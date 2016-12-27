@@ -69,17 +69,15 @@ public class ItemBean extends AbstractBean implements Serializable {
     picture = aPicture;
   }
 
-  public String getLenderHistory(String whichId, String iid, Integer whichHistory) {
-    this.history_id = whichId;
+  public String getLenderHistory(String pid, Integer whichHistory) {
+    this.history_id = pid;  /// history_id will be either a community_id or a particpant_id
     this.setHistory_which(whichHistory);
-    this.itemId = iid;
     return "lender_history";
   }
 
-  public String getBorrowerHistory(String whichId, String iid, Integer whichHistory) {
-    this.history_id = whichId;
+  public String getBorrowerHistory(String pid, Integer whichHistory) {
+    this.history_id = pid;
     this.setHistory_which(whichHistory);
-    this.itemId = iid;
     return "borrower_history";
   }
 
@@ -156,7 +154,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   }
 
-  private Boolean processNewFileImage(String iid) {
+  private Boolean processNewFileImage(String iid, String doesFileExist) {
 
     Boolean b_return = false;
     List ii = this.getPicture();
@@ -180,7 +178,11 @@ public class ItemBean extends AbstractBean implements Serializable {
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-        sb.save(iii);
+        if (doesFileExist == null) {
+          sb.save(iii);
+        } else {
+          sb.update(iii);
+        }
         tx.commit();
         b_return = true;
       } catch (Exception e) {
@@ -198,8 +200,6 @@ public class ItemBean extends AbstractBean implements Serializable {
   public String load_ud(String which, String iid) {
 
     List result = null;
-    //ubean.setItemId(iid);
-    setItemType(which);
 
     if (iid.isEmpty() == true) {
       ubean.setEditable(1);
@@ -241,6 +241,8 @@ public class ItemBean extends AbstractBean implements Serializable {
         }
       }
     } else {
+      // itemType was set above...
+      itemType = which;
       itemId = null;
       categoryId = -9;
       participant_id = null;
@@ -291,7 +293,6 @@ public class ItemBean extends AbstractBean implements Serializable {
         sb.save(ii);
         tx.commit();
         bret = true;
-        /// ubean.setItemId(new_iid);
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in Save Item");
@@ -354,7 +355,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         bret = deleteExistingUserImage(strRetId);
       }
       if ((bret == true) && (this.imageFileNamePart != null)) {
-        bret = processNewFileImage(new_iid);
+        bret = processNewFileImage(new_iid, strRetId);
       }
 
       if ((bret == true) && (notify == 1)) {
@@ -368,7 +369,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(0);
     } else {
-       message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
+      message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(1);
 
     }
@@ -569,7 +570,9 @@ public class ItemBean extends AbstractBean implements Serializable {
       fileCreate = true;
     } catch (Exception ex) {
       System.out.println("Error in Creating New File");
-      ex.printStackTrace();
+      Logger
+              .getLogger(ItemBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     }
 
     if (fileCreate == true) {
@@ -632,12 +635,13 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (iid == null) {
       return getPicture();
     } else {
-      String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid AND itms.itemType = :itype";
+      String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid";
       try {
         result = hib.createQuery(queryString)
                 .setParameter("iid", iid)
-                .setParameter("itype", this.itemType)
                 .list();
+//                .setParameter("itype", this.itemType)
+//                .list();
         tx.commit();
       } catch (Exception e) {
         tx.rollback();
@@ -684,7 +688,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } catch (Exception e) {
       tx.rollback();
       System.out.println("Error in getExistingPicture");
-      e.printStackTrace();
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
     } finally {
       tx = null;
       hib = null;
@@ -727,7 +731,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } catch (Exception e) {
       tx.rollback();
       System.out.println("Error in getCurrentItem");
-      e.printStackTrace();
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
 
     } finally {
       tx = null;
@@ -756,7 +760,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } catch (Exception e) {
       tx.rollback();
       System.out.println("Error in getCurrentItem");
-      e.printStackTrace();
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
 
     } finally {
       tx = null;
@@ -815,26 +819,33 @@ public class ItemBean extends AbstractBean implements Serializable {
     Session session = null;
     Transaction tx = null;
     String query = null;
+    this.itemType = which;
+    // which_history: 0 = individual, 1 = community
     try {
       session = hib_session();
       tx = session.beginTransaction();
       if (this.history_which == 0) {
-        query = "FROM Items WHERE participant_id = :pid and itemType = :it";
+        query = "SELECT itmImage.imageFileName, itm.itemId, itm.itemDescription, itm.itemModel, itm.participant_id "
+                + "FROM Items itm INNER JOIN itm.itemImages itmImage WHERE itm.participant_id = :pid AND itm.itemType = :itype";
       } else if (this.history_which == 1) {
-        query = "SELECT itm FROM Participant part  INNER join part.item itm WHERE part.communityId_id = :pid AND itm.itemType = :it";
+        query = "SELECT itmImage.imageFileName, "
+                + "itm.itemId, itm.itemDescription, "
+                + "itm.itemModel, part.participant_id FROM Participant part, Items itm "
+                + "INNER join part.item itm INNER join itm.itemImages itmImage"
+                + "WHERE part.communityId = :pid AND itm.itemType = :itype";
       } else {
         //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
       }
 
       result = session.createQuery(query)
               .setParameter("pid", pid)
-              .setParameter("it", which)
+              .setParameter("itype", which)
               .list();
       tx.commit();
     } catch (Exception e) {
       tx.rollback();
       System.out.println("Error in ParticipantItems");
-      e.printStackTrace();
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
 
     } finally {
       tx = null;
@@ -919,37 +930,22 @@ public class ItemBean extends AbstractBean implements Serializable {
     return itemId;
   }
 
-  /**
-   * @param itemId the itemId to set
-   */
   public void setItemId(String itemId) {
     this.itemId = itemId;
   }
 
-  /**
-   * @return the itemType
-   */
   public String getWhichType() {
     return whichType;
   }
 
-  /**
-   * @param itemType the itemType to set
-   */
   public void setWhichType(String whichType) {
     this.whichType = whichType;
   }
 
-  /**
-   * @return the participant_id
-   */
   public String getParticipant_id() {
     return participant_id;
   }
 
-  /**
-   * @param participant_id the participant_id to set
-   */
   public void setParticipant_id(String participant_id) {
     this.participant_id = participant_id;
   }
@@ -1018,7 +1014,6 @@ public class ItemBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       System.out.println("Error in removeNullInLIC");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
-      ex.printStackTrace();
       tx.rollback();
     } finally {
       tx = null;
@@ -1073,7 +1068,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       System.out.println("Error in removeNullInLIC");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
-      ex.printStackTrace();
+
       tx.rollback();
 
     } finally {
@@ -1120,17 +1115,15 @@ public class ItemBean extends AbstractBean implements Serializable {
             tx.rollback();
           }
           session.save(new_cp);
-          /// should create new record
           tx.commit();
           return_value = true;
         }
         return_value = true;
       }
     } catch (Exception ex) {
+      tx.rollback();
       System.out.println("Error in removeNullInLIC");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
-      ex.printStackTrace();
-      tx.rollback();
 
     } finally {
       tx = null;
