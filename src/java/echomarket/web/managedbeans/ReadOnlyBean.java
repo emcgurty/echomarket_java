@@ -46,7 +46,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       action = params.get("action");
     } catch (Exception ex) {
     }
-    return action;
+    return action + ".xhtml?faces-redirect=true";
   }
 
   public List getLIC(String iid, String which, String pid) {
