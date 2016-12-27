@@ -129,6 +129,11 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     String addNewCP = null;
     String strIid = null;
 
+    // wasn't in the xhtml so that's why it was null
+    if (lender_item_condition_id == null) {
+      lender_item_condition_id = ""; 
+    }
+
     if (lender_item_condition_id.isEmpty() == true) {
 
       LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), itemId, this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
@@ -139,7 +144,6 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         sb.save(lic);
         tx.commit();
         ubean.setLICid(true);
-        message(null, "LenderItemConditionsSaved", null);
         successTransaction = true;
         ubean.setEditable(1);
       } catch (Exception ex) {
@@ -185,9 +189,9 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           ic.setTrade(trade);
           ic.setTradeItem(tradeItem);
 
-          sb = hib_session();
-          tx = sb.beginTransaction();
           try {
+            sb = hib_session();
+            tx = sb.beginTransaction();
             sb.update(ic);
             tx.commit();
             successTransaction = true;
@@ -224,7 +228,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       if (strIid.isEmpty() == true) {
         strIid = null;
       } else {
-      
+
       }
     } catch (Exception ex) {
     }
@@ -238,81 +242,81 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
-    } catch (Exception ex) {}
+    } catch (Exception ex) {
+    }
 
     if (action != null) {
       if ("edit".equals(action)) {
         ubean.setEditable(1);
       }
     }
- 
-      try {
-        if (strIid != null) {
-          itemId = strIid;
-          condList = getCurrentItemConditions_Iid(pid, strIid);
-        } else if (itemId != null) {
-          condList = getCurrentItemConditions_Iid(pid, itemId);
-        }
-      } catch (Exception ex) {
-        if (strIid.isEmpty() == false) {
-          condList = getCurrentItemConditions_Iid(pid, strIid);
-          itemId = strIid;
-        } else if (itemId != null) {
-          condList = getCurrentItemConditions_Iid(pid, itemId);
-        }
-      }
 
-      if (condList == null) {
-        condList = getCurrentItemConditions(pid);
+    try {
+      if (strIid != null) {
+        itemId = strIid;
+        condList = getCurrentItemConditions_Iid(pid, strIid);
+      } else if (itemId != null) {
+        condList = getCurrentItemConditions_Iid(pid, itemId);
       }
-      if (condList != null) {
-        if (condList.size() == 1) {
-          LenderItemConditions pp = (LenderItemConditions) condList.get(0);
-          if (pp != null) {
-            setItemId(pp.getItemId());
-            setLender_item_condition_id(pp.getLender_item_condition_id());
-            setParticipant_id(pp.getParticipant_id());
-            this.forFree = pp.getForFree();
-            this.availableForPurchase = pp.getAvailableForPurchase();
-            this.availableForPurchaseAmount = pp.getAvailableForPurchaseAmount();
-            this.smallFee = pp.getSmallFee();
-            this.smallFeeAmount = pp.getSmallFeeAmount();
-            this.availableForDonation = pp.getAvailableForDonation();
-            this.donateAnonymous = pp.getDonateAnonymous();
-            this.trade = pp.getTrade();
-            setTradeItem(pp.getTradeItem());
-            this.agreedNumberOfDays = pp.getAgreedNumberOfDays();
-            this.agreedNumberOfHours = pp.getAgreedNumberOfHours();
-            this.indefiniteDuration = pp.getIndefiniteDuration();
-            this.presentDuringBorrowingPeriod = pp.getPresentDuringBorrowingPeriod();
-            this.entirePeriod = pp.getEntirePeriod();
-            this.partialPeriod = pp.getPartialPeriod();
-            this.provideProperUseTraining = pp.getProvideProperUseTraining();
-            this.specificConditions = pp.getSpecificConditions();
-            this.securityDepositAmount = pp.getSecurityDepositAmount();
-            this.securityDeposit = pp.getSecurityDeposit();
+    } catch (Exception ex) {
+      if (strIid.isEmpty() == false) {
+        condList = getCurrentItemConditions_Iid(pid, strIid);
+        itemId = strIid;
+      } else if (itemId != null) {
+        condList = getCurrentItemConditions_Iid(pid, itemId);
+      }
+    }
+
+    if (condList == null) {
+      condList = getCurrentItemConditions(pid);
+    }
+    if (condList != null) {
+      if (condList.size() == 1) {
+        LenderItemConditions pp = (LenderItemConditions) condList.get(0);
+        if (pp != null) {
+          setItemId(pp.getItemId());
+          setLender_item_condition_id(pp.getLender_item_condition_id());
+          setParticipant_id(pp.getParticipant_id());
+          this.forFree = pp.getForFree();
+          this.availableForPurchase = pp.getAvailableForPurchase();
+          this.availableForPurchaseAmount = pp.getAvailableForPurchaseAmount();
+          this.smallFee = pp.getSmallFee();
+          this.smallFeeAmount = pp.getSmallFeeAmount();
+          this.availableForDonation = pp.getAvailableForDonation();
+          this.donateAnonymous = pp.getDonateAnonymous();
+          this.trade = pp.getTrade();
+          setTradeItem(pp.getTradeItem());
+          this.agreedNumberOfDays = pp.getAgreedNumberOfDays();
+          this.agreedNumberOfHours = pp.getAgreedNumberOfHours();
+          this.indefiniteDuration = pp.getIndefiniteDuration();
+          this.presentDuringBorrowingPeriod = pp.getPresentDuringBorrowingPeriod();
+          this.entirePeriod = pp.getEntirePeriod();
+          this.partialPeriod = pp.getPartialPeriod();
+          this.provideProperUseTraining = pp.getProvideProperUseTraining();
+          this.specificConditions = pp.getSpecificConditions();
+          this.securityDepositAmount = pp.getSecurityDepositAmount();
+          this.securityDeposit = pp.getSecurityDeposit();
 //this.comment= pp.get(); // Later
-            pp = null;
-          }
+          pp = null;
         }
       }
-      condList = null;
-
-      return "lender_conditions";
     }
+    condList = null;
 
-    /**
-     * @return the lender_item_condition_id
-     */
-    @Id
-    public String getLender_item_condition_id
-    
-      () {
+    return "lender_conditions";
+  }
+
+  /**
+   * @return the lender_item_condition_id
+   */
+  @Id
+  public String getLender_item_condition_id() {
     return lender_item_condition_id;
-    }
-    /**
-     * @param lender_item_condition_id the lender_item_condition_id to set
-     */
+  }
+
+  /**
+   * @param lender_item_condition_id the lender_item_condition_id to set
+   */
   public void setLender_item_condition_id(String lender_item_condition_id) {
     this.lender_item_condition_id = lender_item_condition_id;
   }
