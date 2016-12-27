@@ -129,7 +129,7 @@
               </h:commandLink>
             </li>
             <c:choose >
-              <c:when  test="#{!empty userBean.communityId}"  >
+                <c:when  test="#{!empty userBean.communityId}"  >
                 <li id="tab_item_16" >
                   <c:set var="newItemLabel" value="Your Community's Borrowing History"  />
                   <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(userBean.communityId, 1)}"  value="#{newItemLabel}"  rendered="true">
