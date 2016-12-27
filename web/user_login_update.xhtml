@@ -17,7 +17,7 @@
 
   <ui:define name="content">
     <h:form id="personal_information" class="user_login_update">
-      <body onload="userLoginUpdateLoad();"  >
+      <body onload="changeMenuBackground(1);"  >
              <c:set var="rid" value="#{userBean.roleId}"  />  
         <c:choose >
           <c:when test="#{rid == 0}" >
@@ -31,6 +31,7 @@
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
             <h:commandLink  action="#{userBean.updateUserLogin()}"  class="right_div" value="Save Login Update"  rendered="#{userBean.editable == 1}" />
+            <h:commandLink  action="#{userBean.load_ud(0)}"  class="right_div" value="Cancel"  rendered="#{userBean.editable == 1}" immediate="true" />
             <h:commandLink  action="#{userBean.load_ud(1)}"  class="right_div" value="Edit Login Information"  rendered="#{userBean.editable == 0}" />
             <br />
              <div class="messagecolor">
@@ -170,7 +171,7 @@
               </tr >
               <tr >
                 <td colspan="2" style="width:100%;padding-bottom: 15px;">
-                  <c:set var="niceUT" value="#{fn:trim(userBean.userType).concat('ing')}" />
+                  <c:set var="niceUT" value="#{fn:trim(userBean.userType)}" />
                   <h:outputLabel for="userTypeArray" value="#{bundle.userType}" rendered="#{userBean.editable == 1}">
                     <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate..." rendered="#{userBean.editable == 1}">
                       <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
