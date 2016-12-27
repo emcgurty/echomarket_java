@@ -32,8 +32,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
   private String startDate;
   private String endDate;
   private Integer lenderOrBorrower;
-  private int isCommunity;
-  private String user_id;
   private Integer zip_code_radius;
   private String remoteIp;
   private String searchCriteria;
@@ -53,91 +51,35 @@ public class SearchesBean extends AbstractBean implements Serializable {
   public void setFound_zip_codes(String found_zip_codes) {
     this.found_zip_codes = found_zip_codes;
   }
-
+  ///  This is why I designed the database.... INNER JOIN works rather nicely
   public String SearchResults() {
 
-    Session sb = hib_session();
-    Transaction tx = sb.beginTransaction();
-    String foo = null;
-    String whichDatabase = "";
-    List address_list;
-    // Build query string
+    Session sb = null;
+    Transaction tx = null;
     String queryString = "";
-    String buildPC = "";
     String forceString = this.found_zip_codes;
-    if (forceString.matches(".*\\d.*")) {
-      if (this.lenderOrBorrower == 2) {
-
-        queryString = " postal_code in (\'" + forceString + "\') AND lender_id =  NULL";
-        whichDatabase = "from Addresses  where " + queryString;
-        address_list = sb.createQuery(whichDatabase).list();
-        tx.commit();
-        if (address_list.size() > 0) {
-          for (int i = 0; i < address_list.size(); i++) {
-            Addresses cArray = (Addresses) address_list.get(i);
-            buildPC = buildPC + cArray.getParticipant_id() + ",";
-          }
-          if (!(buildPC.isEmpty())) {
-            buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-            queryString = " participant_id in (\'" + buildPC + "\')";
-          }
-        }
-      } else {
-        queryString = " postal_code in (\'" + forceString + "\') AND borrower_id =  NULL";
-        whichDatabase = "from Addresses  where " + queryString;
-        address_list = sb.createQuery(whichDatabase).list();
-        tx.commit();
-        if (address_list.size() > 0) {
-          for (int i = 0; i < address_list.size(); i++) {
-            Addresses cArray = (Addresses) address_list.get(i);
-            buildPC = buildPC + cArray.getParticipant_id() + ",";
-          }
-          if (!(buildPC.isEmpty())) {
-            buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-            queryString = " lender_id in (\'" + buildPC + "\')";
-          }
-        }
-      }
-
+    String which = null;
+    List results = null;
+    if (this.lenderOrBorrower == 2) {
+      which = "borrow";
     } else {
-      forceString = this.postalCode;
-      if (forceString.matches(".*\\d.*")) {
-        if (this.lenderOrBorrower == 2) {
-          queryString = " postal_code like (\'" + forceString + "%\') AND lender_id =  NULL";
-          whichDatabase = "from Addresses  where " + queryString;
-          address_list = sb.createQuery(whichDatabase).list();
-          tx.commit();
-          if (address_list.size() > 0) {
-            for (int i = 0; i < address_list.size(); i++) {
-              Addresses cArray = (Addresses) address_list.get(i);
-              buildPC = buildPC + cArray.getParticipant_id() + ",";
-            }
-            if (!(buildPC.isEmpty())) {
-              buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-              queryString = " borrower_id in (\'" + buildPC + "\')";
-            }
-          }
-        } else {
-          queryString = " postal_code like (\'" + forceString + "%\') AND borrower_id =  NULL";
-          whichDatabase = "from Addresses  where " + queryString;
-          address_list = sb.createQuery(whichDatabase).list();
-          tx.commit();
-          if (address_list.size() > 0) {
-            for (int i = 0; i < address_list.size(); i++) {
-              Addresses cArray = (Addresses) address_list.get(i);
-              buildPC = buildPC + cArray.getParticipant_id() + ",";
-            }
-            if (!(buildPC.isEmpty())) {
-              buildPC = buildPC.replace(buildPC.substring(buildPC.length() - 1), "");
-              queryString = " lender_id in (\'" + buildPC + "\')";
-            }
-          }
-        }
-      }
+      which = "lend";
+    }
+    String fromStatement = "SELECT itm from Users user "
+            + " INNER JOIN user.participant part "
+            + " INNER JOIN part.addresses addr "
+            + " INNER JOIN part.item itm "
+            + " WHERE user.userType LIKE '%" + which + "%') ";
+
+    if (forceString.matches(".*\\d.*")) {
+      queryString = " AND addr.postalCode in (\'" + forceString + "\') ";
+    }
+
+    if (this.postalCode.isEmpty() == false) {
+      queryString = " AND addr.postalCode LIKE '" + this.postalCode + "%'";
     }
 
     try {
-
       Date sd = new Date();
       try {
         sd = ConvertDate(this.startDate);
@@ -153,55 +95,49 @@ public class SearchesBean extends AbstractBean implements Serializable {
       }
 
       if ((sd != null) || (ed != null)) {
-
-        if (queryString.length() > 0) {
+        //if (queryString.length() > 0) {
           queryString = queryString + " OR ";
-        }
-        queryString = queryString + " ( date_created >= \'" + this.startDate + "\' AND date_created <= \'" + this.endDate + "\' ) ";
-
+        //}
+        queryString = queryString + " ( itm.dateCreated >= \'" + this.startDate + "\' AND itm.dateCreated <= \'" + this.endDate + "\' ) ";
       }
     } catch (Exception ex) {
       Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
     }
+
     forceString = this.keyword;
     if (forceString.isEmpty() == false) {
-      if (queryString.length() > 0) {
+      //if (queryString.length() > 0) {
         queryString = queryString + " OR ";
-      }
-      queryString = queryString + " (item_description like \'%" + forceString + "%\' OR item_model like \'%" + forceString + "%\')";
+      //}
+      queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
 
     }
 
     if ((this.categoryId != -2)) {
-      if (queryString.length() > 0) {
+     // if (queryString.length() > 0) {
         queryString = queryString + " OR ";
-      }
-      queryString = queryString + " category_id = \'" + this.categoryId + "\' ";
+     // }
+      queryString = queryString + " itm.categoryId = \'" + this.categoryId + "\' ";
     }
 
-    String isCommunityQuery = " AND "; // needs to be rewritten: (role id = " + 'ubean.getIsCommunity()' + ") ";
-    queryString = queryString + isCommunityQuery;
-
-    System.out.println(queryString);
-    // Okay now let's build the query
-    if (this.lenderOrBorrower == 2) {
-      whichDatabase = "from Borrowers where " + queryString;
-      System.out.println(whichDatabase);
+    if (ubean.getComDetailID() != null) {
+      queryString = queryString + "AND part.communityId = " + ubean.getComDetailID();
     } else {
-      whichDatabase = "from Lenders where " + queryString;
+      queryString = queryString + "AND part.communityId = NULL";
     }
+
+    fromStatement = fromStatement + queryString;
+    System.out.println(fromStatement);
 
     try {
-      if (sb.isOpen() == false) {
-        sb = hib_session();
-      }
-      if (tx.isActive() == false) {
-        tx = sb.beginTransaction();
-      }
-      setSearchResultList(sb.createQuery(whichDatabase).list());
+      sb = hib_session();
+      tx = sb.beginTransaction();
+      results = sb.createQuery(fromStatement).list();
+      setSearchResultList(results);
       tx.commit();
     } catch (Exception ex) {
-      Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+      tx.rollback();
+      Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       sb = null;
@@ -209,7 +145,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
       setSearchCriteria(buildSearchCriteria());
       setDisplayResults(true);
     }
-
     return "search";
 
   }
@@ -220,6 +155,9 @@ public class SearchesBean extends AbstractBean implements Serializable {
     String foo = null;
     String hold = null;
     Integer num = null;
+    Session hib = null;
+    Transaction tx = null;
+    List results = null;
 
     if (this.lenderOrBorrower == 1) {
       build = "Retrieve from LENDER records all items";
@@ -234,19 +172,25 @@ public class SearchesBean extends AbstractBean implements Serializable {
 
     num = this.categoryId;
     if (num != -2) {
-      Session hib = hib_session();
-      Transaction tx = hib.beginTransaction();
-      List results = null;
-      String queryString = "from Categories where category_id = :cat";
-      results = hib.createQuery(queryString).setParameter("cat", num).list();
-      tx.commit();
+      try {
+        hib = hib_session();
+        tx = hib.beginTransaction();
+        String queryString = "from Categories where id = :cat";
+        results = hib.createQuery(queryString).setParameter("cat", num).list();
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+      } finally {
+
+        hib = null;
+        tx = null;
+      }
+    }
+    if (results != null) {
       Categories cat_Array = new Categories();
       cat_Array = (Categories) results.get(0);
       build = build + " in Category, " + cat_Array.getCategoryType() + ",";
-      hib = null;
-      tx = null;
     }
-
     Date sd = new Date();
     try {
       sd = ConvertDate(this.startDate);
@@ -413,34 +357,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
    */
   public void setLenderOrBorrower(Integer lenderOrBorrower) {
     this.lenderOrBorrower = lenderOrBorrower;
-  }
-
-  /**
-   * @return the isCommunity
-   */
-  public int getIsCommunity() {
-    return this.isCommunity;
-  }
-
-  /**
-   * @param isCommunity the isCommunity to set
-   */
-  public void setIsCommunity(int isCommunity) {
-    this.isCommunity = isCommunity;
-  }
-
-  /**
-   * @return the user_id
-   */
-  public String getUser_id() {
-    return this.user_id;
-  }
-
-  /**
-   * @param user_id the user_id to set
-   */
-  public void setUser_id(String user_id) {
-    this.user_id = user_id;
   }
 
   /**
