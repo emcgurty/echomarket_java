@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 @Entity
 @Table(name = "participant")
@@ -65,7 +66,7 @@ public class Participant implements java.io.Serializable {
   }
 
   /// User agreement
-  public Participant(String participant_id, String userId, String communityId, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, String remoteIp) {
+  public Participant(String participant_id, String userId, String communityId, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, String remoteIp, Integer isCreator) {
     this.participant_id = participant_id;
     this.userId = userId;
     this.communityId = communityId;
@@ -76,6 +77,8 @@ public class Participant implements java.io.Serializable {
     this.remoteIp = remoteIp;
     this.approved = 1;
     this.editable = 1;
+    this.isCreator = isCreator;
+    
   }
   // Update 
   public Participant(String participant_id, String userId, Integer contactDescribeId, String organizationName, Integer displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, Integer displayName, Integer displayAddress, String homePhone, String cellPhone,
@@ -365,6 +368,7 @@ public class Participant implements java.io.Serializable {
     this.dateUpdated = dateUpdated;
   }
 
+  @Temporal(javax.persistence.TemporalType.DATE)
   public Date getDateDeleted() {
     return this.dateDeleted;
   }
