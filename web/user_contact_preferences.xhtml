@@ -7,6 +7,7 @@
   xmlns:h="http://xmlns.jcp.org/jsf/html"
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
   template="./UserDetailTemplate.xhtml">
 
   <ui:define name="header"  >
@@ -14,7 +15,7 @@
   </ui:define>  
   <ui:define name="content">
     <h:form id="personal_information" class="user_contact_preferences">
-      <body onload="preferencesLoad();"  >
+      <body onload="changeMenuBackground(3);"  >
         <div id="form_contact_preference" class="contact_information" >
 
           <c:set var="iid" value="#{itemBean.itemId}"  />  
@@ -38,8 +39,26 @@
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-              <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Save Default Contact Preferences"  rendered="#{userBean.editable == 1}" />
-              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preference Information"  rendered="#{userBean.editable == 0}" />
+              <c:choose >
+                <c:when test="#{empty contactPreferenceBean.itemId}" >
+                  <c:set var="default_item"  value="Default" />
+                </c:when >
+                <c:when test="#{!empty contactPreferenceBean.itemId}" >
+                  <c:set var="default_item"  value="#{fn:substring(itemBean.itemDescription, 0, 8)}..." />
+                </c:when >
+              </c:choose>
+
+
+              <c:choose >
+                <c:when test="#{empty contactPreferenceBean.contactPreferenceId}" >
+                  <c:set var="save_update"  value="Save #{default_item} Contact Preferences" />
+                </c:when >
+                <c:when test="#{!empty contactPreferenceBean.contactPreferenceId}" >
+                  <c:set var="save_update"  value="Update #{default_item} Contact Preferences" />
+                </c:when >
+              </c:choose>
+              <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="#{save_update}"  rendered="#{userBean.editable == 1}" />
+              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Default Contact Preferences"  rendered="#{userBean.editable == 0}" />
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="Default Contact Preferences" />
@@ -68,7 +87,7 @@
             <div style="float:left;margin-left:25px">
               <div id="postalWithContactAddress" >    
                 <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
-                  <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}" rendered="#{userBean.editable == 1}" >
+                  <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}" rendered="#{userBean.editable == 1}"  layout="pageDirection" >
                     <f:selectItem itemValue="3" itemLabel="Use your Primary Address?" />
                     <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?" />	
                     <f:selectItem itemValue="1" itemLabel="Either address is fine." />
@@ -101,6 +120,7 @@
           </div>
 
           <div  class="div_p"  >
+            <hr />
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Chat..." />
             </div>
@@ -131,8 +151,9 @@
               </h:outputLabel>
             </div>
           </div>
-
+          
           <div  class="div_p"  >
+            <hr />
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Email..." />
             </div>
@@ -142,7 +163,7 @@
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <div style="float:left;margin-left:25px;">
               <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
-                <h:selectOneRadio id="contactByEmail" value="#{contactPreferenceBean.contactByEmail}"  rendered="#{userBean.editable == 1}" >
+                <h:selectOneRadio id="contactByEmail" value="#{contactPreferenceBean.contactByEmail}"  rendered="#{userBean.editable == 1}" layout="pageDirection" >
                   <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
                   <c:set var="udae" scope="view" value="${participantBean.getUserDefinedAlternativeEmail(userBean.user_id)}" />
                   <f:selectItem itemValue="2" itemLabel="Your alternative email. (${udae})" />	
@@ -174,8 +195,9 @@
 
             </div>
           </div>
-
+          
           <div  class="div_p"  id="display_phone">
+            <hr />
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Phone..." />
             </div>
@@ -256,6 +278,7 @@
           </div>
 
           <div  class="div_p"  >
+            <hr />
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Social Media..." />
             </div>
