@@ -104,7 +104,7 @@
                         <h:inputText  id="postalCode" class="search"  value="#{search.postalCode}" style="margin-left:10px;" required="false"/>
                         <br />
                         <h:message styleClass="error-message" for="postalCode"/>
-                        <span class="error-message" id="postal_code_location_error"></span>
+                        <span class="error-message" id="postalCode_location_error"></span>
                     </h:outputLabel>
 
                     <span class="radius" style="float:left;">You can search for vicinity postal code beginning with a certain pattern.  For example to find all items in the Boston, MA area, just search for '021' without the single quotes.</span>
@@ -123,10 +123,10 @@
                         </h:selectOneRadio>    
                     </h:outputLabel>   
 
-                    <h:outputLabel value="Postal Codes found within radius:" for="postal_code" >
+                    <h:outputLabel value="Postal Codes found within radius:" for="found_zip_codes" >
                         <h:inputText  id="found_zip_codes" value="#{search.found_zip_codes}" class="search" style="margin-left:10px;" required="false"/>
                     </h:outputLabel>
-                    <span class="error-message" id="postal_code_error"></span>
+                    <span class="error-message" id="postalCode_error"></span>
                 </div>
 
             </div>
@@ -156,7 +156,6 @@
                             <h:outputText  id="itemModel" value="#{var_search.itemModel}" style="margin-left:10px;color:black;"/>
                         </h:outputLabel>
                         <br />
-
                     </div>
                 </h:column>
             </h:dataTable>
