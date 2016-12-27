@@ -64,7 +64,7 @@ public class ItemROBean extends AbstractBean implements Serializable {
       } else {
         ItemImages a_array = (ItemImages) result.get(0);
         ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(
-                new ItemImages(a_array.getItemImageId(), a_array.getItem_id(), a_array.getImageContentType(),
+                new ItemImages(a_array.getItemImageId(), a_array.getItemId(), a_array.getImageContentType(),
                         a_array.getImageHeight(), a_array.getImageWidth(), a_array.getImageFileName(), a_array.getItemImageCaption())
         ));
         setPicture(tmp_picture);
@@ -114,7 +114,7 @@ public class ItemROBean extends AbstractBean implements Serializable {
       query = "  SELECT itm FROM Participant part "
               + " left join part.item itm "
               + " WHERE itm.itemType = :it AND part.communityId = null ORDER BY itm.dateCreated";
-      result = session.createQuery(query)
+      result = session.createQuery(query)            
               .setParameter("it", which)
               .list();
       tx.commit();
