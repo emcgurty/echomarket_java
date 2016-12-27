@@ -38,7 +38,7 @@
 
     <c:choose>
       <c:when  test="#{userBean.partID}" > 
-        <c:if test="#{userBean.userIsWhichType() == 'borrow'}" >
+        <c:if test="#{userBean.userType == 'borrow'}" >
           <li id="tab_item_4">
             <c:set var="newItemLabel" value="Default Contact Preferences"  />
             <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="true" >
@@ -50,7 +50,7 @@
       </c:when>
     </c:choose>
 
-    <c:if test="#{((userBean.userIsWhichType() == 'both') or (userBean.userIsWhichType() == 'lend')) and (userBean.partID)}" >
+    <c:if test="#{((userBean.userType() == 'both') or (userBean.userType() == 'lend')) and (userBean.partID)}" >
       <li class="subs" id="tab_item_4" >
         <a href="#s1">Default Item Preferences/Conditions</a>
         <ul>
