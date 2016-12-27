@@ -34,14 +34,14 @@
     border: 1px solid transparent;
     color: black;
     display: block;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     height: 27px;
     line-height: 27px;
     margin: -3px 0 0 -1px;
     padding: 0 1px 0 11px;
     text-decoration: none;
-    
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
     
 }
 #nav > li:hover > a, #nav > a:hover {
@@ -54,14 +54,14 @@
     z-index: 1;
 }
 #nav > li.subs:hover > a {
-    background-color: white;
+    background-color: #FFFFFF;
     border: 1px solid rgba(100, 100, 100, 0.4);
     border-bottom-width: 0;
     border-radius: 2px 2px 0 0;
-    color: black;
+    color: #000000;
+    text-shadow: 0 0 transparent;
     z-index: 2;
 }
-
 /*top items separator */
 #nav > li:after {
     background-color: pink;  /*  #405791; Color of the dividers */
