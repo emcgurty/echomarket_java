@@ -14,7 +14,7 @@
       <ui:include src="/item_menu.xhtml" id="lending_item_menu" />  
 
       <div class="top" >
-        <h:outputText value="ITEMS OFFERED TO LEND - #{itemBean.history_id}"  />
+        <h:outputText value="ITEMS OFFERED TO LEND"  />
       </div> 
 
       <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(itemBean.history_id, 'lend')}" />
