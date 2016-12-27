@@ -383,13 +383,15 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       }
     } catch (Exception ex) {
     }
-
+    if (ubean.getEditable() != null) {
     if (ubean.getEditable() == 0) {
       ubean.setEditable(1);
     } else {
       ubean.setEditable(0);
     }
-
+    } else {
+      ubean.setEditable(1);
+    }
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
@@ -438,6 +440,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           contactByLinkedIn = pp.getContactByLinkedIn();
           contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
           contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
+          ubean.setLICid(true);
+          ubean.setLITid(true);
         }
       }
     }
