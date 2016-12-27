@@ -21,13 +21,13 @@
       <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 1}" />    
     </h:head>
     <h:form id="personal_information" class="user_nae" >
-      <body onload="changeMenuBackground(3);"  >
+      <body onload="changeMenuBackground(2);"  >
         <c:set var="rid" value="#{userBean.roleId}"  />  
         <c:choose >
           <c:when test="#{rid == 0}" >
             <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
             <c:set var="allow" value="public"  />  
-            <c:set var="title" value="USER"  />  
+            <c:set var="title" value="#{userBean.userAlias}"  />  
 
           </c:when>
           <c:when test="#{rid gt 0}" >
@@ -58,9 +58,22 @@
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
 
-              <h:outputText value="#{userBean.userAlias}: #{title} DASHBOARD"  />
-              <h:commandLink  action="#{participantBean.updateNAE()}"  class="right_div" value="Save #{sub_title}"   rendered="#{userBean.editable == 1}" />
-              <h:commandLink  action="#{participantBean.load_ud(userbean.user_id)}"  class="right_div" value="Edit #{title}"   rendered="#{userBean.editable == 0}" />
+              <h:outputText value="#{title}: USER DASHBOARD"  />
+              
+                   <c:choose >
+                  <c:when test="#{empty participantBean.participant_id}" >
+                    <c:set var="save_update"  value="Save " />
+                  </c:when >
+                    <c:when test="#{!empty participantBean.participant_id}" >
+                    <c:set var="save_update"  value="Update " />
+                  </c:when >
+                </c:choose>
+              
+              
+              
+              
+              <h:commandLink  action="#{participantBean.updateNAE()}"  class="right_div" value="#{save_update} #{sub_title}"   rendered="#{userBean.editable == 1}" />
+              <h:commandLink  action="#{participantBean.load_ud(userbean.user_id)}"  class="right_div" value="Edit '#{title}' Information"   rendered="#{userBean.editable == 0}" />
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="#{sub_title}" />
@@ -69,6 +82,7 @@
               </h:commandLink>              
               <h:inputHidden id="editable"  value="#{userBean.editable}"  />
               <h:inputHidden id="communityId"  value="#{participantBean.communityId}"  />
+              <h:inputHidden id="participant_id"  value="#{participantBean.participant_id}"  />
             </div>
             <div class="messagecolor">
               <h:messages showSummary="true" 
