@@ -3,6 +3,8 @@ package echomarket.web.managedbeans;
 import echomarket.hibernate.UsStates;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
@@ -38,7 +40,7 @@ public class UsStatesBean extends AbstractBean implements Serializable {
     } catch (Exception e) {
       tx.rollback();
       System.out.println("Error at line 36 in US Bean");
-      e.printStackTrace();
+      Logger.getLogger(UsStatesBean.class.getName()).log(Level.SEVERE, null, e);
 
     } finally {
       session = null;
@@ -88,7 +90,7 @@ public class UsStatesBean extends AbstractBean implements Serializable {
     } catch (Exception e) {
       tx.rollback();
       System.out.println("Error at line 99 in US Bean");
-      e.printStackTrace();
+      Logger.getLogger(UsStatesBean.class.getName()).log(Level.SEVERE, null, e);
     } finally {
       tx = null;
       session = null;
