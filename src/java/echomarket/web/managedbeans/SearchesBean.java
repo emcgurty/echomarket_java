@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,12 +18,14 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "search")
-@RequestScoped
+@ManagedBean(name = "searchesBean")
+@SessionScoped
 public class SearchesBean extends AbstractBean implements Serializable {
 
   @Inject
   UserBean ubean;
+  @Inject
+  ReadOnlyBean robean;
   private List searchResultList;
   private String found_zip_codes;
   private String keyword;
@@ -35,7 +37,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
   private Integer zip_code_radius;
   private String remoteIp;
   private String searchCriteria;
-  private Boolean displayResults;
+  private String imageLibrary;
+  private String which;
 
   /**
    * @return the found_zip_codes
@@ -51,25 +54,39 @@ public class SearchesBean extends AbstractBean implements Serializable {
   public void setFound_zip_codes(String found_zip_codes) {
     this.found_zip_codes = found_zip_codes;
   }
+
   ///  This is why I designed the database.... INNER JOIN works rather nicely
+  public String load_RO(String itype, String iid, String pid) {
+
+    robean.setItemId(iid);
+    robean.setParticipant_id(pid);
+    robean.setWhich(itype);
+
+    return "RO_item";
+  }
+
   public String SearchResults() {
 
     Session sb = null;
     Transaction tx = null;
     String queryString = "";
     String forceString = this.found_zip_codes;
-    String which = null;
     List results = null;
     if (this.lenderOrBorrower == 2) {
-      which = "borrow";
+      this.which = "borrow";
     } else {
-      which = "lend";
+      this.which = "lend";
     }
-    String fromStatement = "SELECT itm from Users user "
+
+    this.imageLibrary = this.which + "_images";
+    String fromStatement = "SELECT itm.itemId, itm.itemModel, itm.itemDescription, "
+            + " itmImages.imageFileName, part.participant_id "
+            + " FROM Users user "
             + " INNER JOIN user.participant part "
             + " INNER JOIN part.addresses addr "
             + " INNER JOIN part.item itm "
-            + " WHERE user.userType LIKE '%" + which + "%') ";
+            + "  LEFT JOIN itm.itemImages itmImages "
+            + " WHERE user.userType LIKE '%" + this.which + "%') AND addr.addressType = 'primary'";
 
     if (forceString.matches(".*\\d.*")) {
       queryString = " AND addr.postalCode in (\'" + forceString + "\') ";
@@ -78,7 +95,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
     if (this.postalCode.isEmpty() == false) {
       queryString = " AND addr.postalCode LIKE '" + this.postalCode + "%'";
     }
-
+// Need to check for null or isEmpty dates.
     try {
       Date sd = new Date();
       try {
@@ -96,7 +113,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
 
       if ((sd != null) || (ed != null)) {
         //if (queryString.length() > 0) {
-          queryString = queryString + " OR ";
+        queryString = queryString + " OR ";
         //}
         queryString = queryString + " ( itm.dateCreated >= \'" + this.startDate + "\' AND itm.dateCreated <= \'" + this.endDate + "\' ) ";
       }
@@ -107,23 +124,23 @@ public class SearchesBean extends AbstractBean implements Serializable {
     forceString = this.keyword;
     if (forceString.isEmpty() == false) {
       //if (queryString.length() > 0) {
-        queryString = queryString + " OR ";
+      queryString = queryString + " OR ";
       //}
       queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
 
     }
 
     if ((this.categoryId != -2)) {
-     // if (queryString.length() > 0) {
-        queryString = queryString + " OR ";
-     // }
+      // if (queryString.length() > 0) {
+      queryString = queryString + " OR ";
+      // }
       queryString = queryString + " itm.categoryId = \'" + this.categoryId + "\' ";
     }
 
     if (ubean.getComDetailID() != null) {
       queryString = queryString + "AND part.communityId = " + ubean.getComDetailID();
     } else {
-      queryString = queryString + "AND part.communityId = NULL";
+      queryString = queryString + "AND part.communityId = ''";
     }
 
     fromStatement = fromStatement + queryString;
@@ -133,133 +150,17 @@ public class SearchesBean extends AbstractBean implements Serializable {
       sb = hib_session();
       tx = sb.beginTransaction();
       results = sb.createQuery(fromStatement).list();
-      setSearchResultList(results);
       tx.commit();
+      setSearchResultList(results);
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       sb = null;
-      //Build pretty search criteria
-      setSearchCriteria(buildSearchCriteria());
-      setDisplayResults(true);
     }
+
     return "search";
-
-  }
-
-  private String buildSearchCriteria() {
-
-    String build = "";
-    String foo = null;
-    String hold = null;
-    Integer num = null;
-    Session hib = null;
-    Transaction tx = null;
-    List results = null;
-
-    if (this.lenderOrBorrower == 1) {
-      build = "Retrieve from LENDER records all items";
-    } else {
-      build = "Retrieve from BORROWER records all items";
-    }
-
-    hold = this.keyword;
-    if (!(hold.equals(foo))) {
-      build = build + " containing the keyword, " + hold + ", in either the item description or item model,";
-    }
-
-    num = this.categoryId;
-    if (num != -2) {
-      try {
-        hib = hib_session();
-        tx = hib.beginTransaction();
-        String queryString = "from Categories where id = :cat";
-        results = hib.createQuery(queryString).setParameter("cat", num).list();
-        tx.commit();
-      } catch (Exception ex) {
-        tx.rollback();
-      } finally {
-
-        hib = null;
-        tx = null;
-      }
-    }
-    if (results != null) {
-      Categories cat_Array = new Categories();
-      cat_Array = (Categories) results.get(0);
-      build = build + " in Category, " + cat_Array.getCategoryType() + ",";
-    }
-    Date sd = new Date();
-    try {
-      sd = ConvertDate(this.startDate);
-    } catch (Exception ex) {
-      Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
-    }
-
-    Date ed = new Date();
-    try {
-      ed = ConvertDate(this.endDate);
-    } catch (Exception ex) {
-      Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
-    }
-
-    if ((sd != null) || (ed != null)) {
-      build = build + "created between the dates, " + this.startDate + " and " + this.endDate + ".";
-    }
-
-    return build;
-  }
-
-  private String buildRadiusPhrase(String h, Integer n) {
-
-    String phrase = null;
-
-    switch (n) {
-      case 1:
-        phrase = " within a one mile radius of " + h;
-        break;
-
-      case 5:
-        phrase = " within a five mile radius of " + h;
-        break;
-
-      case 10:
-        phrase = " within a ten mile radius of " + h;
-        break;
-
-      case 25:
-        phrase = " within a twenty-five mile radius of " + h;
-        break; // optional
-
-      default: // Optional
-
-    }
-
-    return phrase;
-
-  }
-
-  private Date addDays(Date date, int days) {
-    Date today = new Date();
-    Calendar cal = Calendar.getInstance();
-    Boolean catchError = false;
-    try {
-      cal = Calendar.getInstance();
-      cal.setTime(date);
-      cal.add(Calendar.DATE, days); //minus number would decrement the days
-      catchError = true;
-    } catch (Exception ex) {
-      Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      /// 
-    }
-    if (catchError == true) {
-      return cal.getTime();
-    } else {
-      return today;
-    }
   }
 
   private Date ConvertDate(String strDate) {
@@ -416,22 +317,31 @@ public class SearchesBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the displayResults
+   * @return the imageLibrary
    */
-  public Boolean getDisplayResults() {
-    if (this.searchCriteria == null) {
-      return false;
-    } else {
-      return true;
-    }
+  public String getImageLibrary() {
+    return imageLibrary;
   }
 
   /**
-   * @param displayResults the displayResults to set
+   * @param imageLibrary the imageLibrary to set
    */
-  public void setDisplayResults(Boolean displayResults) {
+  public void setImageLibrary(String imageLibrary) {
+    this.imageLibrary = imageLibrary;
+  }
 
-    this.displayResults = displayResults;
+  /**
+   * @return the which
+   */
+  public String getWhich() {
+    return which;
+  }
+
+  /**
+   * @param which the which to set
+   */
+  public void setWhich(String which) {
+    this.which = which;
   }
 
 }
