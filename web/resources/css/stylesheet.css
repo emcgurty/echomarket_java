@@ -10,11 +10,11 @@ hr {
 }
 
 input[type=radio] + label {
-  color: #6fa9a9;
+  color: #2A3F3F;
   font-style: italic;
 } 
 input[type=radio]:checked + label {
-  color: indigo;
+  color: #045491;
   font-style: normal;
 } 
 
@@ -198,7 +198,7 @@ div.contact_information {
 
 select {
 
-  font-size: 14px;
+  font-size: 16px;
 
 }
 
@@ -206,7 +206,7 @@ select {
 
 body {
   background-color: #ffffff;
-  font-size: 18px;
+  font-size: 16px;
   font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
   color: #000000;  
   margin: 5px;
@@ -267,7 +267,7 @@ a:link:hover, a:visited:hover  {
 .error-message {
   color: #d20005;
   font-style: oblique;
-  text-decoration: overline;
+  text-decoration: none;
 }
 
 span.radius {
