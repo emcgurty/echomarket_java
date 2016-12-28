@@ -171,7 +171,7 @@
               </tr >
               <tr >
                 <td colspan="2" style="width:100%;padding-bottom: 15px;">
-                  <c:set var="niceUT" value="#{fn:trim(userBean.userType)}" />
+                  <c:set var="niceUT" value="#{fn:trim(userBean.getPrettyUserType())}" />
                   <h:outputLabel for="userTypeArray" value="#{bundle.userType}" rendered="#{userBean.editable == 1}">
                     <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate..." rendered="#{userBean.editable == 1}">
                       <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
@@ -181,7 +181,7 @@
                   </h:outputLabel>
                   <h:outputLabel for="userTypeArray0" value="Participation:" rendered="#{userBean.editable == 0}">
                     <h:outputText id="userTypeArray0" value="#{niceUT}"
-                                  style="margin-left:5px;text-transform: capitalize" rendered="#{userBean.editable == 0}"/>
+                                  rendered="#{userBean.editable == 0}"/>
                   </h:outputLabel>
                 </td>
               </tr>
