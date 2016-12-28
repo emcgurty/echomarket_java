@@ -118,7 +118,7 @@ public class SendEmail implements java.io.Serializable {
     Object paramArray[] = new Object[2];
     paramArray[0] = getResetCode();
     url_string = MessageFormat.format(url_string, paramArray);
-    String buildMessage = "<html><h1>Your account has been created.</h1>"
+    String buildMessage = "<html><h1>Your EchoMarket account has been created.</h1>"
             + "<p> User Name: " + this.username + "</p>"
             + "<p> Password:  " + this.password + "</p>"
             + "<h2> Visit this url to activate your account: </h2>"
@@ -138,7 +138,7 @@ public class SendEmail implements java.io.Serializable {
     Object paramArray[] = new Object[2];
     paramArray[0] = getResetCode();
     url_string = MessageFormat.format(url_string, paramArray);
-    String buildMessage = "<html><h2>Your Community account has been created.</h2>"
+    String buildMessage = "<html><h2>Your EchoMarket Community account has been created.</h2>"
             + "<p>" + this.whichEmail + "</p>"
             + "<p> User Name: " + this.username + "</p>"
             + "<p> Password:  " + this.password + "</p>"
@@ -159,7 +159,7 @@ public class SendEmail implements java.io.Serializable {
     Object paramArray[] = new Object[2];
     paramArray[0] = getResetCode();
     url_string = MessageFormat.format(url_string, paramArray);
-    String buildMessage = "<html><h1>Your Community account has been created.</h1>"
+    String buildMessage = "<html><h1>Your EchoMarket Community account has been created.</h1>"
             + "<p>" + this.whichEmail + "</p>"
             + "<p> User Name: " + this.username + "</p>"
             + "<p> Password:  " + this.password + "</p>"
