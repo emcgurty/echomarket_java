@@ -98,6 +98,7 @@ public class UserBean extends AbstractBean implements Serializable {
     this.communityId = null;
     this.communityName = null;
     this.pid = null;
+    this.editable = 0;
   }
 
   public String getEmail() {
@@ -117,26 +118,16 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String getUserType() {
-    String hold_UT = null;
-    if (this.editable == 1) {
-      return userType;
-    } else {
-      if (userType == "both") {
-        hold_UT = "Borrowing and Lending";
-      } else {
-        hold_UT = userType;
-      }
-      return hold_UT;
-    }
+    return userType;
   }
 
   public String getPrettyUserType() {
     String hold_UT = null;
     if (userType == "both") {
-        hold_UT = "Borrowing and Lending";
-      } else {
-        hold_UT = userType;
-      }
+      hold_UT = "Borrowing and Lending";
+    } else {
+      hold_UT = userType;
+    }
     return hold_UT;
   }
 
