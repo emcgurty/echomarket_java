@@ -49,64 +49,76 @@
           </c:choose>
         </li>
         <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
-        <c:if test="#{((userBean.userType == 'both') or (userBean.userType == 'lend')) and ((userBean.cpId) or (completeLIC_LIT))}" >
-          <li >
-            <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
-            <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
-              <f:param name="iid" value="#{itemBean.itemId}" />
-              <f:param name="action" value="edit" />
-            </h:commandLink>   
-          </li>
-          <li>
-            <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
-            <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
-              <f:param name="iid" value="#{itemBean.itemId}" />
-              <f:param name="action" value="edit" />
-            </h:commandLink>   
-          </li>
-        </c:if>     
+        <c:set var="completeCP" value="#{userBean.cpId}" /> 
+        <c:set var="whichType" value="#{userBean.userType}" />
+        
+        <c:choose  >
+          <c:when test="#{((whichType== 'both') or (whichType == 'lend'))}"  >
+            <c:choose  >
+              <c:when test="#{completeCP}" >      
+                <li >
+                  <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
+                  <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
+                    <f:param name="iid" value="#{itemBean.itemId}" />
+                    <f:param name="action" value="edit" />
+                  </h:commandLink>   
+                </li>
+                <li>
+                  <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
+                  <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
+                    <f:param name="iid" value="#{itemBean.itemId}" />
+                    <f:param name="action" value="edit" />
+                  </h:commandLink>   
+                </li>
+              </c:when>
+            </c:choose>            
+
+          </c:when>
+        </c:choose>     
       </ul>
     </li>
-    <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
-    <c:if test="#{(userBean.action == 'current') or (completeLIC_LIT) or (userBean.cpId) }" >
-      <li class="subs" >
-        <c:set var="whichType" value="#{userBean.userType}" />
-        <c:choose>                                
-          <c:when test="#{whichType == 'borrow'}"  >
-            <li id="tab_item_1" >
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"     >
-                <f:param name="action" value="item" />
-              </h:commandLink>
-            </li>
-          </c:when >  
-          <c:when test="#{whichType == 'lend'}"  >
-            <li id="tab_item_1" >
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"   >
-                <f:param name="action" value="item" />
-              </h:commandLink>
-            </li>
-          </c:when >  
-          <c:when test="#{whichType == 'both'}"  >
-            <li class="subs" id="tab_item_1" >
-              <a href="#s1">Lend or Borrow?</a>
-              <ul>
-                <li>
-                  <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="I want to lend!"   >
-                    <f:param name="action" value="item" />
-                  </h:commandLink>
-                </li>
-                <li>
-                  <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="I want to borrow!" >
-                    <f:param name="action" value="item" />
-                  </h:commandLink>
-                </li>
-              </ul>
-            </li>
-          </c:when >  
-        </c:choose>
+    <c:choose>
+      <c:when test="#{completeLIC_LIT and completeCP }" >
+        <li class="subs" >
+          <c:choose>                                
+            <c:when test="#{whichType == 'borrow'}"  >
+              <li id="tab_item_1" >
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"     >
+                  <f:param name="action" value="item" />
+                </h:commandLink>
+              </li>
+            </c:when >  
+            <c:when test="#{whichType == 'lend'}"  >
+              <li id="tab_item_1" >
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"   >
+                  <f:param name="action" value="item" />
+                </h:commandLink>
+              </li>
+            </c:when >  
+            <c:when test="#{whichType == 'both'}"  >
+              <li class="subs" id="tab_item_1" >
+                <a href="#s1">Lend or Borrow?</a>
+                <ul>
+                  <li>
+                    <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="I want to lend!"   >
+                      <f:param name="action" value="item" />
+                    </h:commandLink>
+                  </li>
+                  <li>
+                    <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="I want to borrow!" >
+                      <f:param name="action" value="item" />
+                    </h:commandLink>
+                  </li>
+                </ul>
+              </li>
+            </c:when >  
+          </c:choose>
+        </li>
+      </c:when >  
+    </c:choose>
 
-      </li>
-    </c:if>
+
+
   </ul>
 
 </ui:composition>
