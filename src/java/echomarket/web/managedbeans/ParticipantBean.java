@@ -87,15 +87,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String load_ud(String uid) {
 
-    if ("-1".equals(uid)) {
+    if ("-1".equals(uid) == true) {
       ubean.setEditable(-1);
       uid = ubean.getUser_id();
-    } else if (ubean.getEditable() == 0) {
-      ubean.setEditable(1);
-    } else {
-      ubean.setEditable(0);
+    } else if ("-1".equals(uid) == false) {
+      if (ubean.getEditable() == 0) {
+        ubean.setEditable(1);
+      } else {
+        ubean.setEditable(0);
+      }
     }
-
+    
     Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String action = params.get("action");
 
@@ -343,7 +345,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       ubean.setEditable(1);
       ubean.setPartID(true);
       ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
-         
+
     } else {
       ubean.setEditable(0);
     }
@@ -375,6 +377,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         sb.save(part);
         tx.commit();
+        /// emm 1228
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
         ubean.setParticipant_id(new_ID);
         ubean.setAcceptID(true);
@@ -877,7 +880,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       return_result = getPrimary();
     } else {
     }
-    
+
     result = null;
     return return_result;
 
