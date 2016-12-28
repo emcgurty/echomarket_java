@@ -122,13 +122,21 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String getPrettyUserType() {
-    String hold_UT = null;
-    if (userType == "both") {
-      hold_UT = "Borrowing and Lending";
-    } else {
-      hold_UT = userType;
+    String hold_UT = this.userType;
+    String return_string = null;
+    switch (hold_UT) {
+      case "both":
+        return_string = "Borrowing and Lending";
+        break;
+      case "borrow":
+        return_string = "Borrowing";
+        break;
+      case "lend":
+        return_string = "Lending";
+        break;
     }
-    return hold_UT;
+
+    return return_string;
   }
 
   public void setUserType(String ut) {
