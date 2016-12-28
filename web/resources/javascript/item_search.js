@@ -247,7 +247,7 @@ function submitSearch() {
     $("span#echo_market_search_error").css("visibility", "hidden");
 
     if (!(choose_l_or_b)) {
-        $("span#echo_market_search_error").text("From the above option 'Items to Borrow or items to Lend?', you need to choose to either search for what is being offered or what is needed.");
+        $("span#echo_market_search_error").text("You need to choose to either search for what is being offered or what is sought.");
         $("span#echo_market_search_error").css("visibility", "visible");
         returnValue = false;
 
