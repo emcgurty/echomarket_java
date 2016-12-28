@@ -79,13 +79,27 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
 
     this.imageLibrary = this.which + "_images";
+//    select new Family(mother, mate, offspr)
+//    from DomesticCat as mother
+//    join mother.mate as mate
+//    left join mother.kittens as offspr
+//    Doesn't return Object[]
+//    Need to rewrite below
+
+//SELECT users.user_id
+//FROM (((users 
+//INNER JOIN participant ON users.user_id = participant.user_id) 
+//INNER JOIN addresses ON participant.participant_id = addresses.participant_id) 
+//INNER JOIN items ON participant.participant_id = items.participant_id) 
+//INNER JOIN item_images ON items.item_id = item_images.item_id;
+
     String fromStatement = "SELECT itm.itemId, itm.itemModel, itm.itemDescription, "
             + " itmImages.imageFileName, part.participant_id "
             + " FROM Users user "
             + " INNER JOIN user.participant part "
             + " INNER JOIN part.addresses addr "
             + " INNER JOIN part.item itm "
-            + "  LEFT JOIN itm.itemImages itmImages "
+            + " INNER JOIN itm.itemImages itmImages "
             + " WHERE user.userType LIKE '%" + this.which + "%') AND addr.addressType = 'primary'";
 
     if (forceString.matches(".*\\d.*")) {
