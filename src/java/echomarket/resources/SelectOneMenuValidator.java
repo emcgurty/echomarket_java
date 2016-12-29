@@ -27,7 +27,7 @@ public class SelectOneMenuValidator implements Validator {
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 //message.setSummary("Please Select a question!");
                 //message.setDetail("Please Select a question!");
-                context.addMessage("Please make selection.", message);
+                context.addMessage("Please make a selection.", message);
                 throw new ValidatorException(message);
             }
         } catch (Exception e) {
