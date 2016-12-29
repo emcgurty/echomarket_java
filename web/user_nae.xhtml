@@ -40,8 +40,7 @@
           <c:set var="div_display" value="none"  rendered="#{userBean.editable == 1}" />    
           <c:set var="div_display" value="block" rendered="#{userBean.editable == 0}" />    
           <c:set var="rid" value="#{userBean.roleId}"  />  
-
-          <c:set var="rid" value="#{userBean.roleId}"  />  
+          <h:outputText value="#{userBean.roleId} -- Role ID"  />  
           <c:choose >
             <c:when test="#{rid == 0}" >
               <c:set var="sub_title" value="EchoMarket 'Participant Information'" />
@@ -290,7 +289,7 @@
               <div style="margin-left: 25px;float:left" >
                 <c:set var="emailAlt_empty"  value="${empty participantBean.emailAlternative}" />              
                 <h:outputLabel value="Would you like to provide an alternative email address?"  for="questionAltEmailProvide" rendered="#{userBean.editable == 1 and emailAlt_empty}" >
-                  <h:selectOneRadio id="questionAltEmailProvide" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
+                  <h:selectOneRadio id="questionAltEmailProvide" layout='lineDirection'  value="#{participantBean.questionAltEmailProvide}"   rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
                   </h:selectOneRadio>
@@ -311,8 +310,8 @@
                   <span class="error-message" id="emailAlternative" ></span>
                 </h:outputLabel>
                 <br />
-                <h:outputLabel value="Would you like to delete your Alternative Email?"  for="questionAltEmail" rendered="#{(userBean.editable == 1) and (!empty participantBean.questionAltEmail )}">
-                  <h:selectOneRadio id="questionAltEmail" value="#{participantBean.questionAltEmail}"  rendered="#{userBean.editable == 1}" >
+                <h:outputLabel value="Would you like to delete your Alternative Email?"  for="questionAltEmailDelete" rendered="#{userBean.editable == 1}" >
+                  <h:selectOneRadio id="questionAltEmailDelete" value="#{participantBean.questionAltEmailDelete}"  rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
                   </h:selectOneRadio>    
@@ -335,7 +334,8 @@
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
-                          <h:inputText id="addressLine1" value="#{pa.addressLine1}" style="margin-left: 5px;" title="You don't need to provide your numeric address." class="primary" rendered="#{userBean.editable == 1}" />
+                          <h:inputText id="addressLine1" value="#{pa.addressLine1}" style="margin-left: 5px;" 
+                                       title="You don't need to provide your numeric address." class="primary" rendered="#{userBean.editable == 1}" required="true" requiredMessage="Address Line One is required" />
                           <h:outputText value="#{pa.addressLine1}" rendered="#{userBean.editable == 0}"  class="RO_text" />
                           <span class="error-message" id="addressLine1" ></span>
                         </td>
@@ -349,7 +349,7 @@
                         <td>
                           <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
                           <h:inputText id="city" value="#{pa.city}"
-                                       style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" >
+                                       style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" required="true" requiredMessage="City is required" >
                           </h:inputText>
                           <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 0}" class="RO_text" />
                           <span class="error-message" id="city" ></span>
@@ -384,7 +384,7 @@
                       <tr >
                         <td >
                           <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
-                          <h:inputText id="postalCode" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" />
+                          <h:inputText id="postalCode" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" required="true" requiredMessage="Postal Code is required" />
                           <h:outputText value="#{pa.postalCode}" style="margin-left: 5px;" class="RO_text"  rendered="#{userBean.editable == 0}" />
                           <span class="error-message" id="postalCode" ></span>
                         </td>
@@ -435,14 +435,14 @@
 
 
             <c:set var="alternative_address_data" value="#{participantBean.getExistingAddress('alternative')}" />   
-            <c:forEach items="${alternative_address_data}" var="aid"  >
-              <c:set var="alternative_address_data_empty"  value="${empty aid.addressId}" />
-            </c:forEach>
+            <!--<c:forEach items="${alternative_address_data}" var="aid"  >-->
+              <c:set var="alternative_address_data_empty"  value="${fn:length(alternative_address_data) > 0}" />
+            <!--</c:forEach>-->
 
             <div style="margin-left: 25px;float:left">
-              <c:set var="wouldYou" value="#{(userBean.editable == 1 and alternative_address_data_empty)}" />
-              <h:outputLabel value="Would you like to provide an alternative address?"  for="questionAltAddressProvide" rendered="#{wouldYou}" >
-                <h:selectOneRadio id="questionAltAddressProvide" layout='lineDirection'  rendered="#{wouldYou}" >
+              <!--<c:set var="wouldYou" value="#{(userBean.editable == 1 and alternative_address_data_empty)}" />-->
+              <h:outputLabel value="Would you like to provide an alternative address?"  for="questionAltAddressProvide"  >
+                <h:selectOneRadio id="questionAltAddressProvide" layout='lineDirection' value="#{participantBean.questionAltAddressProvide}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
                 </h:selectOneRadio>
@@ -456,7 +456,7 @@
               <c:set var="a_display" value="none" />
             </c:if>  
 
-            <div id="addressAlternative"  style="display:#{a_float};float:left;height:auto;width:inherit;margin-top:10px;">
+            <div id="addressAlternative"  style="display:#{a_display};float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
                 <h:dataTable value="#{alternative_address_data}" id="alternative" var="pa" >    
                   <h:column rowHeader="">
@@ -564,8 +564,8 @@
                             </c:if>
                           </h:outputLabel>   
 
-                          <h:outputLabel value="Would you like to delete your Alternative Address?"  for="questionAltAddress" rendered="#{(userBean.editable == 1) and (!empty pa.postalCode)}">
-                            <h:selectOneRadio id="questionAltAddress" value="#{participantBean.questionAltAddress}"  rendered="#{userBean.editable == 1}" >
+                          <h:outputLabel value="Would you like to delete your Alternative Address?"  for="questionAltAddressDelete" rendered="#{(userBean.editable == 1) and (!empty pa.postalCode)}">
+                            <h:selectOneRadio id="questionAltAddressDelete" value="#{participantBean.questionAltAddressDelete}"  rendered="#{userBean.editable == 1}" >
                               <f:selectItem itemValue="1" itemLabel="Yes" />
                               <f:selectItem itemValue="0" itemLabel="No" />
                             </h:selectOneRadio>    
