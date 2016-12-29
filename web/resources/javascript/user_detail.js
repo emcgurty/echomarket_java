@@ -93,7 +93,7 @@ function checkAltEmailProvide(input) {
 function checkAltAddress(input) {
   if (input.value == 1) {
     if (input.checked == true) {
-      alert("asd");
+      
       $("div#addressAlternative").css("display", "block");
     } else {
       $("div#addressAlternative").css("display", "none");
