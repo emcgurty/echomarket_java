@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,7 +22,7 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "participantBean")
-@SessionScoped
+@RequestScoped
 public class ParticipantBean extends AbstractBean implements Serializable {
 
   @Inject
@@ -34,6 +34,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   private int displayOrganization;
   private String otherDescribeYourself;
   private String firstName;
+  private String firstNamea;
   private String mi;
   private String lastName;
   private String alias;
@@ -141,6 +142,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.isCreator = pp.getIsCreator();
       ubean.setCommunityId(communityId);
       ubean.setParticipant_id(participant_id);
+      
+      
     }
 
     if (ubean.getEditable() == -1) {
@@ -148,7 +151,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     } else {
       this.setQuestionAltAddressDelete(-9);
       this.setQuestionAltEmailDelete(-9);
-      return "user_nae";
+      return "user_nae.xhtml?faces-redirect=true";
     }
 
   }
@@ -159,7 +162,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     sb = null;
     tx = null;
     List result = null;
-    String alt_email = null;
+    String alt_email = "";
     sb = hib_session();
     tx = sb.beginTransaction();
 
@@ -171,7 +174,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx.commit();
       if (result.size() > 0) {
         Participant part = (Participant) result.get(0);
-        alt_email = part.getEmailAlternative();
+        if (part.getEmailAlternative() != null) {
+          alt_email = part.getEmailAlternative();
+        }
       }
     } catch (Exception e) {
       tx.rollback();
@@ -204,22 +209,14 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     String pid = null;
     Boolean updateSuccess = false;
 
-    try {
+     try {
       sb = hib_session();
       tx = sb.beginTransaction();
-      updateSuccess = true;
-    } catch (Exception ex) {
-      System.out.println("Error in Save/Update Particpant");
-      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    try {
       query = "FROM Participant WHERE user_id = :uid";
       result = sb.createQuery(query)
               .setParameter("uid", ubean.getUser_id())
               .list();
       tx.commit();
-      updateSuccess = true;
     } catch (Exception ex) {
       System.out.println("Error in Save/Update Particpant, line 187");
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -298,7 +295,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
           } else {
           }
 
-          if ((aalt.getAddressId() != null) && this.getQuestionAltAddressDelete() == 1) {
+          if ((aalt.getAddressId() != null) && ((this.getQuestionAltAddressDelete() == 1) || (this.getQuestionAltAddressProvide() == 0))) {
             sb.delete(aalt);
           } else {
           }
@@ -655,7 +652,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.remoteIp = remoteIp;
   }
 
-  private List getCurrentParticipant(String uid) {
+  public List getCurrentParticipant(String uid) {
 
     List result = null;
     Session session = null;
@@ -982,6 +979,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
    */
   public void setQuestionAltAddressDelete(int questionAltAddressDelete) {
     this.questionAltAddressDelete = questionAltAddressDelete;
+  }
+
+  /**
+   * @return the firstNamea
+   */
+  public String getFirstNamea() {
+    return firstNamea;
+  }
+
+  /**
+   * @param firstNamea the firstNamea to set
+   */
+  public void setFirstNamea(String firstNamea) {
+    this.firstNamea = firstNamea;
   }
 
 }
