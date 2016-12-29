@@ -43,8 +43,10 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   private String cellPhone;
   private String alternativePhone;
   private String emailAlternative;
-  private int questionAltEmail;
-  private int questionAltAddress;
+  private int questionAltEmailProvide;
+  private int questionAltEmailDelete;
+  private int questionAltAddressProvide;
+  private int questionAltAddressDelete;
   private Integer displayHomePhone;
   private Integer displayCellPhone;
   private Integer displayAlternativePhone;
@@ -97,7 +99,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         ubean.setEditable(0);
       }
     }
-    
+
     Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String action = params.get("action");
 
@@ -132,6 +134,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.displayCellPhone = pp.getDisplayCellPhone();
       this.displayAlternativePhone = pp.getDisplayAlternativePhone();
       this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
+      this.questionAltAddressProvide = pp.getQuestionAltAddress();
+      this.questionAltEmailProvide = pp.getQuestionAltEmail();
       this.goodwill = pp.getGoodwill();
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
@@ -142,8 +146,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if (ubean.getEditable() == -1) {
       return "user_agreement";
     } else {
-      this.questionAltAddress = -9;
-      this.questionAltEmail = -9;
+      this.setQuestionAltAddressDelete(-9);
+      this.setQuestionAltEmailDelete(-9);
       return "user_nae";
     }
 
@@ -243,16 +247,22 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setHomePhone(homePhone);
       part.setCellPhone(cellPhone);
       part.setAlternativePhone(alternativePhone);
+      part.setQuestionAltAddress(questionAltAddressProvide);
+      part.setQuestionAltEmail(questionAltEmailProvide);
       if (ubean.getCommunityName() != null) {
         part.setIsCreator(1);
       } else {
         part.setIsCreator(1);
       }
 
-      if (this.questionAltEmail == 1) {
+      if (this.getQuestionAltEmailProvide() == 0) {
         part.setEmailAlternative(null);
       } else {
         part.setEmailAlternative(emailAlternative);
+      }
+
+      if (this.getQuestionAltEmailDelete() == 1) {
+        part.setEmailAlternative(null);
       }
 
       part.setDisplayHomePhone(displayHomePhone);
@@ -269,26 +279,26 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
 
+      tx = null;
+      sb = null;
       Addresses aalt = (Addresses) aadrs.get(0);
       reqPO = aalt.getPostalCode();
-      if (reqPO != null) {
-
-        if (sb.isOpen() == false) {
-          sb = hib_session();
-        }
-        if (tx.isActive() == false) {
-          tx = sb.beginTransaction();
-        }
+      if (reqPO.isEmpty() == false) {
 
         try {
-          if (aalt.getAddressId() == null && this.questionAltAddress != 1) {
+          sb = hib_session();
+          tx = sb.beginTransaction();
+
+          if (aalt.getAddressId() == null && this.getQuestionAltAddressProvide() == 1) {
             aalt.setParticipant_id(pid);
             aalt.setAddressId(UUID.randomUUID().toString());
             sb.save(aalt);
-          } else if (aalt.getAddressId() != null && this.questionAltAddress != 1) {
+          } else if (aalt.getAddressId() != null && this.getQuestionAltAddressProvide() == 1) {
             sb.update(aalt);
-          } else if ((aalt.getAddressId() != null) && this.questionAltAddress == 1) {
+          } else {
+          }
 
+          if ((aalt.getAddressId() != null) && this.getQuestionAltAddressDelete() == 1) {
             sb.delete(aalt);
           } else {
           }
@@ -302,22 +312,18 @@ public class ParticipantBean extends AbstractBean implements Serializable {
           Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
 
         } finally {
+          tx = null;
+          sb = null;
         }
       }
     }
 
     Addresses ba = (Addresses) padrs.get(0);
     reqPO = ba.getPostalCode();
-    if (reqPO != null) {
-
-      if (sb.isOpen() == false) {
-        sb = hib_session();
-      }
-      if (tx.isActive() == false) {
-        tx = sb.beginTransaction();
-      }
-
+    if (reqPO.isEmpty() == false) {
       try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
         if (ba.getAddressId() == null) {
           ba.setParticipant_id(pid);
           ba.setAddressId(UUID.randomUUID().toString());
@@ -894,34 +900,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the questionAltEmail
-   */
-  public int getQuestionAltEmail() {
-    return questionAltEmail;
-  }
-
-  /**
-   * @param questionAltEmail the questionAltEmail to set
-   */
-  public void setQuestionAltEmail(int questionAltEmail) {
-    this.questionAltEmail = questionAltEmail;
-  }
-
-  /**
-   * @return the questionAltAddress
-   */
-  public int getQuestionAltAddress() {
-    return questionAltAddress;
-  }
-
-  /**
-   * @param questionAltAddress the questionAltAddress to set
-   */
-  public void setQuestionAltAddress(int questionAltAddress) {
-    this.questionAltAddress = questionAltAddress;
-  }
-
-  /**
    * @return the participant_id
    */
   @Id
@@ -948,6 +926,62 @@ public class ParticipantBean extends AbstractBean implements Serializable {
    */
   public void setCommunityId(String communityId) {
     this.communityId = communityId;
+  }
+
+  /**
+   * @return the questionAltEmailProvide
+   */
+  public int getQuestionAltEmailProvide() {
+    return questionAltEmailProvide;
+  }
+
+  /**
+   * @param questionAltEmailProvide the questionAltEmailProvide to set
+   */
+  public void setQuestionAltEmailProvide(int questionAltEmailProvide) {
+    this.questionAltEmailProvide = questionAltEmailProvide;
+  }
+
+  /**
+   * @return the questionAltEmailDelete
+   */
+  public int getQuestionAltEmailDelete() {
+    return questionAltEmailDelete;
+  }
+
+  /**
+   * @param questionAltEmailDelete the questionAltEmailDelete to set
+   */
+  public void setQuestionAltEmailDelete(int questionAltEmailDelete) {
+    this.questionAltEmailDelete = questionAltEmailDelete;
+  }
+
+  /**
+   * @return the questionAltAddressProvide
+   */
+  public int getQuestionAltAddressProvide() {
+    return questionAltAddressProvide;
+  }
+
+  /**
+   * @param questionAltAddressProvide the questionAltAddressProvide to set
+   */
+  public void setQuestionAltAddressProvide(int questionAltAddressProvide) {
+    this.questionAltAddressProvide = questionAltAddressProvide;
+  }
+
+  /**
+   * @return the questionAltAddressDelete
+   */
+  public int getQuestionAltAddressDelete() {
+    return questionAltAddressDelete;
+  }
+
+  /**
+   * @param questionAltAddressDelete the questionAltAddressDelete to set
+   */
+  public void setQuestionAltAddressDelete(int questionAltAddressDelete) {
+    this.questionAltAddressDelete = questionAltAddressDelete;
   }
 
 }
