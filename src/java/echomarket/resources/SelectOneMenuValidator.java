@@ -25,8 +25,8 @@ public class SelectOneMenuValidator implements Validator {
             if (emValue != null && emValue.toUpperCase().equals("PLEASE SELECT")) {
                 FacesMessage message = new FacesMessage();
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
-                message.setSummary("Please Select a question!");
-                message.setDetail("Please Select a question!");
+                //message.setSummary("Please Select a question!");
+                //message.setDetail("Please Select a question!");
                 context.addMessage("Please make selection.", message);
                 throw new ValidatorException(message);
             }
