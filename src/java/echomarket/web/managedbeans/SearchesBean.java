@@ -115,10 +115,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
         }
 
         if ((sd != null) || (ed != null)) {
-          //if (queryString.length() > 0) {
-          queryString = queryString + " OR ";
-          //}
-          queryString = queryString + " ( itm.dateCreated >= \'" + sd + "\' AND itm.dateCreated <= \'" + ed + "\' ) ";
+           queryString = queryString + " OR ";
+           queryString = queryString + " ( itm.dateCreated >= \'" + sd + "\' AND itm.dateCreated <= \'" + ed + "\' ) ";
         }
       } catch (Exception ex) {
         Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
@@ -126,18 +124,14 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
     forceString = this.keyword;
     if (forceString.isEmpty() == false) {
-      //if (queryString.length() > 0) {
-      queryString = queryString + " OR ";
-      //}
-      queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
+        queryString = queryString + " OR ";
+        queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
 
     }
 
     if ((this.categoryId != -2)) {
-      // if (queryString.length() > 0) {
-      queryString = queryString + " OR ";
-      // }
-      queryString = queryString + " itm.categoryId = \'" + this.categoryId + "\' ";
+       queryString = queryString + " OR ";
+       queryString = queryString + " itm.categoryId = \'" + this.categoryId + "\' ";
     }
 
     if (ubean.getComDetailID() != null) {
