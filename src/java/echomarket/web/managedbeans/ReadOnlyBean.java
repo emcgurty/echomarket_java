@@ -438,7 +438,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               + " WHERE (cp.useWhichContactAddress = 1 OR cp.useWhichContactAddress = 3)"
               + " AND  (it.itemId = :iid)"
               + " AND  (part.displayAlternativeAddress = 1)"
-              + " AND  (part.participant = :pid)"
+              + " AND  (part.participant_id = :pid)"
               + " AND  (addr.addressType = 'alternative')";
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
