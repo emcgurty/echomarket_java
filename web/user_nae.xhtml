@@ -322,7 +322,7 @@
 
             <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
-                <h:dataTable value="#{participantBean.getExistingAddress('primary')}" id="primary"   var="pa" >    
+                <h:dataTable value="#{participantBean.primary}" id="primary"   var="pa" >    
                   <h:column rowHeader="">
 
                     <table >
@@ -429,7 +429,7 @@
             </div>    
 
 
-            <c:set var="alternative_address_data" value="#{participantBean.getExistingAddress('alternative')}" />   
+            <c:set var="alternative_address_data" value="#{participantBean.alternative}" />   
             <c:forEach items="${alternative_address_data}" var="aid"  >
               <c:set var="alternative_address_data_empty"  value="${!empty aid.postalCode}" />
             </c:forEach>
