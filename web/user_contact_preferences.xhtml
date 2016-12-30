@@ -17,9 +17,10 @@
     <h:form id="personal_information" class="user_contact_preferences">
       <body onload="changeMenuBackground(3);"  >
         <div id="form_contact_preference" class="contact_information" >
-
           <c:set var="iid" value="#{itemBean.itemId}"  />  
           <c:set var="rid" value="#{userBean.roleId}"  />  
+          <c:set var="ut" value="#{userBean.userType}"  />  
+          <h:outputText value="#{ut}" />
           <c:choose >
             <c:when test="#{empty iid }" >
               <c:choose >
@@ -62,7 +63,8 @@
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="Default Contact Preferences" />
-              <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'"  >
+              <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'" 
+                              rendered="#{(ut == 'lend') or ut == ('both')}">
                 <f:param name="action" value="edit" />
               </h:commandLink>
             </div>
@@ -88,10 +90,11 @@
               <div id="postalWithContactAddress" >    
                 <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
                   <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}" rendered="#{userBean.editable == 1}"  layout="pageDirection" >
-                    <f:selectItem itemValue="3" itemLabel="Use your Primary Address?" />
-                    <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?" />	
-                    <f:selectItem itemValue="1" itemLabel="Either address is fine." />
-                    <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
+                    <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
+                    <!--this isn't going to work becuase ParticipantBeans need to have been loaded which will be necessarily so-->
+                    <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?" rendered="#{participantBean.questionAltAddressProvide == 1}" />	
+                    <f:selectItem itemValue="1" itemLabel="Either address is fine." rendered="#{participantBean.questionAltAddressProvide == 1}" />
+                    <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." rendered="#{participantBean.questionAltAddressProvide == 1}" />
                   </h:selectOneRadio>    
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
