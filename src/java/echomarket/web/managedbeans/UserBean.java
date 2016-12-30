@@ -26,7 +26,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import static jdk.nashorn.internal.objects.NativeString.trim;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -532,7 +531,10 @@ public class UserBean extends AbstractBean implements Serializable {
             } else if (results.size() == 1) {
               Users uu1 = (Users) results.get(0);
               setUser_id(uu1.getUser_id());
+              setRoleId(uu1.getRoleId());
               setUserType(uu1.getUserType());
+              setUserAlias(uu1.getUserAlias());
+              setEmail(uu1.getEmail());
               uu1 = null;
               accept_results = hasAcceptedAgreement();
               if (accept_results != null) {
