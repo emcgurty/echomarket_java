@@ -297,6 +297,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
           if ((aalt.getAddressId() != null) && ((this.getQuestionAltAddressDelete() == 1) || (this.getQuestionAltAddressProvide() == 0))) {
             sb.delete(aalt);
+            sb.flush();
           } else {
           }
 
