@@ -79,19 +79,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
 
     this.imageLibrary = this.which + "_images";
-//    select new Family(mother, mate, offspr)
-//    from DomesticCat as mother
-//    join mother.mate as mate
-//    left join mother.kittens as offspr
-//    Doesn't return Object[]
-//    Need to rewrite below
-
-//SELECT users.user_id
-//FROM (((users 
-//INNER JOIN participant ON users.user_id = participant.user_id) 
-//INNER JOIN addresses ON participant.participant_id = addresses.participant_id) 
-//INNER JOIN items ON participant.participant_id = items.participant_id) 
-//INNER JOIN item_images ON items.item_id = item_images.item_id;
 
     String fromStatement = "SELECT itm.itemId, itm.itemModel, itm.itemDescription, "
             + " itmImages.imageFileName, part.participant_id "
@@ -101,7 +88,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
             + " INNER JOIN part.item itm "
             + " INNER JOIN itm.itemImages itmImages "
             + " WHERE user.userType LIKE '%" + this.which + "%') AND addr.addressType = 'primary'"
-            + " GROUP BY addr.addressType, itm.itemImages, part.participant_id, itm.itemId ";
+            + " GROUP BY user.userType, addr.addressType, itm.itemId, part.participant_id ";
 
     if (forceString.matches(".*\\d.*")) {
       queryString = " AND addr.postalCode in (\'" + forceString + "\') ";
@@ -111,31 +98,32 @@ public class SearchesBean extends AbstractBean implements Serializable {
       queryString = " AND addr.postalCode LIKE '" + this.postalCode + "%'";
     }
 // Need to check for null or isEmpty dates.
-    try {
-      Date sd = new Date();
+    if ((this.startDate.isEmpty() == false) && (this.endDate.isEmpty() == false)) {
       try {
-        sd = ConvertDate(this.startDate);
+        Date sd = new Date();
+        try {
+          sd = ConvertDate(this.startDate);
+        } catch (Exception ex) {
+          Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+        }
+
+        Date ed = new Date();
+        try {
+          ed = ConvertDate(this.endDate);
+        } catch (Exception ex) {
+          Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+        }
+
+        if ((sd != null) || (ed != null)) {
+          //if (queryString.length() > 0) {
+          queryString = queryString + " OR ";
+          //}
+          queryString = queryString + " ( itm.dateCreated >= \'" + sd + "\' AND itm.dateCreated <= \'" + ed + "\' ) ";
+        }
       } catch (Exception ex) {
         Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
       }
-
-      Date ed = new Date();
-      try {
-        ed = ConvertDate(this.endDate);
-      } catch (Exception ex) {
-        Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
-      }
-
-      if ((sd != null) || (ed != null)) {
-        //if (queryString.length() > 0) {
-        queryString = queryString + " OR ";
-        //}
-        queryString = queryString + " ( itm.dateCreated >= \'" + this.startDate + "\' AND itm.dateCreated <= \'" + this.endDate + "\' ) ";
-      }
-    } catch (Exception ex) {
-      Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
     }
-
     forceString = this.keyword;
     if (forceString.isEmpty() == false) {
       //if (queryString.length() > 0) {
