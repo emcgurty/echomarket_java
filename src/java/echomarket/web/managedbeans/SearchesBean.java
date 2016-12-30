@@ -100,7 +100,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
             + " INNER JOIN part.addresses addr "
             + " INNER JOIN part.item itm "
             + " INNER JOIN itm.itemImages itmImages "
-            + " WHERE user.userType LIKE '%" + this.which + "%') AND addr.addressType = 'primary'";
+            + " WHERE user.userType LIKE '%" + this.which + "%') AND addr.addressType = 'primary'"
+            + " GROUP BY addr.addressType, itm.itemImages, part.participant_id, itm.itemId ";
 
     if (forceString.matches(".*\\d.*")) {
       queryString = " AND addr.postalCode in (\'" + forceString + "\') ";
