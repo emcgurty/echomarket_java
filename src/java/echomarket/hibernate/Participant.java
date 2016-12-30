@@ -78,6 +78,9 @@ public class Participant implements java.io.Serializable {
     this.approved = 1;
     this.editable = 1;
     this.isCreator = isCreator;
+    this.questionAltAddress = -9;
+    this.questionAltEmail = -9;
+    
     
   }
   // Update 
