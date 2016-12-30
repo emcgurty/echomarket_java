@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,7 +22,7 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "participantBean")
-@RequestScoped
+@SessionScoped
 public class ParticipantBean extends AbstractBean implements Serializable {
 
   @Inject
@@ -111,10 +111,10 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     List partlist = null;
-    partlist = getCurrentParticipant(uid);
+    Participant pp = null;
+    partlist = getCurrentParticipant(ubean.getParticipant_id());
     if (partlist.size() == 1) {
-      Participant pp = (Participant) partlist.get(0);
-
+      pp = (Participant) partlist.get(0);
       this.participant_id = pp.getParticipant_id();
       this.communityId = pp.getParticipant_id();
       this.contactDescribeId = pp.getContactDescribeId();
@@ -142,8 +142,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.isCreator = pp.getIsCreator();
       ubean.setCommunityId(communityId);
       ubean.setParticipant_id(participant_id);
-      
-      
+    }
+    partlist = getCurrentParticipantAddresTypes(ubean.getParticipant_id());
+    if (partlist != null) {
+      Integer size_of_list = partlist.size();
+
+      for (int i = 0; i < size_of_list; i++) {
+        Addresses addr = (Addresses) partlist.get(0);
+        if ("primary".equals(addr.getAddressType())) {
+          getExistingAddress("primary");
+        } else if ("alternative".equals(addr.getAddressType())) {
+          getExistingAddress("alternative");
+        }
+
+      }
     }
 
     if (ubean.getEditable() == -1) {
@@ -209,7 +221,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     String pid = null;
     Boolean updateSuccess = false;
 
-     try {
+    try {
       sb = hib_session();
       tx = sb.beginTransaction();
       query = "FROM Participant WHERE user_id = :uid";
@@ -653,7 +665,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.remoteIp = remoteIp;
   }
 
-  public List getCurrentParticipant(String uid) {
+  private List getCurrentParticipantAddresTypes(String pid) {
 
     List result = null;
     Session session = null;
@@ -662,9 +674,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     try {
       session = hib_session();
       tx = session.beginTransaction();
-      query = "FROM Participant WHERE user_id = :uid";
+      session.flush();  // delete result not appearing in xhtml
+      query = " Select addr FROM Participant part "
+              + " INNER JOIN part.addresses addr"
+              + " WHERE part.participant_id = :pid  GROUP BY addr.addressType";
       result = session.createQuery(query)
-              .setParameter("uid", uid)
+              .setParameter("pid", pid)
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -679,18 +694,51 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public String deleteCurrentRecord(String bid, String itemDesc) {
+  public List getCurrentParticipant(String pid) {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      session.flush();  // delete result not appearing in xhtml
+      String queryString = "from Participant where participant_id = :pid";
+      result = session.createQuery(queryString)
+                .setParameter("pid", pid)
+                .list();
+        tx.commit() ;
+        Participant part = new Participant("uid", "aliasa");  /// populate with preceeding result
+        query = " Select from new ParticipantAddress(part, 'primary') ";
+        result = session.createQuery(query).list();
+        tx.commit();
+      } catch (Exception ex) {
+        System.out.println("Error in getCurrentParticipant");
+        Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+        tx.rollback();
+      } finally {
+        tx = null;
+        session = null;
+
+      }
+      return result;
+    }
+
+  
+
+  public String deleteCurrentRecord(String pid, String itemDesc) {
 
     List result = null;
     Session hib = null;
     Transaction tx = null;
 
-    String queryString = "from Participant where borrower_id = :bid";
+    String queryString = "from Participant where participant_id = :pid";
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("bid", bid)
+              .setParameter("pid", pid)
               .list();
       if (result != null) {
         if (result.size() == 1) {
@@ -836,14 +884,18 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.isCreator = isCreator;
   }
 
-  public ArrayList<Addresses> getExistingAddress(String which) {
+  private void getExistingAddress(String which) {
 
     List result = null;
     ArrayList<Addresses> return_result = null;
     Session hib = null;
     Transaction tx = null;
+//    ArrayList<Addresses> clear_values = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "primary")));
+//
+//    setPrimary(clear_values);
+//    setAlternative(clear_values);
 
-    String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
+    String queryString = "from Addresses where participant_id = :pid AND address_type = :which GROUP BY address_type ";
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -868,14 +920,14 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       return_result = getAlternative();
     } else if ((size_of_list == 0) && ("primary".equals(which))) {
       return_result = getPrimary();
-    } else if ((size_of_list == 1) && ("alternative".equals(which))) {
+    } else if ((size_of_list > 0) && ("alternative".equals(which))) {
       Addresses alt = (Addresses) result.get(0);
       ArrayList<Addresses> new_alternative
               = new ArrayList<Addresses>(Arrays.asList(new Addresses(alt.getAddressId(), alt.getParticipant_id(), alt.getAddressLine1(), alt.getAddressLine2(),
                       alt.getPostalCode(), alt.getCity(), alt.getProvince(), alt.getUsStateId(), alt.getRegion(), alt.getCountryId(), alt.getAddressType())));
       setAlternative(new_alternative);
       return_result = getAlternative();
-    } else if ((size_of_list == 1) && ("primary".equals(which))) {
+    } else if ((size_of_list > 0) && ("primary".equals(which))) {
       Addresses pri = (Addresses) result.get(0);
       ArrayList<Addresses> new_primary
               = new ArrayList<Addresses>(Arrays.asList(new Addresses(pri.getAddressId(), pri.getParticipant_id(), pri.getAddressLine1(), pri.getAddressLine2(),
@@ -886,7 +938,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     result = null;
-    return return_result;
+    //return return_result;
 
   }
 
