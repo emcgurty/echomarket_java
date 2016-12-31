@@ -22,20 +22,20 @@ public class ContactUs  implements java.io.Serializable {
     }
 
 	
-    public ContactUs(String contactUsId, String subject, String email, String comments, Date dateCreated) {
+    public ContactUs(String contactUsId, String subject, String email, String comments) {
         this.contactUsId = contactUsId;
         this.subject = subject;
         this.email = email;
         this.comments = comments;
-        this.dateCreated = dateCreated;
+        this.dateCreated = new Date();
     }
-    public ContactUs(String contactUsId, String subject, String remoteIp, String email, String comments, Date dateCreated, String userId) {
+    public ContactUs(String contactUsId, String subject, String remoteIp, String email, String comments, String userId) {
        this.contactUsId = contactUsId;
        this.subject = subject;
        this.remoteIp = remoteIp;
        this.email = email;
        this.comments = comments;
-       this.dateCreated = dateCreated;
+       this.dateCreated = new Date();
        this.userId = userId;
     }
    
