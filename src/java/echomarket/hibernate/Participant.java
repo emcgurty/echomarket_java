@@ -59,10 +59,10 @@ public class Participant implements java.io.Serializable {
   public Participant() {
   }
   public Participant(String userId, String alias) {
-    
+
     this.userId = userId;
     this.alias = alias;
-    
+
   }
 
   /// User agreement
@@ -80,8 +80,7 @@ public class Participant implements java.io.Serializable {
     this.isCreator = isCreator;
     this.questionAltAddress = -9;
     this.questionAltEmail = -9;
-    
-    
+
   }
   // Update 
   public Participant(String participant_id, String userId, Integer contactDescribeId, String organizationName, Integer displayOrganization, String otherDescribeYourself, String firstName, String mi, String lastName, String alias, Integer displayName, Integer displayAddress, String homePhone, String cellPhone,
@@ -110,28 +109,27 @@ public class Participant implements java.io.Serializable {
     this.remoteIp = remoteIp;
 
   }
-  
-  /// Community Members
-   public Participant(String participant_id, String communityId, String userId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Integer editable, Date dateCreated, Date dateUpdated, Integer rowIndex, Integer goodwill, Integer age18OrMore, String emailAlternative, Integer isCreator) {
-        this.participant_id = participant_id;
-        this.communityId = communityId;
-        this.remoteIp = remoteIp;
-        this.firstName = firstName;
-        this.mi = mi;
-        this.lastName = lastName;
-        this.alias = alias;
-        this.isActive = isActive;
-        this.editable = editable;
-        this.dateCreated = dateCreated;
-        this.dateUpdated = dateUpdated;
-        this.rowIndex = rowIndex;
-        this.userId = userId;
-        this.age18OrMore = age18OrMore;
-        this.goodwill = goodwill;
-        this.emailAlternative = emailAlternative;
-        this.isCreator = isCreator;
-    }
 
+/// Community Members
+  public Participant(String participant_id, String communityId, String userId, String remoteIp, String firstName, String mi, String lastName, String alias, Integer isActive, Integer editable, Date dateCreated, Date dateUpdated, Integer rowIndex, Integer goodwill, Integer age18OrMore, String emailAlternative, Integer isCreator) {
+    this.participant_id = participant_id;
+    this.communityId = communityId;
+    this.remoteIp = remoteIp;
+    this.firstName = firstName;
+    this.mi = mi;
+    this.lastName = lastName;
+    this.alias = alias;
+    this.isActive = isActive;
+    this.editable = editable;
+    this.dateCreated = dateCreated;
+    this.dateUpdated = dateUpdated;
+    this.rowIndex = rowIndex;
+    this.userId = userId;
+    this.age18OrMore = age18OrMore;
+    this.goodwill = goodwill;
+    this.emailAlternative = emailAlternative;
+    this.isCreator = isCreator;
+  }
 
   /**
    * @return the addresses
@@ -232,18 +230,17 @@ public class Participant implements java.io.Serializable {
 
   public Integer getDisplayName() {
     return (this.displayName == null) ? -9 : displayName;
-    
+
   }
 
   public void setDisplayName(Integer displayName) {
     this.displayName = displayName;
-    
+
   }
 
   public Integer getDisplayAddress() {
-     return (this.displayAddress == null) ? -9 : displayAddress;
-    
-    
+    return (this.displayAddress == null) ? -9 : displayAddress;
+
   }
 
   public void setDisplayAddress(Integer displayAddress) {
@@ -296,7 +293,7 @@ public class Participant implements java.io.Serializable {
 
   public void setDisplayCellPhone(Integer displayCellPhone) {
     this.displayCellPhone = displayCellPhone;
-    
+
   }
 
   public Integer getDisplayAlternativePhone() {
@@ -500,7 +497,6 @@ public class Participant implements java.io.Serializable {
   /**
    * @param lenderTransfer the lenderTransfer to set
    */
- 
   public void setLenderTransfer(Set<LenderTransfer> lenderTransfer) {
     this.lenderTransfer = lenderTransfer;
   }
@@ -518,7 +514,6 @@ public class Participant implements java.io.Serializable {
   /**
    * @param lenderItemConditions the lenderItemConditions to set
    */
- 
   public void setLenderItemConditions(Set<LenderItemConditions> lenderItemConditions) {
     this.lenderItemConditions = lenderItemConditions;
   }
