@@ -143,22 +143,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       ubean.setCommunityId(communityId);
       ubean.setParticipant_id(participant_id);
     }
-    partlist = getCurrentParticipantAddresTypes(ubean.getParticipant_id());
-    if (partlist != null) {
-      Integer size_of_list = partlist.size();
+    getExistingAddress("primary");
+    getExistingAddress("alternative");
 
-      for (int i = 0; i < size_of_list; i++) {
-        Addresses addr = (Addresses) partlist.get(0);
-        if ("primary".equals(addr.getAddressType())) {
-          getExistingAddress("primary");
-        } else if ("alternative".equals(addr.getAddressType())) {
-          getExistingAddress("alternative");
-        }
 
-      }
-    }
-
-    if (ubean.getEditable() == -1) {
+    if (ubean.getEditable()
+            == -1) {
       return "user_agreement";
     } else {
       this.setQuestionAltAddressDelete(-9);
@@ -211,13 +201,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     // if questionAltAddress  == 1, delete alternative address
     List padrs = getPrimary();
     List aadrs = getAlternative();
-    String query = null;
     String reqPO = null;
-    Session sb;
-    Transaction tx;
+    Addresses aalt = (Addresses) aadrs.get(0);
+    reqPO = aalt.getPostalCode();
+    String query = null;
+    Session sb = null;
+    Transaction tx = null;
     List result = null;
-    sb = null;
-    tx = null;
     String pid = null;
     Boolean updateSuccess = false;
 
@@ -231,7 +221,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       System.out.println("Error in Save/Update Particpant, line 187");
-      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       tx.rollback();
     } finally {
       tx = null;
@@ -256,7 +248,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setHomePhone(homePhone);
       part.setCellPhone(cellPhone);
       part.setAlternativePhone(alternativePhone);
-      part.setQuestionAltAddress(questionAltAddressProvide);
+      if (reqPO.isEmpty() == true) {   /// If postalCode is empty dont save record
+        part.setQuestionAltAddress(0);
+      } else {
+        part.setQuestionAltAddress(questionAltAddressProvide);
+      }
+
       part.setQuestionAltEmail(questionAltEmailProvide);
       if (ubean.getCommunityName() != null) {
         part.setIsCreator(1);
@@ -285,13 +282,14 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in Save/Update Particpant, line 228");
-      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
 
       tx = null;
       sb = null;
-      Addresses aalt = (Addresses) aadrs.get(0);
-      reqPO = aalt.getPostalCode();
+
       if (reqPO.isEmpty() == false) {
 
         try {
@@ -305,10 +303,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
           } else if (aalt.getAddressId() != null && this.getQuestionAltAddressProvide() == 1) {
             sb.update(aalt);
           } else {
-          }
+          } 
 
           if ((aalt.getAddressId() != null) && ((this.getQuestionAltAddressDelete() == 1) || (this.getQuestionAltAddressProvide() == 0))) {
-            sb.delete(aalt);
+            Addresses addr = new Addresses();
+            String current_id = aalt.getAddressId();
+            addr.setAddressId(current_id);
+            sb.delete(addr);
+            ArrayList<Addresses> clear_alternative
+                   = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "alternative")));
+            setAlternative(clear_alternative);
+            // sb.delete(aalt); this wasn't producing an immediate result in xhtml
             sb.flush();
           } else {
           }
@@ -319,7 +324,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
           tx.rollback();
           System.out.println("Error in Save/Update Particpant, line 254");
-          Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger
+                  .getLogger(ParticipantBean.class
+                          .getName()).log(Level.SEVERE, null, ex);
 
         } finally {
           tx = null;
@@ -348,7 +355,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in Save/Update Particpant, 276");
-        Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+        Logger
+                .getLogger(ParticipantBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
         message(null, "ParticipantInformationRecordNotSaved", null);
       } finally {
         sb = null;
@@ -407,7 +416,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         return_string = ubean.Logout();
         tx.rollback();
         System.out.println("Error in Save/Update Particpant");
-        Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+        Logger
+                .getLogger(ParticipantBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
       } finally {
         sb = null;
         tx = null;
@@ -429,7 +440,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       b_return = true;
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       if (sb != null) {
         sb.close();
@@ -665,34 +678,37 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.remoteIp = remoteIp;
   }
 
-  private List getCurrentParticipantAddresTypes(String pid) {
-
-    List result = null;
-    Session session = null;
-    Transaction tx = null;
-    String query = null;
-    try {
-      session = hib_session();
-      tx = session.beginTransaction();
-      session.flush();  // delete result not appearing in xhtml
-      query = " Select addr FROM Participant part "
-              + " INNER JOIN part.addresses addr"
-              + " WHERE part.participant_id = :pid  GROUP BY addr.addressType";
-      result = session.createQuery(query)
-              .setParameter("pid", pid)
-              .list();
-      tx.commit();
-    } catch (Exception ex) {
-      System.out.println("Error in getCurrentParticipant");
-      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-      tx.rollback();
-    } finally {
-      tx = null;
-      session = null;
-
-    }
-    return result;
-  }
+//  private List getCurrentParticipantAddresTypes(String pid, String whichAddr) {
+//
+//    List result = null;
+//    Session session = null;
+//    Transaction tx = null;
+//    String query = null;
+//    try {
+//      session = hib_session();
+//      tx = session.beginTransaction();
+//      session.flush();  // delete result not appearing in xhtml
+//      query = " Select addr FROM Participant part "
+//              + " INNER JOIN part.addresses addr"
+//              + " WHERE part.participant_id = :pid AND addr.addressType = :addr GROUP BY addr.addressType";
+//      result = session.createQuery(query)
+//              .setParameter("pid", pid)
+//              .setParameter("addr", whichAddr)
+//              .list();
+//      tx.commit();
+//    } catch (Exception ex) {
+//      System.out.println("Error in getCurrentParticipant");
+//      Logger
+//              .getLogger(ParticipantBean.class
+//                      .getName()).log(Level.SEVERE, null, ex);
+//      tx.rollback();
+//    } finally {
+//      tx = null;
+//      session = null;
+//
+//    }
+//    return result;
+//  }
 
   public List getCurrentParticipant(String pid) {
 
@@ -704,28 +720,24 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       session = hib_session();
       tx = session.beginTransaction();
       session.flush();  // delete result not appearing in xhtml
-      String queryString = "from Participant where participant_id = :pid";
+      String queryString = "FROM Participant WHERE participant_id = :pid GROUP BY participant_id ";
       result = session.createQuery(queryString)
-                .setParameter("pid", pid)
-                .list();
-        tx.commit() ;
-        Participant part = new Participant("uid", "aliasa");  /// populate with preceeding result
-        query = " Select from new ParticipantAddress(part, 'primary') ";
-        result = session.createQuery(query).list();
-        tx.commit();
-      } catch (Exception ex) {
-        System.out.println("Error in getCurrentParticipant");
-        Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
-        tx.rollback();
-      } finally {
-        tx = null;
-        session = null;
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      System.out.println("Error in getCurrentParticipant");
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
+      tx.rollback();
+    } finally {
+      tx = null;
+      session = null;
 
-      }
-      return result;
     }
-
-  
+    return result;
+  }
 
   public String deleteCurrentRecord(String pid, String itemDesc) {
 
@@ -749,7 +761,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in deleteCurrentRecord");
-      Logger.getLogger(ParticipantBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(ParticipantBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       result = null;
       tx = null;
@@ -890,10 +904,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     ArrayList<Addresses> return_result = null;
     Session hib = null;
     Transaction tx = null;
-//    ArrayList<Addresses> clear_values = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "primary")));
-//
-//    setPrimary(clear_values);
-//    setAlternative(clear_values);
 
     String queryString = "from Addresses where participant_id = :pid AND address_type = :which GROUP BY address_type ";
     try {
@@ -938,7 +948,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
 
     result = null;
-    //return return_result;
 
   }
 
