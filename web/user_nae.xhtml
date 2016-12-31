@@ -21,6 +21,8 @@
       <c:set var="country_list" value="#{country.buildCountries()}"   rendered="#{userBean.editable == 1}" />    
       <c:set var="whichUseType" value="#{userBean.userType}" />
       <c:set var="rid" value="#{userBean.roleId}"  />  
+      <c:set var="div_display" value="none"  rendered="#{userBean.editable == 1}" />    
+      <c:set var="div_display" value="block" rendered="#{userBean.editable == 0}" />    
     </h:head>
     <h:form id="personal_information" class="user_nae" >
       <body onload="changeMenuBackground(2);"  >
@@ -38,8 +40,7 @@
           </c:when>
         </c:choose>
         <div id="form_NAE" class="contact_information" >
-          <c:set var="div_display" value="none"  rendered="#{userBean.editable == 1}" />    
-          <c:set var="div_display" value="block" rendered="#{userBean.editable == 0}" />    
+        
           <c:choose >
             <c:when test="#{rid == 0}" >
               <c:set var="sub_title" value="EchoMarket 'Participant Information'" />
@@ -87,7 +88,6 @@
 
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-
             <c:choose >
               <c:when test="#{rid == 2}" >
                 <h:inputHidden id="contactDescribeId"  value="-9"  />
@@ -95,7 +95,7 @@
                 <h:inputHidden id="otherDescribeYourselfText"  value=""  />
                 <h:inputHidden id="organizationName"  value=""  />
               </c:when>
-              <c:when test="#{rid lt 0}" >
+              <c:when test="#{rid lt 3}" >
                 <div style="margin-left: 5px;float:left;">
                   <div  class="div_p" >
                     <div style="margin:5px;" >
@@ -122,6 +122,7 @@
                         </c:when>
                       </c:choose>
                       <h:outputLabel for="contactDescribeId"  value="#{display_describe}" ><span class="required_fields">*</span>
+                        
                         <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 1}" >
 
                           <c:choose >
@@ -130,24 +131,18 @@
                                              var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />  
                             </c:when>
                             <c:when test="#{rid == 0}" >
-
                               <c:choose>
-                                <c:when test="#{whichUseType == 'borrow'}" >
+                                <c:when test="#{whichUseType == 'borrow' }" >
                                   <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('borrow')}"  
                                                  var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
-                                <c:when test="#{whichUseType == 'lend'}" >
+                                <c:when test="#{whichUseType == 'lend' or whichUseType == 'both'}" >
                                   <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('lend')}"  
                                                  var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
-                                <c:when test="#{whichUseType == 'both'}" >
-                                  <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('community')}"  
-                                                 var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
-                                </c:when>
+                                
                               </c:choose>
-                              <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray()}"  
-                                             var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
-
+                              
                             </c:when>
                           </c:choose>
                         </h:selectOneMenu>
@@ -155,9 +150,9 @@
                       </h:outputLabel>
                       <span class="error-message" id="contactDescribeId" ></span>
                     </div>
-                    <div id="otherDescribeYourselfText"  style="margin-left:15px;display: none;">    
+                    <div id="otherDescribeYourselfText"  style="margin-top:10px;margin-left:5px;display: none;float:left;">    
                       <c:set var="display_other" value="Please provide an 'Other' description:"   rendered="#{userBean.editable == 1}" />
-                      <c:set var="display_other" value="Your Organization:"   rendered="#{userBean.editable == 0}" />
+                      <c:set var="display_other" value="Your 'Other' Description:"   rendered="#{userBean.editable == 0}" />
                       <h:outputLabel  value="#{display_other}" for="otherDescribeYourself"  style="margin-left:25px">
                         <h:inputText id="otherDescribeYourself" value="#{participantBean.otherDescribeYourself}" style="margin-left:25px" maxlength="24" size="24"  rendered="#{userBean.editable == 1}" /> 
                         <h:outputText value="#{participantBean.otherDescribeYourself}" rendered="#{userBean.editable == 0}" class="RO_text" />
@@ -174,10 +169,10 @@
                       </h:outputLabel>
                       <span class="error-message" id="organizationName" ></span>
                     </div>
-                    <div style="float:left;margin">
+                      
                       <c:choose >
                         <c:when test="#{rid == 0}" >
-                          <div id="yesNoOrganization" style="display:#{div_display};margin-left:15px;">
+                          <div id="yesNoOrganization" style="margin-left:5px;display: block;float:left;">  
                             <h:outputLabel value="Allow #{allow} to see your Organization Name?:"  for="displayOrganization" rendered="#{(userBean.editable == 1) or ( (userBean.editable == 0) and (!empty participantBean.organizationName) )  }">
                               <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
                                 <f:selectItem itemValue="1" itemLabel="Yes" />
@@ -204,7 +199,7 @@
                           <h:inputHidden id="displayOrganization" value="-9"/>
                         </c:when>
                       </c:choose>
-                    </div>
+                  
                   </div>
                 </div>
               </c:when>
@@ -449,8 +444,7 @@
             <c:if test="#{!alternative_address_data_empty}" >
               <c:set var="a_display" value="none" />
             </c:if>  
-            <h:outputText value="#{a_display} -- display" />
-            <h:outputText value="#{alternative_address_data_empty} -- empty" />
+            
             <div id="addressAlternative"  style="display:#{a_display};float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
                 <h:dataTable value="#{alternative_address_data}" id="alternative" var="pa" >    
