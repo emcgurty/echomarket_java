@@ -41,7 +41,7 @@
     margin: -3px 0 0 -1px;
     padding: 0 1px 0 11px;
     text-decoration: none;
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+/*    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);*/
     
 }
 #nav > li:hover > a, #nav > a:hover {
@@ -59,7 +59,7 @@
     border-bottom-width: 0;
     border-radius: 2px 2px 0 0;
     color: #000000;
-    text-shadow: 0 0 transparent;
+/*    text-shadow: 0 0 transparent;*/
     z-index: 2;
 }
 /*top items separator */
