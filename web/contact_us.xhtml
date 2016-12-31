@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./echomarketTemplate.xhtml"         >
+
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="ContactUsHeader" /> 
+  </ui:define>
+
+  <ui:define name="content">
+
+
+    <h:form id="contactUsForm" >
+      <h:head >
+        <h:inputHidden id="user_id"  value="#{userBean.user_id}" /> 
+      </h:head>
+      <div class="top" >
+        <p>
+          Contact EchoMarket
+        </p>
+        <div class="right_div" >
+          <h:commandLink  action="#{contactUsBean.sendMessage()}" value="Send Message"/>
+        </div>
+        <br />
+        <div class="right_div" >
+          <h:commandLink  action="index" value="Nevermind.." immediate="true" />
+        </div>
+        <div class="messagecolor">
+          <h:messages showSummary="true" 
+                      showDetail="false"
+                      errorStyle="color: indigo" 
+                      />
+        </div>
+      </div>
+      <br />
+
+      <div  >
+        <h:outputLabel for="email"  value="Your email address: "> 
+          <h:inputText id="email"  value="#{contactUsBean.email}" required="true" requiredMessage="Email is required"/> 
+        </h:outputLabel>
+        <span class="error-message" id="contact_us_email_error"></span>
+      </div>
+      <br />
+      <div >
+        <h:outputLabel for="subject"  value="Subject: "> 
+          <h:inputText id="subject"  value="#{contactUsBean.subject}" required="true" requiredMessage="A subject is required"/> 
+        </h:outputLabel>
+        <span class="error-message" id="contact_us_email_error"></span>
+
+      </div>
+      <br />
+
+      <div >
+        <h:outputLabel for="comments"  value="Comments: (255 characters permitted)"> 
+          <h:inputTextarea id="comments"  value="#{contactUsBean.comments}" required="true" requiredMessage="Comments are required"/> 
+        </h:outputLabel>
+        <span class="error-message" id="contact_us_error"></span>
+      </div>
+
+      <br /><br />
+    </h:form>
+
+  </ui:define>
+
+  <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="ChangePasswordFooter" /> 
+  </ui:define>
+
+</ui:composition>
