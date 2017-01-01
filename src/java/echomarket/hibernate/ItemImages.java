@@ -18,14 +18,6 @@ public class ItemImages  implements java.io.Serializable {
     public ItemImages() {
     }
 
-    public ItemImages(String itemImageId, String itemId, String imageFileName) {
-        this.itemImageId = itemImageId;
-        this.itemId = itemId;
-        this.imageFileName = imageFileName;
-        this.dateCreated = dateCreated;
-        this.dateDeleted = dateDeleted;
-        this.dateUpdated = dateUpdated;
-    }
     public ItemImages(String itemImageId, String itemId, String imageContentType, Integer imageHeight, Integer imageWidth, String imageFileName, String itemImageCaption) {
        this.itemImageId = itemImageId;
        this.itemId = itemId;
