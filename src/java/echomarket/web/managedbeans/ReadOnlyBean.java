@@ -116,7 +116,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-  
+
     return result;
   }
 
@@ -185,7 +185,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx.rollback();
 
     } finally {
-      
+
       tx = null;
       hib = null;
     }
@@ -198,7 +198,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     setItemId(iid);
     setWhich(which);
     setParticipant_id(pid);
-    
+
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -271,7 +271,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     setItemId(iid);
     setWhich(which);
     setParticipant_id(pid);
-    
+
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -290,7 +290,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               .setParameter("iid", iid)
               .setParameter("pid", pid)
               .list();
-      
+
       tx.commit();
     } catch (Exception e) {
       Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
@@ -381,7 +381,6 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  //// Probably do not need arg String iid, should just be using item_id property
   public List getPrimaryAddress(String iid) {
 
     List result = null;
@@ -399,11 +398,10 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               + " WHERE (cp.useWhichContactAddress = 1 OR cp.useWhichContactAddress = 3)"
               + " AND  (cp.itemId = :iid)"
               + " AND  (part.displayAddress = 1) "
-              + " AND  (part.participant_id = :pid) "
-              + " AND  (addr.addressType = 'primary')";
+              + " AND  (addr.addressType = 'primary')"
+              + " GROUP BY addr.addressType ";
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
-              .setParameter("pid", this.participant_id)
               .list();
       tx.commit();
     } catch (Exception e) {
@@ -429,24 +427,23 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      queryString = "SELECT addr.addressLine1, addr.addressLine2, addr.postalCode, "
-              + " addr.city, addr.province, addr.usStateId, addr.region, addr.countryId "
+      
+      queryString = "SELECT addr "
               + " FROM Participant part "
               + " left join part.addresses addr"
               + " left join part.contactPreference cp "
               + " left join part.item it "
-              + " WHERE (cp.useWhichContactAddress = 1 OR cp.useWhichContactAddress = 3)"
+              + " WHERE (cp.useWhichContactAddress = 2 OR cp.useWhichContactAddress = 1)"
               + " AND  (it.itemId = :iid)"
               + " AND  (part.displayAlternativeAddress = 1)"
-              + " AND  (part.participant_id = :pid)"
-              + " AND  (addr.addressType = 'alternative')";
+              + " AND  (addr.addressType = 'alternative') "
+              + " GROUP BY addr.addressType ";
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
-              .setParameter("pid", this.participant_id)
               .list();
       tx.commit();
     } catch (Exception e) {
-      System.out.println("Error in getAlternativeAdrress in ReadOnlyBean");
+      System.out.println("Error in getAddress in ReadOnlyBean");
       Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
       tx.rollback();
 
@@ -454,7 +451,9 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-
+     //echomarket.hibernate.ParticipantAddress hold = (echomarket.hibernate.ParticipantAddress)result.get(0);
+     //Participant pp = (Participant) hold.getPart();  /// Got my Participant record
+    
     return result;
   }
 
@@ -500,11 +499,13 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   public List getExistingAddress(String pid, String which) {
 
     List result = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
 
     String queryString = "from Addresses where participant_id = :pid AND address_type = :which";
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("pid", pid)
               .setParameter("which", which)
