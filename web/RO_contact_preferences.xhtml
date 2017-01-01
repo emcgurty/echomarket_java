@@ -25,7 +25,7 @@
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Primary Adddress.." />
+              <h:outputText value="Contact Option: Adddress #1" />
             </div>
           </div>
 
@@ -89,7 +89,7 @@
             </div>
           </div>
         </h:column>
-      </h:dataTable>
+      </h:dataTable>-->
 
       <c:set value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}"  var="aa_data" />    
       <h:dataTable value="#{aa_data}"   var="pa" rendered="${fn:length(aa_data) > 0}"  
@@ -100,7 +100,7 @@
 
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Alternative Adddress.." />
+              <h:outputText value="Contact Option: Address #2" />
             </div>
           </div>
 
