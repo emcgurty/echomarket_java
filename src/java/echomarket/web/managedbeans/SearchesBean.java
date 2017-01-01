@@ -1,11 +1,9 @@
 package echomarket.web.managedbeans;
 
-import echomarket.hibernate.Addresses;
-import echomarket.hibernate.Categories;
+import echomarket.hibernate.Participant;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,14 +37,12 @@ public class SearchesBean extends AbstractBean implements Serializable {
   private String searchCriteria;
   private String imageLibrary;
   private String which;
+  private List itemDetail;
 
-  /**
-   * @return the found_zip_codes
-   */
+
   public String getFound_zip_codes() {
     return this.found_zip_codes;
-
-  }
+ }
 
   /**
    * @param found_zip_codes the found_zip_codes to set
@@ -79,16 +75,12 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
 
     this.imageLibrary = this.which + "_images";
-
-    String fromStatement = "SELECT itm.itemId, itm.itemModel, itm.itemDescription, "
-            + " itmImages.imageFileName, part.participant_id "
+    /// This should always return at least one result
+    String fromStatement = "SELECT part "
             + " FROM Users user "
             + " INNER JOIN user.participant part "
             + " INNER JOIN part.addresses addr "
-            + " INNER JOIN part.item itm "
-            + " INNER JOIN itm.itemImages itmImages "
-            + " WHERE user.userType LIKE '%" + this.which + "%') AND addr.addressType = 'primary'"
-            + " GROUP BY user.userType, addr.addressType, itm.itemId, part.participant_id ";
+            + " WHERE user.userType LIKE \'%" + this.which + "%\') AND addr.addressType = 'primary'";
 
     if (forceString.matches(".*\\d.*")) {
       queryString = " AND addr.postalCode in (\'" + forceString + "\') ";
@@ -97,7 +89,53 @@ public class SearchesBean extends AbstractBean implements Serializable {
     if (this.postalCode.isEmpty() == false) {
       queryString = " AND addr.postalCode LIKE '" + this.postalCode + "%'";
     }
-// Need to check for null or isEmpty dates.
+
+    if (ubean.getComDetailID() != null) {
+      queryString = queryString + "  AND part.communityId = \'" + ubean.getComDetailID() + "\' ";
+    } else {
+      queryString = queryString + "  AND part.communityId = ''";
+    }
+
+    fromStatement = fromStatement + queryString + " GROUP BY part.participant_id ";;
+    System.out.println(fromStatement);
+
+    try {
+      sb = hib_session();
+      tx = sb.beginTransaction();
+      results = sb.createQuery(fromStatement).list();
+      tx.commit();
+      //setSearchResultList(results);
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      sb = null;
+    }
+
+    String[] pids = new String[results.size()];
+    String hold_pid = "";
+    if (results != null) {
+      if (results.size() > 0) {
+        for (int i = 0; i < results.size(); i++) {
+          Participant cArray = (Participant) results.get(i);
+          if (cArray.getParticipant_id().isEmpty() == false) {
+            hold_pid = "\'" + cArray.getParticipant_id() + "\'";
+            pids[i] = hold_pid;
+          }
+        }
+        hold_pid = String.join(",", pids);
+      }
+    }
+
+    results = null;
+    queryString = "";
+    String itemCut = " SELECT itm.itemId, itm.participant_id, itm.itemDescription, itm.itemModel, itmImages.imageFileName, itmImages.itemImageCaption "
+            + " FROM Items itm "
+            + " INNER JOIN itm.itemImages itmImages "
+            + (hold_pid.isEmpty() ? "" : "WHERE itm.participant_id IN ( " + hold_pid + " )");
+
+    // Need to check for null or isEmpty dates.
     if ((this.startDate.isEmpty() == false) && (this.endDate.isEmpty() == false)) {
       try {
         Date sd = new Date();
@@ -115,8 +153,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
         }
 
         if ((sd != null) || (ed != null)) {
-           queryString = queryString + " OR ";
-           queryString = queryString + " ( itm.dateCreated >= \'" + sd + "\' AND itm.dateCreated <= \'" + ed + "\' ) ";
+          queryString = queryString + " OR";
+          queryString = queryString + " ( itm.dateCreated >= \'" + sd + "\' AND itm.dateCreated <= \'" + ed + "\' ) ";
         }
       } catch (Exception ex) {
         Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
@@ -124,31 +162,24 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
     forceString = this.keyword;
     if (forceString.isEmpty() == false) {
-        queryString = queryString + " OR ";
-        queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
-
+      queryString = queryString + " OR ";
+      queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
     }
 
     if ((this.categoryId != -2)) {
-       queryString = queryString + " OR ";
-       queryString = queryString + " itm.categoryId = \'" + this.categoryId + "\' ";
+      queryString = queryString + " OR";
+      queryString = queryString + " itm.categoryId = \'" + this.categoryId + "\' ";
     }
 
-    if (ubean.getComDetailID() != null) {
-      queryString = queryString + "AND part.communityId = " + ubean.getComDetailID();
-    } else {
-      queryString = queryString + "AND part.communityId = ''";
-    }
-
-    fromStatement = fromStatement + queryString;
-    System.out.println(fromStatement);
+    itemCut = itemCut + queryString;
+    System.out.println(itemCut);
 
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
-      results = sb.createQuery(fromStatement).list();
+      results = sb.createQuery(itemCut).list();
       tx.commit();
-      setSearchResultList(results);
+      //setSearchResultList(results);
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -156,6 +187,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
       tx = null;
       sb = null;
     }
+
+    this.itemDetail = results;
 
     return "search";
   }
@@ -339,6 +372,20 @@ public class SearchesBean extends AbstractBean implements Serializable {
    */
   public void setWhich(String which) {
     this.which = which;
+  }
+
+  /**
+   * @return the itemDetail
+   */
+  public List getItemDetail() {
+    return itemDetail;
+  }
+
+  /**
+   * @param itemDetail the itemDetail to set
+   */
+  public void setItemDetail(List itemDetail) {
+    this.itemDetail = itemDetail;
   }
 
 }
