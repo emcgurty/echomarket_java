@@ -127,8 +127,8 @@
         <span class="error-message" id="echo_market_search_error"></span>
       </div>
 
-      <c:set var="currentSearchResult"  value="#{searchesBean.getSearchResultList()}" />
-      <c:forEach items="#{searchesBean.searchResultList}" var="var_search"  rendered="${fn:length(currentSearchResult) > 0}" >
+      <c:set var="currentSearchResult"  value="#{searchesBean.itemDetail}" />
+      <c:forEach items="#{currentSearchResult}" var="var_search"  rendered="${fn:length(currentSearchResult) > 0}" >
 
         <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
           <h:outputLabel for="itemDescription" value="Item Description:" >
@@ -136,13 +136,17 @@
           </h:outputLabel>
           <br />
           <h:outputLabel for="itemModel" value="Item Model:" >
-            <h:outputText  id="itemModel" value="#{var_search[1]}" style="margin-left:10px;color:black;"/>
+            <h:outputText  id="itemModel" value="#{var_search[3]}" style="margin-left:10px;color:black;"/>
           </h:outputLabel>
           <br />
-          <h:graphicImage name="#{var_search[3]}" library="#{searchesBean.getImageLibrary()}" alt="Item Image"   height="100" width="100" rendered="#{!empty var_search[3]}"/>
+            <h:graphicImage name="#{var_search[4]}" library="#{searchesBean.getImageLibrary()}" alt="Item Image"   height="100" width="100" />
+            <h:outputLabel for="itemImageCaption" value="Image caption:" rendered="${!empty var_image[5]}" >
+              <h:outputText  id="itemImageCaption" value="#{var_search[5]}" style="margin-left:10px;color:black;"  rendered="#{!empty var_search[5]}"/>
+            </h:outputLabel>
+          
           <br />
           <c:set var="getValStr"  value="View #{var_search[2]} Details" />
-          <h:commandLink value="#{getValStr}"  action="#{searchesBean.load_RO(searchesBean.getWhich(), var_search[0], var_search[4])}"  immediate="true" rendered="true">
+          <h:commandLink value="#{getValStr}"  action="#{searchesBean.load_RO(searchesBean.getWhich(), var_search[0], var_search[1])}"  immediate="true" rendered="true">
             <f:param name="action" value="RO_item" />
           </h:commandLink>   
         </div>
