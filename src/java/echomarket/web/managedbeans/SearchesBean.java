@@ -39,10 +39,9 @@ public class SearchesBean extends AbstractBean implements Serializable {
   private String which;
   private List itemDetail;
 
-
   public String getFound_zip_codes() {
     return this.found_zip_codes;
- }
+  }
 
   /**
    * @param found_zip_codes the found_zip_codes to set
@@ -68,43 +67,38 @@ public class SearchesBean extends AbstractBean implements Serializable {
     String queryString = "";
     String forceString = this.found_zip_codes;
     List results = null;
+    String fromStatement = "";
     if (this.lenderOrBorrower == 2) {
       this.which = "borrow";
     } else {
       this.which = "lend";
     }
-
     this.imageLibrary = this.which + "_images";
-    /// This should always return at least one result
-    String fromStatement = "SELECT part "
-            + " FROM Users user "
-            + " INNER JOIN user.participant part "
-            + " INNER JOIN part.addresses addr "
-            + " WHERE user.userType LIKE \'%" + this.which + "%\') AND addr.addressType = 'primary'";
+
+    fromStatement = " SELECT  part "
+            + "  FROM Participant part "
+            + "  INNER JOIN part.addresses addr "
+            + "  WHERE addr.addressType = 'primary' ";
+
+    if (ubean.getComDetailID() != null) {
+      fromStatement = fromStatement + "  AND part.communityId = \'" + ubean.getComDetailID() + "\' ";
+    } else {
+      fromStatement = fromStatement + "  AND part.communityId = ''";
+    }
 
     if (forceString.matches(".*\\d.*")) {
-      queryString = " AND addr.postalCode in (\'" + forceString + "\') ";
+      fromStatement = " OR addr.postal_code in (\'" + forceString + "\') ";
     }
 
     if (this.postalCode.isEmpty() == false) {
-      queryString = " AND addr.postalCode LIKE '" + this.postalCode + "%'";
+      fromStatement = " OR addr.postal_code LIKE '" + this.postalCode + "%'";
     }
-
-    if (ubean.getComDetailID() != null) {
-      queryString = queryString + "  AND part.communityId = \'" + ubean.getComDetailID() + "\' ";
-    } else {
-      queryString = queryString + "  AND part.communityId = ''";
-    }
-
-    fromStatement = fromStatement + queryString + " GROUP BY part.participant_id ";;
-    System.out.println(fromStatement);
 
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
       results = sb.createQuery(fromStatement).list();
       tx.commit();
-      //setSearchResultList(results);
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,11 +123,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
 
     results = null;
-    queryString = "";
-    String itemCut = " SELECT itm.itemId, itm.participant_id, itm.itemDescription, itm.itemModel, itmImages.imageFileName, itmImages.itemImageCaption "
-            + " FROM Items itm "
-            + " INNER JOIN itm.itemImages itmImages "
-            + (hold_pid.isEmpty() ? "" : "WHERE itm.participant_id IN ( " + hold_pid + " )");
+    fromStatement = " FROM Items itm WHERE itm.itemType = :which "
+            + (hold_pid.isEmpty() ? "" : " AND itm.participant_id IN ( " + hold_pid + " )");
 
     // Need to check for null or isEmpty dates.
     if ((this.startDate.isEmpty() == false) && (this.endDate.isEmpty() == false)) {
@@ -153,7 +144,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
         }
 
         if ((sd != null) || (ed != null)) {
-          queryString = queryString + " OR";
+          queryString = queryString + " OR ";
           queryString = queryString + " ( itm.dateCreated >= \'" + sd + "\' AND itm.dateCreated <= \'" + ed + "\' ) ";
         }
       } catch (Exception ex) {
@@ -168,18 +159,17 @@ public class SearchesBean extends AbstractBean implements Serializable {
 
     if ((this.categoryId != -2)) {
       queryString = queryString + " OR";
-      queryString = queryString + " itm.categoryId = \'" + this.categoryId + "\' ";
+      queryString = queryString + " itm.categoryId = " + this.categoryId;
     }
 
-    itemCut = itemCut + queryString;
-    System.out.println(itemCut);
+    fromStatement = fromStatement + queryString;
+    System.out.println(fromStatement);
 
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
-      results = sb.createQuery(itemCut).list();
+      results = sb.createQuery(fromStatement).setParameter("which", this.which).list();
       tx.commit();
-      //setSearchResultList(results);
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
