@@ -581,4 +581,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     this.questionAltEmail = questionAltEmail;
   }
 
+  
+
 }
