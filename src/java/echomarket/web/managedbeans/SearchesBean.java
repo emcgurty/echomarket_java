@@ -2,9 +2,6 @@ package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Participant;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,16 +47,41 @@ public class SearchesBean extends AbstractBean implements Serializable {
     this.found_zip_codes = found_zip_codes;
   }
 
-  ///  This is why I designed the database.... INNER JOIN works rather nicely
+  
   public String load_RO(String itype, String iid, String pid) {
 
     robean.setItemId(iid);
     robean.setParticipant_id(pid);
     robean.setWhich(itype);
-
     return "RO_item";
   }
 
+  public List itemImage(String iid) {
+    List results = null;
+    Session sb = null;
+    Transaction tx = null;
+    String fromStatement = "";
+
+    fromStatement = " FROM ItemImages iimag "
+                  + "  WHERE iimag.itemId = :iid ";
+    
+    try {
+      sb = hib_session();
+      tx = sb.beginTransaction();
+      results = sb.createQuery(fromStatement)
+              .setParameter("iid", iid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      sb = null;
+    }
+    return results;
+  }
+  
   public String SearchResults() {
 
     Session sb = null;
@@ -86,12 +108,13 @@ public class SearchesBean extends AbstractBean implements Serializable {
       fromStatement = fromStatement + "  AND part.communityId = ''";
     }
 
-    if (forceString.matches(".*\\d.*")) {
-      fromStatement = " OR addr.postal_code in (\'" + forceString + "\') ";
-    }
+//    This will be implemented in production
+//    if (forceString.matches(".*\\d.*")) {
+//      fromStatement = " OR addr.postal_code in (\'" + forceString + "\') ";
+//    }
 
     if (this.postalCode.isEmpty() == false) {
-      fromStatement = " OR addr.postal_code LIKE '" + this.postalCode + "%'";
+      fromStatement = fromStatement + " OR addr.postalCode LIKE \'" + this.postalCode + "%\'";
     }
 
     try {
@@ -129,24 +152,9 @@ public class SearchesBean extends AbstractBean implements Serializable {
     // Need to check for null or isEmpty dates.
     if ((this.startDate.isEmpty() == false) && (this.endDate.isEmpty() == false)) {
       try {
-        Date sd = new Date();
-        try {
-          sd = ConvertDate(this.startDate);
-        } catch (Exception ex) {
-          Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
-        }
-
-        Date ed = new Date();
-        try {
-          ed = ConvertDate(this.endDate);
-        } catch (Exception ex) {
-          Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
-        }
-
-        if ((sd != null) || (ed != null)) {
           queryString = queryString + " OR ";
-          queryString = queryString + " ( itm.dateCreated >= \'" + sd + "\' AND itm.dateCreated <= \'" + ed + "\' ) ";
-        }
+          queryString = queryString + " ( itm.dateCreated >= \'" + this.startDate + "\' AND itm.dateCreated <= \'" + this.endDate + "\' ) ";
+
       } catch (Exception ex) {
         Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
       }
@@ -183,18 +191,19 @@ public class SearchesBean extends AbstractBean implements Serializable {
     return "search";
   }
 
-  private Date ConvertDate(String strDate) {
-
-    Date convert_date = new Date();
-    try {
-      convert_date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-    } catch (ParseException ex) {
-      Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
-      convert_date = null;
-
-    }
-    return convert_date;
-  }
+//  May need this in production
+//  private Date ConvertDate(String strDate) {
+//
+//    Date convert_date = new Date();
+//    try {
+//      convert_date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
+//    } catch (ParseException ex) {
+//      Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+//      convert_date = null;
+//
+//    }
+//    return convert_date;
+//  }
 
   /**
    * @return the keyword
