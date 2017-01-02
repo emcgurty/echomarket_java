@@ -263,11 +263,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
       if (this.getQuestionAltEmailProvide() == 0) {
         part.setEmailAlternative(null);
+         part.setQuestionAltEmail(0);
       } else {
         part.setEmailAlternative(emailAlternative);
       }
 
       if (this.getQuestionAltEmailDelete() == 1) {
+        part.setQuestionAltEmail(0);
         part.setEmailAlternative(null);
       }
 
