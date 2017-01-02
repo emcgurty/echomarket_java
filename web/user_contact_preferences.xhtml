@@ -88,14 +88,27 @@
 
             <div style="float:left;margin-left:25px">
               <div id="postalWithContactAddress" >    
+              
                 <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
-                  <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}" rendered="#{userBean.editable == 1}"  layout="pageDirection" >
-                    <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
-                    <!--this isn't going to work becuase ParticipantBeans need to have been loaded which will be necessarily so-->
-                    <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?" rendered="#{participantBean.questionAltAddressProvide == 1}" />	
-                    <f:selectItem itemValue="1" itemLabel="Either address is fine." rendered="#{participantBean.questionAltAddressProvide == 1}" />
-                    <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." rendered="#{participantBean.questionAltAddressProvide == 1}" />
-                  </h:selectOneRadio>    
+                  <c:set var="displayAltAddres" value="#{contactPreferenceBean.questionAltAddress}" />
+                  <c:choose> 
+                    <c:when test="#{displayAltAddres == true}" >
+                      <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}" rendered="#{userBean.editable == 1}"  layout="pageDirection" >
+                        <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
+                        <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?"  />	
+                        <f:selectItem itemValue="1" itemLabel="Either address is fine."  />
+                        <f:selectItem itemValue="0" itemLabel="Neither, no address contact please."  />
+                      </h:selectOneRadio>
+                    </c:when>
+                    <c:when test="#{displayAltAddres == false}" >
+                      <h:outputLabel for="useWhichContactAddressQuestion" value="Your Primary Address:"  >
+                      <h:selectBooleanCheckbox id="useWhichContactAddressQuestion" rendered="#{userBean.editable == 1}"  >
+                      </h:selectBooleanCheckbox>
+                      <h:inputHidden id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}"  />
+                      </h:outputLabel>
+                    </c:when>
+                  </c:choose>
+
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
                       <c:when test="#{contactPreferenceBean.useWhichContactAddress == 0}">
@@ -118,7 +131,6 @@
                   </c:if>
                 </h:outputLabel>
               </div>
-
             </div>
           </div>
 
@@ -128,7 +140,6 @@
               <h:outputText value="Contact Option: By Chat..." />
             </div>
           </div>
-
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <div style="float:left;margin-left:25px;">
@@ -154,7 +165,7 @@
               </h:outputLabel>
             </div>
           </div>
-          
+
           <div  class="div_p"  >
             <hr />
             <div style="margin:10px;" >
@@ -165,14 +176,27 @@
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <div style="float:left;margin-left:25px;">
+              
+              <c:set var="displayAltEmail" value="#{contactPreferenceBean.questionAltEmail}" />
               <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
-                <h:selectOneRadio id="contactByEmail" value="#{contactPreferenceBean.contactByEmail}"  rendered="#{userBean.editable == 1}" layout="pageDirection" >
-                  <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
-                  <c:set var="udae" scope="view" value="${participantBean.getUserDefinedAlternativeEmail(userBean.user_id)}" />
-                  <f:selectItem itemValue="2" itemLabel="Your alternative email. (${udae})" />	
-                  <f:selectItem itemValue="1" itemLabel="Either Email." />
-                  <f:selectItem itemValue="0" itemLabel="Neither Email." />	
-                </h:selectOneRadio>    
+                <c:set var="udae" scope="view" value="${participantBean.getUserDefinedAlternativeEmail(userBean.user_id)}" />
+                <c:choose>
+                  <c:when test="#{displayAltEmail == true}" >
+                    <h:selectOneRadio id="contactByEmail" value="#{contactPreferenceBean.contactByEmail}"  rendered="#{userBean.editable == 1}" layout="pageDirection" >
+                      <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
+                      <f:selectItem itemValue="2" itemLabel="Your alternative email. (${udae})"   />	
+                      <f:selectItem itemValue="1" itemLabel="Either Email."  />	
+                      <f:selectItem itemValue="0" itemLabel="Neither Email."  />	
+                    </h:selectOneRadio>    
+                  </c:when>  
+                  <c:when test="#{displayAltEmail == false}" >
+                    <h:outputLabel for="contactByEmailQuestion" value="Your login email: (#{userBean.email})"  >
+                      <h:selectBooleanCheckbox id="contactByEmailQuestion"  rendered="#{userBean.editable == 1}"  />
+                      <h:inputHidden id="contactByEmail" value="#{contactPreferenceBean.contactByEmail}"  />
+                    </h:outputLabel>
+                  </c:when>
+                </c:choose>
+
                 <c:if test="#{userBean.editable == 0}" >
                   <c:choose>
                     <c:when test="#{contactPreferenceBean.contactByEmail == 0}">
@@ -198,7 +222,7 @@
 
             </div>
           </div>
-          
+
           <div  class="div_p"  id="display_phone">
             <hr />
             <div style="margin:10px;" >
