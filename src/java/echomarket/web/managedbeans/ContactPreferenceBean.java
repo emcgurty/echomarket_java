@@ -1,6 +1,7 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.ContactPreference;
+import echomarket.hibernate.Participant;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private String contactByLinkedIn;
   private String contactByOtherSocialMedia;
   private String contactByOtherSocialMediaAccess;
+  private Boolean questionAltAddress;
+  private Boolean questionAltEmail;
 
   public ContactPreferenceBean() {
   }
@@ -373,22 +376,22 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     Map<String, String> params = null;
     String strIid = null;
     String action = null;
-   
+
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
-      
+
       if (strIid.isEmpty() == true) {
         strIid = null;
       }
     } catch (Exception ex) {
     }
     if (ubean.getEditable() != null) {
-    if (ubean.getEditable() == 0) {
-      ubean.setEditable(1);
-    } else {
-      ubean.setEditable(0);
-    }
+      if (ubean.getEditable() == 0) {
+        ubean.setEditable(1);
+      } else {
+        ubean.setEditable(0);
+      }
     } else {
       ubean.setEditable(1);
     }
@@ -442,20 +445,23 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
           ubean.setLICid(true);
           ubean.setLITid(true);
+          getParticipantAddreseEmailAlts(this.participant_id);
         }
       }
     }
     partlist = null;
-      return "user_contact_preferences";
+    return "user_contact_preferences";
   }
 
   private List getCurrentCP(String pid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
+      session = hib_session();
+      tx = session.beginTransaction();
       query = "FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
       result = session.createQuery(query)
               .setParameter("pid", pid)
@@ -479,17 +485,18 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private List getCurrentCP_Iid(String pid, String iid) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String query = null;
     try {
+      session = hib_session();
+      tx = session.beginTransaction();
       query = "FROM ContactPreference WHERE participant_id = :pid  and itemId = :iid ORDER BY participant_id, itemId, dateCreated";
       result = session.createQuery(query)
               .setParameter("pid", pid)
               .setParameter("iid", iid)
               .setMaxResults(1)
               .list();
-
       tx.commit();
     } catch (Exception e) {
       System.out.println("Error in getCurrentCP");
@@ -502,6 +509,76 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     }
     return result;
+  }
+
+  private void getParticipantAddreseEmailAlts(String pid) {
+
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+      query = "FROM Participant WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
+      result = session.createQuery(query)
+              .setParameter("pid", pid)
+              .setMaxResults(1)
+              .list();
+      tx.commit();
+    } catch (Exception e) {
+      System.out.println("Error in getCurrentCP");
+      e.printStackTrace();
+      tx.rollback();
+    } finally {
+      tx = null;
+      session = null;
+    }
+
+    if (result != null) {
+      if (result.size() == 1) {
+        Participant part = (Participant) result.get(0);
+        if (part.getQuestionAltAddress() == 1) {
+          this.setQuestionAltAddress(true);
+        } else {
+          this.setQuestionAltAddress(false);
+        }
+        if (part.getQuestionAltEmail() == 1) {
+          this.setQuestionAltEmail(true);
+        } else {
+          this.setQuestionAltEmail(false);
+        }
+      }
+
+    }
+  }
+
+  /**
+   * @return the questionAltAddress
+   */
+  public Boolean getQuestionAltAddress() {
+    return questionAltAddress;
+  }
+
+  /**
+   * @param questionAltAddress the questionAltAddress to set
+   */
+  public void setQuestionAltAddress(Boolean questionAltAddress) {
+    this.questionAltAddress = questionAltAddress;
+  }
+
+  /**
+   * @return the questionAltEmail
+   */
+  public Boolean getQuestionAltEmail() {
+    return questionAltEmail;
+  }
+
+  /**
+   * @param questionAltEmail the questionAltEmail to set
+   */
+  public void setQuestionAltEmail(Boolean questionAltEmail) {
+    this.questionAltEmail = questionAltEmail;
   }
 
 }
