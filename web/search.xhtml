@@ -132,21 +132,23 @@
 
         <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
           <h:outputLabel for="itemDescription" value="Item Description:" >
-            <h:outputText  id="itemDescription" value="#{var_search[2]}" style="margin-left:10px;color:black;"/>
+            <h:outputText  id="itemDescription" value="#{var_search.itemDescription}" style="margin-left:10px;color:black;"/>
           </h:outputLabel>
           <br />
           <h:outputLabel for="itemModel" value="Item Model:" >
-            <h:outputText  id="itemModel" value="#{var_search[3]}" style="margin-left:10px;color:black;"/>
+            <h:outputText  id="itemModel" value="#{var_search.itemModel}" style="margin-left:10px;color:black;"/>
           </h:outputLabel>
           <br />
-            <h:graphicImage name="#{var_search[4]}" library="#{searchesBean.getImageLibrary()}" alt="Item Image"   height="100" width="100" />
-            <h:outputLabel for="itemImageCaption" value="Image caption:" rendered="${!empty var_image[5]}" >
-              <h:outputText  id="itemImageCaption" value="#{var_search[5]}" style="margin-left:10px;color:black;"  rendered="#{!empty var_search[5]}"/>
+          <c:set var="currentImageResult"  value="#{searchesBean.itemImage(var_search.itemId)}" />
+          <c:forEach items="#{currentImageResult}" var="var_image"  rendered="${fn:length(currentImageResult) > 0}" >
+            <h:graphicImage name="#{var_image.imageFileName}" library="#{searchesBean.getImageLibrary()}" alt="Item Image"   height="100" width="100" />
+            <h:outputLabel for="itemImageCaption" value="Image caption:" rendered="${!empty var_image.itemImageCaption}" >
+              <h:outputText  id="itemImageCaption" value="#{var_image.itemImageCaption}" style="margin-left:10px;color:black;"  rendered="#{!empty var_image.itemImageCaption}"/>
             </h:outputLabel>
-          
+          </c:forEach>
           <br />
-          <c:set var="getValStr"  value="View #{var_search[2]} Details" />
-          <h:commandLink value="#{getValStr}"  action="#{searchesBean.load_RO(searchesBean.getWhich(), var_search[0], var_search[1])}"  immediate="true" rendered="true">
+          <c:set var="getValStr"  value="View #{var_search.itemDescription} Details" />
+          <h:commandLink value="#{getValStr}"  action="#{searchesBean.load_RO(searchesBean.getWhich(), var_search.itemId, var_search.participant_id)}"  immediate="true" rendered="true">
             <f:param name="action" value="RO_item" />
           </h:commandLink>   
         </div>
