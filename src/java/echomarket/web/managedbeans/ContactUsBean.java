@@ -54,22 +54,25 @@ public class ContactUsBean extends AbstractBean implements Serializable {
       tx = null;
     }
     if (savedRecord == true) {
-    SendEmail se = null;
-    String[] getMap = null;
-    getMap = new String[2];
-    getMap = ubean.getApplicationEmail();
-    try {
-      se = new SendEmail("contactUs", this.email, this.subject, this.comments, getMap[0], getMap[1]);
-      message(null,"MessageSuccessfullySent", new Object[]{this.email} );
-    } catch (Exception ex) {
-      System.out.println("Error in ContactUsBean in sending message");
-      Logger.getLogger(ContactUsBean.class.getName())
-              .log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
+      SendEmail se = null;
+      String[] getMap = null;
+      getMap = new String[2];
+      getMap = ubean.getApplicationEmail();
+      try {
+        se = new SendEmail("contactUs", this.email, this.subject, this.comments, getMap[0], getMap[1]);
+        message(null, "MessageSuccessfullySent", new Object[]{this.email});
+      } catch (Exception ex) {
+        message(null, "MessageNotSuccessfullySent", new Object[]{this.email});
+        System.out.println("Error in ContactUsBean in sending message");
+        Logger.getLogger(ContactUsBean.class.getName())
+                .log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
 
-    } finally {
-      se = null;
-      getMap = null;
-    }
+      } finally {
+        se = null;
+        getMap = null;
+      }
+    } else {
+      message(null, "MessageNotSuccessfullySent", new Object[]{this.email});
     }
     return "index";
 
