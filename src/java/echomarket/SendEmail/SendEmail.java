@@ -1,11 +1,10 @@
 package echomarket.SendEmail;
 
-import echomarket.web.managedbeans.UserBean;
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -43,6 +42,8 @@ public class SendEmail implements java.io.Serializable {
     this.comments = comments;
     this.application_email_address = app_email;
     this.application_email_password = app_password;
+    Session sess = establishSession();
+    sendContactUs(sess);
   }
 
 // community member 
@@ -61,7 +62,7 @@ public class SendEmail implements java.io.Serializable {
     Session sess = establishSession();
 
     String threeChars = this.whichEmail.substring(0, 3);
-    if ("registration" == this.whichEmail) {
+    if ("registration".equals(this.whichEmail)) {
       /// then random argument is the password
       this.password = random;
       sendRegistrationEmail(sess);
@@ -69,15 +70,13 @@ public class SendEmail implements java.io.Serializable {
       /// then random argument is the password
       this.password = random;
       sendCommunityRegistrationEmail(sess);
-    } else if ("member" == this.whichEmail) {
+    } else if ("member".equals(this.whichEmail)) {
       /// then random argument is the password
       sendCommunityMemberEmail(sess);
-    } else if ("forgotPassword" == this.whichEmail) {
+    } else if ("forgotPassword".equals(this.whichEmail)) {
       this.reset_code = rc;
       sendForgotPasswordEmail(sess);
-    } else if ("contactUs" == this.whichEmail) {
-      /// needs to be written
-    } else if ("forgotUserName" == this.whichEmail) {
+    } else if ("forgotUserName".equals(this.whichEmail)) {
 
     }
   }
@@ -119,6 +118,48 @@ public class SendEmail implements java.io.Serializable {
     }
   }
 
+  private Boolean sendContactUs(Session sess) {
+
+    try {
+      // Create a default MimeMessage object.
+      Message message = new MimeMessage(sess);
+      message.setContent(BuildContactUsMessage(), "text/html; charset=utf-8");
+      // Set From: header field of the header.
+      message.setFrom(new InternetAddress(getApplication_email_address()));
+
+      // Set To: header field of the header.
+      message.setRecipients(Message.RecipientType.TO,
+              InternetAddress.parse(getApplication_email_address()));
+
+      // Set Subject: header field
+      message.setSubject("EchoMarket Contact.");
+
+      // Send message
+      Transport.send(message);
+
+      System.out.println("Sent message successfully....");
+
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
+    return true;
+  }
+  private String BuildContactUsMessage() {
+
+    ResourceBundle bundle = ResourceBundle.getBundle(
+            "echomarket.web.messages.Messages",
+            FacesContext.getCurrentInstance().getViewRoot().getLocale());
+    String buildMessage = "<html><h1>EchoMarket Contact Us</h1>"
+            + "<p>Subject: " + this.subject + "</p>"
+            + "<p>Comments:  " + this.comments + "</p>"
+             + "<p>User Email:  " + this.user_email + "</p>"
+            + "<p>Date Sent:  " + new Date() + "</p>"
+            + "<p>IP Address:  " + "IP ADDRESS -- not done" + "</p>"
+            + "<p>PS: If you received this email in error, please disregard it.</p></html>";
+    return buildMessage;
+  }
+
+  
   private String BuildRegistrationMessage() {
 
     ResourceBundle bundle = ResourceBundle.getBundle(
@@ -272,6 +313,7 @@ public class SendEmail implements java.io.Serializable {
     return true;
   }
 
+  
   private Boolean sendRegistrationEmail(Session sess) {
 
     try {
