@@ -62,7 +62,7 @@
 
             <div  class="div_p"  >
               <div style="margin:10px;" >
-                 <h:outputText value="Lender Item Transfer Preferences"  />
+                <h:outputText value="Lender Item Transfer Preferences"  />
                 <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Lending Conditions'" rendered="#{userBean.LITid}"  >
                   <f:param name="action" value="edit" />
                 </h:commandLink>
@@ -157,14 +157,15 @@
                   <h:outputText id="willDeliverToBorrowerString"   value="#{cbe}" class="RO_text" />
                 </c:if>  
               </h:outputLabel>  
+              
             </div>
 
-            <div style="margin-left:25px;margin-top:5px;float:left;">                    
+            <div style="margin-left:25px;margin-top:5px;width: 100%;float:left;">                    
+              <hr />
               <h:outputLabel for="thirdPartyPresenceL2b" value="Would you like a third-party present during transfer to borrower?:"  >
                 <h:selectOneRadio id="thirdPartyPresenceL2b" value="#{lenderTransferBean.thirdPartyPresenceL2b}" rendered="#{userBean.editable == 1}">
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
-
                 </h:selectOneRadio>    
                 <c:if test="#{userBean.editable == 0}" >
                   <c:choose>
@@ -181,53 +182,56 @@
                   <h:outputText id="thirdPartyPresenceL2bString"   value="#{cbe}" class="RO_text" />
                 </c:if>  
               </h:outputLabel>  
+              <div id="thirdPartyPresenceL2BGroup" style="margin-left:5px;margin-top:5px;width:auto;padding:0px;display:none;">
+                <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceL2b">
+                  <h:selectOneRadio id="lenderThirdPartyChoiceL2b" value="#{lenderTransferBean.lenderThirdPartyChoiceL2b}" rendered="#{userBean.editable == 1}" >
+                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                    <f:selectItem itemValue="0" itemLabel="No" />
+
+                  </h:selectOneRadio> 
+                  <c:if test="#{userBean.editable == 0}" >
+                    <c:choose>
+                      <c:when test="#{lenderTransferBean.lenderThirdPartyChoiceL2b == 0}">
+                        <c:set var="cbe" value="No"/>
+                      </c:when>
+                      <c:when test="#{lenderTransferBean.lenderThirdPartyChoiceL2b == 1}">
+                        <c:set var="cbe" value="Yes"/>
+                      </c:when>
+                      <c:otherwise>
+                        <c:set var="cbe" value="Selection not made"/>
+                      </c:otherwise>
+                    </c:choose>
+                    <h:outputText id="lenderThirdPartyChoiceL2bString"   value="#{cbe}" class="RO_text" />
+                  </c:if>  
+                </h:outputLabel>
+                <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceL2b">
+                  <h:selectOneRadio id="agreedThirdPartyChoiceL2b" value="#{lenderTransferBean.agreedThirdPartyChoiceL2b}" rendered="#{userBean.editable == 1}" >
+                    <f:selectItem itemValue="1" itemLabel="Yes" />
+                    <f:selectItem itemValue="0" itemLabel="No" />
+
+                  </h:selectOneRadio> 
+                  <c:if test="#{userBean.editable == 0}" >
+                    <c:choose>
+                      <c:when test="#{lenderTransferBean.agreedThirdPartyChoiceL2b == 0}">
+                        <c:set var="cbe" value="No"/>
+                      </c:when>
+                      <c:when test="#{lenderTransferBean.agreedThirdPartyChoiceL2b == 1}">
+                        <c:set var="cbe" value="Yes"/>
+                      </c:when>
+                      <c:otherwise>
+                        <c:set var="cbe" value="Selection not made"/>
+                      </c:otherwise>
+                    </c:choose>
+                    <h:outputText id="agreedThirdPartyChoiceL2bString"   value="#{cbe}" class="RO_text" />
+                  </c:if>  
+                </h:outputLabel>
+                <hr />
+              </div>
+               
             </div>
+           
 
 
-            <div id="thirdPartyPresenceL2BGroup" style="margin-left:25px;margin-top:5px;float:left;display:none;">
-              <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceL2b">
-                <h:selectOneRadio id="lenderThirdPartyChoiceL2b" value="#{lenderTransferBean.lenderThirdPartyChoiceL2b}" rendered="#{userBean.editable == 1}" >
-                  <f:selectItem itemValue="1" itemLabel="Yes" />
-                  <f:selectItem itemValue="0" itemLabel="No" />
-
-                </h:selectOneRadio> 
-                <c:if test="#{userBean.editable == 0}" >
-                  <c:choose>
-                    <c:when test="#{lenderTransferBean.lenderThirdPartyChoiceL2b == 0}">
-                      <c:set var="cbe" value="No"/>
-                    </c:when>
-                    <c:when test="#{lenderTransferBean.lenderThirdPartyChoiceL2b == 1}">
-                      <c:set var="cbe" value="Yes"/>
-                    </c:when>
-                    <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
-                    </c:otherwise>
-                  </c:choose>
-                  <h:outputText id="lenderThirdPartyChoiceL2bString"   value="#{cbe}" class="RO_text" />
-                </c:if>  
-              </h:outputLabel>
-              <h:outputLabel value="Mutually agreed?:" for="agreedThirdPartyChoiceL2b">
-                <h:selectOneRadio id="agreedThirdPartyChoiceL2b" value="#{lenderTransferBean.agreedThirdPartyChoiceL2b}" rendered="#{userBean.editable == 1}" >
-                  <f:selectItem itemValue="1" itemLabel="Yes" />
-                  <f:selectItem itemValue="0" itemLabel="No" />
-
-                </h:selectOneRadio> 
-                <c:if test="#{userBean.editable == 0}" >
-                  <c:choose>
-                    <c:when test="#{lenderTransferBean.agreedThirdPartyChoiceL2b == 0}">
-                      <c:set var="cbe" value="No"/>
-                    </c:when>
-                    <c:when test="#{lenderTransferBean.agreedThirdPartyChoiceL2b == 1}">
-                      <c:set var="cbe" value="Yes"/>
-                    </c:when>
-                    <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
-                    </c:otherwise>
-                  </c:choose>
-                  <h:outputText id="agreedThirdPartyChoiceL2bString"   value="#{cbe}" class="RO_text" />
-                </c:if>  
-              </h:outputLabel>
-            </div>
           </div>
 
           <div id="form_borrower_to_lender" class="contact_information" >
