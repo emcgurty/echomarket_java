@@ -193,7 +193,7 @@
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <div style="float:left;margin-left:25px;">
               <c:set var="questionAltEmailData"  value="#{bye[3]}"  />
-              
+
               <c:choose >
                 <c:when test="#{questionAltEmailData != 1}" >
                   <h:outputLabel value="Which E-Mail Address?:"  >
@@ -260,51 +260,55 @@
             </div>
           </div>
 
-          <div  class="div_p"  >
-            <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Social Media..." />
-            </div>
-          </div>
+          <c:choose>
+            <c:when test="#{!empty bysm.contactByFacebook} or #{!empty bysm.contactByLinkedIn} or #{!empty bysm.contactByTwitter} or #{!empty bysm.contactByInstagram} or #{!empty bysm.contactByOtherSocialMedia} or #{!empty bysm.contactByOtherSocialMediaAccess}"  >
+              <div  class="div_p"  >
+                <div style="margin:10px;" >
+                  <h:outputText value="Contact Option: By Social Media..." />
+                </div>
+              </div>
 
-          <div style="margin-left:25px;float:left;" >
-            <h:outputLabel value="Your Facebook Account:" rendered="#{!empty nbysm.contactByFacebook != null}" >
-              <h:outputText   value="#{bysm.contactByFacebook}"   class="RO_text"  rendered="#{!empty bysm.contactByFacebook}" /> 
-            </h:outputLabel>
-          </div> 
-
-
-          <div style="margin-left:25px;float:left;" >          
-            <h:outputLabel value="Your LinkedIn Account:" rendered="#{!empty bysm.contactByLinkedIn}" >
-              <h:outputText  value="#{bysm.contactByLinkedIn}" class="RO_text"  rendered="#{!empty bysm.contactByLinkedIn}" /> 
-            </h:outputLabel>
-          </div>
-
-          <div style="margin-left:25px;float:left;"  >          
-            <h:outputLabel value="Your Twitter Account:" rendered="#{!empty bysm.contactByTwitter}" >
-              <h:outputText   value="#{bysm.contactByTwitter}" class="RO_text"  rendered="#{!empty bysm.contactByTwitter}" />
-            </h:outputLabel>
-          </div>
+              <div style="margin-left:25px;float:left;" >
+                <h:outputLabel value="Your Facebook Account:" rendered="#{!empty bysm.contactByFacebook}" >
+                  <h:outputText   value="#{bysm.contactByFacebook}"   class="RO_text"  rendered="#{!empty bysm.contactByFacebook}" /> 
+                </h:outputLabel>
+              </div> 
 
 
+              <div style="margin-left:25px;float:left;" >          
+                <h:outputLabel value="Your LinkedIn Account:" rendered="#{!empty bysm.contactByLinkedIn}" >
+                  <h:outputText  value="#{bysm.contactByLinkedIn}" class="RO_text"  rendered="#{!empty bysm.contactByLinkedIn}" /> 
+                </h:outputLabel>
+              </div>
 
-          <div style="margin-left:25px;float:left;">          
-            <h:outputLabel value="Your Instagram Account:"   rendered="#{!empty bysm.contactByInstagram}" >
-              <h:outputText value="#{bysm.contactByInstagram}"  class="RO_text"  rendered="#{!empty bysm.contactByInstagram}" />                                
-            </h:outputLabel>
-          </div>
+              <div style="margin-left:25px;float:left;"  >          
+                <h:outputLabel value="Your Twitter Account:" rendered="#{!empty bysm.contactByTwitter}" >
+                  <h:outputText   value="#{bysm.contactByTwitter}" class="RO_text"  rendered="#{!empty bysm.contactByTwitter}" />
+                </h:outputLabel>
+              </div>
 
 
 
-          <div style="margin-left:25px;float:left;"  >
-            <h:outputLabel value="Other Social Media:"   rendered="#{!empty bysm.contactByOtherSocialMedia}" >
-              <h:outputText  value="#{bysm.contactByOtherSocialMedia}"  class="RO_text"   rendered="#{!empty bysm.contactByOtherSocialMedia}"  />
-            </h:outputLabel>
-            <br />
+              <div style="margin-left:25px;float:left;">          
+                <h:outputLabel value="Your Instagram Account:"   rendered="#{!empty bysm.contactByInstagram}" >
+                  <h:outputText value="#{bysm.contactByInstagram}"  class="RO_text"  rendered="#{!empty bysm.contactByInstagram}" />                                
+                </h:outputLabel>
+              </div>
 
-            <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess"  rendered="#{!empty bysm.contactByOtherSocialMediaAccess}"  >
-              <h:outputText  value="#{bysm.contactByOtherSocialMediaAccess}" class="RO_text"   rendered="#{!empty bysm.contactByOtherSocialMediaAccess}"  /> 
-            </h:outputLabel>
-          </div>
+
+
+              <div style="margin-left:25px;float:left;"  >
+                <h:outputLabel value="Other Social Media:"   rendered="#{!empty bysm.contactByOtherSocialMedia}" >
+                  <h:outputText  value="#{bysm.contactByOtherSocialMedia}"  class="RO_text"   rendered="#{!empty bysm.contactByOtherSocialMedia}"  />
+                </h:outputLabel>
+                <br />
+
+                <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess"  rendered="#{!empty bysm.contactByOtherSocialMediaAccess}"  >
+                  <h:outputText  value="#{bysm.contactByOtherSocialMediaAccess}" class="RO_text"   rendered="#{!empty bysm.contactByOtherSocialMediaAccess}"  /> 
+                </h:outputLabel>
+              </div>
+            </c:when>
+          </c:choose>
         </h:column>
       </h:dataTable>
 
