@@ -16,39 +16,39 @@ $(document).ready(function () {
 
   });
 
-  $("input[type=checkbox]").on('change', function () {
-    var getid = this.id;
-    if (getid.includes('useWhichContactAddressQuestion'))
-      setAltAddress(this);
-    if (getid.includes('contactByEmailQuestion'))
-      setAltEmailProvide(this);
-
-
-  });
+//  $("input[type=checkbox]").on('change', function () {
+//    var getid = this.id;
+//    if (getid.includes('useWhichContactAddressQuestion'))
+//      setAltAddress(this);
+//    if (getid.includes('contactByEmailQuestion'))
+//      setAltEmailProvide(this);
+//
+//
+//  });
 
 
 });
 
-function setAltAddress(input) {
-
-  var foundHidden = $("input[type=hidden][id$='useWhichContactAddressb']");
-
-  if (input.checked == true) {
-    $(foundHidden).val(1);
-  } else {
-    $(foundHidden).val(0);
-  }
-}
-
-function setAltEmailProvide(input) {
-  var foundHidden = $("input[type=hidden][id$='contactByEmail']");
-
-  if (input.checked == true) {
-    $(foundHidden).val(1);
-  } else {
-    $(foundHidden).val(0);
-  }
-}
+//function setAltAddress(input) {
+//
+//  var foundHidden = $("input[type=hidden][id$='useWhichContactAddressb']");
+//
+//  if (input.checked == true) {
+//    $(foundHidden).value = '1';
+//  } else {
+//    $(foundHidden).value = '0';
+//  }
+//}
+//
+//function setAltEmailProvide(input) {
+//  var foundHidden = $("input[type=hidden][id$='contactByEmail']");
+//
+//  if (input.checked == true) {
+//    $(foundHidden).val(1);
+//  } else {
+//    $(foundHidden).val(0);
+//  }
+//}
 function changeMenuBackground(which) {
   $("li").removeClass('active');
   var menuID = "li#tab_item_" + which;
