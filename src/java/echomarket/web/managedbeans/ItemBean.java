@@ -1104,8 +1104,7 @@ public class ItemBean extends AbstractBean implements Serializable {
           ContactPreference new_cp = new ContactPreference(getId(), ubean.getParticipant_id(), iid,
                   na_cp.getUseWhichContactAddress(), na_cp.getContactByChat(), na_cp.getContactByEmail(), na_cp.getContactByHomePhone(),
                   na_cp.getContactByCellPhone(), na_cp.getContactByAlternativePhone(), na_cp.getContactByFacebook(), na_cp.getContactByTwitter(),
-                  na_cp.getContactByInstagram(), na_cp.getContactByLinkedIn(), na_cp.getContactByOtherSocialMedia(), na_cp.getContactByOtherSocialMediaAccess(),
-                  new Date());
+                  na_cp.getContactByInstagram(), na_cp.getContactByLinkedIn(), na_cp.getContactByOtherSocialMedia(), na_cp.getContactByOtherSocialMediaAccess(), new Date());
           if (session.isOpen() == false) {
             session = hib_session();
           }
