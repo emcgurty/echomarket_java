@@ -89,7 +89,7 @@
             </div>
           </div>
         </h:column>
-      </h:dataTable>-->
+      </h:dataTable>
 
       <c:set value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}"  var="aa_data" />    
       <h:dataTable value="#{aa_data}"   var="pa" rendered="${fn:length(aa_data) > 0}"  
@@ -162,8 +162,28 @@
           </div>
         </h:column>
       </h:dataTable>
+
+
       <c:set value="#{readOnlyBean.getByEmail(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id).toArray()}"  var="bye_data" />    
       <h:dataTable value="${bye_data}" var="bye" rendered="${fn:length(bye_data) > 0}"  >    
+        <c:choose > 
+          <c:when test="#{empty bye[0]}" >
+            <c:set var="email_alt" value="Email address not provided" />
+          </c:when>
+          <c:when test="#{!empty bye[0]}" >
+            <c:set var="email_alt" value="#{bye[0]}" />
+          </c:when>  
+        </c:choose>  
+
+        <c:choose > 
+          <c:when test="#{empty bye[1]}" >
+            <c:set var="user_email" value="Email address not provided" />
+          </c:when>
+          <c:when test="#{!empty bye[1]}" >
+            <c:set var="user_email" value="#{bye[1]}" />
+          </c:when>  
+        </c:choose>  
+
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
@@ -172,12 +192,23 @@
           </div>
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <div style="float:left;margin-left:25px;">
-              <h:outputLabel value="Which E-Mail Address?:"  >
-                <h:outputText  value="By email: #{bye[0]} "  class="RO_text" rendered="#{bye[2] == 1}"  />
-                <h:outputText  value="and #{bye[1]}"  class="RO_text" rendered="#{bye[2] == 1}"  />
-                <h:outputText  value="By email: #{bye[0]}"  class="RO_text" rendered="#{bye[2] == 2}"  />
-                <h:outputText  value="By email: #{bye[1]}"  class="RO_text" rendered="#{bye[2] == 3}"  />
-              </h:outputLabel>
+              <c:set var="questionAltEmailData"  value="#{bye[3]}"  />
+              
+              <c:choose >
+                <c:when test="#{questionAltEmailData != 1}" >
+                  <h:outputLabel value="Which E-Mail Address?:"  >
+                    <h:outputText  value="By email: #{user_email}"  class="RO_text" rendered="#{bye[2] == 3}"  />
+                  </h:outputLabel>
+                </c:when>    
+                <c:when test="#{questionAltEmailData == 1}" >
+                  <h:outputLabel value="Which E-Mail Address?:"  >
+                    <h:outputText  value="By email: #{email_alt} "  class="RO_text" rendered="#{bye[2] == 1}"  />
+                    <h:outputText  value="and #{user_email}"  class="RO_text" rendered="#{bye[2] == 1}"  />
+                    <h:outputText  value="By email: #{email_alt}"  class="RO_text" rendered="#{bye[2] == 2}"  />
+                    <h:outputText  value="By email: #{user_email}"  class="RO_text" rendered="#{bye[2] == 3}"  />
+                  </h:outputLabel>
+                </c:when> 
+              </c:choose>
             </div>
           </div>
         </h:column>
