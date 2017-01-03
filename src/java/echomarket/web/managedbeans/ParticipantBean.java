@@ -258,7 +258,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       if (ubean.getCommunityName() != null) {
         part.setIsCreator(1);
       } else {
-        part.setIsCreator(1);
+        part.setIsCreator(0);
       }
 
       if (this.getQuestionAltEmailProvide() == 0) {
