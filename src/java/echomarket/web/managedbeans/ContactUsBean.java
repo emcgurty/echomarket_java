@@ -60,6 +60,7 @@ public class ContactUsBean extends AbstractBean implements Serializable {
     getMap = ubean.getApplicationEmail();
     try {
       se = new SendEmail("contactUs", this.email, this.subject, this.comments, getMap[0], getMap[1]);
+      message(null,"MessageSuccessfullySent", new Object[]{this.email} );
     } catch (Exception ex) {
       System.out.println("Error in ContactUsBean in sending message");
       Logger.getLogger(ContactUsBean.class.getName())
