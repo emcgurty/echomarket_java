@@ -7,14 +7,12 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Participant;
-import echomarket.hibernate.Users;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -280,7 +278,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      queryString = "SELECT part.emailAlternative as altemail, us.email as lemail, cp.contactByEmail  "
+      queryString = "SELECT part.emailAlternative as altemail, us.email as lemail, cp.contactByEmail, part.questionAltEmail  "
               + " FROM Users us "
               + " INNER join us.participant part "
               + " INNER join part.contactPreference cp "
