@@ -26,16 +26,8 @@ public class ContactPreference implements java.io.Serializable {
     public ContactPreference() {
     }
 
-    public ContactPreference(String contactPreferenceId, int useWhichContactAddress, Date dateCreated, Date dateUpdated, Date dateDeleted) {
-        this.contactPreferenceId = contactPreferenceId;
-        this.useWhichContactAddress = useWhichContactAddress;
-        this.dateCreated = dateCreated;
-        this.dateUpdated = dateUpdated;
-        this.dateDeleted = dateDeleted;
-    }
-
     //update
-    public ContactPreference(String contactPreferenceId, String participant_id, String itemId, Integer useWhichContactAddress, Integer contactByChat, Integer contactByEmail, Integer contactByHomePhone, Integer contactByCellPhone, Integer contactByAlternativePhone, String contactByFacebook, String contactByTwitter, String contactByInstagram, String contactByLinkedIn, String contactByOtherSocialMedia, String contactByOtherSocialMediaAccess, Date dateUpdated) {
+    public ContactPreference(String contactPreferenceId, String participant_id, String itemId, Integer useWhichContactAddress, Integer contactByChat, Integer contactByEmail, Integer contactByHomePhone, Integer contactByCellPhone, Integer contactByAlternativePhone, String contactByFacebook, String contactByTwitter, String contactByInstagram, String contactByLinkedIn, String contactByOtherSocialMedia, String contactByOtherSocialMediaAccess, Date dateCreated) {
     
         this.contactPreferenceId = contactPreferenceId;
         this.participant_id = participant_id;
@@ -52,7 +44,8 @@ public class ContactPreference implements java.io.Serializable {
         this.contactByLinkedIn = contactByLinkedIn;
         this.contactByOtherSocialMedia = contactByOtherSocialMedia;
         this.contactByOtherSocialMediaAccess = contactByOtherSocialMediaAccess;
-        this.dateUpdated = dateUpdated;
+        this.dateUpdated = new Date();
+        this.dateCreated = dateCreated;
 
     }
 
