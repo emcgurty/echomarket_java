@@ -140,7 +140,7 @@
                                   <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('lend')}"  
                                                  var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
-                                
+                               
                               </c:choose>
                               
                             </c:when>
@@ -216,7 +216,6 @@
 
                 <div style="margin-left: 25px;float:left">
                   <h:outputLabel value="First Name:" for="firstName" ><span id="firstName" class="required_fields">*</span>
-                    <br />
                     <h:inputText  id="firstName" value="#{participantBean.firstName}"  maxlength="24" size="24"  rendered="#{(userBean.editable == 1) and (empty participantBean.firstName)}"   />
                     <h:inputText  id="firstNamea" value="#{participantBean.firstName}"  maxlength="24" size="24"  rendered="#{(userBean.editable == 1) and (!empty participantBean.firstName)}"   />
                     <h:outputText  value="#{participantBean.firstName}"  rendered="#{userBean.editable == 0}" class="RO_text" />
@@ -225,14 +224,12 @@
                 </div>
                 <div style="margin-left: 25px;float:left">
                   <h:outputLabel value="Middle Initial:"  for="mi" >
-                    <br />
                     <h:inputText  id="mi" value="#{participantBean.mi}" maxlength="1" size="1" rendered="#{userBean.editable == 1}" />
                     <h:outputText  value="#{participantBean.mi}"  rendered="#{userBean.editable == 0}" class="RO_text" />
                   </h:outputLabel>
                 </div>
                 <div style="margin-left: 25px;float:left">
                   <h:outputLabel value="Last Name:"  for="lastName" ><span id="lastName" class="required_fields">*</span>
-                    <br />
                     <h:inputText  id="lastName" value="#{participantBean.lastName}" maxlength="24" size="24" rendered="#{userBean.editable == 1}" />
                     <h:outputText  value="#{participantBean.lastName}"  rendered="#{userBean.editable == 0}" class="RO_text" />
                   </h:outputLabel>
@@ -615,7 +612,7 @@
                         <h:outputText    value="#{participantBean.cellPhone}" rendered="#{userBean.editable == 0}" class="RO_text"/> 
                       </h:outputLabel>
                       <div style="float:left" >
-                        <h:outputLabel value=".. to see your Cell Phone Number?"  for="displayCellPhone" >
+                        <h:outputLabel value=".. your Cell Phone Number?"  for="displayCellPhone" >
                           <h:selectOneRadio id="displayCellPhone" value="#{participantBean.displayCellPhone}" rendered="#{userBean.editable == 1}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" />
                             <f:selectItem itemValue="0" itemLabel="No" />
@@ -645,7 +642,7 @@
                         <h:outputText    value="#{participantBean.alternativePhone}" rendered="#{userBean.editable == 0}" class="RO_text"/> 
                       </h:outputLabel>
                       <div style="float:left" >
-                        <h:outputLabel value="... to see your Alternative Phone Number?"  for="displayAlternativePhone" >
+                        <h:outputLabel value="... your Alternative Phone Number?"  for="displayAlternativePhone" >
                           <h:selectOneRadio id="displayAlternativePhone" value="#{participantBean.displayAlternativePhone}" rendered="#{userBean.editable == 1}" >
                             <f:selectItem itemValue="1" itemLabel="Yes" rendered="#{userBean.editable == 1}" />
                             <f:selectItem itemValue="0" itemLabel="No" rendered="#{userBean.editable == 1}" />	
