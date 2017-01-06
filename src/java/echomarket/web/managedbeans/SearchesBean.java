@@ -21,7 +21,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
   UserBean ubean;
   @Inject
   ReadOnlyBean robean;
-  private List searchResultList;
+  
   private String found_zip_codes;
   private String keyword;
   private String postalCode;
@@ -31,10 +31,10 @@ public class SearchesBean extends AbstractBean implements Serializable {
   private Integer lenderOrBorrower;
   private Integer zip_code_radius;
   private String remoteIp;
-  private String searchCriteria;
   private String imageLibrary;
   private String which;
   private List itemDetail;
+  private Boolean performedSearch;
 
   public String getFound_zip_codes() {
     return this.found_zip_codes;
@@ -47,12 +47,12 @@ public class SearchesBean extends AbstractBean implements Serializable {
     this.found_zip_codes = found_zip_codes;
   }
 
-  
   public String load_RO(String itype, String iid, String pid) {
 
     robean.setItemId(iid);
     robean.setParticipant_id(pid);
     robean.setWhich(itype);
+    this.performedSearch = false;
     return "RO_item";
   }
 
@@ -63,8 +63,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
     String fromStatement = "";
 
     fromStatement = " FROM ItemImages iimag "
-                  + "  WHERE iimag.itemId = :iid ";
-    
+            + "  WHERE iimag.itemId = :iid ";
+
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
@@ -81,15 +81,17 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
     return results;
   }
-  
+
   public String SearchResults() {
 
+    this.performedSearch = true;
     Session sb = null;
     Transaction tx = null;
     String queryString = "";
     String forceString = this.found_zip_codes;
     List results = null;
     String fromStatement = "";
+    String hold_pid = "";
     if (this.lenderOrBorrower == 2) {
       this.which = "borrow";
     } else {
@@ -112,7 +114,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
 //    if (forceString.matches(".*\\d.*")) {
 //      fromStatement = " OR addr.postal_code in (\'" + forceString + "\') ";
 //    }
-
     if (this.postalCode.isEmpty() == false) {
       fromStatement = fromStatement + " OR addr.postalCode LIKE \'" + this.postalCode + "%\'";
     }
@@ -131,7 +132,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
     }
 
     String[] pids = new String[results.size()];
-    String hold_pid = "";
+
     if (results != null) {
       if (results.size() > 0) {
         for (int i = 0; i < results.size(); i++) {
@@ -142,52 +143,54 @@ public class SearchesBean extends AbstractBean implements Serializable {
           }
         }
         hold_pid = String.join(",", pids);
+
       }
     }
 
     results = null;
-    fromStatement = " FROM Items itm WHERE itm.itemType = :which "
-            + (hold_pid.isEmpty() ? "" : " AND itm.participant_id IN ( " + hold_pid + " )");
+    if (hold_pid.isEmpty() == false) {
+      fromStatement = " FROM Items itm WHERE itm.itemType = :which "
+              + (hold_pid.isEmpty() ? "" : " AND itm.participant_id IN ( " + hold_pid + " )");
 
-    // Need to check for null or isEmpty dates.
-    if ((this.startDate.isEmpty() == false) && (this.endDate.isEmpty() == false)) {
-      try {
+      // Need to check for null or isEmpty dates.
+      if ((this.startDate.isEmpty() == false) && (this.endDate.isEmpty() == false)) {
+        try {
           queryString = queryString + " OR ";
           queryString = queryString + " ( itm.dateCreated >= \'" + this.startDate + "\' AND itm.dateCreated <= \'" + this.endDate + "\' ) ";
 
-      } catch (Exception ex) {
-        Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+        } catch (Exception ex) {
+          Logger.getLogger(SearchesBean.class.getName()).log(Level.INFO, null, ex);
+        }
       }
+      forceString = this.keyword;
+      if (forceString.isEmpty() == false) {
+        queryString = queryString + " OR ";
+        queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
+      }
+
+      if ((this.categoryId != -2)) {
+        queryString = queryString + " OR";
+        queryString = queryString + " itm.categoryId = " + this.categoryId;
+      }
+
+      fromStatement = fromStatement + queryString;
+      System.out.println(fromStatement);
+
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        results = sb.createQuery(fromStatement).setParameter("which", this.which).list();
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+        Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+        tx = null;
+        sb = null;
+      }
+      
+      this.itemDetail = results;
     }
-    forceString = this.keyword;
-    if (forceString.isEmpty() == false) {
-      queryString = queryString + " OR ";
-      queryString = queryString + " (itm.itemDescription like \'%" + forceString + "%\' OR itm.itemModel like \'%" + forceString + "%\')";
-    }
-
-    if ((this.categoryId != -2)) {
-      queryString = queryString + " OR";
-      queryString = queryString + " itm.categoryId = " + this.categoryId;
-    }
-
-    fromStatement = fromStatement + queryString;
-    System.out.println(fromStatement);
-
-    try {
-      sb = hib_session();
-      tx = sb.beginTransaction();
-      results = sb.createQuery(fromStatement).setParameter("which", this.which).list();
-      tx.commit();
-    } catch (Exception ex) {
-      tx.rollback();
-      Logger.getLogger(SearchesBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      tx = null;
-      sb = null;
-    }
-
-    this.itemDetail = results;
-
     return "search";
   }
 
@@ -204,7 +207,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
 //    }
 //    return convert_date;
 //  }
-
   /**
    * @return the keyword
    */
@@ -304,34 +306,6 @@ public class SearchesBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the searchResultList
-   */
-  public List getSearchResultList() {
-    return searchResultList;
-  }
-
-  /**
-   * @param searchResultList the searchResultList to set
-   */
-  public void setSearchResultList(List searchResultList) {
-    this.searchResultList = searchResultList;
-  }
-
-  /**
-   * @return the searchCriteria
-   */
-  public String getSearchCriteria() {
-    return searchCriteria;
-  }
-
-  /**
-   * @param searchCriteria the searchCriteria to set
-   */
-  public void setSearchCriteria(String searchCriteria) {
-    this.searchCriteria = searchCriteria;
-  }
-
-  /**
    * @return the zip_code_radius
    */
   public Integer getZip_code_radius() {
@@ -385,6 +359,20 @@ public class SearchesBean extends AbstractBean implements Serializable {
    */
   public void setItemDetail(List itemDetail) {
     this.itemDetail = itemDetail;
+  }
+
+  /**
+   * @return the performedSearch
+   */
+  public Boolean getPerformedSearch() {
+    return performedSearch;
+  }
+
+  /**
+   * @param performedSearch the performedSearch to set
+   */
+  public void setPerformedSearch(Boolean performedSearch) {
+    this.performedSearch = performedSearch;
   }
 
 }
