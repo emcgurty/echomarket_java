@@ -128,7 +128,7 @@
       </div>
 
       <c:set var="currentSearchResult"  value="#{searchesBean.itemDetail}" />
-      <c:forEach items="#{currentSearchResult}" var="var_search"  rendered="${fn:length(currentSearchResult) > 0}" >
+      <c:forEach items="#{currentSearchResult}" var="var_search"  rendered="${fn:length(currentSearchResult) gt 0}" >
 
         <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
           <h:outputLabel for="itemDescription" value="Item Description:" >
@@ -153,6 +153,15 @@
           </h:commandLink>   
         </div>
       </c:forEach>
+      <c:set var="performedSearch"  value="#{searchesBean.performedSearch}" />
+      
+      <c:choose>
+        <c:when test="#{performedSearch and fn:length(currentSearchResult) lt 1}" >
+          <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+            <h:outputText  value="Sorry, no Items were found matching your criteria.  Please try again." style="margin-left:10px;color: maroon; font-weight: bold;"/>
+          </div>
+        </c:when>
+      </c:choose>
     </h:form>
   </ui:define>
 
