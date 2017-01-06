@@ -69,6 +69,17 @@
               </div>
             </div>
 
+            <c:choose> 
+              <c:when test="#{userBean.editable == 0}" >
+                <div  class="div_p"  >
+                  <div style="margin:10px;" >
+                    <h:outputText value="##" style="color: indigo;" />
+                    <h:outputText value=" -- means 'Selection Not Made'"  />
+
+                  </div>
+                </div>
+              </c:when>
+            </c:choose>
             <div  class="div_p"  >
               <div style="margin:10px;" >
                 <h:outputText value="How would you like a borrower to receive your item?" />
@@ -102,7 +113,7 @@
                         <c:set var="cbe" value="To your primary address"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="Selection not made"/>
+                        <c:set var="cbe" value="##"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="borrowerComesToWhichAddressString"   value="#{cbe}" class="RO_text" />
@@ -127,7 +138,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="meetBorrowerAtAgreedL2bString"   value="#{cbe}" class="RO_text" />
@@ -151,13 +162,13 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="willDeliverToBorrowerString"   value="#{cbe}" class="RO_text" />
                 </c:if>  
               </h:outputLabel>  
-              
+
             </div>
 
             <div style="margin-left:25px;margin-top:5px;width: 100%;float:left;">                    
@@ -176,7 +187,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="thirdPartyPresenceL2bString"   value="#{cbe}" class="RO_text" />
@@ -198,7 +209,7 @@
                         <c:set var="cbe" value="Yes"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="Selection not made"/>
+                        <c:set var="cbe" value="##"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="lenderThirdPartyChoiceL2bString"   value="#{cbe}" class="RO_text" />
@@ -219,7 +230,7 @@
                         <c:set var="cbe" value="Yes"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="Selection not made"/>
+                        <c:set var="cbe" value="##"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="agreedThirdPartyChoiceL2bString"   value="#{cbe}" class="RO_text" />
@@ -227,9 +238,9 @@
                 </h:outputLabel>
                 <hr />
               </div>
-               
+
             </div>
-           
+
 
 
           </div>
@@ -268,7 +279,7 @@
                         <c:set var="cbe" value="Primary address"/>
                       </c:when>
                       <c:otherwise>
-                        <c:set var="cbe" value="Selection not made"/>
+                        <c:set var="cbe" value="##"/>
                       </c:otherwise>
                     </c:choose>
                     <h:outputText id="borrowerReturnsToWhichAddressString"   value="#{cbe}" class="RO_text" />
@@ -291,7 +302,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="meetBorrowerAtAgreedB2lString"   value="#{cbe}" class="RO_text" />
@@ -313,7 +324,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="willPickUpPreferredLocationB2lString"   value="#{cbe}" class="RO_text" />
@@ -339,7 +350,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="thirdPartyPresenceB2lString"   value="#{cbe}" class="RO_text" />
@@ -363,7 +374,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="lenderThirdPartyChoiceB2lString"   value="#{cbe}" class="RO_text" />
@@ -384,7 +395,7 @@
                       <c:set var="cbe" value="Yes"/>
                     </c:when>
                     <c:otherwise>
-                      <c:set var="cbe" value="Selection not made"/>
+                      <c:set var="cbe" value="##"/>
                     </c:otherwise>
                   </c:choose>
                   <h:outputText id="agreedThirdPartyChoiceB2lString"   value="#{cbe}" class="RO_text" />
