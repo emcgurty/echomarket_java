@@ -16,6 +16,12 @@ $(document).ready(function () {
 
   });
 
+  var text_max = 255;
+  $('#textarea_feedback').html(text_max + ' characters remaining');
+  $('textarea').keyup(function () {
+    countCharacters(this);
+  });
+
 //  $("input[type=checkbox]").on('change', function () {
 //    var getid = this.id;
 //    if (getid.includes('useWhichContactAddressQuestion'))
@@ -25,10 +31,18 @@ $(document).ready(function () {
 //
 //
 //  });
+function countCharacters(input) {
+//  var text_max = 255;
+  var text_length = $(input).val().length;
+  var text_remaining = text_max - text_length;
+  $('#textarea_feedback').html(text_remaining + ' characters remaining');
+}
 
 
 });
 
+
+//
 //function setAltAddress(input) {
 //
 //  var foundHidden = $("input[type=hidden][id$='useWhichContactAddressb']");
