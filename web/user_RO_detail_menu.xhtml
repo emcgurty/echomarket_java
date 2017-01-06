@@ -28,7 +28,7 @@
 
     <c:if test="#{(readOnlyBean.which == 'both') or (readOnlyBean.which == 'lend')}" >
       <li class="subs" id="tab_item_4" >
-        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null,null)}"  value="Item  transfer Preferences"  rendered="true">
+        <h:commandLink  immediate="true" action="#{readOnlyBean.load_RO(null,null,null)}"  value="Item Transfer Preferences"  rendered="true">
           <f:param name="action" value="RO_lender_transfer" />
         </h:commandLink>   
       </li>
