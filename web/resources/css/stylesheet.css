@@ -4,18 +4,9 @@ tr:nth-child(even) {background: #F2F3F4;}*/
 table.personal {
   border-collapse: collapse;
   border-spacing: 0;
-}
-
-table.empty {
-  width: 350px;
-  border-collapse: collapse;
   empty-cells: hide;
 }
-td.empty {
-  border-style: solid;
-  border-width: 1px;
-  border-color: blue;
-}
+
 td:empty {
   visibility: hidden;
 }
