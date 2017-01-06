@@ -1,6 +1,11 @@
 /*tr:nth-child(odd) {background: #DEEBEC;} 
 tr:nth-child(even) {background: #F2F3F4;}*/
 
+table.personal {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 table.empty {
   width: 350px;
   border-collapse: collapse;
