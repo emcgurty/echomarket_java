@@ -13,54 +13,61 @@
   <ui:define name="content">
 
 
-    <h:form id="contactUsForm" >
+    <h:form id="personal_information" class="contact_us_form" style="margin-left:100px;width:75%;">
       <h:head >
         <h:inputHidden id="user_id"  value="#{userBean.user_id}" /> 
       </h:head>
-      <div class="top" >
-        <p>
-          Contact EchoMarket
-        </p>
-        <div class="right_div" >
-          <h:commandLink  action="#{contactUsBean.sendMessage()}" value="Send Message"/>
+
+      <div class="top" > 
+        <div style="margin-left:-100px;margin-top:25px;" >
+          <h:outputText value="Contact EchoMarket"  />
+
+          <h:commandLink  class="right_div" action="#{contactUsBean.sendMessage()}" value="Send Message"/>
+          <div style="width:100%;float:left;" >
+            <h:commandLink  class="right_div" action="index" value="Nevermind..." immediate="true" />
+          </div>
+
+          <div class="messagecolor" >
+            <h:messages showSummary="true" 
+                        showDetail="false"
+                        errorStyle="color: indigo" 
+                        style="list-style-type: none;"
+                        />
+          </div>
+
+        </div> 
+
+      </div>
+
+      <div style="margin:15px;float:left;" >
+
+        <div >
+          <h:outputLabel for="email"  value="Your email address: "> 
+            <h:inputText id="email"  value="#{contactUsBean.email}" required="true" requiredMessage="Email is required"/> 
+          </h:outputLabel>
+          <span class="error-message" id="contact_us_email_error"></span>
         </div>
         <br />
-        <div class="right_div" >
-          <h:commandLink  action="index" value="Nevermind.." immediate="true" />
+        <div >
+          <h:outputLabel for="subject"  value="Subject: "> 
+            <h:inputText id="subject"  value="#{contactUsBean.subject}" required="true" requiredMessage="A subject is required"/> 
+          </h:outputLabel>
+          <span class="error-message" id="contact_us_email_error"></span>
+
         </div>
-        <div class="messagecolor">
-          <h:messages showSummary="true" 
-                      showDetail="false"
-                      errorStyle="color: indigo" 
-                      />
+        <br />
+        <div >
+          <h:outputLabel for="comments"  value="Comments:"> 
+            <br />
+            <h:inputTextarea id="comments"  value="#{contactUsBean.comments}" required="true" requiredMessage="Comments are required" rows="10" cols="50" validatorMessage="Comment should contain at least 10 characters and fewer than 256 characters"> 
+              <f:validateLength maximum="255" minimum="10"/>
+            </h:inputTextarea>    
+          </h:outputLabel>
+          <div id="textarea_feedback"></div>
+          <span class="error-message" id="contact_us_error"></span>
         </div>
-      </div>
-      <br />
-
-      <div  >
-        <h:outputLabel for="email"  value="Your email address: "> 
-          <h:inputText id="email"  value="#{contactUsBean.email}" required="true" requiredMessage="Email is required"/> 
-        </h:outputLabel>
-        <span class="error-message" id="contact_us_email_error"></span>
-      </div>
-      <br />
-      <div >
-        <h:outputLabel for="subject"  value="Subject: "> 
-          <h:inputText id="subject"  value="#{contactUsBean.subject}" required="true" requiredMessage="A subject is required"/> 
-        </h:outputLabel>
-        <span class="error-message" id="contact_us_email_error"></span>
 
       </div>
-      <br />
-
-      <div >
-        <h:outputLabel for="comments"  value="Comments: (255 characters permitted)"> 
-          <h:inputTextarea id="comments"  value="#{contactUsBean.comments}" required="true" requiredMessage="Comments are required"/> 
-        </h:outputLabel>
-        <span class="error-message" id="contact_us_error"></span>
-      </div>
-
-      <br /><br />
     </h:form>
 
   </ui:define>
