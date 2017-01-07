@@ -165,7 +165,7 @@
 
 
       <c:set value="#{readOnlyBean.getByEmail(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id).toArray()}"  var="bye_data" />    
-      <h:dataTable value="${bye_data}" var="bye" rendered="${fn:length(bye_data) > 0}"  >    
+      <h:dataTable value="${bye_data}" var="bye" rendered="${fn:length(bye_data) gt 0}"  >    
         <c:choose > 
           <c:when test="#{empty bye[0]}" >
             <c:set var="email_alt" value="Email address not provided" />
