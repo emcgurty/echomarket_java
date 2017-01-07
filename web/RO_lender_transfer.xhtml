@@ -51,7 +51,7 @@
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Primary Adddress.." />
+              <h:outputText value="Contact Option: Address #1" />
             </div>
           </div>
 
@@ -97,21 +97,21 @@
                       </tr>
                       <tr >
                         <td >
-                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
+                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
                           <h:outputText value="#{pa.postalCode}" class="RO_text" />
                         </td>
                         <td >
-                          <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                          <h:outputLabel for="countryId" value="#{bundle.Country}"/>
                           <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
                         </td>
                       </tr>
                     </table>
                   </div>
                 </div>    
-
               </div>
             </div>
           </div>
+          <br />
         </h:column>
       </h:dataTable>
 
@@ -123,7 +123,7 @@
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Alternative Adddress.." />
+              <h:outputText value="Contact Option: Address #2" />
             </div>
           </div>
 
@@ -169,11 +169,11 @@
                       </tr>
                       <tr >
                         <td >
-                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
+                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
                           <h:outputText value="#{pa.postalCode}" class="RO_text" />
                         </td>
                         <td >
-                          <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
+                          <h:outputLabel for="countryId" value="#{bundle.Country}"/>
                           <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
                         </td>
                       </tr>
@@ -184,6 +184,7 @@
               </div>
             </div>
           </div>
+          <br />
         </h:column>
       </h:dataTable>
 
