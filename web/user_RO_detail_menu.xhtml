@@ -10,18 +10,18 @@
   <ul id="nav" class="user_detail_menu">
 
     <li class="subs" id="tab_item_1" >
-      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="Item"  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="Item"   >
         <f:param name="action" value="RO_item" />
       </h:commandLink>
     </li>
 
     <li class="subs" id="tab_item_2" >
-      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="About the lender/borrower"  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="About the  #{readOnlyBean.which}er"  >
         <f:param name="action" value="RO_user_nae" />
       </h:commandLink>
     </li>    
     <li class="subs" id="tab_item_3" >
-      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="Initial Contact Preferences"  rendered="#{userBean.editable != -1}" >
+      <h:commandLink immediate="true"  action="#{readOnlyBean.load_RO(null,null,null)}"  value="Contact Preferences"  >
         <f:param name="action" value="RO_contact_preferences" />
       </h:commandLink>
     </li>
