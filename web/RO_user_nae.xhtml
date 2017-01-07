@@ -16,7 +16,26 @@
 
   <ui:define name="content"  >
     <h:form  >
-      
+
+      <h:head>
+        <c:set var="eadd" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'primary' )}" />
+        <c:set var="ealt" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'alternative' )}" />
+        <c:choose>
+          <c:when test="#{(fn:length(eadd) gt 0) and (fn:length(ealt) gt 0)}" > 
+            <c:set var="table1" value="Address #1" />
+            <c:set var="table2" value="Address #2" />
+          </c:when>
+          <c:when test="#{(fn:length(eadd) gt 0) and (fn:length(ealt) eq 0)}" > 
+            <c:set var="table1" value="Address #1" />
+            <c:set var="table2" value="" />
+          </c:when>
+          <c:when test="#{(fn:length(eadd) eq 0) and (fn:length(ealt) gt 0)}" > 
+            <c:set var="table1" value="" />
+            <c:set var="table2" value="Address #1" />
+          </c:when>
+        </c:choose>
+      </h:head>
+
       <div id="form_RO_NAE"  >
         <c:set var="nae_data" value="#{readOnlyBean.getByNAE(readOnlyBean.itemId, readOnlyBean.which)}" scope="view" />
         <h:dataTable value="#{nae_data}" id="ro_nae"   var="nae" >    
@@ -76,12 +95,12 @@
               </div>
             </div>
 
-            <div style="display:block;float:left;height:auto;width:inherit;margin-top:15px;">
+            <div style="display:block;float:left;height:auto;width:100%;margin-top:15px;">
               <div style="margin-left: 15px;float:left">
-                <c:set var="eadd" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'primary' )}" />
-                <h:dataTable value="#{eadd}" var="pa"  rendered="${nae.displayAddress == 1 and fn:length(eadd) > 0}"  >    
+                <h:dataTable value="#{eadd}" var="pa"  rendered="${nae.displayAddress == 1 and fn:length(eadd) gt 0}"  >    
                   <h:column rowHeader="">
                     <table >
+                      <caption align="left">#{table1}</caption>
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
@@ -129,12 +148,12 @@
               </div>
             </div>    
             <br/><br/>
-            <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
+            <div style="display:block;float:left;height:auto;width:100%;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
-                <c:set var="ealt" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'alternative' )}" />
-                <h:dataTable value="#{ealt}" var="pa"  rendered="${nae.displayAlternativeAddress == 1 and fn:length(ealt) > 0}"  >    
+                <h:dataTable value="#{ealt}" var="pa"  rendered="${nae.displayAlternativeAddress == 1 and fn:length(ealt) gt 0}"  >    
                   <h:column rowHeader="">
                     <table >
+                      <caption>#{table2}</caption>
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
