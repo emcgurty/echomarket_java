@@ -56,60 +56,51 @@
           </div>
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-            <div style="float:left;margin-left:25px">
-              <div id="postalWithContactAddress" >    
-                <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                  <div style="margin-left: 15px;float:left">
+            <table style="border-collapse: separate; empty-cells: hide;">
+              <tr >
+                <td>
+                  <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
+                  <h:outputText value="#{pa.addressLine1}" class="RO_text" />
 
-                    <table style="border-collapse: separate; empty-cells: hide;">
-                      <tr >
-                        <td>
-                          <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
-                          <h:outputText value="#{pa.addressLine1}" class="RO_text" />
+                </td>
+                <td>
+                  <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                  <h:outputText value="#{pa.addressLine2}" class="RO_text" />
+                </td>
+              </tr> 
+              <tr>
+                <td>
+                  <h:outputLabel for="city" value="#{bundle.City}"/>
+                  <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
 
-                        </td>
-                        <td>
-                          <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
-                          <h:outputText value="#{pa.addressLine2}" class="RO_text" />
-                        </td>
-                      </tr> 
-                      <tr>
-                        <td>
-                          <h:outputLabel for="city" value="#{bundle.City}"/>
-                          <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
+                </td>
+                <td>
+                  <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                  <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h:outputLabel for="province" value="#{bundle.Province}"  />
+                  <h:outputText value="#{pa.province}" class="RO_text" />
 
-                        </td>
-                        <td>
-                          <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
-                          <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <h:outputLabel for="province" value="#{bundle.Province}"  />
-                          <h:outputText value="#{pa.province}" class="RO_text" />
-
-                        </td>
-                        <td>
-                          <h:outputLabel for="region" value="#{bundle.Region}" />
-                          <h:outputText value="#{pa.region}" class="RO_text" />
-                        </td>
-                      </tr>
-                      <tr >
-                        <td >
-                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
-                          <h:outputText value="#{pa.postalCode}" class="RO_text" />
-                        </td>
-                        <td >
-                          <h:outputLabel for="countryId" value="#{bundle.Country}"/>
-                          <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                </div>    
-              </div>
-            </div>
+                </td>
+                <td>
+                  <h:outputLabel for="region" value="#{bundle.Region}" />
+                  <h:outputText value="#{pa.region}" class="RO_text" />
+                </td>
+              </tr>
+              <tr >
+                <td >
+                  <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
+                  <h:outputText value="#{pa.postalCode}" class="RO_text" />
+                </td>
+                <td >
+                  <h:outputLabel for="countryId" value="#{bundle.Country}"/>
+                  <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
+                </td>
+              </tr>
+            </table>
           </div>
           <br />
         </h:column>
@@ -128,62 +119,54 @@
           </div>
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-            <div style="float:left;margin-left:25px">
-              <div id="postalWithContactAddress" >    
-                <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
-                  <div style="margin-left: 15px;float:left">
 
-                    <table style="border-collapse: separate; empty-cells: hide;" >
-                      <tr>
-                        <td>
-                          <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
-                          <h:outputText value="#{pa.addressLine1}" class="RO_text" />
+            <table style="border-collapse: separate; empty-cells: hide;" >
+              <tr>
+                <td>
+                  <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
+                  <h:outputText value="#{pa.addressLine1}" class="RO_text" />
 
-                        </td>
-                        <td>
-                          <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
-                          <h:outputText value="#{pa.addressLine2}" class="RO_text" />
-                        </td>
-                      </tr> 
-                      <tr>
-                        <td>
-                          <h:outputLabel for="city" value="#{bundle.City}"/>
-                          <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
+                </td>
+                <td>
+                  <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
+                  <h:outputText value="#{pa.addressLine2}" class="RO_text" />
+                </td>
+              </tr> 
+              <tr>
+                <td>
+                  <h:outputLabel for="city" value="#{bundle.City}"/>
+                  <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
 
-                        </td>
-                        <td>
-                          <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
-                          <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <h:outputLabel for="province" value="#{bundle.Province}"  />
-                          <h:outputText value="#{pa.province}" class="RO_text" />
+                </td>
+                <td>
+                  <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
+                  <h:outputText value="#{uss.getOneState(pa.usStateId)}" class="RO_text" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h:outputLabel for="province" value="#{bundle.Province}"  />
+                  <h:outputText value="#{pa.province}" class="RO_text" />
 
-                        </td>
-                        <td>
-                          <h:outputLabel for="region" value="#{bundle.Region}" />
-                          <h:outputText value="#{pa.region}" class="RO_text" />
-                        </td>
-                      </tr>
-                      <tr >
-                        <td >
-                          <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
-                          <h:outputText value="#{pa.postalCode}" class="RO_text" />
-                        </td>
-                        <td >
-                          <h:outputLabel for="countryId" value="#{bundle.Country}"/>
-                          <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                </div>    
-
-              </div>
-            </div>
+                </td>
+                <td>
+                  <h:outputLabel for="region" value="#{bundle.Region}" />
+                  <h:outputText value="#{pa.region}" class="RO_text" />
+                </td>
+              </tr>
+              <tr >
+                <td >
+                  <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/>
+                  <h:outputText value="#{pa.postalCode}" class="RO_text" />
+                </td>
+                <td >
+                  <h:outputLabel for="countryId" value="#{bundle.Country}"/>
+                  <h:outputText value="#{country.getOneCountry(pa.countryId)}" class="RO_text" />
+                </td>
+              </tr>
+            </table>
           </div>
+
           <br />
         </h:column>
       </h:dataTable>
