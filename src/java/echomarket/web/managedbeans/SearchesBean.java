@@ -107,7 +107,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
     if (ubean.getComDetailID() != null) {
       fromStatement = fromStatement + "  AND part.communityId = \'" + ubean.getComDetailID() + "\' ";
     } else {
-      fromStatement = fromStatement + "  AND part.communityId is null";
+      fromStatement = fromStatement + " AND part.communityId is null";
     }
 
 //    This will be implemented in production
