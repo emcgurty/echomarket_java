@@ -31,6 +31,24 @@
         <c:set var="line10"  value="#{lit.lenderThirdPartyChoiceB2l}" />
         <c:set var="line11" value="#{lit.agreedThirdPartyChoiceB2l}" />
       </c:forEach>
+
+      <c:set value="#{readOnlyBean.getBorrowerComesToAlternativeAddress()}"   var="aa_data" /> 
+      <c:set value="#{readOnlyBean.getBorrowerComesToPrimaryAddress()}"   var="aa_data" /> 
+         <c:choose>
+          <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) gt 0)}" > 
+            <c:set var="table1" value="Address #1" />
+            <c:set var="table2" value="Address #2" />
+          </c:when>
+          <c:when test="#{(fn:length(aa_data) gt 0) and (fn:length(aa_data) eq 0)}" > 
+            <c:set var="table1" value="Address #1" />
+            <c:set var="table2" value="" />
+          </c:when>
+          <c:when test="#{(fn:length(aa_data) eq 0) and (fn:length(aa_data) gt 0)}" > 
+            <c:set var="table1" value="" />
+            <c:set var="table2" value="Address #1" />
+          </c:when>
+        </c:choose>
+      
     </h:head>
 
     <div  class="div_p"  >
@@ -46,12 +64,12 @@
     </div>
 
     <div style="margin-left:25px;margin-top:5px;float:left;">
-      <c:set value="#{readOnlyBean.getBorrowerComesToPrimaryAddress()}"   var="pa_data" /> 
+      
       <h:dataTable value="#{pa_data}" var="pa" rendered="${fn:length(pa_data) > 0}" >    
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: Address #1" />
+              <h:outputText value="#{table1}" />
             </div>
           </div>
 
@@ -109,12 +127,12 @@
     </div>
 
     <div style="margin-left:25px;margin-top:5px;float:left;">
-      <c:set value="#{readOnlyBean.getBorrowerComesToAlternativeAddress()}"   var="aa_data" /> 
+
       <h:dataTable value="#{aa_data}"  var="pa" rendered="${fn:length(aa_data) > 0}" >    
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: Address #2" />
+              <h:outputText value="#{table2}" />
             </div>
           </div>
 
