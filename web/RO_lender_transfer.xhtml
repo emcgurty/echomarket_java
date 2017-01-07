@@ -15,6 +15,24 @@
   </ui:define>
 
   <ui:define name="content"  >
+
+    <h:head>
+      <c:set var="lt_data"  value="#{readOnlyBean.getLenderTransferData(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
+      <c:forEach items="#{lt_data}"  var="lit" >
+        <c:set var="line1" value="#{lit.meetBorrowerAtAgreedL2b}" />
+        <c:set var="line2" value="#{lit.willDeliverToBorrower}" />
+        <c:set var="line3" value="#{lit.thirdPartyPresenceL2b}" />
+        <c:set var="line4" value="#{lit.lenderThirdPartyChoiceL2b}" />
+        <c:set var="line5" value="#{lit.agreedThirdPartyChoiceL2b}" />
+        <c:set var="line6"  value="#{lit.borrowerReturnsToWhichAddress}" /> 
+        <c:set var="line7"  value="#{lit.meetBorrowerAtAgreedB2l}" />  
+        <c:set var="Line8" value="#{lit.willPickUpPreferredLocationB2l}" />
+        <c:set var="Line9" value="#{lit.thirdPartyPresenceB2l}" />
+        <c:set var="line10"  value="#{lit.lenderThirdPartyChoiceB2l}" />
+        <c:set var="line11" value="#{lit.agreedThirdPartyChoiceB2l}" />
+      </c:forEach>
+    </h:head>
+
     <div  class="div_p"  >
       <div style="margin:10px;" >
         <h:outputText value="Item Transfer Preferences from Lender to Borrowers..." />
@@ -22,7 +40,7 @@
     </div>
 
     <div  class="div_p"  >
-      <div style="margin:10px;" >
+      <div style="margin-left:10px;" >
         <h:outputText value="How the lender would like a borrower to receive his/her item:" />
       </div>
     </div>
@@ -43,8 +61,8 @@
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                   <div style="margin-left: 15px;float:left">
 
-                    <table >
-                      <tr>
+                    <table style="border-collapse: separate; empty-cells: hide;">
+                      <tr >
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
                           <h:outputText value="#{pa.addressLine1}" class="RO_text" />
@@ -88,8 +106,6 @@
                         </td>
                       </tr>
                     </table>
-
-
                   </div>
                 </div>    
 
@@ -117,7 +133,7 @@
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                   <div style="margin-left: 15px;float:left">
 
-                    <table >
+                    <table style="border-collapse: separate; empty-cells: hide;" >
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
@@ -173,96 +189,112 @@
 
     </div>
 
-    <div id="form_lender_to_borrower" class="contact_information" >
-      <c:set var="lt_data"  value="#{readOnlyBean.getLenderTransferData(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
-      <h:dataTable value="#{lt_data}"   var="lit" >  
-        <h:column rowHeader="">
-          <table class="personal" >
-            <tr>
-              <td>
-                <h:outputText value="Lender will meet with borrower at an agreed location" class="RO_text"  rendered="#{lit.meetBorrowerAtAgreedL2b == 1}" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <h:outputText value="Lender deliver to borrower preferred location." class="RO_text" rendered="#{lit.willDeliverToBorrower == 1}" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <h:outputText value="Lender would like a third-party present during transfer to borrower." class="RO_text" rendered="#{lit.thirdPartyPresenceL2b == 1}" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <h:outputText value="Lender will choose third-party during transfer." class="RO_text" rendered="#{lit.lenderThirdPartyChoiceL2b == 1}" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <h:outputText value="Third-party choice during transfer by mutual agreement." class="RO_text" rendered="#{lit.agreedThirdPartyChoiceL2b == 1}" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div  class="div_p"  >
-                  <div style="margin:10px;" >
-                    <h:outputText value="How the lender would like the borrower to return his/her item:" />
-                  </div>
-                </div>
-              </td>
-            </tr>
+    <div id="form_lender_to_borrower" class="contact_information" style="margin-left:10px;">
+      <c:choose>
+        <c:when test="#{(!empty line1) and (line1 == 1)}" >
+          <h:outputText value="Lender will meet with borrower at an agreed location" class="RO_text"   />
+        </c:when>
+      </c:choose>
 
-            <tr>
-              <td>
-                <h:outputLabel value="Borrower returns to lender's...:" rendered="#{!empty lit.borrowerReturnsToWhichAddress}" >
-                  <h:outputText    value="Yes" class="RO_text" rendered="#{lit.borrowerReturnsToWhichAddress == 1}" />
-                  <h:outputText  value="No" class="RO_text" rendered="#{lit.borrowerReturnsToWhichAddress == 0}" />
-                </h:outputLabel>
-              </td>
-            </tr>
+      <c:choose>
+        <c:when test="#{(!empty line2) and (line2 == 1)}" >
+          <br />
+          <h:outputText value="Lender will deliver to borrower preferred location." class="RO_text"  />
+        </c:when>
+      </c:choose>
 
-            <tr >
-              <td>
-                <h:outputText value="Lender wants to meet borrower at an agreed location?" class="RO_text"  rendered="#{lit.meetBorrowerAtAgreedB2l == 1}"/>
-              </td>
-            </tr>
+      <c:choose>
+        <c:when test="#{(!empty line3) and (line3 == 1)}" >
+          <br />
+          <h:outputText value="Lender would like a third-party present during transfer to borrower." class="RO_text"  />
+        </c:when>
+      </c:choose>
 
-            <tr>
-              <td>
-                <h:outputLabel value="Lender will pick up at borrower's location?:"  rendered="#{!empty lit.willPickUpPreferredLocationB2l}" >
-                  <h:outputText    value="No" class="RO_text" rendered="#{lit.willPickUpPreferredLocationB2l == 0}"/>
-                  <h:outputText    value="Yes" class="RO_text" rendered="#{lit.willPickUpPreferredLocationB2l == 1}"/>
-                </h:outputLabel>                        
-              </td>
-            </tr>
 
-            <tr>
-              <td>
-                <h:outputLabel value="Lender would like a third-party present during transfer from borrower?:" rendered="#{!empty lit.thirdPartyPresenceB2l}" >
-                  <h:outputText value="No" class="RO_text" rendered="#{lit.thirdPartyPresenceB2l == 0}" />
-                  <h:outputText value="Yes" class="RO_text" rendered="#{lit.thirdPartyPresenceB2l == 1}" />
-                </h:outputLabel>                        
-              </td>
-            </tr>
+      <c:choose>
+        <c:when test="#{(!empty line4) and (line4 == 1)}" >
+          <br />
+          <h:outputText value="Lender will choose third-party during transfer." class="RO_text"  />
+        </c:when>
+      </c:choose>
 
-            <tr>
-              <td>
-                <h:outputLabel value="Lender's choice?:" rendered="#{!empty lit.lenderThirdPartyChoiceB2l}">
-                  <h:outputText value="No" class="RO_text" rendered="#{lit.lenderThirdPartyChoiceB2l == 0}" />
-                  <h:outputText value="Yes" class="RO_text" rendered="#{lit.lenderThirdPartyChoiceB2l == 1}" />
-                </h:outputLabel>
 
-                <h:outputLabel value="Mutually agreed?:" rendered="#{!empty lit.agreedThirdPartyChoiceB2l}">
-                  <h:outputText   value="No" class="RO_text" rendered="#{lit.agreedThirdPartyChoiceB2l == 0}" />
-                  <h:outputText   value="Yes" class="RO_text" rendered="#{lit.agreedThirdPartyChoiceB2l == 1}" />
-                </h:outputLabel>
+      <c:choose>
+        <c:when test="#{(!empty line5) and (line5 == 1)}" >
+          <br />
+          <h:outputText value="Choice of third-party present during transfer by mutual agreement." class="RO_text"  />
+        </c:when>
+      </c:choose>
 
-              </td>
-            </tr>
-          </table>
-        </h:column>
-      </h:dataTable>
+
+      <div  class="div_p"  >
+        <div style="margin-top:10px;" >
+          <h:outputText value="How the lender would like the borrower to return his/her item:" rendered="#{(!empty line6) or (!empty line7) or (!empty line8) or (!empty line9) or (!empty line10) or (!empty line11) }"  />
+        </div>
+      </div>
+
+      <c:choose>
+        <c:when test="#{(!empty line6) and (line6 gt 0)}" >
+          <br />
+          <h:outputLabel value="Borrower returns to lender's address:"  >
+            <h:outputText    value="Yes" class="RO_text" />
+          </h:outputLabel>
+        </c:when>
+      </c:choose>
+
+
+      <c:choose>
+        <c:when test="#{(!empty line7) and(line7 == 1)}" >
+          <br />
+          <h:outputText value="Lender wants to meet borrower at an agreed location?" class="RO_text"  />
+        </c:when>
+      </c:choose>
+
+
+      <c:choose>
+        <c:when test="#{(!empty line8) and (line8 gt -1)}" >
+          <br />
+          <h:outputLabel value="Lender will pick up at borrower's location?:"    >
+            <h:outputText    value="No" class="RO_text" rendered="#{line8 == 0}"/>
+            <h:outputText    value="Yes" class="RO_text" rendered="#{line8 == 1}"/>
+          </h:outputLabel>                        
+        </c:when>
+      </c:choose>
+
+      <c:choose>
+        <c:when test="#{(!empty line9) and (line9 gt -1)}" >
+          <br />
+          <h:outputLabel value="Lender would like a third-party present during transfer from borrower?:"  >
+            <h:outputText value="No" class="RO_text" rendered="#{line9 == 0}" />
+            <h:outputText value="Yes" class="RO_text" rendered="#{line9 == 1}" />
+          </h:outputLabel>                        
+        </c:when>
+      </c:choose>
+
+
+
+      <c:choose>
+        <c:when test="#{(!empty line10) and (line10 gt -1)}" >
+          <br />
+          <h:outputLabel value="Lender's choice of third-party present?:" rendered="#{!empty line10}">
+            <h:outputText value="No" class="RO_text" rendered="#{line10 == 0}" />
+            <h:outputText value="Yes" class="RO_text" rendered="#{line10 == 1}" />
+          </h:outputLabel>
+        </c:when>
+      </c:choose>
+
+
+
+      <c:choose>
+        <c:when test="#{(!empty line11) and (line11 gt -1)}" >
+          <br />
+          <h:outputLabel value="Mutually agreed choice of third-party?:" >
+            <h:outputText   value="No" class="RO_text" rendered="#{line11 == 0}" />
+            <h:outputText   value="Yes" class="RO_text" rendered="#{line11 == 1}" />
+          </h:outputLabel>
+        </c:when>
+      </c:choose>
+
     </div>
     <br /><br />
   </ui:define>
