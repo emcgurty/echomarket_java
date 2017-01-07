@@ -116,7 +116,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if (partlist.size() == 1) {
       pp = (Participant) partlist.get(0);
       this.participant_id = pp.getParticipant_id();
-      this.communityId = pp.getParticipant_id();
+      this.communityId = pp.getCommunityId();
       this.contactDescribeId = pp.getContactDescribeId();
       this.organizationName = pp.getOrganizationName();
       this.displayOrganization = pp.getDisplayOrganization();
@@ -395,11 +395,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         tx = sb.beginTransaction();
         String new_ID = getId();
         Participant part = null;
-        ///  1218 changed
+       
         if (ubean.getRoleId() == 0) {
-          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, 1, new Date(), "NA", 0);
+          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, 1, new Date(),getClientIpAddr(), 0);
         } else {
-          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, 1, new Date(), "NA", 1);
+          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, 1, new Date(), getClientIpAddr(), 1);
         }
 
         sb.save(part);
