@@ -65,7 +65,6 @@
                   <c:set var="save_update"  value="Update " />
                 </c:when >
               </c:choose>
-
               <h:commandLink  action="#{participantBean.updateNAE()}"  class="right_div" value="#{save_update} #{sub_title}"   rendered="#{userBean.editable == 1}" />
               <h:commandLink  action="#{participantBean.load_ud(userbean.user_id)}"  class="right_div" value="Edit '#{title}' Information"   rendered="#{userBean.editable == 0}" />
             </div> 
@@ -75,7 +74,7 @@
                 <f:param name="action" value="edit" />
               </h:commandLink>              
               <h:inputHidden id="editable"  value="#{userBean.editable}"  />
-              <h:inputHidden id="communityId"  value="#{participantBean.communityId}"   />
+              <h:inputHidden id="communityId"  value="#{userBean.communityId}"   />
               <h:inputHidden id="participant_id"  value="#{participantBean.participant_id}"  />
             </div>
             <div class="messagecolor">
