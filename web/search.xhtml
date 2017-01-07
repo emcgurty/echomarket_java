@@ -140,7 +140,7 @@
           </h:outputLabel>
           <br />
           <c:set var="currentImageResult"  value="#{searchesBean.itemImage(var_search.itemId)}" />
-          <c:forEach items="#{currentImageResult}" var="var_image"  rendered="${fn:length(currentImageResult) > 0}" >
+          <c:forEach items="#{currentImageResult}" var="var_image"  rendered="${fn:length(currentImageResult) gt 0}" >
             <h:graphicImage name="#{var_image.imageFileName}" library="#{searchesBean.getImageLibrary()}" alt="Item Image"   height="100" width="100" />
             <h:outputLabel for="itemImageCaption" value="Image caption:" rendered="${!empty var_image.itemImageCaption}" >
               <h:outputText  id="itemImageCaption" value="#{var_image.itemImageCaption}" style="margin-left:10px;color:black;"  rendered="#{!empty var_image.itemImageCaption}"/>
