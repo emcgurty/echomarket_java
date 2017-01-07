@@ -1,19 +1,19 @@
 /*tr:nth-child(odd) {background: #DEEBEC;} 
 tr:nth-child(even) {background: #F2F3F4;}*/
 
-table.personal {
+/*table.personal {
   border-collapse: collapse;
   border-spacing: 0;
   empty-cells: hide;
-}
+}*/
 
-td:empty {
+/*td:empty {
   visibility: hidden;
 }
 
 tr:empty {
   visibility: hidden;
-}
+}*/
 
 hr {
   border: 1px dotted indigo;
