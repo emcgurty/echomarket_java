@@ -33,19 +33,19 @@
       </c:forEach>
 
       <c:set value="#{readOnlyBean.getBorrowerComesToAlternativeAddress()}"   var="aa_data" /> 
-      <c:set value="#{readOnlyBean.getBorrowerComesToPrimaryAddress()}"   var="aa_data" /> 
+      <c:set value="#{readOnlyBean.getBorrowerComesToPrimaryAddress()}"   var="pa_data" /> 
          <c:choose>
           <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) gt 0)}" > 
-            <c:set var="table1" value="Address #1" />
-            <c:set var="table2" value="Address #2" />
+            <c:set var="table1" value="Come to Address #1" />
+            <c:set var="table2" value="or Address #2" />
           </c:when>
-          <c:when test="#{(fn:length(aa_data) gt 0) and (fn:length(aa_data) eq 0)}" > 
-            <c:set var="table1" value="Address #1" />
+          <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) eq 0)}" > 
+            <c:set var="table1" value="Come to Address #1" />
             <c:set var="table2" value="" />
           </c:when>
-          <c:when test="#{(fn:length(aa_data) eq 0) and (fn:length(aa_data) gt 0)}" > 
+          <c:when test="#{(fn:length(pa_data) eq 0) and (fn:length(aa_data) gt 0)}" > 
             <c:set var="table1" value="" />
-            <c:set var="table2" value="Address #1" />
+            <c:set var="table2" value="Come to Address #1" />
           </c:when>
         </c:choose>
       
@@ -120,10 +120,10 @@
               </tr>
             </table>
           </div>
-          <br />
+         
         </h:column>
       </h:dataTable>
-
+ <br />
     </div>
 
     <div style="margin-left:25px;margin-top:5px;float:left;">
@@ -184,11 +184,10 @@
               </tr>
             </table>
           </div>
-
-          <br />
+        
         </h:column>
       </h:dataTable>
-
+  <br />
     </div>
 
     <div id="form_lender_to_borrower" class="contact_information" style="margin-left:10px;">
@@ -273,8 +272,6 @@
         </c:when>
       </c:choose>
 
-
-
       <c:choose>
         <c:when test="#{(!empty line10) and (line10 gt -1)}" >
           <br />
@@ -284,8 +281,6 @@
           </h:outputLabel>
         </c:when>
       </c:choose>
-
-
 
       <c:choose>
         <c:when test="#{(!empty line11) and (line11 gt -1)}" >
