@@ -182,7 +182,7 @@
       <c:set value="#{readOnlyBean.getByEmail(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id).toArray()}"  var="bye_data" />    
       <h:dataTable value="${bye_data}" var="bye" rendered="${fn:length(bye_data) gt 0}"  >    
         <h:column rowHeader="">
-                    
+
           <div  class="div_p"  >
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Email..." />
@@ -212,27 +212,76 @@
         </h:column>
       </h:dataTable>
 
-      <c:set  var="gbp"   scope="view"  value="${readOnlyBean.getByPhone(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id).toArray()}" />
-      <h:dataTable value="#{gbp}" var="byp"   rendered="${fn:length(gpb) > 0}" >    
+      <c:set  var="gbp"  value="${readOnlyBean.getByPhone(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}" />
+      <c:forEach var="arePhoneNumbersThere"  items="#{gbp}" >
+        <c:set var="phoneNumbersPresent" value="#{(!empty arePhoneNumbersThere[3]) or (!empty arePhoneNumbersThere[4]) or (!empty arePhoneNumbersThere[5])}" />
+        <c:choose>
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1: " />
+              <c:set var="phone2" value="Contact Phone #2: " />
+              <c:set var="phone3" value="Contact Phone #3: " />
+            </c:when>
+          
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1: " />
+              <c:set var="phone2" value="Contact Phone #2: " />
+              <c:set var="phone3" value="" />
+            </c:when>
+             <c:when test="#{(empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="" />
+              <c:set var="phone2" value="Contact Phone #1: " />
+              <c:set var="phone3" value="Conact Phone #2: " />
+            </c:when>
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1: " />
+              <c:set var="phone2" value="" />
+              <c:set var="phone3" value="Conact Phone #2: " />
+            </c:when>
+          
+            
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1" />
+              <c:set var="phone2" value="" />
+              <c:set var="phone3" value="" />
+            </c:when> 
+            <c:when test="#{(empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="" />
+              <c:set var="phone2" value="Contact Phone #1" />
+              <c:set var="phone3" value="" />
+            </c:when> 
+            <c:when test="#{(empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="" />
+              <c:set var="phone2" value="" />
+              <c:set var="phone3" value="Contact Phone #1" />
+            </c:when> 
+        
+          
+          </c:choose>
+
+      </c:forEach>
+
+      <h:dataTable value="#{gbp}" var="byp" rendered="#{(fn:length(gbp)  == 1) and (phoneNumbersPresent)}" >       
         <h:column rowHeader="">
           <div  class="div_p"  id="display_phone">
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Phone..." />
             </div>
           </div>
+
+          
           <div style="float:left;margin-left:25px;display:block;" >
             <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
-              <h:outputLabel value="By home phone?:"  for="contactByHomePhone"  rendered="#{byp[0] == 1 and byp[6] == 1}" >
+              <h:outputLabel value="#{phone1}"  for="contactByHomePhone"  rendered="#{byp[0] == 1 and byp[6] == 1}" >
                 <h:outputText   value="#{byp[3]}"  class="RO_text"  rendered="#{byp[0] == 1 and byp[6] == 1}" />
               </h:outputLabel> 
             </div>
             <div style="margin-left:25px;float:left;" id="display_cellPhone" class="phone" >
-              <h:outputLabel value="... cell phone?:"  for="contactByCellPhone"  rendered="#{byp[1] == 1 and byp[7] == 1}" >
+              <h:outputLabel value="#{phone2}"  for="contactByCellPhone"  rendered="#{byp[1] == 1 and byp[7] == 1}" >
                 <h:outputText  value="#{byp[4]}"  class="RO_text"  rendered="#{byp[1] == 1 and byp[7] == 1}" />
               </h:outputLabel>
             </div>
             <div style="margin-left:25px;float:left;" id="display_alternativePhone" class="phone" >
-              <h:outputLabel value="... by alternative phone?:"  for="contactByAlternativePhone" rendered="#{byp[2] == 1 and byp[8] == 1}" >
+              <h:outputLabel value="#{phone3}"  for="contactByAlternativePhone" rendered="#{byp[2] == 1 and byp[8] == 1}" >
                 <h:outputText  value="#{byp[5]}"   class="RO_text"   rendered="#{byp[2] == 1 and byp[8] == 1}" />
               </h:outputLabel>
             </div>
@@ -257,9 +306,10 @@
               </h:outputLabel>
             </div>
           </div>
-
+          <c:set var="socialMediaPresent" value="#{(!empty bysm.contactByFacebook) or (!empty bysm.contactByLinkedIn) or (!empty bysm.contactByTwitter) or (!empty bysm.contactByInstagram) or (!empty bysm.contactByOtherSocialMedia) or (!empty bysm.contactByOtherSocialMediaAccess)}"  />
+          <h:outputText value="#{socialMediaPresent}"  />
           <c:choose>
-            <c:when test="#{!empty bysm.contactByFacebook} or #{!empty bysm.contactByLinkedIn} or #{!empty bysm.contactByTwitter} or #{!empty bysm.contactByInstagram} or #{!empty bysm.contactByOtherSocialMedia} or #{!empty bysm.contactByOtherSocialMediaAccess}"  >
+            <c:when test="#{socialMediaPresent}"  >
               <div  class="div_p"  >
                 <div style="margin:10px;" >
                   <h:outputText value="Contact Option: By Social Media..." />
@@ -305,6 +355,7 @@
                   <h:outputText  value="#{bysm.contactByOtherSocialMediaAccess}" class="RO_text"   rendered="#{!empty bysm.contactByOtherSocialMediaAccess}"  /> 
                 </h:outputLabel>
               </div>
+
             </c:when>
           </c:choose>
         </h:column>
