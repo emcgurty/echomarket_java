@@ -16,8 +16,29 @@
 
   <ui:define name="content"  >
 
-    <div id="RO_form_contact_preference" class="contact_information" >
+    <h:head>
       <c:set value="#{readOnlyBean.getPrimaryAddress(readOnlyBean.itemId)}"  var="pa_data" />    
+      <c:set value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}"  var="aa_data" />    
+      <c:choose>
+        <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) gt 0)}" > 
+          <c:set var="table1" value="Contact Address #1" />
+          <c:set var="table2" value="Contact Address #2" />
+        </c:when>
+        <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) eq 0)}" > 
+          <c:set var="table1" value="Contact Address #1" />
+          <c:set var="table2" value="" />
+        </c:when>
+        <c:when test="#{(fn:length(pa_data) eq 0) and (fn:length(aa_data) gt 0)}" > 
+          <c:set var="table1" value="" />
+          <c:set var="table2" value="Contact Address #1" />
+        </c:when>
+      </c:choose>
+
+
+    </h:head>
+
+    <div id="RO_form_contact_preference" class="contact_information" >
+
       <h:dataTable value="#{pa_data}"  id="cp" var="pa" rendered="${fn:length(pa_data) > 0}"  
                    styleClass="cp-table"
                    headerClass="cp-table-header"
@@ -25,7 +46,7 @@
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: Adddress #1" />
+              <h:outputText value="#{table1}" />
             </div>
           </div>
 
@@ -34,13 +55,11 @@
               <div id="postalWithContactAddress" >    
                 <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
                   <div style="margin-left: 15px;float:left">
-
                     <table >
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
                           <h:outputText value="#{pa.addressLine1}" class="RO_text" />
-
                         </td>
                         <td>
                           <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
@@ -51,7 +70,6 @@
                         <td>
                           <h:outputLabel for="city" value="#{bundle.City}"/>
                           <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 2}" class="RO_text" />
-
                         </td>
                         <td>
                           <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
@@ -80,18 +98,15 @@
                         </td>
                       </tr>
                     </table>
-
-
                   </div>
                 </div>    
-
               </div>
             </div>
           </div>
         </h:column>
       </h:dataTable>
 
-      <c:set value="#{readOnlyBean.getAlternativeAddress(readOnlyBean.itemId)}"  var="aa_data" />    
+
       <h:dataTable value="#{aa_data}"   var="pa" rendered="${fn:length(aa_data) > 0}"  
                    styleClass="cp-table"
                    headerClass="cp-table-header"
@@ -100,7 +115,7 @@
 
           <div  class="div_p"  >
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: Address #2" />
+              <h:outputText value="#{table2}" />
             </div>
           </div>
 
@@ -166,25 +181,8 @@
 
       <c:set value="#{readOnlyBean.getByEmail(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id).toArray()}"  var="bye_data" />    
       <h:dataTable value="${bye_data}" var="bye" rendered="${fn:length(bye_data) gt 0}"  >    
-        <c:choose > 
-          <c:when test="#{empty bye[0]}" >
-            <c:set var="email_alt" value="Email address not provided" />
-          </c:when>
-          <c:when test="#{!empty bye[0]}" >
-            <c:set var="email_alt" value="#{bye[0]}" />
-          </c:when>  
-        </c:choose>  
-
-        <c:choose > 
-          <c:when test="#{empty bye[1]}" >
-            <c:set var="user_email" value="Email address not provided" />
-          </c:when>
-          <c:when test="#{!empty bye[1]}" >
-            <c:set var="user_email" value="#{bye[1]}" />
-          </c:when>  
-        </c:choose>  
-
         <h:column rowHeader="">
+                    
           <div  class="div_p"  >
             <div style="margin:10px;" >
               <h:outputText value="Contact Option: By Email..." />
@@ -197,15 +195,15 @@
               <c:choose >
                 <c:when test="#{questionAltEmailData != 1}" >
                   <h:outputLabel value="Which E-Mail Address?:"  >
-                    <h:outputText  value="By email: #{user_email}"  class="RO_text" rendered="#{bye[2] == 3}"  />
+                    <h:outputText  value="#{bye[0]}"  class="RO_text" rendered="#{bye[2] == 3}"  />
                   </h:outputLabel>
                 </c:when>    
                 <c:when test="#{questionAltEmailData == 1}" >
                   <h:outputLabel value="Which E-Mail Address?:"  >
-                    <h:outputText  value="By email: #{email_alt} "  class="RO_text" rendered="#{bye[2] == 1}"  />
-                    <h:outputText  value="and #{user_email}"  class="RO_text" rendered="#{bye[2] == 1}"  />
-                    <h:outputText  value="By email: #{email_alt}"  class="RO_text" rendered="#{bye[2] == 2}"  />
-                    <h:outputText  value="By email: #{user_email}"  class="RO_text" rendered="#{bye[2] == 3}"  />
+                    <h:outputText  value="#{bye[1]} "  class="RO_text" rendered="#{bye[2] == 1}"  />
+                    <h:outputText  value="and #{bye[0]}"  class="RO_text" rendered="#{bye[2] == 1}"  />
+                    <h:outputText  value="#{bye[1]}"  class="RO_text" rendered="#{bye[2] == 2}"  />
+                    <h:outputText  value="#{bye[0]}"  class="RO_text" rendered="#{bye[2] == 3}"  />
                   </h:outputLabel>
                 </c:when> 
               </c:choose>
