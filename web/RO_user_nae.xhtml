@@ -17,9 +17,11 @@
   <ui:define name="content"  >
     <h:form  >
 
-      <h:head>
-        <c:set var="eadd" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'primary' )}" />
-        <c:set var="ealt" value="#{readOnlyBean.getExistingAddress(nae.participant_id,'alternative' )}" />
+      <div id="form_RO_NAE"  >
+        <c:set var="nae_data" value="#{readOnlyBean.getByNAE(readOnlyBean.itemId, readOnlyBean.which)}" />
+        <c:forEach var="asd" items="#{nae_data}" > 
+        <c:set var="eadd" value="#{readOnlyBean.getExistingAddress(asd.participant_id,'primary' )}"   />
+        <c:set var="ealt" value="#{readOnlyBean.getExistingAddress(asd.participant_id,'alternative' )}"  />
         <c:choose>
           <c:when test="#{(fn:length(eadd) gt 0) and (fn:length(ealt) gt 0)}" > 
             <c:set var="table1" value="Address #1" />
@@ -34,10 +36,7 @@
             <c:set var="table2" value="Address #1" />
           </c:when>
         </c:choose>
-      </h:head>
-
-      <div id="form_RO_NAE"  >
-        <c:set var="nae_data" value="#{readOnlyBean.getByNAE(readOnlyBean.itemId, readOnlyBean.which)}" scope="view" />
+        </c:forEach>
         <h:dataTable value="#{nae_data}" id="ro_nae"   var="nae" >    
           <h:column rowHeader="">
             <c:set var="ut"  scope="view" value="#{readOnlyBean.which}"  />
@@ -99,8 +98,13 @@
               <div style="margin-left: 15px;float:left">
                 <h:dataTable value="#{eadd}" var="pa"  rendered="${nae.displayAddress == 1 and fn:length(eadd) gt 0}"  >    
                   <h:column rowHeader="">
+
+                    <div  class="div_p"  >
+                      <div style="margin:10px;" >
+                        <h:outputText value="#{table1}" />
+                      </div>
+                    </div>
                     <table >
-                      <caption align="left">#{table1}</caption>
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
@@ -152,8 +156,13 @@
               <div style="margin-left: 15px;float:left">
                 <h:dataTable value="#{ealt}" var="pa"  rendered="${nae.displayAlternativeAddress == 1 and fn:length(ealt) gt 0}"  >    
                   <h:column rowHeader="">
+                    <div  class="div_p"  >
+                      <div style="margin:10px;" >
+                        <h:outputText value="#{table2}" />
+                      </div>
+                    </div>
                     <table >
-                      <caption>#{table2}</caption>
+
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/>
