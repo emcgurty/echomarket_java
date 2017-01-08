@@ -1,9 +1,3 @@
-/*
-
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Participant;
@@ -228,7 +222,9 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
 
   public List getByPhone(String iid, String which, String pid) {
 
-//  For the moment this call is working, the returned object has two tiers the object and then the result. But I have seen the returned object has only one tier, which will cause the GUI to fail
+/*
+ * //  For the moment this call is working, the returned object has two tiers the object and then the result. But I have seen the returned object has only one tier, which will cause the GUI to fail
+ */ 
     setItemId(iid);
     setWhich(which);
     setParticipant_id(pid);
