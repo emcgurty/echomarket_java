@@ -228,6 +228,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
 
   public List getByPhone(String iid, String which, String pid) {
 
+//  For the moment this call is working, the returned object has two tiers the object and then the result. But I have seen the returned object has only one tier, which will cause the GUI to fail
     setItemId(iid);
     setWhich(which);
     setParticipant_id(pid);
