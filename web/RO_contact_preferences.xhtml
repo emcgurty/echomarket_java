@@ -179,7 +179,16 @@
         </h:column>
       </h:dataTable>
 
-      <h:dataTable value="${getEmail}" var="bye" rendered="${fn:length(getEmail) gt 0}"  >    
+      <c:forEach items="#{getEmail}"  var="eEmpty" >
+        <c:set var="displayEmail" value="true" />
+        <c:choose>  
+          <c:when test="#{empty eEmpty[1] and empty eEmpty[0]}" >
+            <c:set var="displayEmail" value="false" />
+          </c:when>  
+        </c:choose>  
+      </c:forEach>
+
+      <h:dataTable value="${getEmail}" var="bye" rendered="${(fn:length(getEmail) gt 0) and (displayEmail)}"  >    
         <h:column rowHeader="">
           <div  class="div_p"  >
             <div style="margin:10px;" >
@@ -212,54 +221,59 @@
 
 
       <c:forEach var="arePhoneNumbersThere"  items="#{gbp}" >
+
         <c:set var="phoneNumbersPresent" value="#{(!empty arePhoneNumbersThere[3]) or (!empty arePhoneNumbersThere[4]) or (!empty arePhoneNumbersThere[5])}" />
-        <c:choose>
-          <c:when test="#{(!empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
-            <c:set var="phone1" value="Contact Phone #1: " />
-            <c:set var="phone2" value="Contact Phone #2: " />
-            <c:set var="phone3" value="Contact Phone #3: " />
-          </c:when>
 
-          <c:when test="#{(!empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
-            <c:set var="phone1" value="Contact Phone #1: " />
-            <c:set var="phone2" value="Contact Phone #2: " />
-            <c:set var="phone3" value="" />
-          </c:when>
-          <c:when test="#{(empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
-            <c:set var="phone1" value="" />
-            <c:set var="phone2" value="Contact Phone #1: " />
-            <c:set var="phone3" value="Contact Phone #2: " />
-          </c:when>
-          <c:when test="#{(!empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
-            <c:set var="phone1" value="Contact Phone #1: " />
-            <c:set var="phone2" value="" />
-            <c:set var="phone3" value="Contact Phone #2: " />
-          </c:when>
+        <c:if test="#{phoneNumbersPresent == true}"  >
+          <c:choose>
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1: " />
+              <c:set var="phone2" value="Contact Phone #2: " />
+              <c:set var="phone3" value="Contact Phone #3: " />
+            </c:when>
+
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1: " />
+              <c:set var="phone2" value="Contact Phone #2: " />
+              <c:set var="phone3" value="" />
+            </c:when>
+            <c:when test="#{(empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="" />
+              <c:set var="phone2" value="Contact Phone #1: " />
+              <c:set var="phone3" value="Contact Phone #2: " />
+            </c:when>
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1: " />
+              <c:set var="phone2" value="" />
+              <c:set var="phone3" value="Contact Phone #2: " />
+            </c:when>
 
 
-          <c:when test="#{(!empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
-            <c:set var="phone1" value="Contact Phone #1: " />
-            <c:set var="phone2" value="" />
-            <c:set var="phone3" value="" />
-          </c:when> 
-          <c:when test="#{(empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
-            <c:set var="phone1" value="" />
-            <c:set var="phone2" value="Contact Phone #1: " />
-            <c:set var="phone3" value="" />
-          </c:when> 
-          <c:when test="#{(empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
-            <c:set var="phone1" value="" />
-            <c:set var="phone2" value="" />
-            <c:set var="phone3" value="Contact Phone #1: " />
-          </c:when> 
-        </c:choose>
+            <c:when test="#{(!empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="Contact Phone #1: " />
+              <c:set var="phone2" value="" />
+              <c:set var="phone3" value="" />
+            </c:when> 
+            <c:when test="#{(empty arePhoneNumbersThere[3]) and (!empty arePhoneNumbersThere[4]) and (empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="" />
+              <c:set var="phone2" value="Contact Phone #1: " />
+              <c:set var="phone3" value="" />
+            </c:when> 
+            <c:when test="#{(empty arePhoneNumbersThere[3]) and (empty arePhoneNumbersThere[4]) and (!empty arePhoneNumbersThere[5])}" > 
+              <c:set var="phone1" value="" />
+              <c:set var="phone2" value="" />
+              <c:set var="phone3" value="Contact Phone #1: " />
+            </c:when> 
+          </c:choose>
+        </c:if>
       </c:forEach>
 
       <c:forEach var="isPresent"  items="#{data_bysm}" >
         <c:set var="socialMediaPresent" value="#{(!empty isPresent.contactByFacebook) or (!empty isPresent.contactByLinkedIn)  or (!empty isPresent.contactByInstagram) or (!empty isPresent.contactByTwitter) or (!empty isPresent.contactByTwitter) or (!empty isPresent.contactByInstagram) or (!empty isPresent.contactByOtherSocialMedia) or (!empty isPresent.contactByOtherSocialMediaAccess)}"  />
+
       </c:forEach>
 
-      <h:dataTable value="#{gbp}" var="byp" rendered="#{(fn:length(gbp)  == 1) and (phoneNumbersPresent)}" >       
+      <h:dataTable value="#{gbp}" var="byp" rendered="#{(fn:length(gbp)  == 1) and (phoneNumbersPresent == true)}" >       
         <h:column rowHeader="">
           <div  class="div_p"  id="display_phone">
             <div style="margin:10px;" >
