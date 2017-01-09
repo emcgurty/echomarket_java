@@ -9,8 +9,10 @@ $(document).ready(function () {
       checkAltEmailProvide(this);
     if (getid.includes('age18OrMore'))
       check18OrMore(this);
-    if (getid.includes('gooodwill'))
+    if (getid.includes('goodwill'))
       checkGoodWill(this);
+    if (getid.includes('instruct'))
+      checkInstructions(this);
     if (getid.includes('smallFee'))
       checkSmallFee(this);
 
@@ -106,6 +108,18 @@ function checkGoodWill(input) {
     } else {
       $("span#goodwill_span.error-message").text("");
       $("span#goodwill_span.error-message").css("visibility", "hidden");
+    }
+  }
+}
+function checkInstructions(input) {
+
+  if (input.value == 0) {
+    if (input.checked == true) {
+      $("span#instructions_span.error-message").text("You must read EchoMarket Instructions.");
+      $("span#instructions_span.error-message").css("visibility", "visible");
+    } else {
+      $("span#instructions_span.error-message").text("");
+      $("span#instructions_span.error-message").css("visibility", "hidden");
     }
   }
 }
