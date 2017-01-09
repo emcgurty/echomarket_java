@@ -110,26 +110,21 @@
         <li class="subs">
           <a href="#s1">Login</a>
           <ul>
-
             <li>
               <h:commandLink id="login" action="#{userBean.load_login()}">
                 <h:outputText value="Login"/>
               </h:commandLink>                 
-
             </li>
             <li>
               <h:commandLink id="forgotUsername" action="#{userBean.load_forgotUsername()}">
                 <h:outputText value="Forgot Username"/>
               </h:commandLink>                 
-
             </li>
             <li>
               <h:commandLink id="forgotUserPassword" action="#{userBean.load_forgotUserPassword()}">
                 <h:outputText value="Forgot Password"/>
               </h:commandLink>                 
-
             </li>
-
           </ul>
         </li>   
 
@@ -161,6 +156,9 @@
       </c:if>
       <li class="subs"  >
         <h:commandLink id="contactUs" action="contact_us" value="Contact EchoMarket"/>
+      </li>
+      <li class="subs"  >
+        <h:commandLink id="instructions" action="EchoMarket_instructions" value="EchoMarket Instructions"/>
       </li>
     </ul>
 
