@@ -231,8 +231,11 @@ public class Users implements java.io.Serializable {
    * @return the participant
    */
   @OneToMany
-  @JoinTable(name = "echomarket.hibernate.Participant")
-  @JoinColumn(name = "user_id")
+  @JoinTable(
+            name = "echomarket.hibernate.Participant",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "participant_id")
+  )
   public Set<Participant> getParticipant() {
     return participant;
   }
