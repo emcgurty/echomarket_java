@@ -31,6 +31,15 @@
       <div style="margin-left:25px;margin-top:5px;margin-bottom:5px;float:left;">
         <ul >
           <li style="margin:5px;">
+            <h:outputLabel value="I have read EchoMarket Instructions."  for="instructions"  ><span class="required_fields">*</span>
+              <h:selectOneRadio id="instructions"  value="#{participantBean.instructions}"  required="true" requiredMessage="You are required to read Echomarket Instructions.">
+                <f:selectItem itemValue="1" itemLabel="Yes" />
+                <f:selectItem itemValue="0" itemLabel="No" />
+              </h:selectOneRadio>    
+            </h:outputLabel>                                     
+            <span class="error-message" id="instructions_span" ></span>
+          </li>
+          <li style="margin:5px;">
             <h:outputLabel value="I am acting and participating in a spirit of goodwill."  for="goodwill"  ><span class="required_fields">*</span>
               <h:selectOneRadio id="goodwill"  value="#{participantBean.goodwill}"  required="true" requiredMessage="You are required to agree to participate in goodwill.">
                 <f:selectItem itemValue="1" itemLabel="Yes" />
