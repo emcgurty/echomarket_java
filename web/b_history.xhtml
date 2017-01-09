@@ -27,6 +27,12 @@
           <h:outputLabel for="itemModel" value="Item Model:" >
             <h:outputText  id="itemModel" value="#{history[3]}" style="margin-left:10px;color:black;"/>
           </h:outputLabel>
+          <br />
+          <h:outputLabel for="approved" value="Item Approved:" >
+            <h:outputText  id="approved" value="Yes" style="margin-left:10px;color:black;" rendered="#{history[5] == 1}"  />
+            <h:outputText  id="approved" value="No" style="margin-left:10px;color:black;" rendered="#{history[5] == 0}"  />
+          </h:outputLabel>
+          <br />
           <h:graphicImage name="#{history[0]}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty history[0]}"/>
           <br />
           <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history[1])}" immediate="true" rendered="#{history[4] == userBean.participant_id}"  >
