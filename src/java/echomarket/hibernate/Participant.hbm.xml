@@ -91,6 +91,9 @@
     <property name="goodwill" type="java.lang.Integer">
       <column name="goodwill" />
     </property>
+    <property name="instructions" type="java.lang.Integer">
+      <column name="instructions" />
+    </property>
     <property name="age18OrMore" type="java.lang.Integer">
       <column name="age_18_or_more" />
     </property>
