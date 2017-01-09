@@ -285,7 +285,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (itemId.isEmpty() == true) {
 
       Items ii = new Items(new_iid, ubean.getParticipant_id(), categoryId, otherItemCategory,
-              itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 1, notify, itemType);
+              itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 0, notify, itemType);
 
       try {
         sb = hib_session();
@@ -327,6 +327,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         uitem.setItemConditionId(itemConditionId);
         uitem.setItemCount(itemCount);
         uitem.setItemType(itemType);
+        uitem.setApproved(0);
 
         try {
           sb = hib_session();
@@ -742,77 +743,6 @@ public class ItemBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  public String getCurrentItemDescription(String iid) {
-
-    List result = null;
-    Session session = null;
-    Transaction tx = null;
-    String local_string = null;
-
-    try {
-      session = hib_session();
-      tx = session.beginTransaction();
-      local_string = "FROM Items WHERE item_id = '" + iid + "'";
-      result = session.createQuery(local_string).list();
-      tx.commit();
-      Items item_d = (Items) result.get(0);
-      local_string = item_d.getItemDescription();
-    } catch (Exception e) {
-      tx.rollback();
-      System.out.println("Error in getCurrentItem");
-      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
-
-    } finally {
-      tx = null;
-      session = null;
-
-    }
-
-    return local_string;
-  }
-
-  public List getAllSoughtItems(String which) {
-    System.out.println("getAllSoughtItems Called");
-    List result = null;
-//    Session session = null;
-//    Transaction tx = null;
-//    String query = null;
-//    try {
-//      session = hib_session();
-//      tx = session.beginTransaction();
-//      if (ubean.getCommunityId() == null) {
-//        query = "  SELECT itm FROM Participant part "
-//                + " INNER join part.item itm "
-//                + " WHERE itm.itemType = :it AND part.communityId = null ORDER BY itm.dateCreated";
-//        result = session.createQuery(query)
-//                .setParameter("it", which)
-//                .list();
-//
-//      } else {
-//        query = "  SELECT itm FROM Participant part "
-//                + " INNER join part.item itm "
-//                + " WHERE itm.itemType = :it AND part.communityId = :cid ORDER BY itm.dateCreated";
-//        result = session.createQuery(query)
-//                .setParameter("it", which)
-//                .setParameter("cid", ubean.getCommunityId())
-//                .list();
-//      }
-//
-//      tx.commit();
-//    } catch (Exception e) {
-//      tx.rollback();
-//      System.out.println("Error in getAllSoughtItems");
-//      e.printStackTrace();
-//
-//    } finally {
-//      tx = null;
-//      session = null;
-//
-//    }
-
-    return result;
-  }
-
   public List getParticipantItems(String pid, String which) {
 
     List result = null;
@@ -825,14 +755,14 @@ public class ItemBean extends AbstractBean implements Serializable {
       session = hib_session();
       tx = session.beginTransaction();
       if (this.history_which == 0) {
-        query = "SELECT itmImage.imageFileName, itm.itemId, itm.itemDescription, itm.itemModel, itm.participant_id "
-                + "FROM Items itm INNER JOIN itm.itemImages itmImage WHERE itm.participant_id = :pid AND itm.itemType = :itype";
+        query = "SELECT itmImage.imageFileName, itm.itemId, itm.itemDescription, itm.itemModel, itm.participant_id, itm.approved  "
+                + "FROM Items itm INNER JOIN itm.itemImages itmImage WHERE itm.participant_id = :pid AND itm.itemType = :itype ";
       } else if (this.history_which == 1) {
         query = "SELECT itmImage.imageFileName, "
                 + "itm.itemId, itm.itemDescription, "
-                + "itm.itemModel, part.participant_id FROM Participant part, Items itm "
+                + "itm.itemModel, part.participant_id, itm.approved FROM Participant part, Items itm "
                 + "INNER join part.item itm INNER join itm.itemImages itmImage"
-                + "WHERE part.communityId = :pid AND itm.itemType = :itype";
+                + "WHERE part.communityId = :pid AND itm.itemType = :itype AND itm.approved = 1";
       } else {
         //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
       }
