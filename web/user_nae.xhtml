@@ -40,7 +40,7 @@
           </c:when>
         </c:choose>
         <div id="form_NAE" class="contact_information" >
-        
+
           <c:choose >
             <c:when test="#{rid == 0}" >
               <c:set var="sub_title" value="EchoMarket 'Participant Information'" />
@@ -85,7 +85,16 @@
             </div>
           </div> 
 
-
+          <c:choose> 
+            <c:when test="#{userBean.editable == 0}" >
+              <div  class="div_p"  >
+                <div style="margin:10px;" >
+                  <h:outputText value="##" style="color: indigo;" />
+                  <h:outputText value=" -- means 'Selection Not Made'"  />
+                </div>
+              </div>
+            </c:when>
+          </c:choose>
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <c:choose >
               <c:when test="#{rid == 2}" >
@@ -121,7 +130,7 @@
                         </c:when>
                       </c:choose>
                       <h:outputLabel for="contactDescribeId"  value="#{display_describe}" ><span class="required_fields">*</span>
-                        
+
                         <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 1}" >
 
                           <c:choose >
@@ -139,9 +148,9 @@
                                   <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('lend')}"  
                                                  var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
-                               
+
                               </c:choose>
-                              
+
                             </c:when>
                           </c:choose>
                         </h:selectOneMenu>
@@ -168,37 +177,37 @@
                       </h:outputLabel>
                       <span class="error-message" id="organizationName" ></span>
                     </div>
-                      
-                      <c:choose >
-                        <c:when test="#{rid == 0}" >
-                          <div id="yesNoOrganization" style="margin-left:5px;display: block;float:left;">  
-                            <h:outputLabel value="Allow #{allow} to see your Organization Name?:"  for="displayOrganization" rendered="#{(userBean.editable == 1) or ( (userBean.editable == 0) and (!empty participantBean.organizationName) )  }">
-                              <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
-                                <f:selectItem itemValue="1" itemLabel="Yes" />
-                                <f:selectItem itemValue="0" itemLabel="No" />
-                              </h:selectOneRadio>    
-                              <c:if test="#{(userBean.editable == 0) and (!empty participantBean.organizationName)}" >
-                                <c:choose>
-                                  <c:when test="#{participantBean.displayOrganization == 0}">
-                                    <c:set var="yn" value="No"/>
-                                  </c:when>
-                                  <c:when test="#{participantBean.displayOrganization == 1}">
-                                    <c:set var="yn" value="Yes"/>
-                                  </c:when>
-                                  <c:otherwise>
-                                    <c:set var="yn" value="Selection not made"/>
-                                  </c:otherwise>
-                                </c:choose>
-                                <h:outputText id="displayOrganizationString"   value="#{yn}" class="RO_text" />
-                              </c:if>      
-                            </h:outputLabel>     
-                          </div>
-                        </c:when>
-                        <c:when test="#{rid gt 0}" >
-                          <h:inputHidden id="displayOrganization" value="-9"/>
-                        </c:when>
-                      </c:choose>
-                  
+
+                    <c:choose >
+                      <c:when test="#{rid == 0}" >
+                        <div id="yesNoOrganization" style="margin-left:5px;display: block;float:left;">  
+                          <h:outputLabel value="Allow #{allow} to see your Organization Name?:"  for="displayOrganization" rendered="#{(userBean.editable == 1) or ( (userBean.editable == 0) and (!empty participantBean.organizationName) )  }">
+                            <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{userBean.editable == 1}" >
+                              <f:selectItem itemValue="1" itemLabel="Yes" />
+                              <f:selectItem itemValue="0" itemLabel="No" />
+                            </h:selectOneRadio>    
+                            <c:if test="#{(userBean.editable == 0) and (!empty participantBean.organizationName)}" >
+                              <c:choose>
+                                <c:when test="#{participantBean.displayOrganization == 0}">
+                                  <c:set var="yn" value="No"/>
+                                </c:when>
+                                <c:when test="#{participantBean.displayOrganization == 1}">
+                                  <c:set var="yn" value="Yes"/>
+                                </c:when>
+                                <c:otherwise>
+                                  <c:set var="yn" value="##"/>
+                                </c:otherwise>
+                              </c:choose>
+                              <h:outputText id="displayOrganizationString"   value="#{yn}" class="RO_text" />
+                            </c:if>      
+                          </h:outputLabel>     
+                        </div>
+                      </c:when>
+                      <c:when test="#{rid gt 0}" >
+                        <h:inputHidden id="displayOrganization" value="-9"/>
+                      </c:when>
+                    </c:choose>
+
                   </div>
                 </div>
               </c:when>
@@ -252,7 +261,7 @@
                           <c:set var="yn" value="Yes"/>
                         </c:when>
                         <c:otherwise>
-                          <c:set var="yn" value="Selection not made"/>
+                          <c:set var="yn" value="##"/>
                         </c:otherwise>
                       </c:choose>
                       <h:outputText id="displayNameString"   value="#{yn}" class="RO_text" />
@@ -405,7 +414,7 @@
                                   <c:set var="yn" value="Yes"/>
                                 </c:when>
                                 <c:otherwise>
-                                  <c:set var="yn" value="Selection not made"/>
+                                  <c:set var="yn" value="##"/>
                                 </c:otherwise>
                               </c:choose>
                               <h:outputText id="displayAddressString"   value="#{yn}" class="RO_text" />
@@ -440,7 +449,7 @@
             <c:if test="#{!alternative_address_data_empty}" >
               <c:set var="a_display" value="none" />
             </c:if>  
-            
+
             <div id="addressAlternative"  style="display:#{a_display};float:left;height:auto;width:inherit;margin-top:10px;">
               <div style="margin-left: 15px;float:left">
                 <h:dataTable value="#{alternative_address_data}" id="alternative" var="pa" >    
@@ -542,7 +551,7 @@
                                   <c:set var="yn" value="Yes"/>
                                 </c:when>
                                 <c:otherwise>
-                                  <c:set var="yn" value="Selection not made"/>
+                                  <c:set var="yn" value="##"/>
                                 </c:otherwise>
                               </c:choose>
                               <h:outputText id="displayAlternativeAddressString"   value="#{yn}" class="RO_text" />
@@ -595,7 +604,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="Selection not made"/>
+                                <c:set var="yn" value="##"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayHomePhoneString"   value="#{yn}" class="RO_text" />
@@ -626,7 +635,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="Selection not made"/>
+                                <c:set var="yn" value="##"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayCellPhoneString"   value="#{yn}"  class="RO_text" />
@@ -655,7 +664,7 @@
                                 <c:set var="yn" value="Yes"/>
                               </c:when>
                               <c:otherwise>
-                                <c:set var="yn" value="Selection not made"/>
+                                <c:set var="yn" value="##"/>
                               </c:otherwise>
                             </c:choose>
                             <h:outputText id="displayAlternativePhoneString"   value="#{yn}" class="RO_text" />
