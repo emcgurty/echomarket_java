@@ -47,7 +47,7 @@
             </div>
 
             <div style="margin-left:25px;margin-top:5px;">
-              <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  >
+              <h:outputLabel value="#{bundle.ItemCondition}" >
                 <c:set var="icn" value="#{itemc.getItemConditionName(ii.itemConditionId)}" />
                 <h:outputText value="#{icn}" class="RO_text"/>
               </h:outputLabel>
@@ -75,8 +75,8 @@
                   <h:outputLabel value="Uploaded Image:"  />	
                   <h:graphicImage name="#{i.imageFileName}" library="${readOnlyBean.which}_images" alt="Item Image"   height="200" width="200" />
                   <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
-                    <h:outputLabel for="itemImageCaption" value="Item image caption:" rendered="#{!empty i.itemImageCaption}" >
-                      <h:outputText  id="itemImageCaption" value="#{i.itemImageCaption}" class="RO_text"  rendered="#{!empty i.itemImageCaption}" />
+                    <h:outputLabel value="Item image caption:" rendered="#{!empty i.itemImageCaption}" >
+                      <h:outputText value="#{i.itemImageCaption}" class="RO_text"  rendered="#{!empty i.itemImageCaption}" />
                     </h:outputLabel>
                   </div>
                 </h:column>
