@@ -53,6 +53,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   private Integer displayAlternativePhone;
   private Integer displayAlternativeAddress;
   private Integer goodwill;
+  private Integer instructions;
   private Integer age18OrMore;
   private Integer isCreator;
   private Date dateCreated;
@@ -397,9 +398,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         Participant part = null;
        
         if (ubean.getRoleId() == 0) {
-          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, 1, new Date(),getClientIpAddr(), 0);
+          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(),getClientIpAddr(), 0);
         } else {
-          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, 1, new Date(), getClientIpAddr(), 1);
+          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
         }
 
         sb.save(part);
@@ -1057,6 +1058,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
    */
   public void setFirstNamea(String firstNamea) {
     this.firstNamea = firstNamea;
+  }
+
+  /**
+   * @return the instructions
+   */
+  public Integer getInstructions() {
+    return instructions;
+  }
+
+  /**
+   * @param instructions the instructions to set
+   */
+  public void setInstructions(Integer instructions) {
+    this.instructions = instructions;
   }
 
 }
