@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="./echomarketTemplate.xhtml">
+
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="UserDetailHeader" /> </ui:define>
+  <ui:define name="content"  >
+
+    <h:head>
+      <title>#{bundle.echoMarketAgreement}</title>
+    </h:head>
+    <h:form  id="form_agreement"  >
+
+      <div style="font-size:20px;margin:15px;" >
+        <h:outputText value="EchoMarket Instructions"  style="margin-top:15px;"/>
+      </div> 
+      <div style="margin:15px;" >
+        <h:outputText value="Return to EchoMarket Agreement" style="font-size:18px;"  />
+        <h:commandLink  action="user_agreement"  class="right_div" value="I have read these Instructions."  />
+      </div>
+      <ui:include src="instructions.xhtml" rendered="true"  id="userInstructions"  />
+    </h:form>
+    <br /><br />
+  </ui:define>
+  <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="UserDetailFooter" /> 
+  </ui:define>
+</ui:composition>
+
+
