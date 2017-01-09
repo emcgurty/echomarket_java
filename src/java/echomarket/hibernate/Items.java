@@ -31,15 +31,6 @@ public class Items implements java.io.Serializable {
   public Items() {
   }
 
-  public Items(String itemId, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer approved, Integer notify) {
-    this.itemId = itemId;
-    this.dateCreated = dateCreated;
-    this.dateUpdated = dateUpdated;
-    this.dateDeleted = dateDeleted;
-    this.approved = approved;
-    this.notify = notify;
-  }
-
   public Items(String itemId, String participant_id, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer approved, Integer notify, String itemType) {
     this.itemId = itemId;
     this.participant_id = participant_id;
@@ -53,7 +44,7 @@ public class Items implements java.io.Serializable {
     this.dateCreated = dateCreated;
     this.dateUpdated = dateUpdated;
     this.dateDeleted = dateDeleted;
-    this.approved = approved;
+    this.approved = 0;
     this.notify = notify;
     this.itemType = itemType;
   }
