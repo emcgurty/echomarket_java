@@ -277,7 +277,7 @@
         <h:column rowHeader="">
           <div  class="div_p"  id="display_phone">
             <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Phone..." />
+              <h:outputText value="Contact Option: By Phone..." rendered="#{((!empty byp[3]) and (byp[0] == 1) and (byp[6] == 1)) or ((!empty byp[4]) and (byp[1] == 1) and (byp[7] == 1)) or ((!empty byp[5]) and (byp[2] == 1) and (byp[8] == 1))}"/>
             </div>
           </div>
           <div style="float:left;margin-left:25px;display:block;" >
