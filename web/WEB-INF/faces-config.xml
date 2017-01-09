@@ -56,13 +56,7 @@
     </managed-property>
         
   </managed-bean>
-    
-  <managed-bean>
-    <managed-bean-name>selectedOption</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.SelectedOptionBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-    
+      
   <managed-bean>
     <managed-bean-name>contactDescribesBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedBeans.ContactDescribesBean</managed-bean-class>
