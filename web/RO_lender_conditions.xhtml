@@ -15,212 +15,198 @@
 
   <ui:define name="content"  >
 
+    <h:head>
+      <c:set var="lic_data" value="#{readOnlyBean.getLIC(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
+    </h:head>
+
     <div id="lender_registration" class="lender_registration" >
+      <c:forEach items="#{lic_data}"  var="lic" >    
 
-      <div id="form_monetary" class="contact_information" >
-        <div class="top" >
-          <div style="margin:10px;margin-top:25px;" >
-            <h:outputText value="LENDER ITEM CONDITIONS"  />
-          </div> 
+        <div id="form_monetary" class="contact_information" >
+          <div class="top" >
+            <div style="margin:10px;margin-top:25px;" >
+              <h:outputText value="LENDER ITEM CONDITIONS"  />
+            </div> 
+          </div>
+          <div  class="div_p" id="menu_item_6" >
+            <div style="margin:10px;" >
+              <h:outputText value="Lending Terms: Monetary" />
+            </div>
+          </div>
+
+
+          <table class="personal">
+            <tr>
+              <td>
+                <h:outputLabel value="Item available for Free?" rendered="${!empty lic.forFree}" >
+                  <h:outputText  value="No" class="RO_text"  rendered="${lic.forFree == 0}"/>
+                  <h:outputText  value="Yes" class="RO_text"  rendered="${lic.forFree == 1}"/>
+                </h:outputLabel>
+              </td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h:outputLabel value="Small borrowing fee?:"  rendered="${!empty lic.smallFee}" >
+                  <c:set var="cbe" value="No" rendered="#{lic.smallFee == 0}"/>
+                  <c:set var="cbe" value="Yes, for #{lic.smallFeeAmount}" rendered="${lic.smallFee == 1}" />
+                  <h:outputText   value="${cbe}" class="RO_text"   />
+                </h:outputLabel>
+
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+
+                <h:outputLabel value="Item available for small purchase amount?:" rendered="${!empty lic.availableForPurchase}" >
+                  <c:set var="cbe" value="No" rendered="${lic.availableForPurchase == 0}" />
+                  <c:set var="cbe" value="Yes, for ${lic.availableForPurchaseAmount}"   rendered="${lic.availableForPurchase == 1}" />
+                  <h:outputText value="${cbe}" class="RO_text" />
+                </h:outputLabel>
+
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <h:outputLabel value="Item available for donation?:"  rendered="${!empty lic.availableForDonation}" >
+                  <c:set var="cbe" value="No" rendered="${lic.availableForDonation == 0}" />
+                  <c:set var="cbe" value="Yes, for ${lic.availableForDonation}"   rendered="${lic.availableForDonation == 1}" />
+                  <h:outputText value="${cbe}" class="RO_text" />
+                </h:outputLabel>
+              </td>
+              <td>
+                <h:outputLabel for="donateAnonymous" value="Lender would like to anonymously donate:"  rendered="#{!empty lic.donateAnonymous}">
+                  <c:set var="cbe" value="No" rendered="#{lic.donateAnonymous == 0}"/>
+                  <c:set var="cbe" value="Yes" rendered="#{lic.donateAnonymous == 1}"/>
+                  <h:outputText  value="#{cbe}" class="RO_text" />
+                </h:outputLabel>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h:outputLabel for="trade" value="Lender would be interested in trading?:"  rendered="#{!empty lic.trade}" >
+                  <c:set var="cbe" value="No" rendered="#{lic.trade == 0}"/>
+                  <c:set var="cbe" value="Yes for a #{lic.tradeItem}" rendered="#{lic.trade == 1}"/>
+                  <h:outputText value="#{cbe}" class="RO_text" />
+                </h:outputLabel>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <h:outputLabel for="securityDeposit" value="Lender requires a security deposit?:" rendered="#{!empty lic.securityDeposit}" >
+                  <c:set var="cbe" value="No" rendered="#{lic.securityDeposit == 0}"/>
+                  <c:set var="cbe" value="Yes, lender requiring #{lic.securityDepositAmount}" rendered="#{lic.securityDeposit == 1}"/>
+                  <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.securityDeposit}" />
+                </h:outputLabel>
+              </td>
+              <td></td>
+            </tr>
+          </table>
+
         </div>
-        <div  class="div_p" id="menu_item_6" >
-          <div style="margin:10px;" >
-            <h:outputText value="Lending Terms: Monetary" />
+
+        <div id="form_duration" class="contact_information" >
+
+          <div  class="div_p" id="menu_item_126" >
+            <div style="margin:10px;" >
+              <h:outputText value="Lending Terms: Duration" rendered="${(lic.agreedNumberOfDays == 1)or (lic.agreedNumberOfHours == 1) or (lic.indefiniteDuration == 1)}"/>
+            </div>
+          </div>
+
+          <div style="float:left;width:33%;margin-left:25px;">
+            <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  rendered="#{!empty lic.agreedNumberOfDays}" >
+              <c:set var="cbe" value="No" rendered="#{lic.agreedNumberOfDays == 0}" />
+              <c:set var="cbe" value="Yes" rendered="#{lic.agreedNumberOfDays == 1}" />
+              <h:outputText id="agreedNumberOfDaysString"   value="#{cbe}" class="RO_text" rendered="#{!empty lic.agreedNumberOfDays}" />
+            </h:outputLabel>
+          </div>
+
+          <div style="float:left;">
+            <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:" rendered="#{!empty lic.agreedNumberOfHours}"  >
+              <c:set var="cbe" value="No" rendered="#{lic.agreedNumberOfHours == 0}" />
+              <c:set var="cbe" value="Yes" rendered="#{lic.agreedNumberOfHours == 1}" />       
+              <h:outputText id="agreedNumberOfHoursString"   value="#{cbe}" class="RO_text"  rendered="#{!empty lic.agreedNumberOfHours}" />
+            </h:outputLabel>
+
+          </div>
+          <div style="float:left;margin-left:40px;">
+            <h:outputLabel for="indefiniteDuration" value="Indefinite?"  rendered="#{!empty lic.indefiniteDuration}" >
+              <c:set var="cbe" value="No" rendered="#{lic.indefiniteDuration == 0}" />
+              <c:set var="cbe" value="Yes" rendered="#{lic.indefiniteDuration == 1}" />
+              <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.indefiniteDuration}" />
+            </h:outputLabel>
           </div>
         </div>
-        <c:set var="lic_data" value="#{readOnlyBean.getLIC(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
-        <h:dataTable value="#{lic_data}"  var="lic" >    
-          <h:column rowHeader="">
-            <table class="personal">
-              <tr>
-                <td>
 
-                  <h:outputLabel value="Item available for Free?" rendered="${!empty lic.forFree}" >
-                    <h:outputText  value="No" class="RO_text"  rendered="${lic.forFree == 0}"/>
-                    <h:outputText  value="Yes" class="RO_text"  rendered="${lic.forFree == 1}"/>
+        <div id="form_conditions" class="contact_information" >
+
+          <div  class="div_p" id="menu_item_64" >
+            <div style="margin:10px;" >
+              <h:outputText value="Lending Terms: Conditions" rendered="${!empty lic.specificConditions and !empty lic.provideProperUseTraining and !empty lic.entirePeriod and !empty lic.partialPeriod and !empty lic.presentDuringBorrowingPeriod}"/>
+
+            </div>
+          </div>
+
+          <table class="personal" >
+            <tr>
+              <td style="vertical-align:top;">
+                <div style="margin-left:25px;margin-top:5px;">
+
+                  <h:outputLabel for="presentDuringBorrowingPeriod" value="Lender wishes to be present during borrowing period?" rendered="#{!empty lic.presentDuringBorrowingPeriod}" >
+                    <c:set var="cbe" value="No" rendered="#{lic.presentDuringBorrowingPeriod == 0}"/>
+                    <c:set var="cbe" value="Yes" rendered="#{lic.presentDuringBorrowingPeriod == 1}"/>
+                    <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.presentDuringBorrowingPeriod}" />
                   </h:outputLabel>
 
-                </td>
-                <td>
-                  
-                </td>
-              </tr>
-              <tr>
-                <td>
+                </div>
+              </td>
+              <td style="vertical-align:top;">
 
-                  <h:outputLabel value="Small borrowing fee?:"  rendered="${!empty lic.smallFee}" >
-                    <c:set var="cbe" value="No" rendered="#{lic.smallFee == 0}"/>
-                    <c:set var="cbe" value="Yes, for #{lic.smallFeeAmount}" rendered="${lic.smallFee == 1}" />
-                    <h:outputText   value="${cbe}" class="RO_text"   />
-                  </h:outputLabel>
-
-                </td>
-                <td>
-
-                </td>
-              </tr>
-              <tr>
-                <td>
-
-                  <h:outputLabel value="Item available for small purchase amount?:" rendered="${!empty lic.availableForPurchase}" >
-                    <c:set var="cbe" value="No" rendered="${lic.availableForPurchase == 0}" />
-                    <c:set var="cbe" value="Yes, for ${lic.availableForPurchaseAmount}"   rendered="${lic.availableForPurchase == 1}" />
-                    <h:outputText value="${cbe}" class="RO_text" />
-                  </h:outputLabel>
-
-                </td>
-                <td>
-
-                </td>
-              </tr>
-              <tr>
-                <td>
-
-                  <h:outputLabel value="Item available for donation?:"  rendered="${!empty lic.availableForDonation}" >
-                    <c:set var="cbe" value="No" rendered="${lic.availableForDonation == 0}" />
-                    <c:set var="cbe" value="Yes, for ${lic.availableForDonation}"   rendered="${lic.availableForDonation == 1}" />
-                    <h:outputText value="${cbe}" class="RO_text" />
-                  </h:outputLabel>
-
-                </td>
-                <td>
-
-                  <h:outputLabel for="donateAnonymous" value="Lender would like to anonymously donate:"  rendered="#{!empty lic.donateAnonymous}">
-                    <c:set var="cbe" value="No" rendered="#{lic.donateAnonymous == 0}"/>
-                    <c:set var="cbe" value="Yes" rendered="#{lic.donateAnonymous == 1}"/>
-                    <h:outputText  value="#{cbe}" class="RO_text" />
-                  </h:outputLabel>
-                </td>
-              </tr>
-              <tr>
-                <td>
-
-                  <h:outputLabel for="trade" value="Lender would be interested in trading?:"  rendered="#{!empty lic.trade}" >
-                    <c:set var="cbe" value="No" rendered="#{lic.trade == 0}"/>
-                    <c:set var="cbe" value="Yes for a #{lic.tradeItem}" rendered="#{lic.trade == 1}"/>
-                    <h:outputText value="#{cbe}" class="RO_text" />
-                  </h:outputLabel>
-
-                </td>
-                <td>
-                  
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  
-                    <h:outputLabel for="securityDeposit" value="Lender requires a security deposit?:" rendered="#{!empty lic.securityDeposit}" >
-                      <c:set var="cbe" value="No" rendered="#{lic.securityDeposit == 0}"/>
-                      <c:set var="cbe" value="Yes, lender requiring #{lic.securityDepositAmount}" rendered="#{lic.securityDeposit == 1}"/>
-                      <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.securityDeposit}" />
+                <div style="display:block;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
+                  <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+                    <h:outputLabel for="entirePeriod" value="During the entire lending period?:" rendered="#{!empty lic.entirePeriod}" >
+                      <c:set var="cbe" value="No"  rendered="#{lic.entirePeriod == 0}" />
+                      <c:set var="cbe" value="Yes"  rendered="#{lic.entirePeriod == 1}" />
+                      <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.entirePeriod}" />
                     </h:outputLabel>
-                  
-                </td>
-                <td>
-                </td>
-              </tr>
-            </table>
-          </h:column>
-        </h:dataTable>
-      </div>
+                  </div>
+                  <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
+                    <h:outputLabel for="partialPeriod" value="During lending period partially?:" rendered="#{!empty lic.partialPeriod}" >
+                      <c:set var="cbe" value="No" rendered="#{lic.partialPeriod == 0}"/>
+                      <c:set var="cbe" value="Yes" rendered="#{lic.partialPeriod == 1}"/>
+                      <h:outputText  value="#{cbe}" class="RO_text" rendered="#{!empty lic.partialPeriod}" />
+                    </h:outputLabel>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="vertical-align:top;">
+                <div style="margin-left:25px;margin-top:5px;">
+                  <h:outputLabel for="provideProperUseTraining" value="Lender wishes to provide item proper-use training?"  rendered="${!empty lic.provideProperUseTraining}">
+                    <c:set var="cbe" value="No" rendered="${lic.provideProperUseTraining == 0}" />
+                    <c:set var="cbe" value="Yes" rendered="${lic.provideProperUseTraining == 1}" />
+                    <h:outputText value="${cbe}" class="RO_text"  rendered="${!empty lic.provideProperUseTraining}" />
+                  </h:outputLabel>
 
-      <div id="form_duration" class="contact_information" >
-
-        <div  class="div_p" id="menu_item_126" >
-          <div style="margin:10px;" >
-            <h:outputText value="Lending Terms: Duration" rendered="${!empty lic.agreedNumberOfDays and !empty lic.agreedNumberOfHours and !empty lic.indefiniteDuration}"/>
-          </div>
-        </div>
-
-        <div style="float:left;width:33%;margin-left:25px;">
-          <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  rendered="#{!empty lic.agreedNumberOfDays}" >
-            <c:set var="cbe" value="No" rendered="#{lic.agreedNumberOfDays == 0}" />
-            <c:set var="cbe" value="Yes" rendered="#{lic.agreedNumberOfDays == 1}" />
-            <h:outputText id="agreedNumberOfDaysString"   value="#{cbe}" class="RO_text" rendered="#{!empty lic.agreedNumberOfDays}" />
-          </h:outputLabel>
-        </div>
-
-        <div style="float:left;">
-          <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:" rendered="#{!empty lic.agreedNumberOfHours}"  >
-            <c:set var="cbe" value="No" rendered="#{lic.agreedNumberOfHours == 0}" />
-            <c:set var="cbe" value="Yes" rendered="#{lic.agreedNumberOfHours == 1}" />       
-            <h:outputText id="agreedNumberOfHoursString"   value="#{cbe}" class="RO_text"  rendered="#{!empty lic.agreedNumberOfHours}" />
-          </h:outputLabel>
-
-        </div>
-        <div style="float:left;margin-left:40px;">
-          <h:outputLabel for="indefiniteDuration" value="Indefinite?"  rendered="#{!empty lic.indefiniteDuration}" >
-            <c:set var="cbe" value="No" rendered="#{lic.indefiniteDuration == 0}" />
-            <c:set var="cbe" value="Yes" rendered="#{lic.indefiniteDuration == 1}" />
-            <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.indefiniteDuration}" />
-          </h:outputLabel>
-        </div>
-      </div>
-
-      <div id="form_conditions" class="contact_information" >
-
-        <div  class="div_p" id="menu_item_64" >
-          <div style="margin:10px;" >
-            <h:outputText value="Lending Terms: Conditions" rendered="${!empty lic.specificConditions and !empty lic.provideProperUseTraining and !empty lic.entirePeriod and !empty lic.partialPeriod and !empty lic.presentDuringBorrowingPeriod}"/>
-
-          </div>
-        </div>
-
-        <table class="personal" >
-          <tr>
-            <td style="vertical-align:top;">
-              <div style="margin-left:25px;margin-top:5px;">
-
-                <h:outputLabel for="presentDuringBorrowingPeriod" value="Would you like to be present during borrowing period?" rendered="#{!empty lic.presentDuringBorrowingPeriod}" >
-                  <c:set var="cbe" value="No" rendered="#{lic.presentDuringBorrowingPeriod == 0}"/>
-                  <c:set var="cbe" value="Yes" rendered="#{lic.presentDuringBorrowingPeriod == 1}"/>
-                  <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.presentDuringBorrowingPeriod}" />
-                </h:outputLabel>
-
-              </div>
-            </td>
-            <td style="vertical-align:top;">
-
-              <div style="display:block;background-color:#E1F5A9;;margin-left:15px;margin-top:5px;" id="length_of_presence">
-                <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
-                  <h:outputLabel for="entirePeriod" value="During the entire lending period?:" rendered="#{!empty lic.entirePeriod}" >
-                    <c:set var="cbe" value="No"  rendered="#{lic.entirePeriod == 0}" />
-                    <c:set var="cbe" value="Yes"  rendered="#{lic.entirePeriod == 1}" />
-                    <h:outputText value="#{cbe}" class="RO_text" rendered="#{!empty lic.entirePeriod}" />
+                </div>
+              </td>
+              <td style="vertical-align:top;">
+                <div style="margin-left:15px;margin-top:5px;">
+                  <h:outputLabel for="specificConditions" value="Specific conditions of lending:" rendered="${!empty lic.specificConditions}" >
+                    <h:outputText id="specificConditionsString"   value="#{lic.specificConditions}" class="RO_text" rendered="${!empty lic.specificConditions}" />
                   </h:outputLabel>
                 </div>
-                <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
-                  <h:outputLabel for="partialPeriod" value="During lending period partially?:" rendered="#{!empty lic.partialPeriod}" >
-                    <c:set var="cbe" value="No" rendered="#{lic.partialPeriod == 0}"/>
-                    <c:set var="cbe" value="Yes" rendered="#{lic.partialPeriod == 1}"/>
-                    <h:outputText  value="#{cbe}" class="RO_text" rendered="#{!empty lic.partialPeriod}" />
-                  </h:outputLabel>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td style="vertical-align:top;">
-              <div style="margin-left:25px;margin-top:5px;">
-                <h:outputLabel for="provideProperUseTraining" value="Would you like to provide item proper-use training?"  rendered="${!empty lic.provideProperUseTraining}">
-                  <c:set var="cbe" value="No" rendered="${lic.provideProperUseTraining == 0}" />
-                  <c:set var="cbe" value="Yes" rendered="${lic.provideProperUseTraining == 1}" />
-                  <h:outputText value="${cbe}" class="RO_text"  rendered="${!empty lic.provideProperUseTraining}" />
-                </h:outputLabel>
+              </td>
+            </tr>
 
-              </div>
-            </td>
-            <td style="vertical-align:top;">
-              <div style="margin-left:15px;margin-top:5px;">
-                <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" rendered="${!empty lic.specificConditions}" >
-                  <h:outputText id="specificConditionsString"   value="#{lic.specificConditions}" class="RO_text" rendered="${!empty lic.specificConditions}" />
-                </h:outputLabel>
-              </div>
-            </td>
-          </tr>
-
-        </table>
-      </div>  
+          </table>
+        </div>  
+      </c:forEach>
     </div>  
     <br /><br />
   </ui:define>
