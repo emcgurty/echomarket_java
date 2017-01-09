@@ -7,6 +7,10 @@
       <column length="40" name="address_id"/>
       <generator class="assigned"/>
     </id>
+    <set name="item" lazy="true" table="items">
+      <key column="participant_id" />
+      <one-to-many class="echomarket.hibernate.Items"  />
+    </set>
     <property name="participant_id" type="string">
       <column length="40" name="participant_id" not-null="true"/>
     </property>
