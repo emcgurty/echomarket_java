@@ -40,6 +40,7 @@ public class Participant implements java.io.Serializable {
   private Integer displayAlternativePhone;
   private Integer displayAlternativeAddress;
   private Integer goodwill;
+  private Integer instructions;
   private Integer age18OrMore;
   private Integer isActive;
   private Integer editable;
@@ -66,11 +67,12 @@ public class Participant implements java.io.Serializable {
   }
 
   /// User agreement
-  public Participant(String participant_id, String userId, String communityId, Integer goodwill, Integer age18OrMore, Integer isActive, Date dateCreated, String remoteIp, Integer isCreator) {
+  public Participant(String participant_id, String userId, String communityId, Integer goodwill, Integer age18OrMore, Integer instructions, Integer isActive, Date dateCreated, String remoteIp, Integer isCreator) {
     this.participant_id = participant_id;
     this.userId = userId;
     this.communityId = communityId;
     this.goodwill = goodwill;
+    this.instructions = instructions;
     this.age18OrMore = age18OrMore;
     this.isActive = isActive;
     this.dateCreated = new Date();
@@ -516,6 +518,20 @@ public class Participant implements java.io.Serializable {
    */
   public void setLenderItemConditions(Set<LenderItemConditions> lenderItemConditions) {
     this.lenderItemConditions = lenderItemConditions;
+  }
+
+  /**
+   * @return the instructions
+   */
+  public Integer getInstructions() {
+    return instructions;
+  }
+
+  /**
+   * @param instructions the instructions to set
+   */
+  public void setInstructions(Integer instructions) {
+    this.instructions = instructions;
   }
 
 }
