@@ -149,7 +149,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
 
     results = null;
     if (hold_pid.isEmpty() == false) {
-      fromStatement = " FROM Items itm WHERE itm.itemType = :which "
+      fromStatement = " FROM Items itm WHERE itm.itemType = :which AND itm.approved = 1 "
               + (hold_pid.isEmpty() ? "" : " AND itm.participant_id IN ( " + hold_pid + " )");
 
       // Need to check for null or isEmpty dates.
