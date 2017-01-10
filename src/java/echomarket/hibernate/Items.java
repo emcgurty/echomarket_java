@@ -228,4 +228,18 @@ public class Items implements java.io.Serializable {
     this.itemImages = itemImages;
   }
 
+  /**
+   * @return the remoteIp
+   */
+  public String getRemoteIp() {
+    return remoteIp;
+  }
+
+  /**
+   * @param remoteIp the remoteIp to set
+   */
+  public void setRemoteIp(String remoteIp) {
+    this.remoteIp = remoteIp;
+  }
+
 }
