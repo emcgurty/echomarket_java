@@ -32,7 +32,7 @@ public class Items implements java.io.Serializable {
   public Items() {
   }
 
-  public Items(String itemId, String participant_id, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer approved, Integer notify, String itemType) {
+  public Items(String itemId, String participant_id, Integer categoryId, String otherItemCategory, String itemModel, String itemDescription, Integer itemConditionId, Integer itemCount, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted, Integer approved, Integer notify, String itemType, String remoteIp) {
     this.itemId = itemId;
     this.participant_id = participant_id;
     this.categoryId = categoryId;
@@ -48,6 +48,7 @@ public class Items implements java.io.Serializable {
     this.approved = 0;
     this.notify = notify;
     this.itemType = itemType;
+    this.remoteIp = remoteIp;
   }
 
   public String getItemId() {
