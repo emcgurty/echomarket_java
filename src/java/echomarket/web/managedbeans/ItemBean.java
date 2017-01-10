@@ -1,6 +1,7 @@
 package echomarket.web.managedbeans;
 
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
+import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.ContactPreference;
 import echomarket.hibernate.Items;
 import echomarket.hibernate.ItemImages;
@@ -56,6 +57,8 @@ public class ItemBean extends AbstractBean implements Serializable {
   private String history_id;
   private Integer history_which;
   private Part imageFileNamePart;
+  private String remoteIp;
+  private String itemImageCaption;
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
@@ -165,11 +168,12 @@ public class ItemBean extends AbstractBean implements Serializable {
       b_return = SaveUserItemImage(getImageFileNamePart(), iid);
     } catch (Exception ex) {
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
-      System.out.println("Error in Saving Borrower File");;
+      System.out.println("Error in processNewFileImage");;
     }
 
     if (b_return == true) {
       ItemImages iii = (ItemImages) ii.get(0);
+      this.itemImageCaption = iii.getItemImageCaption();
       iii.setItemImageId(getId());
       iii.setItemId(iid);
       iii.setImageFileName(iid + "_" + getFileName(getImageFileNamePart()));
@@ -276,6 +280,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     String strRetId = null;
     String new_iid = getId();
     List result = null;
+    this.remoteIp = getClientIpAddr();
 
     if ("both".equals(itemType)) {
       if (whichType.isEmpty() == false) {
@@ -285,7 +290,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (itemId.isEmpty() == true) {
 
       Items ii = new Items(new_iid, ubean.getParticipant_id(), categoryId, otherItemCategory,
-              itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 0, notify, itemType);
+              itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 0, notify, itemType, this.remoteIp);
 
       try {
         sb = hib_session();
@@ -367,6 +372,11 @@ public class ItemBean extends AbstractBean implements Serializable {
       this.itemId = new_iid;
     }
     if (bret == true) {
+      SendEmail se = null;
+      String[] getMap = null;
+      getMap = new String[2];
+      getMap = ubean.getApplicationEmail();  
+      se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()),  this.itemImageCaption, getMap[0], getMap[1], this.remoteIp ); 
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(0);
     } else {
@@ -380,7 +390,7 @@ public class ItemBean extends AbstractBean implements Serializable {
   /**
    * @return the categoryId
    */
-  public Integer getCategoryId() {
+   public Integer getCategoryId() {
     return categoryId;
   }
 
@@ -1093,5 +1103,33 @@ public class ItemBean extends AbstractBean implements Serializable {
    */
   public void setHistory_which(Integer history_which) {
     this.history_which = history_which;
+  }
+
+  /**
+   * @return the remoteIp
+   */
+  public String getRemoteIp() {
+    return remoteIp;
+  }
+
+  /**
+   * @param remoteIp the remoteIp to set
+   */
+  public void setRemoteIp(String remoteIp) {
+    this.remoteIp = remoteIp;
+  }
+
+  /**
+   * @return the itemImageCaption
+   */
+  public String getItemImageCaption() {
+    return itemImageCaption;
+  }
+
+  /**
+   * @param itemImageCaption the itemImageCaption to set
+   */
+  public void setItemImageCaption(String itemImageCaption) {
+    this.itemImageCaption = itemImageCaption;
   }
 }
