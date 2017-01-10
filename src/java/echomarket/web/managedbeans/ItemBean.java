@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Id;
 import javax.servlet.http.Part;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -1044,25 +1045,20 @@ public class ItemBean extends AbstractBean implements Serializable {
     return return_value;
   }
 
-  public Boolean deleteCurrentRecord(String iid, String itemDescription) {
+  public void deleteCurrentRecord(String iid, String itemDescription) {
     // Need to set up hibernate to cascade for all affected tables...
-    List result = null;
     Session hib = null;
     Transaction tx = null;
-    Boolean retResult = false;
+    Integer retResult = 0;
+    Query query = null;
 
-    String queryString = "from Items where item_id = :iid";
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      result = hib.createQuery(queryString)
-              .setParameter("iid", iid)
-              .list();
+      query = hib.createQuery("delete Items where itemId = :iid");
+      query.setParameter("iid", iid);
+      retResult = query.executeUpdate();
       tx.commit();
-      if (result.size() == 1) {
-        hib.delete((Items)result.get(0));
-      }
-      retResult = true;
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in deleteCurrentRecord");
@@ -1070,17 +1066,16 @@ public class ItemBean extends AbstractBean implements Serializable {
               .getLogger(ItemBean.class
                       .getName()).log(Level.SEVERE, null, ex);
     } finally {
-      result = null;
       tx = null;
       hib = null;
+      query = null;
     }
-    if (retResult == true) {
+    if (retResult > 0) {
       message(null, "DeleteSelectedItemSuccess", new Object[]{itemDescription});
     } else {
       message(null, "DeleteSelectedItemFailed", new Object[]{itemDescription});
     }
-
-    return retResult;
+    
   }
 
   /**
