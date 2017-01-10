@@ -221,7 +221,8 @@ public class SendEmail implements java.io.Serializable {
             + "<p>EchoMarket awaiting approval:</p>"
             + "<p>Item to " + this.whichEmail + ".</p>"
             + "<p>Item Description: " + this.itemDescription + "</p>"
-            + "<p>Item Model:  " + this.itemModel + "</p>";
+            + "<p>Item Model:  " + this.itemModel + "</p>"
+            + "<p>Number of Items:  " + this.numberOfItems + "</p>";
 
     if (this.imageFileName.isEmpty() == false) {
       buildMessage = buildMessage + "<p>Item Image:  " + this.imageFileName + "</p>"
