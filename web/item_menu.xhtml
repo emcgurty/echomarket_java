@@ -43,7 +43,7 @@
     <c:choose>                                
       <c:when test="#{whichType == 'borrow' and (!empty itemBean.itemId)}"  >
         <li id="tab_item_1">
-          <c:set var="newItemLabel" value="Item Contact Preferences - #{itemBean.itemId}"  />
+          <c:set var="newItemLabel" value="Item Contact Preferences"  />
           <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  rendered="true" >
             <f:param name="action" value="edit" />
             <f:param name="iid" value="#{itemBean.itemId}" />
