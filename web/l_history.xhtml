@@ -40,10 +40,9 @@
           <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history[1])}" immediate="true" rendered="#{history[4] == userBean.participant_id}"  >
             <f:param name="action" value="item" />     
           </h:commandButton>    
-
-          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history[1])}"  immediate="true"  rendered="#{history[4] == userBean.participant_id}"  >
+          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history[1], history[2])}"  immediate="true"  rendered="#{history[4] == userBean.participant_id}"  >
           </h:commandButton>    
-
+          
 
         </div>    
       </c:forEach>
