@@ -641,14 +641,16 @@ public class ItemBean extends AbstractBean implements Serializable {
   public List getExistingPicture(String iid) {
 
     List result = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
-    String[] results = null;
+    Session hib = null;
+    Transaction tx = null;
+  
     if (iid == null) {
       return getPicture();
     } else {
       String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid";
       try {
+        hib = hib_session();
+        tx = hib.beginTransaction();
         result = hib.createQuery(queryString)
                 .setParameter("iid", iid)
                 .list();
@@ -658,7 +660,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       } catch (Exception e) {
         tx.rollback();
         System.out.println("Error in getExistingPicture");
-        e.printStackTrace();
+        Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
       } finally {
         tx = null;
         hib = null;
@@ -677,6 +679,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
         a_array = null;
         tmp_picture = null;
+        result = null;
         return getPicture();
       }
     }
