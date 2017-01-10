@@ -117,7 +117,7 @@ public class SendEmail implements java.io.Serializable {
     Session sess = establishSession();
 
     String threeChars = this.whichEmail.substring(0, 3);
-    if ("registration" == this.whichEmail) {
+    if ("registration".equals(this.whichEmail)) {
       /// then random argument is the password
       this.password = random;
       sendRegistrationEmail(sess);
@@ -131,12 +131,12 @@ public class SendEmail implements java.io.Serializable {
       this.password = random;
       sendCommunityMemberEmail(sess);
 
-    } else if ("forgotPassword" == this.whichEmail) {
+    } else if ("forgotPassword".equals(this.whichEmail)) {
       //SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, returnApplicationAddress(), returnApplicationPwd(), null, reset_code);
       // random is user_id
       this.reset_code = rc;
       sendForgotPasswordEmail(sess);
-    } else if ("forgotUserName" == this.whichEmail) {
+    } else if ("forgotUserName".equals(this.whichEmail)) {
 
     }
   }
