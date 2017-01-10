@@ -126,22 +126,23 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   private Boolean deleteExistingUserImage(String iid) {
 
-    Session sb = hib_session();
-    Transaction tx = sb.beginTransaction();
+    Session sb = null;
+    Transaction tx = null;
     List result = null;
     Boolean retResult = false;
 
-    /// Delete existing image file name record becuase maybe be using same name but had editted
+    /// Delete existing image file name record becuase may be using same name but had editted it
     String queryString = "from ItemImages where item_image_id = :iid ";
-
-    result = sb.createQuery(queryString)
-            .setParameter("iid", iid)
-            .list();
     try {
+      sb = hib_session();
+      tx = sb.beginTransaction();
+      result = sb.createQuery(queryString)
+              .setParameter("iid", iid)
+              .list();
+      tx.commit();
       if (result.size() > 0) {
         sb.delete((ItemImages) result.get(0));
       }
-      tx.commit();
       retResult = true;
     } catch (Exception ex) {
       tx.rollback();
@@ -375,9 +376,9 @@ public class ItemBean extends AbstractBean implements Serializable {
       SendEmail se = null;
       String[] getMap = null;
       getMap = new String[2];
-      getMap = ubean.getApplicationEmail();  
-      se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()),  this.itemImageCaption, getMap[0], getMap[1], this.remoteIp ); 
-      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription});
+      getMap = ubean.getApplicationEmail();
+      se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
+      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, ubean.getEmail()});
       ubean.setEditable(0);
     } else {
       message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
@@ -390,7 +391,7 @@ public class ItemBean extends AbstractBean implements Serializable {
   /**
    * @return the categoryId
    */
-   public Integer getCategoryId() {
+  public Integer getCategoryId() {
     return categoryId;
   }
 
