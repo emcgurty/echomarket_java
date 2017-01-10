@@ -30,20 +30,43 @@ public class SendEmail implements java.io.Serializable {
   private String lastName;
   private String subject;
   private String comments;
+  private String itemDescription;
+  private String itemModel;
+  private Integer numberOfItems;
+  private String imageFileName;
+  private String itemImageCaption;
+  private String remoteIp;
 
   public SendEmail() {
   }
 
 ///contact Us
-  public SendEmail(String whichEmail, String email, String subject, String comments, String app_email, String app_password) {
+  public SendEmail(String whichEmail, String email, String subject, String comments, String app_email, String app_password, String remoteIp) {
     this.whichEmail = whichEmail;
     this.user_email = email;
     this.subject = subject;
     this.comments = comments;
     this.application_email_address = app_email;
     this.application_email_password = app_password;
+    this.remoteIp = this.remoteIp;
     Session sess = establishSession();
     sendContactUs(sess);
+  }
+
+///new Item
+  public SendEmail(String whichEmail, String email, String itemDescription, String itemModel, Integer numberOfItems, String imageFileName, String itemImageCaption, String app_email, String app_password, String remoteIp) {
+    this.whichEmail = whichEmail;   /// lend or borrow
+    this.user_email = email;
+    this.itemDescription = itemDescription;
+    this.itemModel = itemModel;
+    this.numberOfItems = numberOfItems;
+    this.imageFileName = imageFileName;
+    this.itemImageCaption = itemImageCaption;
+    this.application_email_address = app_email;
+    this.application_email_password = app_password;
+    this.remoteIp = remoteIp;
+    Session sess = establishSession();
+    sendNewItem(sess);
   }
 
 // community member 
@@ -118,6 +141,35 @@ public class SendEmail implements java.io.Serializable {
     }
   }
 
+  private Boolean sendNewItem(Session sess) {
+
+    try {
+      // Create a default MimeMessage object.
+      Message message = new MimeMessage(sess);
+      message.setContent(BuildNewItemMessage(), "text/html; charset=utf-8");
+      // Set From: header field of the header.
+      message.setFrom(new InternetAddress(getApplication_email_address()));
+
+      // Set To: header field of the header.
+      message.setRecipients(Message.RecipientType.TO,
+              InternetAddress.parse(getApplication_email_address()));
+      message.setRecipients(Message.RecipientType.TO,
+              InternetAddress.parse(this.user_email));
+
+      // Set Subject: header field
+      message.setSubject("New EchoMarket Item.");
+
+      // Send message
+      Transport.send(message);
+
+      System.out.println("Sent message successfully....");
+
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
+    return true;
+  }
+
   private Boolean sendContactUs(Session sess) {
 
     try {
@@ -144,6 +196,7 @@ public class SendEmail implements java.io.Serializable {
     }
     return true;
   }
+
   private String BuildContactUsMessage() {
 
     ResourceBundle bundle = ResourceBundle.getBundle(
@@ -152,14 +205,40 @@ public class SendEmail implements java.io.Serializable {
     String buildMessage = "<html><h1>EchoMarket Contact Us</h1>"
             + "<p>Subject: " + this.subject + "</p>"
             + "<p>Comments:  " + this.comments + "</p>"
-             + "<p>User Email:  " + this.user_email + "</p>"
+            + "<p>User Email:  " + this.user_email + "</p>"
             + "<p>Date Sent:  " + new Date() + "</p>"
-            + "<p>IP Address:  " + "IP ADDRESS -- not done" + "</p>"
+            + "<p>Contact message was sent from IP Address:  " + this.remoteIp + ".</p>"
             + "<p>PS: If you received this email in error, please disregard it.</p></html>";
     return buildMessage;
   }
 
-  
+  private String BuildNewItemMessage() {
+
+    ResourceBundle bundle = ResourceBundle.getBundle(
+            "echomarket.web.messages.Messages",
+            FacesContext.getCurrentInstance().getViewRoot().getLocale());
+    String buildMessage = "<html><h1>EchoMarket New Item</h1>"
+            + "<p>EchoMarket awaiting approval:</p>"
+            + "<p>Item to " + this.whichEmail + ".</p>"
+            + "<p>Item Description: " + this.itemDescription + "</p>"
+            + "<p>Item Model:  " + this.itemModel + "</p>";
+
+    if (this.imageFileName.isEmpty() == false) {
+      buildMessage = buildMessage + "<p>Item Image:  " + this.imageFileName + "</p>"
+              + "<p>(Unaware of image content, EchoMarket will not actually transmit the image file.)</p>";
+    }
+    if (this.itemImageCaption.isEmpty() == false) {
+      buildMessage = buildMessage + "<p>Item Image Caption:  " + this.itemImageCaption + "</p>";
+    }
+
+    buildMessage = buildMessage + "<p>Date Sent:  " + new Date() + "</p>"
+            + "<p>Your item will be assessded for approval within one day.</p>"
+            + "<p>Thanks for participating on EchoMarket!</p>"
+            + "<p>Item created from this IP Address:  " + this.getRemoteIp() + ".</p>"
+            + "<p>PS: If you received this email in error, please disregard it.</p></html>";
+    return buildMessage;
+  }
+
   private String BuildRegistrationMessage() {
 
     ResourceBundle bundle = ResourceBundle.getBundle(
@@ -313,7 +392,6 @@ public class SendEmail implements java.io.Serializable {
     return true;
   }
 
-  
   private Boolean sendRegistrationEmail(Session sess) {
 
     try {
@@ -563,6 +641,90 @@ public class SendEmail implements java.io.Serializable {
    */
   public void setComments(String comments) {
     this.comments = comments;
+  }
+
+  /**
+   * @return the itemDescription
+   */
+  public String getItemDescription() {
+    return itemDescription;
+  }
+
+  /**
+   * @param itemDescription the itemDescription to set
+   */
+  public void setItemDescription(String itemDescription) {
+    this.itemDescription = itemDescription;
+  }
+
+  /**
+   * @return the itemModel
+   */
+  public String getItemModel() {
+    return itemModel;
+  }
+
+  /**
+   * @param itemModel the itemModel to set
+   */
+  public void setItemModel(String itemModel) {
+    this.itemModel = itemModel;
+  }
+
+  /**
+   * @return the numberOfItems
+   */
+  public Integer getNumberOfItems() {
+    return numberOfItems;
+  }
+
+  /**
+   * @param numberOfItems the numberOfItems to set
+   */
+  public void setNumberOfItems(Integer numberOfItems) {
+    this.numberOfItems = numberOfItems;
+  }
+
+  /**
+   * @return the imageFileName
+   */
+  public String getImageFileName() {
+    return imageFileName;
+  }
+
+  /**
+   * @param imageFileName the imageFileName to set
+   */
+  public void setImageFileName(String imageFileName) {
+    this.imageFileName = imageFileName;
+  }
+
+  /**
+   * @return the itemImageCaption
+   */
+  public String getItemImageCaption() {
+    return itemImageCaption;
+  }
+
+  /**
+   * @param itemImageCaption the itemImageCaption to set
+   */
+  public void setItemImageCaption(String itemImageCaption) {
+    this.itemImageCaption = itemImageCaption;
+  }
+
+  /**
+   * @return the remoteIp
+   */
+  public String getRemoteIp() {
+    return remoteIp;
+  }
+
+  /**
+   * @param remoteIp the remoteIp to set
+   */
+  public void setRemoteIp(String remoteIp) {
+    this.remoteIp = remoteIp;
   }
 
 }
