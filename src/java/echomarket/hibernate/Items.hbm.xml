@@ -62,5 +62,8 @@
     <property name="itemType" type="string">
       <column name="item_type" length="12" />
     </property>
+    <property name="remoteIp" type="string">
+      <column name="remote_ip" length="50" />
+    </property>
   </class>
 </hibernate-mapping>
