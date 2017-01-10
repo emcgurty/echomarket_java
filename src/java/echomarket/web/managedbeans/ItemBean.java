@@ -690,7 +690,6 @@ public class ItemBean extends AbstractBean implements Serializable {
     List result = null;
     Session hib = null;
     Transaction tx = null;
-    String[] results = null;
     ItemImages a_array = null;
     ArrayList<ItemImages> tmp_picture = null;
     String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid AND itms.itemType = :itype";
@@ -819,40 +818,6 @@ public class ItemBean extends AbstractBean implements Serializable {
       return_delete_true = files.delete();
     }
     return return_delete_true;
-  }
-
-  public void deleteItem(String iid, String itemDesc) {
-
-    List result = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
-    Boolean retResult = false;
-
-    String queryString = "from Items where item_id = :iid";
-    try {
-      result = hib.createQuery(queryString)
-              .setParameter("iid", iid)
-              .list();
-      tx.commit();
-      retResult = true;
-    } catch (Exception ex) {
-      tx.rollback();
-      retResult = false;
-      System.out.println("Error in deleting borrower record");
-      Logger
-              .getLogger(ItemBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      result = null;
-      tx = null;
-      hib = null;
-    }
-    if (retResult == true) {
-      message(null, "DeleteSelectedBorrowerSuccess", new Object[]{itemDesc});
-    } else {
-      message(null, "DeleteSelectedBorrowerFailed", new Object[]{itemDesc});
-    }
-
   }
 
   /**
@@ -1079,9 +1044,43 @@ public class ItemBean extends AbstractBean implements Serializable {
     return return_value;
   }
 
-  public Boolean deleteCurrentRecord(String iid) {
-    ///Needs to be written
-    return true;
+  public Boolean deleteCurrentRecord(String iid, String itemDescription) {
+    // Need to set up hibernate to cascade for all affected tables...
+    List result = null;
+    Session hib = null;
+    Transaction tx = null;
+    Boolean retResult = false;
+
+    String queryString = "from Items where item_id = :iid";
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      result = hib.createQuery(queryString)
+              .setParameter("iid", iid)
+              .list();
+      tx.commit();
+      if (result.size() == 1) {
+        hib.delete((Items)result.get(0));
+      }
+      retResult = true;
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error in deleteCurrentRecord");
+      Logger
+              .getLogger(ItemBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      result = null;
+      tx = null;
+      hib = null;
+    }
+    if (retResult == true) {
+      message(null, "DeleteSelectedItemSuccess", new Object[]{itemDescription});
+    } else {
+      message(null, "DeleteSelectedItemFailed", new Object[]{itemDescription});
+    }
+
+    return retResult;
   }
 
   /**
