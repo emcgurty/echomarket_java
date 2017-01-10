@@ -24,6 +24,7 @@ public class Items implements java.io.Serializable {
   private int approved;
   private int notify;
   private String itemType;
+  private String remoteIp;
   private Set<LenderTransfer> lenderTransfer = new HashSet<LenderTransfer>();
   private Set<LenderItemConditions> lenderItemConditions = new HashSet<LenderItemConditions>();
   private Set<ItemImages> itemImages = new HashSet<ItemImages>();
