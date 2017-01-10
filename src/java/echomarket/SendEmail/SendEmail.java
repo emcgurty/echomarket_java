@@ -233,7 +233,7 @@ public class SendEmail implements java.io.Serializable {
     }
 
     buildMessage = buildMessage + "<p>Date Sent:  " + new Date() + "</p>"
-            + "<p>Your item will be assessded for approval within one day.</p>"
+            + "<p>Your item will be assessed for approval within one day.</p>"
             + "<p>Thanks for participating on EchoMarket!</p>"
             + "<p>Item created from this IP Address:  " + this.getRemoteIp() + ".</p>"
             + "<p>PS: If you received this email in error, please disregard it.</p></html>";
