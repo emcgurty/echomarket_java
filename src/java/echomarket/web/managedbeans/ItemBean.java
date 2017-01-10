@@ -643,7 +643,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     List result = null;
     Session hib = null;
     Transaction tx = null;
-  
+
     if (iid == null) {
       return getPicture();
     } else {
@@ -688,13 +688,15 @@ public class ItemBean extends AbstractBean implements Serializable {
   public void getCurrentPicture(String iid) {
 
     List result = null;
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
     String[] results = null;
     ItemImages a_array = null;
     ArrayList<ItemImages> tmp_picture = null;
     String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid AND itms.itemType = :itype";
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
               .setParameter("itype", this.itemType)
@@ -702,7 +704,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception e) {
       tx.rollback();
-      System.out.println("Error in getExistingPicture");
+      System.out.println("Error in getCurrentPicture");
       Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
     } finally {
       tx = null;
@@ -724,6 +726,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     a_array = null;
     tmp_picture = null;
+    result = null;
   }
 
   private List getCurrentItem(String iid, String which) {
