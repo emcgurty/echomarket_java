@@ -14,6 +14,13 @@
       <ui:include src="/item_menu.xhtml" id="borrowing_item_menu" />  
       <div class="top" >
         <h:outputText value="ITEMS SOUGHT TO BORROW"  />
+        <br />
+        <div class="messagecolor">
+          <h:messages showSummary="true" 
+                      showDetail="false"
+                      errorStyle="list-style-type:none;color: indigo" 
+                      />
+        </div>
       </div> 
 
       <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(itemBean.history_id, 'borrow')}" />
@@ -36,7 +43,7 @@
           <h:graphicImage name="#{history[0]}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty history[0]}"/>
           <br />
           <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history[1])}" immediate="true" rendered="#{history[4] == userBean.participant_id}"  >
-             <f:param name="action" value="item" />   
+            <f:param name="action" value="item" />   
           </h:commandButton>    
 
           <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history[1], history[2])}"  immediate="true"  rendered="#{history[4] == userBean.participant_id}"  >
