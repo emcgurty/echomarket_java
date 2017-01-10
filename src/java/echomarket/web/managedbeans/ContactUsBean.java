@@ -56,7 +56,7 @@ public class ContactUsBean extends AbstractBean implements Serializable {
       getMap = new String[2];
       getMap = ubean.getApplicationEmail();
       try {
-        se = new SendEmail("contactUs", this.email, this.subject, this.comments, getMap[0], getMap[1]);
+        se = new SendEmail("contactUs", this.email, this.subject, this.comments, getMap[0], getMap[1], getClientIpAddr());
         message(null, "MessageSuccessfullySent", new Object[]{this.email});
       } catch (Exception ex) {
         message(null, "MessageNotSuccessfullySent", new Object[]{this.email});
