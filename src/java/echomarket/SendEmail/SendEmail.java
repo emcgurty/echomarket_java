@@ -151,10 +151,9 @@ public class SendEmail implements java.io.Serializable {
       message.setFrom(new InternetAddress(getApplication_email_address()));
 
       // Set To: header field of the header.
-      message.setRecipients(Message.RecipientType.TO,
-              InternetAddress.parse(getApplication_email_address()));
-      message.setRecipients(Message.RecipientType.TO,
-              InternetAddress.parse(this.user_email));
+      String recipients = getApplication_email_address() + " , " + this.user_email;
+      message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
+      
 
       // Set Subject: header field
       message.setSubject("New EchoMarket Item.");
