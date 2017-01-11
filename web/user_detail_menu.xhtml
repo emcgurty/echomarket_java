@@ -51,11 +51,11 @@
         <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
         <c:set var="completeCP" value="#{userBean.cpId}" /> 
         <c:set var="whichType" value="#{userBean.userType}" />
-        
+
         <c:choose  >
           <c:when test="#{((whichType== 'both') or (whichType == 'lend'))}"  >
             <c:choose  >
-              <c:when test="#{completeCP}" >      
+              <c:when test="#{completeCP }" >      
                 <li >
                   <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
                   <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
@@ -63,6 +63,8 @@
                     <f:param name="action" value="edit" />
                   </h:commandLink>   
                 </li>
+              </c:when> 
+              <c:when test="#{completeCP and userBean.LITid}" >   
                 <li>
                   <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
                   <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
@@ -83,14 +85,14 @@
           <c:choose>                                
             <c:when test="#{whichType == 'borrow'}"  >
               <li id="tab_item_1" >
-                <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"     >
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing..."     >
                   <f:param name="action" value="item" />
                 </h:commandLink>
               </li>
             </c:when >  
             <c:when test="#{whichType == 'lend'}"  >
               <li id="tab_item_1" >
-                <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"   >
+                <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending..."   >
                   <f:param name="action" value="item" />
                 </h:commandLink>
               </li>
@@ -100,12 +102,12 @@
                 <a href="#s1">Lend or Borrow?</a>
                 <ul>
                   <li>
-                    <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="I want to lend!"   >
+                    <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="New Item to lend, or your Lending History"   >
                       <f:param name="action" value="item" />
                     </h:commandLink>
                   </li>
                   <li>
-                    <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="I want to borrow!" >
+                    <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="New Item to borrow, or your Borrowing History" >
                       <f:param name="action" value="item" />
                     </h:commandLink>
                   </li>
