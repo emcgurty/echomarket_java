@@ -27,7 +27,7 @@ public abstract class AbstractBean implements Serializable {
 
   @Id
   private String id;
- 
+
   public AbstractBean() {
     this.id = UUID.randomUUID().toString();
   }
@@ -56,7 +56,13 @@ public abstract class AbstractBean implements Serializable {
    * @return the id
    */
   protected String getId() {
+    if (this.id.isEmpty() == true) {
+      return id;
+    } else {
+      this.id = UUID.randomUUID().toString();
+    }
     return id;
+
   }
 
   /**
