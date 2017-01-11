@@ -179,6 +179,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       iii.setItemImageId(getId());
       iii.setItemId(iid);
       iii.setImageFileName(iid + "_" + getFileName(getImageFileNamePart()));
+      iii.setItemImageCaption(itemImageCaption);
       iii.setImageContentType(getImageFileNamePart().getContentType());
 
       try {
@@ -300,6 +301,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         sb.save(ii);
         tx.commit();
         bret = true;
+
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in Save Item");
@@ -362,55 +364,86 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (strRetId != null) {
         bret = deleteExistingUserImage(strRetId);
       }
+    }
+
+      ////  If newImagePart.. What about this.picture caption changed...
       if ((bret == true) && (this.imageFileNamePart != null)) {
         bret = processNewFileImage(new_iid, strRetId);
+      }
+
+      if ((bret == true) && (this.imageFileNamePart == null)) {
+        List currentPicture = this.getPicture();
+        if (currentPicture != null) {
+          if (currentPicture.size() == 1) {
+            ItemImages currentImage = (ItemImages) currentPicture.get(0);
+            setItemImageCaption(itemImageCaption);
+            try {
+              sb = hib_session();
+              tx = sb.beginTransaction();
+              sb.update(currentImage);
+              tx.commit();
+            } catch (Exception ex) {
+              tx.rollback();
+
+            } finally {
+              sb = null;
+              tx = null;
+            }
+          } else {
+
+          }
+
+        } else {
+
+        }
       }
 
       if ((bret == true) && (notify == 1)) {
         bret = sendNotification(itemType);  // This needs to be written...
       }
-    }
 
-    if (bret == true) {
-      if (itemId.isEmpty() == true) {
-        this.itemId = new_iid;
-      }
-      SendEmail se = null;
-      String[] getMap = null;
-      getMap = new String[2];
-      getMap = ubean.getApplicationEmail();
-      if (getImageFileNamePart() != null) {
-        se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
-      } else {
-        List currentPicture = this.getPicture();
-        if (currentPicture != null) {
-          if (currentPicture.size() == 1) {
-            ItemImages currentImage = (ItemImages) currentPicture.get(0);
-            String currentImageFileName = currentImage.getImageFileName();
-            String currentImageFileCaption = currentImage.getItemImageCaption();
-            se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, currentImageFileName, currentImageFileCaption, getMap[0], getMap[1], this.remoteIp);
-          }
-        } else {
-          se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+      if (bret == true) {
+        if (itemId.isEmpty() == true) {
+          this.itemId = new_iid;
         }
+        SendEmail se = null;
+        String[] getMap = null;
+        getMap = new String[2];
+        getMap = ubean.getApplicationEmail();
+        if (getImageFileNamePart() != null) {
+          se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
+        } else {
+          List currentPicture = this.getPicture();
+          if (currentPicture != null) {
+            if (currentPicture.size() == 1) {
+              ItemImages currentImage = (ItemImages) currentPicture.get(0);
+              String currentImageFileName = currentImage.getImageFileName();
+              String currentImageFileCaption = currentImage.getItemImageCaption();
+              se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, currentImageFileName, currentImageFileCaption, getMap[0], getMap[1], this.remoteIp);
+            } else {
+              se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+            }
+
+          } else {
+            se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+          }
+        }
+
+        se = null;
+        getMap = null;
+
+        message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, ubean.getEmail()});
+        ubean.setEditable(0);
+      } else {
+        message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
+        ubean.setEditable(1);
+
       }
-      
-      se = null;
-      getMap = null;
-      
-      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, ubean.getEmail()});
-      ubean.setEditable(0);
-    } else {
-      message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
-      ubean.setEditable(1);
-
+      return load_ud(itemType, itemId);
     }
-    return load_ud(itemType, itemId);
-  }
-
-  /**
-   * @return the categoryId
-   */
+    /**
+     * @return the categoryId
+     */
   public Integer getCategoryId() {
     return categoryId;
   }
