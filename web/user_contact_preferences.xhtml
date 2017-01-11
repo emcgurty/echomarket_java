@@ -64,7 +64,7 @@
             <div style="margin:10px;" >
               <h:outputText value="Default Contact Preferences" />
               <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'" 
-                              rendered="#{(ut == 'lend') or ut == ('both')}">
+                              rendered="#{((ut == 'lend') or ut == ('both')) and (userBean.cpId)}">
                 <f:param name="action" value="edit" />
               </h:commandLink>
             </div>
