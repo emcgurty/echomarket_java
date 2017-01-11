@@ -33,6 +33,7 @@
               <h:outputText value="#{label} ITEM"  rendered="#{userBean.editable == 1}" />
               <h:outputText value="ITEM: #{itemBean.itemDescription}"  rendered="#{userBean.editable == 0}" />
               <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save Item"  rendered="#{userBean.editable == 1}" />
+
               <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" >
                 <f:param name="action" value="item" />
               </h:commandLink>
@@ -63,6 +64,7 @@
               <h:outputText value="Item Detail..." />
               <h:inputHidden id="itemId" value="#{itemBean.itemId}"   />
               <h:inputHidden id="participant_id" value="#{itemBean.participant_id}"  />
+              <h:outputText value="#{itemBean.itemType} -- itemTYpe"  />
             </div>
           </div>
 
@@ -181,7 +183,16 @@
                 <br />
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                   <h:outputLabel for="imagePreview" value="Uploaded Image:"  >
-                    <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="lend_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/>
+                    <c:choose>
+                      <c:when test="#{itemBean.itemType == 'both'}" >
+                        <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="images" alt="Item Image"   height="100" width="100" 
+                                         rendered="#{!empty image.imageFileName}"/>
+                      </c:when>
+                      <c:when test="#{itemBean.itemType != 'both'}" >
+                        <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" 
+                                         rendered="#{!empty image.imageFileName}"/>
+                      </c:when>
+                    </c:choose>
                   </h:outputLabel> 
                 </div>
                 <br />
