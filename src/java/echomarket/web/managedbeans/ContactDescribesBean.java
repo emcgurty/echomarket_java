@@ -8,6 +8,8 @@ package echomarket.web.managedbeans;
 import echomarket.hibernate.ContactDescribes;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
@@ -31,23 +33,22 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
   public String getOneCD(String cd) {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
     String returnCD = null;
 
     try {
+      session = hib_session();
+      tx = session.beginTransaction();
       result = session.createQuery("from ContactDescribes WHERE contact_describe_id = :cd")
               .setParameter("cd", cd)
               .list();
       tx.commit();
-
     } catch (Exception e) {
       tx.rollback();
-      System.out.println("Error at line 42 in CD Bean");
-      e.printStackTrace();
-
+      System.out.println("Error in getOneCD");
+      Logger.getLogger(ContactDescribesBean.class.getName()).log(Level.SEVERE, null, e);
     } finally {
-//            session.close();
       session = null;
       tx = null;
     }
@@ -59,7 +60,7 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
     } else {
       returnCD = "Contact Description not found";
     }
-
+     
     result = null;
     return returnCD;
   }
@@ -90,8 +91,8 @@ public class ContactDescribesBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error at line 57 in CDBeans");
-      ex.printStackTrace();
+      System.out.println("Error in cd_list");
+      Logger.getLogger(ContactDescribesBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       session = null;
       tx = null;
