@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Categories;
@@ -43,7 +38,7 @@ public class CategoriesBean extends AbstractBean implements Serializable {
     Transaction tx;
     session = null;
     tx = null;
-    
+
     try {
       session = hib_session();
       tx = session.beginTransaction();
@@ -92,7 +87,7 @@ public class CategoriesBean extends AbstractBean implements Serializable {
     List result = null;
     Session session = null;
     Transaction tx = null;
-    
+
     try {
       session = hib_session();
       tx = session.beginTransaction();
@@ -100,12 +95,12 @@ public class CategoriesBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception e) {
       tx.rollback();
-      System.out.println("Error line 108 CatBean");
-      e.printStackTrace();
+      System.out.println("Error in cat_list");
+      Logger.getLogger(CategoriesBean.class.getName()).log(Level.SEVERE, null, e);
 
     } finally {
-    session = null;
-    tx = null;
+      session = null;
+      tx = null;
     }
     return result;
   }
