@@ -172,6 +172,7 @@
 
             <div style="margin-left:25px;margin-top:5px;width: 100%;float:left;">                    
               <hr />
+               
               <h:outputLabel for="thirdPartyPresenceL2b" value="Would you like a third-party present during transfer to borrower?:"  >
                 <h:selectOneRadio id="thirdPartyPresenceL2b" value="#{lenderTransferBean.thirdPartyPresenceL2b}" rendered="#{userBean.editable == 1}">
                   <f:selectItem itemValue="1" itemLabel="Yes" />
@@ -192,7 +193,10 @@
                   <h:outputText id="thirdPartyPresenceL2bString"   value="#{cbe}" class="RO_text" />
                 </c:if>  
               </h:outputLabel>  
-              <div id="thirdPartyPresenceL2BGroup" style="margin-left:5px;margin-top:5px;width:auto;padding:0px;display:none;">
+              <c:set var="displayThirdChoice" value="none" />
+              <c:set var="displayThirdChoice" value="#{(userBean.editable == 0) and (lenderTransferBean.thirdPartyPresenceL2b == 1)}" />
+              
+              <div id="thirdPartyPresenceL2BGroup" style="margin-left:5px;margin-top:5px;width:auto;padding:0px;display:#{displayThirdChoice};">
                 <h:outputLabel value="Your choice?:" for="lenderThirdPartyChoiceL2b">
                   <h:selectOneRadio id="lenderThirdPartyChoiceL2b" value="#{lenderTransferBean.lenderThirdPartyChoiceL2b}" rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
