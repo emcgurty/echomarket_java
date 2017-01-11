@@ -75,17 +75,22 @@ public class ItemConditionBean extends AbstractBean implements Serializable {
   private List cat_list() {
 
     List result = null;
-    Session session = hib_session();
-    Transaction tx = session.beginTransaction();
+    Session session = null;
+    Transaction tx = null;
 
     try {
+      session = hib_session();
+      tx = session.beginTransaction();
       result = session.createQuery("from ItemConditions order by id").list();
+      tx.commit();
     } catch (Exception e) {
-      System.out.println("Error line 48 Itemm Conditions");
-      e.printStackTrace();
-
+      tx.rollback();
+      System.out.println("Error in cat_list");
+        Logger.getLogger(ItemConditionBean.class.getName()).log(Level.SEVERE, null, e);
+    } finally {
+      session = null;
+      tx = null;
     }
-    tx.commit();
 
     return result;
   }
