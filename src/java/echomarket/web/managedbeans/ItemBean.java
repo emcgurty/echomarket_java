@@ -280,7 +280,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     Boolean bret = false;
     String strRetId = null;
-    String new_iid = getId();
+    String new_iid = getId();  // As ItemBean is session, this fails in 
     List result = null;
     this.remoteIp = getClientIpAddr();
 
@@ -370,10 +370,11 @@ public class ItemBean extends AbstractBean implements Serializable {
         bret = sendNotification(itemType);  // This needs to be written...
       }
     }
-    if (itemId.isEmpty() == true) {
-      this.itemId = new_iid;
-    }
+
     if (bret == true) {
+      if (itemId.isEmpty() == true) {
+        this.itemId = new_iid;
+      }
       SendEmail se = null;
       String[] getMap = null;
       getMap = new String[2];
@@ -779,7 +780,7 @@ public class ItemBean extends AbstractBean implements Serializable {
                 + "itm.itemId, itm.itemDescription, "
                 + "itm.itemModel, part.participant_id, itm.approved FROM Participant part, Items itm "
                 + "INNER join part.item itm INNER join itm.itemImages itmImage"
-                + "WHERE part.communityId = :pid AND itm.itemType = :itype AND itm.approved = 1";
+                + "WHERE part.communityId = :pid AND itm.itemType = :itype";
       } else {
         //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
       }
@@ -1075,7 +1076,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     } else {
       message(null, "DeleteSelectedItemFailed", new Object[]{itemDescription});
     }
-    
+
   }
 
   /**
