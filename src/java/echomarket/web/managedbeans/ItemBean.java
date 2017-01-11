@@ -379,7 +379,25 @@ public class ItemBean extends AbstractBean implements Serializable {
       String[] getMap = null;
       getMap = new String[2];
       getMap = ubean.getApplicationEmail();
-      se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
+      if (getImageFileNamePart() != null) {
+        se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
+      } else {
+        List currentPicture = this.getPicture();
+        if (currentPicture != null) {
+          if (currentPicture.size() == 1) {
+            ItemImages currentImage = (ItemImages) currentPicture.get(0);
+            String currentImageFileName = currentImage.getImageFileName();
+            String currentImageFileCaption = currentImage.getItemImageCaption();
+            se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, currentImageFileName, currentImageFileCaption, getMap[0], getMap[1], this.remoteIp);
+          }
+        } else {
+          se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+        }
+      }
+      
+      se = null;
+      getMap = null;
+      
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, ubean.getEmail()});
       ubean.setEditable(0);
     } else {
