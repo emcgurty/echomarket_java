@@ -12,20 +12,30 @@
   <h:inputHidden id="cpId" value="#{userBean.cpId}"  />
   <h:inputHidden id="LITid" value="#{userBean.LITid}"  />
   <h:inputHidden id="LICid" value="#{userBean.LICid}"  />
-  <c:set var="whichType" value="#{itemBean.itemType}" />
-  <ul id="nav" class="item_menu">
+  <c:set var="whichType" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}"/>
+  <c:set var="whichType" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}"/>
+  <h:outputText value="#{whichType} -- whichType" />
+  <ul id="nav" class="item_menu" >
+   
     <li class="subs"  >
+      
       <c:choose>                                
         <c:when test="#{whichType == 'borrow'}"  >
           <li id="tab_item_1" >
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', itemBean.itemId)}"  value="Item to Borrow"  rendered="true"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', itemBean.itemId)}"  value="Item to Borrow: #{itemBean.itemDescription}"  rendered="#{!empty itemBean.itemDescription}"    >
+              <f:param name="action" value="item" />             
+            </h:commandLink>
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', itemBean.itemId)}"  value="Item to Borrow"  rendered="#{empty itemBean.itemDescription}"    >
               <f:param name="action" value="item" />             
             </h:commandLink>
           </li>
         </c:when >  
         <c:when test="#{whichType == 'lend'}"  >
           <li id="tab_item_1" >
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend',itemBean.itemId)}"  value="Item to Lend"  rendered="true"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend',itemBean.itemId)}"  value="Item to Lend: #{itemBean.itemDescription}"  rendered="#{!empty itemBean.itemDescription}"    >
+              <f:param name="action" value="item" />
+            </h:commandLink>
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend',itemBean.itemId)}"  value="Item to Lend: #{itemBean.itemDescription}"  rendered="#{empty itemBean.itemDescription}"    >
               <f:param name="action" value="item" />
             </h:commandLink>
           </li>
@@ -159,9 +169,10 @@
       </c:when>
     </c:choose>
 
-    <li id="item_menu_33" >
+    <li  >
       <h:commandLink action="#{participantBean.load_ud(userBean.participant_id)}" immediate="true"  value="Return to DashBoard"  rendered="true"    >
       </h:commandLink>
     </li>
+   
   </ul>
 </ui:composition>
