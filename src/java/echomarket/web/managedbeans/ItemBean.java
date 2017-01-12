@@ -205,6 +205,10 @@ public class ItemBean extends AbstractBean implements Serializable {
   }
 
   public String load_ud(String which, String iid) {
+    
+    if ("both".equals(which)) {
+      System.out.println("I should not see both except on User Login");
+    }
 
     List result = null;
 
@@ -249,24 +253,24 @@ public class ItemBean extends AbstractBean implements Serializable {
       }
     } else {
       // itemType was set above...
-      itemType = which;
-      itemId = null;
-      categoryId = -9;
-      participant_id = null;
-      otherItemCategory = null;
-      itemModel = null;
-      itemDescription = null;
-      itemConditionId = null;
-      itemCount = null;
-      comment = null;
-      dateCreated = null;
-      dateUpdated = null;
-      dateDeleted = null;
-      approved = -9;
-      notify = -9;
-      whichType = null;
-      history_id = null;
-      history_which = null;
+      this.itemType = which;
+      this.itemId = null;
+      this.categoryId = -9;
+      this.participant_id = null;
+      this.otherItemCategory = null;
+      this.itemModel = null;
+      this.itemDescription = null;
+      this.itemConditionId = null;
+      this.itemCount = null;
+      this.comment = null;
+      this.dateCreated = null;
+      this.dateUpdated = null;
+      this.dateDeleted = null;
+      this.approved = -9;
+      this.notify = -9;
+      this.whichType = null;
+      this.history_id = null;
+      this.history_which = null;
       ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
       setPicture(tmp_picture);
 
@@ -312,17 +316,17 @@ public class ItemBean extends AbstractBean implements Serializable {
         sb = null;
         tx = null;
       }
-      if (bret == true) {
-        bret = removeNullInLIC(ubean.getParticipant_id(), new_iid);
-      }
-
-      if (bret == true) {
-        bret = removeNullInLIT(ubean.getParticipant_id(), new_iid);
-      }
-
-      if (bret == true) {
-        bret = removeNullInCP(ubean.getParticipant_id(), new_iid);
-      }
+//      if (bret == true) {
+//        bret = removeNullInLIC(ubean.getParticipant_id(), new_iid);
+//      }
+//
+//      if (bret == true) {
+//        bret = removeNullInLIT(ubean.getParticipant_id(), new_iid);
+//      }
+//
+//      if (bret == true) {
+//        bret = removeNullInCP(ubean.getParticipant_id(), new_iid);
+//      }
 
     } else {
 
