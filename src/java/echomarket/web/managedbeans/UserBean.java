@@ -606,8 +606,6 @@ public class UserBean extends AbstractBean implements Serializable {
 
     String return_string = "";
     String pid = null;
-    List hasCompleteLIT = null;
-    List hasCompleteLIC = null;
     String return_null = "";
     List partList = completeParticipantRecord();
     if (partList != null) {
@@ -623,48 +621,39 @@ public class UserBean extends AbstractBean implements Serializable {
       }
 
       if (return_string.isEmpty() == true) {
-        List completCP = completeContactPreferences(this.participant_id);
-        Integer hs = completCP.size();
-        if (hs == 0) {
+        completeContactPreferences(this.participant_id);
+
+        if (this.cpId == false) {
           setEditable(0);
-          this.cpId = true;
           return_string = cpbean.load_ud(pid);
         } else {
           this.editable = 0;
-          this.cpId = true;
           switch (this.userType) {
             case "borrow":
               setAction("current");
               return_string = ibean.load_ud("borrow", return_null);
               break;
             case "lend":
-              hasCompleteLIT = completeLIT(this.participant_id);
-              if (hasCompleteLIT.size() == 0) {
-                this.LITid = true;
+              completeLIT(this.participant_id);
+              if (this.LITid == false) {
                 return_string = ltribean.load_ud(this.participant_id);
               } else {
-                this.LITid = true;
-                hasCompleteLIC = completeLIC(this.participant_id);
-                if (hasCompleteLIC.size() == 0) {
-                  this.LICid = true;
+                completeLIC(this.participant_id);
+                if (this.LICid == false) {
                   return_string = licibean.load_ud(this.participant_id);
                 } else {
                   setAction("current");
-                  this.LICid = true;
                   return_string = ibean.load_ud("lend", return_null);
                 }
               }
               break;
             case "both":
-              hasCompleteLIT = completeLIT(this.participant_id);
-              if (hasCompleteLIT.size() == 0) {
-                this.LITid = true;
+              completeLIT(this.participant_id);
+              if (this.LITid == false) {
                 return_string = ltribean.load_ud(this.participant_id);
               } else {
-                this.LITid = true;
-                hasCompleteLIC = completeLIC(this.participant_id);
-                if (hasCompleteLIC.size() == 0) {
-                  this.LICid = true;
+                completeLIC(this.participant_id);
+                if (this.LICid == false) {
                   return_string = licibean.load_ud(this.participant_id);
                 } else {
                   setAction("current");
@@ -1419,13 +1408,14 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  private List completeLIC(String pid) {
+  private void completeLIC(String pid) {
 
     List results = null;
     Session hib = null;
     Transaction tx = null;
     String currentItem = null;
     currentItem = ibean.getItemId();
+    this.LICid = false;
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1444,22 +1434,29 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on completeLIC");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      return null;
+
     } finally {
       tx = null;
       hib = null;
+      currentItem = null;
     }
-    return results;
+    if (results != null) {
+      if (results.size() == 1) {
+        this.LICid = true;
+        results = null;
+      }
+    }
 
   }
 
-  private List completeLIT(String pid) {
+  private void completeLIT(String pid) {
 
     List results = null;
     Session hib = null;
     Transaction tx = null;
     String currentItem = null;
     currentItem = ibean.getItemId();
+    this.LITid = false;
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1475,26 +1472,33 @@ public class UserBean extends AbstractBean implements Serializable {
       }
 
       tx.commit();
+
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on completeLIT");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      return null;
     } finally {
       tx = null;
       hib = null;
+      currentItem = null;
     }
-    return results;
+    if (results != null) {
+      if (results.size() == 1) {
+        this.LITid = true;
+        results = null;
+      }
+    }
 
   }
 
-  public List completeContactPreferences(String pid) {
+  public void completeContactPreferences(String pid) {
 
     List results = null;
     Session hib = null;
     Transaction tx = null;
     String currentItem = null;
     currentItem = ibean.getItemId();
+    this.cpId = false;
 
     try {
       hib = hib_session();
@@ -1516,12 +1520,18 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on completeContactPreferences");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      return null;
+
     } finally {
       tx = null;
       hib = null;
+      currentItem = null;
     }
-    return results;
+    if (results != null) {
+      if (results.size() == 1) {
+        this.cpId = true;
+        results = null;
+      }
+    }
 
   }
 
