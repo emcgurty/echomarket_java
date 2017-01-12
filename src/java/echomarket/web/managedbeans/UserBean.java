@@ -125,7 +125,7 @@ public class UserBean extends AbstractBean implements Serializable {
     String return_string = null;
     switch (hold_UT) {
       case "both":
-        return_string = "Borrowing and Lending";
+        return_string = "Borrowing and/or Lending";
         break;
       case "borrow":
         return_string = "Borrowing";
@@ -1419,43 +1419,26 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  public List completeLIC_LIT(String PID) {
-    List results = null;
-    Session hib = null;
-    Transaction tx = null;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      results = hib.createQuery("SELECT part from Participant part INNER JOIN part.lenderItemConditions INNER JOIN part.lenderTransfer WHERE part.participant_id = :pid")
-              .setParameter("pid", pid)
-              .list();
-      tx.commit();
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error on completeLIC");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      return null;
-    } finally {
-      tx = null;
-      hib = null;
-    }
-    return results;
-
-  }
-
   private List completeLIC(String pid) {
 
     List results = null;
     Session hib = null;
     Transaction tx = null;
-
+    String currentItem = null;
+    currentItem = ibean.getItemId();
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid")
-              .setParameter("pid", pid)
-              .list();
+      if (currentItem.isEmpty() == true) {
+        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid")
+                .setParameter("pid", pid)
+                .list();
+      } else {
+        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid and itemId = :iid")
+                .setParameter("pid", pid)
+                .setParameter("iid", currentItem)
+                .list();
+      }
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
@@ -1475,13 +1458,22 @@ public class UserBean extends AbstractBean implements Serializable {
     List results = null;
     Session hib = null;
     Transaction tx = null;
-
+    String currentItem = null;
+    currentItem = ibean.getItemId();
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid")
-              .setParameter("pid", pid)
-              .list();
+      if (currentItem.isEmpty() == true) {
+        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid")
+                .setParameter("pid", pid)
+                .list();
+      } else {
+        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid and itemId = :iid")
+                .setParameter("pid", pid)
+                .setParameter("iid", currentItem)
+                .list();
+      }
+
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
@@ -1501,13 +1493,23 @@ public class UserBean extends AbstractBean implements Serializable {
     List results = null;
     Session hib = null;
     Transaction tx = null;
+    String currentItem = null;
+    currentItem = ibean.getItemId();
 
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery("from ContactPreference WHERE participant_id = :pid")
-              .setParameter("pid", pid)
-              .list();
+      if (currentItem.isEmpty() == true) {
+        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid")
+                .setParameter("pid", pid)
+                .list();
+      } else {
+        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid and itemId = :iid")
+                .setParameter("pid", pid)
+                .setParameter("iid", currentItem)
+                .list();
+      }
+
       tx.commit();
 
     } catch (Exception ex) {
