@@ -681,38 +681,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     this.remoteIp = remoteIp;
   }
 
-//  private List getCurrentParticipantAddresTypes(String pid, String whichAddr) {
-//
-//    List result = null;
-//    Session session = null;
-//    Transaction tx = null;
-//    String query = null;
-//    try {
-//      session = hib_session();
-//      tx = session.beginTransaction();
-//      session.flush();  // delete result not appearing in xhtml
-//      query = " Select addr FROM Participant part "
-//              + " INNER JOIN part.addresses addr"
-//              + " WHERE part.participant_id = :pid AND addr.addressType = :addr GROUP BY addr.addressType";
-//      result = session.createQuery(query)
-//              .setParameter("pid", pid)
-//              .setParameter("addr", whichAddr)
-//              .list();
-//      tx.commit();
-//    } catch (Exception ex) {
-//      System.out.println("Error in getCurrentParticipant");
-//      Logger
-//              .getLogger(ParticipantBean.class
-//                      .getName()).log(Level.SEVERE, null, ex);
-//      tx.rollback();
-//    } finally {
-//      tx = null;
-//      session = null;
-//
-//    }
-//    return result;
-//  }
-
   public List getCurrentParticipant(String pid) {
 
     List result = null;
