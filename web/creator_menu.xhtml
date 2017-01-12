@@ -85,14 +85,14 @@
         <c:choose>                                
           <c:when test="#{whichType == 'borrow'}"  >
             <li id="tab_item_1" >
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing"  rendered="#{userBean.editable != -1}"    >
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing..."  rendered="#{userBean.editable != -1}"    >
                 <f:param name="action" value="item" />
               </h:commandLink>
             </li>
           </c:when >  
           <c:when test="#{whichType == 'lend'}"  >
             <li id="tab_item_1" >
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending"  rendered="#{userBean.editable != -1}"    >
+              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', null)}"  value="Lending..."  rendered="#{userBean.editable != -1}"    >
                 <f:param name="action" value="item" />
               </h:commandLink>
             </li>
