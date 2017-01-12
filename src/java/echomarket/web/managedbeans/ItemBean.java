@@ -781,6 +781,11 @@ public class ItemBean extends AbstractBean implements Serializable {
     a_array = null;
     tmp_picture = null;
     result = null;
+    try {
+      Thread.sleep(2500);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   private List getCurrentItem(String iid, String which) {
