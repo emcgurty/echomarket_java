@@ -10,12 +10,18 @@
 
   <h:head>
     <h:outputStylesheet library="css" name="creator_nav.css"/>
+    <c:set var="whichType" value="#{userBean.userType}" />
+    <h:outputText value="#{userBean.LITid} == LIT" />
+    <h:outputText value="#{userBean.LICid} == LIC" />
   </h:head>
 
 
   <ul id="nav" class="user_detail_menu">
     <li class="subs" id="tab_item_2" >
       <h:commandLink immediate="true"  action="#{participantBean.load_ud('-1')}"  value="EchoMarket Agreement"  rendered="#{userBean.editable == -1}" />
+    </li>
+    <li class="subs" id="tab_item_99" >
+      <h:commandLink immediate="true"  action="#{participantBean.load_ud('-2')}"  value="EchoMarket Instructions"  rendered="#{userBean.editable == -2}" />
     </li>
     <li class="subs" id="tab_item_1" >
       <h:commandLink immediate="true"  action="#{userBean.load_ud(0)}"  value="Login Information"  rendered="#{userBean.acceptID}" >
@@ -48,26 +54,25 @@
             </c:when>
           </c:choose>
         </li>
-        <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
-        <c:set var="completeCP" value="#{userBean.cpId}" /> 
-        <c:set var="whichType" value="#{userBean.userType}" />
 
         <c:choose  >
           <c:when test="#{((whichType== 'both') or (whichType == 'lend'))}"  >
             <c:choose  >
-              <c:when test="#{completeCP }" >      
+              <c:when test="#{userBean.cpId}" >      
                 <li >
                   <c:set var="newItemLabelTrans" value="Item Transfer Preferences"  />
-                  <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="true">
+                  <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}" >
                     <f:param name="iid" value="#{itemBean.itemId}" />
                     <f:param name="action" value="edit" />
                   </h:commandLink>   
                 </li>
               </c:when> 
-              <c:when test="#{completeCP and userBean.LITid}" >   
+            </c:choose>            
+            <c:choose  >
+              <c:when test="#{userBean.cpId and userBean.LITid}" >   
                 <li>
                   <c:set var="newItemLabelCond" value="Item Lending Conditions"  />
-                  <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="true">
+                  <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  >
                     <f:param name="iid" value="#{itemBean.itemId}" />
                     <f:param name="action" value="edit" />
                   </h:commandLink>   
@@ -79,8 +84,9 @@
         </c:choose>     
       </ul>
     </li>
+   
     <c:choose>
-      <c:when test="#{completeLIC_LIT and completeCP }" >
+      <c:when test="#{userBean.cpId and userBean.LICid  and userBean.LITid }" >
         <li class="subs" >
           <c:choose>                                
             <c:when test="#{whichType == 'borrow'}"  >
@@ -118,9 +124,6 @@
         </li>
       </c:when >  
     </c:choose>
-
-
-
   </ul>
 
 </ui:composition>
