@@ -216,8 +216,8 @@ public class SendEmail implements java.io.Serializable {
     ResourceBundle bundle = ResourceBundle.getBundle(
             "echomarket.web.messages.Messages",
             FacesContext.getCurrentInstance().getViewRoot().getLocale());
-    String buildMessage = "<html><h1>EchoMarket New Item</h1>"
-            + "<p>EchoMarket awaiting approval:</p>"
+    String buildMessage = "<html><h1>EchoMarket New or Updated Item</h1>"
+            + "<p>Item requiring EchoMarket approval:</p>"
             + "<p>Item to " + this.whichEmail + ".</p>"
             + "<p>Item Description: " + this.itemDescription + "</p>"
             + "<p>Item Model:  " + this.itemModel + "</p>"
