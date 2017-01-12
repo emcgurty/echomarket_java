@@ -148,7 +148,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         ubean.setEditable(1);
       } catch (Exception ex) {
         tx.rollback();
-        System.out.println("Error in saveLenderItemCon");
+        System.out.println("Error in updateLIC");
         Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
         message(null, "LenderItemConditionsNotSaved", null);
         ubean.setEditable(0);
