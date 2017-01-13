@@ -18,6 +18,7 @@
       <body onload="changeMenuBackground(3);"  >
         <div id="form_contact_preference" class="contact_information" >
           <c:set var="iid" value="#{itemBean.itemId}"  />  
+          <h:outputText  value="#{userBean.editable} -- editbale -- "  />  
           <c:set var="rid" value="#{userBean.roleId}"  />  
           <c:set var="ut" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />  
           <c:set var="ut" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />  
@@ -91,8 +92,9 @@
               <div id="postalWithContactAddress" >    
 
                 <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
+                  <c:if test="#{userBean.editable == 1}" >
                   <c:set var="displayAltAddres" value="#{contactPreferenceBean.questionAltAddress}" />
-                  <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}" rendered="#{userBean.editable == 1}"  layout="pageDirection" >
+                  <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}"   layout="pageDirection" >
                     <c:choose> 
                       <c:when test="#{displayAltAddres == true}"   >
                         <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
@@ -112,6 +114,7 @@
                       </c:otherwise>
                     </c:choose>
                   </h:selectOneRadio>
+                  </c:if>
                   <c:if test="#{userBean.editable == 0}" >
                     <c:choose>
                       <c:when test="#{contactPreferenceBean.useWhichContactAddress == 0}">
