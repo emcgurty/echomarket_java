@@ -15,14 +15,13 @@
   </ui:define>  
   <ui:define name="content">
     <h:form id="personal_information" class="user_contact_preferences">
+     
       <body onload="changeMenuBackground(3);"  >
         <div id="form_contact_preference" class="contact_information" >
           <c:set var="iid" value="#{itemBean.itemId}"  />  
-          <h:outputText  value="#{userBean.editable} -- editbale -- "  />  
           <c:set var="rid" value="#{userBean.roleId}"  />  
           <c:set var="ut" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />  
           <c:set var="ut" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />  
-          <h:outputText value="#{ut} -- whichType" />
           <c:choose >
             <c:when test="#{empty iid }" >
               <c:choose >
@@ -42,36 +41,17 @@
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-              <c:choose >
-                <c:when test="#{empty contactPreferenceBean.itemId}" >
-                  <c:set var="default_item"  value="Default" />
-                </c:when >
-                <c:when test="#{!empty contactPreferenceBean.itemId}" >
-                  <c:set var="default_item"  value="#{fn:substring(itemBean.itemDescription, 0, 8)}..." />
-                </c:when >
-              </c:choose>
+                <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Update Contact Preferences" rendered="true"  />
+                <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preferences"   >
+                   <f:param name="action" value="edit" />
+                </h:commandLink>
 
-
-              <c:choose >
-                <c:when test="#{empty contactPreferenceBean.contactPreferenceId}" >
-                  <c:set var="save_update"  value="Save #{default_item} Contact Preferences" />
-                </c:when >
-                <c:when test="#{!empty contactPreferenceBean.contactPreferenceId}" >
-                  <c:set var="save_update"  value="Update #{default_item} Contact Preferences" />
-                </c:when >
-              </c:choose>
-              <c:if test="#{userBean.editable == 1}" >
-                <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="#{save_update}"  />
-              </c:if>
-              <c:if test="#{userBean.editable == 0}" >
-                <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Default Contact Preferences"   />
-              </c:if>
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="Default Contact Preferences --  #{ut}" />
               <c:if test="#{((ut == 'lend') or ut == ('both')) and (userBean.cpId)}" >
                 <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'"  >
-                    <f:param name="action" value="edit" />
+                  <f:param name="action" value="edit" />
                 </h:commandLink>
               </c:if>
             </div>
@@ -138,7 +118,7 @@
                         <c:set var="whichAddress" value="Selection not made"/>
                       </c:otherwise>
                     </c:choose>
-                    <h:outputText id="useWhichContactAddressString"   value="#{whichAddress}" class="RO_text" />
+                    <h:outputText id="useWhichContactAddress"   value="#{whichAddress}" class="RO_text" />
                   </c:if>
                 </h:outputLabel>
               </div>
@@ -173,7 +153,7 @@
                       <c:set var="cbe" value="Selection not made"/>
                     </c:otherwise>
                   </c:choose>
-                  <h:outputText id="contactByChatString"   value="#{cbe}" class="RO_text" />
+                  <h:outputText id="contactByChat"   value="#{cbe}" class="RO_text" />
                 </c:if>  
               </h:outputLabel>
             </div>
@@ -233,7 +213,7 @@
                       <c:set var="cbe" value="Selection not made"/>
                     </c:otherwise>
                   </c:choose>
-                  <h:outputText id="contactByEmailString"   value="#{cbe}"  class="RO_text" />
+                  <h:outputText id="contactByEmail"   value="#{cbe}"  class="RO_text" />
                 </c:if>  
               </h:outputLabel>
 
@@ -381,37 +361,37 @@
               <table  style="margin-left:15px;">
                 <tr>
                   <td>
-                    <h:outputLabel value="Your Facebook Account:" for="contactByFacebook" >
+                    <h:outputLabel value="Your Facebook Account:"  >
                       <h:outputText  value="#{contactPreferenceBean.contactByFacebook}" style="margin-left:5px;"   class="RO_text" /> 
                     </h:outputLabel>
                   </td>
                   <td>
-                    <h:outputLabel value="Your LinkedIn Account:" for="contactByLinkedIn" >
+                    <h:outputLabel value="Your LinkedIn Account:"  >
                       <h:outputText  value="#{contactPreferenceBean.contactByLinkedIn}" style="margin-left:5px;"   class="RO_text"  /> 
                     </h:outputLabel>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h:outputLabel value="Your Twitter Account:" for="contactByTwitter" >
+                    <h:outputLabel value="Your Twitter Account:" >
                       <h:outputText value="#{contactPreferenceBean.contactByTwitter}" style="margin-left:5px;"   class="RO_text"  />
                     </h:outputLabel>
                   </td>
                   <td>
-                    <h:outputLabel value="Your Instagram Account:" for="contactByInstagram" >
+                    <h:outputLabel value="Your Instagram Account:" >
                       <h:outputText value="#{contactPreferenceBean.contactByInstagram}" style="margin-left:5px;"   class="RO_text"  />                                
                     </h:outputLabel>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h:outputLabel value="Other Social Media:" for="contactByOtherSocialMedia" >
+                    <h:outputLabel value="Other Social Media:"  >
                       <h:outputText  value="#{contactPreferenceBean.contactByOtherSocialMedia}" style="margin-left:5px;"  class="RO_text" />
                     </h:outputLabel>
                   </td>
 
                   <td>
-                    <h:outputLabel value="Other Social Media Access:" for="contactByOtherSocialMediaAccess" >
+                    <h:outputLabel value="Other Social Media Access:" >
                       <h:outputText  value="#{contactPreferenceBean.contactByOtherSocialMediaAccess}" style="margin-left:5px;"  class="RO_text" /> 
                     </h:outputLabel>
                   </td>
