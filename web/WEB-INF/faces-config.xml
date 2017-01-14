@@ -85,19 +85,19 @@
   <managed-bean>
     <managed-bean-name>itemConditionBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedBeans.ItemConditionBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
+    <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
-  <managed-bean>
+<!--  <managed-bean>
     <managed-bean-name>lenderBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.LenderBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
+  </managed-bean>-->
   <managed-bean>
     <managed-bean-name>searchBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.SearchesBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
-  <managed-bean>
+<!--  <managed-bean>
     <managed-bean-name>borrowerBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.BorrowersBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
@@ -107,7 +107,7 @@
       <property-class>java.lang.String</property-class>
       <value>#{param['processId']}</value>
     </managed-property>
-  </managed-bean>
+  </managed-bean>-->
   <managed-bean>
     <managed-bean-name>LocaleBean</managed-bean-name>
     <managed-bean-class>LocaleBean</managed-bean-class>
@@ -140,7 +140,7 @@
   <managed-bean>
     <managed-bean-name>itemBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.ItemBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
+    <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
   <managed-bean>
     <managed-bean-name>contactPreferenceBean</managed-bean-name>
