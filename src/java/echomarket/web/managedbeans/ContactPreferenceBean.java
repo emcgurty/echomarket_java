@@ -284,7 +284,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   }
 
   public String updateCP() {
-    Map<String, String> params = null;
+    
+    
     Boolean successTransaction = false;
     List cp_list = null;
     Session sb;
@@ -293,6 +294,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     tx = null;
     String addNewCP = null;
     try {
+      Map<String, String> params = null;
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       addNewCP = params.get("action");
     } catch (Exception ex) {
@@ -307,7 +309,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         tx = sb.beginTransaction();
         sb.save(part);
         tx.commit();
-        ubean.setCpId(true);
+        //ubean.setCpId(true);
         message(null, "CPSaved", null);
         successTransaction = true;
       } catch (Exception ex) {
@@ -322,7 +324,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } else {
 
       if (itemId.isEmpty() == false) {
-        cp_list = getCurrentCP_Iid(ubean.getParticipant_id(), itemId);
+        cp_list = getCurrentCP_Id(ubean.getParticipant_id(), itemId);
       } else {
         cp_list = getCurrentCP(ubean.getParticipant_id());
       }
@@ -350,16 +352,13 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           try {
             sb.update(part);
             tx.commit();
-            ubean.setCpId(true);
             successTransaction = true;
             message(null, "CPUpdated", null);
-            ubean.setEditable(1);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update Contact Preferences");
             Logger.getLogger(ContactPreferenceBean.class.getName()).log(Level.SEVERE, null, ex);
             message(null, "UpdateOrSaveOfCPNotSuccessful", null);
-            ubean.setEditable(0);
           } finally {
             sb = null;
             tx = null;
@@ -367,20 +366,33 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         }
       }
     }
-    return load_ud(ubean.getParticipant_id());
+    
+     if(successTransaction == true) {
+       ubean.setEditable(1);
+      if (this.itemId.isEmpty() == true) {   /// User is setting default CP
+        ubean.setCpId(true);
+      } else {
+        ubean.completeContactPreferences(ubean.getParticipant_id());
+      }
+     } else {
+       ubean.setEditable(0);
+       ubean.setCpId(false);
+     }
+     return load_ud(ubean.getParticipant_id());
   }
 
   public String load_ud(String pid) {
 
     List partlist = null;
     Map<String, String> params = null;
+    params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String strIid = null;
     String action = null;
 
     try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      
       strIid = params.get("iid");
-
+   
       if (strIid.isEmpty() == true) {
         strIid = null;
       }
@@ -396,7 +408,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       ubean.setEditable(1);
     }
     try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+//      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
     } catch (Exception ex) {
     }
@@ -406,18 +418,18 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         ubean.setEditable(1);
       }
     }
-
+    
     try {
       if (strIid != null) {
-        partlist = getCurrentCP_Iid(pid, strIid);
+        partlist = getCurrentCP_Id(pid, strIid);
       } else if (itemId != null) {
-        partlist = getCurrentCP_Iid(pid, itemId);
+        partlist = getCurrentCP_Id(pid, itemId);
       }
     } catch (Exception ex) {
       if (strIid.isEmpty() == false) {
-        partlist = getCurrentCP_Iid(pid, strIid);
+        partlist = getCurrentCP_Id(pid, strIid);
       } else if (itemId != null) {
-        partlist = getCurrentCP_Iid(pid, itemId);
+        partlist = getCurrentCP_Id(pid, itemId);
       }
     }
 
@@ -428,28 +440,30 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       if (partlist.size() == 1) {
         ContactPreference pp = (ContactPreference) partlist.get(0);
         if (pp != null) {
-          setContactPreferenceId(pp.getContactPreferenceId());
-          setItemId(pp.getItemId());
-          setParticipant_id(pp.getParticipant_id());
-          useWhichContactAddress = pp.getUseWhichContactAddress();
-          contactByChat = pp.getContactByChat();
-          contactByEmail = pp.getContactByEmail();
-          contactByHomePhone = pp.getContactByHomePhone();
-          contactByCellPhone = pp.getContactByCellPhone();
-          contactByAlternativePhone = pp.getContactByAlternativePhone();
-          contactByFacebook = pp.getContactByFacebook();
-          contactByTwitter = pp.getContactByTwitter();
-          contactByInstagram = pp.getContactByInstagram();
-          contactByLinkedIn = pp.getContactByLinkedIn();
-          contactByOtherSocialMedia = pp.getContactByOtherSocialMedia();
-          contactByOtherSocialMediaAccess = pp.getContactByOtherSocialMediaAccess();
-          ubean.setLICid(true);
-          ubean.setLITid(true);
+          this.contactPreferenceId = pp.getContactPreferenceId();
+          this.itemId=(pp.getItemId());
+          this.participant_id=(pp.getParticipant_id());
+          this.useWhichContactAddress=(pp.getUseWhichContactAddress());
+          this.contactByChat=(pp.getContactByChat());
+          this.contactByEmail=(pp.getContactByEmail());
+          this.contactByHomePhone=(pp.getContactByHomePhone());
+          this.contactByCellPhone=(pp.getContactByCellPhone());
+          this.contactByAlternativePhone=(pp.getContactByAlternativePhone());
+          this.contactByFacebook = pp.getContactByFacebook();
+          this.contactByTwitter=(pp.getContactByTwitter());
+          this.contactByInstagram =( pp.getContactByInstagram());
+          this.contactByLinkedIn= ( pp.getContactByLinkedIn());
+          this.contactByOtherSocialMedia=( pp.getContactByOtherSocialMedia());
+          this.contactByOtherSocialMediaAccess =(pp.getContactByOtherSocialMediaAccess());
+         // ubean.setLICid(true);   Why did I do that?  Becuase I am designing where user must complete one after the other
+         // ubean.setLITid(true);
           getParticipantAddreseEmailAlts(this.participant_id);
+          pp = null;
         }
       }
     }
     partlist = null;
+//    return "user_contact_preferences?faces-redirect=true";   /// Does not return values!!! 
     return "user_contact_preferences";
   }
 
@@ -482,7 +496,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     return result;
   }
 
-  private List getCurrentCP_Iid(String pid, String iid) {
+  private List getCurrentCP_Id(String pid, String iid) {
 
     List result = null;
     Session session = null;
