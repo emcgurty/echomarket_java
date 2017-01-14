@@ -73,6 +73,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private String communityId;
   private String communityName;
   private Integer editable;
+ 
 
   private Integer roleId;
   private String action;
@@ -502,7 +503,6 @@ public class UserBean extends AbstractBean implements Serializable {
   public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
-
     Boolean b_local_results = false;
     Integer memberCreator = -9;
     List results = null;
@@ -561,6 +561,9 @@ public class UserBean extends AbstractBean implements Serializable {
                   setUserType(this.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
                   setUser_id(uu.getUser_id());
                   results = null;
+                  this.LICid = false;
+                  this.LITid = false;
+                  this.cpId= false;
 
                   switch (memberCreator) {
                     case 0:  // Individual not with a community
@@ -1408,13 +1411,15 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  private void completeLIC(String pid) {
+  protected void completeLIC(String pid) {
 
     List results = null;
     Session hib = null;
     Transaction tx = null;
-    String currentItem = null;
-    currentItem = ibean.getItemId();
+    String currentItem = "";
+    if (ibean.getItemId() != null) {
+      currentItem = ibean.getItemId();
+    }
     this.LICid = false;
     try {
       hib = hib_session();
@@ -1449,13 +1454,15 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  private void completeLIT(String pid) {
+  protected void completeLIT(String pid) {
 
     List results = null;
     Session hib = null;
     Transaction tx = null;
-    String currentItem = null;
-    currentItem = ibean.getItemId();
+    String currentItem = "";
+    if (ibean.getItemId() != null) {
+      currentItem = ibean.getItemId();
+    }
     this.LITid = false;
     try {
       hib = hib_session();
@@ -1491,26 +1498,30 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  public void completeContactPreferences(String pid) {
+  protected void completeContactPreferences(String pid) {
 
     List results = null;
     Session hib = null;
     Transaction tx = null;
-    String currentItem = null;
-    currentItem = ibean.getItemId();
+    String currentItem = "";
+    if (ibean.getItemId() != null) {
+      currentItem = ibean.getItemId();
+    }
     this.cpId = false;
 
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
       if (currentItem.isEmpty() == true) {
-        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid")
+        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid GROUP BY participant_id ORDER BY participant_id ")
                 .setParameter("pid", pid)
+                .setMaxResults(1)
                 .list();
       } else {
-        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid and itemId = :iid")
+        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId GROUP BY participant_id, itemId")
                 .setParameter("pid", pid)
                 .setParameter("iid", currentItem)
+                .setMaxResults(1)
                 .list();
       }
 
@@ -1986,4 +1997,5 @@ public class UserBean extends AbstractBean implements Serializable {
     this.comDetailID = comDetailID;
   }
 
+ 
 }
