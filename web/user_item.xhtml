@@ -44,7 +44,8 @@
                           errorStyle="list-style-type:none;color: #d20005" 
                           infoStyle="color: indigo"/>
             </div>
-          </div> 
+          </div>
+
 
           <div  class="div_p" >
             <div style="margin:10px;" >
@@ -64,7 +65,7 @@
               <h:outputText value="Item Detail..." />
               <h:inputHidden id="itemId" value="#{itemBean.itemId}"   />
               <h:inputHidden id="participant_id" value="#{itemBean.participant_id}"  />
-              
+
             </div>
           </div>
 
@@ -103,20 +104,22 @@
                       <f:selectItem itemValue="1" itemLabel="Yes" />
                       <f:selectItem itemValue="0" itemLabel="No" />
                     </h:selectOneRadio>    
-                    <c:if test="#{userBean.editable == 0}" >
-                      <c:choose>
-                        <c:when test="#{itemBean.notify == 0}">
-                          <c:set var="cbe" value="No"/>
-                        </c:when>
-                        <c:when test="#{itemBean.notify == 1}">
-                          <c:set var="cbe" value="Yes"/>
-                        </c:when>
-                        <c:otherwise>
-                          <c:set var="cbe" value="Selection not made"/>
-                        </c:otherwise>
-                      </c:choose>
-                      <h:outputText id="notifyString"   value="#{cbe}" class="RO_text" />
-                    </c:if>  
+                    <c:choose>
+                      <c:when test="#{userBean.editable == 0}" >
+                        <c:choose>
+                          <c:when test="#{itemBean.notify == 0}">
+                            <c:set var="cbe" value="No"/>
+                          </c:when>
+                          <c:when test="#{itemBean.notify == 1}">
+                            <c:set var="cbe" value="Yes"/>
+                          </c:when>
+                          <c:otherwise>
+                            <c:set var="cbe" value="Selection not made"/>
+                          </c:otherwise>
+                        </c:choose>
+                        <h:outputText id="notifyString"   value="#{cbe}" class="RO_text" />
+                      </c:when>  
+                    </c:choose>
                   </h:outputLabel>                        
 
                 </div></td>
@@ -136,15 +139,18 @@
                   <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
                     <h:selectOneMenu id="itemConditionId" value="#{itemBean.itemConditionId}"  style="margin-left:10px" class="items select"   rendered="#{userBean.editable == 1}">
                       <f:validator validatorId="selectOneMenuValidator" />  
-                      <f:selectItems id="item_condition" value="#{itemc.buildItemConditionsArray()}"  
+                      <f:selectItems id="item_condition" value="#{itemConditionBean.buildItemConditionsArray()}"  
                                      var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
                                      >   
                       </f:selectItems>    
                     </h:selectOneMenu>
-                    <c:if test="#{userBean.editable == 0}" >
-                      <c:set var="icn" value="#{itemc.getItemConditionName(itemBean.itemConditionId)}" />
-                      <h:outputText  id="itemConditionIdString" value="#{icn}" class="RO_text"/>
-                    </c:if>
+                    <c:choose>
+                      <c:when test="#{userBean.editable == 0}" >
+                        <c:set var="icn" value="#{itemConditionBean.getItemConditionName(itemBean.itemConditionId)}" />
+                        <h:outputText  id="itemConditionIdString" value="#{icn}" class="RO_text"/>
+                      </c:when>  
+                    </c:choose>
+
                   </h:outputLabel>
                   <br /> <span class="error-message" id="itemConditionId" ></span>
                 </div></td>
@@ -185,7 +191,7 @@
                   <c:set var="whichTypeUser" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />
                   <c:set var="whichTypeUser" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />
                   <h:outputText value="#{whichTypeUser}" />
-                  
+
                   <h:outputLabel for="imagePreview" value="Uploaded Image:"  >
                     <c:choose>
                       <c:when test="#{whichTypeUser == 'both'}" >
