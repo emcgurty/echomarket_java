@@ -203,80 +203,90 @@ public class ItemBean extends AbstractBean implements Serializable {
     return b_return;
 
   }
+  
+ 
 
   public String load_ud(String which, String iid) {
-    
-    if ("both".equals(which)) {
-      System.out.println("I should not see both except on User Login");
-    }
 
-    List result = null;
+//    if ("both".equals(which)) {
+//      System.out.println("I should not see both except on User Login");
+//    }
+        List result = null;
 
-    if (iid.isEmpty() == true) {
-      ubean.setEditable(1);
-    } else {
-      ubean.setEditable(0);
-    }
-
-    Map<String, String> params = null;
-    String action = null;
-
-    try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-      action = params.get("action");
-      if (action != null) {
-        if ("item".equals(action)) {
+        if (iid.isEmpty() == true) {
           ubean.setEditable(1);
+        } else {
+          ubean.setEditable(0);
         }
-      }
-    } catch (Exception ex) {
-    }
 
-    if (iid.isEmpty() == false) {
-      result = getCurrentItem(iid, which);
-      if (result != null) {
-        if (result.size() == 1) {
-          Items ir = (Items) result.get(0);
-          setItemId(ir.getItemId());
-          this.participant_id = ir.getParticipant_id();
-          this.categoryId = ir.getCategoryId();
-          this.otherItemCategory = ir.getOtherItemCategory();
-          this.itemModel = ir.getItemModel();
-          this.itemDescription = ir.getItemDescription();
-          this.itemConditionId = ir.getItemConditionId();
-          this.itemCount = ir.getItemCount();
-          this.itemType = ir.getItemType();
-          //    this.comment = ir.getComment();  Later, not in gui yet
-          this.notify = ir.getNotify();
-          getCurrentPicture(iid);
+        if (this.itemId != null) {
+          if (this.itemId.isEmpty() == false) {
+            iid = this.itemId;
+            ubean.setEditable(0);
+          }
         }
-      }
-    } else {
-      // itemType was set above...
-      this.itemType = which;
-      this.itemId = null;
-      this.categoryId = -9;
-      this.participant_id = null;
-      this.otherItemCategory = null;
-      this.itemModel = null;
-      this.itemDescription = null;
-      this.itemConditionId = null;
-      this.itemCount = null;
-      this.comment = null;
-      this.dateCreated = null;
-      this.dateUpdated = null;
-      this.dateDeleted = null;
-      this.approved = -9;
-      this.notify = -9;
-      this.whichType = null;
-      this.history_id = null;
-      this.history_which = null;
-      ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
-      setPicture(tmp_picture);
 
-    }
+        Map<String, String> params = null;
+        String action = null;
 
+        try {
+          params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+          action = params.get("action");
+          if (action != null) {
+            if ("item".equals(action)) {
+              ubean.setEditable(1);
+            }
+          }
+        } catch (Exception ex) {
+        }
+
+        if (iid.isEmpty() == false) {
+          result = getCurrentItem(iid, which);
+          if (result != null) {
+            if (result.size() == 1) {
+              Items ir = (Items) result.get(0);
+              setItemId(ir.getItemId());
+              this.participant_id = ir.getParticipant_id();
+              this.categoryId = ir.getCategoryId();
+              this.otherItemCategory = ir.getOtherItemCategory();
+              this.itemModel = ir.getItemModel();
+              this.itemDescription = ir.getItemDescription();
+              this.itemConditionId = ir.getItemConditionId();
+              this.itemCount = ir.getItemCount();
+              this.itemType = ir.getItemType();
+              //    this.comment = ir.getComment();  Later, not in gui yet
+              this.notify = ir.getNotify();
+              getCurrentPicture(iid);
+            }
+          }
+        } else {
+          // itemType was set above...
+          this.itemType = which;
+          this.itemId = null;
+          this.categoryId = -9;
+          this.participant_id = null;
+          this.otherItemCategory = null;
+          this.itemModel = null;
+          this.itemDescription = null;
+          this.itemConditionId = null;
+          this.itemCount = null;
+          this.comment = null;
+          this.dateCreated = null;
+          this.dateUpdated = null;
+          this.dateDeleted = null;
+          this.approved = -9;
+          this.notify = -9;
+          this.whichType = null;
+          this.history_id = null;
+          this.history_which = null;
+          ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
+          setPicture(tmp_picture);
+
+        }
+    
+//    return "user_item?faces-redirect=truw";
     return "user_item";
+
   }
 
   public String saveItem() {
@@ -316,17 +326,6 @@ public class ItemBean extends AbstractBean implements Serializable {
         sb = null;
         tx = null;
       }
-//      if (bret == true) {
-//        bret = removeNullInLIC(ubean.getParticipant_id(), new_iid);
-//      }
-//
-//      if (bret == true) {
-//        bret = removeNullInLIT(ubean.getParticipant_id(), new_iid);
-//      }
-//
-//      if (bret == true) {
-//        bret = removeNullInCP(ubean.getParticipant_id(), new_iid);
-//      }
 
     } else {
 
