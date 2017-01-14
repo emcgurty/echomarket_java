@@ -132,7 +132,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         tx = sb.beginTransaction();
         sb.save(lt);
         tx.commit();
-        ubean.setLITid(true);
+        ///ubean.setLITid(true);
         message(null, "LenderTransferSaved", null);
         successTransaction = true;
         ubean.setEditable(1);
@@ -181,7 +181,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             successTransaction = true;
             message(null, "LenderTransferUpdated", null);
             ubean.setEditable(1);
-             ubean.setLITid(true);
+            // ubean.setLITid(true);
           } catch (Exception ex) {
             message(null, "LenderTransferUpdatedFailed", null);
             tx.rollback();
@@ -194,6 +194,16 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           }
         }
       }
+    }
+    
+     if(successTransaction == true) {
+      if (this.itemId.isEmpty() == true) {   /// User is setting default LIT
+        ubean.setLITid(true);
+      } else {
+        ubean.completeLIT(ubean.getParticipant_id());
+      }
+    } else {
+        ubean.setLITid(false);
     }
 
     return load_ud(ubean.getParticipant_id());
