@@ -143,7 +143,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         tx = sb.beginTransaction();
         sb.save(lic);
         tx.commit();
-        ubean.setLICid(true);
+        //ubean.setLICid(true);
         successTransaction = true;
         ubean.setEditable(1);
       } catch (Exception ex) {
@@ -210,6 +210,17 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         }
       }
     }
+    if(successTransaction == true) {
+      if (this.itemId.isEmpty() == true) {   /// User is setting default LIC
+        ubean.setLICid(true);
+      } else {
+        ubean.completeLIC(ubean.getParticipant_id());
+      }
+    } else {
+        ubean.setLICid(false);
+    }
+   
+    
 
     return load_ud(ubean.getParticipant_id());
   }
