@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import org.hibernate.Session;
@@ -14,7 +14,7 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean(name = "itemc")
-@SessionScoped
+@RequestScoped
 public class ItemConditionBean extends AbstractBean implements Serializable {
 
 //    private Integer id;
