@@ -50,7 +50,7 @@ public class UserBean extends AbstractBean implements Serializable {
   CommunityMembersBean cmbean;
   private String user_id;
   private String participant_id;
-  //private String itemId;
+  private String itemId;
   private Boolean acceptID;
   private Boolean creatorDetailID;
   private Boolean comDetailID;
@@ -73,7 +73,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private String communityId;
   private String communityName;
   private Integer editable;
- 
+  private String isCompleteString;
 
   private Integer roleId;
   private String action;
@@ -563,20 +563,24 @@ public class UserBean extends AbstractBean implements Serializable {
                   results = null;
                   this.LICid = false;
                   this.LITid = false;
-                  this.cpId= false;
+                  this.cpId = false;
 
                   switch (memberCreator) {
                     case 0:  // Individual not with a community
-                      return_string = findWhatIsComplete();
+                      findWhatIsComplete();
+                      return_string = this.isCompleteString;
                       break;
                     case 1:  // A community creator
-                      return_string = findWhatIsCommunityComplete();
+                      findWhatIsCommunityComplete();
+                      return_string = this.isCompleteString;
                       if (return_string.isEmpty() == true) {
-                        return_string = findWhatIsComplete();  // hold needs to be written
+                        findWhatIsComplete();  // hold needs to be written
+                        return_string = this.isCompleteString;
                       }
                       break;
                     case 2:  // A member of a community
-                      return_string = findWhatIsComplete(); // hold needs to be written
+                      findWhatIsComplete(); // hold needs to be written
+                      return_string = this.isCompleteString;
                       break;
                     default:
                       break;
@@ -584,7 +588,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 }
               } else {
                 message(null, "UserHasNotAccepted", new Object[]{this.username});
-                return_string = pbean.load_ud("-1");
+                return_string = "agreement"; //pbean.load_ud("-1");
               }
             }
 
@@ -600,6 +604,27 @@ public class UserBean extends AbstractBean implements Serializable {
           return_string = "index";
         }
       }
+
+    }
+
+    switch (return_string) {
+      case "agreement":
+        return_string = pbean.load_ud("-1");
+        break;
+      case "user_item":
+        return_string = ibean.load_ud(this.userType, "");
+        break;
+      case "user_nae":
+        return_string = pbean.load_ud(this.user_id);
+        break;
+      case "user_contact_preferences":
+        return_string = cpbean.load_ud(this.participant_id);
+        break;
+      case "lender_transfer":
+        return_string = ltribean.load_ud(this.participant_id);
+        break;
+      default:
+        return_string = "index";
 
     }
     return return_string;
@@ -620,7 +645,7 @@ public class UserBean extends AbstractBean implements Serializable {
       } else {
         this.editable = 0;
         this.partID = true;
-        return_string = pbean.load_ud(this.user_id);
+        //return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
 
       if (return_string.isEmpty() == true) {
@@ -628,40 +653,42 @@ public class UserBean extends AbstractBean implements Serializable {
 
         if (this.cpId == false) {
           setEditable(0);
-          return_string = cpbean.load_ud(pid);
+          return_string = "user_contact_preferences"; //cpbean.load_ud(pid);
         } else {
           this.editable = 0;
           switch (this.userType) {
             case "borrow":
               setAction("current");
-              return_string = ibean.load_ud("borrow", return_null);
+              return_string = "user_item";
               break;
             case "lend":
+              ///setAction("current");
               completeLIT(this.participant_id);
               if (this.LITid == false) {
-                return_string = ltribean.load_ud(this.participant_id);
+                return_string = "lender_transfer"; //ltribean.load_ud(this.participant_id);
               } else {
                 completeLIC(this.participant_id);
                 if (this.LICid == false) {
-                  return_string = licibean.load_ud(this.participant_id);
+                  return_string = "lender_conditions"; //licibean.load_ud(this.participant_id);
                 } else {
                   setAction("current");
-                  return_string = ibean.load_ud("lend", return_null);
+                  return_string = "user_item"; //ibean.load_ud("lend", return_null);
                 }
               }
               break;
             case "both":
+              //setAction("current");
               completeLIT(this.participant_id);
               if (this.LITid == false) {
-                return_string = ltribean.load_ud(this.participant_id);
+                return_string = "lender_transfer"; //ltribean.load_ud(this.participant_id);
               } else {
                 completeLIC(this.participant_id);
                 if (this.LICid == false) {
-                  return_string = licibean.load_ud(this.participant_id);
+                  return_string = "lender_conditions"; //licibean.load_ud(this.participant_id);
                 } else {
                   setAction("current");
                   this.LICid = true;
-                  return_string = ibean.load_ud("both", return_null);
+                  return_string = "user_item"; //ibean.load_ud("both", return_null);
                 }
                 break;
               }
@@ -672,11 +699,11 @@ public class UserBean extends AbstractBean implements Serializable {
       message(null, "ParticipantNotFound", null);
       return_string = "index";
     }
-
+    this.isCompleteString = return_string;
     return return_string;
   }
 
-  private String findWhatIsCommunityComplete() {
+  private void findWhatIsCommunityComplete() {
 
     String return_string = "";
     String pid = null;
@@ -713,7 +740,7 @@ public class UserBean extends AbstractBean implements Serializable {
       message(null, "ParticpantNotFound", null);
       return_string = "index";
     }
-    return return_string;
+    this.isCompleteString = return_string;
   }
 
   private void setCurrentUserCommunityId(String uid) {
@@ -1417,8 +1444,8 @@ public class UserBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     String currentItem = "";
-    if (ibean.getItemId() != null) {
-      currentItem = ibean.getItemId();
+    if (getItemId() != null) {
+      currentItem = getItemId();
     }
     this.LICid = false;
     try {
@@ -1460,8 +1487,8 @@ public class UserBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     String currentItem = "";
-    if (ibean.getItemId() != null) {
-      currentItem = ibean.getItemId();
+    if (getItemId() != null) {
+      currentItem = getItemId();
     }
     this.LITid = false;
     try {
@@ -1504,8 +1531,8 @@ public class UserBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     String currentItem = "";
-    if (ibean.getItemId() != null) {
-      currentItem = ibean.getItemId();
+    if (getItemId() != null) {
+      currentItem = getItemId();
     }
     this.cpId = false;
 
@@ -1997,5 +2024,32 @@ public class UserBean extends AbstractBean implements Serializable {
     this.comDetailID = comDetailID;
   }
 
- 
+  /**
+   * @return the isCompleteString
+   */
+  public String getIsCompleteString() {
+    return isCompleteString;
+  }
+
+  /**
+   * @param isCompleteString the isCompleteString to set
+   */
+  public void setIsCompleteString(String isCompleteString) {
+    this.isCompleteString = isCompleteString;
+  }
+
+  /**
+   * @return the itemId
+   */
+  public String getItemId() {
+    return itemId;
+  }
+
+  /**
+   * @param itemId the itemId to set
+   */
+  public void setItemId(String itemId) {
+    this.itemId = itemId;
+  }
+
 }
