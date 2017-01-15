@@ -71,7 +71,9 @@
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
             <h:inputHidden id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  />
-            <h:inputHidden id="itemId" value="#{contactPreferenceBean.itemId}"  />
+            <!--<h:inputHidden id="itemId" value="#{contactPreferenceBean.itemId}" rendered="#{!empty contactPreferenceBean.itemId}" />-->
+            <h:inputHidden id="itemId" value="#{userBean.itemId}"  rendered="#{!empty userBean.itemId}" />
+            <h:outputText value="#{userBean.itemId}"  />
 
             <div style="float:left;margin-left:25px">
               <div id="postalWithContactAddress" >    
