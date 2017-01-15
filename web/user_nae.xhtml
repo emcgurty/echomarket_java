@@ -244,10 +244,10 @@
                   <span class="error-message" id="lastName" ></span>
                 </div>
 
-                <div style="margin-left: 25px;float:left">
+                <div style="margin-left: 25px;margin-top:5px;float:left">
 
                   <h:outputLabel value="Allow #{allow} to see your Name?"  for="displayName"  title="Your privacy is important to EchoMarket." >
-                    <h:selectOneRadio id="displayName" value="#{participantBean.displayName}" layout="pageDirection"  rendered="#{userBean.editable == 1}">
+                    <h:selectOneRadio id="displayName" value="#{participantBean.displayName}" layout="lineDirection"  rendered="#{userBean.editable == 1}">
                       <f:selectItem itemValue="1" itemLabel="Yes" />
                       <f:selectItem itemValue="0" itemLabel="No" />
 
