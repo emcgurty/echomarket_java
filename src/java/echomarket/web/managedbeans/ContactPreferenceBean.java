@@ -172,11 +172,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByFacebook
    */
   public String getContactByFacebook() {
-    if ((contactByFacebook != null) || (ubean.getEditable() == 1)) {
-      return contactByFacebook;
-    } else {
-      return "Not provided";
-    }
+    return contactByFacebook;
 
   }
 
@@ -191,12 +187,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByTwitter
    */
   public String getContactByTwitter() {
-    if ((contactByTwitter != null) || (ubean.getEditable() == 1)) {
-      return contactByTwitter;
-    } else {
-      return "Not provided";
-    }
-
+    return contactByTwitter;
   }
 
   /**
@@ -210,12 +201,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByInstagram
    */
   public String getContactByInstagram() {
-    if ((contactByInstagram != null) || (ubean.getEditable() == 1)) {
-      return contactByInstagram;
-    } else {
-      return "Not provided";
-    }
-
+    return contactByInstagram;
   }
 
   /**
@@ -229,11 +215,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByLinkedIn
    */
   public String getContactByLinkedIn() {
-    if ((contactByLinkedIn != null) || (ubean.getEditable() == 1)) {
-      return contactByLinkedIn;
-    } else {
-      return "Not provided";
-    }
+    return contactByLinkedIn;
 
   }
 
@@ -248,12 +230,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByOtherSocialMedia
    */
   public String getContactByOtherSocialMedia() {
-    if ((contactByOtherSocialMedia != null) || (ubean.getEditable() == 1)) {
-      return contactByOtherSocialMedia;
-    } else {
-      return "Not provided";
-    }
-
+    return contactByOtherSocialMedia;
   }
 
   /**
@@ -267,12 +244,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    * @return the contactByOtherSocialMediaAccess
    */
   public String getContactByOtherSocialMediaAccess() {
-    if ((contactByOtherSocialMediaAccess != null) || (ubean.getEditable() == 1)) {
-      return contactByOtherSocialMediaAccess;
-    } else {
-      return "Not provided";
-    }
-
+    return contactByOtherSocialMediaAccess;
   }
 
   /**
@@ -284,8 +256,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   }
 
   public String updateCP() {
-    
-    
+
     Boolean successTransaction = false;
     List cp_list = null;
     Session sb;
@@ -297,12 +268,57 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       Map<String, String> params = null;
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       addNewCP = params.get("action");
+      for (Map.Entry<String, String> entry : params.entrySet()) {
+//        if (entry.getKey().contains("itemId")) {
+//          this.itemId = entry.getValue();
+//        }
+        if (entry.getKey().contains("contactPreferenceId")) {
+          this.contactPreferenceId = entry.getValue();
+        }
+        if (entry.getKey().contains("contactByFaceBook")) {
+          this.contactByFacebook = entry.getValue();
+        }
+        if (entry.getKey().contains("contactByChat")) {
+          this.contactByChat = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("contactByTwitter")) {
+          this.contactByTwitter = entry.getValue();
+        }
+        if (entry.getKey().contains("contactByLinkedIn")) {
+          this.contactByLinkedIn = entry.getValue();
+        }
+        if (entry.getKey().contains("contactByInstagram")) {
+          this.contactByInstagram = entry.getValue();
+        }
+        if (entry.getKey().contains("personal_information:contactByOtherSocialMedia")) {
+          this.contactByOtherSocialMedia = entry.getValue();
+        }
+        if (entry.getKey().contains("contactByOtherSocialMediaAccess")) {
+          this.contactByOtherSocialMediaAccess = entry.getValue();
+        }
+        if (entry.getKey().contains("useWhichContactAddress")) {
+          this.useWhichContactAddress = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("contactByEmail")) {
+          this.contactByEmail = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("contactByHomePhone")) {
+          this.contactByHomePhone = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("contactByCellPhone")) {
+          this.contactByCellPhone = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("contactByAlternativePhone")) {
+          this.contactByAlternativePhone = Integer.valueOf(entry.getValue());
+        }
+        System.out.println(entry.getKey() + "/" + entry.getValue());
+      }
     } catch (Exception ex) {
     }
 
-    if (contactPreferenceId.isEmpty() == true) {
+    if (this.contactPreferenceId.isEmpty() == true) {
 
-      ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), itemId, useWhichContactAddress, contactByChat, contactByEmail, contactByHomePhone, contactByCellPhone, contactByAlternativePhone, contactByFacebook, contactByTwitter, contactByInstagram, contactByLinkedIn, contactByOtherSocialMedia, contactByOtherSocialMediaAccess, new Date() );
+      ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), ubean.getItemId(), this.useWhichContactAddress, this.contactByChat, this.contactByEmail, this.contactByHomePhone, this.contactByCellPhone, this.contactByAlternativePhone, this.contactByFacebook, this.contactByTwitter, this.contactByInstagram, this.contactByLinkedIn, this.contactByOtherSocialMedia, this.contactByOtherSocialMediaAccess, new Date());
 
       try {
         sb = hib_session();
@@ -323,28 +339,28 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     } else {
 
-      if (itemId.isEmpty() == false) {
-        cp_list = getCurrentCP_Id(ubean.getParticipant_id(), itemId);
+      if (ubean.getItemId().isEmpty() == false) {
+        cp_list = getCurrentCP_Id(ubean.getParticipant_id(), ubean.getItemId());
       } else {
         cp_list = getCurrentCP(ubean.getParticipant_id());
       }
       if (cp_list != null) {
         if (cp_list.size() == 1) {
           ContactPreference part = (ContactPreference) cp_list.get(0);
-          part.setItemId(itemId);
-          part.setUseWhichContactAddress(useWhichContactAddress);
-          part.setContactByChat(contactByChat);
-          part.setContactByEmail(contactByEmail);
-          part.setContactByHomePhone(contactByHomePhone);
-          part.setContactByAlternativePhone(contactByAlternativePhone);
-          part.setContactByCellPhone(contactByCellPhone);
-          part.setContactByAlternativePhone(contactByAlternativePhone);
-          part.setContactByFacebook(contactByFacebook);
-          part.setContactByTwitter(contactByTwitter);
-          part.setContactByInstagram(contactByInstagram);
-          part.setContactByLinkedIn(contactByLinkedIn);
-          part.setContactByOtherSocialMedia(contactByOtherSocialMedia);
-          part.setContactByOtherSocialMediaAccess(contactByOtherSocialMediaAccess);
+          part.setItemId(ubean.getItemId());
+          part.setUseWhichContactAddress(this.useWhichContactAddress);
+          part.setContactByChat(this.contactByChat);
+          part.setContactByEmail(this.contactByEmail);
+          part.setContactByHomePhone(this.contactByHomePhone);
+          part.setContactByAlternativePhone(this.contactByAlternativePhone);
+          part.setContactByCellPhone(this.contactByCellPhone);
+          part.setContactByAlternativePhone(this.contactByAlternativePhone);
+          part.setContactByFacebook(this.contactByFacebook);
+          part.setContactByTwitter(this.contactByTwitter);
+          part.setContactByInstagram(this.contactByInstagram);
+          part.setContactByLinkedIn(this.contactByLinkedIn);
+          part.setContactByOtherSocialMedia(this.contactByOtherSocialMedia);
+          part.setContactByOtherSocialMediaAccess(this.contactByOtherSocialMediaAccess);
           part.setDateUpdated(new Date());
 
           sb = hib_session();
@@ -366,19 +382,21 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         }
       }
     }
-    
-     if(successTransaction == true) {
-       ubean.setEditable(1);
-      if (this.itemId.isEmpty() == true) {   /// User is setting default CP
-        ubean.setCpId(true);
-      } else {
-        ubean.completeContactPreferences(ubean.getParticipant_id());
+
+    if (successTransaction == true) {
+      ubean.setEditable(1);
+      if (ubean.getItemId() != null) {
+        if (ubean.getItemId().isEmpty() == false) {
+          ubean.completeContactPreferences(ubean.getParticipant_id());
+        } else {
+          ubean.setCpId(true);
+        }
       }
-     } else {
-       ubean.setEditable(0);
-       ubean.setCpId(false);
-     }
-     return load_ud(ubean.getParticipant_id());
+    } else {
+      ubean.setEditable(0);
+      ubean.setCpId(false);
+    }
+    return load_ud(ubean.getParticipant_id()) + "?faces-redirect=true";
   }
 
   public String load_ud(String pid) {
@@ -390,14 +408,19 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     String action = null;
 
     try {
-      
       strIid = params.get("iid");
-   
       if (strIid.isEmpty() == true) {
         strIid = null;
       }
     } catch (Exception ex) {
     }
+
+    if (ubean.getItemId() != null) {
+      if (ubean.getItemId().isEmpty() == false) {
+        strIid = ubean.getItemId();
+      }
+    }
+
     if (ubean.getEditable() != null) {
       if (ubean.getEditable() == 0) {
         ubean.setEditable(1);
@@ -418,52 +441,44 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         ubean.setEditable(1);
       }
     }
-    
-    try {
-      if (strIid != null) {
-        partlist = getCurrentCP_Id(pid, strIid);
-      } else if (itemId != null) {
-        partlist = getCurrentCP_Id(pid, itemId);
-      }
-    } catch (Exception ex) {
-      if (strIid.isEmpty() == false) {
-        partlist = getCurrentCP_Id(pid, strIid);
-      } else if (itemId != null) {
-        partlist = getCurrentCP_Id(pid, itemId);
-      }
+
+    if (strIid != null) {
+      partlist = getCurrentCP_Id(pid, strIid);
     }
 
-    if (partlist == null) {
-      partlist = getCurrentCP(pid);
+    if (partlist != null) {
+      if (partlist.size() < 1) {
+        partlist = getCurrentCP(pid);
+      }
     }
+    
     if (partlist != null) {
       if (partlist.size() == 1) {
         ContactPreference pp = (ContactPreference) partlist.get(0);
         if (pp != null) {
           this.contactPreferenceId = pp.getContactPreferenceId();
-          this.itemId=(pp.getItemId());
-          this.participant_id=(pp.getParticipant_id());
-          this.useWhichContactAddress=(pp.getUseWhichContactAddress());
-          this.contactByChat=(pp.getContactByChat());
-          this.contactByEmail=(pp.getContactByEmail());
-          this.contactByHomePhone=(pp.getContactByHomePhone());
-          this.contactByCellPhone=(pp.getContactByCellPhone());
-          this.contactByAlternativePhone=(pp.getContactByAlternativePhone());
+          this.itemId = (pp.getItemId());
+          this.participant_id = (pp.getParticipant_id());
+          this.useWhichContactAddress = (pp.getUseWhichContactAddress());
+          this.contactByChat = (pp.getContactByChat());
+          this.contactByEmail = (pp.getContactByEmail());
+          this.contactByHomePhone = (pp.getContactByHomePhone());
+          this.contactByCellPhone = (pp.getContactByCellPhone());
+          this.contactByAlternativePhone = (pp.getContactByAlternativePhone());
           this.contactByFacebook = pp.getContactByFacebook();
-          this.contactByTwitter=(pp.getContactByTwitter());
-          this.contactByInstagram =( pp.getContactByInstagram());
-          this.contactByLinkedIn= ( pp.getContactByLinkedIn());
-          this.contactByOtherSocialMedia=( pp.getContactByOtherSocialMedia());
-          this.contactByOtherSocialMediaAccess =(pp.getContactByOtherSocialMediaAccess());
-         // ubean.setLICid(true);   Why did I do that?  Becuase I am designing where user must complete one after the other
-         // ubean.setLITid(true);
+          this.contactByTwitter = (pp.getContactByTwitter());
+          this.contactByInstagram = (pp.getContactByInstagram());
+          this.contactByLinkedIn = (pp.getContactByLinkedIn());
+          this.contactByOtherSocialMedia = (pp.getContactByOtherSocialMedia());
+          this.contactByOtherSocialMediaAccess = (pp.getContactByOtherSocialMediaAccess());
+          // ubean.setLICid(true);   Why did I do that?  Becuase I am designing where user must complete one after the other
+          // ubean.setLITid(true);
           getParticipantAddreseEmailAlts(this.participant_id);
           pp = null;
         }
       }
     }
     partlist = null;
-//    return "user_contact_preferences?faces-redirect=true";   /// Does not return values!!! 
     return "user_contact_preferences";
   }
 
@@ -594,7 +609,5 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   public void setQuestionAltEmail(Boolean questionAltEmail) {
     this.questionAltEmail = questionAltEmail;
   }
-
-  
 
 }
