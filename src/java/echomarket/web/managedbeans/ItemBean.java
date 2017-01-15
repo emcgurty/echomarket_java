@@ -203,15 +203,14 @@ public class ItemBean extends AbstractBean implements Serializable {
     return b_return;
 
   }
-  
- 
-
+   
   public String load_ud(String which, String iid) {
 
 //    if ("both".equals(which)) {
 //      System.out.println("I should not see both except on User Login");
 //    }
-        List result = null;
+         List result = null;
+        
 
         if (iid.isEmpty() == true) {
           ubean.setEditable(1);
@@ -222,6 +221,13 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (this.itemId != null) {
           if (this.itemId.isEmpty() == false) {
             iid = this.itemId;
+            ubean.setEditable(0);
+          }
+        }
+        
+        if (ubean.getItemId() != null) {
+          if (ubean.getItemId().isEmpty() == false) {
+            iid = ubean.getItemId();
             ubean.setEditable(0);
           }
         }
@@ -283,10 +289,8 @@ public class ItemBean extends AbstractBean implements Serializable {
           setPicture(tmp_picture);
 
         }
-    
-//    return "user_item?faces-redirect=truw";
+         
     return "user_item";
-
   }
 
   public String saveItem() {
@@ -326,6 +330,17 @@ public class ItemBean extends AbstractBean implements Serializable {
         sb = null;
         tx = null;
       }
+//      if (bret == true) {
+//        bret = removeNullInLIC(ubean.getParticipant_id(), new_iid);
+//      }
+//
+//      if (bret == true) {
+//        bret = removeNullInLIT(ubean.getParticipant_id(), new_iid);
+//      }
+//
+//      if (bret == true) {
+//        bret = removeNullInCP(ubean.getParticipant_id(), new_iid);
+//      }
 
     } else {
 
@@ -437,13 +452,14 @@ public class ItemBean extends AbstractBean implements Serializable {
       getMap = null;
 
       message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, ubean.getEmail()});
+      ubean.setItemId(new_iid);
       ubean.setEditable(0);
     } else {
       message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
       ubean.setEditable(1);
 
     }
-    return load_ud(itemType, itemId);
+    return load_ud(itemType, itemId) + "?faces-redirect=true";
   }
 
   /**
@@ -1195,4 +1211,4 @@ public class ItemBean extends AbstractBean implements Serializable {
   public void setItemImageCaption(String itemImageCaption) {
     this.itemImageCaption = itemImageCaption;
   }
-}
+  }
