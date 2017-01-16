@@ -66,20 +66,25 @@
               <c:set var="newItemLabel" value="Contact Preferences"  />
               <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  >
                 <f:param name="action" value="edit" />
-                <f:param name="iid" value="#{itemBean.itemId}" />
+                <c:choose>
+                  <c:when test="#{!empty itemBean.itemId}" >
+                    <f:param name="iid" value="#{itemBean.itemId}" />
+                  </c:when>
+                </c:choose>
+                
               </h:commandLink>
             </li>
             <li id="tab_item_12" >
               <c:set var="newItemLabelTrans" value="Transfer Preferences"  />
               <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="#{userBean.cpId}" > 
-                <f:param name="iid" value="#{itemBean.itemId}" />
+                <!--<f:param name="iid" value="#{itemBean.itemId}" />-->
                 <f:param name="action" value="edit" />
               </h:commandLink>   
             </li>
             <li id="tab_item_13" >
               <c:set var="newItemLabelCond" value="Lending Conditions"  />
               <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="#{userBean.LITid}" >  
-                <f:param name="iid" value="#{itemBean.itemId}" />
+                <!--<f:param name="iid" value="#{itemBean.itemId}" />-->
                 <f:param name="action" value="edit" />
               </h:commandLink>   
             </li>
