@@ -298,7 +298,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         if (entry.getKey().contains("personal_information:contactByOtherSocialMedia")) {
           this.contactByOtherSocialMedia = entry.getValue();
         }
-        if (entry.getKey().contains("contactByOtherSocialMediaAccess")) {
+        if (entry.getKey().contains("personal_information:contactByOtherSocialMediaAccess")) {
           this.contactByOtherSocialMediaAccess = entry.getValue();
         }
         if (entry.getKey().contains("useWhichContactAddress")) {
@@ -330,7 +330,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         tx = sb.beginTransaction();
         sb.save(part);
         tx.commit();
-        //ubean.setCpId(true);
         message(null, "CPSaved", null);
         successTransaction = true;
       } catch (Exception ex) {
@@ -447,11 +446,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } catch (Exception ex) {
     }
 
-//    if (ubean.getItemId() != null) {
-//      if (ubean.getItemId().isEmpty() == false) {
-//        strIid = ubean.getItemId();
-//      }
-//    }
     if (ubean.getEditable() != null) {
       if (ubean.getEditable() == 0) {
         ubean.setEditable(1);
@@ -462,7 +456,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       ubean.setEditable(1);
     }
     try {
-//      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
     } catch (Exception ex) {
     }
@@ -502,8 +495,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           this.contactByLinkedIn = (pp.getContactByLinkedIn());
           this.contactByOtherSocialMedia = (pp.getContactByOtherSocialMedia());
           this.contactByOtherSocialMediaAccess = (pp.getContactByOtherSocialMediaAccess());
-          // ubean.setLICid(true);   Why did I do that?  Becuase I am designing where user must complete one after the other
-          // ubean.setLITid(true);
           getParticipantAddreseEmailAlts(this.participant_id);
           pp = null;
         }
