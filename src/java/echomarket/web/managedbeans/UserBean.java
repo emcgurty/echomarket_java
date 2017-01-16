@@ -1545,7 +1545,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 .setMaxResults(1)
                 .list();
       } else {
-        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId GROUP BY participant_id, itemId")
+        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId")
                 .setParameter("pid", pid)
                 .setParameter("iid", currentItem)
                 .setMaxResults(1)
