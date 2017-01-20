@@ -9,18 +9,14 @@ public class LenderTransfer implements java.io.Serializable {
     private String itemId;
     private String participant_id;
     private Integer borrowerComesToWhichAddress;
-    private Integer meetBorrowerAtAgreedL2b;
-    private Integer meetBorrowerAtAgreedB2l;
+    private Integer meetBorrowerAtAgreed;
     private Integer willDeliverToBorrower;
-    private Integer thirdPartyPresenceL2b;
-    private Integer thirdPartyPresenceB2l;
+    private Integer thirdPartyPresence;
     private Integer borrowerThirdPartyChoice;
-    private Integer agreedThirdPartyChoiceL2b;
-    private Integer agreedThirdPartyChoiceB2l;
+    private Integer agreedThirdPartyChoice;
     private Integer borrowerReturnsToWhichAddress;
-    private Integer willPickUpPreferredLocationB2l;
-    private Integer lenderThirdPartyChoiceB2l;
-    private Integer lenderThirdPartyChoiceL2b;
+    private Integer willPickUpPreferredLocation;
+    private Integer lenderThirdPartyChoice;
     private Integer borrowerChoice;
     private String remoteIp;
     private String comment;
@@ -40,22 +36,25 @@ public class LenderTransfer implements java.io.Serializable {
         this.dateDeleted = dateDeleted;
     }
        
-    public LenderTransfer(String lenderTransferId, String itemId, String participant_id, Integer borrowerComesToWhichAddress, Integer meetBorrowerAtAgreedL2b, Integer meetBorrowerAtAgreedB2l, Integer willDeliverToBorrower, Integer thirdPartyPresenceL2b, Integer thirdPartyPresenceB2l, Integer borrowerThirdPartyChoice, Integer agreedThirdPartyChoiceL2b, Integer agreedThirdPartyChoiceB2l, Integer borrowerReturnsToWhichAddress, Integer willPickUpPreferredLocationB2l, Integer lenderThirdPartyChoiceB2l, Integer borrowerChoice, String remoteIp, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted) {
+    public LenderTransfer(String lenderTransferId, String itemId, String participant_id, 
+            Integer borrowerComesToWhichAddress, Integer meetBorrowerAtAgreed, 
+            Integer willDeliverToBorrower,  
+            Integer thirdPartyPresence, Integer borrowerThirdPartyChoice,  
+            Integer agreedThirdPartyChoice, Integer borrowerReturnsToWhichAddress, 
+            Integer willPickUpPreferredLocation, Integer lenderThirdPartyChoice, 
+            Integer borrowerChoice, String remoteIp, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted) {
         this.lenderTransferId = lenderTransferId;
         this.itemId = itemId;
         this.participant_id = participant_id;
         this.borrowerComesToWhichAddress = borrowerComesToWhichAddress;
-        this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
-        this.meetBorrowerAtAgreedB2l = meetBorrowerAtAgreedB2l;
+        this.meetBorrowerAtAgreed = meetBorrowerAtAgreed;
         this.willDeliverToBorrower = willDeliverToBorrower;
-        this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
-        this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
+        this.thirdPartyPresence = thirdPartyPresence;
         this.borrowerThirdPartyChoice = borrowerThirdPartyChoice;
-        this.agreedThirdPartyChoiceL2b = agreedThirdPartyChoiceL2b;
-        this.agreedThirdPartyChoiceB2l = agreedThirdPartyChoiceB2l;
+        this.agreedThirdPartyChoice = agreedThirdPartyChoice;
         this.borrowerReturnsToWhichAddress = borrowerReturnsToWhichAddress;
-        this.willPickUpPreferredLocationB2l = willPickUpPreferredLocationB2l;
-        this.lenderThirdPartyChoiceB2l = lenderThirdPartyChoiceB2l;
+        this.willPickUpPreferredLocation = willPickUpPreferredLocation;
+        this.lenderThirdPartyChoice = lenderThirdPartyChoice;
         this.borrowerChoice = borrowerChoice;
         this.remoteIp = remoteIp;
         this.comment = comment;
@@ -96,20 +95,12 @@ public class LenderTransfer implements java.io.Serializable {
         this.borrowerComesToWhichAddress = borrowerComesToWhichAddress;
     }
 
-    public Integer getMeetBorrowerAtAgreedL2b() {
-        return this.meetBorrowerAtAgreedL2b;
+    public Integer getMeetBorrowerAtAgreed() {
+        return this.meetBorrowerAtAgreed;
     }
 
-    public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2b) {
-        this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
-    }
-
-    public Integer getMeetBorrowerAtAgreedB2l() {
-        return this.meetBorrowerAtAgreedB2l;
-    }
-
-    public void setMeetBorrowerAtAgreedB2l(Integer meetBorrowerAtAgreedB2l) {
-        this.meetBorrowerAtAgreedB2l = meetBorrowerAtAgreedB2l;
+    public void setMeetBorrowerAtAgreed(Integer meetBorrowerAtAgreed) {
+        this.meetBorrowerAtAgreed = meetBorrowerAtAgreed;
     }
 
     public Integer getWillDeliverToBorrower() {
@@ -120,22 +111,15 @@ public class LenderTransfer implements java.io.Serializable {
         this.willDeliverToBorrower = willDeliverToBorrower;
     }
 
-    public Integer getThirdPartyPresenceL2b() {
-        return this.thirdPartyPresenceL2b;
+    public Integer getThirdPartyPresence() {
+        return this.thirdPartyPresence;
     }
 
-    public void setThirdPartyPresenceL2b(Integer thirdPartyPresenceL2b) {
-        this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
+    public void setThirdPartyPresence(Integer thirdPartyPresence) {
+        this.thirdPartyPresence = thirdPartyPresence;
     }
 
-    public Integer getThirdPartyPresenceB2l() {
-        return this.thirdPartyPresenceB2l;
-    }
-
-    public void setThirdPartyPresenceB2l(Integer thirdPartyPresenceB2l) {
-        this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
-    }
-
+    
     public Integer getBorrowerThirdPartyChoice() {
         return this.borrowerThirdPartyChoice;
     }
@@ -144,22 +128,15 @@ public class LenderTransfer implements java.io.Serializable {
         this.borrowerThirdPartyChoice = borrowerThirdPartyChoice;
     }
 
-    public Integer getAgreedThirdPartyChoiceL2b() {
-        return this.agreedThirdPartyChoiceL2b;
+    public Integer getAgreedThirdPartyChoice() {
+        return this.agreedThirdPartyChoice;
     }
 
-    public void setAgreedThirdPartyChoiceL2b(Integer agreedThirdPartyChoiceL2b) {
-        this.agreedThirdPartyChoiceL2b = agreedThirdPartyChoiceL2b;
+    public void setAgreedThirdPartyChoice(Integer agreedThirdPartyChoice) {
+        this.agreedThirdPartyChoice = agreedThirdPartyChoice;
     }
 
-    public Integer getAgreedThirdPartyChoiceB2l() {
-        return this.agreedThirdPartyChoiceB2l;
-    }
-
-    public void setAgreedThirdPartyChoiceB2l(Integer agreedThirdPartyChoiceB2l) {
-        this.agreedThirdPartyChoiceB2l = agreedThirdPartyChoiceB2l;
-    }
-
+    
     public Integer getBorrowerReturnsToWhichAddress() {
         return this.borrowerReturnsToWhichAddress;
     }
@@ -168,20 +145,20 @@ public class LenderTransfer implements java.io.Serializable {
         this.borrowerReturnsToWhichAddress = borrowerReturnsToWhichAddress;
     }
 
-    public Integer getWillPickUpPreferredLocationB2l() {
-        return this.willPickUpPreferredLocationB2l;
+    public Integer getWillPickUpPreferredLocation() {
+        return this.willPickUpPreferredLocation;
     }
 
-    public void setWillPickUpPreferredLocationB2l(Integer willPickUpPreferredLocationB2l) {
-        this.willPickUpPreferredLocationB2l = willPickUpPreferredLocationB2l;
+    public void setWillPickUpPreferredLocation(Integer willPickUpPreferredLocationB2l) {
+        this.willPickUpPreferredLocation = willPickUpPreferredLocationB2l;
     }
 
-    public Integer getLenderThirdPartyChoiceB2l() {
-        return this.lenderThirdPartyChoiceB2l;
+    public Integer getLenderThirdPartyChoice() {
+        return this.lenderThirdPartyChoice;
     }
 
-    public void setLenderThirdPartyChoiceB2l(Integer lenderThirdPartyChoiceB2l) {
-        this.lenderThirdPartyChoiceB2l = lenderThirdPartyChoiceB2l;
+    public void setLenderThirdPartyChoice(Integer lenderThirdPartyChoice) {
+        this.lenderThirdPartyChoice = lenderThirdPartyChoice;
     }
 
     public Integer getBorrowerChoice() {
@@ -232,18 +209,6 @@ public class LenderTransfer implements java.io.Serializable {
         this.dateDeleted = dateDeleted;
     }
 
-    /**
-     * @return the lenderThirdPartyChoiceL2b
-     */
-    public Integer getLenderThirdPartyChoiceL2b() {
-        return lenderThirdPartyChoiceL2b;
-    }
-
-    /**
-     * @param lenderThirdPartyChoiceL2b the lenderThirdPartyChoiceL2b to set
-     */
-    public void setLenderThirdPartyChoiceL2b(Integer lenderThirdPartyChoiceL2b) {
-        this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
-    }
+  
 
 }
