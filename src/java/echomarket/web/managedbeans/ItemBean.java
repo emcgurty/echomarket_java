@@ -1037,9 +1037,10 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (result.size() == 1) {
           LenderTransfer na_lit = (LenderTransfer) result.get(0);
           LenderTransfer new_lt = new LenderTransfer(getId(), iid, ubean.getParticipant_id(),
-                  na_lit.getBorrowerComesToWhichAddress(), na_lit.getMeetBorrowerAtAgreedL2b(), na_lit.getMeetBorrowerAtAgreedB2l(), na_lit.getWillDeliverToBorrower(),
-                  na_lit.getThirdPartyPresenceL2b(), na_lit.getThirdPartyPresenceB2l(), na_lit.getBorrowerThirdPartyChoice(), na_lit.getAgreedThirdPartyChoiceL2b(),
-                  na_lit.getAgreedThirdPartyChoiceB2l(), na_lit.getBorrowerReturnsToWhichAddress(), na_lit.getWillPickUpPreferredLocationB2l(), na_lit.getLenderThirdPartyChoiceB2l(),
+                  na_lit.getBorrowerComesToWhichAddress(), na_lit.getMeetBorrowerAtAgreed(),  na_lit.getWillDeliverToBorrower(),
+                  na_lit.getThirdPartyPresence(),  na_lit.getBorrowerThirdPartyChoice(), 
+                  na_lit.getAgreedThirdPartyChoice(), na_lit.getBorrowerReturnsToWhichAddress(), 
+                  na_lit.getWillPickUpPreferredLocation(), na_lit.getLenderThirdPartyChoice(),
                   na_lit.getBorrowerChoice(), "NA", na_lit.getComment(), new Date(), new Date(), null);
           if (session.isOpen() == false) {
             session = hib_session();
