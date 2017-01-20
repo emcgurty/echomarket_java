@@ -621,13 +621,13 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = cpbean.load_ud(this.participant_id);
         break;
       case "lender_transfer":
-        return_string = ltribean.load_ud(this.participant_id);
+        return_string = "lender_transfer";  ///ltribean.load_ud(this.participant_id);
         break;
       default:
         return_string = "index";
 
     }
-    return return_string;
+    return return_string + "?faces-redirect=true";   /// need to stop forwarding from index
   }
 
   private String findWhatIsComplete() {
