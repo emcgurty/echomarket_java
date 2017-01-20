@@ -17,41 +17,29 @@
         <property name="borrowerComesToWhichAddress" type="java.lang.Integer">
             <column name="borrower_comes_to_which_address" />
         </property>
-        <property name="meetBorrowerAtAgreedL2b" type="java.lang.Integer">
-            <column name="meetBorrowerAtAgreedL2B" />
-        </property>
-        <property name="meetBorrowerAtAgreedB2l" type="java.lang.Integer">
-            <column name="meetBorrowerAtAgreedB2L" />
+        <property name="meetBorrowerAtAgreed" type="java.lang.Integer">
+            <column name="meetBorrowerAtAgreed" />
         </property>
         <property name="willDeliverToBorrower" type="java.lang.Integer">
             <column name="will_deliver_to_borrower" />
         </property>
-        <property name="thirdPartyPresenceL2b" type="java.lang.Integer">
-            <column name="thirdPartyPresenceL2B" />
+        <property name="thirdPartyPresence" type="java.lang.Integer">
+            <column name="thirdPartyPresence" />
         </property>
-        <property name="thirdPartyPresenceB2l" type="java.lang.Integer">
-            <column name="thirdPartyPresenceB2L" />
-        </property>
-           <property name="borrowerThirdPartyChoice" type="java.lang.Integer">
+         <property name="borrowerThirdPartyChoice" type="java.lang.Integer">
             <column name="borrower_third_party_choice" />
         </property>
-        <property name="agreedThirdPartyChoiceL2b" type="java.lang.Integer">
-            <column name="agreedThirdPartyChoiceL2B" />
-        </property>
-        <property name="agreedThirdPartyChoiceB2l" type="java.lang.Integer">
-            <column name="agreedThirdPartyChoiceB2L" />
+        <property name="agreedThirdPartyChoice" type="java.lang.Integer">
+            <column name="agreedThirdPartyChoice" />
         </property>
         <property name="borrowerReturnsToWhichAddress" type="java.lang.Integer">
             <column name="borrower_returns_to_which_address" />
         </property>
-        <property name="willPickUpPreferredLocationB2l" type="java.lang.Integer">
-            <column name="willPickUpPreferredLocationB2L" />
+        <property name="willPickUpPreferredLocation" type="java.lang.Integer">
+            <column name="willPickUpPreferredLocation" />
         </property>
-        <property name="lenderThirdPartyChoiceB2l" type="java.lang.Integer">
-            <column name="lenderThirdPartyChoiceB2L" />
-        </property>
-        <property name="lenderThirdPartyChoiceL2b" type="java.lang.Integer">
-            <column name="lenderThirdPartyChoiceL2B" />
+        <property name="lenderThirdPartyChoice" type="java.lang.Integer">
+            <column name="lenderThirdPartyChoice" />
         </property>
         <property name="borrowerChoice" type="java.lang.Integer">
             <column name="borrower_choice" />
