@@ -27,18 +27,14 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   private String itemId;
   private String participant_id;
   private Integer borrowerComesToWhichAddress;
-  private Integer meetBorrowerAtAgreedL2b;
-  private Integer meetBorrowerAtAgreedB2l;
+  private Integer meetBorrowerAtAgreed;
   private Integer willDeliverToBorrower;
-  private Integer thirdPartyPresenceL2b;
-  private Integer thirdPartyPresenceB2l;
+  private Integer thirdPartyPresence;
   private Integer borrowerThirdPartyChoice;
-  private Integer agreedThirdPartyChoiceL2b;
-  private Integer agreedThirdPartyChoiceB2l;
+  private Integer agreedThirdPartyChoice;
   private Integer borrowerReturnsToWhichAddress;
-  private Integer willPickUpPreferredLocationB2l;
-  private Integer lenderThirdPartyChoiceB2l;
-  private Integer lenderThirdPartyChoiceL2b;
+  private Integer willPickUpPreferredLocation;
+  private Integer lenderThirdPartyChoice;
   private Integer borrowerChoice;
   private String remoteIp;
   private String comment;
@@ -110,84 +106,143 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
   public String updateLIT() {
 
+    Boolean successTransaction = false;
+    List cp_list = null;
     Session sb;
     Transaction tx;
     sb = null;
     tx = null;
-    List litList = null;
-    Boolean successTransaction = false;
-    Map<String, String> params = null;
     String addNewCP = null;
-    String strIid = null;
-    
-    // not necessary
-    if (lenderTransferId == null)
-      lenderTransferId = "";
-    if (lenderTransferId.isEmpty()) {
+    String currentIid = null;
+    try {
+      Map<String, String> params = null;
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      addNewCP = params.get("action");
+      currentIid = params.get("iid");
+      ubean.setItemId(currentIid);
+      this.itemId = currentIid;
+      for (Map.Entry<String, String> entry : params.entrySet()) {
+//        if (entry.getKey().contains("itemId")) {
+//          this.itemId = entry.getValue();
+//          ubean.setItemId(this.itemId);
+//        }
+        if (entry.getKey().contains("lenderTransferId")) {
+          this.lenderTransferId = entry.getValue();
+        }
+        if (entry.getKey().contains("borrowerComesToWhichAddress")) {
+          this.borrowerComesToWhichAddress = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("meetBorrowerAtAgreed")) {
+          this.setMeetBorrowerAtAgreed(Integer.valueOf(entry.getValue()));
+        }
+          if (entry.getKey().contains("willDeliverToBorrower")) {
+            this.setWillDeliverToBorrower(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("thirdPartyPresence")) {
+          this.setThirdPartyPresence(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("borrowerThirdPartyChoice")) {
+          this.setBorrowerThirdPartyChoice(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("agreedThirdPartyChoice")) {
+          this.setAgreedThirdPartyChoice(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("borrowerReturnsToWhichAddress")) {
+          this.setBorrowerReturnsToWhichAddress(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("willPickUpPreferredLocation")) {
+          this.setWillPickUpPreferredLocation(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("lenderThirdPartyChoice")) {
+          this.setLenderThirdPartyChoice(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("borrowerChoice")) {
+          this.setBorrowerChoice(Integer.valueOf(entry.getValue()));
+        }
+        System.out.println(entry.getKey() + "/" + entry.getValue());
+      }
+    } catch (Exception ex) {
+    }
 
-      LenderTransfer lt = new LenderTransfer(getId(), itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.meetBorrowerAtAgreedL2b, this.meetBorrowerAtAgreedB2l, this.willDeliverToBorrower, this.thirdPartyPresenceL2b, this.thirdPartyPresenceB2l, this.borrowerThirdPartyChoice, this.agreedThirdPartyChoiceL2b, this.agreedThirdPartyChoiceB2l, this.borrowerReturnsToWhichAddress, this.willPickUpPreferredLocationB2l, this.lenderThirdPartyChoiceB2l, this.borrowerChoice, "NA", this.comment, new Date(), new Date(), null);
+    if (this.lenderTransferId.isEmpty() == true) {
+
+      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.getMeetBorrowerAtAgreed(), this.getWillDeliverToBorrower(), this.getThirdPartyPresence(), this.getBorrowerThirdPartyChoice(), this.getAgreedThirdPartyChoice(), this.getBorrowerReturnsToWhichAddress(), this.getWillPickUpPreferredLocation(), this.getLenderThirdPartyChoice(), this.getBorrowerChoice(), "NA", this.getComment(), new Date(), new Date(), null);
 
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
         sb.save(lt);
         tx.commit();
-        ///ubean.setLITid(true);
         message(null, "LenderTransferSaved", null);
         successTransaction = true;
-        ubean.setEditable(1);
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in saveLenderItemCon");
-        Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(LenderTransferBean.class.getName()).log(Level.SEVERE, null, ex);
         message(null, "LenderTransferNotSaved", null);
-        ubean.setEditable(0);
       } finally {
         sb = null;
         tx = null;
       }
+
     } else {
-      // Do update
-      if (itemId.isEmpty() == false) {
-        litList = getCurrentLT_Iid(ubean.getParticipant_id(), itemId);
-      }else {
-        litList = getCurrentLT(ubean.getParticipant_id());
+
+      if (ubean.getItemId().isEmpty() == false) {
+        cp_list = getCurrentLT_Iid(ubean.getParticipant_id(), ubean.getItemId());
+      } else {
+        cp_list = getCurrentLT(ubean.getParticipant_id());
       }
-      if (litList != null) {
-        if (litList.size() == 1) {
-          LenderTransfer lit = (LenderTransfer) litList.get(0);
-          lit.setItemId(itemId);
-          lit.setParticipant_id(ubean.getParticipant_id());
-          lit.setBorrowerComesToWhichAddress(borrowerComesToWhichAddress);
-          lit.setMeetBorrowerAtAgreedL2b(meetBorrowerAtAgreedL2b);
-          lit.setMeetBorrowerAtAgreedB2l(meetBorrowerAtAgreedB2l);
-          lit.setWillDeliverToBorrower(willDeliverToBorrower);
-          lit.setThirdPartyPresenceL2b(thirdPartyPresenceL2b);
-          lit.setThirdPartyPresenceB2l(thirdPartyPresenceB2l);
-          lit.setBorrowerThirdPartyChoice(borrowerThirdPartyChoice);
-          lit.setAgreedThirdPartyChoiceL2b(agreedThirdPartyChoiceL2b);
-          lit.setAgreedThirdPartyChoiceB2l(agreedThirdPartyChoiceB2l);
-          lit.setBorrowerReturnsToWhichAddress(borrowerReturnsToWhichAddress);
-          lit.setWillPickUpPreferredLocationB2l(willPickUpPreferredLocationB2l);
-          lit.setLenderThirdPartyChoiceB2l(lenderThirdPartyChoiceB2l);
-          lit.setLenderThirdPartyChoiceL2b(lenderThirdPartyChoiceL2b);
+      if (cp_list != null) {
+        if (cp_list.size() == 1) {
+          LenderTransfer lit = (LenderTransfer) cp_list.get(0);
+          lit.setItemId(ubean.getItemId());
+          lit.setBorrowerComesToWhichAddress(this.borrowerComesToWhichAddress);
+          lit.setMeetBorrowerAtAgreed(this.getMeetBorrowerAtAgreed());
+          
+          lit.setWillDeliverToBorrower(this.getWillDeliverToBorrower());
+          lit.setThirdPartyPresence(this.getThirdPartyPresence());
+
+          lit.setBorrowerThirdPartyChoice(this.getBorrowerThirdPartyChoice());
+          lit.setAgreedThirdPartyChoice(this.getAgreedThirdPartyChoice());
+
+          lit.setBorrowerReturnsToWhichAddress(this.getBorrowerReturnsToWhichAddress());
+          lit.setWillPickUpPreferredLocation(this.getWillPickUpPreferredLocation());
+          lit.setLenderThirdPartyChoice(this.getLenderThirdPartyChoice());
+
+          lit.setBorrowerChoice(this.getBorrowerChoice());
+          lit.setDateUpdated(new Date());
 
           sb = hib_session();
           tx = sb.beginTransaction();
-
           try {
             sb.update(lit);
             tx.commit();
             successTransaction = true;
-            message(null, "LenderTransferUpdated", null);
-            ubean.setEditable(1);
-            // ubean.setLITid(true);
+            message(null, "CPUpdated", null);
           } catch (Exception ex) {
-            message(null, "LenderTransferUpdatedFailed", null);
             tx.rollback();
-            System.out.println("Error in Update Lender Transfer Perferenes");
-            Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
-            ubean.setEditable(0);
+            System.out.println("Error in Update LIT");
+            Logger.getLogger(LenderTransferBean.class.getName()).log(Level.SEVERE, null, ex);
+            message(null, "UpdateOrSaveOfLITNotSuccessful", null);
+          } finally {
+            sb = null;
+            tx = null;
+          }
+        } else {
+          // Create new record
+          LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.getMeetBorrowerAtAgreed(), this.getWillDeliverToBorrower(), this.getThirdPartyPresence(), this.getBorrowerThirdPartyChoice(), this.getAgreedThirdPartyChoice(), this.getBorrowerReturnsToWhichAddress(), this.getWillPickUpPreferredLocation(), this.getLenderThirdPartyChoice(), this.getBorrowerChoice(), "NA", this.getComment(), new Date(), new Date(), null);
+          try {
+            sb = hib_session();
+            tx = sb.beginTransaction();
+            sb.save(lt);
+            tx.commit();
+            //ubean.setCpId(true);
+            message(null, "CPSaved", null);
+            successTransaction = true;
+          } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in Save LIT");
+            Logger.getLogger(LenderTransfer.class.getName()).log(Level.SEVERE, null, ex);
           } finally {
             sb = null;
             tx = null;
@@ -195,73 +250,80 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         }
       }
     }
-    
-     if(successTransaction == true) {
-      if (this.itemId.isEmpty() == true) {   /// User is setting default LIT
-        ubean.setLITid(true);
-      } else {
-        ubean.completeLIT(ubean.getParticipant_id());
+
+    if (successTransaction == true) {
+      ubean.setEditable(1);
+      if (ubean.getItemId() != null) {
+        if (ubean.getItemId().isEmpty() == false) {
+          ubean.completeLIT(ubean.getParticipant_id());
+        } else {
+          ubean.setLITid(true);
+        }
       }
     } else {
-        ubean.setLITid(false);
+      ubean.setEditable(0);
+      ubean.setLITid(false);
     }
 
-    return load_ud(ubean.getParticipant_id());
+   // return load_ud(ubean.getParticipant_id()) + "?faces-redirect=true";
+   return "lender_transfer.xhtml?faces-redirect=true";
+
   }
 
-  public String load_ud(String pid) {
+  public List load_ud(String pid) {
 
     List result = null;
     Map<String, String> params = null;
+    params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String strIid = null;
     String action = null;
+    Boolean isLITnull = false;
 
     try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
-      /// This doesn't work, hence below try/catch on strIid
-      if (strIid.isEmpty() == true) {
-        strIid = null;
-      } else {
-      
+      if (strIid != null) {
+        if (strIid.isEmpty() == true) {
+          strIid = null;
+        }
       }
     } catch (Exception ex) {
     }
 
-    if (ubean.getEditable() == 0) {
-      ubean.setEditable(1);
+    if (ubean.getEditable() != null) {
+      if (ubean.getEditable() == 0) {
+        ubean.setEditable(1);
+      } else {
+        ubean.setEditable(0);
+      }
     } else {
-      ubean.setEditable(0);
+      ubean.setEditable(1);
     }
-
     try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
     } catch (Exception ex) {
     }
-    if ("edit".equals(action)) {
+
+    if (action != null) {
+      if ("edit".equals(action)) {
         ubean.setEditable(1);
       }
-
-    try {
-      if (strIid != null) {
-        result = getCurrentLT_Iid(pid, strIid);
-        itemId = strIid;
-      } else if (itemId != null) {
-        result = getCurrentLT_Iid(pid, itemId);
-      }
-    } catch (Exception ex) {
-      if (strIid.isEmpty() == false) {
-        result = getCurrentLT_Iid(pid, strIid);
-         itemId = strIid;
-      } else if (itemId != null) {
-        result = getCurrentLT_Iid(pid, itemId);
-      }
-
     }
 
+    if (strIid != null) {
+      result = getCurrentLT_Iid(pid, strIid);
+    }
     if (result == null) {
-      result = getCurrentLT(pid);
+      isLITnull = true;
+    }
+
+    if (result != null) {
+      if (result.size() == 0) {
+        isLITnull = true;
+      }
+    }
+    
+    if (isLITnull == true) {
+           result = getCurrentLT(pid);
     }
 
     if (result != null) {
@@ -273,26 +335,28 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           this.itemId = ltr.getItemId();
           this.participant_id = ltr.getParticipant_id();
           this.borrowerComesToWhichAddress = ltr.getBorrowerComesToWhichAddress();
-          this.meetBorrowerAtAgreedL2b = ltr.getMeetBorrowerAtAgreedL2b();
-          this.meetBorrowerAtAgreedB2l = ltr.getMeetBorrowerAtAgreedL2b();
-          this.willDeliverToBorrower = ltr.getWillDeliverToBorrower();
-          this.thirdPartyPresenceL2b = ltr.getThirdPartyPresenceL2b();
-          this.thirdPartyPresenceB2l = ltr.getThirdPartyPresenceB2l();
-          this.borrowerThirdPartyChoice = ltr.getBorrowerThirdPartyChoice();
-          this.agreedThirdPartyChoiceL2b = ltr.getAgreedThirdPartyChoiceL2b();
-          this.agreedThirdPartyChoiceB2l = ltr.getAgreedThirdPartyChoiceB2l();
-          this.borrowerReturnsToWhichAddress = ltr.getBorrowerReturnsToWhichAddress();
-          this.willPickUpPreferredLocationB2l = ltr.getWillPickUpPreferredLocationB2l();
-          this.lenderThirdPartyChoiceB2l = ltr.getLenderThirdPartyChoiceB2l();
-          this.lenderThirdPartyChoiceL2b = ltr.getLenderThirdPartyChoiceL2b();
-          this.borrowerChoice = ltr.getBorrowerChoice();
+          this.setMeetBorrowerAtAgreed(ltr.getMeetBorrowerAtAgreed());
+
+          this.setWillDeliverToBorrower(ltr.getWillDeliverToBorrower());
+          this.setThirdPartyPresence(ltr.getThirdPartyPresence());
+
+          this.setBorrowerThirdPartyChoice(ltr.getBorrowerThirdPartyChoice());
+          this.setAgreedThirdPartyChoice(ltr.getAgreedThirdPartyChoice());
+
+          this.setBorrowerReturnsToWhichAddress(ltr.getBorrowerReturnsToWhichAddress());
+          this.setWillPickUpPreferredLocation(ltr.getWillPickUpPreferredLocation());
+          this.setLenderThirdPartyChoice(ltr.getLenderThirdPartyChoice());
+
+          this.setBorrowerChoice(ltr.getBorrowerChoice());
           ltr = null;
         }
       }
     }
-    result = null;
-    
-    return "lender_transfer";
+    //  result = null;
+//  emm true
+//    return "lender_transfer?faces-redirect=true";
+//    return "lender_transfer";
+    return result;
   }
 
   /**
@@ -353,31 +417,17 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the meetBorrowerAtAgreedL2b
+   * @return the meetBorrowerAtAgreed
    */
-  public Integer getMeetBorrowerAtAgreedL2b() {
-    return meetBorrowerAtAgreedL2b;
+  public Integer getMeetBorrowerAtAgreed() {
+    return meetBorrowerAtAgreed;
   }
 
   /**
-   * @param meetBorrowerAtAgreedL2b the meetBorrowerAtAgreedL2b to set
+   * @param meetBorrowerAtAgreed the meetBorrowerAtAgreed to set
    */
-  public void setMeetBorrowerAtAgreedL2b(Integer meetBorrowerAtAgreedL2b) {
-    this.meetBorrowerAtAgreedL2b = meetBorrowerAtAgreedL2b;
-  }
-
-  /**
-   * @return the meetBorrowerAtAgreedB2l
-   */
-  public Integer getMeetBorrowerAtAgreedB2l() {
-    return meetBorrowerAtAgreedB2l;
-  }
-
-  /**
-   * @param meetBorrowerAtAgreedB2l the meetBorrowerAtAgreedB2l to set
-   */
-  public void setMeetBorrowerAtAgreedB2l(Integer meetBorrowerAtAgreedB2l) {
-    this.meetBorrowerAtAgreedB2l = meetBorrowerAtAgreedB2l;
+  public void setMeetBorrowerAtAgreed(Integer meetBorrowerAtAgreed) {
+    this.meetBorrowerAtAgreed = meetBorrowerAtAgreed;
   }
 
   /**
@@ -395,31 +445,17 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the thirdPartyPresenceL2b
+   * @return the thirdPartyPresence
    */
-  public Integer getThirdPartyPresenceL2b() {
-    return thirdPartyPresenceL2b;
+  public Integer getThirdPartyPresence() {
+    return thirdPartyPresence;
   }
 
   /**
-   * @param thirdPartyPresenceL2b the thirdPartyPresenceL2b to set
+   * @param thirdPartyPresence the thirdPartyPresence to set
    */
-  public void setThirdPartyPresenceL2b(Integer thirdPartyPresenceL2b) {
-    this.thirdPartyPresenceL2b = thirdPartyPresenceL2b;
-  }
-
-  /**
-   * @return the thirdPartyPresenceB2l
-   */
-  public Integer getThirdPartyPresenceB2l() {
-    return thirdPartyPresenceB2l;
-  }
-
-  /**
-   * @param thirdPartyPresenceB2l the thirdPartyPresenceB2l to set
-   */
-  public void setThirdPartyPresenceB2l(Integer thirdPartyPresenceB2l) {
-    this.thirdPartyPresenceB2l = thirdPartyPresenceB2l;
+  public void setThirdPartyPresence(Integer thirdPartyPresence) {
+    this.thirdPartyPresence = thirdPartyPresence;
   }
 
   /**
@@ -437,31 +473,17 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the agreedThirdPartyChoiceL2b
+   * @return the agreedThirdPartyChoice
    */
-  public Integer getAgreedThirdPartyChoiceL2b() {
-    return agreedThirdPartyChoiceL2b;
+  public Integer getAgreedThirdPartyChoice() {
+    return agreedThirdPartyChoice;
   }
 
   /**
-   * @param agreedThirdPartyChoiceL2b the agreedThirdPartyChoiceL2b to set
+   * @param agreedThirdPartyChoice the agreedThirdPartyChoice to set
    */
-  public void setAgreedThirdPartyChoiceL2b(Integer agreedThirdPartyChoiceL2b) {
-    this.agreedThirdPartyChoiceL2b = agreedThirdPartyChoiceL2b;
-  }
-
-  /**
-   * @return the agreedThirdPartyChoiceB2l
-   */
-  public Integer getAgreedThirdPartyChoiceB2l() {
-    return agreedThirdPartyChoiceB2l;
-  }
-
-  /**
-   * @param agreedThirdPartyChoiceB2l the agreedThirdPartyChoiceB2l to set
-   */
-  public void setAgreedThirdPartyChoiceB2l(Integer agreedThirdPartyChoiceB2l) {
-    this.agreedThirdPartyChoiceB2l = agreedThirdPartyChoiceB2l;
+  public void setAgreedThirdPartyChoice(Integer agreedThirdPartyChoice) {
+    this.agreedThirdPartyChoice = agreedThirdPartyChoice;
   }
 
   /**
@@ -472,40 +494,38 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to
-   * set
+   * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to set
    */
   public void setBorrowerReturnsToWhichAddress(Integer borrowerReturnsToWhichAddress) {
     this.borrowerReturnsToWhichAddress = borrowerReturnsToWhichAddress;
   }
 
   /**
-   * @return the willPickUpPreferredLocationB2l
+   * @return the willPickUpPreferredLocation
    */
-  public Integer getWillPickUpPreferredLocationB2l() {
-    return willPickUpPreferredLocationB2l;
+  public Integer getWillPickUpPreferredLocation() {
+    return willPickUpPreferredLocation;
   }
 
   /**
-   * @param willPickUpPreferredLocationB2l the willPickUpPreferredLocationB2l to
-   * set
+   * @param willPickUpPreferredLocation the willPickUpPreferredLocation to set
    */
-  public void setWillPickUpPreferredLocationB2l(Integer willPickUpPreferredLocationB2l) {
-    this.willPickUpPreferredLocationB2l = willPickUpPreferredLocationB2l;
+  public void setWillPickUpPreferredLocation(Integer willPickUpPreferredLocation) {
+    this.willPickUpPreferredLocation = willPickUpPreferredLocation;
   }
 
   /**
-   * @return the lenderThirdPartyChoiceB2l
+   * @return the lenderThirdPartyChoice
    */
-  public Integer getLenderThirdPartyChoiceB2l() {
-    return lenderThirdPartyChoiceB2l;
+  public Integer getLenderThirdPartyChoice() {
+    return lenderThirdPartyChoice;
   }
 
   /**
-   * @param lenderThirdPartyChoiceB2l the lenderThirdPartyChoiceB2l to set
+   * @param lenderThirdPartyChoice the lenderThirdPartyChoice to set
    */
-  public void setLenderThirdPartyChoiceB2l(Integer lenderThirdPartyChoiceB2l) {
-    this.lenderThirdPartyChoiceB2l = lenderThirdPartyChoiceB2l;
+  public void setLenderThirdPartyChoice(Integer lenderThirdPartyChoice) {
+    this.lenderThirdPartyChoice = lenderThirdPartyChoice;
   }
 
   /**
@@ -550,18 +570,5 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     this.comment = comment;
   }
 
-  /**
-   * @return the lenderThirdPartyChoiceL2b
-   */
-  public Integer getLenderThirdPartyChoiceL2b() {
-    return lenderThirdPartyChoiceL2b;
-  }
-
-  /**
-   * @param lenderThirdPartyChoiceL2b the lenderThirdPartyChoiceL2b to set
-   */
-  public void setLenderThirdPartyChoiceL2b(Integer lenderThirdPartyChoiceL2b) {
-    this.lenderThirdPartyChoiceL2b = lenderThirdPartyChoiceL2b;
-  }
-
+  
 }
