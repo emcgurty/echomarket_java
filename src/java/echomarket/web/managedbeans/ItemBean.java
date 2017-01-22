@@ -203,93 +203,92 @@ public class ItemBean extends AbstractBean implements Serializable {
     return b_return;
 
   }
-   
+
   public String load_ud(String which, String iid) {
 
 //    if ("both".equals(which)) {
 //      System.out.println("I should not see both except on User Login");
 //    }
-         List result = null;
-        
+    List result = null;
 
-        if (iid.isEmpty() == true) {
+    if (iid.isEmpty() == true) {
+      ubean.setEditable(1);
+    } else {
+      ubean.setEditable(0);
+    }
+
+    if (this.itemId != null) {
+      if (this.itemId.isEmpty() == false) {
+        iid = this.itemId;
+        ubean.setEditable(0);
+      }
+    }
+
+    if (ubean.getItemId() != null) {
+      if (ubean.getItemId().isEmpty() == false) {
+        iid = ubean.getItemId();
+        ubean.setEditable(0);
+      }
+    }
+
+    Map<String, String> params = null;
+    String action = null;
+
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      action = params.get("action");
+      if (action != null) {
+        if ("item".equals(action)) {
           ubean.setEditable(1);
-        } else {
-          ubean.setEditable(0);
         }
+      }
+    } catch (Exception ex) {
+    }
 
-        if (this.itemId != null) {
-          if (this.itemId.isEmpty() == false) {
-            iid = this.itemId;
-            ubean.setEditable(0);
-          }
+    if (iid.isEmpty() == false) {
+      result = getCurrentItem(iid, which);
+      if (result != null) {
+        if (result.size() == 1) {
+          Items ir = (Items) result.get(0);
+          setItemId(ir.getItemId());
+          this.participant_id = ir.getParticipant_id();
+          this.categoryId = ir.getCategoryId();
+          this.otherItemCategory = ir.getOtherItemCategory();
+          this.itemModel = ir.getItemModel();
+          this.itemDescription = ir.getItemDescription();
+          this.itemConditionId = ir.getItemConditionId();
+          this.itemCount = ir.getItemCount();
+          this.itemType = ir.getItemType();
+          //    this.comment = ir.getComment();  Later, not in gui yet
+          this.notify = ir.getNotify();
+          getCurrentPicture(iid);
         }
-        
-        if (ubean.getItemId() != null) {
-          if (ubean.getItemId().isEmpty() == false) {
-            iid = ubean.getItemId();
-            ubean.setEditable(0);
-          }
-        }
+      }
+    } else {
+      // itemType was set above...
+      this.itemType = which;
+      this.itemId = null;
+      this.categoryId = -9;
+      this.participant_id = null;
+      this.otherItemCategory = null;
+      this.itemModel = null;
+      this.itemDescription = null;
+      this.itemConditionId = null;
+      this.itemCount = null;
+      this.comment = null;
+      this.dateCreated = null;
+      this.dateUpdated = null;
+      this.dateDeleted = null;
+      this.approved = -9;
+      this.notify = -9;
+      this.whichType = null;
+      this.history_id = null;
+      this.history_which = null;
+      ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
+      setPicture(tmp_picture);
 
-        Map<String, String> params = null;
-        String action = null;
+    }
 
-        try {
-          params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-          action = params.get("action");
-          if (action != null) {
-            if ("item".equals(action)) {
-              ubean.setEditable(1);
-            }
-          }
-        } catch (Exception ex) {
-        }
-
-        if (iid.isEmpty() == false) {
-          result = getCurrentItem(iid, which);
-          if (result != null) {
-            if (result.size() == 1) {
-              Items ir = (Items) result.get(0);
-              setItemId(ir.getItemId());
-              this.participant_id = ir.getParticipant_id();
-              this.categoryId = ir.getCategoryId();
-              this.otherItemCategory = ir.getOtherItemCategory();
-              this.itemModel = ir.getItemModel();
-              this.itemDescription = ir.getItemDescription();
-              this.itemConditionId = ir.getItemConditionId();
-              this.itemCount = ir.getItemCount();
-              this.itemType = ir.getItemType();
-              //    this.comment = ir.getComment();  Later, not in gui yet
-              this.notify = ir.getNotify();
-              getCurrentPicture(iid);
-            }
-          }
-        } else {
-          // itemType was set above...
-          this.itemType = which;
-          this.itemId = null;
-          this.categoryId = -9;
-          this.participant_id = null;
-          this.otherItemCategory = null;
-          this.itemModel = null;
-          this.itemDescription = null;
-          this.itemConditionId = null;
-          this.itemCount = null;
-          this.comment = null;
-          this.dateCreated = null;
-          this.dateUpdated = null;
-          this.dateDeleted = null;
-          this.approved = -9;
-          this.notify = -9;
-          this.whichType = null;
-          this.history_id = null;
-          this.history_which = null;
-          ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
-          setPicture(tmp_picture);
-
-        }
-         
     return "user_item";
   }
 
@@ -1037,11 +1036,19 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (result.size() == 1) {
           LenderTransfer na_lit = (LenderTransfer) result.get(0);
           LenderTransfer new_lt = new LenderTransfer(getId(), iid, ubean.getParticipant_id(),
-                  na_lit.getBorrowerComesToWhichAddress(), na_lit.getMeetBorrowerAtAgreed(),  na_lit.getWillDeliverToBorrower(),
-                  na_lit.getThirdPartyPresence(),  na_lit.getBorrowerThirdPartyChoice(), 
-                  na_lit.getAgreedThirdPartyChoice(), na_lit.getBorrowerReturnsToWhichAddress(), 
-                  na_lit.getWillPickUpPreferredLocation(), na_lit.getLenderThirdPartyChoice(),
-                  na_lit.getBorrowerChoice(), "NA", na_lit.getComment(), new Date(), new Date(), null);
+                  na_lit.getBorrowerComesToWhichAddress(),
+                  na_lit.getMeetBorrowerAtAgreed(),
+                  na_lit.getMeetBorrowerAtAgreedBorrowerChoice(),
+                  na_lit.getMeetBorrowerAtAgreedLenderChoice(),
+                  na_lit.getMeetBorrowerAtAgreedMutual(),
+                  na_lit.getWillDeliverToBorrower(),
+                  na_lit.getThirdPartyPresence(),
+                  na_lit.getThirdPartyPresenceBorrowerChoice(),
+                  na_lit.getThirdPartyPresenceLenderChoice(),
+                  na_lit.getThirdPartyPresenceMutual(),
+                  na_lit.getBorrowerReturnsToWhichAddress(),
+                  na_lit.getWillPickUpPreferredLocation(),
+                  "NA", na_lit.getComment(), new Date(), new Date(), null);
           if (session.isOpen() == false) {
             session = hib_session();
           }
@@ -1212,4 +1219,4 @@ public class ItemBean extends AbstractBean implements Serializable {
   public void setItemImageCaption(String itemImageCaption) {
     this.itemImageCaption = itemImageCaption;
   }
-  }
+}
