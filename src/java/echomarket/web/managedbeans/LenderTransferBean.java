@@ -44,7 +44,6 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   private String remoteIp;
   private String comment;
 
-
   public LenderTransferBean() {
   }
 
@@ -147,7 +146,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("meetBorrowerAtAgreedM")) {
           this.setMeetBorrowerAtAgreedMutual(Integer.valueOf(entry.getValue()));
         }
-        
+
         if (entry.getKey().contains("willDeliverToBorrower")) {
           this.setWillDeliverToBorrower(Integer.valueOf(entry.getValue()));
         }
@@ -163,14 +162,14 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("thirdPartyPresenceM")) {
           this.setThirdPartyPresenceMutual(Integer.valueOf(entry.getValue()));
         }
-       
+
         if (entry.getKey().contains("borrowerReturnsToWhichAddress")) {
           this.setBorrowerReturnsToWhichAddress(Integer.valueOf(entry.getValue()));
         }
         if (entry.getKey().contains("willPickUpPreferredLocation")) {
           this.setWillPickUpPreferredLocation(Integer.valueOf(entry.getValue()));
         }
-       
+
         System.out.println(entry.getKey() + "/" + entry.getValue());
       }
     } catch (Exception ex) {
@@ -178,20 +177,13 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
     if (this.lenderTransferId.isEmpty() == true) {
 
-      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), 
-          this.borrowerComesToWhichAddress, 
-          this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
-          this.willDeliverToBorrower,
-          this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(), 
-                   
-          
-          this.borrowerReturnsToWhichAddress,
-          this.willPickUpPreferredLocation,
-              
-              
-              
-              
-              
+      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(),
+              this.borrowerComesToWhichAddress,
+              this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
+              this.willDeliverToBorrower,
+              this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(),
+              this.borrowerReturnsToWhichAddress,
+              this.willPickUpPreferredLocation,
               "NA", this.getComment(), new Date(), new Date(), null);
 
       try {
@@ -254,14 +246,14 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           }
         } else {
           // Create new record
-         LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), 
-          this.borrowerComesToWhichAddress, 
-          this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
-          this.willDeliverToBorrower,
-          this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(), 
-          this.borrowerReturnsToWhichAddress,
-          this.willPickUpPreferredLocation,
-          "NA", this.getComment(), new Date(), new Date(), null);
+          LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(),
+                  this.borrowerComesToWhichAddress,
+                  this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
+                  this.willDeliverToBorrower,
+                  this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(),
+                  this.borrowerReturnsToWhichAddress,
+                  this.willPickUpPreferredLocation,
+                  "NA", this.getComment(), new Date(), new Date(), null);
           try {
             sb = hib_session();
             tx = sb.beginTransaction();
@@ -388,13 +380,21 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.participant_id = ubean.getParticipant_id();
         this.borrowerComesToWhichAddress = -9;
         this.meetBorrowerAtAgreed = -9;
+        this.meetBorrowerAtAgreedBorrowerChoice = -9;
+        this.meetBorrowerAtAgreedLenderChoice = -9;
+        this.meetBorrowerAtAgreedMutual = -9;
+
         this.willDeliverToBorrower = -9;
         this.thirdPartyPresence = -9;
-
+        this.thirdPartyPresenceBorrowerChoice = -9;
+        this.thirdPartyPresenceLenderChoice = -9;
+        this.thirdPartyPresenceMutual = -9;
+        this.willPickUpPreferredLocation = -9;
+        this.borrowerReturnsToWhichAddress = -9;
         ubean.setEditable(1);
 
       }
-     
+
     }
 
     return "lender_transfer";
@@ -528,9 +528,6 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     this.willPickUpPreferredLocation = willPickUpPreferredLocation;
   }
 
-  
-
-  
   /**
    * @return the remoteIp
    */
@@ -567,7 +564,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @param meetBorrowerAtAgreedLenderChoice the meetBorrowerAtAgreedLenderChoice to set
+   * @param meetBorrowerAtAgreedLenderChoice the
+   * meetBorrowerAtAgreedLenderChoice to set
    */
   public void setMeetBorrowerAtAgreedLenderChoice(Integer meetBorrowerAtAgreedLenderChoice) {
     this.meetBorrowerAtAgreedLenderChoice = meetBorrowerAtAgreedLenderChoice;
@@ -581,7 +579,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @param meetBorrowerAtAgreedBorrowerChoice the meetBorrowerAtAgreedBorrowerChoice to set
+   * @param meetBorrowerAtAgreedBorrowerChoice the
+   * meetBorrowerAtAgreedBorrowerChoice to set
    */
   public void setMeetBorrowerAtAgreedBorrowerChoice(Integer meetBorrowerAtAgreedBorrowerChoice) {
     this.meetBorrowerAtAgreedBorrowerChoice = meetBorrowerAtAgreedBorrowerChoice;
@@ -609,7 +608,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @param thirdPartyPresenceLenderChoice the thirdPartyPresenceLenderChoice to set
+   * @param thirdPartyPresenceLenderChoice the thirdPartyPresenceLenderChoice to
+   * set
    */
   public void setThirdPartyPresenceLenderChoice(Integer thirdPartyPresenceLenderChoice) {
     this.thirdPartyPresenceLenderChoice = thirdPartyPresenceLenderChoice;
@@ -623,7 +623,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @param thirdPartyPresenceBorrowerChoice the thirdPartyPresenceBorrowerChoice to set
+   * @param thirdPartyPresenceBorrowerChoice the
+   * thirdPartyPresenceBorrowerChoice to set
    */
   public void setThirdPartyPresenceBorrowerChoice(Integer thirdPartyPresenceBorrowerChoice) {
     this.thirdPartyPresenceBorrowerChoice = thirdPartyPresenceBorrowerChoice;
@@ -643,5 +644,4 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     this.thirdPartyPresenceMutual = thirdPartyPresenceMutual;
   }
 
-  
 }
