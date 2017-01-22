@@ -19,17 +19,21 @@
     <h:head>
       <c:set var="lt_data"  value="#{readOnlyBean.getLenderTransferData(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
       <c:forEach items="#{lt_data}"  var="lit" >
-        <c:set var="line1" value="#{lit.meetBorrowerAtAgreedL2b}" />
-        <c:set var="line2" value="#{lit.willDeliverToBorrower}" />
-        <c:set var="line3" value="#{lit.thirdPartyPresenceL2b}" />
-        <c:set var="line4" value="#{lit.lenderThirdPartyChoiceL2b}" />
-        <c:set var="line5" value="#{lit.agreedThirdPartyChoiceL2b}" />
-        <c:set var="line6"  value="#{lit.borrowerReturnsToWhichAddress}" /> 
-        <c:set var="line7"  value="#{lit.meetBorrowerAtAgreedB2l}" />  
-        <c:set var="Line8" value="#{lit.willPickUpPreferredLocationB2l}" />
-        <c:set var="Line9" value="#{lit.thirdPartyPresenceB2l}" />
-        <c:set var="line10"  value="#{lit.lenderThirdPartyChoiceB2l}" />
-        <c:set var="line11" value="#{lit.agreedThirdPartyChoiceB2l}" />
+        <c:set var="line1" value="#{lit.borrowerComesToWhichAddress}" />
+        <c:set var="line2" value="#{lit.meetBorrowerAtAgreed}" />
+        <c:set var="line3" value="#{lit.meetBorrowerAtAgreedLenderChoice}" />
+        <c:set var="line4" value="#{lit.meetBorrowerAtAgreedBorrowerChoice}" />
+        <c:set var="line5" value="#{lit.meetBorrowerAtAgreedMutual}" />
+        <c:set var="line6" value="#{lit.willDeliverToBorrower}" />
+        <c:set var="line7" value="#{lit.thirdPartyPresence}" />
+        <c:set var="line8" value="#{lit.thirdPartyPresenceLenderChoice}" />
+        <c:set var="line9" value="#{lit.thirdPartyPresenceBorrowerChoice}" />
+        <c:set var="line10" value="#{lit.thirdPartyPresenceMutual}" />
+        <c:set var="line11" value="#{lit.borrowerReturnsToWhichAddress}" />
+        <c:set var="line12" value="#{lit.willPickPreferredLocation}" />
+    
+        
+   
       </c:forEach>
 
       <c:set value="#{readOnlyBean.getBorrowerComesToAlternativeAddress()}"   var="aa_data" /> 
