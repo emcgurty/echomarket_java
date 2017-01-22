@@ -628,6 +628,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
     }
     return return_string + "?faces-redirect=true";   /// need to stop forwarding from index
+//    return return_string;   /// need to stop forwarding from index
   }
 
   private String findWhatIsComplete() {
