@@ -100,7 +100,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx.commit();
 
     } catch (Exception e) {
-      System.out.println("Error in getLenderTransferData in ReadnNlyBean");
+      System.out.println("Error in getLenderTransferData in ReadOnlyBean");
       Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
       tx.rollback();
 
