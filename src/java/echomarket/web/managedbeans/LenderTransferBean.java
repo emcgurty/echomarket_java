@@ -2,13 +2,15 @@ package echomarket.web.managedbeans;
 
 import echomarket.hibernate.LenderTransfer;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -18,7 +20,7 @@ import org.hibernate.Transaction;
 
 @Named
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class LenderTransferBean extends AbstractBean implements Serializable {
 
   @Inject
@@ -28,16 +30,20 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   private String participant_id;
   private Integer borrowerComesToWhichAddress;
   private Integer meetBorrowerAtAgreed;
+  private Integer meetBorrowerAtAgreedLenderChoice;
+  private Integer meetBorrowerAtAgreedBorrowerChoice;
+  private Integer meetBorrowerAtAgreedMutual;
   private Integer willDeliverToBorrower;
   private Integer thirdPartyPresence;
-  private Integer borrowerThirdPartyChoice;
-  private Integer agreedThirdPartyChoice;
+  private Integer thirdPartyPresenceLenderChoice;
+  private Integer thirdPartyPresenceBorrowerChoice;
+  private Integer thirdPartyPresenceMutual;
   private Integer borrowerReturnsToWhichAddress;
   private Integer willPickUpPreferredLocation;
-  private Integer lenderThirdPartyChoice;
-  private Integer borrowerChoice;
+
   private String remoteIp;
   private String comment;
+
 
   public LenderTransferBean() {
   }
@@ -60,7 +66,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
               .list();
       tx.commit();
     } catch (Exception e) {
-      System.out.println("Error in getCurrentCP");
+      System.out.println("Error in getCurrentLT");
       e.printStackTrace();
       tx.rollback();
       return null;
@@ -122,10 +128,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       ubean.setItemId(currentIid);
       this.itemId = currentIid;
       for (Map.Entry<String, String> entry : params.entrySet()) {
-//        if (entry.getKey().contains("itemId")) {
-//          this.itemId = entry.getValue();
-//          ubean.setItemId(this.itemId);
-//        }
+
         if (entry.getKey().contains("lenderTransferId")) {
           this.lenderTransferId = entry.getValue();
         }
@@ -135,30 +138,39 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("meetBorrowerAtAgreed")) {
           this.setMeetBorrowerAtAgreed(Integer.valueOf(entry.getValue()));
         }
-          if (entry.getKey().contains("willDeliverToBorrower")) {
-            this.setWillDeliverToBorrower(Integer.valueOf(entry.getValue()));
+        if (entry.getKey().contains("meetBorrowerAtAgreedB")) {
+          this.setMeetBorrowerAtAgreedBorrowerChoice(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("meetBorrowerAtAgreedL")) {
+          this.setMeetBorrowerAtAgreedLenderChoice(Integer.valueOf(entry.getValue()));
+        }
+        if (entry.getKey().contains("meetBorrowerAtAgreedM")) {
+          this.setMeetBorrowerAtAgreedMutual(Integer.valueOf(entry.getValue()));
+        }
+        
+        if (entry.getKey().contains("willDeliverToBorrower")) {
+          this.setWillDeliverToBorrower(Integer.valueOf(entry.getValue()));
         }
         if (entry.getKey().contains("thirdPartyPresence")) {
           this.setThirdPartyPresence(Integer.valueOf(entry.getValue()));
         }
-        if (entry.getKey().contains("borrowerThirdPartyChoice")) {
-          this.setBorrowerThirdPartyChoice(Integer.valueOf(entry.getValue()));
+        if (entry.getKey().contains("thirdPartyPresenceB")) {
+          this.setThirdPartyPresenceBorrowerChoice(Integer.valueOf(entry.getValue()));
         }
-        if (entry.getKey().contains("agreedThirdPartyChoice")) {
-          this.setAgreedThirdPartyChoice(Integer.valueOf(entry.getValue()));
+        if (entry.getKey().contains("thirdPartyPresenceL")) {
+          this.setThirdPartyPresenceLenderChoice(Integer.valueOf(entry.getValue()));
         }
+        if (entry.getKey().contains("thirdPartyPresenceM")) {
+          this.setThirdPartyPresenceMutual(Integer.valueOf(entry.getValue()));
+        }
+       
         if (entry.getKey().contains("borrowerReturnsToWhichAddress")) {
           this.setBorrowerReturnsToWhichAddress(Integer.valueOf(entry.getValue()));
         }
         if (entry.getKey().contains("willPickUpPreferredLocation")) {
           this.setWillPickUpPreferredLocation(Integer.valueOf(entry.getValue()));
         }
-        if (entry.getKey().contains("lenderThirdPartyChoice")) {
-          this.setLenderThirdPartyChoice(Integer.valueOf(entry.getValue()));
-        }
-        if (entry.getKey().contains("borrowerChoice")) {
-          this.setBorrowerChoice(Integer.valueOf(entry.getValue()));
-        }
+       
         System.out.println(entry.getKey() + "/" + entry.getValue());
       }
     } catch (Exception ex) {
@@ -166,7 +178,21 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
     if (this.lenderTransferId.isEmpty() == true) {
 
-      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.getMeetBorrowerAtAgreed(), this.getWillDeliverToBorrower(), this.getThirdPartyPresence(), this.getBorrowerThirdPartyChoice(), this.getAgreedThirdPartyChoice(), this.getBorrowerReturnsToWhichAddress(), this.getWillPickUpPreferredLocation(), this.getLenderThirdPartyChoice(), this.getBorrowerChoice(), "NA", this.getComment(), new Date(), new Date(), null);
+      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), 
+          this.borrowerComesToWhichAddress, 
+          this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
+          this.willDeliverToBorrower,
+          this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(), 
+                   
+          
+          this.borrowerReturnsToWhichAddress,
+          this.willPickUpPreferredLocation,
+              
+              
+              
+              
+              
+              "NA", this.getComment(), new Date(), new Date(), null);
 
       try {
         sb = hib_session();
@@ -197,19 +223,17 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           LenderTransfer lit = (LenderTransfer) cp_list.get(0);
           lit.setItemId(ubean.getItemId());
           lit.setBorrowerComesToWhichAddress(this.borrowerComesToWhichAddress);
-          lit.setMeetBorrowerAtAgreed(this.getMeetBorrowerAtAgreed());
-          
+          lit.setMeetBorrowerAtAgreed(this.meetBorrowerAtAgreed);
+          lit.setMeetBorrowerAtAgreedBorrowerChoice(this.getMeetBorrowerAtAgreedBorrowerChoice());
+          lit.setMeetBorrowerAtAgreedLenderChoice(this.getMeetBorrowerAtAgreedLenderChoice());
+          lit.setMeetBorrowerAtAgreedMutual(this.getMeetBorrowerAtAgreedMutual());
           lit.setWillDeliverToBorrower(this.getWillDeliverToBorrower());
           lit.setThirdPartyPresence(this.getThirdPartyPresence());
-
-          lit.setBorrowerThirdPartyChoice(this.getBorrowerThirdPartyChoice());
-          lit.setAgreedThirdPartyChoice(this.getAgreedThirdPartyChoice());
-
+          lit.setThirdPartyPresenceBorrowerChoice(this.getThirdPartyPresenceBorrowerChoice());
+          lit.setThirdPartyPresenceLenderChoice(this.getThirdPartyPresenceLenderChoice());
+          lit.setThirdPartyPresenceMutual(this.getThirdPartyPresenceMutual());
           lit.setBorrowerReturnsToWhichAddress(this.getBorrowerReturnsToWhichAddress());
           lit.setWillPickUpPreferredLocation(this.getWillPickUpPreferredLocation());
-          lit.setLenderThirdPartyChoice(this.getLenderThirdPartyChoice());
-
-          lit.setBorrowerChoice(this.getBorrowerChoice());
           lit.setDateUpdated(new Date());
 
           sb = hib_session();
@@ -218,7 +242,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             sb.update(lit);
             tx.commit();
             successTransaction = true;
-            message(null, "CPUpdated", null);
+            message(null, "LITupdated", null);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update LIT");
@@ -230,7 +254,14 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           }
         } else {
           // Create new record
-          LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), this.borrowerComesToWhichAddress, this.getMeetBorrowerAtAgreed(), this.getWillDeliverToBorrower(), this.getThirdPartyPresence(), this.getBorrowerThirdPartyChoice(), this.getAgreedThirdPartyChoice(), this.getBorrowerReturnsToWhichAddress(), this.getWillPickUpPreferredLocation(), this.getLenderThirdPartyChoice(), this.getBorrowerChoice(), "NA", this.getComment(), new Date(), new Date(), null);
+         LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(), 
+          this.borrowerComesToWhichAddress, 
+          this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
+          this.willDeliverToBorrower,
+          this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(), 
+          this.borrowerReturnsToWhichAddress,
+          this.willPickUpPreferredLocation,
+          "NA", this.getComment(), new Date(), new Date(), null);
           try {
             sb = hib_session();
             tx = sb.beginTransaction();
@@ -265,12 +296,13 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       ubean.setLITid(false);
     }
 
-   // return load_ud(ubean.getParticipant_id()) + "?faces-redirect=true";
-   return "lender_transfer.xhtml?faces-redirect=true";
+    return load_ud(ubean.getParticipant_id());
+//   return "lender_transfer.xhtml?faces-redirect=true";
+//   return "lender_transfer";
 
   }
 
-  public List load_ud(String pid) {
+  public String load_ud(String pid) {
 
     List result = null;
     Map<String, String> params = null;
@@ -321,9 +353,9 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         isLITnull = true;
       }
     }
-    
+
     if (isLITnull == true) {
-           result = getCurrentLT(pid);
+      result = getCurrentLT(pid);
     }
 
     if (result != null) {
@@ -335,28 +367,37 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           this.itemId = ltr.getItemId();
           this.participant_id = ltr.getParticipant_id();
           this.borrowerComesToWhichAddress = ltr.getBorrowerComesToWhichAddress();
-          this.setMeetBorrowerAtAgreed(ltr.getMeetBorrowerAtAgreed());
+          this.meetBorrowerAtAgreed = (ltr.getMeetBorrowerAtAgreed());
+          this.meetBorrowerAtAgreedBorrowerChoice = (ltr.getMeetBorrowerAtAgreedBorrowerChoice());
+          this.meetBorrowerAtAgreedLenderChoice = (ltr.getMeetBorrowerAtAgreedLenderChoice());
+          this.meetBorrowerAtAgreedMutual = (ltr.getMeetBorrowerAtAgreedMutual());
 
-          this.setWillDeliverToBorrower(ltr.getWillDeliverToBorrower());
-          this.setThirdPartyPresence(ltr.getThirdPartyPresence());
+          this.willDeliverToBorrower = (ltr.getWillDeliverToBorrower());
 
-          this.setBorrowerThirdPartyChoice(ltr.getBorrowerThirdPartyChoice());
-          this.setAgreedThirdPartyChoice(ltr.getAgreedThirdPartyChoice());
+          this.thirdPartyPresence = (ltr.getThirdPartyPresence());
+          this.thirdPartyPresenceBorrowerChoice = (ltr.getThirdPartyPresenceBorrowerChoice());
+          this.thirdPartyPresenceLenderChoice = (ltr.getThirdPartyPresenceLenderChoice());
+          this.thirdPartyPresenceMutual = (ltr.getThirdPartyPresenceMutual());
 
-          this.setBorrowerReturnsToWhichAddress(ltr.getBorrowerReturnsToWhichAddress());
-          this.setWillPickUpPreferredLocation(ltr.getWillPickUpPreferredLocation());
-          this.setLenderThirdPartyChoice(ltr.getLenderThirdPartyChoice());
+          this.borrowerReturnsToWhichAddress = (ltr.getBorrowerReturnsToWhichAddress());
+          this.willPickUpPreferredLocation = (ltr.getWillPickUpPreferredLocation());
 
-          this.setBorrowerChoice(ltr.getBorrowerChoice());
           ltr = null;
         }
+      } else {
+        this.participant_id = ubean.getParticipant_id();
+        this.borrowerComesToWhichAddress = -9;
+        this.meetBorrowerAtAgreed = -9;
+        this.willDeliverToBorrower = -9;
+        this.thirdPartyPresence = -9;
+
+        ubean.setEditable(1);
+
       }
+     
     }
-    //  result = null;
-//  emm true
-//    return "lender_transfer?faces-redirect=true";
-//    return "lender_transfer";
-    return result;
+
+    return "lender_transfer";
   }
 
   /**
@@ -459,34 +500,6 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @return the borrowerThirdPartyChoice
-   */
-  public Integer getBorrowerThirdPartyChoice() {
-    return borrowerThirdPartyChoice;
-  }
-
-  /**
-   * @param borrowerThirdPartyChoice the borrowerThirdPartyChoice to set
-   */
-  public void setBorrowerThirdPartyChoice(Integer borrowerThirdPartyChoice) {
-    this.borrowerThirdPartyChoice = borrowerThirdPartyChoice;
-  }
-
-  /**
-   * @return the agreedThirdPartyChoice
-   */
-  public Integer getAgreedThirdPartyChoice() {
-    return agreedThirdPartyChoice;
-  }
-
-  /**
-   * @param agreedThirdPartyChoice the agreedThirdPartyChoice to set
-   */
-  public void setAgreedThirdPartyChoice(Integer agreedThirdPartyChoice) {
-    this.agreedThirdPartyChoice = agreedThirdPartyChoice;
-  }
-
-  /**
    * @return the borrowerReturnsToWhichAddress
    */
   public Integer getBorrowerReturnsToWhichAddress() {
@@ -494,7 +507,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   }
 
   /**
-   * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to set
+   * @param borrowerReturnsToWhichAddress the borrowerReturnsToWhichAddress to
+   * set
    */
   public void setBorrowerReturnsToWhichAddress(Integer borrowerReturnsToWhichAddress) {
     this.borrowerReturnsToWhichAddress = borrowerReturnsToWhichAddress;
@@ -514,34 +528,9 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     this.willPickUpPreferredLocation = willPickUpPreferredLocation;
   }
 
-  /**
-   * @return the lenderThirdPartyChoice
-   */
-  public Integer getLenderThirdPartyChoice() {
-    return lenderThirdPartyChoice;
-  }
+  
 
-  /**
-   * @param lenderThirdPartyChoice the lenderThirdPartyChoice to set
-   */
-  public void setLenderThirdPartyChoice(Integer lenderThirdPartyChoice) {
-    this.lenderThirdPartyChoice = lenderThirdPartyChoice;
-  }
-
-  /**
-   * @return the borrowerChoice
-   */
-  public Integer getBorrowerChoice() {
-    return borrowerChoice;
-  }
-
-  /**
-   * @param borrowerChoice the borrowerChoice to set
-   */
-  public void setBorrowerChoice(Integer borrowerChoice) {
-    this.borrowerChoice = borrowerChoice;
-  }
-
+  
   /**
    * @return the remoteIp
    */
@@ -568,6 +557,90 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
    */
   public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  /**
+   * @return the meetBorrowerAtAgreedLenderChoice
+   */
+  public Integer getMeetBorrowerAtAgreedLenderChoice() {
+    return meetBorrowerAtAgreedLenderChoice;
+  }
+
+  /**
+   * @param meetBorrowerAtAgreedLenderChoice the meetBorrowerAtAgreedLenderChoice to set
+   */
+  public void setMeetBorrowerAtAgreedLenderChoice(Integer meetBorrowerAtAgreedLenderChoice) {
+    this.meetBorrowerAtAgreedLenderChoice = meetBorrowerAtAgreedLenderChoice;
+  }
+
+  /**
+   * @return the meetBorrowerAtAgreedBorrowerChoice
+   */
+  public Integer getMeetBorrowerAtAgreedBorrowerChoice() {
+    return meetBorrowerAtAgreedBorrowerChoice;
+  }
+
+  /**
+   * @param meetBorrowerAtAgreedBorrowerChoice the meetBorrowerAtAgreedBorrowerChoice to set
+   */
+  public void setMeetBorrowerAtAgreedBorrowerChoice(Integer meetBorrowerAtAgreedBorrowerChoice) {
+    this.meetBorrowerAtAgreedBorrowerChoice = meetBorrowerAtAgreedBorrowerChoice;
+  }
+
+  /**
+   * @return the meetBorrowerAtAgreedMutual
+   */
+  public Integer getMeetBorrowerAtAgreedMutual() {
+    return meetBorrowerAtAgreedMutual;
+  }
+
+  /**
+   * @param meetBorrowerAtAgreedMutual the meetBorrowerAtAgreedMutual to set
+   */
+  public void setMeetBorrowerAtAgreedMutual(Integer meetBorrowerAtAgreedMutual) {
+    this.meetBorrowerAtAgreedMutual = meetBorrowerAtAgreedMutual;
+  }
+
+  /**
+   * @return the thirdPartyPresenceLenderChoice
+   */
+  public Integer getThirdPartyPresenceLenderChoice() {
+    return thirdPartyPresenceLenderChoice;
+  }
+
+  /**
+   * @param thirdPartyPresenceLenderChoice the thirdPartyPresenceLenderChoice to set
+   */
+  public void setThirdPartyPresenceLenderChoice(Integer thirdPartyPresenceLenderChoice) {
+    this.thirdPartyPresenceLenderChoice = thirdPartyPresenceLenderChoice;
+  }
+
+  /**
+   * @return the thirdPartyPresenceBorrowerChoice
+   */
+  public Integer getThirdPartyPresenceBorrowerChoice() {
+    return thirdPartyPresenceBorrowerChoice;
+  }
+
+  /**
+   * @param thirdPartyPresenceBorrowerChoice the thirdPartyPresenceBorrowerChoice to set
+   */
+  public void setThirdPartyPresenceBorrowerChoice(Integer thirdPartyPresenceBorrowerChoice) {
+    this.thirdPartyPresenceBorrowerChoice = thirdPartyPresenceBorrowerChoice;
+  }
+
+  /**
+   * @return the thirdPartyPresenceMutual
+   */
+  public Integer getThirdPartyPresenceMutual() {
+    return thirdPartyPresenceMutual;
+  }
+
+  /**
+   * @param thirdPartyPresenceMutual the thirdPartyPresenceMutual to set
+   */
+  public void setThirdPartyPresenceMutual(Integer thirdPartyPresenceMutual) {
+    this.thirdPartyPresenceMutual = thirdPartyPresenceMutual;
   }
 
   
