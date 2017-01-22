@@ -3,61 +3,69 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 29, 2016 11:54:07 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="echomarket.hibernate.LenderTransfer" table="lender_transfer" catalog="echomarket" optimistic-lock="version">
-        <id name="lenderTransferId" type="string">
-            <column name="lender_transfer_id" length="40" />
-            <generator class="assigned" />
-        </id>
-        <property name="itemId" type="string">
-            <column name="item_id" length="40"  />
-        </property>
-        <property name="participant_id" type="string">
-            <column name="participant_id" length="40" />
-        </property>
-        <property name="borrowerComesToWhichAddress" type="java.lang.Integer">
-            <column name="borrower_comes_to_which_address" />
-        </property>
-        <property name="meetBorrowerAtAgreed" type="java.lang.Integer">
-            <column name="meetBorrowerAtAgreed" />
-        </property>
-        <property name="willDeliverToBorrower" type="java.lang.Integer">
-            <column name="will_deliver_to_borrower" />
-        </property>
-        <property name="thirdPartyPresence" type="java.lang.Integer">
-            <column name="thirdPartyPresence" />
-        </property>
-         <property name="borrowerThirdPartyChoice" type="java.lang.Integer">
-            <column name="borrower_third_party_choice" />
-        </property>
-        <property name="agreedThirdPartyChoice" type="java.lang.Integer">
-            <column name="agreedThirdPartyChoice" />
-        </property>
-        <property name="borrowerReturnsToWhichAddress" type="java.lang.Integer">
-            <column name="borrower_returns_to_which_address" />
-        </property>
-        <property name="willPickUpPreferredLocation" type="java.lang.Integer">
-            <column name="willPickUpPreferredLocation" />
-        </property>
-        <property name="lenderThirdPartyChoice" type="java.lang.Integer">
-            <column name="lenderThirdPartyChoice" />
-        </property>
-        <property name="borrowerChoice" type="java.lang.Integer">
-            <column name="borrower_choice" />
-        </property>
-        <property name="remoteIp" type="string">
-            <column name="remote_ip" length="50" />
-        </property>
-        <property name="comment" type="string">
-            <column name="comment" />
-        </property>
-        <property name="dateCreated" type="timestamp">
-            <column name="date_created" length="19" not-null="true" />
-        </property>
-        <property name="dateUpdated" type="timestamp">
-            <column name="date_updated" length="19" not-null="true" />
-        </property>
-        <property name="dateDeleted" type="timestamp">
-            <column name="date_deleted" length="19" not-null="true" />
-        </property>
-    </class>
+  <class name="echomarket.hibernate.LenderTransfer" table="lender_transfer" catalog="echomarket" optimistic-lock="version">
+    <id name="lenderTransferId" type="string">
+      <column name="lender_transfer_id" length="40" />
+      <generator class="assigned" />
+    </id>
+    <property name="itemId" type="string">
+      <column name="item_id" length="40"  />
+    </property>
+    <property name="participant_id" type="string">
+      <column name="participant_id" length="40" />
+    </property>
+    <property name="borrowerComesToWhichAddress" type="java.lang.Integer">
+      <column name="borrower_comes_to_which_address" />
+    </property>
+    <property name="meetBorrowerAtAgreed" type="java.lang.Integer">
+      <column name="meetBorrowerAtAgreed" />
+    </property>
+    <property name="meetBorrowerAtAgreedLenderChoice" type="java.lang.Integer">
+      <column name="meetBorrowerAtAgreedLenderChoice" />
+    </property>
+    <property name="meetBorrowerAtAgreedBorrowerChoice" type="java.lang.Integer">
+      <column name="meetBorrowerAtAgreedBorrowerChoice" />
+    </property>
+    <property name="meetBorrowerAtAgreedMutual" type="java.lang.Integer">
+      <column name="meetBorrowerAtAgreedMutual" />
+    </property>
+        
+        
+    <property name="willDeliverToBorrower" type="java.lang.Integer">
+      <column name="will_deliver_to_borrower" />
+    </property>
+    <property name="thirdPartyPresence" type="java.lang.Integer">
+      <column name="thirdPartyPresence" />
+    </property>
+    <property name="thirdPartyPresenceLenderChoice" type="java.lang.Integer">
+      <column name="thirdPartyPresenceLenderChoice" />
+    </property>
+    <property name="thirdPartyPresenceBorrowerChoice" type="java.lang.Integer">
+      <column name="thirdPartyPresenceBorrowerChoice" />
+    </property>
+    <property name="thirdPartyPresenceMutual" type="java.lang.Integer">
+      <column name="thirdPartyPresenceMutual" />
+    </property>
+    <property name="borrowerReturnsToWhichAddress" type="java.lang.Integer">
+      <column name="borrower_returns_to_which_address" />
+    </property>
+    <property name="willPickUpPreferredLocation" type="java.lang.Integer">
+      <column name="willPickUpPreferredLocation" />
+    </property>
+    <property name="remoteIp" type="string">
+      <column name="remote_ip" length="50" />
+    </property>
+    <property name="comment" type="string">
+      <column name="comment" />
+    </property>
+    <property name="dateCreated" type="timestamp">
+      <column name="date_created" length="19" not-null="true" />
+    </property>
+    <property name="dateUpdated" type="timestamp">
+      <column name="date_updated" length="19" not-null="true" />
+    </property>
+    <property name="dateDeleted" type="timestamp">
+      <column name="date_deleted" length="19" not-null="true" />
+    </property>
+  </class>
 </hibernate-mapping>
