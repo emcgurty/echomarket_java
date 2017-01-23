@@ -134,7 +134,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("borrowerComesToWhichAddress")) {
           this.borrowerComesToWhichAddress = Integer.valueOf(entry.getValue());
         }
-        if (entry.getKey().contains("meetBorrowerAtAgreed")) {
+        if ("personal_information:meetBorrowerAtAgreed".equals(entry.getKey())) {
           this.setMeetBorrowerAtAgreed(Integer.valueOf(entry.getValue()));
         }
         if (entry.getKey().contains("meetBorrowerAtAgreedB")) {
@@ -150,7 +150,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("willDeliverToBorrower")) {
           this.setWillDeliverToBorrower(Integer.valueOf(entry.getValue()));
         }
-        if (entry.getKey().contains("thirdPartyPresence")) {
+        if ("personal_information:thirdPartyPresence".equals(entry.getKey())) {
           this.setThirdPartyPresence(Integer.valueOf(entry.getValue()));
         }
         if (entry.getKey().contains("thirdPartyPresenceB")) {
@@ -169,10 +169,29 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("willPickUpPreferredLocation")) {
           this.setWillPickUpPreferredLocation(Integer.valueOf(entry.getValue()));
         }
+        if (entry.getKey().contains("comment")) {
+          this.setComment(entry.getValue());
+        }
 
         System.out.println(entry.getKey() + "/" + entry.getValue());
       }
     } catch (Exception ex) {
+    }
+
+    if (this.thirdPartyPresence != null) {
+      if (this.thirdPartyPresence == 0) {
+        this.thirdPartyPresenceBorrowerChoice = -9;
+        this.thirdPartyPresenceLenderChoice = -9;
+        this.thirdPartyPresenceMutual = -9;
+      }
+    }
+    
+     if (this.meetBorrowerAtAgreed != null) {
+      if (this.meetBorrowerAtAgreed == 0) {
+        this.meetBorrowerAtAgreedBorrowerChoice = -9;
+        this.meetBorrowerAtAgreedLenderChoice = -9;
+        this.meetBorrowerAtAgreedMutual = -9;
+      }
     }
 
     if (this.lenderTransferId.isEmpty() == true) {
@@ -184,7 +203,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
               this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(),
               this.borrowerReturnsToWhichAddress,
               this.willPickUpPreferredLocation,
-              "NA", this.getComment(), new Date(), new Date(), null);
+              "NA", this.comment, new Date(), new Date(), null);
 
       try {
         sb = hib_session();
@@ -226,6 +245,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           lit.setThirdPartyPresenceMutual(this.getThirdPartyPresenceMutual());
           lit.setBorrowerReturnsToWhichAddress(this.getBorrowerReturnsToWhichAddress());
           lit.setWillPickUpPreferredLocation(this.getWillPickUpPreferredLocation());
+          lit.setComment(this.getComment());
           lit.setDateUpdated(new Date());
 
           sb = hib_session();
@@ -253,7 +273,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
                   this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(),
                   this.borrowerReturnsToWhichAddress,
                   this.willPickUpPreferredLocation,
-                  "NA", this.getComment(), new Date(), new Date(), null);
+                  "NA", this.comment, new Date(), new Date(), null);
           try {
             sb = hib_session();
             tx = sb.beginTransaction();
@@ -373,6 +393,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
           this.borrowerReturnsToWhichAddress = (ltr.getBorrowerReturnsToWhichAddress());
           this.willPickUpPreferredLocation = (ltr.getWillPickUpPreferredLocation());
+          this.comment = (ltr.getComment());
 
           ltr = null;
         }
