@@ -31,28 +31,28 @@
         <c:set var="line10" value="#{lit.thirdPartyPresenceMutual}" />
         <c:set var="line11" value="#{lit.borrowerReturnsToWhichAddress}" />
         <c:set var="line12" value="#{lit.willPickPreferredLocation}" />
-    
-        
-   
+
+
+
       </c:forEach>
 
       <c:set value="#{readOnlyBean.getBorrowerComesToAlternativeAddress()}"   var="aa_data" /> 
       <c:set value="#{readOnlyBean.getBorrowerComesToPrimaryAddress()}"   var="pa_data" /> 
-         <c:choose>
-          <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) gt 0)}" > 
-            <c:set var="table1" value="Come to Address #1" />
-            <c:set var="table2" value="or Address #2" />
-          </c:when>
-          <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) eq 0)}" > 
-            <c:set var="table1" value="Come to Address #1" />
-            <c:set var="table2" value="" />
-          </c:when>
-          <c:when test="#{(fn:length(pa_data) eq 0) and (fn:length(aa_data) gt 0)}" > 
-            <c:set var="table1" value="" />
-            <c:set var="table2" value="Come to Address #1" />
-          </c:when>
-        </c:choose>
-      
+      <c:choose>
+        <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) gt 0)}" > 
+          <c:set var="table1" value="Come to Address #1" />
+          <c:set var="table2" value="or Address #2" />
+        </c:when>
+        <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) eq 0)}" > 
+          <c:set var="table1" value="Come to Address #1" />
+          <c:set var="table2" value="" />
+        </c:when>
+        <c:when test="#{(fn:length(pa_data) eq 0) and (fn:length(aa_data) gt 0)}" > 
+          <c:set var="table1" value="" />
+          <c:set var="table2" value="Come to Address #1" />
+        </c:when>
+      </c:choose>
+
     </h:head>
 
     <div  class="div_p"  >
@@ -68,7 +68,7 @@
     </div>
 
     <div style="margin-left:25px;margin-top:5px;float:left;">
-      
+
       <h:dataTable value="#{pa_data}" var="pa" rendered="${fn:length(pa_data) > 0}" >    
         <h:column rowHeader="">
           <div  class="div_p"  >
@@ -124,10 +124,10 @@
               </tr>
             </table>
           </div>
-         
+
         </h:column>
       </h:dataTable>
- <br />
+      <br />
     </div>
 
     <div style="margin-left:25px;margin-top:5px;float:left;">
@@ -188,28 +188,43 @@
               </tr>
             </table>
           </div>
-        
+
         </h:column>
       </h:dataTable>
-  <br />
+      <br />
     </div>
 
     <div id="form_lender_to_borrower" class="contact_information" style="margin-left:10px;">
       <c:choose>
-        <c:when test="#{(!empty line1) and (line1 == 1)}" >
+        <c:when test="#{(!empty line2) and (line2 == 1)}" >
           <h:outputText value="Lender will meet with borrower at an agreed location" class="RO_text"   />
+        </c:when>
+      </c:choose>
+      <c:choose>
+        <c:when test="#{(!empty line3) and (line3 == 1)}" >
+          <h:outputText value="Lender's choice of agreed location" class="RO_text"   />
+        </c:when>
+      </c:choose>
+      <c:choose>
+        <c:when test="#{(!empty line4) and (line4 == 1)}" >
+          <h:outputText value="Borrower's choice of agreed location" class="RO_text"   />
+        </c:when>
+      </c:choose>
+      <c:choose>
+        <c:when test="#{(!empty line5) and (line5 == 1)}" >
+          <h:outputText value="Mutual choice of agreed location" class="RO_text"   />
         </c:when>
       </c:choose>
 
       <c:choose>
-        <c:when test="#{(!empty line2) and (line2 == 1)}" >
+        <c:when test="#{(!empty line6) and (line6 == 1)}" >
           <br />
           <h:outputText value="Lender will deliver to borrower preferred location." class="RO_text"  />
         </c:when>
       </c:choose>
 
       <c:choose>
-        <c:when test="#{(!empty line3) and (line3 == 1)}" >
+        <c:when test="#{(!empty line7) and (line7 == 1)}" >
           <br />
           <h:outputText value="Lender would like a third-party present during transfer to borrower." class="RO_text"  />
         </c:when>
@@ -217,82 +232,35 @@
 
 
       <c:choose>
-        <c:when test="#{(!empty line4) and (line4 == 1)}" >
+        <c:when test="#{(!empty line8) and (line8 == 1)}" >
           <br />
-          <h:outputText value="Lender will choose third-party during transfer." class="RO_text"  />
+          <h:outputText value="Lender's choice of third-party presence" class="RO_text"  />
         </c:when>
       </c:choose>
-
-
       <c:choose>
-        <c:when test="#{(!empty line5) and (line5 == 1)}" >
+        <c:when test="#{(!empty line9) and (line9 == 1)}" >
           <br />
-          <h:outputText value="Choice of third-party present during transfer by mutual agreement." class="RO_text"  />
+          <h:outputText value="Borrower's choice of third-party presence" class="RO_text"  />
         </c:when>
       </c:choose>
-
-
-      <div  class="div_p"  >
-        <div style="margin-top:10px;" >
-          <h:outputText value="How the lender would like the borrower to return his/her item:" rendered="#{(!empty line6) or (!empty line7) or (!empty line8) or (!empty line9) or (!empty line10) or (!empty line11) }"  />
-        </div>
-      </div>
-
       <c:choose>
-        <c:when test="#{(!empty line6) and (line6 gt 0)}" >
+        <c:when test="#{(!empty line10) and (line10 == 1)}" >
           <br />
-          <h:outputLabel value="Borrower returns to lender's address:"  >
-            <h:outputText    value="Yes" class="RO_text" />
-          </h:outputLabel>
-        </c:when>
-      </c:choose>
-
-
-      <c:choose>
-        <c:when test="#{(!empty line7) and(line7 == 1)}" >
-          <br />
-          <h:outputText value="Lender wants to meet borrower at an agreed location" class="RO_text"  />
-        </c:when>
-      </c:choose>
-
-
-      <c:choose>
-        <c:when test="#{(!empty line8) and (line8 gt -1)}" >
-          <br />
-          <h:outputLabel value="Lender will pick up at borrower's location?:"    >
-            <h:outputText    value="No" class="RO_text" rendered="#{line8 == 0}"/>
-            <h:outputText    value="Yes" class="RO_text" rendered="#{line8 == 1}"/>
-          </h:outputLabel>                        
+          <h:outputText value="Mutual agreement of third-party presence" class="RO_text"  />
         </c:when>
       </c:choose>
 
       <c:choose>
-        <c:when test="#{(!empty line9) and (line9 gt -1)}" >
+        <c:when test="#{(!empty line11) and (line11 gt 0)}" >
           <br />
-          <h:outputLabel value="Lender would like a third-party present during transfer from borrower?:"  >
-            <h:outputText value="No" class="RO_text" rendered="#{line9 == 0}" />
-            <h:outputText value="Yes" class="RO_text" rendered="#{line9 == 1}" />
-          </h:outputLabel>                        
+          <h:outputText value="Borrower returns to Lender address" class="RO_text"  />
         </c:when>
       </c:choose>
 
-      <c:choose>
-        <c:when test="#{(!empty line10) and (line10 gt -1)}" >
+            <c:choose>
+        <c:when test="#{(!empty line12) and (line12 == 1)}" >
           <br />
-          <h:outputLabel value="Lender's choice of third-party present?:" rendered="#{!empty line10}">
-            <h:outputText value="No" class="RO_text" rendered="#{line10 == 0}" />
-            <h:outputText value="Yes" class="RO_text" rendered="#{line10 == 1}" />
-          </h:outputLabel>
-        </c:when>
-      </c:choose>
-
-      <c:choose>
-        <c:when test="#{(!empty line11) and (line11 gt -1)}" >
-          <br />
-          <h:outputLabel value="Mutually agreed choice of third-party?:"  >
-            <h:outputText   value="No" class="RO_text" rendered="#{line11 == 0}" />
-            <h:outputText   value="Yes" class="RO_text" rendered="#{line11 == 1}" />
-          </h:outputLabel>
+          <h:outputText value="Lender will pick up item" class="RO_text"  />
         </c:when>
       </c:choose>
 
