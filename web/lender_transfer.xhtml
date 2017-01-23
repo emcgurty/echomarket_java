@@ -19,6 +19,7 @@
         <body onload="changeMenuBackground(3);"  >
 
           <div id="form_lender_to_borrower" class="contact_information" >
+            <h:outputText  value="${userBean.editable} -- e"  />  
             <c:set var="iid" value="${itemBean.itemId}"  />  
             <c:set var="rid" value="${userBean.roleId}"  />  
             <c:set var="displayThirdChoice" value="none" />
@@ -50,10 +51,10 @@
                     <c:set var="save_update"  value="Update Item Transfer Preferences" />
                   </c:when >
                 </c:choose>
-                <h:commandLink  action="${lenderTransferBean.updateLIT()}"  class="right_div"  value="Update"   rendered="true"  >
+                <h:commandLink  action="${lenderTransferBean.updateLIT()}"  class="right_div"  value="${save_update}"   rendered="${userBean.editable == 1}"  >
                   <f:param name="iid" value="${userBean.itemId}" />
                 </h:commandLink> 
-                <h:commandLink  action="${lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="true" >
+                <h:commandLink  action="${lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="${userBean.editable == 0}" >
                   <f:param name="action" value="edit" />
                   <f:param name="iid" value="${userBean.itemId}" />
                 </h:commandLink>
@@ -411,6 +412,14 @@
                 </c:if>  
               </h:outputLabel>                        
             </div>
+          </div>
+          <div style="margin-left:25px;margin-top:5px;">
+            <h:outputLabel for="comment" value="Additional transfer preferences:" >
+              <h:inputTextarea id="comment"  value="#{lenderTransferBean.comment}"  cols="40" rows="10" rendered="#{userBean.editable == 1}" style="margin-left:10px;"  />
+              <c:if test="#{userBean.editable == 0}" >
+                <h:outputText   value="#{lenderTransferBean.comment}"  class="RO_text" />
+              </c:if> 
+            </h:outputLabel>
           </div>
         </body>
       </div>
