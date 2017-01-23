@@ -656,7 +656,8 @@ public class UserBean extends AbstractBean implements Serializable {
           setEditable(0);
           return_string = "user_contact_preferences"; //cpbean.load_ud(pid);
         } else {
-          this.editable = 0;
+          //  emm 123:  No data default 
+          this.editable = 1;
           switch (this.userType) {
             case "borrow":
               setAction("current");
