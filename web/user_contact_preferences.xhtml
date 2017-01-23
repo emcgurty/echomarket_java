@@ -42,17 +42,17 @@
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
-              <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Update Contact Preferences" rendered="true"  >
+              <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div" value="Update Contact Preferences" rendered="#{userBean.editable == 1}"  >
                 <f:param name="iid" value="#{userBean.itemId}" />
               </h:commandLink>                  
-              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preferences"   >
+              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preferences"  rendered="#{userBean.editable == 0}" >
                 <f:param name="action" value="edit" />
                 <f:param name="iid" value="#{userBean.itemId}" />
               </h:commandLink>
 
             </div> 
             <div style="margin:10px;" >
-              <h:outputText value="Default Contact Preferences --  #{ut}" />
+              
               <c:if test="#{((ut == 'lend') or ut == ('both')) and (userBean.cpId)}" >
                 <h:commandLink  action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'"  >
                   <f:param name="action" value="edit" />
@@ -75,9 +75,7 @@
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
             <h:inputHidden id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  />
-            <!--<h:inputHidden id="itemId" value="#{contactPreferenceBean.itemId}" rendered="#{!empty contactPreferenceBean.itemId}" />-->
             <h:inputHidden id="itemId" value="#{userBean.itemId}"  rendered="#{!empty userBean.itemId}" />
-            <h:outputText value="#{userBean.itemId}"  />
 
             <div style="float:left;margin-left:25px">
               <div id="postalWithContactAddress" >    
