@@ -1,6 +1,5 @@
 package echomarket.web.managedbeans;
 
-import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.ContactPreference;
 import echomarket.hibernate.Items;
@@ -681,9 +680,8 @@ public class ItemBean extends AbstractBean implements Serializable {
         fileCreate = true;
       } catch (FileNotFoundException fne) {
         fileCreate = false;
-        LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                new Object[]{fne.getMessage()});
-      } finally {
+        Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, "SaveUserItemImage", fne);
+        } finally {
         if (out != null) {
           out.close();
         }
