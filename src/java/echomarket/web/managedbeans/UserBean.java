@@ -631,7 +631,7 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = cpbean.load_ud(this.participant_id);
         break;
       case "lender_transfer":
-        return_string = "lender_transfer";  ///ltribean.load_ud(this.participant_id);
+        return_string = ltribean.load_ud(this.participant_id);
         break;
       default:
         return_string = "index";
@@ -1464,13 +1464,15 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       if (currentItem.isEmpty() == true) {
-        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid")
+        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid GROUP BY participant_id, dateCreated")
                 .setParameter("pid", pid)
+                .setMaxResults(1)
                 .list();
       } else {
-        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid and itemId = :iid")
+        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId, dateCreated")
                 .setParameter("pid", pid)
                 .setParameter("iid", currentItem)
+                .setMaxResults(1)
                 .list();
       }
       tx.commit();
@@ -1507,13 +1509,15 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       if (currentItem.isEmpty() == true) {
-        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid")
+        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid GROUP BY participant_id, dateCreated")
                 .setParameter("pid", pid)
+                .setMaxResults(1)
                 .list();
       } else {
-        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid and itemId = :iid")
+        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId, dateCreated")
                 .setParameter("pid", pid)
                 .setParameter("iid", currentItem)
+                .setMaxResults(1)
                 .list();
       }
 
