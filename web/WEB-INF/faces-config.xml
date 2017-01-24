@@ -87,27 +87,13 @@
     <managed-bean-class>echomarket.web.managedBeans.ItemConditionBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
-<!--  <managed-bean>
-    <managed-bean-name>lenderBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.LenderBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>-->
+
   <managed-bean>
     <managed-bean-name>searchBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.SearchesBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
-<!--  <managed-bean>
-    <managed-bean-name>borrowerBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.BorrowersBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-    <managed-property>
-      <description>Which borrower record to edit, view, delete</description>
-      <property-name>processId</property-name>
-      <property-class>java.lang.String</property-class>
-      <value>#{param['processId']}</value>
-    </managed-property>
-  </managed-bean>-->
+
   <managed-bean>
     <managed-bean-name>LocaleBean</managed-bean-name>
     <managed-bean-class>LocaleBean</managed-bean-class>
@@ -118,20 +104,40 @@
     <managed-bean-class>echomarket.web.managedbeans.CommunitiesBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
+  
+ 
+  <navigation-rule>
+    <from-view-id>/user_nae.xhtml</from-view-id>
+    <navigation-case>
+      <from-action>#{lenderTransferBean.load_ud(userBean.participant_id)}</from-action>
+      
+      <to-view-id>/lender_transfer.xhtml</to-view-id>
+    </navigation-case>
     
-<!--  <navigation-rule>
-    <from-view-id>index.xhtml</from-view-id>
+  </navigation-rule>
+  
+    <navigation-rule>
+    <from-view-id>/user_item.xhtml</from-view-id>
     <navigation-case>
-      <from-action>#{communitiesBean.load_community_detail()}</from-action>
-      <from-outcome>community_detail.xhtml?faces-redirect=true</from-outcome>
-      <to-view-id>community_detail.xhtml</to-view-id>
+      <from-action>#{lenderTransferBean.load_ud(userBean.participant_id)}</from-action>
+      
+      <to-view-id>/lender_transfer.xhtml</to-view-id>
     </navigation-case>
-    <navigation-case>
-      <from-action>#{communitiesBean.load_community_members()}</from-action>
-      <from-outcome>build_community_members.xhtml?faces-redirect=true</from-outcome>
-      <to-view-id>build_community_members.xhtml</to-view-id>
-    </navigation-case>
-  </navigation-rule>-->
+    
+  </navigation-rule>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <managed-bean>
     <managed-bean-name>participantBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.ParticipantBean</managed-bean-class>
