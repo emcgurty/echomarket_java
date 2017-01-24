@@ -12,7 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-//Queries for search not working at all
+
+
 @Named
 @ManagedBean
 @SessionScoped
@@ -21,6 +22,8 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   private String participant_id;
   private String itemId;
   private String which;
+  private List itemFoundList;
+  
 
   public String load_RO(String strwhich, String iid, String pid) {
     if ((strwhich.isEmpty() == false) && (iid.isEmpty() == false) && (pid.isEmpty() == false)) {
@@ -28,6 +31,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       this.setWhich(strwhich);
       this.setItemId(iid);
       this.setParticipant_id(pid);
+      itemFoundList = null;
     }
     // Get action
     Map<String, String> params = null;
@@ -64,7 +68,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx.commit();
 
     } catch (Exception e) {
-      System.out.println("Error in getLIC in ReadONlyBean");
+      System.out.println("Error in getLIC in ReadOnlyBean");
       Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
       tx.rollback();
 
@@ -121,28 +125,30 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
+    if (this.itemFoundList == null) {
+      try {
+        hib = hib_session();
+        tx = hib.beginTransaction();
+        queryString = "FROM Items WHERE  (itemId = :iid) AND (participant_id = :pid)";
+        System.out.println(queryString);
+        result = hib.createQuery(queryString)
+                .setParameter("iid", iid)
+                .setParameter("pid", pid)
+                .list();
+        tx.commit();
+      } catch (Exception e) {
+        System.out.println("Error in getItemData in ReadOnlyBean");
+        Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
+        tx.rollback();
 
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      queryString = "FROM Items WHERE  (itemId = :iid) AND (participant_id = :pid)";
-      System.out.println(queryString);
-      result = hib.createQuery(queryString)
-              .setParameter("iid", iid)
-              .setParameter("pid", pid)
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      System.out.println("Error in getItemData in ReadOnlyBean");
-      Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
-      tx.rollback();
+      } finally {
+        tx = null;
+        hib = null;
+        this.itemFoundList = result;
+      }
 
-    } finally {
-      tx = null;
-      hib = null;
     }
-
-    return result;
+    return this.itemFoundList;
   }
 
   public List getByNAE(String iid, String which) {
@@ -222,9 +228,9 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
 
   public List getByPhone(String iid, String which, String pid) {
 
-/*
+    /*
  * //  For the moment this call is working, the returned object has two tiers the object and then the result. But I have seen the returned object has only one tier, which will cause the GUI to fail
- */ 
+     */
     setItemId(iid);
     setWhich(which);
     setParticipant_id(pid);
@@ -422,7 +428,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      
+
       queryString = "SELECT addr "
               + " FROM Participant part "
               + " left join part.addresses addr"
@@ -446,9 +452,9 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-     //echomarket.hibernate.ParticipantAddress hold = (echomarket.hibernate.ParticipantAddress)result.get(0);
-     //Participant pp = (Participant) hold.getPart();  /// Got my Participant record
-    
+    //echomarket.hibernate.ParticipantAddress hold = (echomarket.hibernate.ParticipantAddress)result.get(0);
+    //Participant pp = (Participant) hold.getPart();  /// Got my Participant record
+
     return result;
   }
 
