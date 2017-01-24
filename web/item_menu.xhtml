@@ -105,12 +105,6 @@
       </c:when>     
     </c:choose>
 
-    <!--    <li id="tab_item_1" >
-          <h:commandLink immediate="true"  action="#{itemBean.load_ud(whichType, null)}"  value="Finished? Add Another Item"  rendered="#{!empty itemBean.itemId}"    >
-            <f:param name="action" value="item" />             
-          </h:commandLink>
-        </li>-->
-
     <c:choose>                                
       <c:when test="#{whichType == 'borrow'}"  >
         <li id="tab_item_15" >
@@ -184,8 +178,9 @@
       </c:when>
     </c:choose>
 
-    <li  >
-      <h:commandLink action="#{participantBean.load_ud(userBean.participant_id)}" immediate="true"  value="Return to DashBoard"  rendered="true"    >
+    <li >
+      <h:commandLink action="#{userBean.clearItemId()}" immediate="true"  value="Return to DashBoard"  rendered="true"    >
+             
       </h:commandLink>
     </li>
 
