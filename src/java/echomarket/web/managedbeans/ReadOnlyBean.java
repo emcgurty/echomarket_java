@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
+//Queries for search not working at all
 @Named
 @ManagedBean
 @SessionScoped
