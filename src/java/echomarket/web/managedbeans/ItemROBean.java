@@ -34,7 +34,7 @@ public class ItemROBean extends AbstractBean implements Serializable {
 
   }
 
-  public List getExistingPicture(String iid) {
+  private List getExistingPicture(String iid) {
 
     List result = null;
     Session hib = hib_session();
