@@ -23,10 +23,10 @@
                       />
         </div>
       </div> 
-
-      <c:set var="currentHistory"  value="#{itemBean.getParticipantItems(itemBean.history_id, 'lend')}" />
+      
+      <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'lend')}" />
       <h:inputHidden id="itemType" value="lend" />
-      <c:forEach  items="#{currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
+      <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
         <div style="margin-left:25px;margin-top:15px;float:left;position: relative;display:block;" >
 
           <h:outputLabel for="itemDescription" value="Item Description:" >
