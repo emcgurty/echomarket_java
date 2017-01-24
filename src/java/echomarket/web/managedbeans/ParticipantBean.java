@@ -101,7 +101,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         ubean.setEditable(0);
       }
     }
-
+    /// emm 123
+    ubean.setItemId("");
     Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String action = params.get("action");
 
