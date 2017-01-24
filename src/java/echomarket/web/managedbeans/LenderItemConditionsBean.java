@@ -129,21 +129,97 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     String addNewCP = null;
     String strIid = null;
 
-    // wasn't in the xhtml so that's why it was null
-    if (lender_item_condition_id == null) {
-      lender_item_condition_id = ""; 
+    try {
+      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      addNewCP = params.get("action");
+      strIid = params.get("iid");
+      if (strIid == null) {
+        strIid = "";
+      }
+      ubean.setItemId(strIid);
+      this.itemId = strIid;
+      for (Map.Entry<String, String> entry : params.entrySet()) {
+        if (entry.getKey().contains("lender_item_condition_id")) {
+          this.lender_item_condition_id = entry.getValue();
+        }
+        if (entry.getKey().contains("itemId")) {
+          this.itemId = entry.getValue();
+          ubean.setItemId(this.itemId);
+        }
+        if (entry.getKey().contains("forFree")) {
+          this.forFree = Integer.valueOf(entry.getValue());
+        }
+        if ("personal_information:availableForPurchase".equals(entry.getKey())) {
+          this.availableForPurchase = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("availableForPurchaseAmount")) {
+          this.availableForPurchaseAmount = new BigDecimal(entry.getValue());
+        }
+        if ("personal_information:smallFee".equals(entry.getKey())) {
+          this.smallFee = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("smallFeeAmount")) {
+          this.smallFeeAmount = new BigDecimal(entry.getValue());
+        }
+        if (entry.getKey().contains("availableForDonation")) {
+          this.availableForDonation = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("donateAnonymous")) {
+          this.donateAnonymous = Integer.valueOf(entry.getValue());
+        }
+        if ("personal_information:trade".equals(entry.getKey())) {
+          this.trade = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("tradeItem")) {
+          this.tradeItem = entry.getValue();
+        }
+        if (entry.getKey().contains("agreedNumberOfDays")) {
+          this.agreedNumberOfDays = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("agreedNumberOfHours")) {
+          this.agreedNumberOfHours = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("indefiniteDuration")) {
+          this.indefiniteDuration = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("presentDuringBorrowingPeriod")) {
+          this.presentDuringBorrowingPeriod = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("entirePeriod")) {
+          this.entirePeriod = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("partialPeriod")) {
+          this.partialPeriod = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("provideProperUseTraining")) {
+          this.provideProperUseTraining = Integer.valueOf(entry.getValue());
+        }
+        if (entry.getKey().contains("specificConditions")) {
+          this.specificConditions = entry.getValue();
+        }
+        if (entry.getKey().contains("securityDepositAmount")) {
+          this.securityDepositAmount = new BigDecimal(entry.getValue());
+        }
+        if ("personal_information:securityDeposit".equals(entry.getKey())) {
+          this.securityDeposit = Integer.valueOf(entry.getValue());
+        }
+      }
+
+    } catch (Exception ex) {
+
+    } finally {
+
     }
 
     if (lender_item_condition_id.isEmpty() == true) {
 
-      LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), itemId, this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, "NA", this.comment, new Date(), new Date());
+      LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), this.itemId, this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, getClientIpAddr(), this.comment, new Date(), new Date());
 
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
         sb.save(lic);
         tx.commit();
-        //ubean.setLICid(true);
         successTransaction = true;
         ubean.setEditable(1);
       } catch (Exception ex) {
@@ -158,8 +234,8 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       }
     } else {
 
-      if (itemId.isEmpty() == false) {
-        icList = getCurrentItemConditions_Iid(ubean.getParticipant_id(), itemId);
+      if (ubean.getItemId().isEmpty() == false) {
+        icList = getCurrentItemConditions_Iid(ubean.getParticipant_id(), ubean.getItemId());
       } else {
         icList = getCurrentItemConditions(ubean.getParticipant_id());
       }
@@ -175,7 +251,6 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           ic.setAvailableForPurchaseAmount(availableForPurchaseAmount);
           ic.setDonateAnonymous(donateAnonymous);
           ic.setEntirePeriod(entirePeriod);
-//          ic.setComment(comment); Later
           ic.setForFree(forFree);
           ic.setIndefiniteDuration(indefiniteDuration);
           ic.setPartialPeriod(partialPeriod);
@@ -207,20 +282,38 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
             sb = null;
             tx = null;
           }
+        } else {
+          // Create new record
+          LenderItemConditions lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), this.itemId, this.forFree, this.availableForPurchase, this.availableForPurchaseAmount, this.smallFee, this.smallFeeAmount, this.availableForDonation, this.donateAnonymous, this.trade, this.tradeItem, this.agreedNumberOfDays, this.agreedNumberOfHours, this.indefiniteDuration, this.presentDuringBorrowingPeriod, this.entirePeriod, this.partialPeriod, this.provideProperUseTraining, this.specificConditions, this.securityDepositAmount, this.securityDeposit, getClientIpAddr(), this.comment, new Date(), new Date());
+          try {
+            sb = hib_session();
+            tx = sb.beginTransaction();
+            sb.save(lic);
+            tx.commit();
+            message(null, "LenderItemConditionsUpdated", null);
+            successTransaction = true;
+          } catch (Exception ex) {
+            tx.rollback();
+            message(null, "LenderItemConditionsUpdatedFailed", null);
+            System.out.println("Error in Save LIC");
+            Logger.getLogger(LenderItemConditionsBean.class.getName()).log(Level.SEVERE, null, ex);
+          } finally {
+            sb = null;
+            tx = null;
+          }
         }
       }
     }
-    if(successTransaction == true) {
+
+    if (successTransaction == true) {
       if (this.itemId.isEmpty() == true) {   /// User is setting default LIC
         ubean.setLICid(true);
       } else {
         ubean.completeLIC(ubean.getParticipant_id());
       }
     } else {
-        ubean.setLICid(false);
+      ubean.setLICid(false);
     }
-   
-    
 
     return load_ud(ubean.getParticipant_id());
   }
