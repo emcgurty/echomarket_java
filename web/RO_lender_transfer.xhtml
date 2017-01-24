@@ -202,16 +202,18 @@
       </c:choose>
       <c:choose>
         <c:when test="#{(!empty line3) and (line3 == 1)}" >
-          <h:outputText value="Lender's choice of agreed location" class="RO_text"   />
+          <br /><h:outputText value="Lender's choice of agreed location" class="RO_text"   />
         </c:when>
       </c:choose>
       <c:choose>
         <c:when test="#{(!empty line4) and (line4 == 1)}" >
+          <br />
           <h:outputText value="Borrower's choice of agreed location" class="RO_text"   />
         </c:when>
       </c:choose>
       <c:choose>
         <c:when test="#{(!empty line5) and (line5 == 1)}" >
+          <br />
           <h:outputText value="Mutual choice of agreed location" class="RO_text"   />
         </c:when>
       </c:choose>
@@ -257,7 +259,7 @@
         </c:when>
       </c:choose>
 
-            <c:choose>
+      <c:choose>
         <c:when test="#{(!empty line12) and (line12 == 1)}" >
           <br />
           <h:outputText value="Lender will pick up item" class="RO_text"  />
