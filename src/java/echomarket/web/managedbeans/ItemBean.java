@@ -60,6 +60,7 @@ public class ItemBean extends AbstractBean implements Serializable {
   private Part imageFileNamePart;
   private String remoteIp;
   private String itemImageCaption;
+  private List itemFoundList;
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
@@ -76,6 +77,7 @@ public class ItemBean extends AbstractBean implements Serializable {
   public String getLenderHistory(String pid, Integer whichHistory) {
     this.history_id = pid;  /// history_id will be either a community_id or a particpant_id
     this.setHistory_which(whichHistory);
+    this.itemFoundList = null;
     return "lender_history";
   }
 
@@ -844,42 +846,50 @@ public class ItemBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     String query = null;
     this.itemType = which;
-    // which_history: 0 = individual, 1 = community
-    try {
-      session = hib_session();
-      tx = session.beginTransaction();
-      if (this.history_which == 0) {
-        query = "SELECT itmImage.imageFileName, itm.itemId, itm.itemDescription, "
-                + "itm.itemModel, itm.participant_id, itm.approved  "
-                + "FROM Items itm LEFT JOIN itm.itemImages itmImage "
-                + "WHERE itm.participant_id = :pid AND itm.itemType = :itype ";
-      } else if (this.history_which == 1) {
-        query = "SELECT itmImage.imageFileName, "
-                + "itm.itemId, itm.itemDescription, "
-                + "itm.itemModel, part.participant_id, itm.approved FROM Participant part, Items itm "
-                + "INNER join part.item itm LEFT join itm.itemImages itmImage"
-                + "WHERE part.communityId = :pid AND itm.itemType = :itype";
-      } else {
-        //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
+
+    if (this.itemFoundList == null) {
+      // which_history: 0 = individual, 1 = community
+      try {
+        session = hib_session();
+        tx = session.beginTransaction();
+        if (this.history_which == 0) {
+          query = "SELECT itmImage.imageFileName, itm.itemId, itm.itemDescription, "
+                  + "itm.itemModel, itm.participant_id, itm.approved  "
+                  + "FROM Items itm LEFT JOIN itm.itemImages itmImage "
+                  + "WHERE itm.participant_id = :pid AND itm.itemType = :itype ";
+        } else if (this.history_which == 1) {
+          query = "SELECT itmImage.imageFileName, "
+                  + "itm.itemId, itm.itemDescription, "
+                  + "itm.itemModel, part.participant_id, itm.approved FROM Participant part, Items itm "
+                  + "INNER join part.item itm LEFT join itm.itemImages itmImage"
+                  + "WHERE part.communityId = :pid AND itm.itemType = :itype";
+        } else {
+          //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
+        }
+
+        result = session.createQuery(query)
+                .setParameter("pid", pid)
+                .setParameter("itype", which)
+                .list();
+        tx.commit();
+      } catch (Exception e) {
+        tx.rollback();
+        System.out.println("Error in ParticipantItems");
+        Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
+
+      } finally {
+        tx = null;
+        session = null;
+
       }
-
-      result = session.createQuery(query)
-              .setParameter("pid", pid)
-              .setParameter("itype", which)
-              .list();
-      tx.commit();
-    } catch (Exception e) {
-      tx.rollback();
-      System.out.println("Error in ParticipantItems");
-      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
-
-    } finally {
-      tx = null;
-      session = null;
-
+      this.itemFoundList = result;
     }
 
-    return result;
+    if (this.itemFoundList != null) {
+      return this.itemFoundList;
+    } else {
+      return result;
+    }
   }
 
   private Boolean DeleteImageFile(String fileName) {
@@ -1221,4 +1231,5 @@ public class ItemBean extends AbstractBean implements Serializable {
   public void setItemImageCaption(String itemImageCaption) {
     this.itemImageCaption = itemImageCaption;
   }
+
 }
