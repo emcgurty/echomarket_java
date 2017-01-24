@@ -16,24 +16,10 @@
   <ui:define name="content">
     <h:form id="personal_information"  class="lender_conditions">
       <body onload="changeMenuBackground(3);"  >
+        <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
+        
         <div id="lender_registration" class="contact_information" >
-          <c:set var="iid" value="#{itemBean.itemId}"  />  
-          <c:set var="rid" value="#{userBean.roleId}"  />  
-          <c:choose >
-            <c:when test="#{empty iid }" >
-              <c:choose >
-                <c:when test="#{rid == 0}" >
-                  <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
-                </c:when>
-                <c:when test="#{rid == 1}" >
-                  <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
-                </c:when>
-              </c:choose>   
-            </c:when>
-            <c:when test="#{!empty iid }" >
-              <ui:include src="/item_menu.xhtml" id="item_menu" />  
-            </c:when>        
-          </c:choose>
+         
 
           <div id="form_monetary" class="contact_information" style="width:100%;" >
             <div class="top" >
