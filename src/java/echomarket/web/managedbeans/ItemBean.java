@@ -758,7 +758,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
   }
 
-  public void getCurrentPicture(String iid) {
+  private void getCurrentPicture(String iid) {
 
     List result = null;
     Session hib = null;
