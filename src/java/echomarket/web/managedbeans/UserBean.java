@@ -29,6 +29,8 @@ import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+//Need to fixe login approach in event of exisitng data 
+
 @Named
 @ManagedBean(name = "userBean")
 @SessionScoped
