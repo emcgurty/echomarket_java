@@ -60,6 +60,7 @@ public class ItemBean extends AbstractBean implements Serializable {
   private String remoteIp;
   private String itemImageCaption;
   private List itemFoundList;
+  private List imageFoundList;
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
@@ -207,10 +208,8 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   public String load_ud(String which, String iid) {
 
-//    if ("both".equals(which)) {
-//      System.out.println("I should not see both except on User Login");
-//    }
     List result = null;
+    this.imageFoundList = null;
 
     if (iid.isEmpty() == true) {
       ubean.setEditable(1);
@@ -681,7 +680,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       } catch (FileNotFoundException fne) {
         fileCreate = false;
         Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, "SaveUserItemImage", fne);
-        } finally {
+      } finally {
         if (out != null) {
           out.close();
         }
@@ -711,7 +710,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   }
 
-  public List getExistingPicture(String iid) {
+  private List getExistingPicture(String iid) {
 
     List result = null;
     Session hib = null;
@@ -720,16 +719,17 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (iid == null) {
       return getPicture();
     } else {
-      String queryString = "Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid";
+      
+      System.out.println("IN getExistingPicture");
+      String queryString = " Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid";
       try {
         hib = hib_session();
         tx = hib.beginTransaction();
         result = hib.createQuery(queryString)
                 .setParameter("iid", iid)
                 .list();
-//                .setParameter("itype", this.itemType)
-//                .list();
         tx.commit();
+        this.imageFoundList = result;
       } catch (Exception e) {
         tx.rollback();
         System.out.println("Error in getExistingPicture");
@@ -738,7 +738,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         tx = null;
         hib = null;
       }
-
+      
       Integer size_of_list = result.size();
       if (size_of_list == 0) {
         return getPicture();
@@ -808,6 +808,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   private List getCurrentItem(String iid, String which) {
 
+    System.out.println("IN getCurrentItem");
     List result = null;
     Session session = null;
     Transaction tx = null;
@@ -816,7 +817,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       session = hib_session();
       tx = session.beginTransaction();
 
-      query = "FROM Items WHERE item_id = :iid and itemType = :which";
+      query = " FROM Items WHERE item_id = :iid and itemType = :which";
       result = session.createQuery(query)
               .setParameter("iid", iid)
               .setParameter("which", which)
@@ -1228,6 +1229,20 @@ public class ItemBean extends AbstractBean implements Serializable {
    */
   public void setItemImageCaption(String itemImageCaption) {
     this.itemImageCaption = itemImageCaption;
+  }
+
+  /**
+   * @return the imageFoundList
+   */
+  public List getImageFoundList() {
+    return imageFoundList;
+  }
+
+  /**
+   * @param imageFoundList the imageFoundList to set
+   */
+  public void setImageFoundList(List imageFoundList) {
+    this.imageFoundList = imageFoundList;
   }
 
 }
