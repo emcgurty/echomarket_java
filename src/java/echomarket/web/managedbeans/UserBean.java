@@ -84,6 +84,14 @@ public class UserBean extends AbstractBean implements Serializable {
     return "index?faces-redirect=true";
   }
 
+  public String clearItemId() {
+    
+    ibean.setItemId("");
+    this.itemId = "";
+    return pbean.load_ud(this.participant_id);
+           
+  }
+  
   private void setUserToNull() {
     this.user_id = null;
     this.username = null;
