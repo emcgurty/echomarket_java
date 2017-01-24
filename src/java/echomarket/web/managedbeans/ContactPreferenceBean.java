@@ -42,6 +42,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private Boolean questionAltAddress;
   private Boolean questionAltEmail;
 
+
   public ContactPreferenceBean() {
   }
 
@@ -273,10 +274,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       ubean.setItemId(currentIid);
       this.itemId = currentIid;
       for (Map.Entry<String, String> entry : params.entrySet()) {
-//        if (entry.getKey().contains("itemId")) {
-//          this.itemId = entry.getValue();
-//          ubean.setItemId(this.itemId);
-//        }
+
         if (entry.getKey().contains("contactPreferenceId")) {
           this.contactPreferenceId = entry.getValue();
         }
@@ -295,10 +293,10 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         if (entry.getKey().contains("contactByInstagram")) {
           this.contactByInstagram = entry.getValue();
         }
-        if (entry.getKey().contains("personal_information:contactByOtherSocialMedia")) {
+        if ("personal_information:contactByOtherSocialMedia".equals(entry.getKey())) {
           this.contactByOtherSocialMedia = entry.getValue();
         }
-        if (entry.getKey().contains("personal_information:contactByOtherSocialMediaAccess")) {
+        if (entry.getKey().contains("contactByOtherSocialMediaAccess")) {
           this.contactByOtherSocialMediaAccess = entry.getValue();
         }
         if (entry.getKey().contains("useWhichContactAddress")) {
@@ -323,7 +321,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     if (this.contactPreferenceId.isEmpty() == true) {
 
-      ContactPreference part = new ContactPreference(getId(), ubean.getParticipant_id(), this.itemId, this.useWhichContactAddress, this.contactByChat, this.contactByEmail, this.contactByHomePhone, this.contactByCellPhone, this.contactByAlternativePhone, this.contactByFacebook, this.contactByTwitter, this.contactByInstagram, this.contactByLinkedIn, this.contactByOtherSocialMedia, this.contactByOtherSocialMediaAccess, new Date());
+      ContactPreference part = new ContactPreference(getId(), 
+              ubean.getParticipant_id(), this.itemId, 
+              this.useWhichContactAddress, this.contactByChat, 
+              this.contactByEmail, this.contactByHomePhone, 
+              this.contactByCellPhone, this.contactByAlternativePhone, 
+              this.contactByFacebook, this.contactByTwitter, this.contactByInstagram, this.contactByLinkedIn, this.contactByOtherSocialMedia, this.contactByOtherSocialMediaAccess, new Date());
 
       try {
         sb = hib_session();
@@ -425,7 +428,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       ubean.setEditable(0);
       ubean.setCpId(false);
     }
-    return load_ud(ubean.getParticipant_id()) + "?faces-redirect=true";
+    return load_ud(ubean.getParticipant_id());
   }
 
   public String load_ud(String pid) {
@@ -435,7 +438,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String strIid = null;
     String action = null;
-
+    Boolean isCPnull = false;
     try {
       strIid = params.get("iid");
       if (strIid != null) {
@@ -469,12 +472,21 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     if (strIid != null) {
       partlist = getCurrentCP_Id(pid, strIid);
     }
+    
+     if (partlist == null) {
+      isCPnull = true;
+    }
 
     if (partlist != null) {
-      if (partlist.size() < 1) {
-        partlist = getCurrentCP(pid);
+      if (partlist.size() == 0) {
+        isCPnull = true;
       }
     }
+
+    if (isCPnull == true) {
+        partlist = getCurrentCP(pid);
+      }
+
 
     if (partlist != null) {
       if (partlist.size() == 1) {
@@ -631,5 +643,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   public void setQuestionAltEmail(Boolean questionAltEmail) {
     this.questionAltEmail = questionAltEmail;
   }
+
+
 
 }
