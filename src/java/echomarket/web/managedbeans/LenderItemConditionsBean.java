@@ -243,26 +243,26 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       if (icList != null) {
         if (icList.size() == 1) {
           LenderItemConditions ic = (LenderItemConditions) icList.get(0);
-          ic.setItemId(itemId);
-          ic.setAgreedNumberOfDays(agreedNumberOfDays);
-          ic.setAgreedNumberOfHours(agreedNumberOfHours);
-          ic.setAvailableForDonation(availableForDonation);
-          ic.setAvailableForPurchase(availableForPurchase);
-          ic.setAvailableForPurchaseAmount(availableForPurchaseAmount);
-          ic.setDonateAnonymous(donateAnonymous);
-          ic.setEntirePeriod(entirePeriod);
-          ic.setForFree(forFree);
-          ic.setIndefiniteDuration(indefiniteDuration);
-          ic.setPartialPeriod(partialPeriod);
-          ic.setPresentDuringBorrowingPeriod(presentDuringBorrowingPeriod);
-          ic.setProvideProperUseTraining(provideProperUseTraining);
-          ic.setSecurityDeposit(securityDeposit);
-          ic.setSecurityDepositAmount(securityDepositAmount);
-          ic.setSmallFee(smallFee);
-          ic.setSmallFeeAmount(smallFeeAmount);
-          ic.setSpecificConditions(specificConditions);
-          ic.setTrade(trade);
-          ic.setTradeItem(tradeItem);
+          ic.setItemId(this.itemId);
+          ic.setAgreedNumberOfDays(this.agreedNumberOfDays);
+          ic.setAgreedNumberOfHours(this.agreedNumberOfHours);
+          ic.setAvailableForDonation(this.availableForDonation);
+          ic.setAvailableForPurchase(this.availableForPurchase);
+          ic.setAvailableForPurchaseAmount(this.availableForPurchaseAmount);
+          ic.setDonateAnonymous(this.donateAnonymous);
+          ic.setEntirePeriod(this.entirePeriod);
+          ic.setForFree(this.forFree);
+          ic.setIndefiniteDuration(this.indefiniteDuration);
+          ic.setPartialPeriod(this.partialPeriod);
+          ic.setPresentDuringBorrowingPeriod(this.presentDuringBorrowingPeriod);
+          ic.setProvideProperUseTraining(this.provideProperUseTraining);
+          ic.setSecurityDeposit(this.securityDeposit);
+          ic.setSecurityDepositAmount(this.securityDepositAmount);
+          ic.setSmallFee(this.smallFee);
+          ic.setSmallFeeAmount(this.smallFeeAmount);
+          ic.setSpecificConditions(this.specificConditions);
+          ic.setTrade(this.trade);
+          ic.setTradeItem(this.tradeItem);
 
           try {
             sb = hib_session();
