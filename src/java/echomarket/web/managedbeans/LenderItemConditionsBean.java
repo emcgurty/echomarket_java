@@ -278,8 +278,16 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         condList = getCurrentItemConditions_Iid(pid, itemId);
       }
     }
-
     if (condList == null) {
+      isLICnull = true;
+    }
+
+    if (condList != null) {
+      if (condList.size() == 0) {
+        isLICnull = true;
+      }
+    }
+    if (isLICnull == true) {
       condList = getCurrentItemConditions(pid);
     }
     if (condList != null) {
