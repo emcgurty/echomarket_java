@@ -203,7 +203,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
               this.thirdPartyPresence, this.getThirdPartyPresenceBorrowerChoice(), this.getThirdPartyPresenceLenderChoice(), this.getThirdPartyPresenceMutual(),
               this.borrowerReturnsToWhichAddress,
               this.willPickUpPreferredLocation,
-              "NA", this.comment, new Date(), new Date(), null);
+              getClientIpAddr(), this.comment, new Date(), new Date(), null);
 
       try {
         sb = hib_session();
@@ -279,11 +279,12 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             tx = sb.beginTransaction();
             sb.save(lt);
             tx.commit();
-            //ubean.setCpId(true);
-            message(null, "CPSaved", null);
+           
+            message(null, "LenderTransferSaved", null);
             successTransaction = true;
           } catch (Exception ex) {
             tx.rollback();
+            message(null, "UpdateOrSaveOfLITNotSuccessful", null);
             System.out.println("Error in Save LIT");
             Logger.getLogger(LenderTransfer.class.getName()).log(Level.SEVERE, null, ex);
           } finally {
