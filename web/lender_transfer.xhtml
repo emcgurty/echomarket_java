@@ -17,29 +17,13 @@
     <h:form id="personal_information"  class="lender_transfer">
       <div id="lender_transfer" class="contact_information" >
         <body onload="changeMenuBackground(3);"  >
-
+           <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
           <div id="form_lender_to_borrower" class="contact_information" >
             <h:outputText  value="${userBean.editable} -- e"  />  
             <c:set var="iid" value="${itemBean.itemId}"  />  
-            <c:set var="rid" value="${userBean.roleId}"  />  
-            <c:set var="displayThirdChoice" value="none" />
+           <c:set var="displayThirdChoice" value="none" />
             <c:set var="displayThirdChoice" value="${(userBean.editable == 0) and (lenderTransferBean.thirdPartyPresence == 1)}" />
-            <c:choose >
-              <c:when test="${empty iid }" >
-                <c:choose >
-                  <c:when test="${rid == 0}" >
-                    <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
-                  </c:when>
-                  <c:when test="${rid == 1}" >
-                    <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
-                  </c:when>
-                </c:choose>   
-              </c:when>
-              <c:when test="${!empty iid }" >
-                <ui:include src="/item_menu.xhtml" id="item_menu" />  
-              </c:when>        
-            </c:choose>
-
+           
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="${userBean.userAlias}: USER DASHBOARD"  />
