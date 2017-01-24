@@ -16,11 +16,12 @@
   <ui:define name="content"  >
 
     <h:head>
-      <c:set var="lic_data" value="#{readOnlyBean.getLIC(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
+    
     </h:head>
 
     <div id="lender_registration" class="lender_registration" >
-      <c:forEach items="#{lic_data}"  var="lic" >    
+       <c:set var="lic_data" value="#{readOnlyBean.getLIC(readOnlyBean.itemId, readOnlyBean.which, readOnlyBean.participant_id)}"  />
+       <c:forEach items="#{lic_data}"  var="lic" >    
 
         <div id="form_monetary" class="contact_information" >
           <div class="top" >
