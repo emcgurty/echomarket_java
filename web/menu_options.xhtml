@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                >
+
+
+  <c:set var="rid" value="#{userBean.roleId}"  />  
+
+  <c:set var="iid" value="#{itemBean.itemId}"  />  
+
+  <c:choose >
+    <c:when test="#{empty iid }" >
+      <c:choose >
+        <c:when test="#{rid == 0}" >
+          <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+        </c:when>
+        <c:when test="#{rid == 1}" >
+          <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
+        </c:when>
+      </c:choose>   
+    </c:when>
+    <c:when test="#{!empty iid }" >
+      <ui:include src="/item_menu.xhtml" id="item_menu" />  
+    </c:when>        
+  </c:choose>
+
+
+</ui:composition>
