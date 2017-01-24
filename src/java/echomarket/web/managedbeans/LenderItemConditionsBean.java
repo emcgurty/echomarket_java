@@ -231,6 +231,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     Map<String, String> params = null;
     String strIid = null;
     String action = null;
+    Boolean isLICnull = false;
 
     try {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
