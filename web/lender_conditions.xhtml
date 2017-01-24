@@ -38,7 +38,8 @@
                   <f:param name="action" value="edit" />
                 </h:commandLink>
                 <h:inputHidden id="lender_item_condition_id"  value="#{lenderItemConditionsBean.lender_item_condition_id}"  />
-                <h:inputHidden id="itemId" value="#{lenderItemConditionsBean.itemId}"  />
+                
+                <h:inputHidden id="itemId" value="${userBean.itemId}"  />
 
               </div> 
               <div class="messagecolor">
