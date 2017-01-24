@@ -254,7 +254,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             sb.update(lit);
             tx.commit();
             successTransaction = true;
-            message(null, "LITupdated", null);
+            message(null, "LenderTransferSaved", null);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update LIT");
