@@ -26,7 +26,7 @@
     <property name="communityId" type="string">
       <column name="community_id" length="40" />
     </property>
-    <property name="contactDescribeId" type="java.lang.Integer">
+    <property name="contact_describe_id" type="java.lang.Integer">
       <column name="contact_describe_id"  />
     </property>
     <property name="organizationName" type="string">
