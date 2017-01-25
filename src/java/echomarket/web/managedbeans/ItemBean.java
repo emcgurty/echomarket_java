@@ -262,6 +262,7 @@ public class ItemBean extends AbstractBean implements Serializable {
           //    this.comment = ir.getComment();  Later, not in gui yet
           this.notify = ir.getNotify();
           getCurrentPicture(iid);
+          
         }
       }
     } else {
@@ -288,7 +289,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       setPicture(tmp_picture);
 
     }
-
+    
     return "user_item";
   }
 
