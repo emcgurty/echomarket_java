@@ -42,7 +42,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private Boolean questionAltAddress;
   private Boolean questionAltEmail;
 
-
   public ContactPreferenceBean() {
   }
 
@@ -321,11 +320,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     if (this.contactPreferenceId.isEmpty() == true) {
 
-      ContactPreference part = new ContactPreference(getId(), 
-              ubean.getParticipant_id(), this.itemId, 
-              this.useWhichContactAddress, this.contactByChat, 
-              this.contactByEmail, this.contactByHomePhone, 
-              this.contactByCellPhone, this.contactByAlternativePhone, 
+      ContactPreference part = new ContactPreference(getId(),
+              ubean.getParticipant_id(), this.itemId,
+              this.useWhichContactAddress, this.contactByChat,
+              this.contactByEmail, this.contactByHomePhone,
+              this.contactByCellPhone, this.contactByAlternativePhone,
               this.contactByFacebook, this.contactByTwitter, this.contactByInstagram, this.contactByLinkedIn, this.contactByOtherSocialMedia, this.contactByOtherSocialMediaAccess, new Date());
 
       try {
@@ -472,8 +471,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     if (strIid != null) {
       partlist = getCurrentCP_Id(pid, strIid);
     }
-    
-     if (partlist == null) {
+
+    if (partlist == null) {
       isCPnull = true;
     }
 
@@ -484,9 +483,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     }
 
     if (isCPnull == true) {
-        partlist = getCurrentCP(pid);
-      }
-
+      partlist = getCurrentCP(pid);
+    }
 
     if (partlist != null) {
       if (partlist.size() == 1) {
@@ -576,6 +574,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
   private void getParticipantAddreseEmailAlts(String pid) {
 
+    System.out.println("Called getParticipantAddreseEmailAlts");
     List result = null;
     Session session = null;
     Transaction tx = null;
@@ -643,7 +642,5 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   public void setQuestionAltEmail(Boolean questionAltEmail) {
     this.questionAltEmail = questionAltEmail;
   }
-
-
 
 }
