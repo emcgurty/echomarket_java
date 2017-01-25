@@ -186,7 +186,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         sb = hib_session();
         tx = sb.beginTransaction();
         //// one-to-one particpant and community
-        comm = new Communities(ubean.getParticipant_id(), this.communityName, 0, this.firstName, this.mi, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, "NA");
+        comm = new Communities(ubean.getParticipant_id(), this.communityName, 0, this.firstName, this.mi, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, getClientIpAddr());
         sb.save(comm);
         tx.commit();
         updateSuccess = true;
@@ -239,7 +239,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
             comm_result.setPostalCode(postalCode);
             comm_result.setProvince(province);
             comm_result.setRegion(region);
-            comm_result.setRemoteIp("NA");
+            comm_result.setRemoteIp(getClientIpAddr());
             comm_result.setIsActive(1);
             sb = hib_session();
             tx = sb.beginTransaction();
@@ -262,6 +262,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
+    ubean.setComMemberDetailID(updateSuccess);
     ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
     }
     return "community_members";
