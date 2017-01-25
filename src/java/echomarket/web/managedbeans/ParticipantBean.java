@@ -29,7 +29,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   UserBean ubean;
   private String participant_id;
   private String communityId;
-  private int contactDescribeId;
+  private int contact_describe_id;
   private String organizationName;
   private int displayOrganization;
   private String otherDescribeYourself;
@@ -55,6 +55,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   private Integer goodwill;
   private Integer instructions;
   private Integer age18OrMore;
+  private Integer threeStrikesYourOut;
   private Integer isCreator;
   private Date dateCreated;
   private Date dateUpdated;
@@ -119,7 +120,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       pp = (Participant) partlist.get(0);
       this.participant_id = pp.getParticipant_id();
       this.communityId = pp.getCommunityId();
-      this.contactDescribeId = pp.getContactDescribeId();
+      this.contact_describe_id = pp.getContact_describe_id();
       this.organizationName = pp.getOrganizationName();
       this.displayOrganization = pp.getDisplayOrganization();
       this.otherDescribeYourself = pp.getOtherDescribeYourself();
@@ -147,7 +148,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     }
     getExistingAddress("primary");
     getExistingAddress("alternative");
-
 
     if (ubean.getEditable()
             == -1) {
@@ -238,7 +238,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       Participant part = (Participant) result.get(0);
       pid = part.getParticipant_id();
       part.setCommunityId(communityId);
-      part.setContactDescribeId(contactDescribeId);
+      part.setContact_describe_id(contact_describe_id);
       part.setOrganizationName(organizationName);
       part.setDisplayOrganization(displayOrganization);
       part.setOtherDescribeYourself(otherDescribeYourself);
@@ -265,7 +265,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
       if (this.getQuestionAltEmailProvide() == 0) {
         part.setEmailAlternative(null);
-         part.setQuestionAltEmail(0);
+        part.setQuestionAltEmail(0);
       } else {
         part.setEmailAlternative(emailAlternative);
       }
@@ -307,7 +307,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
           } else if (aalt.getAddressId() != null && this.getQuestionAltAddressProvide() == 1) {
             sb.update(aalt);
           } else {
-          } 
+          }
 
           if ((aalt.getAddressId() != null) && ((this.getQuestionAltAddressDelete() == 1) || (this.getQuestionAltAddressProvide() == 0))) {
             Addresses addr = new Addresses();
@@ -315,7 +315,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
             addr.setAddressId(current_id);
             sb.delete(addr);
             ArrayList<Addresses> clear_alternative
-                   = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "alternative")));
+                    = new ArrayList<Addresses>(Arrays.asList(new Addresses(null, null, null, null, null, null, null, null, null, null, "alternative")));
             setAlternative(clear_alternative);
             // sb.delete(aalt); this wasn't producing an immediate result in xhtml
             sb.flush();
@@ -388,8 +388,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     Session sb = null;
     Transaction tx = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
-      message(null, "threeStrikesYourOut", null);
-      return_string = ubean.Logout();
+      this.setThreeStrikesYourOut((Integer) (this.getThreeStrikesYourOut() + 1));
+      if (this.threeStrikesYourOut == 3) {
+        message(null, "threeStrikesYourOut", null);
+        return_string = ubean.Logout();
+      }
     } else {
 
       try {
@@ -397,9 +400,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         tx = sb.beginTransaction();
         String new_ID = getId();
         Participant part = null;
-       
+
         if (ubean.getRoleId() == 0) {
-          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(),getClientIpAddr(), 0);
+          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
         } else {
           part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
         }
@@ -410,6 +413,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
         ubean.setParticipant_id(new_ID);
         ubean.setAcceptID(true);
+
         if (ubean.getRoleId() > 0) {
           ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
         }
@@ -459,12 +463,12 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     return b_return;
   }
 
-  public int getContactDescribeId() {
-    return contactDescribeId;
+  public int getContact_describe_id() {
+    return contact_describe_id;
   }
 
-  public void setContactDescribeId(int contactDescribeId) {
-    this.contactDescribeId = contactDescribeId;
+  public void setContact_describe_id(int contactDescribeId) {
+    this.contact_describe_id = contactDescribeId;
   }
 
   public String getOrganizationName() {
@@ -1041,6 +1045,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
    */
   public void setInstructions(Integer instructions) {
     this.instructions = instructions;
+  }
+
+  /**
+   * @return the threeStrikesYourOut
+   */
+  public Integer getThreeStrikesYourOut() {
+    return threeStrikesYourOut;
+  }
+
+  /**
+   * @param threeStrikesYourOut the threeStrikesYourOut to set
+   */
+  public void setThreeStrikesYourOut(Integer threeStrikesYourOut) {
+    this.threeStrikesYourOut = threeStrikesYourOut;
   }
 
 }
