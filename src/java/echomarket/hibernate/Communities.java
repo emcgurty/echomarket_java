@@ -36,7 +36,14 @@ public class Communities  implements java.io.Serializable {
     public Communities() {
     }
 
-	
+	///  Initial constructor on new Communitiy creator
+    public Communities(String communityId) {
+        this.communityId = communityId;
+        this.dateCreated = new Date();
+        this.dateUpdated = new Date();
+        this.dateDeleted = new Date();  // know that's wrong
+    }
+    
     public Communities(String communityId, String communityName, String firstName, String lastName, String addressLine1, String postalCode, String city, String usStateId, String countryId, Date dateCreated, Date dateUpdated, Date dateDeleted) {
         this.communityId = communityId;
         this.communityName = communityName;
