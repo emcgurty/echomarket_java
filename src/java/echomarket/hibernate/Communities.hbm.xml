@@ -15,34 +15,34 @@
             <column name="approved" />
         </property>
         <property name="firstName" type="string">
-            <column name="first_name" length="24" not-null="true" />
+            <column name="first_name" length="24"  />
         </property>
         <property name="mi" type="string">
             <column name="mi" length="1" />
         </property>
         <property name="lastName" type="string">
-            <column name="last_name" length="24" not-null="true" />
+            <column name="last_name" length="24"  />
         </property>
         <property name="addressLine1" type="string">
-            <column name="address_line_1" length="24" not-null="true" />
+            <column name="address_line_1" length="24"  />
         </property>
         <property name="addressLine2" type="string">
             <column name="address_line_2" length="24" />
         </property>
         <property name="postalCode" type="string">
-            <column name="postal_code" length="24" not-null="true" />
+            <column name="postal_code" length="24"  />
         </property>
         <property name="city" type="string">
-            <column name="city" length="24" not-null="true" />
+            <column name="city" length="24"  />
         </property>
         <property name="province" type="string">
             <column name="province" length="24" />
         </property>
         <property name="usStateId" type="string">
-            <column name="us_state_id" length="2" not-null="true" />
+            <column name="us_state_id" length="2"  />
         </property>
         <property name="countryId" type="string">
-            <column name="country_id" length="2" not-null="true" />
+            <column name="country_id" length="2"  />
         </property>
         <property name="homePhone" type="string">
             <column name="home_phone" length="20" />
