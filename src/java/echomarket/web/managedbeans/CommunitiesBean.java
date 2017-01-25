@@ -48,6 +48,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
 
   public String load_community_detail() {
 
+    System.out.println("Called load_community_detail");
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -59,7 +60,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", cid )
+              .setParameter("cid", cid)
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -172,17 +173,17 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
   }
 
   public String saveCommunityDetail() {
-   
+
     Session sb = null;
     Transaction tx = null;
     Boolean updateSuccess = false;
     String query = null;
     List result = null;
     Communities comm_result = null;
-    
+
     if (this.communityId.isEmpty() == true) {
       ///  Should never be empty
-     
+
     } else {
       /// Do update 
       try {
@@ -223,7 +224,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
             comm_result.setRegion(region);
             comm_result.setRemoteIp(getClientIpAddr());
             comm_result.setIsActive(1);
-            
+
             sb = hib_session();
             tx = sb.beginTransaction();
             sb.update(comm_result);
@@ -245,8 +246,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
-    ubean.setComMemberDetailID(updateSuccess);
-    ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
+      ubean.setComMemberDetailID(updateSuccess);
+      ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
     }
     return "community_members";
   }
