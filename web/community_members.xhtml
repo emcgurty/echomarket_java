@@ -14,16 +14,8 @@
   <ui:define name="content">
   
     <h:form id="personal_information" class="community_members" > 
-     <body onload="communityMembersLoad();"  >
-      <c:set var="rid" value="#{userBean.roleId}"  />  
-      <c:choose >
-        <c:when test="#{rid == 0}" >
-          <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
-        </c:when>
-        <c:when test="#{rid gt 0}" >
-          <ui:include src="/creator_menu.xhtml" id="community_detail_menu" />  
-        </c:when>
-      </c:choose>
+     <body   >
+      <ui:include rendered="true" src="menu_options.xhtml"  /> 
       <div id="community_members" class="contact_information" >
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
