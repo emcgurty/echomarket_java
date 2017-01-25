@@ -18,7 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "communitiesBean")
+@ManagedBean
 @RequestScoped
 public class CommunitiesBean extends AbstractBean implements Serializable {
 
