@@ -262,7 +262,7 @@ public class ItemBean extends AbstractBean implements Serializable {
           //    this.comment = ir.getComment();  Later, not in gui yet
           this.notify = ir.getNotify();
           getCurrentPicture(iid);
-          
+
         }
       }
     } else {
@@ -289,7 +289,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       setPicture(tmp_picture);
 
     }
-    
+
     return "user_item";
   }
 
@@ -720,7 +720,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     if (iid == null) {
       return getPicture();
     } else {
-      
+
       System.out.println("IN getExistingPicture");
       String queryString = " Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid";
       try {
@@ -739,7 +739,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         tx = null;
         hib = null;
       }
-      
+
       Integer size_of_list = result.size();
       if (size_of_list == 0) {
         return getPicture();
@@ -841,6 +841,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   public List getParticipantItems(String pid, String which) {
 
+    System.out.println("called getParticipantItems");
     List result = null;
     Session session = null;
     Transaction tx = null;
