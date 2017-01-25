@@ -53,13 +53,13 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     String queryString = null;
     Communities comm_Array = null;
-
+    String cid = ubean.getCommunityId();
     queryString = "FROM Communities where community_id = :cid";
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", ubean.getCommunityId())
+              .setParameter("cid", cid )
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -172,35 +172,17 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
   }
 
   public String saveCommunityDetail() {
-
+   
     Session sb = null;
     Transaction tx = null;
-    Communities comm = null;
     Boolean updateSuccess = false;
     String query = null;
     List result = null;
     Communities comm_result = null;
+    
     if (this.communityId.isEmpty() == true) {
-      ///Do save
-      try {
-        sb = hib_session();
-        tx = sb.beginTransaction();
-        //// one-to-one particpant and community
-        comm = new Communities(ubean.getParticipant_id(), this.communityName, 0, this.firstName, this.mi, this.lastName, this.addressLine1, this.addressLine2, this.postalCode, this.city, this.province, this.usStateId, this.countryId, this.homePhone, this.cellPhone, this.email, 1, this.region, getClientIpAddr());
-        sb.save(comm);
-        tx.commit();
-        updateSuccess = true;
-        ubean.setCommunityId(ubean.getParticipant_id());
-        ubean.setCommunityName(this.communityName);
-        message(null, "CommunityDetailRecordSaved", null);
-      } catch (Exception ex) {
-        System.out.println("Error in saveCommunityDetail");
-        Logger.getLogger(CommunitiesBean.class.getName()).log(Level.SEVERE, null, ex);
-        message(null, "CommunityDetailRecordWasNotSaved", null);
-      } finally {
-        sb = null;
-        tx = null;
-      }
+      ///  Should never be empty
+     
     } else {
       /// Do update 
       try {
@@ -241,13 +223,14 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
             comm_result.setRegion(region);
             comm_result.setRemoteIp(getClientIpAddr());
             comm_result.setIsActive(1);
+            
             sb = hib_session();
             tx = sb.beginTransaction();
             sb.update(comm_result);
             tx.commit();
             updateSuccess = true;
             ubean.setCommunityId(comm_result.getCommunityId());
-            ubean.setCommunityName(this.communityName);
+            ubean.setCommunityName(comm_result.getCommunityName());
             message(null, "CommunityDetailRecordUpdated", null);
           }
         }
