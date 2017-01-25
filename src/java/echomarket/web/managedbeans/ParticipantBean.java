@@ -162,6 +162,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String getUserDefinedAlternativeEmail(String pid) {
+    System.out.println("Called getUserDefinedAlternativeEmail");
     Session sb;
     Transaction tx;
     sb = null;
