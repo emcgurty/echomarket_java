@@ -490,6 +490,11 @@ public class UserBean extends AbstractBean implements Serializable {
             setUserType(uu.getUserType());
             setUserType(this.userIsWhichType());
             setUser_id(uu.getUser_id());
+            /// emm 125
+            setPartID(false);
+            setCpId(false);
+            setLICid(false);
+            setLITid(false);
             results = null;
             message(null, "ActivateSuccessful", new Object[]{this.username});
           }
@@ -633,6 +638,12 @@ public class UserBean extends AbstractBean implements Serializable {
       case "lender_transfer":
         return_string = ltribean.load_ud(this.participant_id);
         break;
+      case "community_detail":
+        return_string = commbean.load_community_detail();
+        break;
+      case "community_members":
+        return_string = cmbean.load_community_members();
+        break;
       default:
         return_string = "index";
 
@@ -730,7 +741,7 @@ public class UserBean extends AbstractBean implements Serializable {
         setCommunityId(part.getCommunityId());
       } else {
         setEditable(0);
-        return_string = pbean.load_ud(this.user_id);
+        return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
 
       if (return_string.isEmpty() == true) {
@@ -739,12 +750,12 @@ public class UserBean extends AbstractBean implements Serializable {
         if (hs == 0) {
           setComDetailID(true);
           setEditable(1);
-          return_string = commbean.load_community_detail();
+          return_string = "community_detail"; //commbean.load_community_detail();
         } else {
           setComDetailID(true);
           setCreatorDetailID(true);
           setEditable(1);
-          return_string = cmbean.load_community_members();
+          return_string = "community_members"; //cmbean.load_community_members();
 
         }
       }
