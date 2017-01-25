@@ -1,6 +1,7 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Addresses;
+import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
@@ -399,20 +400,26 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         sb = hib_session();
         tx = sb.beginTransaction();
         String new_ID = getId();
+        String cid_id = UUID.randomUUID().toString();
         Participant part = null;
+        Communities comm = null;
 
         if (ubean.getRoleId() == 0) {
-          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+          part = new Participant(new_ID, ubean.getUser_id(),  null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
         } else {
-          part = new Participant(new_ID, ubean.getUser_id(), new_ID, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
+          /// Have to create a Community record here
+          comm = new Communities(cid_id);
+          part = new Participant(new_ID, ubean.getUser_id(), cid_id, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
         }
 
         sb.save(part);
+        sb.save(comm);
         tx.commit();
         /// emm 1228
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
         ubean.setParticipant_id(new_ID);
         ubean.setAcceptID(true);
+        ubean.setCommunityId(cid_id);
 
         if (ubean.getRoleId() > 0) {
           ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
