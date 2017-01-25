@@ -405,7 +405,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         Communities comm = null;
 
         if (ubean.getRoleId() == 0) {
-          part = new Participant(new_ID, ubean.getUser_id(),  null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
         } else {
           /// Have to create a Community record here
           comm = new Communities(cid_id);
@@ -415,7 +415,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         sb.save(part);
         sb.save(comm);
         tx.commit();
-        /// emm 1228
         ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
         ubean.setParticipant_id(new_ID);
         ubean.setAcceptID(true);
