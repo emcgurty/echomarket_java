@@ -124,6 +124,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   private Boolean hasCreatorRights() {
 
+    System.out.println("Called hasCreatorRights");
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
@@ -383,6 +384,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   private List getExistingMemberList() {
 
+    System.out.println("called getExistingMemberList");
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
@@ -561,6 +563,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   private Boolean checkForDuplicate() {
 
+    System.out.println("Called checkforDuplicate");
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
