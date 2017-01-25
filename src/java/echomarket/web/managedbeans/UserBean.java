@@ -56,6 +56,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private Boolean acceptID;
   private Boolean creatorDetailID;
   private Boolean comDetailID;
+  private Boolean comMemberDetailID;
   private Boolean partID;
   private Boolean cpId;
   private Boolean LITid;
@@ -109,6 +110,7 @@ public class UserBean extends AbstractBean implements Serializable {
     this.communityName = null;
     this.pid = null;
     this.editable = 0;
+   
   }
 
   public String getEmail() {
@@ -648,7 +650,7 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = "index";
 
     }
-    return return_string + "?faces-redirect=true";   /// need to stop forwarding from index
+    return return_string + "?faces-redirect=true";   /// need to stop forwarding from index AND redirect should end Session
 //    return return_string;   /// need to stop forwarding from index
   }
 
@@ -749,10 +751,12 @@ public class UserBean extends AbstractBean implements Serializable {
         Integer hs = completCD.size();
         if (hs == 0) {
           setComDetailID(true);
+          setComMemberDetailID(false);
           setEditable(1);
           return_string = "community_detail"; //commbean.load_community_detail();
         } else {
           setComDetailID(true);
+          setComMemberDetailID(true);
           setCreatorDetailID(true);
           setEditable(1);
           return_string = "community_members"; //cmbean.load_community_members();
@@ -2077,6 +2081,20 @@ public class UserBean extends AbstractBean implements Serializable {
    */
   public void setItemId(String itemId) {
     this.itemId = itemId;
+  }
+
+  /**
+   * @return the comMemberDetailID
+   */
+  public Boolean getComMemberDetailID() {
+    return comMemberDetailID;
+  }
+
+  /**
+   * @param comMemberDetailID the comMemberDetailID to set
+   */
+  public void setComMemberDetailID(Boolean comMemberDetailID) {
+    this.comMemberDetailID = comMemberDetailID;
   }
 
 }
