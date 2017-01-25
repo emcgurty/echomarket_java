@@ -31,6 +31,20 @@
 
           <c:choose >
             <c:when test="#{rid == 0}" >
+
+              <c:set var="allow" value="public"  />  
+              <c:set var="title" value="USER"  />  
+
+            </c:when>
+            <c:when test="#{rid gt 0}" >
+
+              <c:set var="allow" value="Community"  />  
+              <c:set var="title" value="#{userBean.communityName}"  />  
+            </c:when>
+          </c:choose>
+
+          <c:choose >
+            <c:when test="#{rid == 0}" >
               <c:set var="sub_title" value="EchoMarket 'Participant Information'" />
             </c:when>
             <c:when test="#{rid == 1}" >
@@ -117,32 +131,28 @@
                           <c:set var="display_describe" value="How you describe your Community:"   rendered="#{userBean.editable == 0}" />
                         </c:when>
                       </c:choose>
-                      <h:outputLabel for="contactDescribeId"  value="#{display_describe}" ><span class="required_fields">*</span>
-
-                        <h:selectOneMenu id="contactDescribeId" value="#{participantBean.contactDescribeId}" rendered="#{userBean.editable == 1}" >
-
+                      <h:outputLabel for="contact_describe_id"  value="#{display_describe}" ><span class="required_fields">*</span>
+                        <h:selectOneMenu id="contact_describe_id" value="#{participantBean.contact_describe_id}" rendered="#{userBean.editable == 1}" >
                           <c:choose >
                             <c:when test="#{rid == 1}" >
-                              <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('community')}"  
-                                             var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  />  
+                              <f:selectItems id="contact_describe_id_value" value="#{contactDescribesBean.buildContactDArray('community')}"  
+                                             var="c" itemValue="#{c.contact_describe_id}" itemLabel="#{c.borrowerOrLenderText}"  />  
                             </c:when>
                             <c:when test="#{rid == 0}" >
                               <c:choose>
                                 <c:when test="#{whichUseType == 'borrow' }" >
-                                  <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('borrow')}"  
-                                                 var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
+                                  <f:selectItems id="contact_describe_id_value" value="#{contactDescribesBean.buildContactDArray('borrow')}"  
+                                                 var="c" itemValue="#{c.contact_describe_id}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
                                 <c:when test="#{whichUseType == 'lend' or whichUseType == 'both'}" >
-                                  <f:selectItems id="contact_describe_id_values" value="#{contactDescribesBean.buildContactDArray('lend')}"  
-                                                 var="c" itemValue="#{c.optionValue}" itemLabel="#{c.borrowerOrLenderText}"  /> 
+                                  <f:selectItems id="contact_describe_id_value" value="#{contactDescribesBean.buildContactDArray('lend')}"  
+                                                 var="c" itemValue="#{c.contact_describe_id}" itemLabel="#{c.borrowerOrLenderText}"  /> 
                                 </c:when>
-
                               </c:choose>
-
                             </c:when>
                           </c:choose>
                         </h:selectOneMenu>
-                        <h:outputText value="#{contactDescribesBean.getOneCD(participantBean.contactDescribeId)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
+                        <h:outputText value="#{contactDescribesBean.getOneCD(participantBean.contact_describe_id)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
                       </h:outputLabel>
                       <span class="error-message" id="contactDescribeId" ></span>
                     </div>
