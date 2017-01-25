@@ -19,6 +19,7 @@ $(document).ready(function () {
 
         } else if (this.id.includes('email')) {
             current_id = this.id;
+            /// regEx not working
             var intValue = parseInt(current_id.match(/[0-9]+/)[0], 10);
             current_value = $(this).val();
             
