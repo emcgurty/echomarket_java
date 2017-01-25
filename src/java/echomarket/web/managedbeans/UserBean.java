@@ -30,7 +30,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 //Need to fixe login approach in event of exisitng data 
-
 @Named
 @ManagedBean(name = "userBean")
 @SessionScoped
@@ -88,13 +87,13 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String clearItemId() {
-    
+
     ibean.setItemId("");
     this.itemId = "";
     return pbean.load_ud(this.participant_id);
-           
+
   }
-  
+
   private void setUserToNull() {
     this.user_id = null;
     this.username = null;
@@ -110,7 +109,7 @@ public class UserBean extends AbstractBean implements Serializable {
     this.communityName = null;
     this.pid = null;
     this.editable = 0;
-   
+
   }
 
   public String getEmail() {
@@ -650,7 +649,11 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = "index";
 
     }
-    return return_string + "?faces-redirect=true";   /// need to stop forwarding from index AND redirect should end Session
+    if ("community_detail".equals(return_string)) {
+      return return_string;
+    } else {
+      return return_string + "?faces-redirect=true";   /// need to stop forwarding from index AND redirect should end Session
+    }
 //    return return_string;   /// need to stop forwarding from index
   }
 
@@ -800,6 +803,9 @@ public class UserBean extends AbstractBean implements Serializable {
         Participant getPID = (Participant) results.get(0);
         setParticipant_id(getPID.getParticipant_id());
         setCommunityId(getPID.getCommunityId());
+        /// Seems redundant but set is not working... cid in testing should be b4b
+        this.participant_id = getPID.getParticipant_id();
+        this.communityId = getPID.getCommunityId();
         results = null;
         getPID = null;
       }
@@ -817,7 +823,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       queryString = " FROM Communities "
-              + " WHERE community_id = :cid";
+              + " WHERE community_id = :cid and communityName is not null";
       results = hib.createQuery(queryString)
               .setParameter("cid", this.communityId)
               .list();
