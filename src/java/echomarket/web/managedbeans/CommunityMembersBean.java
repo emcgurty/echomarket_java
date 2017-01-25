@@ -17,8 +17,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "communityMembersBean")
+@ManagedBean
 @SessionScoped
+
 public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   @Inject
@@ -69,6 +70,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     SendEmail se = null;
     String[] getMap = null;
     Boolean savedRecord = false;
+    String fullName = null;
 
     for (int i = 0; i < new_row_size; i++) {
       cm = (Participant) new_rows.get(i);
@@ -78,7 +80,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         this.alias = cm.getAlias();
         this.emailAlternative = cm.getEmailAlternative();
         this.participant_id = cm.getParticipant_id();
-
+        fullName = this.firstName + " " + this.lastName + " with alias " + this.alias;
         if (checkForDuplicate() == false) {
 
           try {
@@ -103,7 +105,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             } catch (Exception ex) {
               System.out.println("Error in Send Member Notification");
               Logger.getLogger(CommunityMembersBean.class.getName())
-                      .log(Level.SEVERE, "COMMUNITY MEMBER NOT updates", ex);
+                      .log(Level.SEVERE, "COMMUNITY MEMBER NOT updated", ex);
 
             } finally {
               se = null;
@@ -111,11 +113,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             }
             if (savedRecord == true) {
               ubean.setPartID(savedRecord);  /// Allows preference to appear in menu
-              if (new_row_size == 1) {
-                message(null, "Your new memeber has been saved to your Community and an email notication was sent to him/her", null);
-              } else {
-                message(null, "New Member(s) have been saved to your Community and an email notication was sent to them", null);
-              }
+              message(null, "NewMember", new Object[]{fullName});
             }
           }
         }
@@ -129,6 +127,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
+    String cid = ubean.getCommunityId();
+    String uid = ubean.getUser_id();
     List result = null;
     Boolean isCreatorRights = false;
     queryString = "FROM Participant where community_id = :cid AND is_creator = 1 AND user_id = :uid ";
@@ -137,8 +137,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", ubean.getCommunityId())
-              .setParameter("uid", ubean.getUser_id())
+              .setParameter("cid", cid)
+              .setParameter("uid", uid)
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -192,7 +192,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       }
 
       this.editable = 0;
-      return "community_members.xhtml?faces-redirect=true";
+      return "community_members";
     } else {
       message(null, "MustBeCommunityCreatorAddMember", null);
       return "index";
