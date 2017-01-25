@@ -244,11 +244,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void addAction() {
 
     if (this.howManyRecords > 0 && this.howManyRecords < 26) {
-      if (this.currentRow != null){
-      if (this.currentRow > -1) {
-        cancelAction(comm_member_rows.get(this.currentRow));
-        this.currentRow = -1;
-      }
+      if (this.currentRow != null) {
+        if (this.currentRow > -1) {
+          cancelAction(comm_member_rows.get(this.currentRow));
+          this.currentRow = -1;
+        }
       }
       this.setErrorMessage("");
       this.editable = 3;
@@ -353,8 +353,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public List buildCommunityMemberCreators() {
-    Session hib = hib_session();
-    Transaction tx = hib.beginTransaction();
+    Session hib = null;
+    Transaction tx = null;
     String queryString = null;
     List result = null;
     queryString = "SELECT part.firstName, part.lastName, us.userAlias, us.email, part.isActive  "
@@ -362,6 +362,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             + " INNER join us.participant part "
             + " WHERE part.communityId = :cid and part.isCreator = 1";
     try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
               .setParameter("cid", ubean.getCommunityId())
               .list();
@@ -499,27 +501,24 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void setNew_member(List new_member) {
     this.new_member = new_member;
   }
-   
-  
+
 //  public void setNew_member(Participant[] cm) {
 //    this.setNew_member(cm);
 //  }
-
   public List getExisting_member() {
     return getExistingMemberList();
   }
 
- /**
+  /**
    * @param existing_member the existing_member to set
    */
   public void setExisting_member(List existing_member) {
     this.existing_member = existing_member;
   }
-  
+
 //  public void setExisting_member(Participant[] existing_member) {
 //    this.existing_member = existing_member;
 //  }
-
   public String getEditWhichRecord() {
     return editWhichRecord;
   }
@@ -623,9 +622,5 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   public void setCurrentRow(Integer currentRow) {
     this.currentRow = currentRow;
   }
-
-
-
-  
 
 }
