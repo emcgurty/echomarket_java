@@ -19,7 +19,7 @@ public class Participant implements java.io.Serializable {
   private String participant_id;
   private String userId;
   private String communityId;
-  private Integer contactDescribeId;
+  private Integer contact_describe_id;
   private String organizationName;
   private Integer displayOrganization;
   private String otherDescribeYourself;
@@ -90,7 +90,7 @@ public class Participant implements java.io.Serializable {
     this.participant_id = participant_id;
     this.userId = userId;
     this.communityId = null;
-    this.contactDescribeId = contactDescribeId;
+    this.contact_describe_id = contactDescribeId;
     this.organizationName = organizationName;
     this.displayOrganization = displayOrganization;
     this.otherDescribeYourself = otherDescribeYourself;
@@ -166,12 +166,12 @@ public class Participant implements java.io.Serializable {
     this.communityId = communityId;
   }
 
-  public Integer getContactDescribeId() {
-    return (null == this.contactDescribeId) ? -9 : contactDescribeId;
+  public Integer getContact_describe_id() {
+    return (null == this.contact_describe_id) ? -9 : contact_describe_id;
   }
 
-  public void setContactDescribeId(Integer contactDescribeId) {
-    this.contactDescribeId = contactDescribeId;
+  public void setContact_describe_id(Integer contactDescribeId) {
+    this.contact_describe_id = contactDescribeId;
   }
 
   public String getOrganizationName() {
