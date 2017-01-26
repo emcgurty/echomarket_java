@@ -15,6 +15,10 @@ tr:empty {
   visibility: hidden;
 }*/
 
+li {
+  list-style: none;
+  
+}
 hr {
   border: 1px dotted indigo;
   border-style: none none solid; 
