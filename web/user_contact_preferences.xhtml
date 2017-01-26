@@ -28,7 +28,7 @@
             <div style="margin:10px;margin-top:25px;" >
 
               <h:outputText value="${userBean.userAlias}: USER DASHBOARD"  />
-              <h:outputText value="${userBean.editable}: ed"  />
+              
               <c:choose >
                 <c:when test="#{empty contactPreferenceBean.contactPreferenceId}" >
                   <c:set var="save_update"  value="Save Contact Preferences" />
