@@ -390,11 +390,14 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     Session sb = null;
     Transaction tx = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
-      this.setThreeStrikesYourOut((Integer) (this.getThreeStrikesYourOut() + 1));
+      if (this.threeStrikesYourOut == null) {
+        threeStrikesYourOut = 0;
+      }
+      this.threeStrikesYourOut = this.threeStrikesYourOut + 1;
       if (this.threeStrikesYourOut == 3) {
         message(null, "threeStrikesYourOut", null);
         return_string = ubean.Logout();
-      }
+      } 
     } else {
 
       try {
