@@ -19,7 +19,7 @@
         <body onload="changeMenuBackground(3);"  >
            <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
           <div id="form_lender_to_borrower" class="contact_information" >
-            <h:outputText  value="${userBean.editable} -- e"  />  
+           
             <c:set var="iid" value="${itemBean.itemId}"  />  
            <c:set var="displayThirdChoice" value="none" />
             <c:set var="displayThirdChoice" value="${(userBean.editable == 0) and (lenderTransferBean.thirdPartyPresence == 1)}" />
@@ -397,7 +397,7 @@
               </h:outputLabel>                        
             </div>
           </div>
-          <div style="margin-left:25px;margin-top:5px;">
+          <div style="margin-left:25px;margin-top:5px;float:left;">
             <h:outputLabel for="comment" value="Additional transfer preferences:" >
               <h:inputTextarea id="comment"  value="#{lenderTransferBean.comment}"  cols="40" rows="10" rendered="#{userBean.editable == 1}" style="margin-left:10px;"  />
               <c:if test="#{userBean.editable == 0}" >
