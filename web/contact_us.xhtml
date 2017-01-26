@@ -24,7 +24,8 @@
 
           <h:commandLink  class="right_div" action="#{contactUsBean.sendMessage()}" value="Send Message"/>
           <div style="width:100%;float:left;" >
-            <h:commandLink  class="right_div" action="index" value="Nevermind..." immediate="true" />
+            <br />
+            <h:commandLink  class="right_div" value="Nevermind..." immediate="true" onclick="window.history.back();"/>
           </div>
 
           <div class="messagecolor" >
