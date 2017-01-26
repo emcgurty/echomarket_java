@@ -440,7 +440,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
       }
     }
-    return return_string + ".xhtml?faces-redirect=true";
+    return return_string;
 
   }
 
