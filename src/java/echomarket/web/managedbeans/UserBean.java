@@ -557,7 +557,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 if (accept_results.size() == 0) {
                   accept_results = null;
                   message(null, "UserHasNotAccepted", new Object[]{this.username});
-                  return_string = pbean.load_ud("-1");
+                  return_string = "user_agreement";  ////pbean.load_ud("-1");
                 } else if (accept_results.size() == 1) {
                   accept_results = null;
                   this.acceptID = true;
@@ -604,7 +604,7 @@ public class UserBean extends AbstractBean implements Serializable {
                 }
               } else {
                 message(null, "UserHasNotAccepted", new Object[]{this.username});
-                return_string = "agreement"; //pbean.load_ud("-1");
+                return_string = "user_agreement"; //pbean.load_ud("-1");
               }
             }
 
@@ -624,7 +624,7 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     switch (return_string) {
-      case "agreement":
+      case "user_agreement":
         return_string = pbean.load_ud("-1");
         break;
       case "user_item":
@@ -649,8 +649,8 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = "index";
 
     }
-    if ("community_detail".equals(return_string)) {
-      return return_string;
+    if ("community_detail".equals(return_string) || "user_agreement".equals(return_string) ) {
+      return return_string;  // no redirect because lose data
     } else {
       return return_string + "?faces-redirect=true";   /// need to stop forwarding from index AND redirect should end Session
     }
@@ -672,7 +672,7 @@ public class UserBean extends AbstractBean implements Serializable {
       } else {
         this.editable = 0;
         this.partID = true;
-        //return_string = "user_nae"; //pbean.load_ud(this.user_id);
+        return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
 
       if (return_string.isEmpty() == true) {
@@ -1454,7 +1454,7 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
-      results = hib.createQuery("from Participant WHERE user_id = :uid AND firstName != null")
+      results = hib.createQuery("from Participant WHERE user_id = :uid AND firstName is not null")
               .setParameter("uid", this.user_id)
               .list();
       tx.commit();
