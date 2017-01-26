@@ -89,11 +89,9 @@
     </c:choose> 
     
 
-    <c:if test="#{(userBean.action == 'current') or (completeLIC_LIT) }" >
+    <c:if test="#{completeLIC_LIT or (userBean.partID and userBean.cpId) }" >
       <li class="subs" >
-
         <c:choose>                                
-    
           <c:when test="#{whichType == 'borrow'}"  >
             <li id="tab_item_1" >
               <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', null)}"  value="Borrowing..."  rendered="#{userBean.editable != -1}"    >
