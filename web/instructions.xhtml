@@ -6,8 +6,23 @@
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
   >
 
+  <style>
+    ul.instructions_top {
+      color:indigo;
+    }
 
-  <body onload="changeMenuBackground(2)"  >
+    ul.instructions_sub {
+      color:#003782;
+    }
+
+    li {
+      list-style-type: square;
+      color: #00824b;
+    }    
+
+  </style>
+
+  <body >
     <div style="font-size:16px;margin-left:15px;" >
 
       <p >
@@ -21,12 +36,12 @@
         Before you can begin to either borrow or lend, you must take the following steps. 
         The navigation of EchoMarket will assist you in this process.  This process should only take a couple of minutes... 
       </p>
-      <ul><a>Step One:</a> 
+      <ul class="instructions_top" ><a>Step One:</a> 
         <li>
           Identify yourself.  For all the the following options if required, 
           you may choose to not publicly display this information.  The required information will be for purposes of Searching for Items.
         </li>
-        <ul>
+        <ul class="instructions_sub">
           <li>
             Your name. Required, you may choose to not publicly display it.  Never used in Item Search. Real or fake, up to you.  
             ...Just you may have some awkward explaining to do to prospective borrowers or lenders.
@@ -52,12 +67,12 @@
           </li>
         </ul>
       </ul>
-      <ul><a>Step Two:</a> 
+      <ul class="instructions_top"><a>Step Two:</a> 
         <li>
           Your Default Contact Preferences.  On creation of a new item to either borrow or lend, 
           you will be able to revise these default preferences. How do you want Borrowers or Lenders to contact?  In a 'Yes/No' process..
         </li>
-        <ul>
+        <ul class="instructions_sub">
           <li>
             Your Primary or Alternative Address?
           </li>
@@ -75,14 +90,14 @@
           </li>
         </ul>
       </ul>
-      <ul><a>Step Three, if are a lender:</a> 
+      <ul class="instructions_top"><a>Step Three, if are a lender:</a> 
         <li>
           Your Default Item Transfer Preference. 
           Again, on creation of a new item to lend, you will be able to revise these preferences. 
           How do you want a borrower to receive and return your item?  
           You will be required to specify at least one option. In a simple 'Yes/No' process..
         </li>
-        <ul>
+        <ul class="instructions_sub">
           <li>
             You want the borrower to come to either your Primary or Alternative address, which will be displayed generically. 
           </li>
@@ -98,14 +113,14 @@
           <li>
             How do you want the item to be returned?  
           </li>
-          
+
         </ul>
       </ul>
-      <ul><a>Step Four, if are a lender:</a> 
+      <ul class="instructions_top"><a>Step Four, if are a lender:</a> 
         <li>
           Your Monetary, Duration and Conditions in Lending. And again, on creation of a new item to lend, you will be able to revise these preferences. You will be required to specify at least one option. Again, in a simple 'Yes/No' process..
         </li>
-        <ul>
+        <ul class="instructions_sub">
           <li>
             Lending for Free?
           </li>
@@ -133,17 +148,17 @@
           <li>
             You may write specific conditions in lending...
           </li>
-          
+
         </ul>
       </ul>
-      
+
       <p >
         That's it!  May seem excessive, but EchoMarket is determined in protecting your privacy and assuring all successful and continued borrowing and lending.
       </p>
       <p >
         From your Browser, you should print these Instructions.
       </p>
-      
+
     </div>
 
   </body>
