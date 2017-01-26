@@ -37,7 +37,7 @@
     <table style="width:95%;margin-left: 50px" align="center" id="user_registration_table">
       <tr >
         <td style="padding-bottom: 15px;">
-          <h:outputLabel for="username" value="#{b_username}" >       
+          <h:outputLabel for="username" value="#{b_username}" >
             <h:inputText id="username"
                          value="#{userBean.username}"
                          size="16"
@@ -47,10 +47,12 @@
                          style="margin-left:5px">
             </h:inputText>
           </h:outputLabel>
+          <br />
+          <span class="required_fields" style="margin-left:7px;" >8-16 characters</span> 
         </td>
         <td style=" padding-bottom: 15px;">
 
-          <h:outputLabel for="userAlias"  value="#{b_alias}">       
+          <h:outputLabel for="userAlias"  value="#{b_alias}">      
             <h:inputText id="userAlias"
                          size="16"
                          value="#{userBean.userAlias}"
@@ -60,12 +62,14 @@
                          style="margin-left:5px">
             </h:inputText>
           </h:outputLabel>
+          <br />
+          <span class="required_fields" style="margin-left:7px;" >8-16 characters</span> 
         </td>
       </tr>
       <tr >
-        <td style="padding-bottom: 15px;">
+        <td style="padding-bottom: 0px;">
           <f:event listener="#{userBean.validatePassword}" type="postValidate" />
-          <h:outputLabel for="password" value="#{b_password}" >       
+          <h:outputLabel for="password" value="#{b_password}" >
             <h:inputSecret id="password"
                            size="16"
                            value="#{userBean.password}"
@@ -75,9 +79,10 @@
                            style="margin-left:5px">
             </h:inputSecret>
           </h:outputLabel>
+          
 
         </td>
-        <td style="padding-bottom: 15px;">
+        <td style="padding-bottom: 0px;">
           <h:outputLabel for="confirmPassword" value="#{b_confirm}" >       
             <h:inputSecret id="confirmPassword"
                            size="16"
@@ -87,6 +92,12 @@
                            style="margin-left:5px">
             </h:inputSecret>
           </h:outputLabel>
+        </td>
+      </tr>
+      <tr  >
+        <td colspan="2" style="width:100%;padding-bottom: 15px;">
+        
+           <span class="required_fields" style="margin-left:7px;" >8-16 characters, at least one upper case letter, one lower case letter, one number, and one from @, #, $, %, or ! </span>      
         </td>
       </tr>
       <tr  >
