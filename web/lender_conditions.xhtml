@@ -26,11 +26,14 @@
               <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
                 <c:choose >
-                  <c:when test="#{empty lenderItemConditionsBean.lender_item_condition_id}" >
+                  <c:when test="#{(empty lenderItemConditionsBean.lender_item_condition_id) and (empty userBean.itemId)}" >
                     <c:set var="save_update"  value="Save Lender Item Conditions" />
                   </c:when >
-                  <c:when test="#{!empty lenderItemConditionsBean.lender_item_condition_id}" >
+                  <c:when test="#{(!empty lenderItemConditionsBean.lender_item_condition_id)  and (empty userBean.itemId)}" >
                     <c:set var="save_update"  value="Update Lender Item Conditions" />
+                  </c:when >
+                  <c:when test="#{(!empty lenderItemConditionsBean.lender_item_condition_id)  and (!empty userBean.itemId)}" >
+                    <c:set var="save_update"  value="Update or Accept Current Lender Item Conditions" />
                   </c:when >
                 </c:choose>
                 <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="#{save_update}"  rendered="#{userBean.editable == 1}"  />
@@ -49,16 +52,7 @@
                             infoStyle="color: indigo"/>
               </div>
             </div>
-
-            <div  class="div_p"  >
-              <div style="margin:10px;" >
-                <h:outputText value="Lender Item Conditions"  />
-                <h:commandLink  action="#{itemBean.load_ud(userBean.userType, '')}"  class="right_div" value="Let's Add A New Item!" rendered="#{userBean.LICid}"  >
-                  <f:param name="action" value="edit" />
-                </h:commandLink>
-              </div>
-            </div>
-
+       
             <c:choose> 
               <c:when test="#{userBean.editable == 0}" >
                 <div  class="div_p"  >
