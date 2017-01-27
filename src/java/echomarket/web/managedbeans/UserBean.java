@@ -211,7 +211,7 @@ public class UserBean extends AbstractBean implements Serializable {
     if (results != null) {
       if (results.size() == 1) {
         Users user = (Users) results.get(0);
-        this.userType = user.getUserType();
+     //   this.userType = user.getUserType();
         this.communityName = user.getCommunityName();
         return_result = true;
       }
@@ -589,7 +589,7 @@ public class UserBean extends AbstractBean implements Serializable {
                     case 1:  // A community creator
                       findWhatIsCommunityComplete();
                       return_string = this.isCompleteString;
-                      if (return_string.isEmpty() == true) {
+                      if (return_string.isEmpty() == false) {
                         findWhatIsComplete();  // hold needs to be written
                         return_string = this.isCompleteString;
                       }
@@ -891,7 +891,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return getp;
   }
 
-  private List findUserName() {
+  protected List findUserName() {
 
     Session hib = null;
     Transaction tx = null;
