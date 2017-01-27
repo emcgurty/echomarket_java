@@ -30,11 +30,14 @@
               <h:outputText value="${userBean.userAlias}: USER DASHBOARD"  />
               
               <c:choose >
-                <c:when test="#{empty contactPreferenceBean.contactPreferenceId}" >
+                <c:when test="${(empty contactPreferenceBean.contactPreferenceId) and (empty userBean.itemId)}" >
                   <c:set var="save_update"  value="Save Contact Preferences" />
                 </c:when >
-                <c:when test="#{!empty contactPreferenceBean.contactPreferenceId}" >
+                <c:when test="${(!empty contactPreferenceBean.contactPreferenceId) and (empty userBean.itemId)}" >
                   <c:set var="save_update"  value="Update Contact Preferences" />
+                </c:when >
+                <c:when test="${(!empty contactPreferenceBean.contactPreferenceId) and (!empty userBean.itemId)}" >
+                  <c:set var="save_update"  value="Update or Accept Current Contact Preferences" />
                 </c:when >
               </c:choose>
               <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div"   rendered="#{userBean.editable == 1}"  >
