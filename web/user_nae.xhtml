@@ -303,7 +303,7 @@
                   <span class="error-message" id="emailAlternative" ></span>
                 </h:outputLabel>
                 <br />
-                <h:outputLabel value="Would you like to delete your Alternative Email?"  for="questionAltEmailDelete" rendered="#{userBean.editable == 1}" >
+                <h:outputLabel value="Would you like to delete your Alternative Email?"  for="questionAltEmailDelete" rendered="#{userBean.editable == 1}" style="margin-top:10px;">
                   <h:selectOneRadio id="questionAltEmailDelete" value="#{participantBean.questionAltEmailDelete}"  rendered="#{userBean.editable == 1}" >
                     <f:selectItem itemValue="1" itemLabel="Yes" />
                     <f:selectItem itemValue="0" itemLabel="No" />
