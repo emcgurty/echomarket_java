@@ -208,6 +208,8 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
     } catch (Exception ex) {
 
     } finally {
+      
+      params = null;
 
     }
 
