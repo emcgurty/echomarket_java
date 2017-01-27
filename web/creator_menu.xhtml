@@ -3,14 +3,20 @@
   xmlns:f="http://xmlns.jcp.org/jsf/core"
   xmlns:h="http://xmlns.jcp.org/jsf/html"
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
   xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
   <h:head>
     <h:outputStylesheet library="css" name="creator_nav.css"/>
-    <c:set var="whichType" value="#{userBean.userIsWhichType()}" />
-    <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
+  
   </h:head>
-
+  <c:set var="whichType" value="#{userBean.userType}" />
+  <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
+  <h:outputText  value="#{userBean.partID} -- partId  " /> 
+  <h:outputText  value="#{userBean.cpId} -- cpid  " /> 
+  <h:outputText  value="#{userBean.LITid} -- lit " /> 
+  <h:outputText  value="#{userBean.LICid}-- lic  " /> 
+  <h:outputText  value="#{whichType}-- which header  " /> 
   <ul id="nav" class="creator_menu">
 
 
@@ -30,12 +36,12 @@
     </li>
 
     <li class="subs" id="tab_item_0" >
-      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" value="Community Detail" immediate="true" rendered="#{userBean.creatorDetailID}" >
+      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" value="Community Detail" immediate="true" rendered="#{userBean.comDetailID}" >
       </h:commandLink>   
     </li>
 
     <li class="subs" id="tab_item_1" >
-      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" value="Community Members" immediate="true" rendered="#{userBean.comDetailID}" >
+      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" value="Community Members" immediate="true" rendered="#{userBean.comMemberDetailID}" >
       </h:commandLink>    
     </li>
 
@@ -53,10 +59,11 @@
       </c:when>
     </c:choose>
 
-    
+       <h:outputText value="#{((whichType == 'both') or (whichType == 'lend')) and (userBean.partID)} == 3  " />
+       <h:outputText value="#{whichType} == which 3  " />
     <c:choose>
       
-      <c:when test="#{!empty whichType and !empty userBean.partID}"  >
+      <c:when test="#{userBean.partID}"  >
         <c:if test="#{((whichType == 'both') or (whichType == 'lend')) and (userBean.partID)}" >
           <li class="subs" id="tab_item_4" >
             <a href="#s1">Default Item Preferences/Conditions</a>
