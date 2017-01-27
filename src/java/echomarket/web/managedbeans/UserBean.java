@@ -649,7 +649,7 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = "index";
 
     }
-    if ("community_detail".equals(return_string) || "user_agreement".equals(return_string) ) {
+    if ("community_detail".equals(return_string) || "user_agreement".equals(return_string) || "index".equals(return_string)) {
       return return_string;  // no redirect because lose data
     } else {
       return return_string + "?faces-redirect=true";   /// need to stop forwarding from index AND redirect should end Session
