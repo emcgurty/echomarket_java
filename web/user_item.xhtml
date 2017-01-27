@@ -190,8 +190,6 @@
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                   <c:set var="whichTypeUser" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />
                   <c:set var="whichTypeUser" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />
-                  <h:outputText value="#{whichTypeUser}" />
-
                   <h:outputLabel for="imagePreview" value="Uploaded Image:"  >
                     <c:choose>
                       <c:when test="#{whichTypeUser == 'both'}" >
