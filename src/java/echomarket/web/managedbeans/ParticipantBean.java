@@ -3,6 +3,7 @@ package echomarket.web.managedbeans;
 import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
+import echomarket.hibernate.Users;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -389,6 +390,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     String return_string = null;
     Session sb = null;
     Transaction tx = null;
+    List result  = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
       if (this.threeStrikesYourOut == null) {
         threeStrikesYourOut = 0;
@@ -423,9 +425,30 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         ubean.setParticipant_id(new_ID);
         ubean.setAcceptID(true);
         ubean.setCommunityId(cid_id);
-
+        result = ubean.findUserName();
+        if (result != null) {
+          if (result.size() == 1) {
+        
+           Users uu = (Users) result.get(0);  /// User result that has current user data
+            Integer memberCreator = uu.getRoleId();
+            ubean.setRoleId(memberCreator);
+            ubean.setEmail(uu.getEmail());
+            ubean.setUserAlias(uu.getUserAlias());
+            ubean.setUsername(uu.getUsername());
+            ubean.setUserType(uu.getUserType());
+            String hold_ut = ubean.userIsWhichType();  // getting a WELD error
+            ubean.setUserType(hold_ut);
+            ubean.setUser_id(uu.getUser_id());
+            ubean.setPartID(false);
+            ubean.setCpId(false);
+            ubean.setLICid(false);
+            ubean.setLITid(false);
+            ubean.setCommunityName(uu.getCommunityName());
+            result = null;
+          }
+        }
         if (ubean.getRoleId() > 0) {
-          ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
+          //ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
         }
         return_string = load_ud(ubean.getUser_id());
         message(null, "thanksForAcceptingAgreement", null);
