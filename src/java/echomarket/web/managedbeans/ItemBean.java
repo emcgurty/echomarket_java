@@ -866,15 +866,13 @@ public class ItemBean extends AbstractBean implements Serializable {
         session = hib_session();
         tx = session.beginTransaction();
         if (this.history_which == 0) {
-          query = "SELECT itmImage.imageFileName, itm.itemId, itm.itemDescription, "
-                  + "itm.itemModel, itm.participant_id, itm.approved  "
-                  + "FROM Items itm LEFT JOIN itm.itemImages itmImage "
+          query = "SELECT itm "
+                  + "FROM Items itm "
                   + " WHERE itm.participant_id = :pid AND itm.itemType = :itype ";
         } else if (this.history_which == 1) {
-          query = "SELECT itmImage.imageFileName, "
-                  + " itm.itemId, itm.itemDescription, "
-                  + " itm.itemModel, part.participant_id, itm.approved FROM Participant part, Items itm "
-                  + " INNER join part.item itm LEFT join itm.itemImages itmImage "
+          query = "SELECT itm "
+                  + " FROM Participant part, Items itm "
+                  + " INNER join part.item itm "
                   + " WHERE part.communityId = :pid AND itm.itemType = :itype";
         } else {
           //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
