@@ -9,6 +9,10 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 >
 
+  <h:head>
+    <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'lend')}" />
+    <c:set value="${fn:length(currentHistory) - 1}" var="sizeOfCurrentHistory" />
+  </h:head>
   <h:form enctype="multipart/form-data" id="l_history"  >
     <body  >
       <ui:include src="/item_menu.xhtml" id="lending_item_menu" />  
@@ -23,10 +27,10 @@
                       />
         </div>
       </div> 
-      
-      <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'lend')}" />
+
+
       <h:inputHidden id="itemType" value="lend" />
-      <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
+      <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" begin="0" end="${sizeOfCurrentHistory}">
         <div style="margin-left:25px;margin-top:15px;float:left;position: relative;display:block;" >
 
           <h:outputLabel for="itemDescription" value="Item Description:" >
