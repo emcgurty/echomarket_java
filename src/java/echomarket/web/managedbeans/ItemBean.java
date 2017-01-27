@@ -707,12 +707,23 @@ public class ItemBean extends AbstractBean implements Serializable {
   }
 
   public List getCurrentItemImage(String iid) {
-    return getExistingPicture(iid);
 
+    List result_list = null;
+    if (iid.isEmpty() == true) {
+      result_list = getPicture();
+    } else  {
+      if (this.imageFoundList == null)  {
+              result_list = getExistingPicture(iid);
+      } else {
+        result_list = imageFoundList;
+      }
+    }
+    return result_list;
   }
 
   private List getExistingPicture(String iid) {
 
+    System.out.println("IN getExistingPicture");
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -721,7 +732,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       return getPicture();
     } else {
 
-      System.out.println("IN getExistingPicture");
+      
       String queryString = " Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid";
       try {
         hib = hib_session();
