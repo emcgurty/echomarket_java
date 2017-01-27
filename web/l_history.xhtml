@@ -28,35 +28,33 @@
         </div>
       </div> 
 
-
       <h:inputHidden id="itemType" value="lend" />
-      <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" begin="0" end="${sizeOfCurrentHistory}">
-        <div style="margin-left:25px;margin-top:15px;float:left;position: relative;display:block;" >
+      <h:dataTable  value="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
+        <h:column>
+          <div style="margin-left:25px;margin-top:15px;position: relative;display:block;" >
 
-          <h:outputLabel for="itemDescription" value="Item Description:" >
-            <h:outputText  id="itemDescription" value="#{history[2]}" style="margin-left:10px;color:black;"/>
-          </h:outputLabel>
-          <br />
-          <h:outputLabel for="itemModel" value="Item Model:" >
-            <h:outputText  id="itemModel" value="#{history[3]}" style="margin-left:10px;color:black;"/>
-          </h:outputLabel>
-          <br />
-          <h:outputLabel for="approved" value="Item Approved:" >
-            <h:outputText  id="approved" value="Yes" style="margin-left:10px;color:black;" rendered="#{history[5] == 1}"  />
-            <h:outputText  id="approved" value="No" style="margin-left:10px;color:black;" rendered="#{history[5] == 0}"  />
-          </h:outputLabel>
-          <br />
-          <h:graphicImage name="#{history[0]}" library="lend_images" alt="Item Image"   height="100" width="100" rendered="#{!empty history[0]}"/>
-          <br />
-          <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history[1])}" immediate="true" rendered="#{history[4] == userBean.participant_id}"  >
-            <f:param name="action" value="item" />     
-          </h:commandButton>    
-          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history[1], history[2])}"  immediate="true"  rendered="#{history[4] == userBean.participant_id}"  >
-          </h:commandButton>    
-
-
-        </div>    
-      </c:forEach>
+            <h:outputLabel for="itemDescription" value="Item Description:" >
+              <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
+            </h:outputLabel>
+            <br />
+            <h:outputLabel for="itemModel" value="Item Model:" >
+              <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
+            </h:outputLabel>
+            <br />
+            <h:outputLabel for="approved" value="Item Approved:" >
+              <c:choose>
+                <c:when test="#{history.approved == 1}" >
+                  <h:outputText  id="approved" value="Yes" style="margin-left:10px;color:black;"  />
+                </c:when>
+                <c:when test="#{history.approved == 0}" >
+                  <h:outputText  id="approved" value="No" style="margin-left:10px;color:black;"  />
+                </c:when>
+              </c:choose>
+            </h:outputLabel>
+            
+          </div>    
+        </h:column>
+      </h:dataTable>
 
       <div class="borrower_registration" >
         <h:outputText value="No Lender History Records Found" rendered="${fn:length(currentHistory) == 0}" />
