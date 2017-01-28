@@ -84,7 +84,7 @@ public class ItemBean extends AbstractBean implements Serializable {
   public String getBorrowerHistory(String pid, Integer whichHistory) {
     this.history_id = pid;
     this.setHistory_which(whichHistory);
-     this.itemFoundList = null;
+    this.itemFoundList = null;
     return "borrower_history";
   }
 
@@ -288,6 +288,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       this.history_which = null;
       ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
       setPicture(tmp_picture);
+      /// loading picture needs a delay.... Not hapy with this.  Must be a way to test without using sleep
 
     }
 
@@ -712,12 +713,10 @@ public class ItemBean extends AbstractBean implements Serializable {
     List result_list = null;
     if (iid.isEmpty() == true) {
       result_list = getPicture();
-    } else  {
-      if (this.imageFoundList == null)  {
-              result_list = getExistingPicture(iid);
-      } else {
-        result_list = imageFoundList;
-      }
+    } else if (this.imageFoundList == null) {
+      result_list = getExistingPicture(iid);
+    } else {
+      result_list = imageFoundList;
     }
     return result_list;
   }
@@ -733,7 +732,6 @@ public class ItemBean extends AbstractBean implements Serializable {
       return getPicture();
     } else {
 
-      
       String queryString = " Select images from Items itms INNER JOIN itms.itemImages images where itms.itemId = :iid";
       try {
         hib = hib_session();
@@ -819,6 +817,44 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
   }
 
+  public String getCurrentImageName(String iid) {
+
+    System.out.println("IN getCurrentImageName");
+    List result = null;
+    Session session = null;
+    Transaction tx = null;
+    String query = null;
+    String currentimageFileName = null;
+    try {
+      session = hib_session();
+      tx = session.beginTransaction();
+
+      query = " FROM ItemImages WHERE item_id = :iid ";
+      result = session.createQuery(query)
+              .setParameter("iid", iid)
+              .list();
+
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
+      System.out.println("Error in getCurrentImageName");
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
+
+    } finally {
+      tx = null;
+      session = null;
+    }
+
+    if (result != null) {
+      if (result.size() == 1) {
+        ItemImages itmImg = (ItemImages) result.get(0);
+        currentimageFileName = itmImg.getImageFileName();
+      }
+    }
+    result = null;
+    return currentimageFileName;
+  }
+
   private List getCurrentItem(String iid, String which) {
 
     System.out.println("IN getCurrentItem");
@@ -866,14 +902,14 @@ public class ItemBean extends AbstractBean implements Serializable {
         session = hib_session();
         tx = session.beginTransaction();
         if (this.history_which == 0) {
-          query = "SELECT itm "
-                  + "FROM Items itm "
-                  + " WHERE itm.participant_id = :pid AND itm.itemType = :itype ";
+          query = " SELECT itm "
+                  + " FROM Items itm "
+                  + " WHERE itm.participant_id = :pid AND itm.itemType = :itype GROUP BY itm.participant_id ";
         } else if (this.history_which == 1) {
-          query = "SELECT itm "
+          query = " SELECT itm "
                   + " FROM Participant part, Items itm "
                   + " INNER join part.item itm "
-                  + " WHERE part.communityId = :pid AND itm.itemType = :itype";
+                  + " WHERE part.communityId = :pid AND itm.itemType = :itype GROUP BY part.communityId, itm.itemType";
         } else {
           //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
         }
