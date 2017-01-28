@@ -188,20 +188,9 @@
                 </div>    
                 <br />
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
-                  <c:set var="whichTypeUser" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />
-                  <c:set var="whichTypeUser" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />
+                  <c:set var="imageLibrary" value="${itemBean.itemType}_images" />
                   <h:outputLabel for="imagePreview" value="Uploaded Image:"  >
-                    
-                    <c:choose>
-                      <c:when test="#{whichTypeUser == 'both'}" >
-                        <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="images" alt="Item Image"   height="100" width="100" 
-                                         rendered="#{!empty image.imageFileName}"/>
-                      </c:when>
-                      <c:when test="#{whichTypeUser != 'both'}" >
-                        <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" 
-                                         rendered="#{!empty image.imageFileName}"/>
-                      </c:when>
-                    </c:choose>
+                    <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="${imageLibrary}" alt="Item Image"   height="100" width="100" />
                   </h:outputLabel> 
                 </div>
                 <br />
@@ -217,8 +206,7 @@
               <h:column rowHeader="">
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                   <h:outputLabel for="imageView" value="Uploaded Image:"  >
-                    <h:graphicImage  id="imageView" name="${image.imageFileName}" library="#{itemBean.itemType}_images" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/> 
-
+                    <h:graphicImage  id="imageView" name="${image.imageFileName}" library="${imageLibrary}" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/> 
                   </h:outputLabel> 
                 </div>
                 <br />
