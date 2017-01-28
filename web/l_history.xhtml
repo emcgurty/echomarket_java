@@ -41,16 +41,21 @@
               <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
             </h:outputLabel>
             <br />
-            <h:outputLabel for="approved" value="Item Approved:" >
-              <c:choose>
-                <c:when test="#{history.approved == 1}" >
-                  <h:outputText  id="approved" value="Yes" style="margin-left:10px;color:black;"  />
-                </c:when>
-                <c:when test="#{history.approved == 0}" >
-                  <h:outputText  id="approved" value="No" style="margin-left:10px;color:black;"  />
-                </c:when>
-              </c:choose>
+            
+            <h:outputLabel value="Item Approved:" >
+                  <h:outputText   value="Yes" style="margin-left:10px;color:black;"  rendered="${history.approved == 1}"/>
+                  <h:outputText  value="No" style="margin-left:10px;color:black;"  rendered="${history.approved == 0}"/>
             </h:outputLabel>
+          <br />
+          <c:set var="currentImage"  value="#{itemBean.getCurrentImageName(history.itemId)}"  />
+          <h:graphicImage name="#{currentImage}" library="lend_images" alt="Item Image"   height="100" width="100" rendered="#{!empty currentImage}" />
+          
+          <br />
+          <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history.itemId)}" immediate="true" rendered="#{history.participant_id == userBean.participant_id}"  >
+            <f:param name="action" value="item" />     
+          </h:commandButton>    
+          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId, history.itemDescription)}"  immediate="true"  rendered="#{history.participant_id == userBean.participant_id}"  >
+          </h:commandButton>    
             
           </div>    
         </h:column>
