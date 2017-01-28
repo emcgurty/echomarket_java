@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.Where;
 
 public class Items implements java.io.Serializable {
 
@@ -166,6 +167,7 @@ public class Items implements java.io.Serializable {
   /**
    * @return the itemType
    */
+  @Where(clause = "itemType = 'lend' ")
   public String getItemType() {
     return itemType;
   }
