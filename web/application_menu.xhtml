@@ -22,21 +22,18 @@
         <h:commandLink id="index" action="index" value="EchoMarket: Welcome #{username}!" hreflang="#s1"/>
         <ul>
           <li>
-            <h:commandLink id="allItemsListing" action="all_items_listing">
-              <h:outputText value="All Items Listing"/>
+            <h:commandLink id="echomarket_about" action="echomarket_about">
+              <h:outputText value="About EchoMarket"/>
             </h:commandLink>
           </li>
           <li class="subs" >
             <h:commandLink id="instructions" action="EchoMarket_instructions" value="EchoMarket Instructions"/>
           </li>
-
         </ul>
       </li>
       <li class="subs"  >
         <h:commandLink id="search_items" action="search" value="SEARCH!"/>
       </li>
-
-
       <li class="subs">
         <a href="#s1">Borrowing</a>
         <ul>
@@ -45,23 +42,7 @@
               <h:outputText value="What's available to borrow"/>
             </h:commandLink>                  
           </li>
-          <c:if test="#{((userBean.username != null) and (userBean.action == 'current'))}" >
-            <li>
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', '')}"  value="I want to borrow"  >
-                <f:param name="action" value="item" />
-              </h:commandLink>
-            </li>
-            <li>
-              <h:commandLink id="borrowHistory" action="borrower_history">
-                <h:outputText value="My borrowing history"/>
-              </h:commandLink>                  
-            </li>
-            <li>
-              <h:commandLink id="borrowUpdate" action="borrower_update">
-                <h:outputText value="Change my borrowing requirements"/>
-              </h:commandLink>                  
-            </li>
-          </c:if>
+
         </ul>
       </li>
 
@@ -74,23 +55,6 @@
 
             </h:commandLink>                  
           </li>
-          <c:if test="#{((userBean.username != null) and (userBean.action == 'current'))}" >
-            <li>
-              <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend', '')}"  value="I want to lend"  >
-                <f:param name="action" value="item" />
-              </h:commandLink>
-            </li>
-            <li>
-              <h:commandLink id="lenderHistory" action="lender_history">
-                <h:outputText value="My lending history"/>
-              </h:commandLink>                  
-            </li>
-            <li>
-              <h:commandLink id="lenderUpdate" action="lender_update">
-                <h:outputText value="Change my lending requirements"/>
-              </h:commandLink>                  
-            </li>
-          </c:if>
 
         </ul>
       </li>
