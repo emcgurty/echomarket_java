@@ -18,10 +18,10 @@
         <h:outputText value="EchoMarket Instructions"  style="margin-top:15px;"/>
 
         <c:choose>
-          <c:when test="#{empty userBean.acceptID}" >
+          <c:when test="#{!empty userBean.acceptID}" >
             <h:commandLink  action="user_agreement"  class="right_div" value="I have read these Instructions."  />
           </c:when>
-          <c:when test="#{!empty userBean.acceptID}" >
+          <c:when test="#{empty userBean.acceptID}" >
             <h:commandLink  class="right_div" value="Okay..."  onclick="window.history.back();"/>
           </c:when>
         </c:choose>
