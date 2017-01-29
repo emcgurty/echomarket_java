@@ -29,9 +29,10 @@
         </div>
       </div> 
 
-      <h:dataTable  value="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
-        <h:column>
-          <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
+       <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
+        
+         <div style="margin-left:25px;margin-top:15px;position: relative;float:left;display:block;border-right:solid gray dashed ;" >
+           
             <h:outputLabel for="itemDescription" value="Item Description:" >
               <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
             </h:outputLabel>
@@ -45,6 +46,9 @@
               <h:outputText  value="No" style="margin-left:10px;color:black;"  rendered="${history.approved == 0}"/>
             </h:outputLabel>
             <br />
+            <h:outputLabel value="Date Created:" >
+                  <h:outputText  value="#{history.dateCreated}" style="margin-left:10px;color:black;"/>
+            </h:outputLabel>
           <c:set var="currentImage"  value="#{itemBean.getCurrentImageName(history.itemId)}"  />
           <h:graphicImage name="#{currentImage}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty currentImage}" />
 
@@ -56,8 +60,7 @@
           </h:commandButton>    
 
           </div>
-        </h:column>
-      </h:dataTable>
+       </c:forEach>
 
       <div class="borrower_registration" >
         <h:outputText value="No Borrower History Records Found" rendered="${fn:length(currentHistory) == 0}" />
