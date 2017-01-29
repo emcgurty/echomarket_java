@@ -167,7 +167,7 @@
               <td  style="width:50%;">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
-                    <h:inputText  id="itemCount" value="#{itemBean.itemCount}" size="2" maxlength="2" required="true" class="items"  style="margin-left:10px"   rendered="#{userBean.editable == 1}"/>
+                    <h:inputText  id="itemCount" value="#{itemBean.itemCount}" size="2" maxlength="2" required="true" requiredMessage="Please enter a numeric value between 1 and 25."  class="items"  style="margin-left:10px"   rendered="#{userBean.editable == 1}"/>
                     <h:outputText  id="itemCountString" value="#{itemBean.itemCount}"   rendered="#{userBean.editable == 0}" class="RO_text"/>
                   </h:outputLabel>
                   <span class="error-message" id="itemCount" ></span>
@@ -180,7 +180,7 @@
               <h:column rowHeader="">
                 <div style="margin-left:25px;margin-top:5px;float:left;">
                   <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
-                    <h:inputFile id="imageFileNamePart" value="#{itemBean.imageFileNamePart}" />
+                    <h:inputFile id="imageFileNamePart" value="#{itemBean.imageFileNamePart}"  />
                     <span class="file_image_error"></span>
                   </h:outputLabel>
                   <br />
