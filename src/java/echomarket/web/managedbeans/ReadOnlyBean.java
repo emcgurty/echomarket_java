@@ -60,7 +60,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = hib.beginTransaction();
       queryString = " FROM LenderItemConditions lic "
               + " WHERE  (lic.itemId = :iid) "
-              + " AND  (lic.participant_id = :pid)";
+              + " AND  (lic.participant_id = :pid)  ORDER BY lic.dateCreated ";
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
               .setParameter("pid", pid)
@@ -96,7 +96,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = hib.beginTransaction();
       queryString = " FROM LenderTransfer lt "
               + " WHERE  (lt.itemId = :iid) "
-              + " AND  (lt.participant_id = :pid)";
+              + " AND  (lt.participant_id = :pid) ORDER BY lt.dateCreated ";
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
               .setParameter("pid", pid)
@@ -129,7 +129,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       try {
         hib = hib_session();
         tx = hib.beginTransaction();
-        queryString = "FROM Items WHERE  (itemId = :iid) AND (participant_id = :pid)";
+        queryString = "FROM Items WHERE itemId = :iid AND participant_id = :pid  ORDER BY dateCreated ";
         System.out.println(queryString);
         result = hib.createQuery(queryString)
                 .setParameter("iid", iid)
@@ -165,7 +165,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       tx = hib.beginTransaction();
       queryString = "SELECT part FROM Participant part "
               + " left join part.item it "
-              + " WHERE  (it.itemId = :iid)";
+              + " WHERE it.itemId = :iid ORDER BY it.dateCreated ";
 
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
@@ -206,7 +206,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       queryString = "FROM ContactPreference "
-              + " WHERE (itemId = :iid) AND (participant_id = :pid) ";
+              + " WHERE itemId = :iid AND participant_id = :pid ORDER BY dateCreated ";
 
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
@@ -247,7 +247,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
               + " part.displayHomePhone, part.displayCellPhone, part.displayAlternativePhone "
               + " FROM Participant part "
               + " INNER join part.contactPreference cp "
-              + " WHERE  (cp.itemId = :iid)  AND (part.participant_id = :pid)";
+              + " WHERE cp.itemId = :iid  AND part.participant_id = :pid ORDER BY cp.dateCreated ";
 
       result = hib.createQuery(queryString)
               .setParameter("iid", iid)
