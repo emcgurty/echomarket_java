@@ -46,7 +46,11 @@
               </h:commandLink> 
               <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preferences"  rendered="#{userBean.editable == 0}" >
                 <f:param name="action" value="edit" />
-                <f:param name="iid" value="#{userBean.itemId}" />
+                   <c:choose>
+                    <c:when test="#{!empty itemBean.itemId}" >
+                      <f:param name="iid" value="#{itemBean.itemId}" />
+                    </c:when>
+                  </c:choose>
               </h:commandLink>
 
             </div> 
@@ -57,6 +61,11 @@
                 <c:if test="#{((ut == 'lend') or ut == ('both')) and (userBean.cpId)}" >
                   <h:commandLink  action="${lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'" rendered="${userBean.cpId}"  >
                     <f:param name="action" value="edit" />
+                         <c:choose>
+                    <c:when test="#{!empty itemBean.itemId}" >
+                      <f:param name="iid" value="#{itemBean.itemId}" />
+                    </c:when>
+                  </c:choose>
                   </h:commandLink>
                 </c:if>
               </div>
