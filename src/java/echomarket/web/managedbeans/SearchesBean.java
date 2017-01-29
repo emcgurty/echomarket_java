@@ -63,7 +63,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
     String fromStatement = "";
 
     fromStatement = " FROM ItemImages iimag "
-            + "  WHERE iimag.itemId = :iid ";
+            + "  WHERE iimag.itemId ";
 
     try {
       sb = hib_session();
