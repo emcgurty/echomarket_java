@@ -44,7 +44,7 @@
                 <h:outputText  value="#{save_update}" />
                 <f:param name="iid" value="${userBean.itemId}" />
               </h:commandLink> 
-              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="#{userBean.editable == 0}" >
+              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preferences"  rendered="#{userBean.editable == 0}" >
                 <f:param name="action" value="edit" />
                 <f:param name="iid" value="#{userBean.itemId}" />
               </h:commandLink>
