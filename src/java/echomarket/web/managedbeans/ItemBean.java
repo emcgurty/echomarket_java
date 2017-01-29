@@ -904,12 +904,12 @@ public class ItemBean extends AbstractBean implements Serializable {
         if (this.history_which == 0) {
           query = " SELECT itm "
                   + " FROM Items itm "
-                  + " WHERE itm.participant_id = :pid AND itm.itemType = :itype GROUP BY itm.participant_id ";
+                  + " WHERE itm.participant_id = :pid AND itm.itemType = :itype ORDER BY itm.dateCreated ";
         } else if (this.history_which == 1) {
           query = " SELECT itm "
                   + " FROM Participant part, Items itm "
                   + " INNER join part.item itm "
-                  + " WHERE part.communityId = :pid AND itm.itemType = :itype GROUP BY part.communityId, itm.itemType";
+                  + " WHERE part.communityId = :pid AND itm.itemType = :itype ORDER BY itm.dateCreated ";
         } else {
           //  Later query = "FROM Items WHERE participant_id = :pid and itemType = :it";
         }
