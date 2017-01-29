@@ -3,31 +3,18 @@ Rewriting Echomarket in Java, IDE Netbeans, Faces, Hibernate
 
 Back in 2000 I was working with Java and Java Servlets.  In the meanwhile I have worked with ColdFusion, PhP. ASP.Net and Ruby on Rails.  I decided to return to Java and re-write an application that I previously wrote in Ruby on Rails.  These are my results...  all work in progress... 
 
-It's been a while since I updated this README.
-
 What's going on with the application.
 
 The basic bones exist...
 
-I need to re-write Search functions because I changed the database.  And I also want to add search option for free, donated, security deposit-required, etc.. offered items to lend.  Basics of search is in place.  Haven't throughly tested, importantly INNER JOIN, LEFT JOIN query seems to be working well.   
-I need to build a Community menu. -- done  -- need to better coordinate menus with presented xhtml.  Not huge.  
-I need to clean up presentation, sizing...  -- css set at 980px for all view.   
-I need to learn how to code in the event of user reload.    
-I need to introduce an error page.  
+I need to re-write Search functions because I changed the database.  Rewrite done but Hibernate results failing.  
 I need to complete Hibernate attributes.  
 I need to code for the event of a user deleted.  
-I need to understand why <h:graphicImage often fails. -- done   
-I need to revisit early code to reflect what I have learned.  -- making progress esp regarding Hibernate transaction errors  
-I need to implement address completion based on zip code.  Autocomplete is annoying   
 I need to test and understand various browsers.  I know that IE does not find my Javascript.    
 I need feedback in how I am Hibernate coding.   
 I need feedback in how I am using face-config.xml and web.xml.    
-I need feedback in how I am using @Inject.     
-I need advise on production deployment.    
-And, I need to revisit JavaScript.  I know that I have goofy loops to find elements... Live and learn...   
 
 Future ambitions:  
-
 Registration via FaceBook or LinkedIn...  
 Provide GIS Map of Items Sought and Items Offered.  
 Make the GUI more attractive.  
