@@ -74,6 +74,11 @@
               <h:outputText value="#{sub_title}" />
               <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{userBean.partID}" >
                 <f:param name="action" value="edit" />
+                <c:choose>
+                  <c:when test="#{!empty itemBean.itemId}" >
+                    <f:param name="iid" value="#{itemBean.itemId}" />
+                  </c:when>
+                </c:choose>
               </h:commandLink>              
               <h:inputHidden id="editable"  value="#{userBean.editable}"  />
               <h:inputHidden id="communityId"  value="#{userBean.communityId}"   />
