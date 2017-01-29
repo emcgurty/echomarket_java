@@ -17,9 +17,9 @@
     <h:form id="personal_information"  class="lender_conditions">
       <body onload="changeMenuBackground(3);"  >
         <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
-        
+
         <div id="lender_registration" class="contact_information" >
-         
+
 
           <div id="form_monetary" class="contact_information" style="width:100%;" >
             <div class="top" >
@@ -37,11 +37,19 @@
                   </c:when >
                 </c:choose>
                 <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="#{save_update}"  rendered="#{userBean.editable == 1}"  />
+
+
                 <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Lender Item Conditions"  rendered="#{userBean.editable == 0}" >
                   <f:param name="action" value="edit" />
+                  <c:choose>
+                    <c:when test="#{!empty itemBean.itemId}" >
+                      <f:param name="iid" value="#{itemBean.itemId}" />
+                    </c:when>
+                  </c:choose>
                 </h:commandLink>
+
                 <h:inputHidden id="lender_item_condition_id"  value="#{lenderItemConditionsBean.lender_item_condition_id}"  />
-                
+
                 <h:inputHidden id="itemId" value="${userBean.itemId}"  />
 
               </div> 
@@ -52,7 +60,7 @@
                             infoStyle="color: indigo"/>
               </div>
             </div>
-       
+
             <c:choose> 
               <c:when test="#{userBean.editable == 0}" >
                 <div  class="div_p"  >
@@ -160,7 +168,7 @@
                   <td>
                     <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
                       <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}"  size="10" rendered="#{userBean.editable == 1}" >
-                         <f:convertNumber type="currency"  pattern="#0.00" currencySymbol="$" />
+                        <f:convertNumber type="currency"  pattern="#0.00" currencySymbol="$" />
                       </h:inputText> 
                       <c:if test="#{userBean.editable == 0}" >
                         <h:outputText id="availableForPurchaseAmountString"   value="#{lenderItemConditionsBean.availableForPurchaseAmount}" class="RO_text" />
