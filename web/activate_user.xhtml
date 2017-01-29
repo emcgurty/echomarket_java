@@ -17,13 +17,12 @@
         <f:viewParam name="reset_code" id="resetCode" value="#{userBean.resetCode}" />
       </f:metadata>         
 
-      <f:event listener="#{userBean.validatePassword}" type="postValidate" />
       <div  class="top" id="activate_div">
         <div class="messagecolor">
           <h:messages showSummary="true" 
                       showDetail="false"
                       errorStyle="list-style-type:none;color: #d20005" 
-                      infoStyle="color: indigo"/>
+                      infoStyle="color: indigo" />
         </div>
         <table style="width:75%;margin-left: 50px" align="center" id="activate_table">
           <tr style="background-color:  #F0FFFF">
