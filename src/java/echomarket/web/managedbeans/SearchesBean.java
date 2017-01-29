@@ -105,7 +105,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
             + "  WHERE addr.addressType = 'primary' ";
 
     if (ubean.getComDetailID() != null) {
-      fromStatement = fromStatement + "  AND part.communityId = \'" + ubean.getComDetailID() + "\' ";
+      fromStatement = fromStatement + "  AND part.communityId = \'" + ubean.getCommunityId()+ "\' ";   /// When the heck did I change that!  I would have never selected that property.
     } else {
       fromStatement = fromStatement + " AND part.communityId is null";
     }
@@ -115,9 +115,10 @@ public class SearchesBean extends AbstractBean implements Serializable {
 //      fromStatement = " OR addr.postal_code in (\'" + forceString + "\') ";
 //    }
     if (this.postalCode.isEmpty() == false) {
-      fromStatement = fromStatement + " OR addr.postalCode LIKE \'" + this.postalCode + "%\'";
+      fromStatement = fromStatement + " OR addr.postalCode LIKE \'" + this.postalCode + "%\'  ";
     }
-
+    fromStatement = fromStatement + " ORDER BY part.dateCreated ";  
+    
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
@@ -173,7 +174,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
         queryString = queryString + " itm.categoryId = " + this.categoryId;
       }
 
-      fromStatement = fromStatement + queryString;
+      fromStatement = fromStatement + queryString + "ORDER BY itm.dateCreated ";
       System.out.println(fromStatement);
 
       try {
