@@ -148,14 +148,16 @@
           <ul>
             <li id="tab_item_16">
               <c:set var="newItemLabel" value="Your Borrowing History"  />
-              <h:commandLink immediate="true"  action="#{itemBean.getBorrowerHistory(userBean.participant_id, 0)}"  value="#{newItemLabel}"  rendered="true" >
+              <h:commandLink immediate="true"  action="#{itemBean.getBorrowerHistory(userBean.participant_id, 0)}"  rendered="true" >
+                <h:outputText value="${newItemLabel}" />
               </h:commandLink>
             </li>
             <c:choose >
               <c:when  test="#{!empty userBean.communityId}"  >
                 <li id="tab_item_16" >
                   <c:set var="newItemLabel" value="Your Community's Borrowing History"  />
-                  <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(userBean.communityId, 1)}"  value="#{newItemLabel}"  rendered="true">
+                  <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(userBean.communityId, 1)}"  rendered="true">
+                    <h:outputText value="${newItemLabel}" />
                   </h:commandLink>   
                 </li>
               </c:when>         
