@@ -105,7 +105,7 @@
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <c:choose >
               <c:when test="#{rid == 2}" >
-                <h:inputHidden id="contactDescribeId"  value="-9"  />
+                <h:inputHidden id="contact_describe_id"  value="-9"  />
                 <h:inputHidden id="displayOrganization"  value="-9"  />
                 <h:inputHidden id="otherDescribeYourselfText"  value=""  />
                 <h:inputHidden id="organizationName"  value=""  />
@@ -159,7 +159,7 @@
                         </h:selectOneMenu>
                         <h:outputText value="#{contactDescribesBean.getOneCD(participantBean.contact_describe_id)}" rendered="#{userBean.editable == 0}" class="RO_text"  />
                       </h:outputLabel>
-                      <span class="error-message" id="contactDescribeId" ></span>
+                      <span class="error-message" id="contact_describe_id" ></span>
                     </div>
                     <div id="otherDescribeYourselfText"  style="margin-top:10px;margin-left:5px;display: none;float:left;">    
                       <c:set var="display_other" value="Please provide an 'Other' description:"   rendered="#{userBean.editable == 1}" />
