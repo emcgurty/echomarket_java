@@ -43,7 +43,11 @@
                 </h:commandLink> 
                 <h:commandLink  action="${lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="${userBean.editable == 0}" >
                   <f:param name="action" value="edit" />
-                  <f:param name="iid" value="${userBean.itemId}" />
+                   <c:choose>
+                    <c:when test="#{!empty itemBean.itemId}" >
+                      <f:param name="iid" value="#{itemBean.itemId}" />
+                    </c:when>
+                  </c:choose>
                 </h:commandLink>
               </div> 
               <div class="messagecolor">
@@ -57,8 +61,13 @@
             <div  class="div_p"  >
               <div style="margin:10px;" >
                 <h:outputText value="Lender Item Transfer Preferences"  />
-                <h:commandLink  action="${lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Lending Conditions'" rendered="${userBean.LITid}"  >
+                <h:commandLink  action="${lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Lending Item Conditions'" rendered="${userBean.LITid}"  >
                   <f:param name="action" value="edit" />
+                     <c:choose>
+                    <c:when test="#{!empty itemBean.itemId}" >
+                      <f:param name="iid" value="#{itemBean.itemId}" />
+                    </c:when>
+                  </c:choose>
                 </h:commandLink>
               </div>
             </div>
