@@ -59,7 +59,7 @@ if ($("input[id$='organizationName']").val()) {
             returnResult = true;
         }
 
-        if ((select_id == 'contactDescribeId') && (select_value == '10')) {
+        if ((select_id == 'contact_describe_id') && (select_value == '10')) {
             $("div#otherDescribeYourselfText").css("display", "block");
         } else {
             $("input#otherDescribeYourself").html("");
@@ -559,7 +559,7 @@ function ValidateContactInformation() {
     $("select").each(function () {
         uid = getChildID(this.id);
         this_class = $(this).attr("class");
-        if (this.id.includes('contactDescribeId')) {
+        if (this.id.includes('contact_describe_id')) {
             cdi = this.value;
             foundComponent++;
         } else if ((this.id == 'countryId') && (this_class == 'primary')) {
@@ -611,8 +611,8 @@ function ValidateContactInformation() {
 
     if (cdi == -2) {
 
-        $("span#contactDescribeId.error-message").css("visibility", "visible");
-        $("span#contactDescribeId.error-message").text("Please make a selection");
+        $("span#contact_describe_id.error-message").css("visibility", "visible");
+        $("span#contact_describe_id.error-message").text("Please make a selection");
         returnValue = false;
     }
 
