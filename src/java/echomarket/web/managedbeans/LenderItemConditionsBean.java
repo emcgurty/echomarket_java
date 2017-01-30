@@ -142,10 +142,6 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         if (entry.getKey().contains("lender_item_condition_id")) {
           this.lender_item_condition_id = entry.getValue();
         }
-        if (entry.getKey().contains("itemId")) {
-          this.itemId = entry.getValue();
-          ubean.setItemId(this.itemId);
-        }
         if (entry.getKey().contains("forFree")) {
           this.forFree = Integer.valueOf(entry.getValue());
         }
@@ -236,8 +232,8 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       }
     } else {
 
-      if (ubean.getItemId().isEmpty() == false) {
-        icList = getCurrentItemConditions_Iid(ubean.getParticipant_id(), ubean.getItemId());
+      if (this.itemId.isEmpty() == false) {
+        icList = getCurrentItemConditions_Iid(ubean.getParticipant_id(), this.itemId);
       } else {
         icList = getCurrentItemConditions(ubean.getParticipant_id());
       }
@@ -322,32 +318,33 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
 
   public String load_ud(String pid) {
 
-    List condList = null;
+    List result = null;
     Map<String, String> params = null;
+    params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String strIid = null;
     String action = null;
     Boolean isLICnull = false;
 
     try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       strIid = params.get("iid");
-      /// This doesn't work, hence below try/catch on strIid
-      if (strIid.isEmpty() == true) {
-        strIid = null;
-      } else {
-
+      if (strIid != null) {
+        if (strIid.isEmpty() == true) {
+          strIid = null;
+        }
       }
     } catch (Exception ex) {
     }
 
-    if (ubean.getEditable() == 0) {
-      ubean.setEditable(1);
+    if (ubean.getEditable() != null) {
+      if (ubean.getEditable() == 0) {
+        ubean.setEditable(1);
+      } else {
+        ubean.setEditable(0);
+      }
     } else {
-      ubean.setEditable(0);
+      ubean.setEditable(1);
     }
-
     try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       action = params.get("action");
     } catch (Exception ex) {
     }
@@ -358,40 +355,29 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
       }
     }
 
-    try {
-      if (strIid != null) {
-        itemId = strIid;
-        condList = getCurrentItemConditions_Iid(pid, strIid);
-      } else if (itemId != null) {
-        condList = getCurrentItemConditions_Iid(pid, itemId);
-      }
-    } catch (Exception ex) {
-      if (strIid.isEmpty() == false) {
-        condList = getCurrentItemConditions_Iid(pid, strIid);
-        itemId = strIid;
-      } else if (itemId != null) {
-        condList = getCurrentItemConditions_Iid(pid, itemId);
-      }
+    if (strIid != null) {
+      result = getCurrentItemConditions_Iid(pid, strIid);
     }
-    if (condList == null) {
+    if (result == null) {
       isLICnull = true;
     }
 
-    if (condList != null) {
-      if (condList.size() == 0) {
+    if (result != null) {
+      if (result.size() == 0) {
         isLICnull = true;
       }
     }
+
     if (isLICnull == true) {
-      condList = getCurrentItemConditions(pid);
+      result = getCurrentItemConditions(pid);
     }
-    if (condList != null) {
-      if (condList.size() == 1) {
-        LenderItemConditions pp = (LenderItemConditions) condList.get(0);
+    if (result != null) {
+      if (result.size() == 1) {
+        LenderItemConditions pp = (LenderItemConditions) result.get(0);
         if (pp != null) {
-          setItemId(pp.getItemId());
-          setLender_item_condition_id(pp.getLender_item_condition_id());
-          setParticipant_id(pp.getParticipant_id());
+          this.itemId = pp.getItemId();
+          this.lender_item_condition_id = (pp.getLender_item_condition_id());
+          this.participant_id= (pp.getParticipant_id());
           this.forFree = pp.getForFree();
           this.availableForPurchase = pp.getAvailableForPurchase();
           this.availableForPurchaseAmount = pp.getAvailableForPurchaseAmount();
@@ -400,7 +386,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           this.availableForDonation = pp.getAvailableForDonation();
           this.donateAnonymous = pp.getDonateAnonymous();
           this.trade = pp.getTrade();
-          setTradeItem(pp.getTradeItem());
+          this.tradeItem= (pp.getTradeItem());
           this.agreedNumberOfDays = pp.getAgreedNumberOfDays();
           this.agreedNumberOfHours = pp.getAgreedNumberOfHours();
           this.indefiniteDuration = pp.getIndefiniteDuration();
@@ -416,7 +402,7 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
         }
       }
     }
-    condList = null;
+    result = null;
 
     return "lender_conditions";
   }
