@@ -19,7 +19,17 @@
       <body onload="changeMenuBackground(3);"  >
         <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
         <div id="form_contact_preference" class="contact_information" >
-          <c:set var="iid" value="#{itemBean.itemId}"  />  
+
+          <c:choose >
+            <c:when test="${!empty itemBean.itemId}" >
+              <c:set var="iid" value="${itemBean.itemId}"  />  
+            </c:when >
+            <c:when test="${!empty userBean.itemId}" >
+              <c:set var="iid" value="${userBean.itemId}"  />  
+            </c:when >
+          </c:choose>
+          <h:outputText value="${iid}  -- curent IID"  />
+
           <c:set var="ut" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />  
           <c:set var="ut" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />  
 
@@ -28,29 +38,25 @@
             <div style="margin:10px;margin-top:25px;" >
 
               <h:outputText value="${userBean.userAlias}: USER DASHBOARD"  />
-              
+
               <c:choose >
-                <c:when test="${(empty contactPreferenceBean.contactPreferenceId) and (empty userBean.itemId)}" >
+                <c:when test="${(empty contactPreferenceBean.contactPreferenceId) and (empty iid)}" >
                   <c:set var="save_update"  value="Save Contact Preferences" />
                 </c:when >
-                <c:when test="${(!empty contactPreferenceBean.contactPreferenceId) and (empty userBean.itemId)}" >
+                <c:when test="${(!empty contactPreferenceBean.contactPreferenceId) and (empty iid)}" >
                   <c:set var="save_update"  value="Update Contact Preferences" />
                 </c:when >
-                <c:when test="${(!empty contactPreferenceBean.contactPreferenceId) and (!empty userBean.itemId)}" >
+                <c:when test="${(!empty contactPreferenceBean.contactPreferenceId) and (!empty iid)}" >
                   <c:set var="save_update"  value="Update or Accept Current Contact Preferences" />
                 </c:when >
               </c:choose>
               <h:commandLink  action="#{contactPreferenceBean.updateCP()}"  class="right_div"   rendered="#{userBean.editable == 1}"  >
                 <h:outputText  value="#{save_update}" />
-                <f:param name="iid" value="${userBean.itemId}" />
+                <f:param name="iid" value="${iid}" />
               </h:commandLink> 
               <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Contact Preferences"  rendered="#{userBean.editable == 0}" >
                 <f:param name="action" value="edit" />
-                   <c:choose>
-                    <c:when test="#{!empty itemBean.itemId}" >
-                      <f:param name="iid" value="#{itemBean.itemId}" />
-                    </c:when>
-                  </c:choose>
+                <f:param name="iid" value="#{iid}" />
               </h:commandLink>
 
             </div> 
@@ -61,11 +67,7 @@
                 <c:if test="#{((ut == 'lend') or ut == ('both')) and (userBean.cpId)}" >
                   <h:commandLink  action="${lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Item Transfer Preferences'" rendered="${userBean.cpId}"  >
                     <f:param name="action" value="edit" />
-                         <c:choose>
-                    <c:when test="#{!empty itemBean.itemId}" >
-                      <f:param name="iid" value="#{itemBean.itemId}" />
-                    </c:when>
-                  </c:choose>
+                    <f:param name="iid" value="#{iid}" />
                   </h:commandLink>
                 </c:if>
               </div>
@@ -98,7 +100,7 @@
 
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
             <h:inputHidden id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  />
-            <h:inputHidden id="itemId" value="#{userBean.itemId}"  rendered="#{!empty userBean.itemId}" />
+            <h:inputHidden id="itemId" value="#{iid}"  />
 
             <div style="float:left;margin-left:25px">
               <div id="postalWithContactAddress" >    
