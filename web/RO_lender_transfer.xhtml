@@ -31,11 +31,38 @@
         <c:set var="line10" value="#{lit.thirdPartyPresenceMutual}" />
         <c:set var="line11" value="#{lit.borrowerReturnsToWhichAddress}" />
         <c:set var="line12" value="#{lit.willPickUpPreferredLocation}" />
+        <c:set var="line13" value="#{lit.comment}" />
 
       </c:forEach>
 
-      <c:set value="#{readOnlyBean.getBorrowerComesToAlternativeAddress()}"   var="aa_data" /> 
-      <c:set value="#{readOnlyBean.getBorrowerComesToPrimaryAddress()}"   var="pa_data" /> 
+      <h:outputText value="#{line1} == line1" /><br />
+      <h:outputText value="#{line2} == line2" /><br />
+      <h:outputText value="#{line3} == line3" /><br />
+      <h:outputText value="#{line4} == line4" /><br />
+      <h:outputText value="#{line5} == line5" /><br />
+      <h:outputText value="#{line6} == line6" /><br />
+      <h:outputText value="#{line7} == line7" /><br />
+      <h:outputText value="#{line8} == line8" /><br />
+      <h:outputText value="#{line9} == line9" /><br />
+      <h:outputText value="#{line10} == line10" /><br />
+      <h:outputText value="#{line11} == line11" /><br />
+      <h:outputText value="${line1 == 2 or line1 == 1 and line1 != 3 and line1 != 0} == 2 and 1" />
+      <h:outputText value="${line1 == 3 or line1 == 1 and line1 != 2 and line1 != 0} == 3 and 1" />
+
+
+
+      <c:if test="${line1 == 2 or line1 == 1}" >
+        <c:set value="#{readOnlyBean.getBorrowerComesToAlternativeAddress()}"   var="aa_data" /> 
+      </c:if>
+
+
+      <c:if test="${line1 == 3 or line1 == 1}" >
+        <c:set value="#{readOnlyBean.getBorrowerComesToPrimaryAddress()}"   var="pa_data" /> 
+      </c:if>
+
+
+
+
       <c:choose>
         <c:when test="#{(fn:length(pa_data) gt 0) and (fn:length(aa_data) gt 0)}" > 
           <c:set var="table1" value="Come to Address #1" />
@@ -261,6 +288,13 @@
         <c:when test="#{(!empty line12) and (line12 == 1)}" >
           <br />
           <h:outputText value="Lender will pick up item" class="RO_text"  />
+        </c:when>
+      </c:choose>
+      <c:choose>
+        <c:when test="#{!empty line13}" >
+          <br />
+
+          <h:outputText value="Comment: #{line13}" class="RO_text"  />
         </c:when>
       </c:choose>
 
