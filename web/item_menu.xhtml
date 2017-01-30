@@ -13,6 +13,18 @@
   <h:inputHidden id="LITid" value="#{userBean.LITid}"  />
   <h:inputHidden id="LICid" value="#{userBean.LICid}"  />
   <c:set var="whichType" value="#{userBean.userType}" />
+
+  <c:choose >
+    <c:when test="${!empty itemBean.itemId}" >
+      <c:set var="iid" value="${itemBean.itemId}"  />  
+    </c:when >
+    <c:when test="${!empty userBean.itemId}" >
+      <c:set var="iid" value="${userBean.itemId}"  />  
+    </c:when >
+  </c:choose>
+
+
+
   <ul id="nav" class="item_menu" >
 
     <li class="subs"  >
@@ -20,27 +32,27 @@
       <c:choose>                                
         <c:when test="#{whichType == 'borrow'}"  >
           <li id="tab_item_1" >
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', itemBean.itemId)}"  value="Item to Borrow: #{itemBean.itemDescription}"  rendered="#{!empty itemBean.itemDescription}"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', iid)}"  value="Item to Borrow: #{itemBean.itemDescription}"  rendered="#{!empty itemBean.itemDescription}"    >
               <f:param name="action" value="item" />             
             </h:commandLink>
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', itemBean.itemId)}"  value="Item to Borrow"  rendered="#{empty itemBean.itemDescription}"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('borrow', iid)}"  value="Item to Borrow"  rendered="#{empty itemBean.itemDescription}"    >
               <f:param name="action" value="item" />             
             </h:commandLink>
           </li>
         </c:when >  
         <c:when test="#{whichType == 'lend'}"  >
           <li id="tab_item_1" >
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend',itemBean.itemId)}"  value="Item to Lend: #{itemBean.itemDescription}"  rendered="#{!empty itemBean.itemDescription}"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend',iid)}"  value="Item to Lend: #{itemBean.itemDescription}"  rendered="#{!empty itemBean.itemDescription}"    >
               <f:param name="action" value="item" />
             </h:commandLink>
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend',itemBean.itemId)}"  value="Item to Lend: #{itemBean.itemDescription}"  rendered="#{empty itemBean.itemDescription}"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud('lend',iid)}"  value="Item to Lend: #{itemBean.itemDescription}"  rendered="#{empty itemBean.itemDescription}"    >
               <f:param name="action" value="item" />
             </h:commandLink>
           </li>
         </c:when >  
         <c:when test="#{whichType == 'both'}"  >
           <li id="tab_item_1" >
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud(whichType,itemBean.itemId)}"  value="New Item - #{userBean.getPrettyUserType()}"  style="text-transform: capitalize" rendered="true"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud(whichType,iid)}"  value="New Item - #{userBean.getPrettyUserType()}"  style="text-transform: capitalize" rendered="true"    >
               <f:param name="action" value="item" />
             </h:commandLink>
           </li>
@@ -49,20 +61,16 @@
     </li>
 
     <c:choose>                                
-      <c:when test="#{(whichType == 'borrow') and (!empty itemBean.itemId)}"  >
+      <c:when test="#{(whichType == 'borrow') and (!empty iid)}"  >
         <li id="tab_item_1">
           <c:set var="newItemLabel" value="Item Contact Preferences"  />
           <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  >
             <f:param name="action" value="edit" />
-            <c:choose>
-              <c:when test="#{!empty itemBean.itemId}" >
-                <f:param name="iid" value="#{itemBean.itemId}" />
-              </c:when>
-            </c:choose>
+            <f:param name="iid" value="#{iid}" />
           </h:commandLink>
         </li>
       </c:when>
-      <c:when test="#{((whichType == 'lend') or (whichType == 'both')) and (!empty itemBean.itemId)}"  >
+      <c:when test="#{((whichType == 'lend') or (whichType == 'both')) and (!empty iid)}"  >
         <li id="subs">
           <a href="#s1">Item Preferences/Conditions</a>
           <ul>
@@ -70,34 +78,22 @@
               <c:set var="newItemLabel" value="Contact Preferences"  />
               <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  >
                 <f:param name="action" value="edit" />
-                <c:choose>
-                  <c:when test="#{!empty itemBean.itemId}" >
-                    <f:param name="iid" value="#{itemBean.itemId}" />
-                  </c:when>
-                </c:choose>
-
+                <f:param name="iid" value="#{iid}" />
               </h:commandLink>
             </li>
             <li id="tab_item_12" >
               <c:set var="newItemLabelTrans" value="Transfer Preferences"  />
               <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="#{userBean.cpId}" > 
                 <f:param name="action" value="edit" />
-                <c:choose>
-                  <c:when test="#{!empty itemBean.itemId}" >
-                    <f:param name="iid" value="#{itemBean.itemId}" />
-                  </c:when>
-                </c:choose>
+                <f:param name="iid" value="#{iid}" />
+                
               </h:commandLink>   
             </li>
             <li id="tab_item_13" >
               <c:set var="newItemLabelCond" value="Lending Conditions"  />
               <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="#{userBean.LITid}" >  
                 <f:param name="action" value="edit" />
-                <c:choose>
-                  <c:when test="#{!empty itemBean.itemId}" >
-                    <f:param name="iid" value="#{itemBean.itemId}" />
-                  </c:when>
-                </c:choose>
+                <f:param name="iid" value="#{iid}" />
               </h:commandLink>   
             </li>
           </ul>
@@ -110,7 +106,7 @@
         <li id="tab_item_15" >
           <c:set var="newItemLabel" value="Your Borrowing History"  />
           <h:commandLink immediate="true"  action="#{itemBean.getBorrowerHistory(userBean.participant_id, 0)}"  rendered="true" >
-             <h:outputText value="${newItemLabel}" />
+            <h:outputText value="${newItemLabel}" />
           </h:commandLink>
         </li>
         <c:choose >
@@ -118,7 +114,7 @@
             <li id="tab_item_15" >
               <c:set var="newItemLabel" value="Your Community's Borrowing History"  />
               <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(userBean.communityId, 1)}"   rendered="true">
-                 <h:outputText value="${newItemLabel}" />
+                <h:outputText value="${newItemLabel}" />
               </h:commandLink>   
             </li>
           </c:when>         
@@ -136,7 +132,7 @@
             <li id="tab_item_16" >
               <c:set var="newItemLabel" value="Your Community's Lending History"  />
               <h:commandLink  immediate="true" action="#{itemBean.getLenderHistory(userBean.communityId, 1)}"   rendered="true">
-                 <h:outputText value="${newItemLabel}" />
+                <h:outputText value="${newItemLabel}" />
               </h:commandLink>   
             </li>
           </c:when>         
@@ -186,7 +182,6 @@
 
     <li >
       <h:commandLink action="#{userBean.clearItemId()}" immediate="true"  value="Return to DashBoard"  rendered="true" title="Default Preferences/Conditions or Add Another Item"  >
-             
       </h:commandLink>
     </li>
 
