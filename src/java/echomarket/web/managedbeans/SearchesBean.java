@@ -53,7 +53,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
     robean.setParticipant_id(pid);
     robean.setWhich(itype);
     this.performedSearch = false;
-    return "RO_item";
+    return "RO_item?faces-redirect=true;";
   }
 
   public List itemImage(String iid) {
@@ -63,7 +63,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
     String fromStatement = "";
 
     fromStatement = " FROM ItemImages iimag "
-            + "  WHERE iimag.itemId ";
+            + "  WHERE iimag.itemId = :iid";
 
     try {
       sb = hib_session();
@@ -174,7 +174,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
         queryString = queryString + " itm.categoryId = " + this.categoryId;
       }
 
-      fromStatement = fromStatement + queryString + "ORDER BY itm.dateCreated ";
+      fromStatement = fromStatement + queryString + " ORDER BY itm.dateCreated ";
       System.out.println(fromStatement);
 
       try {
