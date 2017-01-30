@@ -17,37 +17,42 @@
     <h:form id="personal_information"  class="lender_transfer">
       <div id="lender_transfer" class="contact_information" >
         <body onload="changeMenuBackground(3);"  >
-           <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
+          <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
           <div id="form_lender_to_borrower" class="contact_information" >
-           
-            <c:set var="iid" value="${itemBean.itemId}"  />  
-           <c:set var="displayThirdChoice" value="none" />
+
+            <c:choose >
+              <c:when test="${!empty itemBean.itemId}" >
+                <c:set var="iid" value="${itemBean.itemId}"  />  
+              </c:when >
+              <c:when test="${!empty userBean.itemId}" >
+                <c:set var="iid" value="${userBean.itemId}"  />  
+              </c:when >
+            </c:choose>
+
+            <h:outputText value="${iid}  -- curent IID"  />
+            <c:set var="displayThirdChoice" value="none" />
             <c:set var="displayThirdChoice" value="${(userBean.editable == 0) and (lenderTransferBean.thirdPartyPresence == 1)}" />
-           
+
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="${userBean.userAlias}: USER DASHBOARD"  />
                 <c:choose >
-                  <c:when test="${(empty lenderTransferBean.lenderTransferId) and (empty userBean.itemId)}" >
+                  <c:when test="${(empty lenderTransferBean.lenderTransferId) and (empty iid)}" >
                     <c:set var="save_update"  value="Save Item Transfer Preferences" />
                   </c:when >
-                  <c:when test="${(!empty lenderTransferBean.lenderTransferId) and (empty userBean.itemId)}" >
+                  <c:when test="${(!empty lenderTransferBean.lenderTransferId) and (empty iid)}" >
                     <c:set var="save_update"  value="Update Item Transfer Preferences" />
                   </c:when >
-                  <c:when test="${(!empty lenderTransferBean.lenderTransferId) and (!empty userBean.itemId)}" >
+                  <c:when test="${(!empty lenderTransferBean.lenderTransferId) and (!empty iid)}" >
                     <c:set var="save_update"  value="Update or Accept Current Item Transfer Preferences" />
                   </c:when >
                 </c:choose>
                 <h:commandLink  action="${lenderTransferBean.updateLIT()}"  class="right_div"  value="${save_update}"   rendered="${userBean.editable == 1}"  >
-                  <f:param name="iid" value="${userBean.itemId}" />
+                  <f:param name="iid" value="${iid}" />
                 </h:commandLink> 
                 <h:commandLink  action="${lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="${userBean.editable == 0}" >
                   <f:param name="action" value="edit" />
-                   <c:choose>
-                    <c:when test="#{!empty itemBean.itemId}" >
-                      <f:param name="iid" value="#{itemBean.itemId}" />
-                    </c:when>
-                  </c:choose>
+                  <f:param name="iid" value="#{iid}" />
                 </h:commandLink>
               </div> 
               <div class="messagecolor">
@@ -63,11 +68,8 @@
                 <h:outputText value="Lender Item Transfer Preferences"  />
                 <h:commandLink  action="${lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Lending Item Conditions'" rendered="${userBean.LITid}"  >
                   <f:param name="action" value="edit" />
-                     <c:choose>
-                    <c:when test="#{!empty itemBean.itemId}" >
-                      <f:param name="iid" value="#{itemBean.itemId}" />
-                    </c:when>
-                  </c:choose>
+                  <f:param name="iid" value="#{iid}" />
+
                 </h:commandLink>
               </div>
             </div>
@@ -86,7 +88,8 @@
               <div style="margin:10px;" >
                 <h:outputText value="How would you like a borrower to receive your item?" />
                 <h:inputHidden id="lenderTransferId" value="${lenderTransferBean.lenderTransferId}" />
-                <h:inputHidden id="itemId" value="${userBean.itemId}"  />
+                <h:inputHidden id="itemId" value="${iid}"  />
+
               </div>
             </div>
 
