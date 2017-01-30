@@ -17,40 +17,42 @@
     <h:form id="personal_information"  class="lender_conditions">
       <body onload="changeMenuBackground(3);"  >
         <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
-
         <div id="lender_registration" class="contact_information" >
-
+          <c:choose >
+            <c:when test="${!empty itemBean.itemId}" >
+              <c:set var="iid" value="${itemBean.itemId}"  />  
+            </c:when >
+            <c:when test="${!empty userBean.itemId}" >
+              <c:set var="iid" value="${userBean.itemId}"  />  
+            </c:when >
+          </c:choose>
+          <h:outputText value="${iid}  -- curent IID"  />
 
           <div id="form_monetary" class="contact_information" style="width:100%;" >
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
                 <c:choose >
-                  <c:when test="#{(empty lenderItemConditionsBean.lender_item_condition_id) and (empty userBean.itemId)}" >
+                  <c:when test="#{(empty lenderItemConditionsBean.lender_item_condition_id) and (empty iid)}" >
                     <c:set var="save_update"  value="Save Lender Item Conditions" />
                   </c:when >
-                  <c:when test="#{(!empty lenderItemConditionsBean.lender_item_condition_id)  and (empty userBean.itemId)}" >
+                  <c:when test="#{(!empty lenderItemConditionsBean.lender_item_condition_id)  and (empty iid)}" >
                     <c:set var="save_update"  value="Update Lender Item Conditions" />
                   </c:when >
-                  <c:when test="#{(!empty lenderItemConditionsBean.lender_item_condition_id)  and (!empty userBean.itemId)}" >
+                  <c:when test="#{(!empty lenderItemConditionsBean.lender_item_condition_id)  and (!empty iid)}" >
                     <c:set var="save_update"  value="Update or Accept Current Lender Item Conditions" />
                   </c:when >
                 </c:choose>
-                <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="#{save_update}"  rendered="#{userBean.editable == 1}"  />
-
+                <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="#{save_update}"  rendered="#{userBean.editable == 1}"  >
+                  <f:param name="iid" value="${iid}" />
+                </h:commandLink>
 
                 <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Lender Item Conditions"  rendered="#{userBean.editable == 0}" >
                   <f:param name="action" value="edit" />
-                  <c:choose>
-                    <c:when test="#{!empty itemBean.itemId}" >
-                      <f:param name="iid" value="#{itemBean.itemId}" />
-                    </c:when>
-                  </c:choose>
+                  <f:param name="iid" value="#{iid}" />
                 </h:commandLink>
-
                 <h:inputHidden id="lender_item_condition_id"  value="#{lenderItemConditionsBean.lender_item_condition_id}"  />
-
-                <h:inputHidden id="itemId" value="${userBean.itemId}"  />
+                <h:inputHidden id="itemId" value="${iid}"  />
 
               </div> 
               <div class="messagecolor">
