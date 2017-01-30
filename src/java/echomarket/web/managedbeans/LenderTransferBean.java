@@ -131,7 +131,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("lenderTransferId")) {
           this.lenderTransferId = entry.getValue();
         }
-        
+
         if (entry.getKey().contains("borrowerComesToWhichAddress")) {
           this.borrowerComesToWhichAddress = Integer.valueOf(entry.getValue());
         }
@@ -174,7 +174,6 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           this.setComment(entry.getValue());
         }
 
-        
       }
     } catch (Exception ex) {
     }
@@ -186,8 +185,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.thirdPartyPresenceMutual = -9;
       }
     }
-    
-     if (this.meetBorrowerAtAgreed != null) {
+
+    if (this.meetBorrowerAtAgreed != null) {
       if (this.meetBorrowerAtAgreed == 0) {
         this.meetBorrowerAtAgreedBorrowerChoice = -9;
         this.meetBorrowerAtAgreedLenderChoice = -9;
@@ -280,7 +279,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             tx = sb.beginTransaction();
             sb.save(lt);
             tx.commit();
-           
+
             message(null, "LenderTransferSaved", null);
             successTransaction = true;
           } catch (Exception ex) {
