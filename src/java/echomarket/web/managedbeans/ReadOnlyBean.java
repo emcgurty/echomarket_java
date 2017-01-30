@@ -319,21 +319,15 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       queryString = "SELECT addr "
               + " FROM Participant part "
               + " inner join part.addresses addr "
-              + " inner join part.item itm "
-              + " inner join itm.lenderTransfer ltrans "
-              + " WHERE (ltrans.borrowerComesToWhichAddress = 1 OR ltrans.borrowerComesToWhichAddress = 3)"
-              + " AND  (ltrans.itemId = :iid) "
-              + " AND  (part.participant_id = :pid) "
-              + " AND  (part.displayAddress = 1 )"
+              + " WHERE (part.participant_id = :pid )"
               + " AND  (addr.addressType = 'primary')";
 
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.itemId)
               .setParameter("pid", this.participant_id)
               .list();
       tx.commit();
     } catch (Exception e) {
-      System.out.println("Error in getPrimaryAdrress in ReadONlyBean");
+      System.out.println("Error in getPrimaryAdrress in ReadOnlyBean");
       Logger.getLogger(ReadOnlyBean.class.getName()).log(Level.SEVERE, null, e);
       tx.rollback();
 
@@ -358,14 +352,9 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       queryString = "SELECT addr "
               + " FROM Participant part "
               + " inner join part.addresses addr "
-              + " inner join part.item itm "
-              + " inner join itm.lenderTransfer ltrans "
-              + " WHERE (ltrans.borrowerComesToWhichAddress = 1 OR ltrans.borrowerComesToWhichAddress = 2)"
-              + " AND  (ltrans.itemId = :iid)"
-              + " AND  (part.participant_id = :pid)"
+              + " WHERE (part.participant_id = :pid )"
               + " AND  (addr.addressType = 'alternative')";
       result = hib.createQuery(queryString)
-              .setParameter("iid", this.itemId)
               .setParameter("pid", this.participant_id)
               .list();
       tx.commit();
