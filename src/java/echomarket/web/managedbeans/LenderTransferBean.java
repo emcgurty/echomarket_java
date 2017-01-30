@@ -131,6 +131,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("lenderTransferId")) {
           this.lenderTransferId = entry.getValue();
         }
+        
         if (entry.getKey().contains("borrowerComesToWhichAddress")) {
           this.borrowerComesToWhichAddress = Integer.valueOf(entry.getValue());
         }
@@ -173,7 +174,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           this.setComment(entry.getValue());
         }
 
-        System.out.println(entry.getKey() + "/" + entry.getValue());
+        
       }
     } catch (Exception ex) {
     }
@@ -224,8 +225,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
     } else {
 
-      if (ubean.getItemId().isEmpty() == false) {
-        cp_list = getCurrentLT_Iid(ubean.getParticipant_id(), ubean.getItemId());
+      if (this.itemId.isEmpty() == false) {
+        cp_list = getCurrentLT_Iid(ubean.getParticipant_id(), this.itemId);
       } else {
         cp_list = getCurrentLT(ubean.getParticipant_id());
       }
