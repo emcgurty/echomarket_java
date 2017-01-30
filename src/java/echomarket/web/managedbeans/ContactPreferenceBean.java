@@ -345,15 +345,15 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
 
     } else {
 
-      if (ubean.getItemId().isEmpty() == false) {
-        cp_list = getCurrentCP_Id(ubean.getParticipant_id(), ubean.getItemId());
+      if (this.itemId.isEmpty() == false) {
+        cp_list = getCurrentCP_Id(ubean.getParticipant_id(),this.itemId);
       } else {
         cp_list = getCurrentCP(ubean.getParticipant_id());
       }
       if (cp_list != null) {
         if (cp_list.size() == 1) {
           ContactPreference part = (ContactPreference) cp_list.get(0);
-          part.setItemId(ubean.getItemId());
+          part.setItemId(this.itemId);
           part.setUseWhichContactAddress(this.useWhichContactAddress);
           part.setContactByChat(this.contactByChat);
           part.setContactByEmail(this.contactByEmail);
