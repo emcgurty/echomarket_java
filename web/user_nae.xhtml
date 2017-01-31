@@ -68,7 +68,7 @@
                 </c:when >
               </c:choose>
               <h:commandLink  action="#{participantBean.updateNAE()}"  class="right_div" value="#{save_update} #{sub_title}"   rendered="#{userBean.editable == 1}" />
-              <h:commandLink  action="#{participantBean.load_ud(userbean.user_id)}"  class="right_div" value="Edit '#{title}' Information"   rendered="#{userBean.editable == 0}" />
+              <h:commandLink  action="#{participantBean.load_ud(userbean.user_id)}"  class="right_div" value="Edit #{sub_title}"   rendered="#{userBean.editable == 0}" />
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="#{sub_title}" />
