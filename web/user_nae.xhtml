@@ -382,7 +382,7 @@
                       <tr >
                         <td >
                           <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
-                          <h:inputText id="postalCode" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" required="true" requiredMessage="Postal Code is required" />
+                          <h:inputText id="postalCode" value="#{pa.postalCode}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" required="true" requiredMessage="Postal Code is required" maxlength="24" />
                           <h:outputText value="#{pa.postalCode}" style="margin-left: 5px;" class="RO_text"  rendered="#{userBean.editable == 0}" />
                           <span class="error-message" id="postalCode" ></span>
                         </td>
@@ -507,7 +507,7 @@
                         </td>
                         <td>
                           <h:outputLabel for="regiona" value="#{bundle.Region}"/>
-                          <h:inputText id="regiona" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
+                          <h:inputText id="regiona" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" maxlength="24" />
                           <h:outputText value="#{pa.region}" class="RO_text"  rendered="#{userBean.editable == 0}" />
 
                         </td>
