@@ -41,6 +41,11 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private String contactByOtherSocialMediaAccess;
   private Boolean questionAltAddress;
   private Boolean questionAltEmail;
+  private Boolean displayPrimary;
+  private Boolean displayAlternative;
+  private Boolean displayHomePhone;
+  private Boolean displayAlternativePhone;
+  private Boolean displayCellPhone;
 
   public ContactPreferenceBean() {
   }
@@ -346,7 +351,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } else {
 
       if (this.itemId.isEmpty() == false) {
-        cp_list = getCurrentCP_Id(ubean.getParticipant_id(),this.itemId);
+        cp_list = getCurrentCP_Id(ubean.getParticipant_id(), this.itemId);
       } else {
         cp_list = getCurrentCP(ubean.getParticipant_id());
       }
@@ -589,7 +594,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
               .list();
       tx.commit();
     } catch (Exception e) {
-      System.out.println("Error in getCurrentCP");
+      System.out.println("Error in getParticipantAddreseEmailAlts");
       e.printStackTrace();
       tx.rollback();
     } finally {
@@ -610,6 +615,32 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         } else {
           this.setQuestionAltEmail(false);
         }
+        if (part.getDisplayAddress() == 1) {
+          this.displayPrimary = true;
+        } else {
+          this.displayPrimary = false;
+        }
+        if (part.getDisplayAlternativeAddress() == 1) {
+          this.displayAlternative = true;
+        } else {
+          this.displayAlternative = false;
+        }
+        if (part.getDisplayHomePhone() == 1) {
+          this.displayHomePhone = true;
+        } else {
+          this.displayHomePhone = false;
+        }
+        if (part.getDisplayCellPhone() == 1) {
+          this.displayCellPhone = true;
+        } else {
+          this.displayCellPhone = false;
+        }
+        if (part.getDisplayAlternativePhone() == 1) {
+          this.displayAlternativePhone = true;
+        } else {
+          this.displayAlternativePhone = false;
+        }
+
       }
 
     }
@@ -641,6 +672,76 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    */
   public void setQuestionAltEmail(Boolean questionAltEmail) {
     this.questionAltEmail = questionAltEmail;
+  }
+
+  /**
+   * @return the displayPrimary
+   */
+  public Boolean getDisplayPrimary() {
+    return displayPrimary;
+  }
+
+  /**
+   * @param displayPrimary the displayPrimary to set
+   */
+  public void setDisplayPrimary(Boolean displayPrimary) {
+    this.displayPrimary = displayPrimary;
+  }
+
+  /**
+   * @return the displayAlternative
+   */
+  public Boolean getDisplayAlternative() {
+    return displayAlternative;
+  }
+
+  /**
+   * @param displayAlternative the displayAlternative to set
+   */
+  public void setDisplayAlternative(Boolean displayAlternative) {
+    this.displayAlternative = displayAlternative;
+  }
+
+  /**
+   * @return the displayHomePhone
+   */
+  public Boolean getDisplayHomePhone() {
+    return displayHomePhone;
+  }
+
+  /**
+   * @param displayHomePhone the displayHomePhone to set
+   */
+  public void setDisplayHomePhone(Boolean displayHomePhone) {
+    this.displayHomePhone = displayHomePhone;
+  }
+
+  /**
+   * @return the displayAlternativePhone
+   */
+  public Boolean getDisplayAlternativePhone() {
+    return displayAlternativePhone;
+  }
+
+  /**
+   * @param displayAlternativePhone the displayAlternativePhone to set
+   */
+  public void setDisplayAlternativePhone(Boolean displayAlternativePhone) {
+    this.displayAlternativePhone = displayAlternativePhone;
+  }
+
+  /**
+   * @return the displayCellPhone
+   */
+  public Boolean getDisplayCellPhone() {
+    return displayCellPhone;
+  }
+
+  /**
+   * @param displayCellPhone the displayCellPhone to set
+   */
+  public void setDisplayCellPhone(Boolean displayCellPhone) {
+    this.displayCellPhone = displayCellPhone;
   }
 
 }
