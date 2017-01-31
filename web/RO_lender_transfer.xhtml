@@ -293,8 +293,8 @@
       <c:choose>
         <c:when test="#{!empty line13}" >
           <br />
-
-          <h:outputText value="Comment: #{line13}" class="RO_text"  />
+          
+          <h:inputTextarea readonly="true" value="Comments: #{line13}" rows="10"  cols="40"  label="Comments"/>
         </c:when>
       </c:choose>
 
