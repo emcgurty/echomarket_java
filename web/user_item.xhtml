@@ -88,7 +88,7 @@
 
                 <div id="other_category" style="display:none;">    
                   <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
-                    <h:inputText  value="#{itemBean.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"    rendered="#{userBean.editable == 1}"/>
+                    <h:inputText  value="#{itemBean.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"    rendered="#{userBean.editable == 1}" maxlength="24" />
                     <h:outputText  id="otherItemCategoryString" value="#{itemBean.otherItemCategory}"   rendered="#{userBean.editable == 0}"/>
                   </h:outputLabel>    
                   <span class="error-message" id="otherItemCategory" ></span>
@@ -129,7 +129,7 @@
               <td style="width:50%">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
-                    <h:inputText  id="itemDescription" value="#{itemBean.itemDescription}" class="items"  style="margin-left:10px"   rendered="#{userBean.editable == 1}"/>
+                    <h:inputText  id="itemDescription" value="#{itemBean.itemDescription}" class="items"  style="margin-left:10px"   rendered="#{userBean.editable == 1}" maxlength="50" />
                     <h:outputText  value="#{itemBean.itemDescription}"    rendered="#{userBean.editable == 0}"  class="RO_text"/>
                   </h:outputLabel>
                   <span class="error-message" id="itemDescription" ></span>
@@ -160,7 +160,7 @@
               <td  style="width:50%;">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemModel" value="#{bundle.ItemModel}" >
-                    <h:inputText id="itemModel" value="#{itemBean.itemModel}"  style="margin-left:10px"   rendered="#{userBean.editable == 1}"/>
+                    <h:inputText id="itemModel" value="#{itemBean.itemModel}"  style="margin-left:10px"   rendered="#{userBean.editable == 1}" maxlength="24" />
                     <h:outputText  id="itemModelString" value="#{itemBean.itemModel}"   rendered="#{userBean.editable == 0}" class="RO_text"/>
                   </h:outputLabel>
                 </div></td>
