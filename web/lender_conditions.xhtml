@@ -126,7 +126,7 @@
                   </td>
                   <td>
                     <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
-                      <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" rendered="#{userBean.editable == 1}"  size="10">
+                      <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" rendered="#{userBean.editable == 1}"  size="10" maxlength="10">
                         <f:convertNumber type="currency"  pattern="#0.00" currencySymbol="$" />
                       </h:inputText>    
                       <span class="error-message" id="smallFee" ></span>       
@@ -169,7 +169,7 @@
                   </td>
                   <td>
                     <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
-                      <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}"  size="10" rendered="#{userBean.editable == 1}" >
+                      <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}"  size="10" maxlength="10" rendered="#{userBean.editable == 1}" >
                         <f:convertNumber type="currency"  pattern="#0.00" currencySymbol="$" />
                       </h:inputText> 
                       <c:if test="#{userBean.editable == 0}" >
@@ -257,7 +257,7 @@
                   <td>
 
                     <h:outputLabel for="tradeItem" value="If yes, what would you like in exchange?" >
-                      <h:inputText id="tradeItem" value="#{lenderItemConditionsBean.tradeItem}"  rendered="#{userBean.editable == 1}" />
+                      <h:inputText id="tradeItem" value="#{lenderItemConditionsBean.tradeItem}"  rendered="#{userBean.editable == 1}" maxlength="24"/>
                       <c:if test="#{userBean.editable == 0}" >
                         <h:outputText id="tradeItemString"   value="#{lenderItemConditionsBean.tradeItem}" class="RO_text" />
                       </c:if> 
@@ -292,7 +292,7 @@
                   <td>
 
                     <h:outputLabel for="securityDepositAmount" value="If yes, please provide the security deposit amount:" >
-                      <h:inputText id="securityDepositAmount" value="#{lenderItemConditionsBean.securityDepositAmount}"  size="10" rendered="#{userBean.editable == 1}" >
+                      <h:inputText id="securityDepositAmount" value="#{lenderItemConditionsBean.securityDepositAmount}"  size="10" rendered="#{userBean.editable == 1}" maxlength="10">
                         <f:convertNumber type="currency"  pattern="##0.00" currencySymbol="$" />
                       </h:inputText> 
                       <span class="security_deposit_amount_error"></span>
