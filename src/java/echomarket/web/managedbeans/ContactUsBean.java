@@ -24,16 +24,22 @@ public class ContactUsBean extends AbstractBean implements Serializable {
   private String email;
   private String subject;
   private String comments;
-  
+
   public ContactUsBean() {
   }
 
   public String sendMessage() {
-    
+
     String rip = getClientIpAddr();
     Session hib = null;
     Transaction tx = null;
     Boolean savedRecord = false;
+    String hold = this.comments;
+    if (hold.length() > 254) {
+      this.comments = hold.substring(0, 254);
+    } else {
+      this.comments = hold;
+    }
     ContactUs cus = new ContactUs(UUID.randomUUID().toString(), this.subject, rip, this.email, this.comments, this.user_id);
 
     try {
@@ -45,7 +51,7 @@ public class ContactUsBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, "Error in save ContactUsBean", ex);
-      
+
     } finally {
       hib = null;
       tx = null;
@@ -130,6 +136,5 @@ public class ContactUsBean extends AbstractBean implements Serializable {
   public void setComments(String comments) {
     this.comments = comments;
   }
-
 
 }
