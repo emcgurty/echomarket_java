@@ -171,7 +171,12 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           this.setWillPickUpPreferredLocation(Integer.valueOf(entry.getValue()));
         }
         if (entry.getKey().contains("comment")) {
-          this.setComment(entry.getValue());
+          String hold = entry.getValue();
+          if (hold.length() > 254) {
+             this.comment = hold.substring(0, 254);
+          } else
+             this.comment = hold;
+          
         }
 
       }
