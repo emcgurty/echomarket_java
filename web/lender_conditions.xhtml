@@ -513,9 +513,10 @@
                     <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
                       <h:inputTextarea id="specificConditions"  value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" rendered="#{userBean.editable == 1}" />
                       <c:if test="#{userBean.editable == 0}" >
-                        <h:outputText id="specificConditionsString"    value="#{lenderItemConditionsBean.specificConditions}"  class="RO_text" />
+                        <h:inputTextarea readonly="true" value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" title="Specific conditions.." />
                       </c:if> 
                     </h:outputLabel>
+                    <span class="required_fields" style="margin-left:5px;">255 characters permitted</span>                    
                   </div>
                 </td>
               </tr>
