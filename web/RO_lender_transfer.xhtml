@@ -11,7 +11,7 @@
                 template="./UserDetailROTemplate.xhtml">
 
   <ui:define name="header"  >
-    <ui:include rendered="true" src="application_header.xhtml" id="borrowersHeader" />
+    <ui:include rendered="true" src="application_header.xhtml" id="ROLITHeader" />
   </ui:define>
 
   <ui:define name="content"  >
@@ -293,11 +293,10 @@
       <c:choose>
         <c:when test="#{!empty line13}" >
           <br />
-          
+
           <h:inputTextarea readonly="true" value="Comments: #{line13}" rows="10"  cols="40"  label="Comments"/>
         </c:when>
       </c:choose>
-
     </div>
     <br /><br />
   </ui:define>
