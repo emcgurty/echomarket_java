@@ -38,7 +38,7 @@
                 <h:inputText id="username"
                              value="#{userBean.username}"
                              required="true"
-                             requiredMessage="#{bundle.ReqUserName}" style="margin-left:10px">
+                             requiredMessage="#{bundle.ReqUserName}" style="margin-left:10px" maxlength="18">
                 </h:inputText>
               </h:outputLabel>
             </td>
@@ -50,7 +50,7 @@
                 <h:inputSecret id="password"
                                value="#{userBean.password}"
                                required="true"
-                               requiredMessage="#{bundle.ReqPassword}"  style="margin-left:10px" >
+                               requiredMessage="#{bundle.ReqPassword}"  style="margin-left:10px" maxlength="18">
                 </h:inputSecret>
               </h:outputLabel>
             </td>
@@ -61,7 +61,7 @@
                 <h:inputSecret id="confirmPassword"
                                required="true"
                                requiredMessage="#{bundle.ReqPassword}"
-                               style="margin-left:10px">
+                               style="margin-left:10px" maxlength="18">
                 </h:inputSecret>
               </h:outputLabel>
             </td>
