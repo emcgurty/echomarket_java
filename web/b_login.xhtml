@@ -30,7 +30,7 @@
                            required="true"
                            requiredMessage="#{bundle.ReqUserName}"
                            autocomplete="off"
-                           style="margin-left: 5px;" >
+                           style="margin-left: 5px;" maxlength="16">
               </h:inputText>
             </h:outputLabel>
           </h:panelGroup>
@@ -42,6 +42,7 @@
             <h:outputLabel for="password" value="#{bundle.password}" >       
               <h:inputSecret id="password"
                              size="16"
+                             maxlength="16"
                              value="#{userBean.password}"
                              required="true"
                              requiredMessage="#{bundle.ReqPassword}"
