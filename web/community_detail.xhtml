@@ -53,7 +53,7 @@
                   <span id="communityName" class="required_fields">*</span>       
                   <h:inputText id="communityName"
                                value="#{communitiesBean.communityName}" 
-                               style="margin-left:10px;margin-right:10px;" >
+                               style="margin-left:10px;margin-right:10px;" maxlength="50" >
                   </h:inputText>
                 </h:outputLabel>
 
@@ -62,7 +62,7 @@
             <tr>
               <td style="padding-top: 7px;padding-bottom: 7px;" colspan="2">
                 <h:outputLabel for="email"  value="#{bundle.c_detail_email} (#{userBean.email})"><span id="email" class="required_fields">*</span>       
-                  <h:inputText id="email" value="#{communitiesBean.email}"  />
+                  <h:inputText id="email" value="#{communitiesBean.email}"  maxlength="50"/>
                 </h:outputLabel>
 
               </td>
@@ -74,13 +74,13 @@
                   <h:inputText id="firstName"
                                value="#{communitiesBean.firstName}"
                                required="true"
-                               requiredMessage="#{bundle.ReqFirstName}" style="margin-left:10px">
+                               requiredMessage="#{bundle.ReqFirstName}" style="margin-left:10px" maxlength="24" >
                   </h:inputText>
                 </h:outputLabel>
                 <h:outputLabel for="mi"  value="#{bundle.c_MI}">
                   <h:inputText id="mi"
                                value="#{communitiesBean.mi}"
-                               style="margin-left:10x" maxlength="1" size="1">
+                               style="margin-left:10x" maxlength="1" size="2">
                   </h:inputText>
                 </h:outputLabel>
 
@@ -90,7 +90,7 @@
                   <h:inputText id="lastName"
                                value="#{communitiesBean.lastName}"
                                required="true"
-                               requiredMessage="#{bundle.ReqLastName}" style="margin-left:10px">
+                               requiredMessage="#{bundle.ReqLastName}" style="margin-left:10px" maxlength="24" >
                   </h:inputText>
                 </h:outputLabel>
 
@@ -103,7 +103,7 @@
                   <h:inputText id="addressLine1"
                                value="#{communitiesBean.addressLine1}"
                                required="true"
-                               requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left:10px"  class="address">
+                               requiredMessage="#{bundle.ReqAddressLine1}" style="margin-left:10px"  class="address" maxlength="24" >
                   </h:inputText>
                 </h:outputLabel>
 
@@ -112,7 +112,7 @@
 
                 <h:outputLabel for="addressLine2"  value="#{bundle.AddressLine2}">       
                   <h:inputText id="addressLine2"
-                               value="#{communitiesBean.addressLine2}" style="margin-left:10px"  class="address">
+                               value="#{communitiesBean.addressLine2}" style="margin-left:10px"  class="address" maxlength="24" >
                   </h:inputText>
                 </h:outputLabel>
               </td>
@@ -123,7 +123,7 @@
                 <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
                 <h:inputText id="city" value="#{communitiesBean.city}"
                              required="true"
-                             requiredMessage="#{bundle.ReqCity}" style="margin-left:10px" class="address">
+                             requiredMessage="#{bundle.ReqCity}" style="margin-left:10px" class="address" maxlength="24" >
                 </h:inputText>
 
               </td>
@@ -144,13 +144,13 @@
             <tr >
               <td style="padding-top: 7px;padding-bottom: 7px;">
                 <h:outputLabel for="province" value="#{bundle.Province}"/>
-                <h:inputText id="province" value="#{communitiesBean.province}" style="margin-left: 5px;" class="address">
+                <h:inputText id="province" value="#{communitiesBean.province}" style="margin-left: 5px;" class="address" maxlength="24" >
                 </h:inputText>
 
               </td>
               <td style="padding-top: 7px;padding-bottom: 7px;">
                 <h:outputLabel for="region" value="#{bundle.Region}"/>
-                <h:inputText id="region" value="#{communitiesBean.region}" style="margin-left: 5px;" class="address">
+                <h:inputText id="region" value="#{communitiesBean.region}" style="margin-left: 5px;" class="address" maxlength="24" >
                 </h:inputText>
               </td>
             </tr>
@@ -159,7 +159,7 @@
                 <h:outputLabel for="postalCode" value="#{bundle.PostalCode}"/><span id="postalCode" class="required_fields">*</span>
                 <h:inputText id="postalCode" value="#{communitiesBean.postalCode}" 
                              required="true"
-                             requiredMessage="#{bundle.ReqPostalCode}" style="margin-left:10px" class="address">
+                             requiredMessage="#{bundle.ReqPostalCode}" style="margin-left:10px" class="address" maxlength="24" >
                 </h:inputText>
 
               </td>
@@ -184,14 +184,14 @@
               <td style="padding-top: 7px;padding-bottom: 7px;">
                 <h:outputLabel for="cellPhone" value="#{bundle.c_cellPhone}"/>
                 <h:inputText id="cellPhone" value="#{communitiesBean.cellPhone}" 
-                             style="margin-left: 5px;">
+                             style="margin-left: 5px;" maxlength="20" >
                 </h:inputText>
 
               </td>
               <td style="padding-top: 7px;padding-bottom: 7px;">
                 <h:outputLabel for="homePhone" value="#{bundle.c_communityPhone}"/>
                 <h:inputText id="homePhone" value="#{communitiesBean.homePhone}" 
-                             style="margin-left: 5px;">
+                             style="margin-left: 5px;" maxlength="20">
                 </h:inputText>
               </td>
             </tr>
