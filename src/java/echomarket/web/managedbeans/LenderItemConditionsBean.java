@@ -191,7 +191,12 @@ public class LenderItemConditionsBean extends AbstractBean implements Serializab
           this.provideProperUseTraining = Integer.valueOf(entry.getValue());
         }
         if (entry.getKey().contains("specificConditions")) {
-          this.specificConditions = entry.getValue();
+          String hold = entry.getValue();
+          if (hold.length() > 254) {
+            this.specificConditions = hold.substring(0, 254);
+          } else
+             this.specificConditions = hold;
+          
         }
         if (entry.getKey().contains("securityDepositAmount")) {
           this.securityDepositAmount = new BigDecimal(entry.getValue());
