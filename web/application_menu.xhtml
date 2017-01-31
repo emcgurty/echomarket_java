@@ -34,31 +34,7 @@
       <li class="subs"  >
         <h:commandLink id="search_items" action="search" value="SEARCH!"/>
       </li>
-      <li class="subs">
-        <a href="#s1">Borrowing</a>
-        <ul>
-          <li>
-            <h:commandLink id="borrowListing" action="borrower_lsting">
-              <h:outputText value="What's available to borrow"/>
-            </h:commandLink>                  
-          </li>
-
-        </ul>
-      </li>
-
-      <li class="subs">
-        <a href="#s1">Lending</a>
-        <ul>
-          <li>
-            <h:commandLink id="lenderListing" action="lender_listing">
-              <h:outputText value="What's available from lenders"/>
-
-            </h:commandLink>                  
-          </li>
-
-        </ul>
-      </li>
-
+      
       <c:if test="#{userBean.user_id == null}" >
         <li class="subs">
           <a href="#s1">Login</a>
