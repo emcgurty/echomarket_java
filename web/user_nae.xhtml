@@ -175,7 +175,7 @@
                   <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;margin-right:50px;">
                     <div style="float:left;margin-left:25px">
                       <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" rendered="#{(userBean.editable == 1) or ( (userBean.editable == 0) and (!empty participantBean.organizationName) )  }" >
-                        <h:inputText  id="organizationName" value="#{participantBean.organizationName}"  rendered="#{userBean.editable == 1}" />
+                        <h:inputText  id="organizationName" value="#{participantBean.organizationName}"  rendered="#{userBean.editable == 1}" maxlength="50" />
                         <h:outputText value="#{participantBean.organizationName}" rendered="#{userBean.editable == 0}" class="RO_text" />
                       </h:outputLabel>
                       <span class="error-message" id="organizationName" ></span>
@@ -235,7 +235,7 @@
                 </div>
                 <div style="margin-left: 25px;float:left">
                   <h:outputLabel value="Middle Initial:"  for="mi" >
-                    <h:inputText  id="mi" value="#{participantBean.mi}" maxlength="1" size="1" rendered="#{userBean.editable == 1}" />
+                    <h:inputText  id="mi" value="#{participantBean.mi}" maxlength="1" size="2" rendered="#{userBean.editable == 1}" />
                     <h:outputText  value="#{participantBean.mi}"  rendered="#{userBean.editable == 0}" class="RO_text" />
                   </h:outputLabel>
                 </div>
