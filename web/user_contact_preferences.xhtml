@@ -32,13 +32,17 @@
 
           <c:set var="ut" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />  
           <c:set var="ut" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />  
+          <c:set var="displayAltAddress" value="#{contactPreferenceBean.displayAlternative}" />
+          <c:set var="displayPrimaryAddress" value="#{contactPreferenceBean.displayPrimary}" />
+          <c:set var="displayHomePhone" value="#{contactPreferenceBean.displayHomePhone}" />
+          <c:set var="displayCellPhone" value="#{contactPreferenceBean.displayCellPhone}" />
+          <c:set var="displayAlternativePhone" value="#{contactPreferenceBean.displayAlternativePhone}" />
 
-
+          <h:inputHidden id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  />
+          <h:inputHidden id="itemId" value="#{iid}"  />
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
-
               <h:outputText value="${userBean.userAlias}: USER DASHBOARD"  />
-
               <c:choose >
                 <c:when test="${(empty contactPreferenceBean.contactPreferenceId) and (empty iid)}" >
                   <c:set var="save_update"  value="Save Contact Preferences" />
@@ -91,69 +95,67 @@
               </div>
             </c:when>
           </c:choose>
-
-          <div  class="div_p"  >
-            <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Address.." />
-            </div>
-          </div>
-
-          <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
-            <h:inputHidden id="contactPreferenceId" value="#{contactPreferenceBean.contactPreferenceId}"  />
-            <h:inputHidden id="itemId" value="#{iid}"  />
-
-            <div style="float:left;margin-left:25px">
-              <div id="postalWithContactAddress" >    
-
-                <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
-                  <c:if test="#{userBean.editable == 1}" >
-                    <c:set var="displayAltAddres" value="#{contactPreferenceBean.questionAltAddress}" />
-                    <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}"   layout="pageDirection" >
-                      <c:choose> 
-                        <c:when test="#{displayAltAddres == true}"   >
-                          <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
-                          <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?"  />	
-                          <f:selectItem itemValue="1" itemLabel="Either address is fine."  />
-                          <f:selectItem itemValue="0" itemLabel="Neither, no address contact please."  />
-                        </c:when>
-                        <c:when test="#{displayAltAddres == false}" >
-                          <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
-                          <f:selectItem itemValue="0" itemLabel="No address contact please."  />
-                        </c:when>
-                        <c:otherwise>
-                          <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
-                          <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?"  />	
-                          <f:selectItem itemValue="1" itemLabel="Either address is fine."  />
-                          <f:selectItem itemValue="0" itemLabel="Neither, no address contact please."  />
-                        </c:otherwise>
-                      </c:choose>
-                    </h:selectOneRadio>
-                  </c:if>
-                  <c:if test="#{userBean.editable == 0}" >
-                    <c:choose>
-                      <c:when test="#{contactPreferenceBean.useWhichContactAddress == 0}">
-                        <c:set var="whichAddress" value="Neither, no address contact"/>
-                      </c:when>
-                      <c:when test="#{contactPreferenceBean.useWhichContactAddress == 1}">
-                        <c:set var="whichAddress" value="Either address is fine"/>
-                      </c:when>
-                      <c:when test="#{contactPreferenceBean.useWhichContactAddress == 2}">
-                        <c:set var="whichAddress" value="Use your Alternative Address"/>
-                      </c:when>
-                      <c:when test="#{contactPreferenceBean.useWhichContactAddress == 3}">
-                        <c:set var="whichAddress" value="Use your Primary Address"/>
-                      </c:when>
-                      <c:otherwise>
-                        <c:set var="whichAddress" value="##"/>
-                      </c:otherwise>
-                    </c:choose>
-                    <h:outputText id="useWhichContactAddress"   value="#{whichAddress}" class="RO_text" />
-                  </c:if>
-                </h:outputLabel>
+          <c:if test="#{displayPrimaryAddress == false  and displayAltAddress == false}"   >
+            <h:inputHidden  id="useWhichContactAddress" value="0" />
+          </c:if>
+          <c:if test="#{displayPrimaryAddress == true  or displayAltAddress == true}"   >
+            <div  class="div_p"  >
+              <div style="margin:10px;" >
+                <h:outputText value="Contact Option: By Address.." />
               </div>
             </div>
-          </div>
 
+            <div style="display:block;float:left;height:auto;width:inherit;margin-top:5px;">
+              <div style="float:left;margin-left:25px">
+                <div id="postalWithContactAddress" >    
+
+                  <h:outputLabel value="Which Address?" for="useWhichContactAddress" >
+                    <c:if test="#{userBean.editable == 1}" >
+                      <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}"   layout="pageDirection" >
+                        <c:choose> 
+                          <c:when test="#{displayPrimaryAddress == true  and displayAltAddress == true}"   >
+                            <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
+                            <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?"  />	
+                            <f:selectItem itemValue="1" itemLabel="Either address is fine."  />
+                            <f:selectItem itemValue="0" itemLabel="No address contact please."  />
+                          </c:when>
+                          <c:when test="#{displayPrimaryAddress == true  and displayAltAddress == false}"   >
+                            <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
+                            <f:selectItem itemValue="0" itemLabel="No address contact please."  />
+                          </c:when>
+                          <c:when test="#{displayPrimaryAddress == false  and displayAltAddress == true}"   >
+                            <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?"  />	
+                            <f:selectItem itemValue="0" itemLabel="No address contact please."  />
+                          </c:when>
+                        </c:choose>
+                      </h:selectOneRadio>
+                    </c:if>
+                    <c:if test="#{userBean.editable == 0}" >
+                      <c:choose>
+                        <c:when test="#{contactPreferenceBean.useWhichContactAddress == 0}">
+                          <c:set var="whichAddress" value="Neither, no address contact"/>
+                        </c:when>
+                        <c:when test="#{contactPreferenceBean.useWhichContactAddress == 1}">
+                          <c:set var="whichAddress" value="Either address is fine"/>
+                        </c:when>
+                        <c:when test="#{contactPreferenceBean.useWhichContactAddress == 2}">
+                          <c:set var="whichAddress" value="Use your Alternative Address"/>
+                        </c:when>
+                        <c:when test="#{contactPreferenceBean.useWhichContactAddress == 3}">
+                          <c:set var="whichAddress" value="Use your Primary Address"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="whichAddress" value="##"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText id="useWhichContactAddress"   value="#{whichAddress}" class="RO_text" />
+                    </c:if>
+                  </h:outputLabel>
+
+                </div>
+              </div>
+            </div>
+          </c:if>
           <div  class="div_p"  >
             <hr />
             <div style="margin:10px;" >
@@ -245,96 +247,111 @@
                   <h:outputText id="contactByEmail"   value="#{cbe}"  class="RO_text" />
                 </c:if>  
               </h:outputLabel>
-
-
             </div>
           </div>
 
-          <div  class="div_p"  id="display_phone">
-            <hr />
-            <div style="margin:10px;" >
-              <h:outputText value="Contact Option: By Phone..." />
+          <c:if test="#{displayHomePhone == false  and displayCellPhone == false and displayAlternativePhone == false}"   >
+            <h:inputHidden  id="contactByHomePhone" value="0" />
+            <h:inputHidden  id="contactByCellPhone" value="0" />
+            <h:inputHidden  id="contactByAlternativePhone" value="0" />
+          </c:if>
+
+          <c:if test="#{displayHomePhone == true  or displayCellPhone == true or displayAlternativePhone == true}"   >
+            <div  class="div_p"  id="display_phone">
+              <hr />
+              <div style="margin:10px;" >
+                <h:outputText value="Contact Option: By Phone..." /><br />
+                <h:outputText value="Can interested EchoMarket participants call you at your..." />
+              </div>
             </div>
-          </div>
+          </c:if>  
+
           <div style="float:left;margin-left:25px;display:block;" >
-            <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
+            <c:if test="#{displayHomePhone == true}" >
+              
+              <div style="margin-left:25px;float:left;" id="display_homePhone" class="phone" >
+                <h:outputLabel value="... home phone?:"  for="contactByHomePhone" >
+                  <c:if test="#{userBean.editable == 1}" >
+                    <h:selectOneRadio id="contactByHomePhone" value="#{contactPreferenceBean.contactByHomePhone}"   >
+                      <f:selectItem itemValue="1" itemLabel="Yes" />
+                      <f:selectItem itemValue="0" itemLabel="No" />
+                    </h:selectOneRadio>    
+                  </c:if>
+                  <c:if test="#{userBean.editable == 0}" >
+                    <c:choose>
+                      <c:when test="#{contactPreferenceBean.contactByHomePhone == 0}">
+                        <c:set var="yn" value="No"/>
+                      </c:when>
+                      <c:when test="#{contactPreferenceBean.contactByHomePhone== 1}">
+                        <c:set var="yn" value="Yes"/>
+                      </c:when>
+                      <c:otherwise>
+                        <c:set var="yn" value="##"/>
+                      </c:otherwise>
+                    </c:choose>
+                    <h:outputText id="contactByHomePhone"   value="#{yn}"  class="RO_text"  />
+                  </c:if>   
 
-              <h:outputLabel value="Can interested EchoMarket participants call you at your home phone?:"  for="contactByHomePhone" >
-                <c:if test="#{userBean.editable == 1}" >
-                  <h:selectOneRadio id="contactByHomePhone" value="#{contactPreferenceBean.contactByHomePhone}"   >
-                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                    <f:selectItem itemValue="0" itemLabel="No" />
-                  </h:selectOneRadio>    
-                </c:if>
-                <c:if test="#{userBean.editable == 0}" >
-                  <c:choose>
-                    <c:when test="#{contactPreferenceBean.contactByHomePhone == 0}">
-                      <c:set var="yn" value="No"/>
-                    </c:when>
-                    <c:when test="#{contactPreferenceBean.contactByHomePhone== 1}">
-                      <c:set var="yn" value="Yes"/>
-                    </c:when>
-                    <c:otherwise>
-                      <c:set var="yn" value="##"/>
-                    </c:otherwise>
-                  </c:choose>
-                  <h:outputText id="contactByHomePhone"   value="#{yn}"  class="RO_text"  />
-                </c:if>   
+                </h:outputLabel> 
+              </div>
+            </c:if>  
+            <c:if test="#{displayCellPhone == true}" >
+              
+              <div style="margin-left:25px;float:left;" id="display_cellPhone" class="phone" >
+                <h:outputLabel value="... cell phone?:"  for="contactByCellPhone" >
+                  <c:if test="#{userBean.editable == 1}" >
+                    <h:selectOneRadio id="contactByCellPhone" value="#{contactPreferenceBean.contactByCellPhone}" >
+                      <f:selectItem itemValue="1" itemLabel="Yes" />
+                      <f:selectItem itemValue="0" itemLabel="No" />
 
-              </h:outputLabel> 
-            </div>
-            <div style="margin-left:25px;float:left;" id="display_cellPhone" class="phone" >
-              <h:outputLabel value="... by your cell phone?:"  for="contactByCellPhone" >
-                <c:if test="#{userBean.editable == 1}" >
-                  <h:selectOneRadio id="contactByCellPhone" value="#{contactPreferenceBean.contactByCellPhone}" >
-                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                    <f:selectItem itemValue="0" itemLabel="No" />
+                    </h:selectOneRadio>    
+                  </c:if>
+                  <c:if test="#{userBean.editable == 0}" >
+                    <c:choose>
+                      <c:when test="#{contactPreferenceBean.contactByCellPhone == 0}">
+                        <c:set var="yn" value="No"/>
+                      </c:when>
+                      <c:when test="#{contactPreferenceBean.contactByCellPhone== 1}">
+                        <c:set var="yn" value="Yes"/>
+                      </c:when>
+                      <c:otherwise>
+                        <c:set var="yn" value="##"/>
+                      </c:otherwise>
+                    </c:choose>
+                    <h:outputText id="contactByCellPhone"   value="#{yn}"  class="RO_text"  />
+                  </c:if>   
+                </h:outputLabel>
 
-                  </h:selectOneRadio>    
-                </c:if>
-                <c:if test="#{userBean.editable == 0}" >
-                  <c:choose>
-                    <c:when test="#{contactPreferenceBean.contactByCellPhone == 0}">
-                      <c:set var="yn" value="No"/>
-                    </c:when>
-                    <c:when test="#{contactPreferenceBean.contactByCellPhone== 1}">
-                      <c:set var="yn" value="Yes"/>
-                    </c:when>
-                    <c:otherwise>
-                      <c:set var="yn" value="##"/>
-                    </c:otherwise>
-                  </c:choose>
-                  <h:outputText id="contactByCellPhone"   value="#{yn}"  class="RO_text"  />
-                </c:if>   
-              </h:outputLabel>
+              </div>
+            </c:if>  
+            <c:if test="#{displayAlternativePhone == true}" >
+              
+              <div style="margin-left:25px;float:left;" id="display_alternativePhone" class="phone" >
+                <h:outputLabel value="... alternative phone?:"  for="contactByAlternativePhone" >
+                  <c:if test="#{userBean.editable == 1}" >
+                    <h:selectOneRadio id="contactByAlternativePhone" value="#{contactPreferenceBean.contactByAlternativePhone}"   >
+                      <f:selectItem itemValue="1" itemLabel="Yes" />
+                      <f:selectItem itemValue="0" itemLabel="No" />
 
-            </div>
-            <div style="margin-left:25px;float:left;" id="display_alternativePhone" class="phone" >
-              <h:outputLabel value="... by your alternative phone?:"  for="contactByAlternativePhone" >
-                <c:if test="#{userBean.editable == 1}" >
-                  <h:selectOneRadio id="contactByAlternativePhone" value="#{contactPreferenceBean.contactByAlternativePhone}"   >
-                    <f:selectItem itemValue="1" itemLabel="Yes" />
-                    <f:selectItem itemValue="0" itemLabel="No" />
-
-                  </h:selectOneRadio>    
-                </c:if>
-                <c:if test="#{userBean.editable == 0}" >
-                  <c:choose>
-                    <c:when test="#{contactPreferenceBean.contactByAlternativePhone == 0}">
-                      <c:set var="yn" value="No"/>
-                    </c:when>
-                    <c:when test="#{contactPreferenceBean.contactByAlternativePhone== 1}">
-                      <c:set var="yn" value="Yes"/>
-                    </c:when>
-                    <c:otherwise>
-                      <c:set var="yn" value="##"/>
-                    </c:otherwise>
-                  </c:choose>
-                  <h:outputText id="contactByAlternativePhone"   value="#{yn}"   class="RO_text" />
-                </c:if>   
-              </h:outputLabel>
-
-            </div>
+                    </h:selectOneRadio>    
+                  </c:if>
+                  <c:if test="#{userBean.editable == 0}" >
+                    <c:choose>
+                      <c:when test="#{contactPreferenceBean.contactByAlternativePhone == 0}">
+                        <c:set var="yn" value="No"/>
+                      </c:when>
+                      <c:when test="#{contactPreferenceBean.contactByAlternativePhone== 1}">
+                        <c:set var="yn" value="Yes"/>
+                      </c:when>
+                      <c:otherwise>
+                        <c:set var="yn" value="##"/>
+                      </c:otherwise>
+                    </c:choose>
+                    <h:outputText id="contactByAlternativePhone"   value="#{yn}"   class="RO_text" />
+                  </c:if>   
+                </h:outputLabel>
+              </div>
+            </c:if>
           </div>
 
           <div  class="div_p"  >
