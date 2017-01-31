@@ -332,21 +332,21 @@
                       <tr>
                         <td>
                           <h:outputLabel for="addressLine1" value="#{bundle.AddressLine1}"/><span id="addressLine1" class="required_fields">*</span>
-                          <h:inputText id="addressLine1" value="#{pa.addressLine1}" style="margin-left: 5px;" 
+                          <h:inputText id="addressLine1" value="#{pa.addressLine1}" style="margin-left: 5px;" maxlength="24"
                                        title="You don't need to provide your numeric address." class="primary" rendered="#{userBean.editable == 1}" required="true" requiredMessage="Address Line One is required" />
                           <h:outputText value="#{pa.addressLine1}" rendered="#{userBean.editable == 0}"  class="RO_text" />
                           <span class="error-message" id="addressLine1" ></span>
                         </td>
                         <td>
                           <h:outputLabel for="addressLine2" value="#{bundle.AddressLine2}" />
-                          <h:inputText id="addressLine2" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}"  />
+                          <h:inputText id="addressLine2" value="#{pa.addressLine2}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" maxlength="24" />
                           <h:outputText value="#{pa.addressLine2}" rendered="#{userBean.editable == 0}" class="RO_text" />
                         </td>
                       </tr> 
                       <tr>
                         <td>
                           <h:outputLabel for="city" value="#{bundle.City}"/><span id="city" class="required_fields">*</span>
-                          <h:inputText id="city" value="#{pa.city}"
+                          <h:inputText id="city" value="#{pa.city}" maxlength="24"
                                        style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" required="true" requiredMessage="City is required" >
                           </h:inputText>
                           <h:outputText value="#{pa.city}" rendered="#{userBean.editable == 0}" class="RO_text" />
@@ -368,13 +368,13 @@
                       <tr>
                         <td>
                           <h:outputLabel for="province" value="#{bundle.Province}"  />
-                          <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
+                          <h:inputText id="province" value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" maxlength="24" />
                           <h:outputText value="#{pa.province}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" class="RO_text" />
 
                         </td>
                         <td>
                           <h:outputLabel for="region" value="#{bundle.Region}" />
-                          <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" />
+                          <h:inputText id="region" value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" maxlength="24"/>
                           <h:outputText value="#{pa.region}" style="margin-left: 5px;" rendered="#{userBean.editable == 0}" class="RO_text" />
 
                         </td>
