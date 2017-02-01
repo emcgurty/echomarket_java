@@ -1917,14 +1917,16 @@ public class UserBean extends AbstractBean implements Serializable {
     return returnCID;
   }
 
-  public String getCommunityName(String pid) {
+  public String getRegistrationCommunityName(String pid) {
 
     List result = null;
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
+    String returnString = null;
     Communities pt = null;
     String getCID = getMemberInformation(pid);
+        
     queryString = "FROM Communities where community_id = :cid";
     try {
       hib = hib_session();
@@ -1935,7 +1937,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error on getCommunityName");
+      System.out.println("Error on getRegistrationCommunityName");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
@@ -1946,12 +1948,12 @@ public class UserBean extends AbstractBean implements Serializable {
     if (result != null) {
       if (result.size() == 1) {
         pt = (Communities) result.get(0);
-        queryString = pt.getCommunityName();
+        returnString = pt.getCommunityName();
       }
     }
     result = null;
     pt = null;
-    return queryString;
+    return returnString;
 
   }
 
