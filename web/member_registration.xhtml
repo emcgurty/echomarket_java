@@ -11,12 +11,7 @@
   <ui:define name="header"  >
     <ui:include rendered="true" src="application_header.xhtml" id="registrationHeader" /> 
   </ui:define>
-  <div class="messagecolor">
-    <h:messages showSummary="true" 
-                showDetail="false"
-                errorStyle="list-style-type:none;color: #d20005" 
-                infoStyle="color: indigo"/>
-  </div>
+
 
   <ui:define name="content">
     <h:head>
@@ -30,10 +25,21 @@
     <c:set var="pid"  value="#{request.getParameter('pid')}"  />
 
     <h:form id="community_member_registration" >
-    
+
       <div  class="top" id="form_user_registration" >
         <div style="margin:10px;" >
           <h:outputText value="Community Member Registration" style="font-size:large;"/>
+          
+          <h:commandLink  action="#{userBean.registerCommunityMember()}" value="Register" class="right_div" style="font-size:large;color:maroon;margin-top:15px;"   >
+            <f:param id="new" value="action"  />
+          </h:commandLink>  
+          <br />
+          <div class="messagecolor">
+            <h:messages showSummary="true" 
+                        showDetail="false"
+                        errorStyle="list-style-type:none;color: #d20005" 
+                        infoStyle="color: indigo"/>
+          </div>
         </div>
         <div id="individualNameGroup" style="float:left;margin:5px;width:95%;"  >
           <c:set var="b_alias" scope="view" value="#{bundle.userAlias}" />
@@ -41,18 +47,16 @@
           <c:set var="b_password" scope="view" value="#{bundle.password}" />
           <c:set var="b_confirm" scope="view" value="#{bundle.confirmPassword}" />
           <c:set var="b_email" scope="view" value="#{bundle.email}" />
-          
-          <div class="div_p" >
-              <p>Welcome To EchoMarket and to your Community Member Registration! </p>
-              <p>Your Community, #{userBean.getCommunityName(pid)}, has provided some preliminary information which you may change.  Please complete the remaining fields.  All fields are required.</p>  
-          </div>   
-          
-          <div style="width:95%;margin-left: 25px" >
-            <h:commandLink  action="#{userBean.registerCommunityMember()}" value="Register" style="font-size:large;color:maroon;margin-top:15px;"   >
-              <f:param id="new" value="action"  />
-            </h:commandLink>  
 
-          <table id="user_registration_table">
+          <div class="div_p" >
+            <p>Welcome To EchoMarket and to your Community Member Registration! </p>
+            <p>Your Community, #{userBean.getRegistrationCommunityName(pid)}, has provided some preliminary information which you may change.  Please complete the remaining fields.  All fields are required.</p>  
+          </div>   
+
+          <div style="width:95%;margin-left: 25px" >
+
+
+            <table id="user_registration_table">
               <tr >
                 <td style="padding-bottom: 15px;">
                   <h:outputLabel for="firstName" value="#{bundle.firstName}" >
