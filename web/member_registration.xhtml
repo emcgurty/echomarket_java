@@ -21,16 +21,15 @@
 
     <f:metadata>
       <f:viewParam name="pid" id="pid" value="#{userBean.pid}" />
-    </f:metadata>         
+      </f:metadata>         
     <c:set var="pid"  value="#{request.getParameter('pid')}"  />
-
+    
     <h:form id="community_member_registration" >
 
       <div  class="top" id="form_user_registration" >
         <div style="margin:10px;" >
           <h:outputText value="Community Member Registration" style="font-size:large;"/>
-          
-          <h:commandLink  action="#{userBean.registerCommunityMember()}" value="Register" class="right_div" style="font-size:large;color:maroon;margin-top:15px;"   >
+          <h:commandLink  action="#{userBean.processMemberActivation()}" value="Activate!" class="right_div" style="font-size:large;color:maroon;margin-top:15px;"   >
             <f:param id="new" value="action"  />
           </h:commandLink>  
           <br />
