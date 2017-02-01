@@ -42,14 +42,14 @@
 
         <div >
           <h:outputLabel for="email"  value="Your email address: "> 
-            <h:inputText id="email"  value="#{contactUsBean.email}" required="true" requiredMessage="Email is required"/> 
+            <h:inputText id="email"  value="#{contactUsBean.email}" required="true" requiredMessage="Email is required" maxlength="50" size="16" /> 
           </h:outputLabel>
           <span class="error-message" id="contact_us_email_error"></span>
         </div>
         <br />
         <div >
           <h:outputLabel for="subject"  value="Subject: "> 
-            <h:inputText id="subject"  value="#{contactUsBean.subject}" required="true" requiredMessage="A subject is required"/> 
+            <h:inputText id="subject"  value="#{contactUsBean.subject}" required="true" requiredMessage="A subject is required"  maxlength="40" size="16" /> 
           </h:outputLabel>
           <span class="error-message" id="contact_us_email_error"></span>
 
