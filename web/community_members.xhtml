@@ -105,31 +105,31 @@
           </f:facet>
 
           <h:column >
-            <f:facet name="header" >Member</f:facet>
+            <f:facet name="header" >#</f:facet>
             <h:outputText value="#{member.rowIndex + 1}"  />
           </h:column>
 
           <h:column >
             <f:facet name="header" >First Name</f:facet>
             <h:outputText value="#{member.firstName}" rendered="#{member.editable == 0}" />
-            <h:inputText id="firstName" value="#{communityMembersBean.firstName}" rendered="#{member.editable == 1}" />
+            <h:inputText id="firstName" value="#{communityMembersBean.firstName}" rendered="#{member.editable == 1}" size="16" maxlength="24" />
           </h:column>
           <h:column>
             <f:facet name="header">Last Name</f:facet>
             <h:outputText value="#{member.lastName}" rendered="#{member.editable == 0}" />
-            <h:inputText id="lastName" value="#{communityMembersBean.lastName}" rendered="#{member.editable == 1}" />
+            <h:inputText id="lastName" value="#{communityMembersBean.lastName}" rendered="#{member.editable == 1}" size="16" maxlength="24" />
 
           </h:column>
           <h:column>
             <f:facet name="header">Alias</f:facet>
             <h:outputText value="#{member.alias}" rendered="#{member.editable == 0}" />
-            <h:inputText id="alias" value="#{communityMembersBean.alias}" rendered="#{member.editable == 1}" />
+            <h:inputText id="alias" value="#{communityMembersBean.alias}" rendered="#{member.editable == 1}" size="8" maxlength="16"/>
           </h:column>
           <h:column>
             <f:facet name="header">Email</f:facet>
             <h:outputText value="#{member.emailAlternative}" rendered="#{member.editable == 0}" />
             <h:inputText id="emailAlternative" value="#{communityMembersBean.emailAlternative}" rendered="#{member.editable == 1}" 
-                         size="16"
+                         size="16" maxlength="50"
                          required="true"
                          requiredMessage="#{bundle.ReqEmail}"
                          validatorMessage="#{bundle.ValidEmail}" 
@@ -197,27 +197,27 @@
           </f:facet>
 
           <h:column >
-            <f:facet name="header" >Member</f:facet>
+            <f:facet name="header" >#</f:facet>
             <h:outputText value="#{new.rowIndex + 1}"  />
           </h:column>
           <h:column >
             <f:facet name="header" >First Name</f:facet>
-            <h:inputText id="firstName" value="#{new.firstName}"  />
+            <h:inputText id="firstName" value="#{new.firstName}"  size="16" maxlength="24" />
 
           </h:column>
           <h:column>
             <f:facet name="header">Last Name</f:facet>
-            <h:inputText id="lastName"  value="#{new.lastName}" />
+            <h:inputText id="lastName"  value="#{new.lastName}"  size="16" maxlength="24" />
 
           </h:column>
           <h:column>
             <f:facet name="header">Alias</f:facet>
-            <h:inputText id="alias"   value="#{new.alias}"  />
+            <h:inputText id="alias"   value="#{new.alias}"  size="8" maxlength="16"  />
           </h:column>
           <h:column>
             <f:facet name="header">Notification Email</f:facet>
             <h:inputText id="emailAlternative"  
-                         size="16"
+                         size="16"  maxlength="50" 
                          value="#{new.emailAlternative}"
                          >
             </h:inputText>
