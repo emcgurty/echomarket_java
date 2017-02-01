@@ -24,7 +24,7 @@
                 <td style="width:50%;padding-bottom: 15px;">
                     <h:outputLabel for="firstName"  value="#{b_fname}">       
                         <h:inputText id="firstName"
-                                     size="16"
+                                     size="16" maxlength="24"
                                      value="#{userBean.firstName}"
                                      required="true"
                                      requiredMessage="#{bundle.ReqFirstName}" style="margin-left:5px">
@@ -36,7 +36,7 @@
                 <td style="width:50%;padding-bottom: 15px;">
                     <h:outputLabel for="lastName"  value="#{b_lname}" >       
                         <h:inputText id="lastName"
-                                     size="16"
+                                     size="16" maxlength="24"
                                      value="#{userBean.lastName}"
                                      required="true"
                                      requiredMessage="#{bundle.ReqLastName}" style="margin-left:5px">
@@ -52,7 +52,7 @@
                     <h:outputLabel for="username" value="#{b_username}" >       
                         <h:inputText id="username"
                                      value="#{userBean.username}"
-                                     size="16"
+                                     size="16" maxlength="16"
                                      required="true"
                                      requiredMessage="#{bundle.ReqUserName}"
                                      style="margin-left:5px">
@@ -62,7 +62,7 @@
                 <td style="width:50%;  padding-bottom: 15px;">
                     <h:outputLabel for="user_alias"  value="#{b_alias}">       
                         <h:inputText id="user_alias"
-                                     size="16"
+                                     size="16" maxlength="16"
                                      value="#{userBean.userAlias}"
                                      title="#{b_alias}"
                                      required="true"
@@ -78,7 +78,7 @@
                     <f:event listener="#{userBean.validatePassword}" type="postValidate" />
                     <h:outputLabel for="password" value="#{b_password}" >       
                         <h:inputSecret id="password"
-                                       size="16"
+                                       size="16" maxlength="16"
                                        value="#{userBean.password}"
                                        title="#{b_password}"
                                        required="true"
@@ -93,7 +93,7 @@
                 <td style="width:50%;padding-bottom: 15px;">
                     <h:outputLabel for="confirmPassword" value="#{b_confirm}" >       
                         <h:inputSecret id="confirmPassword"
-                                       size="16"
+                                       size="16" maxlength="16"
                                        title="#{b_confirm}"
                                        required="true"
                                        requiredMessage="#{bundle.ReqConfirmPassword}"
@@ -108,7 +108,7 @@
                 <td colspan="2" style="width:100%;padding-bottom: 15px;">
                     <h:outputLabel for="email" value="#{b_email}" >       
                         <h:inputText id="email"
-                                     size="16"
+                                     size="16" maxlength="50"
                                      value="#{userBean.email}"
                                      title="#{b_email}"
                                      required="true"
