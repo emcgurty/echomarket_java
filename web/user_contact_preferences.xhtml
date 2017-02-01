@@ -196,33 +196,24 @@
               <h:outputText value="Contact Option: By Email..." />
             </div>
           </div>
-
-
           <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;">
             <div style="float:left;margin-left:25px;">
-
-              <c:set var="displayAltEmail" value="#{contactPreferenceBean.questionAltEmail}" />
+              <c:set var="displayAltEmail" value="#{contactPreferenceBean.displayAlternativeEmail}" />
+              <c:set var="udae" value="${contactPreferenceBean.userAlternativeEmail}" />
               <h:outputLabel for="contactByEmail" value="Which E-Mail Address?:"  >
                 <c:if test="#{userBean.editable == 1}" >
-                  <c:set var="udae" scope="view" value="${participantBean.getUserDefinedAlternativeEmail(userBean.user_id)}" />
                   <h:selectOneRadio id="contactByEmail" value="#{contactPreferenceBean.contactByEmail}"   layout="pageDirection" >
                     <c:choose>
                       <c:when test="#{displayAltEmail == true}" >
                         <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
-                        <f:selectItem itemValue="2" itemLabel="Your alternative email. (${udae})"   />	
-                        <f:selectItem itemValue="1" itemLabel="Either Email."  />	
-                        <f:selectItem itemValue="0" itemLabel="Neither Email."  />	
+                        <f:selectItem itemValue="2" itemLabel="Your alternative email? (${udae})"   />	
+                        <f:selectItem itemValue="1" itemLabel="Either Email"  />	
+                        <f:selectItem itemValue="0" itemLabel="Neither Email"  />	
                       </c:when>  
                       <c:when test="#{displayAltEmail == false}" >
                         <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
-                        <f:selectItem itemValue="0" itemLabel="No email contact."  />	
+                        <f:selectItem itemValue="0" itemLabel="No Email Contact"  />	
                       </c:when>
-                      <c:otherwise>
-                        <f:selectItem itemValue="3" itemLabel="Your login Email? (#{userBean.email})" /> 
-                        <f:selectItem itemValue="2" itemLabel="Your alternative email"   />	
-                        <f:selectItem itemValue="1" itemLabel="Either Email."  />	
-                        <f:selectItem itemValue="0" itemLabel="Neither Email."  />	
-                      </c:otherwise>
                     </c:choose>
                   </h:selectOneRadio>    
                 </c:if>
