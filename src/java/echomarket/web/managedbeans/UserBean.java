@@ -538,7 +538,7 @@ public class UserBean extends AbstractBean implements Serializable {
     if (savedRecord == false) {
 
       try {
-        queryString = " Select user FROM Users user INNER join user.participant part WHERE participant_id  = :pid";
+        queryString = " Select user FROM Users user INNER JOIN user.participant part WHERE participant_id  = :pid";
         hib = hib_session();
         tx = hib.beginTransaction();
         results = hib.createQuery(queryString)
@@ -586,9 +586,10 @@ public class UserBean extends AbstractBean implements Serializable {
     } else {
       message(null, "DuplicateUserNameOrEmail", new Object[]{this.username, this.email});
     }
+    
 
     if (savedRecord == true) {
-      returnString = pbean.load_ud("-1");
+      returnString = loginUser();
     } else {
       setUserToNull();
       returnString = "member_registration.xhtml?pid=" + this.pid;
