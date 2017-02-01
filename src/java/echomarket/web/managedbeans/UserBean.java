@@ -211,7 +211,7 @@ public class UserBean extends AbstractBean implements Serializable {
     if (results != null) {
       if (results.size() == 1) {
         Users user = (Users) results.get(0);
-     //   this.userType = user.getUserType();
+        //   this.userType = user.getUserType();
         this.communityName = user.getCommunityName();
         return_result = true;
       }
@@ -306,6 +306,7 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String registerUser() {
+
     Boolean savedRecord = false;
     String returnString = null;
     savedRecord = checkForDuplicateEmail(this.email);
@@ -514,6 +515,86 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     return return_string;
+  }
+
+  public String processMemberActivation() {
+
+    Boolean savedRecord = false;
+    Users create_record = null;
+    String commName = null;
+    Session hib = null;
+    Transaction tx = null;
+    String current_user_id = null;
+    String queryString = null;
+    String returnString = null;
+    List results = null;
+    commName = this.communityName;
+
+    savedRecord = checkForDuplicateEmail(this.email);
+    if (savedRecord == false) {
+      savedRecord = checkForDuplicateUserName();
+    }
+
+    if (savedRecord == false) {
+
+      try {
+        queryString = " Select user FROM Users user INNER join user.participant part WHERE participant_id  = :pid";
+        hib = hib_session();
+        tx = hib.beginTransaction();
+        results = hib.createQuery(queryString)
+                .setParameter("pid", this.pid)
+                .setMaxResults(1)
+                .list();
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+      } finally {
+        hib = null;
+        tx = null;
+      }
+      
+      if (results != null) {
+        if (results.size() == 1) {
+          Users uu = (Users) results.get(0);
+          this.userType = uu.getUserType();
+        }
+          
+      }
+      
+      
+
+      try {
+        current_user_id = getId();
+        this.user_id = current_user_id;
+        create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.userAlias, this.userType);
+        hib = hib_session();
+        tx = hib.beginTransaction();
+        hib.save(create_record);
+        tx.commit();
+        savedRecord = true;
+      } catch (Exception ex) {
+        tx.rollback();
+        this.user_id = null;
+        System.out.println("Error in processMemberActivation");
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        message(null, "MemberRegistrationNotUpdated", new Object[]{this.username, this.email});
+      } finally {
+        tx = null;
+        hib = null;
+        create_record = null;
+      }
+    } else {
+      message(null, "DuplicateUserNameOrEmail", new Object[]{this.username, this.email});
+    }
+
+    if (savedRecord == true) {
+      returnString = pbean.load_ud("-1");
+    } else {
+      setUserToNull();
+      returnString = "member_registration.xhtml?pid=" + this.pid;
+    }
+
+    return returnString;
   }
 
   public String loginUser() {
@@ -1926,7 +2007,7 @@ public class UserBean extends AbstractBean implements Serializable {
     String returnString = null;
     Communities pt = null;
     String getCID = getMemberInformation(pid);
-        
+
     queryString = "FROM Communities where community_id = :cid";
     try {
       hib = hib_session();
