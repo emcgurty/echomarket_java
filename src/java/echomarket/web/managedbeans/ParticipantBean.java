@@ -139,9 +139,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.displayHomePhone = pp.getDisplayHomePhone();
       this.displayCellPhone = pp.getDisplayCellPhone();
       this.displayAlternativePhone = pp.getDisplayAlternativePhone();
+
       this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
-      this.questionAltAddressProvide = pp.getQuestionAltAddress();
-      this.questionAltEmailProvide = pp.getQuestionAltEmail();
+      if (pp.getQuestionAltAddress() == null) {
+        this.questionAltAddressProvide = -9;
+      } else {
+        this.questionAltAddressProvide = pp.getQuestionAltAddress();
+      }
+
+      if (pp.getQuestionAltEmail() == null) {
+        this.questionAltEmailProvide = -9;
+      } else {
+        this.questionAltEmailProvide = pp.getQuestionAltEmail();
+      }
+
       this.goodwill = pp.getGoodwill();
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
@@ -390,7 +401,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     String return_string = null;
     Session sb = null;
     Transaction tx = null;
-    List result  = null;
+    List result = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
       if (this.threeStrikesYourOut == null) {
         threeStrikesYourOut = 0;
@@ -399,7 +410,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       if (this.threeStrikesYourOut == 3) {
         message(null, "threeStrikesYourOut", null);
         return_string = ubean.Logout();
-      } 
+      }
     } else {
 
       try {
@@ -428,8 +439,8 @@ public class ParticipantBean extends AbstractBean implements Serializable {
         result = ubean.findUserName();
         if (result != null) {
           if (result.size() == 1) {
-        
-           Users uu = (Users) result.get(0);  /// User result that has current user data
+
+            Users uu = (Users) result.get(0);  /// User result that has current user data
             Integer memberCreator = uu.getRoleId();
             ubean.setRoleId(memberCreator);
             ubean.setEmail(uu.getEmail());
