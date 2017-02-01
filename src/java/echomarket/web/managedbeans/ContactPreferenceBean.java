@@ -46,6 +46,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private Boolean displayHomePhone;
   private Boolean displayAlternativePhone;
   private Boolean displayCellPhone;
+  private Boolean displayAlternativeEmail;
+  private String userAlternativeEmail;
 
   public ContactPreferenceBean() {
   }
@@ -513,6 +515,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           getParticipantAddreseEmailAlts(this.participant_id);
           pp = null;
         }
+      } else {
+          getParticipantAddreseEmailAlts(ubean.getParticipant_id());
       }
     }
     partlist = null;
@@ -528,7 +532,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     try {
       session = hib_session();
       tx = session.beginTransaction();
-      query = "FROM ContactPreference WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
+      query = "FROM ContactPreference WHERE participant_id = :pid  ";
       result = session.createQuery(query)
               .setParameter("pid", pid)
               .setMaxResults(1)
@@ -587,7 +591,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     try {
       session = hib_session();
       tx = session.beginTransaction();
-      query = "FROM Participant WHERE participant_id = :pid  ORDER BY participant_id, dateCreated";
+      query = "FROM Participant WHERE participant_id = :pid  ";
       result = session.createQuery(query)
               .setParameter("pid", pid)
               .setMaxResults(1)
@@ -610,10 +614,12 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         } else {
           this.setQuestionAltAddress(false);
         }
-        if (part.getQuestionAltEmail() == 1) {
-          this.setQuestionAltEmail(true);
+        if (part.getEmailAlternative() != null) {
+          this.displayAlternativeEmail = true;
+          this.userAlternativeEmail = part.getEmailAlternative();
         } else {
-          this.setQuestionAltEmail(false);
+          this.displayAlternativeEmail = false;
+          this.userAlternativeEmail = null;
         }
         if (part.getDisplayAddress() == 1) {
           this.displayPrimary = true;
@@ -742,6 +748,34 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
    */
   public void setDisplayCellPhone(Boolean displayCellPhone) {
     this.displayCellPhone = displayCellPhone;
+  }
+
+  /**
+   * @return the displayAlternativeEmail
+   */
+  public Boolean getDisplayAlternativeEmail() {
+    return displayAlternativeEmail;
+  }
+
+  /**
+   * @param displayAlternativeEmail the displayAlternativeEmail to set
+   */
+  public void setDisplayAlternativeEmail(Boolean displayAlternativeEmail) {
+    this.displayAlternativeEmail = displayAlternativeEmail;
+  }
+
+    /**
+   * @return the userAlternativeEmail
+   */
+  public String getUserAlternativeEmail() {
+    return userAlternativeEmail;
+  }
+
+  /**
+   * @param userAlternativeEmail the userAlternativeEmail to set
+   */
+  public void setUserAlternativeEmail(String userAlternativeEmail) {
+    this.userAlternativeEmail = userAlternativeEmail;
   }
 
 }
