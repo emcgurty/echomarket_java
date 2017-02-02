@@ -1,66 +1,67 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-   <div class="messagecolor">
+  <div class="messagecolor">
     <h:messages showSummary="true" 
                 showDetail="false"
                 errorStyle="list-style-type:none;color: #d20005" 
                 infoStyle="color: indigo"/>
   </div>
   <h:form  id="forgotUserName"  >
-        <h:head>
-          
-        </h:head>
-          <div  class="top" id="form_forgot_username">
-            <table style="width:75%;margin-left: 50px" align="center" id="forgot_username_table">
-                <tr >
-                    <td style="padding-top: 15px;padding-bottom: 15px;">
-                        <h:outputText value="Forgot Username" />
-                    </td>
-                </tr> 
-                <tr>
-                    <td style="padding-top: 15px;padding-bottom: 15px;">
-                        <h:outputLabel for="email"  value="#{bundle.email}">       
-                            <h:inputText id="email"
-                                         value="#{userBean.email}"
-                                         required="true"
-                                         requiredMessage="#{bundle.ReqUserEmail}" style="margin-left:10px">
-                            </h:inputText>
-                        </h:outputLabel>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-top: 15px;padding-bottom: 15px;">
-                        <h:outputLabel for="password"  value="#{bundle.password}">       
-                            <h:inputSecret id="password"
-                                           value="#{userBean.password}"
-                                           required="true"
-                                           requiredMessage="#{bundle.ReqPassword}" style="margin-left:10px">
-                            </h:inputSecret>
-                        </h:outputLabel>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-top: 15px;padding-bottom: 5px;">
-                        <h:commandLink  action="#{userBean.forgotUserName()}" id="forgot_username" value="Get Username" >
-                        </h:commandLink>
-                    </td>
+    <h:head>
+
+    </h:head>
+    <div  class="top" id="form_forgot_username">
+      <table style="width:75%;margin-left: 50px" align="center" id="forgot_username_table">
+        <tr >
+          <td style="padding-top: 15px;padding-bottom: 15px;">
+            <h:outputText value="Forgot Username" />
+          </td>
+        </tr> 
+        <tr>
+          <td style="padding-top: 15px;padding-bottom: 15px;">
+            <h:outputLabel for="email"  value="#{bundle.email}">       
+              <h:inputText id="email"
+                           value="#{userBean.email}"
+                           required="true"
+                           requiredMessage="#{bundle.ReqUserEmail}" style="margin-left:10px">
+              </h:inputText>
+            </h:outputLabel>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 15px;padding-bottom: 15px;">
+            <h:outputLabel for="password"  value="#{bundle.password}">       
+              <h:inputSecret id="password"
+                             value="#{userBean.password}"
+                             required="true"
+                             title="#{bundle.PasswordMustContain}"
+                             requiredMessage="#{bundle.ReqPassword}" style="margin-left:10px">
+              </h:inputSecret>
+            </h:outputLabel>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 15px;padding-bottom: 5px;">
+            <h:commandLink  action="#{userBean.forgotUserName()}" id="forgot_username" value="Get Username" >
+            </h:commandLink>
+          </td>
 
 
-                </tr>
-                <tr>
-                    <td style="padding-top: 15px;padding-bottom: 15px;">
-                        <h:commandLink  action="#{userBean.load_login()}" id="nevermind" value="Nevermind, found it!" immediate="true">
-                        </h:commandLink>
-                    </td>
-               </tr>
-            </table>
-        </div>
-    </h:form>
+        </tr>
+        <tr>
+          <td style="padding-top: 15px;padding-bottom: 15px;">
+            <h:commandLink  action="#{userBean.load_login()}" id="nevermind" value="Nevermind, found it!" immediate="true">
+            </h:commandLink>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </h:form>
 </ui:composition>
