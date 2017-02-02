@@ -520,8 +520,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String processMemberActivation() {
 
-    /// Have to update participant too
-    
+    /// Needs to be broken down into smalller, more testable functions...
     Boolean savedRecord = false;
     Users create_record = null;
     String commName = null;
@@ -539,7 +538,6 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     if (savedRecord == false) {
-
       try {
         queryString = " FROM Users user WHERE user.user_id = :uid";
         hib = hib_session();
@@ -551,45 +549,94 @@ public class UserBean extends AbstractBean implements Serializable {
         tx.commit();
       } catch (Exception ex) {
         tx.rollback();
+        System.out.println("Error in updatingNewMemberParticpant, get UserType");
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       } finally {
         hib = null;
         tx = null;
       }
-      
+
       if (results != null) {
         if (results.size() == 1) {
           Users uu = (Users) results.get(0);
           this.userType = uu.getUserType();
+          savedRecord = true;
+          results = null;
         }
-          
       }
-      
-      
 
-      try {
-        current_user_id = getId();
-        this.user_id = current_user_id;
-        create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.userAlias, this.userType);
-        hib = hib_session();
-        tx = hib.beginTransaction();
-        hib.save(create_record);
-        tx.commit();
-        savedRecord = true;
-      } catch (Exception ex) {
-        tx.rollback();
-        this.user_id = null;
-        System.out.println("Error in processMemberActivation");
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-        message(null, "MemberRegistrationNotUpdated", new Object[]{this.username, this.email});
-      } finally {
-        tx = null;
-        hib = null;
-        create_record = null;
+      if (savedRecord == true) {
+        try {
+          queryString = " FROM Participant part WHERE part.participant_id = :pid";
+          hib = hib_session();
+          tx = hib.beginTransaction();
+          results = hib.createQuery(queryString)
+                  .setParameter("pid", this.pid)
+                  .list();
+          try {
+            tx.commit();
+          } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in updatingNewMemberParticpant, getting current participant record");
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            savedRecord = false;
+          } finally {
+            hib = null;
+            tx = null;
+            
+          }
+
+          if (results != null) {
+            if (results.size() == 1) {
+              hib = hib_session();
+              tx = hib.beginTransaction();
+              Participant part = (Participant) results.get(0);
+              part.setFirstName(this.firstName);
+              part.setLastName(this.lastName);
+              part.setAlias(this.userAlias);
+              part.setEmailAlternative(null);
+              part.setIsCreator(0);
+              hib.update(part);
+              tx.commit();
+              savedRecord = true;
+            }
+
+          }
+        } catch (Exception ex) {
+          tx.rollback();
+          System.out.println("Error in updatingNewMemberParticpant");
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+          hib = null;
+          tx = null;
+        }
+
+      }
+      if (savedRecord == true) {
+        try {
+          current_user_id = getId();
+          this.user_id = current_user_id;
+          create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.userAlias, this.userType);
+          hib = hib_session();
+          tx = hib.beginTransaction();
+          hib.save(create_record);
+          tx.commit();
+          savedRecord = true;
+        } catch (Exception ex) {
+          tx.rollback();
+          this.user_id = null;
+          System.out.println("Error in processMemberActivation create new user");
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          message(null, "MemberRegistrationNotUpdated", new Object[]{this.username, this.email});
+        } finally {
+          tx = null;
+          hib = null;
+          create_record = null;
+        }
       }
     } else {
       message(null, "DuplicateUserNameOrEmail", new Object[]{this.username, this.email});
     }
-    
 
     if (savedRecord == true) {
       returnString = loginUser();   /// will set values 
@@ -650,7 +697,7 @@ public class UserBean extends AbstractBean implements Serializable {
                   Users uu = (Users) results.get(0);  /// User result that has current user data
                   memberCreator = uu.getRoleId();
                   setRoleId(memberCreator);
-                  if (memberCreator == 1) {
+                  if (memberCreator > 0) {
                     setCurrentUserCommunityId(uu.getUser_id());  // sets cid and pid
                     setCommunityName(uu.getCommunityName());
                   }
@@ -1961,9 +2008,9 @@ public class UserBean extends AbstractBean implements Serializable {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
-  
+
   public List getMemberRegistrationInformation(String pid) {
-    
+
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -1986,7 +2033,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-    
+
     if (result != null) {
       if (result.size() == 1) {
         pt = (Participant) result.get(0);
@@ -1994,10 +2041,11 @@ public class UserBean extends AbstractBean implements Serializable {
         this.lastName = pt.getLastName();
         this.userAlias = pt.getAlias();
         this.email = pt.getEmailAlternative();
-     
+        this.username = null;
+
       }
     }
-    
+
     return result;
   }
 
