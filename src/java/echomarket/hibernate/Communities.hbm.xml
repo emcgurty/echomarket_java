@@ -9,7 +9,7 @@
             <generator class="assigned" />
         </id>
         <property name="communityName" type="string">
-            <column name="community_name" length="50" not-null="true" />
+            <column name="community_name" length="50" />
         </property>
         <property name="approved" type="java.lang.Integer">
             <column name="approved" />
