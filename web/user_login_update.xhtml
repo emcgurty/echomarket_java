@@ -18,7 +18,7 @@
   <ui:define name="content">
     <h:form id="personal_information" class="user_login_update">
       <body onload="changeMenuBackground(1);"  >
-             <c:set var="rid" value="#{userBean.roleId}"  />  
+        <c:set var="rid" value="#{userBean.roleId}"  />  
         <c:choose >
           <c:when test="#{rid == 0}" >
             <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
@@ -34,7 +34,7 @@
             <h:commandLink  action="#{userBean.load_ud(0)}"  class="right_div" value="Cancel"  rendered="#{userBean.editable == 1}" immediate="true" />
             <h:commandLink  action="#{userBean.load_ud(1)}"  class="right_div" value="Edit Login Information"  rendered="#{userBean.editable == 0}" />
             <br />
-             <div class="messagecolor">
+            <div class="messagecolor">
               <h:messages showSummary="true" 
                           showDetail="false"
                           errorStyle="list-style-type:none;color: #d20005" 
@@ -46,7 +46,7 @@
             <h:outputText value="Login Information..." />
             <h:commandLink  action="#{participantBean.load_ud(userBean.user_id)}"  class="right_div" value="Continue to 'Participant Information'" immediate="true" >
               <f:param name="action" value="edit" />
-              
+
             </h:commandLink>
             <h:inputHidden id="roleId"  value="#{userBean.roleId}" />                  
           </div>
@@ -124,7 +124,7 @@
                     <h:inputSecret id="password"
                                    size="16" maxlength="16"
                                    value="#{userBean.password}"
-                                   title="#{bundle.password}"
+                                   title="#{bundle.PasswordMustContain}"
                                    required="true"
                                    requiredMessage="#{bundle.ReqPassword}"
                                    style="margin-left:5px" 
