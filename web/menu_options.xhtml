@@ -21,6 +21,9 @@
         <c:when test="#{rid == 1}" >
           <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
         </c:when>
+        <c:when test="#{rid == 2}" >
+          <ui:include src="/user_detail_menu.xhtml" id="user_detail_menu" />  
+        </c:when>
       </c:choose>   
     </c:when>
     <c:when test="#{!empty iid }" >
