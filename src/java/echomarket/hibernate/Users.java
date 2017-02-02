@@ -38,7 +38,27 @@ public class Users implements java.io.Serializable {
   public Users() {
   }
 
-  // This constructor is used to create new, non-activated user
+  // This constructor is used to create new, community member
+  public Users(String id, String username, String communityName, String email, String password, String userAlias, String userType) {
+    String local_password = password;
+    this.user_id = id;
+    this.username = username;
+    this.communityName = communityName;
+    this.email = email;
+    this.userAlias = userAlias;
+    this.userType = userType;
+    this.roleId = 2;
+    this.salt = passTheSalt();
+    this.cryptedPassword = passThePepper(password);
+    // Later make sure this is unique in database
+    this.resetCode = null;
+    this.activatedAt = null;
+    this.dateCreated = new Date();
+    this.activatedAt = new Date();
+
+  }
+
+// This constructor is used to create new, non-activated user
   public Users(String id, String username, String communityName, String email, String password, String resetCode, String userAlias, String userType, Integer roleId) {
     String local_password = password;
     this.user_id = id;
@@ -56,6 +76,7 @@ public class Users implements java.io.Serializable {
     this.dateCreated = new Date();
 
   }
+
   // This constructor is used for non-password updates
   public Users(String id, String username, String email, String userAlias, String userType) {
     this.user_id = id;
@@ -232,9 +253,9 @@ public class Users implements java.io.Serializable {
    */
   @OneToMany
   @JoinTable(
-            name = "echomarket.hibernate.Participant",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "participant_id")
+          name = "echomarket.hibernate.Participant",
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "participant_id")
   )
   public Set<Participant> getParticipant() {
     return participant;
