@@ -17,14 +17,21 @@
     <h:head>
       <h:outputScript library="javascript" name="registration.js"  />
       <title>#{bundle.EchoMarketTitle}</title>
+
     </h:head>
 
     <f:metadata>
       <f:viewParam name="pid" id="pid" value="#{userBean.pid}" />
-      </f:metadata>         
+      <f:viewParam name="uid" id="userType" value="#{userBean.uid}" />
+    </f:metadata>         
     <c:set var="pid"  value="#{request.getParameter('pid')}"  />
-    
-    <h:form id="community_member_registration" >
+    <c:set var="uid"  value="#{request.getParameter('uid')}"  />
+
+
+    <h:form id="community_member_registration"   >
+
+      <c:forEach items="#{userBean.getMemberRegistrationInformation(pid)}"  var="memInfo"  >
+      </c:forEach>   
 
       <div  class="top" id="form_user_registration" >
         <div style="margin:10px;" >
@@ -54,7 +61,6 @@
 
           <div style="width:95%;margin-left: 25px" >
 
-
             <table id="user_registration_table">
               <tr >
                 <td style="padding-bottom: 15px;">
@@ -62,7 +68,7 @@
                     <h:inputText id="firstName"  size="16" maxlength="24"
                                  value="#{userBean.firstName}"
                                  required="true"
-                                 requiredMessage="#{bundle.ReqFirstName}"
+                                 requiredMessage="#{bundle.ReqFirstName}" 
                                  />
                   </h:outputLabel>
                 </td>
@@ -89,7 +95,7 @@
                   </h:outputLabel>
                 </td>
                 <td style=" padding-bottom: 15px;">
-                  <f:event listener="#{userBean.getMemberAlias}" type="postValidate" />
+
                   <h:outputLabel for="userAlias"  value="#{b_alias}" >       
                     <h:inputText id="userAlias"
                                  size="18"  maxlength="18"
@@ -131,7 +137,7 @@
               </tr>
               <tr  >
                 <td colspan="2" style="width:100%;padding-bottom: 15px;">
-                  <f:event listener="#{userBean.getMemberEmail}" type="postValidate" />
+
                   <h:outputLabel for="email" value="#{b_email}" >       
                     <h:inputText id="email"
                                  size="16" maxlength="50"
@@ -150,6 +156,7 @@
               <tr >
               </tr>
             </table>
+
           </div>   
         </div>
       </div>
