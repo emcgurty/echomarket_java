@@ -99,7 +99,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
             getMap = new String[2];
             getMap = ubean.getApplicationEmail();
             try {
-              se = new SendEmail("member", this.firstName, this.lastName, this.alias, this.emailAlternative, getMap[0], getMap[1], ubean.getCommunityName(), this.participant_id);
+              se = new SendEmail("member", this.firstName, this.lastName, this.alias, this.emailAlternative, getMap[0], getMap[1], ubean.getCommunityName(), this.participant_id, ubean.getUser_id());
               savedRecord = true;
             } catch (Exception ex) {
               System.out.println("Error in Send Member Notification");
