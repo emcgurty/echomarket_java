@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
 //import org.hibernate.validator.internal.util.logging.Messages;
 public class SendEmail implements java.io.Serializable {
 
-  private Integer user_id;
+  private String user_id;
   private String whichEmail;
   private String username;
   private String commmunityName;
@@ -71,7 +71,7 @@ public class SendEmail implements java.io.Serializable {
 
 // community member 
   public SendEmail(String whichEmail, String firstName, String lastName, String user_alias,
-          String user_email, String app_email, String app_password, String random, String rc) {
+          String user_email, String app_email, String app_password, String random, String rc, String uid) {
 
     this.whichEmail = whichEmail;
     this.firstName = firstName;
@@ -82,26 +82,10 @@ public class SendEmail implements java.io.Serializable {
     this.application_email_address = app_email;
     this.application_email_password = app_password;
     this.reset_code = rc;
+    this.user_id = uid;
     Session sess = establishSession();
-
-    String threeChars = this.whichEmail.substring(0, 3);
-    if ("registration".equals(this.whichEmail)) {
-      /// then random argument is the password
-      this.password = random;
-      sendRegistrationEmail(sess);
-    } else if ("Com".equals(threeChars)) {
-      /// then random argument is the password
-      this.password = random;
-      sendCommunityRegistrationEmail(sess);
-    } else if ("member".equals(this.whichEmail)) {
-      /// then random argument is the password
-      sendCommunityMemberEmail(sess);
-    } else if ("forgotPassword".equals(this.whichEmail)) {
-      this.reset_code = rc;
-      sendForgotPasswordEmail(sess);
-    } else if ("forgotUserName".equals(this.whichEmail)) {
-
-    }
+    sendCommunityMemberEmail(sess);
+ 
   }
 
   public SendEmail(String whichEmail, String username, String user_alias,
@@ -309,15 +293,16 @@ public class SendEmail implements java.io.Serializable {
     String url_string = bundle.getString("NewMemberUrl");
     Object paramArray[] = new Object[2];
     paramArray[0] = getResetCode();
+    paramArray[1] = this.user_id;
     url_string = MessageFormat.format(url_string, paramArray);
     String buildMessage = "<html><h2>"
             + this.firstName + " " + this.lastName
             + " with alias, " + this.user_alias
             + ", you have been added to the EchoMarket Community: "
             + this.commmunityName + ".</h2>"
-            + " <p>If you wish to participate in this Community, you need to complete two quick steps."
-            + " First, you need to click on the link below or copy it into your browser's web address area, and complete Registration form. Then you will receive another email to activate your account.</p>"
-            + " <h2> Visit this url to Register: </h2>"
+            + " <p>If you wish to participate in this Community, please"
+            + " click on the link below or copy it into your browser's web address area to activate your membership.</p>"
+            + " <h2> Visit this url to Activate: </h2>"
             + " <p><a href='url'>" + url_string + "</a></p>"
             + " <p>  Thank you,</p>"
             + " <p>  www.echomarket.org</p>"
@@ -473,11 +458,11 @@ public class SendEmail implements java.io.Serializable {
     return true;
   }
 
-  private Integer getuser_id() {
+  private String getuser_id() {
     return user_id;
   }
 
-  private void setuser_id(Integer id) {
+  private void setuser_id(String id) {
     this.user_id = id;
   }
 
