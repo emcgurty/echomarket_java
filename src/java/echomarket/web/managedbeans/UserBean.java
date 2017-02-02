@@ -80,6 +80,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private Integer roleId;
   private String action;
   private String pid;
+  private String uid;    /// user_id for member registration url
 
   public String Logout() {
     setUserToNull();
@@ -519,6 +520,8 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String processMemberActivation() {
 
+    /// Have to update participant too
+    
     Boolean savedRecord = false;
     Users create_record = null;
     String commName = null;
@@ -538,11 +541,11 @@ public class UserBean extends AbstractBean implements Serializable {
     if (savedRecord == false) {
 
       try {
-        queryString = " Select user FROM Users user INNER JOIN user.participant part WHERE participant_id  = :pid";
+        queryString = " FROM Users user WHERE user.user_id = :uid";
         hib = hib_session();
         tx = hib.beginTransaction();
         results = hib.createQuery(queryString)
-                .setParameter("pid", this.pid)
+                .setParameter("uid", this.uid)
                 .setMaxResults(1)
                 .list();
         tx.commit();
@@ -589,7 +592,7 @@ public class UserBean extends AbstractBean implements Serializable {
     
 
     if (savedRecord == true) {
-      returnString = loginUser();
+      returnString = loginUser();   /// will set values 
     } else {
       setUserToNull();
       returnString = "member_registration.xhtml?pid=" + this.pid;
@@ -1958,6 +1961,45 @@ public class UserBean extends AbstractBean implements Serializable {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+  
+  public List getMemberRegistrationInformation(String pid) {
+    
+    List result = null;
+    Session hib = null;
+    Transaction tx = null;
+    String queryString = null;
+    Participant pt = null;
+    String returnCID = null;
+    queryString = "FROM Participant where participant_id = :pid";
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      result = hib.createQuery(queryString)
+              .setParameter("pid", pid)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on getMemberRegistrationInformation");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    
+    if (result != null) {
+      if (result.size() == 1) {
+        pt = (Participant) result.get(0);
+        this.firstName = pt.getFirstName();
+        this.lastName = pt.getLastName();
+        this.userAlias = pt.getAlias();
+        this.email = pt.getEmailAlternative();
+     
+      }
+    }
+    
+    return result;
+  }
 
   private String getMemberInformation(String pid) {
 
@@ -2185,6 +2227,20 @@ public class UserBean extends AbstractBean implements Serializable {
    */
   public void setComMemberDetailID(Boolean comMemberDetailID) {
     this.comMemberDetailID = comMemberDetailID;
+  }
+
+  /**
+   * @return the uid
+   */
+  public String getUid() {
+    return uid;
+  }
+
+  /**
+   * @param uid the uid to set
+   */
+  public void setUid(String uid) {
+    this.uid = uid;
   }
 
 }
