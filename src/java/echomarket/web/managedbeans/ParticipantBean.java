@@ -402,6 +402,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     Session sb = null;
     Transaction tx = null;
     List result = null;
+    Participant part = null;
+    String new_ID = null;
+    String cid_id = null;
     if ((goodwill != 1) || (age18OrMore != 1)) {
       if (this.threeStrikesYourOut == null) {
         threeStrikesYourOut = 0;
@@ -416,18 +419,23 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-        String new_ID = getId();
-        String cid_id = UUID.randomUUID().toString();
-        Participant part = null;
+        new_ID = getId();
+        cid_id = UUID.randomUUID().toString();
+
         Communities comm = null;
 
-        if (ubean.getRoleId() == 0) {
-          part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
-        } else {
-          /// Have to create a Community record here
-          comm = new Communities(cid_id);
-          part = new Participant(new_ID, ubean.getUser_id(), cid_id, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
-          sb.save(comm);
+        switch (ubean.getRoleId()) {
+          case 0:
+            part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+            break;
+          case 1:
+            comm = new Communities(cid_id);
+            part = new Participant(new_ID, ubean.getUser_id(), cid_id, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
+            sb.save(comm);
+            break;
+          case 2:
+            part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+            break;
         }
 
         sb.save(part);
