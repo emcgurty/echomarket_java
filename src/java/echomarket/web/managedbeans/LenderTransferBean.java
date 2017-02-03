@@ -215,7 +215,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         tx = sb.beginTransaction();
         sb.save(lt);
         tx.commit();
-        message(null, "LenderTransferSaved", null);
+       // message(null, "LenderTransferSaved", null);
         successTransaction = true;
       } catch (Exception ex) {
         tx.rollback();
@@ -259,7 +259,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             sb.update(lit);
             tx.commit();
             successTransaction = true;
-            message(null, "LenderTransferSaved", null);
+           // message(null, "LenderTransferSaved", null);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update LIT");
@@ -285,7 +285,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             sb.save(lt);
             tx.commit();
 
-            message(null, "LenderTransferSaved", null);
+          //  message(null, "LenderTransferSaved", null);
             successTransaction = true;
           } catch (Exception ex) {
             tx.rollback();
