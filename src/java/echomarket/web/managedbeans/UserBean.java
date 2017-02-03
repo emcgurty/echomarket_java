@@ -727,7 +727,7 @@ public class UserBean extends AbstractBean implements Serializable {
                     case 1:  // A community creator
                       findWhatIsCommunityComplete();
                       return_string = this.isCompleteString;
-                      if (return_string.isEmpty() == false) {
+                      if (return_string.isEmpty() == true) {
                         findWhatIsComplete();  // hold needs to be written
                         return_string = this.isCompleteString;
                       }
@@ -896,8 +896,8 @@ public class UserBean extends AbstractBean implements Serializable {
         List completCD = completeCommunityDetail();
         Integer hs = completCD.size();
         if (hs == 0) {
-          //setComDetailID(true);
-          //setComMemberDetailID(false);
+          
+          setComDetailID(false);
           setEditable(1);
           return_string = "community_detail"; //commbean.load_community_detail();
         } else {
@@ -1777,6 +1777,8 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
+      
+      
       Users uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
       hib.update(uu);
       tx.commit();
