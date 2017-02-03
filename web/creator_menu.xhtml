@@ -12,13 +12,13 @@
   </h:head>
   <c:set var="whichType" value="#{userBean.userType}" />
   <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
-<!--  <h:outputText  value="#{userBean.partID} -- partId  " /> <br />
-  <h:outputText  value="#{userBean.cpId} -- cpid  " /> <br />
-  <h:outputText  value="#{userBean.LITid} -- lit " /> <br />
-  <h:outputText  value="#{userBean.LICid}-- lic  " /> <br />
-  <h:outputText  value="#{userBean.comDetailID}-- comDetailID  " /> <br />
-  <h:outputText  value="#{userBean.comMemberDetailID}-- comMemberDetailID  " /> <br />
-  <h:outputText  value="#{whichType}-- which header  " /> <br />-->
+  <!--<h:outputText  value="#{userBean.partID}  partId  " /> <br />-->
+  <!--<h:outputText  value="#{userBean.cpId}  cpid  " /> <br />-->
+  <!--<h:outputText  value="#{userBean.LITid}  lit " /> <br />-->
+  <!--<h:outputText  value="#{userBean.LICid} lic  " /> <br />-->
+  <!--<h:outputText  value="#{userBean.comDetailID} comDetailID  " /> <br />-->
+  <!--<h:outputText  value="#{userBean.comMemberDetailID} comMemberDetailID  " /> <br />-->
+  <!--<h:outputText  value="#{whichType} which header  " /> <br />-->
   <c:choose >
     <c:when test="${!empty itemBean.itemId}" >
       <c:set var="iid" value="${itemBean.itemId}"  />  
@@ -69,8 +69,8 @@
       </c:when>
     </c:choose>
 
-<!--    <h:outputText value="#{((whichType == 'both') or (whichType == 'lend')) and (userBean.partID)} == 3  " />
-    <h:outputText value="#{whichType} == which 3  " />-->
+    <!--<h:outputText value="#{((whichType == 'both') or (whichType == 'lend')) and (userBean.partID)} == 3  " />-->
+    <!--<h:outputText value="#{whichType} == which 3  " />-->
     <c:choose>
 
       <c:when test="#{userBean.comDetailID}"  >
