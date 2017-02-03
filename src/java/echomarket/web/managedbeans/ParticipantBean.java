@@ -162,13 +162,13 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     getExistingAddress("primary");
     getExistingAddress("alternative");
 
-    if (ubean.getEditable()
-            == -1) {
+    if (ubean.getEditable()             == -1) {
       return "user_agreement";
     } else {
       this.setQuestionAltAddressDelete(-9);
       this.setQuestionAltEmailDelete(-9);
-      return "user_nae.xhtml?faces-redirect=true";
+//      return "user_nae.xhtml?faces-redirect=true";  ///lose data in redirect
+      return "user_nae";
     }
 
   }
@@ -386,8 +386,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if (updateSuccess == true) {
       ubean.setParticipant_id(pid);
       ubean.setEditable(1);
-      ubean.setPartID(true);
-      ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
+//      ubean.setPartID(true);
+//      ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
+      ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
 
     } else {
       ubean.setEditable(0);
