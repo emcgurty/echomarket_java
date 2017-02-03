@@ -516,7 +516,9 @@
                         <h:inputTextarea readonly="true" value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" title="Specific conditions.." />
                       </c:if> 
                     </h:outputLabel>
-                    <span class="required_fields" style="margin-left:5px;">255 characters permitted</span>                    
+                    <c:if test="#{userBean.editable == 1}" >
+                      <span class="required_fields" style="margin-left:5px;">255 characters permitted</span>                    
+                    </c:if>  
                   </div>
                 </td>
               </tr>
