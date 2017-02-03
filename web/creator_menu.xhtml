@@ -56,7 +56,7 @@
     </li>
 
     <c:choose>
-      <c:when  test="#{creatorDetailID}" > 
+      <c:when  test="#{userBean.comDetailID}" > 
         <c:if test="#{whichType == 'borrow'}" >
           <li id="tab_item_4">
             <c:set var="newItemLabel" value="Default Contact Preferences"  />
