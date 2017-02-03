@@ -21,6 +21,7 @@
               <h:outputText value="Community Detail" rendered="#{communitiesBean.communityName == null}"/>
               <h:commandLink  action="#{communitiesBean.saveCommunityDetail()}" class="right_div" value="Save Community Details">
               </h:commandLink>
+              
               <c:set var="cid" value="#{communitiesBean.communityId}"  />
               <h:inputHidden id="communityId" value="#{cid}"  />
             </div> 
@@ -33,7 +34,7 @@
           </div> 
 
           <c:choose>  
-            <c:when test="#{userBean.comMemberDetailID}" >
+            <c:when test="#{userBean.comDetailID}" >
               <div class="top" >
                 <div style="margin:10px;margin-top:25px;" >
                   <h:outputText value="#{bundle.addMembers}" />
