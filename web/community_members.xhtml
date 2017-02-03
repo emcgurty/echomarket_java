@@ -20,6 +20,7 @@
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.communityName} : Community Members" style="color:black;font-weight:bold;"/>
+            <h:commandLink value="Skip Adding Members" immediate="true" class="right_div" action="#{communityMembersBean.skipMembers()}" style="margin-left:5px;"/>
           </div>   
         </div>
         <div style="float:left;margin:15px;margin-top:10px;" >
@@ -32,7 +33,7 @@
               </h:inputText> 
 
             </h:outputLabel>
-            <h:commandLink value="Add Member(s)" action="#{communityMembersBean.addAction()}" style="margin-left:5px;"/>
+            
             <span class="error-message" id="howManyRecords" ></span>
             <br /><br />
             <h:outputText class="error-message" id="errorMessage" value="#{communityMembersBean.errorMessage}"/>
