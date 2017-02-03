@@ -117,7 +117,8 @@ public String skipMembers() {
               getMap = null;
             }
             if (savedRecord == true) {
-              ubean.setPartID(savedRecord);  /// Allows preference to appear in menu
+              ubean.setPartID(savedRecord);  
+              ubean.setComMemberDetailID(savedRecord); 
               message(null, "NewMember", new Object[]{fullName});
             }
           }
