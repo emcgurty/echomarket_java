@@ -583,7 +583,7 @@ public class UserBean extends AbstractBean implements Serializable {
           } finally {
             hib = null;
             tx = null;
-            
+
           }
 
           if (results != null) {
@@ -650,11 +650,10 @@ public class UserBean extends AbstractBean implements Serializable {
 
   protected String skipCommunityMembers() {
     this.comMemberDetailID = true;
-    this.editable  = 0;
+    this.editable = 0;
     return cpbean.load_ud(this.participant_id);
   }
-          
-          
+
   public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
@@ -808,6 +807,7 @@ public class UserBean extends AbstractBean implements Serializable {
         pid = part.getParticipant_id();
         this.participant_id = pid;
         this.partID = true;
+
       } else {
         this.editable = 0;
         this.partID = true;
@@ -885,6 +885,9 @@ public class UserBean extends AbstractBean implements Serializable {
         setCommunityId(part.getCommunityId());
         setCreatorDetailID(true);
       } else {
+        setPartID(true);
+        setCommunityId(part.getCommunityId());
+        setCreatorDetailID(true);
         setEditable(0);
         return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
