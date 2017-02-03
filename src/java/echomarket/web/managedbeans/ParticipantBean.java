@@ -369,7 +369,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         tx.commit();
         updateSuccess = true;
-        message(null, "ParticipantInformationRecordSaved", null);
+        //message(null, "ParticipantInformationRecordSaved", null);
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in Save/Update Particpant, 276");
