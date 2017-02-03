@@ -12,11 +12,13 @@
   </h:head>
   <c:set var="whichType" value="#{userBean.userType}" />
   <c:set var="completeLIC_LIT" value="#{userBean.LITid and userBean.LICid}" /> 
-  <h:outputText  value="#{userBean.partID} -- partId  " /> 
-  <h:outputText  value="#{userBean.cpId} -- cpid  " /> 
-  <h:outputText  value="#{userBean.LITid} -- lit " /> 
-  <h:outputText  value="#{userBean.LICid}-- lic  " /> 
-  <h:outputText  value="#{whichType}-- which header  " /> 
+<!--  <h:outputText  value="#{userBean.partID} -- partId  " /> <br />
+  <h:outputText  value="#{userBean.cpId} -- cpid  " /> <br />
+  <h:outputText  value="#{userBean.LITid} -- lit " /> <br />
+  <h:outputText  value="#{userBean.LICid}-- lic  " /> <br />
+  <h:outputText  value="#{userBean.comDetailID}-- comDetailID  " /> <br />
+  <h:outputText  value="#{userBean.comMemberDetailID}-- comMemberDetailID  " /> <br />
+  <h:outputText  value="#{whichType}-- which header  " /> <br />-->
   <c:choose >
     <c:when test="${!empty itemBean.itemId}" >
       <c:set var="iid" value="${itemBean.itemId}"  />  
@@ -44,17 +46,17 @@
     </li>
 
     <li class="subs" id="tab_item_0" >
-      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" value="Community Detail" immediate="true" rendered="#{userBean.comDetailID}" >
+      <h:commandLink id="detail" action="#{communitiesBean.load_community_detail()}" value="Community Detail" immediate="true" rendered="#{userBean.creatorDetailID}" >
       </h:commandLink>   
     </li>
 
     <li class="subs" id="tab_item_1" >
-      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" value="Community Members" immediate="true" rendered="#{userBean.comMemberDetailID}" >
+      <h:commandLink id="members" action="#{communityMembersBean.load_community_members()}" value="Community Members" immediate="true" rendered="#{userBean.comDetailID}" >
       </h:commandLink>    
     </li>
 
     <c:choose>
-      <c:when  test="#{userBean.partID}" > 
+      <c:when  test="#{creatorDetailID}" > 
         <c:if test="#{whichType == 'borrow'}" >
           <li id="tab_item_4">
             <c:set var="newItemLabel" value="Default Contact Preferences"  />
@@ -67,11 +69,11 @@
       </c:when>
     </c:choose>
 
-    <h:outputText value="#{((whichType == 'both') or (whichType == 'lend')) and (userBean.partID)} == 3  " />
-    <h:outputText value="#{whichType} == which 3  " />
+<!--    <h:outputText value="#{((whichType == 'both') or (whichType == 'lend')) and (userBean.partID)} == 3  " />
+    <h:outputText value="#{whichType} == which 3  " />-->
     <c:choose>
 
-      <c:when test="#{userBean.partID}"  >
+      <c:when test="#{userBean.comDetailID}"  >
         <c:if test="#{((whichType == 'both') or (whichType == 'lend')) and (userBean.partID)}" >
           <li class="subs" id="tab_item_4" >
             <a href="#s1">Default Item Preferences/Conditions</a>
@@ -104,7 +106,7 @@
     </c:choose> 
 
 
-    <c:if test="#{completeLIC_LIT and (userBean.partID and userBean.cpId) }" >
+    <c:if test="#{completeLIC_LIT and userBean.comDetailID }" >
       <li class="subs" >
         <c:choose>                                
           <c:when test="#{whichType == 'borrow'}"  >
