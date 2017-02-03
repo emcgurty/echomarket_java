@@ -72,7 +72,12 @@
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="#{sub_title}" />
-              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{userBean.partID}" >
+              <!--<h:outputText  value="#{userBean.creatorDetailID}" />-->              
+              <!--<h:outputText  value="#{userBean.editable == 0 and userBean.creatorDetailID}" />-->              
+              <h:commandLink  action="#{communitiesBean.load_community_detail()}"  class="right_div" value="Continue to 'Community Detail'" rendered="#{userBean.editable == 0 and userBean.creatorDetailID}" >
+              </h:commandLink>              
+
+              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{userBean.partID and((userbean.creatorDetailID) and (!empty userBean.communityId))}" >
                 <f:param name="action" value="edit" />
                 <c:choose>
                   <c:when test="#{!empty itemBean.itemId}" >
