@@ -246,8 +246,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
-      ubean.setComMemberDetailID(updateSuccess);
-      ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
+      ubean.setComDetailID(updateSuccess);
+//      ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
     }
     
     return cmBean.load_community_members();
