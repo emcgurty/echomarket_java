@@ -59,6 +59,12 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     return comm_member;
   }
 
+public String skipMembers() {
+  return ubean.skipCommunityMembers();
+
+}
+
+
   public String actionSave() {
     this.errorMessage = null;
     Session hib = null;
