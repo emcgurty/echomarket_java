@@ -386,7 +386,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if (updateSuccess == true) {
       ubean.setParticipant_id(pid);
       ubean.setEditable(1);
-//      ubean.setPartID(true);
+      ubean.setPartID(true);
 //      ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
       ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
 
