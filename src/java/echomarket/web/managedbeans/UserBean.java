@@ -1410,6 +1410,47 @@ public class UserBean extends AbstractBean implements Serializable {
     }
   }
 
+  public void makeCDselection(ComponentSystemEvent event) {
+
+    UIComponent components = event.getComponent();
+    UIInput uiInputCD = (UIInput) components.findComponent("contact_describe_id");
+    String reg_cd = uiInputCD.getLocalValue() == null ? "" : uiInputCD.getLocalValue().toString();
+    String CDId = uiInputCD.getClientId();
+    if (reg_cd != null) {
+      if ("-2".equals(reg_cd) == true) {
+        FacesMessage msg = new FacesMessage("Plese make a selection to describe yourself");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context().addMessage(CDId, msg);
+        context().renderResponse();
+      } else {
+        return;
+      }
+    } else {
+      // Required true do its job 
+      return;
+    }
+  }
+  
+  public void makeCountryselection(ComponentSystemEvent event) {
+
+    UIComponent components = event.getComponent();
+    UIInput uiInputCD = (UIInput) components.findComponent("countryId");
+    String reg_cd = uiInputCD.getLocalValue() == null ? "" : uiInputCD.getLocalValue().toString();
+    String CDId = uiInputCD.getClientId();
+    if (reg_cd != null) {
+      if ("-2".equals(reg_cd) == true) {
+        FacesMessage msg = new FacesMessage("Plese make a Country selection");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context().addMessage(CDId, msg);
+        context().renderResponse();
+      } else {
+        return;
+      }
+    } else {
+      // Required true do its job 
+      return;
+    }
+  }
   public void validatePassword(ComponentSystemEvent event) {
 
     UIComponent components = event.getComponent();
@@ -1773,8 +1814,9 @@ public class UserBean extends AbstractBean implements Serializable {
     String resetCodeString = null;
     Session hib = null;
     Transaction tx = null;
-
+    
     try {
+      
       hib = hib_session();
       tx = hib.beginTransaction();
       
