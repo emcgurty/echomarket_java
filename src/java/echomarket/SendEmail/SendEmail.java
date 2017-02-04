@@ -213,7 +213,7 @@ public class SendEmail implements java.io.Serializable {
             + "<p>User Email:  " + this.user_email + "</p>"
             + "<p>Date Sent:  " + new Date() + "</p>"
             + "<p>Contact message was sent from IP Address:  " + this.remoteIp + ".</p>"
-            + "<p>PS: If you received this email in error, please disregard it.</p></html>";
+            + "<p>PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
@@ -241,7 +241,7 @@ public class SendEmail implements java.io.Serializable {
             + "<p>Your item will be assessed for approval within one day.</p>"
             + "<p>Thanks for participating on EchoMarket!</p>"
             + "<p>Item created from this IP Address:  " + this.getRemoteIp() + ".</p>"
-            + "<p>PS: If you received this email in error, please disregard it.</p></html>";
+            + "<p>PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
@@ -261,7 +261,7 @@ public class SendEmail implements java.io.Serializable {
             + "<p><a href='url'>" + url_string + "</a></p>"
             + "<p>  Thank you,</p>"
             + "<p>  www.echomarket.org</p>"
-            + "<p>  PS: If you received this email in error, please disregard it.</p></html>";
+            + "<p>  PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
@@ -270,7 +270,7 @@ public class SendEmail implements java.io.Serializable {
     ResourceBundle bundle = ResourceBundle.getBundle(
             "echomarket.web.messages.Messages",
             FacesContext.getCurrentInstance().getViewRoot().getLocale());
-    String url_string = bundle.getString("ActivationUrl");
+    String url_string = bundle.getString("UpdateUrl");
     Object paramArray[] = new Object[2];
     paramArray[0] = getResetCode();
     url_string = MessageFormat.format(url_string, paramArray);
@@ -285,7 +285,7 @@ public class SendEmail implements java.io.Serializable {
             + "<p><a href='url'>" + url_string + "</a></p>"
             + "<p>  Thank you,</p>"
             + "<p>  www.echomarket.org</p>"
-            + "<p>  PS: If you received this email in error, please disregard it.</p></html>";
+            + "<p>  PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
@@ -306,7 +306,7 @@ public class SendEmail implements java.io.Serializable {
             + "<p><a href='url'>" + url_string + "</a></p>"
             + "<p>  Thank you,</p>"
             + "<p>  www.echomarket.org</p>"
-            + "<p>  PS: If you received this email in error, please disregard it.</p></html>";
+            + "<p>  PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
@@ -327,7 +327,7 @@ public class SendEmail implements java.io.Serializable {
             + "<p><a href='url'>" + url_string + "</a></p>"
             + "<p>  Thank you,</p>"
             + "<p>  www.echomarket.org</p>"
-            + "<p>  PS: If you received this email in error, please disregard it.</p></html>";
+            + "<p>  PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
@@ -352,7 +352,7 @@ public class SendEmail implements java.io.Serializable {
             + " <p><a href='url'>" + url_string + "</a></p>"
             + " <p>  Thank you,</p>"
             + " <p>  www.echomarket.org</p>"
-            + " <p>  PS: If you received this email in error, please disregard it.</p></html>";
+            + " <p>  PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
@@ -372,7 +372,7 @@ public class SendEmail implements java.io.Serializable {
             + "<p><a href='url'>" + url_string + "</a></p>"
             + "<p>  Thank you,</p>"
             + "<p>  www.echomarket.org</p>"
-            + "<p>  PS: If you received this email in error, please disregard it.</p></html>";
+            + "<p>  PS: If you received this email in error, please delete it.</p></html>";
     return buildMessage;
   }
 
