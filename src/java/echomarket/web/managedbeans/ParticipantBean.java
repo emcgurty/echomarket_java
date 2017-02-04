@@ -162,7 +162,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     getExistingAddress("primary");
     getExistingAddress("alternative");
 
-    if (ubean.getEditable()             == -1) {
+    if (ubean.getEditable() == -1) {
       return "user_agreement";
     } else {
       this.setQuestionAltAddressDelete(-9);
@@ -388,8 +388,9 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       ubean.setEditable(1);
       ubean.setPartID(true);
 //      ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
-      ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
-
+      if (ubean.getCommunityId().isEmpty() == false) {
+        ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
+      }
     } else {
       ubean.setEditable(0);
     }
