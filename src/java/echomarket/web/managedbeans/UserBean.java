@@ -654,6 +654,36 @@ public class UserBean extends AbstractBean implements Serializable {
     return cpbean.load_ud(this.participant_id);
   }
 
+  public String acceptUpdatedUser() {
+
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+
+    results = findUserName();
+    Users uu = (Users) results.get(0);
+    uu.setActivatedAt(new Date());
+    uu.setResetCode(null);
+    uu.setDateUpdated(new Date());
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      hib.update(uu);
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error in acceptUpdatedUser");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      hib = null;
+      tx = null;
+      results = null;
+    }
+
+    return loginUser();
+
+  }
+
   public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
@@ -1811,6 +1841,8 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String updateUserLogin() {
 
+    
+    ///  TODO:  This coding is wrong.  Need to check if password is changed then use an adaption of managePassword....
     Boolean updateSuccess = false;
     String resetCodeString = null;
     Session hib = null;
@@ -1821,7 +1853,7 @@ public class UserBean extends AbstractBean implements Serializable {
     byte[] new_salt = null;
     Users uu = null;
 
-    /// need to get salt and pepper and resetCode
+    /// need to get salt and pepper and resetCode... this is wrong, need to check if password is present, otherwise perform non-password updates
     try {
       uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
       new_salt = uu.getSalt();
