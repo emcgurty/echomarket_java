@@ -370,7 +370,7 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     if (savedRecord == true) {
-      savedRecord = sendActivationEmail(ac);
+      savedRecord = sendActivationEmail(ac, 0);
     }
     if (savedRecord == true) {
       if (commName == null) {
@@ -896,7 +896,7 @@ public class UserBean extends AbstractBean implements Serializable {
         List completCD = completeCommunityDetail();
         Integer hs = completCD.size();
         if (hs == 0) {
-          
+
           setComDetailID(false);
           setEditable(1);
           return_string = "community_detail"; //commbean.load_community_detail();
@@ -1430,7 +1430,7 @@ public class UserBean extends AbstractBean implements Serializable {
       return;
     }
   }
-  
+
   public void makeCountryselection(ComponentSystemEvent event) {
 
     UIComponent components = event.getComponent();
@@ -1451,6 +1451,7 @@ public class UserBean extends AbstractBean implements Serializable {
       return;
     }
   }
+
   public void validatePassword(ComponentSystemEvent event) {
 
     UIComponent components = event.getComponent();
@@ -1814,18 +1815,19 @@ public class UserBean extends AbstractBean implements Serializable {
     String resetCodeString = null;
     Session hib = null;
     Transaction tx = null;
-    
+    String queryString = null;
+    List result = null;
+    byte[] new_cryptedPassword = null;
+    byte[] new_salt = null;
+    Users uu = null;
+
+    /// need to get salt and pepper and resetCode
     try {
-      
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      
-      
-      Users uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
-      hib.update(uu);
-      tx.commit();
+      uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
+      new_salt = uu.getSalt();
+      new_cryptedPassword = uu.getCryptedPassword();
       resetCodeString = uu.getResetCode();
-      updateSuccess = true;
+
     } catch (Exception ex) {
       tx.rollback();
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -1834,15 +1836,61 @@ public class UserBean extends AbstractBean implements Serializable {
     } finally {
       tx = null;
       hib = null;
+      uu = null;
+    }
+
+    try {
+      queryString = " FROM Users "
+              + " WHERE user_id  = :uid";
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      result = hib.createQuery(queryString)
+              .setParameter("uid", this.user_id)
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      System.out.println("Error on Update User, retrieving current user information");
+      message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
+    } finally {
+      hib = null;
+      tx = null;
+    }
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      uu = (Users) result.get(0);
+      uu.setUsername(username);
+      uu.setUserAlias(userAlias);
+      uu.setEmail(email);
+      uu.setCommunityName(communityName);
+      uu.setActivatedAt(null);
+      uu.setSalt(new_salt);
+      uu.setCryptedPassword(new_cryptedPassword);
+      uu.setResetCode(resetCodeString);
+      hib.update(uu);
+      tx.commit();
+      updateSuccess = true;
+    } catch (Exception ex) {
+      tx.rollback();
+
+    } finally {
+      hib = null;
+      tx = null;
+      uu = null;
+      result = null;
     }
     if (updateSuccess == true) {
-      sendActivationEmail(resetCodeString);
+      sendActivationEmail(resetCodeString, 1);
       message(null, "LoginUpdated", new Object[]{this.username, this.email});
     } else {
-      message(null, "LoginUpdateFailed", new Object[]{this.username, this.email});
+      message(null, "LoginUpdateFailed", new Object[]{this.username});
 
     }
-
+    setUserToNull();
+    this.userAction = "login";
     return "index";
 
   }
@@ -1876,19 +1924,30 @@ public class UserBean extends AbstractBean implements Serializable {
     this.roleId = roleId;
   }
 
-  private Boolean sendActivationEmail(String resetCodeString) {
+  private Boolean sendActivationEmail(String resetCodeString, Integer which) {
 
+    //// which 0 = new, 1 = update
     String[] getMap = new String[2];
     getMap = getApplicationEmail();
     Boolean return_string = false;
 
     try {
-      if (this.communityName == null) {
-        SendEmail se = new SendEmail("registration", this.username, this.userAlias, this.email, getMap[0], getMap[1], this.password, resetCodeString);
-        se = null;
-      } else {
-        SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, getMap[0], getMap[1], this.password, resetCodeString);
-        se = null;
+
+      switch (which) {
+        case 0:
+          if (this.communityName == null) {
+            SendEmail se = new SendEmail("registration", this.username, this.userAlias, this.email, getMap[0], getMap[1], this.password, resetCodeString);
+            se = null;
+          } else {
+            SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, getMap[0], getMap[1], this.password, resetCodeString);
+            se = null;
+          }
+        case 1:
+          if (this.communityName == null) {
+            this.communityName = "";   // becuase SendEmail tests for isEmpty
+          }
+          SendEmail se = new SendEmail("update", this.username, this.userAlias, this.email, this.communityName, getMap[0], getMap[1], this.password, resetCodeString);
+          se = null;
       }
       return_string = true;
     } catch (Exception ex) {
