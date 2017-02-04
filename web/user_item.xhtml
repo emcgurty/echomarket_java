@@ -129,8 +129,9 @@
               <td style="width:50%">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
-                    <h:inputText  id="itemDescription" value="#{itemBean.itemDescription}" class="items"  style="margin-left:10px"   rendered="#{userBean.editable == 1}" maxlength="50" />
-                    <h:outputText  value="#{itemBean.itemDescription}"    rendered="#{userBean.editable == 0}"  class="RO_text"/>
+                    <h:inputText  id="itemDescription" value="#{itemBean.itemDescription}" class="items"  style="margin-left:10px"   
+                                  rendered="#{userBean.editable == 1}" maxlength="50" required="true" requiredMessage="Item description is required"/>
+                    <h:outputText  value="#{itemBean.itemDescription}"    rendered="#{userBean.editable == 0}"  class="RO_text" />
                   </h:outputLabel>
                   <span class="error-message" id="itemDescription" ></span>
                 </div></td>
@@ -138,12 +139,13 @@
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
                     <h:selectOneMenu id="itemConditionId" value="#{itemBean.itemConditionId}"  style="margin-left:10px" class="items select"   rendered="#{userBean.editable == 1}">
-                      <f:validator validatorId="selectOneMenuValidator" />  
+                      
                       <f:selectItems id="item_condition" value="#{itemConditionBean.buildItemConditionsArray()}"  
                                      var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
                                      >   
                       </f:selectItems>    
                     </h:selectOneMenu>
+                     
                     <c:choose>
                       <c:when test="#{userBean.editable == 0}" >
                         <c:set var="icn" value="#{itemConditionBean.getItemConditionName(itemBean.itemConditionId)}" />
@@ -190,7 +192,8 @@
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                   <c:set var="imageLibrary" value="${itemBean.itemType}_images" />
                   <h:outputLabel for="imagePreview" value="Uploaded Image:"  >
-                    <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" library="${imageLibrary}" alt="Item Image"   height="100" width="100" />
+                    <h:graphicImage  id="imagePreview" name="#{image.imageFileName}" 
+                                     library="${imageLibrary}" alt="Item Image"   height="100" width="100" />
                   </h:outputLabel> 
                 </div>
                 <br />
@@ -206,7 +209,7 @@
               <h:column rowHeader="">
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                   <h:outputLabel for="imageView" value="Uploaded Image:"  >
-                    <h:graphicImage  id="imageView" name="${image.imageFileName}" library="${imageLibrary}" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}"/> 
+                    <h:graphicImage  id="imageView" name="${image.imageFileName}" library="${imageLibrary}" alt="Item Image"   height="100" width="100" rendered="#{!empty image.imageFileName}" /> 
                   </h:outputLabel> 
                 </div>
                 <br />
