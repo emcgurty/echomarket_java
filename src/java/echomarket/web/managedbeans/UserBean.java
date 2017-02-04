@@ -881,11 +881,11 @@ public class UserBean extends AbstractBean implements Serializable {
         part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
         setParticipant_id(pid);
-        setPartID(true);
+//        setPartID(true);
         setCommunityId(part.getCommunityId());
         setCreatorDetailID(true);
       } else {
-        setPartID(true);
+//        setPartID(true);
         setCommunityId(part.getCommunityId());
         setCreatorDetailID(true);
         setEditable(0);
