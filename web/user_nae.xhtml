@@ -72,12 +72,12 @@
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="#{sub_title}" />
-              <!--<h:outputText  value="#{userBean.creatorDetailID}" />-->              
+              <h:outputText  value="#{userBean.creatorDetailID}" />              
               <!--<h:outputText  value="#{userBean.editable == 0 and userBean.creatorDetailID}" />-->              
               <h:commandLink  action="#{communitiesBean.load_community_detail()}"  class="right_div" value="Continue to 'Community Detail'" rendered="#{userBean.editable == 0 and userBean.creatorDetailID}" >
               </h:commandLink>              
 
-              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{userBean.partID and((userbean.creatorDetailID) and (!empty userBean.communityId))}" >
+              <h:commandLink  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{userBean.partID}" >
                 <f:param name="action" value="edit" />
                 <c:choose>
                   <c:when test="#{!empty itemBean.itemId}" >
@@ -141,7 +141,9 @@
                           <c:set var="display_describe" value="How you describe your Community:"   rendered="#{userBean.editable == 0}" />
                         </c:when>
                       </c:choose>
+                      <f:event listener="#{userBean.makeCDselection}" type="postValidate" />
                       <h:outputLabel for="contact_describe_id"  value="#{display_describe}" ><span class="required_fields">*</span>
+
                         <h:selectOneMenu id="contact_describe_id" value="#{participantBean.contact_describe_id}" rendered="#{userBean.editable == 1}" >
                           <c:choose >
                             <c:when test="#{rid == 1}" >
@@ -361,7 +363,7 @@
                           <h:outputLabel for="usStateId" value="#{bundle.UsStates}"/>
 
                           <h:selectOneMenu id="usStateId" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}" >
-                            <f:validator validatorId="selectOneMenuValidator" />  
+                           
                             <f:selectItems id="us_state_id_select" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
                             </f:selectItems>    
                           </h:selectOneMenu>
@@ -392,9 +394,10 @@
                           <span class="error-message" id="postalCode" ></span>
                         </td>
                         <td >
+                          
                           <h:outputLabel for="countryId" value="#{bundle.Country}"/><span class="required_fields">*</span>
                           <h:selectOneMenu id="countryId" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}" >
-                            <f:validator validatorId="selectOneMenuValidator" />  
+                            <f:event listener="#{userBean.makeCountryselection}" type="postValidate" />
                             <f:selectItems id="country_id" value="#{country_list}"  
                                            var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                             </f:selectItems>    
@@ -494,7 +497,7 @@
                         <td>
                           <h:outputLabel for="usStateIda" value="#{bundle.UsStates}"/>
                           <h:selectOneMenu id="usStateIda" value="#{pa.usStateId}" style="margin-left: 5px;" rendered="#{userBean.editable == 1}">
-                            <f:validator validatorId="selectOneMenuValidator" />  
+                            
                             <f:selectItems id="us_state_id" value="#{states_list}"  var="c" itemValue="#{c.id}" itemLabel="#{c.stateName}" >   
                             </f:selectItems>    
                           </h:selectOneMenu>
@@ -527,7 +530,7 @@
                         <td >
                           <h:outputLabel for="countryIda" value="#{bundle.Country}"/><span class="required_fields">*</span>
                           <h:selectOneMenu id="countryIda" value="#{pa.countryId}" style="margin-left: 5px;" class="primary" rendered="#{userBean.editable == 1}"  >
-                            <f:validator validatorId="selectOneMenuValidator" />  
+                            
                             <f:selectItems id="country_id" value="#{country_list}"  var="c" itemValue="#{c.countryId}" itemLabel="#{c.countryName}"                              >   
                             </f:selectItems>    
                           </h:selectOneMenu>
