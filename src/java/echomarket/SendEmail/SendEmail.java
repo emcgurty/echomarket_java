@@ -85,9 +85,29 @@ public class SendEmail implements java.io.Serializable {
     this.user_id = uid;
     Session sess = establishSession();
     sendCommunityMemberEmail(sess);
- 
+
   }
 
+    public SendEmail(String whichEmail, String username, String user_alias,
+          String user_email, String communityName, String app_email, String app_password, String random, String rc) {
+
+    this.whichEmail = whichEmail;
+    this.username = username;
+    this.user_alias = user_alias;
+    this.user_email = user_email;
+    this.commmunityName = communityName;
+    this.application_email_address = app_email;
+    this.application_email_password = app_password;
+    this.reset_code = rc;
+    Session sess = establishSession();
+    
+    if ("update".equals(this.whichEmail)) {
+      /// then random argument is the password
+      this.password = random;
+      sendUpdateEmail(sess);
+    } 
+  }
+  
   public SendEmail(String whichEmail, String username, String user_alias,
           String user_email, String app_email, String app_password, String random, String rc) {
 
@@ -105,7 +125,10 @@ public class SendEmail implements java.io.Serializable {
       /// then random argument is the password
       this.password = random;
       sendRegistrationEmail(sess);
-
+    } else if ("update".equals(this.whichEmail)) {
+      /// then random argument is the password
+      this.password = random;
+      sendUpdateEmail(sess);
     } else if ("Com".equals(threeChars)) {
       /// then random argument is the password
       this.password = random;
@@ -137,7 +160,6 @@ public class SendEmail implements java.io.Serializable {
       // Set To: header field of the header.
       String recipients = getApplication_email_address() + " , " + this.user_email;
       message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
-      
 
       // Set Subject: header field
       message.setSubject("New EchoMarket Item.");
@@ -236,6 +258,30 @@ public class SendEmail implements java.io.Serializable {
             + "<p> User Name: " + this.username + "</p>"
             + "<p> Password:  " + this.password + "</p>"
             + "<h2> Visit this url to activate your account: </h2>"
+            + "<p><a href='url'>" + url_string + "</a></p>"
+            + "<p>  Thank you,</p>"
+            + "<p>  www.echomarket.org</p>"
+            + "<p>  PS: If you received this email in error, please disregard it.</p></html>";
+    return buildMessage;
+  }
+
+  private String BuildUpdateMessage() {
+
+    ResourceBundle bundle = ResourceBundle.getBundle(
+            "echomarket.web.messages.Messages",
+            FacesContext.getCurrentInstance().getViewRoot().getLocale());
+    String url_string = bundle.getString("ActivationUrl");
+    Object paramArray[] = new Object[2];
+    paramArray[0] = getResetCode();
+    url_string = MessageFormat.format(url_string, paramArray);
+    String buildMessage = "<html><h1>Your EchoMarket account has been updated.</h1>"
+            + "<p> User Name: " + this.username + "</p>"
+            + "<p> Password:  " + this.password + "</p>"
+            + "<p> Email:  " + this.user_email + "</p>";
+            if (this.commmunityName.isEmpty() == false) {
+              buildMessage = buildMessage + "<p> Community Name:  " + this.commmunityName + "</p>"; 
+            }
+            buildMessage = buildMessage = "<h2> Visit this url to activate your updated account: </h2>"
             + "<p><a href='url'>" + url_string + "</a></p>"
             + "<p>  Thank you,</p>"
             + "<p>  www.echomarket.org</p>"
@@ -392,6 +438,33 @@ public class SendEmail implements java.io.Serializable {
 
       // Set Subject: header field
       message.setSubject("Thank you for Registering at EchoMarket.");
+
+      // Send message
+      Transport.send(message);
+
+      System.out.println("Sent message successfully....");
+
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
+    return true;
+  }
+
+  private Boolean sendUpdateEmail(Session sess) {
+
+    try {
+      // Create a default MimeMessage object.
+      Message message = new MimeMessage(sess);
+      message.setContent(BuildUpdateMessage(), "text/html; charset=utf-8");
+      // Set From: header field of the header.
+      message.setFrom(new InternetAddress(getApplication_email_address()));
+
+      // Set To: header field of the header.
+      message.setRecipients(Message.RecipientType.TO,
+              InternetAddress.parse(getUser_email()));
+
+      // Set Subject: header field
+      message.setSubject("EchoMarket User Login Update.");
 
       // Send message
       Transport.send(message);
