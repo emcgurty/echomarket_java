@@ -125,10 +125,6 @@ public class SendEmail implements java.io.Serializable {
       /// then random argument is the password
       this.password = random;
       sendRegistrationEmail(sess);
-    } else if ("update".equals(this.whichEmail)) {
-      /// then random argument is the password
-      this.password = random;
-      sendUpdateEmail(sess);
     } else if ("Com".equals(threeChars)) {
       /// then random argument is the password
       this.password = random;
@@ -137,7 +133,6 @@ public class SendEmail implements java.io.Serializable {
       /// then random argument is the password
       this.password = random;
       sendCommunityMemberEmail(sess);
-
     } else if ("forgotPassword".equals(this.whichEmail)) {
       //SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, returnApplicationAddress(), returnApplicationPwd(), null, reset_code);
       // random is user_id
@@ -281,7 +276,7 @@ public class SendEmail implements java.io.Serializable {
             if (this.commmunityName.isEmpty() == false) {
               buildMessage = buildMessage + "<p> Community Name:  " + this.commmunityName + "</p>"; 
             }
-            buildMessage = buildMessage = "<h2> Visit this url to activate your updated account: </h2>"
+            buildMessage = buildMessage + "<h2> Visit this url to activate your updated account: </h2>"
             + "<p><a href='url'>" + url_string + "</a></p>"
             + "<p>  Thank you,</p>"
             + "<p>  www.echomarket.org</p>"
