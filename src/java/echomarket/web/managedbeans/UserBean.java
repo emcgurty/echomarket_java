@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
@@ -1166,7 +1167,7 @@ public class UserBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     Users userArray = null;
-    List results = validateUserNameResetCode();
+    List results = validateUserNameResetCode();   // return user with reset code
     if (results != null) {
 
       try {
@@ -1841,35 +1842,15 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String updateUserLogin() {
 
-    
-    ///  TODO:  This coding is wrong.  Need to check if password is changed then use an adaption of managePassword....
+    // called by user_login_update.xhtml, which will produce email.  
     Boolean updateSuccess = false;
     String resetCodeString = null;
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
+    String strManagePasswordChange = null;
     List result = null;
-    byte[] new_cryptedPassword = null;
-    byte[] new_salt = null;
     Users uu = null;
-
-    /// need to get salt and pepper and resetCode... this is wrong, need to check if password is present, otherwise perform non-password updates
-    try {
-      uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, parseUserTypeArray(), this.getRoleId());
-      new_salt = uu.getSalt();
-      new_cryptedPassword = uu.getCryptedPassword();
-      resetCodeString = uu.getResetCode();
-
-    } catch (Exception ex) {
-      tx.rollback();
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      System.out.println("Error on Update User");
-      message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
-    } finally {
-      tx = null;
-      hib = null;
-      uu = null;
-    }
 
     try {
       queryString = " FROM Users "
@@ -1884,48 +1865,61 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User, retrieving current user information");
-      message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
+      updateSuccess = false;
     } finally {
       hib = null;
       tx = null;
     }
 
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      uu = (Users) result.get(0);
-      uu.setUsername(username);
-      uu.setUserAlias(userAlias);
-      uu.setEmail(email);
-      uu.setCommunityName(communityName);
-      uu.setActivatedAt(null);
-      uu.setSalt(new_salt);
-      uu.setCryptedPassword(new_cryptedPassword);
-      uu.setResetCode(resetCodeString);
-      hib.update(uu);
-      tx.commit();
-      updateSuccess = true;
-    } catch (Exception ex) {
-      tx.rollback();
-
-    } finally {
-      hib = null;
-      tx = null;
-      uu = null;
-      result = null;
+    if (result != null) {
+      if (result.size() == 1) {
+        updateSuccess = validateUserPassword(result);    // doesn't chnage database, just authenticates
+      }
     }
+
     if (updateSuccess == true) {
-      sendActivationEmail(resetCodeString, 1);
-      message(null, "LoginUpdated", new Object[]{this.username, this.email});
-    } else {
-      message(null, "LoginUpdateFailed", new Object[]{this.username});
 
+      resetCodeString = UUID.randomUUID().toString();
+
+      try {
+        hib = hib_session();
+        tx = hib.beginTransaction();
+        uu = (Users) result.get(0);
+        uu.setUsername(username);
+        uu.setUserAlias(userAlias);
+        uu.setEmail(email);
+        if (this.communityName != null) {
+          uu.setCommunityName(communityName);
+        }
+        uu.setActivatedAt(null);
+        uu.setResetCode(resetCodeString);
+        hib.update(uu);
+        tx.commit();
+        updateSuccess = true;
+      } catch (Exception ex) {
+        tx.rollback();
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        System.out.println("Error on Update User, updating current user information");
+      } finally {
+        hib = null;
+        tx = null;
+        uu = null;
+        result = null;
+      }
     }
-    setUserToNull();
-    this.userAction = "login";
-    return "index";
+      if (updateSuccess == true) {
+        sendActivationEmail(resetCodeString, 1);  /// email will direct user to update_user.xhtml
+        message(null, "LoginUpdated", new Object[]{this.username, this.email});
+      } else {
+        message(null, "LoginUpdateFailed", new Object[]{this.username});
+      }
 
-  }
+      setUserToNull();
+      this.userAction = "login";
+      return "index";
+    }
+  
+  
 
   public String load_ud(Integer which) {
 
