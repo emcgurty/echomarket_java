@@ -1528,9 +1528,15 @@ public class UserBean extends AbstractBean implements Serializable {
    * @return the userTypeArray
    */
   public List<String> getUserTypeArray() {
+
     if (this.userType != null) {
       ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(";")));
-      return uta;
+      if ("both".equals(uta.get(0))) {
+        List<String> uta2 = Arrays.asList("borrow", "lend");
+        return uta2;
+      } else {
+        return uta;
+      }
     } else {
       return userTypeArray;
     }
@@ -1841,7 +1847,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String updateUserLogin() {
 
-    // called by user_login_update.xhtml, which will produce email.  
+    // called by user_login_update.xhtml, which will produce email if user changed password
     Boolean updateSuccess = false;
     Boolean wasPasswordChanged = false;
     String resetCodeString = null;
@@ -1877,7 +1883,7 @@ public class UserBean extends AbstractBean implements Serializable {
         wasPasswordChanged = validateUserPassword(result);  // if false then user changed password;
         if (wasPasswordChanged == false) {
           try {
-            //// Need to create new salt and pepper for new password.
+            //// Need to create new salt and pepper for new password. 
             uu = new Users(this.user_id, this.username, this.communityName, this.email, this.password, null, this.userAlias, "NA", -1);
             new_salt = uu.getSalt();
             new_passwordEncrypt = uu.getCryptedPassword();
@@ -1931,7 +1937,7 @@ public class UserBean extends AbstractBean implements Serializable {
     } else {
       message(null, "LoginUpdateFailed", new Object[]{this.username});
     }
-    
+
     setUserToNull();
     this.userAction = "login";
     return "index";
@@ -1984,13 +1990,16 @@ public class UserBean extends AbstractBean implements Serializable {
             SendEmail se = new SendEmail("Community: " + this.communityName, this.username, this.userAlias, this.email, getMap[0], getMap[1], this.password, resetCodeString);
             se = null;
           }
+          break;
         case 1:
           if (this.communityName == null) {
             this.communityName = "";   // becuase SendEmail tests for isEmpty
           }
           SendEmail se = new SendEmail("update", this.username, this.userAlias, this.email, this.communityName, getMap[0], getMap[1], this.password, resetCodeString);
           se = null;
+          break;
       }
+
       return_string = true;
     } catch (Exception ex) {
       System.out.println("Send Mail Failed");
