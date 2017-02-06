@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./echomarketTemplate.xhtml"         >
+  <ui:define name="header"  >
+    <ui:include rendered="true" src="application_header.xhtml" id="activateUser" /> 
+  </ui:define>
+
+  <ui:define name="content">
+    <h:form  id="form_activate"  >
+    
+
+      <f:metadata>
+        <f:viewParam name="reset_code" id="resetCode" value="#{userBean.resetCode}" />
+      </f:metadata>         
+
+      <div  class="top" id="activate_div">
+        <div class="messagecolor">
+          <h:messages showSummary="true" 
+                      showDetail="false"
+                      errorStyle="list-style-type:none;color: #d20005" 
+                      infoStyle="color: indigo" />
+        </div>
+        <table style="width:75%;margin-left: 50px" align="center" id="activate_table">
+          <tr style="background-color:  #F0FFFF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
+              <h:outputText value="Please login to complete update of your User Information update" />
+              <h:commandLink  action="#{userBean.managePasswordChange()}" class="right_div" value="Please Complete!">
+              </h:commandLink>
+            </td>
+          </tr> 
+          <tr style="background-color:  #FFF7FF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
+              <h:outputLabel for="username"  value="#{bundle.username}">       
+                <h:inputText id="username" 
+                             value="#{userBean.username}"
+                             required="true"
+                             requiredMessage="#{bundle.ReqUserName}" style="margin-left:10px" maxlength="18">
+                </h:inputText>
+              </h:outputLabel>
+            </td>
+          </tr>
+          <tr style="background-color:  #F0FFFF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
+              <f:event listener="#{userBean.validatePassword}" type="postValidate" />
+              <h:outputLabel for="password"   value="#{bundle.password}">       
+                <h:inputSecret id="password"
+                               value="#{userBean.password}"
+                               required="true"
+                               title="#{bundle.PasswordMustContain}"
+                               requiredMessage="#{bundle.ReqPassword}"  style="margin-left:10px" maxlength="18">
+                </h:inputSecret>
+              </h:outputLabel>
+            </td>
+          </tr>
+          <tr style="background-color:  #FFF7FF">
+            <td style="padding-top: 15px;padding-bottom: 10px;">
+              <h:outputLabel for="confirmPassword"  value="#{bundle.confirmPassword}">       
+                <h:inputSecret id="confirmPassword"
+                               required="true"
+                               requiredMessage="#{bundle.ReqPassword}"
+                               style="margin-left:10px" maxlength="18">
+                </h:inputSecret>
+              </h:outputLabel>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </h:form>
+      <br /><br />
+  </ui:define>
+
+  <ui:define name="footer"  >
+    <ui:include rendered="true" src="application_footer.xhtml" id="ActivateFooter" /> 
+  </ui:define>
+
+</ui:composition>
