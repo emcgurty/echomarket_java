@@ -113,7 +113,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         if (result != null) {
           if (result.size() == 1) {
             Participant part_array = (Participant) result.get(0);
-            Boolean needCommunityValues = ubean.getCreatorDetail(ubean.getUser_id());
+           // emm Boolean needCommunityValues = ubean.getCreatorDetail(ubean.getUser_id());
             this.communityName = ubean.getCommunityName();
             this.firstName = part_array.getFirstName();
             this.lastName = part_array.getLastName();
