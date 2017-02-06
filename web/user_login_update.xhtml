@@ -26,7 +26,7 @@
           <c:when test="#{rid == 1}" >
             <ui:include src="/creator_menu.xhtml" id="user_detail_menu" />  
           </c:when>
-        </c:choose>    
+        </c:choose>  
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
@@ -80,9 +80,6 @@
                   </td>
                 </tr>
               </c:if>
-
-
-
               <tr >
                 <td style="width:50%;padding-bottom: 15px;">
                   <h:outputLabel for="username" value="#{bundle.username}" >       
@@ -92,8 +89,6 @@
                                  required="true"
                                  requiredMessage="#{bundle.ReqUserName}"
                                  style="margin-left:5px" rendered="#{userBean.editable == 1}">
-
-
                     </h:inputText>
                     <h:outputText 
                       value="#{userBean.username}"
@@ -180,8 +175,8 @@
                       </f:selectItems>
                     </h:selectManyCheckbox>
                   </h:outputLabel>
-                  <h:outputLabel for="userTypeArray0" value="Participation:" rendered="#{userBean.editable == 0}">
-                    <h:outputText id="userTypeArray0" value="#{niceUT}"
+                  <h:outputLabel  value="Participation:" rendered="#{userBean.editable == 0}">
+                    <h:outputText value="#{niceUT}"
                                   rendered="#{userBean.editable == 0}"  style="margin-left:5px" />
                   </h:outputLabel>
                 </td>
