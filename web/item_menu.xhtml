@@ -22,9 +22,7 @@
       <c:set var="iid" value="${userBean.itemId}"  />  
     </c:when >
   </c:choose>
-
-
-
+  
   <ul id="nav" class="item_menu" >
 
     <li class="subs"  >
@@ -52,7 +50,7 @@
         </c:when >  
         <c:when test="#{whichType == 'both'}"  >
           <li id="tab_item_1" >
-            <h:commandLink immediate="true"  action="#{itemBean.load_ud(whichType,iid)}"  value="New Item - #{userBean.getPrettyUserType()}"  style="text-transform: capitalize" rendered="true"    >
+            <h:commandLink immediate="true"  action="#{itemBean.load_ud(whichType,iid)}"  value="New Item - Borrowing and/or Lending"  style="text-transform: capitalize" rendered="true"    >
               <f:param name="action" value="item" />
             </h:commandLink>
           </li>
@@ -86,7 +84,7 @@
               <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="#{userBean.cpId}" > 
                 <f:param name="action" value="edit" />
                 <f:param name="iid" value="#{iid}" />
-                
+
               </h:commandLink>   
             </li>
             <li id="tab_item_13" >
