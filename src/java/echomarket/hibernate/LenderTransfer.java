@@ -40,20 +40,16 @@ public class LenderTransfer implements java.io.Serializable {
   }
 
   public LenderTransfer(String lenderTransferId, String itemId, String participant_id,
-          Integer borrowerComesToWhichAddress, 
-          
+          Integer borrowerComesToWhichAddress,
           Integer meetBorrowerAtAgreed,
           Integer meetBorrowerAtAgreedBorrowerChoice,
           Integer meetBorrowerAtAgreedLenderChoice,
           Integer meetBorrowerAtAgreedMutual,
-          
           Integer willDeliverToBorrower,
-          Integer thirdPartyPresence, 
-          Integer thirdPartyPresenceBorrowerChoice, 
-          Integer thirdPartyPresenceLenderChoice, 
-          Integer thirdPartyPresenceMutual, 
-                   
-          
+          Integer thirdPartyPresence,
+          Integer thirdPartyPresenceBorrowerChoice,
+          Integer thirdPartyPresenceLenderChoice,
+          Integer thirdPartyPresenceMutual,
           Integer borrowerReturnsToWhichAddress,
           Integer willPickUpPreferredLocation,
           String remoteIp, String comment, Date dateCreated, Date dateUpdated, Date dateDeleted) {
