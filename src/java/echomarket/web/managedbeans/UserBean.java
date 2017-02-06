@@ -66,7 +66,7 @@ public class UserBean extends AbstractBean implements Serializable {
   private String lastName;
   private String userAlias;
   private String userType;
-  private List<String> userTypeArray;
+  private List<String> userTypeArray;   // hold checkbox selections of uer type: borow or lend
   private String password;
   private String email;
   private String resetCode;
@@ -135,20 +135,23 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String getPrettyUserType() {
-    String hold_UT = this.userType;
-    String return_string = null;
-    switch (hold_UT) {
-      case "both":
-        return_string = "Borrowing and/or Lending";
-        break;
-      case "borrow":
-        return_string = "Borrowing";
-        break;
-      case "lend":
-        return_string = "Lending";
-        break;
-    }
 
+    String return_string = "";
+
+    if (this.userType != null) {
+
+      switch (this.userType) {
+        case "both":
+          return_string = "Borrowing and Lending";
+          break;
+        case "borrow":
+          return_string = "Borrowing";
+          break;
+        case "lend":
+          return_string = "Lending";
+          break;
+      }
+    }
     return return_string;
   }
 
@@ -172,9 +175,9 @@ public class UserBean extends AbstractBean implements Serializable {
     this.password = password;
   }
 
-  public String registerCommunityMember() {
+  public String registerCommunityMember() {   /// Need to test this...
     Boolean updateEntity = false;
-    String strGetUserThatCreatedMember = getUserThatCreatedMember();
+    String strGetUserThatCreatedMember = getUserThatCreatedMember();  // return user_id of participant
     if (strGetUserThatCreatedMember != null) {
       updateEntity = getCreatorDetail(strGetUserThatCreatedMember);   /// sets values needed for registerUser
     }
@@ -186,7 +189,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-  protected Boolean getCreatorDetail(String uid) {
+  protected Boolean getCreatorDetail(String uid) {   /// Not sure about this...
     List results = null;
     Session hib = null;
     Transaction tx = null;
@@ -203,7 +206,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error on updateParticipantRecord in Hibernate session");
+      System.out.println("Error on getCreatorDetail");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
@@ -342,10 +345,13 @@ public class UserBean extends AbstractBean implements Serializable {
       current_user_id = getId();
       this.user_id = current_user_id;
       // Role ID, indivdual = 0; community creator = 1; community member = 2
+      String hold_ut = String.join(",", getUserTypeArray());
+
       if (commName != null) {
-        create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 1);
+
+        create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.resetCode, this.userAlias, hold_ut, 1);
       } else {
-        create_record = new Users(current_user_id, this.username, null, this.email, this.password, this.resetCode, this.userAlias, parseUserTypeArray(), 0);
+        create_record = new Users(current_user_id, this.username, null, this.email, this.password, this.resetCode, this.userAlias, hold_ut, 0);
       }
     } catch (Exception ex) {
       // Need to learn error on creating new entity object
@@ -408,53 +414,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return returnType;
   }
 
-  public Boolean parseUserType(String whichType) {
-    if (this.userType != null) {
-      return this.userType.contains(whichType);
-    } else {
-      return false;
-    }
-  }
-
-  private String[] buildTypeList() {
-
-    List p_list = null;
-    Session hib = null;
-    Transaction tx = null;
-    String[] results = null;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-    } catch (Exception ex) {
-      System.out.println("Error at line 233 in UserBean");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    String queryString = "from Purpose order by purpose_order";
-    try {
-      p_list = hib.createQuery(queryString).list();
-      tx.commit();
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error at line 250 in US Bean");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      hib = null;
-      tx = null;
-    }
-    Integer p_list_size = p_list.size();
-    results = new String[p_list_size];
-
-    for (int i = 0; i < p_list_size; i++) {
-      Purpose p_a = (Purpose) p_list.get(i);
-      String tmp = p_a.getPurposeType();
-      results[i] = tmp;
-    }
-
-    return results;
-  }
-
+  
   public String processActivation() {
 
     Boolean b_local_results = false;
@@ -522,6 +482,7 @@ public class UserBean extends AbstractBean implements Serializable {
   public String processMemberActivation() {
 
     /// Needs to be broken down into smalller, more testable functions...
+    /// userType usage okay...
     Boolean savedRecord = false;
     Users create_record = null;
     String commName = null;
@@ -560,7 +521,7 @@ public class UserBean extends AbstractBean implements Serializable {
       if (results != null) {
         if (results.size() == 1) {
           Users uu = (Users) results.get(0);
-          this.userType = uu.getUserType();
+          this.userType = uu.getUserType();   // from database, not gui
           savedRecord = true;
           results = null;
         }
@@ -687,7 +648,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String loginUser() {
     // debugging with password assignment
-    //this.password = "Emcgurty123!";
+    this.password = "Emcgurty123!";
     Boolean b_local_results = false;
     Integer memberCreator = -9;
     List results = null;
@@ -717,7 +678,7 @@ public class UserBean extends AbstractBean implements Serializable {
               Users uu1 = (Users) results.get(0);
               setUser_id(uu1.getUser_id());
               setRoleId(uu1.getRoleId());
-              setUserType(uu1.getUserType());
+              setUserType(uu1.getUserType());  //db
               setUserAlias(uu1.getUserAlias());
               setEmail(uu1.getEmail());
               uu1 = null;
@@ -1516,7 +1477,6 @@ public class UserBean extends AbstractBean implements Serializable {
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         context().addMessage(passwordId, msg);
         context().renderResponse();
-//        message(null, "PasswordMustContain", null);
 
       } else {
         return;
@@ -1529,9 +1489,9 @@ public class UserBean extends AbstractBean implements Serializable {
    */
   public List<String> getUserTypeArray() {
 
-    if (this.userType != null) {
-      ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(";")));
-      if ("both".equals(uta.get(0))) {
+    if (userTypeArray == null) {
+      ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(",")));
+      if ("both".equals(uta.get(0)) && this.editable != null) {
         List<String> uta2 = Arrays.asList("borrow", "lend");
         return uta2;
       } else {
@@ -1902,6 +1862,10 @@ public class UserBean extends AbstractBean implements Serializable {
           uu.setUsername(username);
           uu.setUserAlias(userAlias);
           uu.setEmail(email);
+          this.userType = null;
+          String userTypeString = String.join(",", getUserTypeArray());
+          uu.setUserType(userTypeString);
+
           if (this.communityName != null) {
             uu.setCommunityName(communityName);
           }
@@ -1950,18 +1914,9 @@ public class UserBean extends AbstractBean implements Serializable {
       message(null, "LoginInRequiredToReviseUserInformation", null);
       return "index";
     } else {
+
       return "user_login_update";
     }
-  }
-
-  private String parseUserTypeArray() {
-
-    String hold_userTypeBuild = "";
-    for (String userTypeArray1 : getUserTypeArray()) {
-      hold_userTypeBuild = hold_userTypeBuild + userTypeArray1 + ";";
-    }
-    return hold_userTypeBuild;
-
   }
 
   public Integer getRoleId() {
@@ -2027,13 +1982,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.participant_id = participant_id;
   }
 
-//  public String getItemId() {
-//    return itemId;
-//  }
-//
-//  public void setItemId(String itemId) {
-//    this.itemId = itemId;
-//  }
   /**
    * @return the action
    */
