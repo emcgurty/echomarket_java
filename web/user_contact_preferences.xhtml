@@ -28,7 +28,7 @@
               <c:set var="iid" value="${userBean.itemId}"  />  
             </c:when >
           </c:choose>
-          <h:outputText value="${iid}  -- curent IID"  />
+          <!--<h:outputText value="${iid}  curent IID"  />-->
 
           <c:set var="ut" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />  
           <c:set var="ut" value="#{userBean.userType}" rendered="#{empty itemBean.itemType}" />  
