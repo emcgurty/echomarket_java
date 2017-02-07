@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
@@ -454,16 +455,20 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       }
     } catch (Exception ex) {
     }
+    // emm 1.8
+    if (ubean != null) {
 
-    if (ubean.getEditable() != null) {
-      if (ubean.getEditable() == 0) {
-        ubean.setEditable(1);
+      if (ubean.getEditable() != null) {
+        if (ubean.getEditable() == 0) {
+          ubean.setEditable(1);
+        } else {
+          ubean.setEditable(0);
+        }
       } else {
-        ubean.setEditable(0);
+        ubean.setEditable(1);
       }
-    } else {
-      ubean.setEditable(1);
-    }
+
+    
     try {
       action = params.get("action");
     } catch (Exception ex) {
@@ -474,7 +479,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         ubean.setEditable(1);
       }
     }
-
+    }
     if (strIid != null) {
       partlist = getCurrentCP_Id(pid, strIid);
     }
@@ -516,7 +521,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           pp = null;
         }
       } else {
-          getParticipantAddreseEmailAlts(ubean.getParticipant_id());
+        if (ubean != null) {
+        getParticipantAddreseEmailAlts(ubean.getParticipant_id());
+        }
       }
     }
     partlist = null;
@@ -764,7 +771,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     this.displayAlternativeEmail = displayAlternativeEmail;
   }
 
-    /**
+  /**
    * @return the userAlternativeEmail
    */
   public String getUserAlternativeEmail() {
