@@ -43,7 +43,11 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private Integer howManyRecords;
   private String errorMessage;
   private Integer currentRow;
-
+ 
+  // emm 1.8
+  public CommunityMembersBean() {
+    
+  }
   
   private List getNewMemberList() {
     this.errorMessage = null;
