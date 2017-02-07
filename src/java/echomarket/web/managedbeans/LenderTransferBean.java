@@ -173,10 +173,11 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         if (entry.getKey().contains("comment")) {
           String hold = entry.getValue();
           if (hold.length() > 254) {
-             this.comment = hold.substring(0, 254);
-          } else
-             this.comment = hold;
-          
+            this.comment = hold.substring(0, 254);
+          } else {
+            this.comment = hold;
+          }
+
         }
 
       }
@@ -215,7 +216,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         tx = sb.beginTransaction();
         sb.save(lt);
         tx.commit();
-       // message(null, "LenderTransferSaved", null);
+        // message(null, "LenderTransferSaved", null);
         successTransaction = true;
       } catch (Exception ex) {
         tx.rollback();
@@ -259,7 +260,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             sb.update(lit);
             tx.commit();
             successTransaction = true;
-           // message(null, "LenderTransferSaved", null);
+            // message(null, "LenderTransferSaved", null);
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in Update LIT");
@@ -285,7 +286,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
             sb.save(lt);
             tx.commit();
 
-          //  message(null, "LenderTransferSaved", null);
+            //  message(null, "LenderTransferSaved", null);
             successTransaction = true;
           } catch (Exception ex) {
             tx.rollback();
@@ -338,27 +339,28 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       }
     } catch (Exception ex) {
     }
-
-    if (ubean.getEditable() != null) {
-      if (ubean.getEditable() == 0) {
-        ubean.setEditable(1);
+    // emm 1.8
+    if (ubean != null) {
+      if (ubean.getEditable() != null) {
+        if (ubean.getEditable() == 0) {
+          ubean.setEditable(1);
+        } else {
+          ubean.setEditable(0);
+        }
       } else {
-        ubean.setEditable(0);
-      }
-    } else {
-      ubean.setEditable(1);
-    }
-    try {
-      action = params.get("action");
-    } catch (Exception ex) {
-    }
-
-    if (action != null) {
-      if ("edit".equals(action)) {
         ubean.setEditable(1);
       }
-    }
+      try {
+        action = params.get("action");
+      } catch (Exception ex) {
+      }
 
+      if (action != null) {
+        if ("edit".equals(action)) {
+          ubean.setEditable(1);
+        }
+      }
+    }
     if (strIid != null) {
       result = getCurrentLT_Iid(pid, strIid);
     }
@@ -404,7 +406,9 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           ltr = null;
         }
       } else {
-        this.participant_id = ubean.getParticipant_id();
+        if (ubean != null) {
+          this.participant_id = ubean.getParticipant_id();
+        }
         this.borrowerComesToWhichAddress = -9;
         this.meetBorrowerAtAgreed = -9;
         this.meetBorrowerAtAgreedBorrowerChoice = -9;
@@ -418,8 +422,9 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.thirdPartyPresenceMutual = -9;
         this.willPickUpPreferredLocation = -9;
         this.borrowerReturnsToWhichAddress = -9;
-        ubean.setEditable(1);
-
+        if (ubean != null) {
+          ubean.setEditable(1);
+        }
       }
 
     }
