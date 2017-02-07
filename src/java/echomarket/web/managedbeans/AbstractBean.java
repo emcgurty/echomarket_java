@@ -29,7 +29,7 @@ public abstract class AbstractBean implements Serializable {
   private String id;
 
   public AbstractBean() {
-    this.id = UUID.randomUUID().toString();
+    // emm 1.8  this.id = UUID.randomUUID().toString();
   }
 
   @Override
