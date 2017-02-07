@@ -75,6 +75,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     return primary;
   }
 
+  //  emm 1.8
+  public ParticipantBean() {
+
+  }
+
   public ArrayList<Addresses> getAlternative() {
     return alternative;
   }
@@ -94,27 +99,28 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String load_ud(String uid) {
 
-    if ("-1".equals(uid) == true) {
-      ubean.setEditable(-1);
-      uid = ubean.getUser_id();
-    } else if ("-1".equals(uid) == false) {
-      if (ubean.getEditable() == 0) {
-        ubean.setEditable(1);
-      } else {
-        ubean.setEditable(0);
+    if (ubean != null) {
+      if ("-1".equals(uid) == true) {
+        ubean.setEditable(-1);
+        uid = ubean.getUser_id();
+      } else if ("-1".equals(uid) == false) {
+        if (ubean.getEditable() == 0) {
+          ubean.setEditable(1);
+        } else {
+          ubean.setEditable(0);
+        }
+      }
+      /// emm 123
+      ubean.setItemId("");
+      Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+      String action = params.get("action");
+
+      if (action != null) {
+        if ("participant".equals(action)) {
+          ubean.setEditable(1);
+        }
       }
     }
-    /// emm 123
-    ubean.setItemId("");
-    Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-    String action = params.get("action");
-
-    if (action != null) {
-      if ("participant".equals(action)) {
-        ubean.setEditable(1);
-      }
-    }
-
     List partlist = null;
     Participant pp = null;
     partlist = getCurrentParticipant(ubean.getParticipant_id());
@@ -156,20 +162,26 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.goodwill = pp.getGoodwill();
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
-      ubean.setCommunityId(communityId);
-      ubean.setParticipant_id(participant_id);
+      if (ubean != null) {
+        ubean.setCommunityId(communityId);
+        ubean.setParticipant_id(participant_id);
+      }
     }
     getExistingAddress("primary");
     getExistingAddress("alternative");
 
-    if (ubean.getEditable() == -1) {
-      return "user_agreement";
-    } else {
-      this.setQuestionAltAddressDelete(-9);
-      this.setQuestionAltEmailDelete(-9);
+    if (ubean != null) {
+      if (ubean.getEditable() == -1) {
+        return "user_agreement";
+      } else {
+        this.setQuestionAltAddressDelete(-9);
+        this.setQuestionAltEmailDelete(-9);
 //      return "user_nae.xhtml?faces-redirect=true";  ///lose data in redirect
+        return "user_nae";
+      }
+    } else {
       return "user_nae";
-    }
+    } 
 
   }
 
