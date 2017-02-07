@@ -47,15 +47,15 @@
       <c:set var="whichUserType" value="#{userBean.userType}"  />
       <c:choose>
         <c:when test="#{whichUserType == 'borrow'}">
-          <ui:include rendered="true" src="b_history.xhtml" id="b_history"  /> 
+          <ui:include rendered="true" src="b_history.xhtml" id="b1" /> 
         </c:when>
         <c:when test="#{whichUserType == 'lend'}">
-          <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
+          <ui:include rendered="true" src="l_history.xhtml" id="l1" /> 
         </c:when>
         <c:when test="#{whichUserType == 'both'}">
-          <ui:include rendered="true" src="b_history.xhtml" id="b_history"  /> 
+          <ui:include rendered="true" src="b_history.xhtml" id="b2"   /> 
           <br />
-          <ui:include rendered="true" src="l_history.xhtml" id="l_history"  /> 
+          <ui:include rendered="true" src="l_history.xhtml"  id="l2" /> 
         </c:when>
       </c:choose>
     </c:if>
