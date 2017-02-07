@@ -45,6 +45,11 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
   private String email;
   private Integer isActive;
   private String remoteIp;
+  
+  // emm 1.8
+  public CommunitiesBean() {
+    
+  }
 
   public String load_community_detail() {
 
@@ -54,7 +59,10 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     String queryString = null;
     Communities comm_Array = null;
-    String cid = ubean.getCommunityId();
+    String cid = null;
+    if (ubean != null ) {
+     cid = ubean.getCommunityId();
+    }
     queryString = "FROM Communities where community_id = :cid";
     try {
       hib = hib_session();
@@ -95,10 +103,15 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
 
         queryString = "FROM Participant where community_id = :cid";
         try {
+          //  emm 1.8
+          String setCID = null;
+          if (ubean != null ) {
+            setCID = ubean.getCommunityId();
+          }
           hib = hib_session();
           tx = hib.beginTransaction();
           result = hib.createQuery(queryString)
-                  .setParameter("cid", ubean.getCommunityId())
+                  .setParameter("cid", setCID)
                   .list();
           tx.commit();
         } catch (Exception ex) {
