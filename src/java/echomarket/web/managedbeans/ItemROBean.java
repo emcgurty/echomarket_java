@@ -19,6 +19,11 @@ public class ItemROBean extends AbstractBean implements Serializable {
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
+  
+  // emm 1.8
+  public ItemROBean() {
+    
+  }
 
   public ArrayList<ItemImages> getPicture() {
     return picture;
