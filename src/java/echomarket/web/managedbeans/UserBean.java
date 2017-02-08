@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -83,6 +84,16 @@ public class UserBean extends AbstractBean implements Serializable {
   private String pid;
   private String uid;    /// user_id for member registration url
 
+// emm 1.8
+  public UserBean() {
+
+  }
+
+  @PostConstruct
+  public void init() {
+    this.user_id = "liz";
+  }
+
   public String Logout() {
     setUserToNull();
     return "index?faces-redirect=true";
@@ -90,10 +101,11 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String clearItemId() {
 
-    ibean.setItemId("");
-    this.itemId = "";
-    return pbean.load_ud(this.participant_id);
-
+    /// emm 1.8
+//    ibean..setItemId(null);
+//    this.itemId = "";
+    //   return pbean.load_ud(this.participant_id);
+    return "index";
   }
 
   private void setUserToNull() {
@@ -345,7 +357,8 @@ public class UserBean extends AbstractBean implements Serializable {
       current_user_id = getId();
       this.user_id = current_user_id;
       // Role ID, indivdual = 0; community creator = 1; community member = 2
-      String hold_ut = String.join(",", getUserTypeArray());
+      // emm 1.8  String hold_ut = String.join(",", getUserTypeArray());
+      String hold_ut = "borrow";
 
       if (commName != null) {
 
@@ -414,7 +427,6 @@ public class UserBean extends AbstractBean implements Serializable {
     return returnType;
   }
 
-  
   public String processActivation() {
 
     Boolean b_local_results = false;
@@ -1489,7 +1501,7 @@ public class UserBean extends AbstractBean implements Serializable {
    */
   public List<String> getUserTypeArray() {
 
-    if (userTypeArray == null) {
+    if (userTypeArray == null && this.userType != null) {
       ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(",")));
       if ("both".equals(uta.get(0)) && this.editable != null) {
         List<String> uta2 = Arrays.asList("borrow", "lend");
@@ -1863,7 +1875,8 @@ public class UserBean extends AbstractBean implements Serializable {
           uu.setUserAlias(userAlias);
           uu.setEmail(email);
           this.userType = null;
-          String userTypeString = String.join(",", getUserTypeArray());
+          // emm 1.8 String userTypeString = String.join(",", getUserTypeArray());
+          String userTypeString = "borrow";
           uu.setUserType(userTypeString);
 
           if (this.communityName != null) {
