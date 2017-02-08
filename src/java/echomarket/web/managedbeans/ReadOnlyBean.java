@@ -15,7 +15,7 @@ import org.hibernate.Transaction;
 
 
 @Named
-@ManagedBean
+@ManagedBean(name = "readOnlyBean")
 @SessionScoped
 public class ReadOnlyBean extends AbstractBean implements Serializable {
 
@@ -24,6 +24,11 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
   private String which;
   private List itemFoundList;
   
+  // emm 1.8
+  public ReadOnlyBean() {
+    
+  }
+  
 
   public String load_RO(String strwhich, String iid, String pid) {
     if ((strwhich.isEmpty() == false) && (iid.isEmpty() == false) && (pid.isEmpty() == false)) {
@@ -31,7 +36,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       this.setWhich(strwhich);
       this.setItemId(iid);
       this.setParticipant_id(pid);
-      itemFoundList = null;
+      setItemFoundList(null);
     }
     // Get action
     Map<String, String> params = null;
@@ -125,7 +130,7 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
-    if (this.itemFoundList == null) {
+    if (this.getItemFoundList() == null) {
       try {
         hib = hib_session();
         tx = hib.beginTransaction();
@@ -144,11 +149,11 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       } finally {
         tx = null;
         hib = null;
-        this.itemFoundList = result;
+        this.setItemFoundList(result);
       }
 
     }
-    return this.itemFoundList;
+    return this.getItemFoundList();
   }
 
   public List getByNAE(String iid, String which) {
@@ -512,6 +517,20 @@ public class ReadOnlyBean extends AbstractBean implements Serializable {
       hib = null;
     }
     return result;
+  }
+
+  /**
+   * @return the itemFoundList
+   */
+  public List getItemFoundList() {
+    return itemFoundList;
+  }
+
+  /**
+   * @param itemFoundList the itemFoundList to set
+   */
+  public void setItemFoundList(List itemFoundList) {
+    this.itemFoundList = itemFoundList;
   }
 
 }
