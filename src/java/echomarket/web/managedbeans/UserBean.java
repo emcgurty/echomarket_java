@@ -91,7 +91,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   @PostConstruct
   public void init() {
-    this.user_id = "liz";
+    //this.user_id = "liz";
   }
 
   public String Logout() {
@@ -101,11 +101,12 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String clearItemId() {
 
-    /// emm 1.8
-//    ibean..setItemId(null);
-//    this.itemId = "";
-    //   return pbean.load_ud(this.participant_id);
-    return "index";
+    if (ibean != null) {
+      ibean.setItemId("");
+    }
+    this.itemId = "";
+    return pbean.load_ud(this.participant_id);
+
   }
 
   private void setUserToNull() {
@@ -357,9 +358,11 @@ public class UserBean extends AbstractBean implements Serializable {
       current_user_id = getId();
       this.user_id = current_user_id;
       // Role ID, indivdual = 0; community creator = 1; community member = 2
-      // emm 1.8  String hold_ut = String.join(",", getUserTypeArray());
-      String hold_ut = "borrow";
-
+      String hold_ut = "";
+      for (String s : getUserTypeArray()) {
+        hold_ut += s + ",";
+      }
+      hold_ut = hold_ut.substring(0, hold_ut.length() - 1);
       if (commName != null) {
 
         create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.resetCode, this.userAlias, hold_ut, 1);
