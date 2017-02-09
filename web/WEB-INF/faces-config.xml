@@ -124,7 +124,7 @@
     
   </navigation-rule>
   
-    <navigation-rule>
+  <navigation-rule>
     <from-view-id>/user_item.xhtml</from-view-id>
     <navigation-case>
       <from-action>#{lenderTransferBean.load_ud(userBean.participant_id)}</from-action>
