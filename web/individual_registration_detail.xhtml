@@ -121,9 +121,8 @@
 
           <h:outputLabel for="userTypeArray" value="#{b_userType}" >
             <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate...">
-              <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
-                             itemLabel="#{c.purposeType}" itemValue="#{c.purposeShort}"   >   
-              </f:selectItems>
+             	<f:selectItem itemValue="borrow" itemLabel="Borrowing" />
+                <f:selectItem itemValue="lend" itemLabel="Lending" />  	
             </h:selectManyCheckbox>
           </h:outputLabel>   
         </td>
