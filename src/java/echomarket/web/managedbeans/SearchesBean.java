@@ -21,7 +21,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
   UserBean ubean;
   @Inject
   ReadOnlyBean robean;
-  
+
   private String found_zip_codes;
   private String keyword;
   private String postalCode;
@@ -35,6 +35,11 @@ public class SearchesBean extends AbstractBean implements Serializable {
   private String which;
   private List itemDetail;
   private Boolean performedSearch;
+
+  // emm 1.8
+  public SearchesBean() {
+
+  }
 
   public String getFound_zip_codes() {
     return this.found_zip_codes;
@@ -105,7 +110,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
             + "  WHERE addr.addressType = 'primary' ";
 
     if (ubean.getComDetailID() != null) {
-      fromStatement = fromStatement + "  AND part.communityId = \'" + ubean.getCommunityId()+ "\' ";   /// When the heck did I change that!  I would have never selected that property.
+      fromStatement = fromStatement + "  AND part.communityId = \'" + ubean.getCommunityId() + "\' ";   /// When the heck did I change that!  I would have never selected that property.
     } else {
       fromStatement = fromStatement + " AND part.communityId is null";
     }
@@ -117,8 +122,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
     if (this.postalCode.isEmpty() == false) {
       fromStatement = fromStatement + " OR addr.postalCode LIKE \'" + this.postalCode + "%\'  ";
     }
-    fromStatement = fromStatement + " ORDER BY part.dateCreated ";  
-    
+    fromStatement = fromStatement + " ORDER BY part.dateCreated ";
+
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
@@ -131,20 +136,20 @@ public class SearchesBean extends AbstractBean implements Serializable {
       tx = null;
       sb = null;
     }
-
-    String[] pids = new String[results.size()];
-
+    String tmp = "";
     if (results != null) {
       if (results.size() > 0) {
         for (int i = 0; i < results.size(); i++) {
           Participant cArray = (Participant) results.get(i);
+
           if (cArray.getParticipant_id().isEmpty() == false) {
-            hold_pid = "\'" + cArray.getParticipant_id() + "\'";
-            pids[i] = hold_pid;
+            tmp = "\'" + cArray.getParticipant_id() + "\'";
+            hold_pid += tmp + ",";
+
           }
         }
-        hold_pid = String.join(",", pids);
 
+        hold_pid = hold_pid.substring(0, hold_pid.length() - 1);
       }
     }
 
@@ -189,7 +194,7 @@ public class SearchesBean extends AbstractBean implements Serializable {
         tx = null;
         sb = null;
       }
-      
+
       this.itemDetail = results;
     }
     return "search";
