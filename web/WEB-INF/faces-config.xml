@@ -58,6 +58,14 @@
   </managed-bean>
       
   <managed-bean>
+    <managed-bean-name>purposeBean</managed-bean-name>
+    <managed-bean-class>echomarket.web.managedBeans.PurposeBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+
+
+  <managed-bean>
     <managed-bean-name>contactDescribesBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedBeans.ContactDescribesBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
@@ -125,17 +133,7 @@
     </navigation-case>
     
   </navigation-rule>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+   
   
   
   <managed-bean>
