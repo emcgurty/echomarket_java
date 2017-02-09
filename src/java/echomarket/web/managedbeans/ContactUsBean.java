@@ -2,6 +2,7 @@ package echomarket.web.managedbeans;
 
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.ContactUs;
+import echomarket.hibernate.Users;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -60,7 +61,14 @@ public class ContactUsBean extends AbstractBean implements Serializable {
       SendEmail se = null;
       String[] getMap = null;
       getMap = new String[2];
-      getMap = ubean.getApplicationEmail();
+      if (ubean == null) {
+        UserBean utmp = new UserBean();
+        getMap = utmp.getApplicationEmail();
+        utmp = null;
+      } else {
+        getMap = ubean.getApplicationEmail();
+      }
+      
       try {
         se = new SendEmail("contactUs", this.email, this.subject, this.comments, getMap[0], getMap[1], getClientIpAddr());
         message(null, "MessageSuccessfullySent", new Object[]{this.email});
