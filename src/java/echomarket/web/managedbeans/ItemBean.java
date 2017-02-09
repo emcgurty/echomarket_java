@@ -64,6 +64,11 @@ public class ItemBean extends AbstractBean implements Serializable {
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
+  
+// emm 1.8
+  public ItemBean() {
+    
+  }
 
   public ArrayList<ItemImages> getPicture() {
     return picture;
@@ -211,7 +216,11 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     List result = null;
     this.imageFoundList = null;
-
+   // emm 1.8
+   
+   
+   if (ubean != null) {
+    
     if (iid.isEmpty() == true) {
       ubean.setEditable(1);
     } else {
@@ -240,11 +249,13 @@ public class ItemBean extends AbstractBean implements Serializable {
       action = params.get("action");
       if (action != null) {
         if ("item".equals(action)) {
+          
           ubean.setEditable(1);
         }
       }
     } catch (Exception ex) {
     }
+   } 
 
     if (iid.isEmpty() == false) {
       result = getCurrentItem(iid, which);
