@@ -23,8 +23,8 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class LenderTransferBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
+ 
+  private UserBean ubean;
   private String lenderTransferId;
   private String itemId;
   private String participant_id;
@@ -124,7 +124,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       addNewCP = params.get("action");
       currentIid = params.get("iid");
-      ubean.setItemId(currentIid);
+      getUbean().setItemId(currentIid);
       this.itemId = currentIid;
       for (Map.Entry<String, String> entry : params.entrySet()) {
 
@@ -202,7 +202,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
     if (this.lenderTransferId.isEmpty() == true) {
 
-      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(),
+      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, getUbean().getParticipant_id(),
               this.borrowerComesToWhichAddress,
               this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
               this.willDeliverToBorrower,
@@ -231,14 +231,14 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     } else {
 
       if (this.itemId.isEmpty() == false) {
-        cp_list = getCurrentLT_Iid(ubean.getParticipant_id(), this.itemId);
+        cp_list = getCurrentLT_Iid(getUbean().getParticipant_id(), this.itemId);
       } else {
-        cp_list = getCurrentLT(ubean.getParticipant_id());
+        cp_list = getCurrentLT(getUbean().getParticipant_id());
       }
       if (cp_list != null) {
         if (cp_list.size() == 1) {
           LenderTransfer lit = (LenderTransfer) cp_list.get(0);
-          lit.setItemId(ubean.getItemId());
+          lit.setItemId(getUbean().getItemId());
           lit.setBorrowerComesToWhichAddress(this.borrowerComesToWhichAddress);
           lit.setMeetBorrowerAtAgreed(this.meetBorrowerAtAgreed);
           lit.setMeetBorrowerAtAgreedBorrowerChoice(this.getMeetBorrowerAtAgreedBorrowerChoice());
@@ -272,7 +272,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           }
         } else {
           // Create new record
-          LenderTransfer lt = new LenderTransfer(getId(), this.itemId, ubean.getParticipant_id(),
+          LenderTransfer lt = new LenderTransfer(getId(), this.itemId, getUbean().getParticipant_id(),
                   this.borrowerComesToWhichAddress,
                   this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
                   this.willDeliverToBorrower,
@@ -302,20 +302,20 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     }
 
     if (successTransaction == true) {
-      ubean.setEditable(1);
-      if (ubean.getItemId() != null) {
-        if (ubean.getItemId().isEmpty() == false) {
-          ubean.completeLIT(ubean.getParticipant_id());
+      getUbean().setEditable(1);
+      if (getUbean().getItemId() != null) {
+        if (getUbean().getItemId().isEmpty() == false) {
+          getUbean().completeLIT(getUbean().getParticipant_id());
         } else {
-          ubean.setLITid(true);
+          getUbean().setLITid(true);
         }
       }
     } else {
-      ubean.setEditable(0);
-      ubean.setLITid(false);
+      getUbean().setEditable(0);
+      getUbean().setLITid(false);
     }
 
-    return load_ud(ubean.getParticipant_id());
+    return load_ud(getUbean().getParticipant_id());
 //   return "lender_transfer.xhtml?faces-redirect=true";
 //   return "lender_transfer";
 
@@ -340,15 +340,15 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
     }
     // emm 1.8
-    if (ubean != null) {
-      if (ubean.getEditable() != null) {
-        if (ubean.getEditable() == 0) {
-          ubean.setEditable(1);
+    if (getUbean() != null) {
+      if (getUbean().getEditable() != null) {
+        if (getUbean().getEditable() == 0) {
+          getUbean().setEditable(1);
         } else {
-          ubean.setEditable(0);
+          getUbean().setEditable(0);
         }
       } else {
-        ubean.setEditable(1);
+        getUbean().setEditable(1);
       }
       try {
         action = params.get("action");
@@ -357,7 +357,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
       if (action != null) {
         if ("edit".equals(action)) {
-          ubean.setEditable(1);
+          getUbean().setEditable(1);
         }
       }
     }
@@ -406,8 +406,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           ltr = null;
         }
       } else {
-        if (ubean != null) {
-          this.participant_id = ubean.getParticipant_id();
+        if (getUbean() != null) {
+          this.participant_id = getUbean().getParticipant_id();
         }
         this.borrowerComesToWhichAddress = -9;
         this.meetBorrowerAtAgreed = -9;
@@ -422,8 +422,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.thirdPartyPresenceMutual = -9;
         this.willPickUpPreferredLocation = -9;
         this.borrowerReturnsToWhichAddress = -9;
-        if (ubean != null) {
-          ubean.setEditable(1);
+        if (getUbean() != null) {
+          getUbean().setEditable(1);
         }
       }
 
@@ -674,6 +674,20 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
    */
   public void setThirdPartyPresenceMutual(Integer thirdPartyPresenceMutual) {
     this.thirdPartyPresenceMutual = thirdPartyPresenceMutual;
+  }
+
+  /**
+   * @return the ubean
+   */
+  public UserBean getUbean() {
+    return ubean;
+  }
+
+  /**
+   * @param ubean the ubean to set
+   */
+  public void setUbean(UserBean ubean) {
+    this.ubean = ubean;
   }
 
 }
