@@ -787,6 +787,12 @@ public class UserBean extends AbstractBean implements Serializable {
         return_string = ltribean.load_ud(this.participant_id);
         ltribean = null;
         break;
+      case "lender_conditions":
+        LenderItemConditionsBean lcbean = new LenderItemConditionsBean();
+        lcbean.setUbean(this);
+        return_string = lcbean.load_ud(this.participant_id);
+        lcbean = null;
+        break;
       case "community_detail":
         CommunitiesBean commbean = new CommunitiesBean();
         commbean.setUbean(this);
