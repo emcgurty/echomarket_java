@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -29,9 +30,10 @@ public abstract class AbstractBean implements Serializable {
   private String id;
 
   public AbstractBean() {
-    // emm 1.8  this.id = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID().toString();
   }
 
+  
   @Override
   public int hashCode() {
     return getId().hashCode();
