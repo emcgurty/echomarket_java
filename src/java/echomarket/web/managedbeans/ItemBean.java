@@ -23,7 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Id;
 import javax.servlet.http.Part;
@@ -36,8 +35,7 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class ItemBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
+  private UserBean ubean;
   private String itemId;
   private Integer categoryId;
   private String participant_id;
@@ -219,25 +217,25 @@ public class ItemBean extends AbstractBean implements Serializable {
    // emm 1.8
    
    
-   if (ubean != null) {
+   if (getUbean() != null) {
     
     if (iid.isEmpty() == true) {
-      ubean.setEditable(1);
+        getUbean().setEditable(1);
     } else {
-      ubean.setEditable(0);
+        getUbean().setEditable(0);
     }
 
     if (this.itemId != null) {
       if (this.itemId.isEmpty() == false) {
         iid = this.itemId;
-        ubean.setEditable(0);
+          getUbean().setEditable(0);
       }
     }
 
-    if (ubean.getItemId() != null) {
-      if (ubean.getItemId().isEmpty() == false) {
-        iid = ubean.getItemId();
-        ubean.setEditable(0);
+    if (getUbean().getItemId() != null) {
+      if (getUbean().getItemId().isEmpty() == false) {
+        iid = getUbean().getItemId();
+          getUbean().setEditable(0);
       }
     }
 
@@ -250,7 +248,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (action != null) {
         if ("item".equals(action)) {
           
-          ubean.setEditable(1);
+            getUbean().setEditable(1);
         }
       }
     } catch (Exception ex) {
@@ -324,7 +322,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     if (itemId.isEmpty() == true) {
 
-      Items ii = new Items(new_iid, ubean.getParticipant_id(), categoryId, otherItemCategory,
+      Items ii = new Items(new_iid, getUbean().getParticipant_id(), categoryId, otherItemCategory,
               itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 0, notify, itemType, this.remoteIp);
 
       try {
@@ -441,9 +439,9 @@ public class ItemBean extends AbstractBean implements Serializable {
       SendEmail se = null;
       String[] getMap = null;
       getMap = new String[2];
-      getMap = ubean.getApplicationEmail();
+      getMap = getUbean().getApplicationEmail();
       if (getImageFileNamePart() != null) {
-        se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
+        se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
       } else {
         List currentPicture = this.getPicture();
         if (currentPicture != null) {
@@ -451,25 +449,25 @@ public class ItemBean extends AbstractBean implements Serializable {
             ItemImages currentImage = (ItemImages) currentPicture.get(0);
             String currentImageFileName = currentImage.getImageFileName();
             String currentImageFileCaption = currentImage.getItemImageCaption();
-            se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, currentImageFileName, currentImageFileCaption, getMap[0], getMap[1], this.remoteIp);
+            se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, currentImageFileName, currentImageFileCaption, getMap[0], getMap[1], this.remoteIp);
           } else {
-            se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+            se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
           }
 
         } else {
-          se = new SendEmail(this.itemType, ubean.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+          se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
         }
       }
 
       se = null;
       getMap = null;
 
-      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, ubean.getEmail()});
-      ubean.setItemId(new_iid);
-      ubean.setEditable(0);
+      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, getUbean().getEmail()});
+      getUbean().setItemId(new_iid);
+      getUbean().setEditable(0);
     } else {
       message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
-      ubean.setEditable(1);
+      getUbean().setEditable(1);
 
     }
     return load_ud(itemType, itemId) + "?faces-redirect=true";
@@ -1014,8 +1012,8 @@ public class ItemBean extends AbstractBean implements Serializable {
    * @return the itemType
    */
   public String getItemType() {
-    if (itemType == null && ubean.getEditable() == 1) {
-      return ubean.userIsWhichType();
+    if (itemType == null && getUbean().getEditable() == 1) {
+      return getUbean().userIsWhichType();
     } else {
       return itemType;
     }
@@ -1050,7 +1048,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (result != null) {
         if (result.size() == 1) {
           LenderItemConditions na_lic = (LenderItemConditions) result.get(0);
-          LenderItemConditions new_lic = new LenderItemConditions(getId(), ubean.getParticipant_id(), iid,
+          LenderItemConditions new_lic = new LenderItemConditions(getId(), getUbean().getParticipant_id(), iid,
                   na_lic.getForFree(), na_lic.getAvailableForPurchase(), na_lic.getAvailableForPurchaseAmount(), na_lic.getSmallFee(),
                   na_lic.getSmallFeeAmount(), na_lic.getAvailableForDonation(), na_lic.getDonateAnonymous(),
                   na_lic.getTrade(), na_lic.getTradeItem(), na_lic.getAgreedNumberOfDays(), na_lic.getAgreedNumberOfHours(), na_lic.getIndefiniteDuration(),
@@ -1105,7 +1103,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (result != null) {
         if (result.size() == 1) {
           LenderTransfer na_lit = (LenderTransfer) result.get(0);
-          LenderTransfer new_lt = new LenderTransfer(getId(), iid, ubean.getParticipant_id(),
+          LenderTransfer new_lt = new LenderTransfer(getId(), iid, getUbean().getParticipant_id(),
                   na_lit.getBorrowerComesToWhichAddress(),
                   na_lit.getMeetBorrowerAtAgreed(),
                   na_lit.getMeetBorrowerAtAgreedBorrowerChoice(),
@@ -1170,7 +1168,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (result != null) {
         if (result.size() == 1) {
           ContactPreference na_cp = (ContactPreference) result.get(0);
-          ContactPreference new_cp = new ContactPreference(getId(), ubean.getParticipant_id(), iid,
+          ContactPreference new_cp = new ContactPreference(getId(), getUbean().getParticipant_id(), iid,
                   na_cp.getUseWhichContactAddress(), na_cp.getContactByChat(), na_cp.getContactByEmail(), na_cp.getContactByHomePhone(),
                   na_cp.getContactByCellPhone(), na_cp.getContactByAlternativePhone(), na_cp.getContactByFacebook(), na_cp.getContactByTwitter(),
                   na_cp.getContactByInstagram(), na_cp.getContactByLinkedIn(), na_cp.getContactByOtherSocialMedia(), na_cp.getContactByOtherSocialMediaAccess(), new Date());
@@ -1302,6 +1300,20 @@ public class ItemBean extends AbstractBean implements Serializable {
    */
   public void setImageFoundList(List imageFoundList) {
     this.imageFoundList = imageFoundList;
+  }
+
+  /**
+   * @return the ubean
+   */
+  public UserBean getUbean() {
+    return ubean;
+  }
+
+  /**
+   * @param ubean the ubean to set
+   */
+  public void setUbean(UserBean ubean) {
+    this.ubean = ubean;
   }
 
 }
