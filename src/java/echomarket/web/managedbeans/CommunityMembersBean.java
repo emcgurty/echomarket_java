@@ -22,8 +22,7 @@ import org.hibernate.Transaction;
 
 public class CommunityMembersBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
+  private UserBean ubean;
   private String participant_id;
   private String community_id;
   private String remoteIp;
@@ -43,12 +42,12 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   private Integer howManyRecords;
   private String errorMessage;
   private Integer currentRow;
- 
+
   // emm 1.8
   public CommunityMembersBean() {
-    
+
   }
-  
+
   private List getNewMemberList() {
     this.errorMessage = null;
     // TO DO: Need to code for when getHowMany = 0... Managed in addAction()
@@ -56,18 +55,17 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Integer howMany = getHowManyRecords();
     Participant new_cm;
     for (int i = 0; i < howMany; i++) {
-      new_cm = new Participant(UUID.randomUUID().toString(), ubean.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
+      new_cm = new Participant(UUID.randomUUID().toString(), getUbean().getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
       comm_member.add(new_cm);
     }
     this.new_comm_member_rows = comm_member;
     return comm_member;
   }
 
-public String skipMembers() {
-  return ubean.skipCommunityMembers();
+  public String skipMembers() {
+    return getUbean().skipCommunityMembers();
 
-}
-
+  }
 
   public String actionSave() {
     this.errorMessage = null;
@@ -107,9 +105,9 @@ public String skipMembers() {
           }
           if (savedRecord == true) {
             getMap = new String[2];
-            getMap = ubean.getApplicationEmail();
+            getMap = getUbean().getApplicationEmail();
             try {
-              se = new SendEmail("member", this.firstName, this.lastName, this.alias, this.emailAlternative, getMap[0], getMap[1], ubean.getCommunityName(), this.participant_id, ubean.getUser_id());
+              se = new SendEmail("member", this.firstName, this.lastName, this.alias, this.emailAlternative, getMap[0], getMap[1], getUbean().getCommunityName(), this.participant_id, getUbean().getUser_id());
               savedRecord = true;
             } catch (Exception ex) {
               System.out.println("Error in Send Member Notification");
@@ -121,8 +119,8 @@ public String skipMembers() {
               getMap = null;
             }
             if (savedRecord == true) {
-              ubean.setPartID(savedRecord);  
-              ubean.setComMemberDetailID(savedRecord); 
+              getUbean().setPartID(savedRecord);
+              getUbean().setComMemberDetailID(savedRecord);
               message(null, "NewMember", new Object[]{fullName});
             }
           }
@@ -138,8 +136,8 @@ public String skipMembers() {
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
-    String cid = ubean.getCommunityId();
-    String uid = ubean.getUser_id();
+    String cid = getUbean().getCommunityId();
+    String uid = getUbean().getUser_id();
     List result = null;
     Boolean isCreatorRights = false;
     queryString = "FROM Participant where community_id = :cid AND is_creator = 1 AND user_id = :uid ";
@@ -184,7 +182,7 @@ public String skipMembers() {
         hib = hib_session();
         tx = hib.beginTransaction();
         result = hib.createQuery(queryString)
-                .setParameter("cid", ubean.getCommunityId())
+                .setParameter("cid", getUbean().getCommunityId())
                 .list();
         for (int i = 0; i < result.size(); i++) {
           Participant cm = (Participant) result.get(i);
@@ -376,7 +374,7 @@ public String skipMembers() {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", ubean.getCommunityId())
+              .setParameter("cid", getUbean().getCommunityId())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -405,7 +403,7 @@ public String skipMembers() {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", ubean.getCommunityId())
+              .setParameter("cid", getUbean().getCommunityId())
               .list();
       tx.commit();
 
@@ -583,7 +581,7 @@ public String skipMembers() {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", ubean.getCommunityId())
+              .setParameter("cid", getUbean().getCommunityId())
               .setParameter("fn", this.firstName)
               .setParameter("ln", this.lastName)
               .setParameter("al", this.alias)
@@ -634,6 +632,20 @@ public String skipMembers() {
    */
   public void setCurrentRow(Integer currentRow) {
     this.currentRow = currentRow;
+  }
+
+  /**
+   * @return the ubean
+   */
+  public UserBean getUbean() {
+    return ubean;
+  }
+
+  /**
+   * @param ubean the ubean to set
+   */
+  public void setUbean(UserBean ubean) {
+    this.ubean = ubean;
   }
 
 }
