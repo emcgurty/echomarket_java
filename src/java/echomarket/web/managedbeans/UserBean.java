@@ -782,25 +782,68 @@ public class UserBean extends AbstractBean implements Serializable {
 
     switch (return_string) {
       case "user_agreement":
-        return_string = pbean.load_ud("-1");
+        if (pbean != null) {
+          return_string = pbean.load_ud("-1");
+        } else {
+          ParticipantBean pb = new ParticipantBean();
+          return_string = pb.load_ud("-1");
+        }
         break;
       case "user_item":
-        return_string = ibean.load_ud(this.userType, "");
+        if (ibean != null) {
+          return_string = ibean.load_ud(this.userType, "");
+        } else {
+          ItemBean ib = new ItemBean();
+          return_string = ib.load_ud(this.userType, "");
+        }
         break;
       case "user_nae":
-        return_string = pbean.load_ud(this.user_id);
+        if (pbean != null) {
+          return_string = pbean.load_ud(this.user_id);
+        } else {
+          ParticipantBean pb = new ParticipantBean();
+          return_string = pb.load_ud(this.user_id);
+        }
         break;
       case "user_contact_preferences":
-        return_string = cpbean.load_ud(this.participant_id);
+        if (cpbean != null) {
+          return_string = cpbean.load_ud(this.participant_id);
+        } else {
+          ContactPreferenceBean cp = new ContactPreferenceBean();
+          return_string = cp.load_ud(this.participant_id);
+        }
         break;
       case "lender_transfer":
-        return_string = ltribean.load_ud(this.participant_id);
+        if (ltribean != null) {
+          return_string = ltribean.load_ud(this.participant_id);
+        } else {
+          LenderTransferBean lb = new LenderTransferBean();
+          return_string = lb.load_ud(this.participant_id);
+        }
+        break;
+      case "lender_conditions":
+        if (licibean != null) {
+          return_string = licibean.load_ud(this.participant_id);
+        } else {
+          LenderItemConditionsBean lc = new LenderItemConditionsBean();
+          return_string = lc.load_ud(this.participant_id);
+        }
         break;
       case "community_detail":
-        return_string = commbean.load_community_detail();
+        if (commbean != null) {
+          return_string = commbean.load_community_detail();
+        } else {
+          CommunitiesBean comm = new CommunitiesBean();
+          return_string = comm.load_community_detail();
+        }
         break;
       case "community_members":
-        return_string = cmbean.load_community_members();
+        if (cmbean != null) {
+          return_string = cmbean.load_community_members();
+        } else {
+          CommunityMembersBean cmb = new CommunityMembersBean();
+          return_string = cmb.load_community_members();
+        }
         break;
       default:
         return_string = "index";
