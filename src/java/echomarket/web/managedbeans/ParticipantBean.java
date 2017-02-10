@@ -27,8 +27,7 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class ParticipantBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
+  private UserBean ubean;
   private String participant_id;
   private String communityId;
   private int contact_describe_id;
@@ -99,31 +98,32 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
   public String load_ud(String uid) {
 
-    if (ubean != null) {
+    if (uid != null) {
       if ("-1".equals(uid) == true) {
-        ubean.setEditable(-1);
-        uid = ubean.getUser_id();
+        getUbean().setEditable(-1);
+        uid = getUbean().getUser_id();
       } else if ("-1".equals(uid) == false) {
-        if (ubean.getEditable() == 0) {
-          ubean.setEditable(1);
+        if (getUbean().getEditable() == 0) {
+          getUbean().setEditable(1);
         } else {
-          ubean.setEditable(0);
-        }
-      }
-      /// emm 123
-      ubean.setItemId("");
-      Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-      String action = params.get("action");
-
-      if (action != null) {
-        if ("participant".equals(action)) {
-          ubean.setEditable(1);
+          getUbean().setEditable(0);
         }
       }
     }
+    /// emm 123
+    getUbean().setItemId("");
+    Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+    String action = params.get("action");
+
+    if (action != null) {
+      if ("participant".equals(action)) {
+        getUbean().setEditable(1);
+      }
+    }
+
     List partlist = null;
     Participant pp = null;
-    partlist = getCurrentParticipant(ubean.getParticipant_id());
+    partlist = getCurrentParticipant(getUbean().getParticipant_id());
     if (partlist.size() == 1) {
       pp = (Participant) partlist.get(0);
       this.participant_id = pp.getParticipant_id();
@@ -162,16 +162,16 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.goodwill = pp.getGoodwill();
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
-      if (ubean != null) {
-        ubean.setCommunityId(communityId);
-        ubean.setParticipant_id(participant_id);
+      if (getUbean() != null) {
+        getUbean().setCommunityId(communityId);
+        getUbean().setParticipant_id(participant_id);
       }
     }
     getExistingAddress("primary");
     getExistingAddress("alternative");
 
-    if (ubean != null) {
-      if (ubean.getEditable() == -1) {
+    if (getUbean() != null) {
+      if (getUbean().getEditable() == -1) {
         return "user_agreement";
       } else {
         this.setQuestionAltAddressDelete(-9);
@@ -181,7 +181,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
     } else {
       return "user_nae";
-    } 
+    }
 
   }
 
@@ -244,7 +244,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx = sb.beginTransaction();
       query = "FROM Participant WHERE user_id = :uid";
       result = sb.createQuery(query)
-              .setParameter("uid", ubean.getUser_id())
+              .setParameter("uid", getUbean().getUser_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -283,7 +283,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
 
       part.setQuestionAltEmail(questionAltEmailProvide);
-      if (ubean.getCommunityName() != null) {
+      if (getUbean().getCommunityName() != null) {
         part.setIsCreator(1);
       } else {
         part.setIsCreator(0);
@@ -396,17 +396,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
-      ubean.setParticipant_id(pid);
-      ubean.setEditable(1);
-      ubean.setPartID(true);
+      getUbean().setParticipant_id(pid);
+      getUbean().setEditable(1);
+      getUbean().setPartID(true);
 //      ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
-      if (ubean.getCommunityId().isEmpty() == false) {
-        ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
+      if (getUbean().getCommunityId().isEmpty() == false) {
+        getUbean().setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
       }
     } else {
-      ubean.setEditable(0);
+      getUbean().setEditable(0);
     }
-    return load_ud(ubean.getUser_id());
+    return load_ud(getUbean().getUser_id());
 
   }
 
@@ -426,7 +426,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.threeStrikesYourOut = this.threeStrikesYourOut + 1;
       if (this.threeStrikesYourOut == 3) {
         message(null, "threeStrikesYourOut", null);
-        return_string = ubean.Logout();
+        return_string = getUbean().Logout();
       }
     } else {
 
@@ -438,56 +438,56 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         Communities comm = null;
 
-        switch (ubean.getRoleId()) {
+        switch (getUbean().getRoleId()) {
           case 0:
-            part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+            part = new Participant(new_ID, getUbean().getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
             break;
           case 1:
             comm = new Communities(cid_id);
-            part = new Participant(new_ID, ubean.getUser_id(), cid_id, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
+            part = new Participant(new_ID, getUbean().getUser_id(), cid_id, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
             sb.save(comm);
             break;
           case 2:
-            part = new Participant(new_ID, ubean.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+            part = new Participant(new_ID, getUbean().getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
             break;
         }
 
         sb.save(part);
         tx.commit();
-        ubean.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
-        ubean.setParticipant_id(new_ID);
-        ubean.setAcceptID(true);
-        ubean.setCommunityId(cid_id);
-        result = ubean.findUserName();
+        getUbean().setEditable(0);  /// which will be toggled as 1 = edit in load_ud
+        getUbean().setParticipant_id(new_ID);
+        getUbean().setAcceptID(true);
+        getUbean().setCommunityId(cid_id);
+        result = getUbean().findUserName();
         if (result != null) {
           if (result.size() == 1) {
 
             Users uu = (Users) result.get(0);  /// User result that has current user data
             Integer memberCreator = uu.getRoleId();
-            ubean.setRoleId(memberCreator);
-            ubean.setEmail(uu.getEmail());
-            ubean.setUserAlias(uu.getUserAlias());
-            ubean.setUsername(uu.getUsername());
-            ubean.setUserType(uu.getUserType());
-            String hold_ut = ubean.userIsWhichType();  // getting a WELD error
-            ubean.setUserType(hold_ut);
-            ubean.setUser_id(uu.getUser_id());
-            ubean.setPartID(false);
-            ubean.setCpId(false);
-            ubean.setLICid(false);
-            ubean.setLITid(false);
-            ubean.setCommunityName(uu.getCommunityName());
+            getUbean().setRoleId(memberCreator);
+            getUbean().setEmail(uu.getEmail());
+            getUbean().setUserAlias(uu.getUserAlias());
+            getUbean().setUsername(uu.getUsername());
+            getUbean().setUserType(uu.getUserType());
+            String hold_ut = getUbean().userIsWhichType();  // getting a WELD error
+            getUbean().setUserType(hold_ut);
+            getUbean().setUser_id(uu.getUser_id());
+            getUbean().setPartID(false);
+            getUbean().setCpId(false);
+            getUbean().setLICid(false);
+            getUbean().setLITid(false);
+            getUbean().setCommunityName(uu.getCommunityName());
             result = null;
           }
         }
-        if (ubean.getRoleId() > 0) {
+        if (getUbean().getRoleId() > 0) {
           //ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
         }
-        return_string = load_ud(ubean.getUser_id());
+        return_string = load_ud(getUbean().getUser_id());
         message(null, "thanksForAcceptingAgreement", null);
       } catch (Exception ex) {
         message(null, "failedToSaveAgreement", null);
-        return_string = ubean.Logout();
+        return_string = getUbean().Logout();
         tx.rollback();
         System.out.println("Error in Save/Update Particpant");
         Logger
@@ -538,7 +538,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String getOrganizationName() {
-    if ((organizationName != null) || (ubean.getEditable() == 1)) {
+    if ((organizationName != null) || (getUbean().getEditable() == 1)) {
       return organizationName;
     } else {
       return "Not provided";
@@ -551,7 +551,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String getOtherDescribeYourself() {
-    if ((otherDescribeYourself != null) || (ubean.getEditable() == 1)) {
+    if ((otherDescribeYourself != null) || (getUbean().getEditable() == 1)) {
       return otherDescribeYourself;
     } else {
       return "Not provided";
@@ -952,7 +952,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("pid", ubean.getParticipant_id())
+              .setParameter("pid", getUbean().getParticipant_id())
               .setParameter("which", which)
               .list();
       tx.commit();
@@ -1125,6 +1125,20 @@ public class ParticipantBean extends AbstractBean implements Serializable {
    */
   public void setThreeStrikesYourOut(Integer threeStrikesYourOut) {
     this.threeStrikesYourOut = threeStrikesYourOut;
+  }
+
+  /**
+   * @return the ubean
+   */
+  public UserBean getUbean() {
+    return ubean;
+  }
+
+  /**
+   * @param ubean the ubean to set
+   */
+  public void setUbean(UserBean ubean) {
+    this.ubean = ubean;
   }
 
 }
