@@ -19,14 +19,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -37,20 +35,6 @@ import org.hibernate.Transaction;
 @SessionScoped
 public class UserBean extends AbstractBean implements Serializable {
 
-  @Inject
-  ContactPreferenceBean cpbean;
-  @Inject
-  ParticipantBean pbean;
-  @Inject
-  ItemBean ibean;
-  @Inject
-  LenderItemConditionsBean licibean;
-  @Inject
-  LenderTransferBean ltribean;
-  @Inject
-  CommunitiesBean commbean;
-  @Inject
-  CommunityMembersBean cmbean;
   private String user_id;
   private String participant_id;
   private String itemId;
@@ -89,23 +73,20 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  @PostConstruct
-  public void init() {
-    //this.user_id = "liz";
-  }
-
   public String Logout() {
     setUserToNull();
     return "index?faces-redirect=true";
   }
 
   public String clearItemId() {
-
-    if (ibean != null) {
-      ibean.setItemId("");
-    }
+    String return_string = null;
+    ItemBean ibean = new ItemBean();  /// This will not work...
+    ibean.setItemId("");
     this.itemId = "";
-    return pbean.load_ud(this.participant_id);
+    ParticipantBean pbean = new ParticipantBean();
+    pbean.setUbean(this);  /// This should work
+    return_string = pbean.load_ud(this.participant_id);
+    return return_string;
 
   }
 
@@ -485,14 +466,9 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     if (activation_success == true) {
-
-      if (pbean != null) {
-        return_string = pbean.load_ud("-1");
-      } else {
-        ParticipantBean partB = new ParticipantBean();
-        return_string = partB.load_ud("-1");
-      }
-
+      ParticipantBean pbean = new ParticipantBean();
+      pbean.setUbean(this);
+      return_string = pbean.load_ud("-1");
     } else {
       setUserToNull();
       return_string = "activate_user.xhtml?reset_code=" + holdResetCode;
@@ -635,12 +611,12 @@ public class UserBean extends AbstractBean implements Serializable {
   protected String skipCommunityMembers() {
     this.comMemberDetailID = true;
     this.editable = 0;
-    if (cpbean != null) {
-      return cpbean.load_ud(this.participant_id);
-    } else {
-      ContactPreferenceBean contB = new ContactPreferenceBean();
-      return contB.load_ud(this.participant_id);
-    }
+    String return_string = null;
+    ContactPreferenceBean cpbean = new ContactPreferenceBean();
+    return_string = cpbean.load_ud(this.participant_id);
+    cpbean = null;
+    return return_string;
+
   }
 
   public String acceptUpdatedUser() {
@@ -782,68 +758,46 @@ public class UserBean extends AbstractBean implements Serializable {
 
     switch (return_string) {
       case "user_agreement":
-        if (pbean != null) {
-          return_string = pbean.load_ud("-1");
-        } else {
-          ParticipantBean pb = new ParticipantBean();
-          return_string = pb.load_ud("-1");
-        }
+        ParticipantBean pb = new ParticipantBean();
+        pb.setUbean(this);
+        return_string = pb.load_ud("-1");
+        pb = null;
         break;
       case "user_item":
-        if (ibean != null) {
-          return_string = ibean.load_ud(this.userType, "");
-        } else {
-          ItemBean ib = new ItemBean();
-          return_string = ib.load_ud(this.userType, "");
-        }
+        ItemBean ibean = new ItemBean();
+        ibean.setUbean(this);
+        return_string = ibean.load_ud(this.userType, "");
+        ibean = null;
         break;
       case "user_nae":
-        if (pbean != null) {
-          return_string = pbean.load_ud(this.user_id);
-        } else {
-          ParticipantBean pb = new ParticipantBean();
-          return_string = pb.load_ud(this.user_id);
-        }
+        ParticipantBean pb2 = new ParticipantBean();
+        pb2.setUbean(this);
+        return_string = pb2.load_ud(this.user_id);
+        pb2 = null;
         break;
       case "user_contact_preferences":
-        if (cpbean != null) {
-          return_string = cpbean.load_ud(this.participant_id);
-        } else {
-          ContactPreferenceBean cp = new ContactPreferenceBean();
-          return_string = cp.load_ud(this.participant_id);
-        }
+        ContactPreferenceBean cpbean = new ContactPreferenceBean();
+        cpbean.setUbean(this);
+        return_string = cpbean.load_ud(this.participant_id);
+        cpbean = null;
         break;
       case "lender_transfer":
-        if (ltribean != null) {
-          return_string = ltribean.load_ud(this.participant_id);
-        } else {
-          LenderTransferBean lb = new LenderTransferBean();
-          return_string = lb.load_ud(this.participant_id);
-        }
-        break;
-      case "lender_conditions":
-        if (licibean != null) {
-          return_string = licibean.load_ud(this.participant_id);
-        } else {
-          LenderItemConditionsBean lc = new LenderItemConditionsBean();
-          return_string = lc.load_ud(this.participant_id);
-        }
+        LenderTransferBean ltribean = new LenderTransferBean();
+        ltribean.setUbean(this);
+        return_string = ltribean.load_ud(this.participant_id);
+        ltribean = null;
         break;
       case "community_detail":
-        if (commbean != null) {
-          return_string = commbean.load_community_detail();
-        } else {
-          CommunitiesBean comm = new CommunitiesBean();
-          return_string = comm.load_community_detail();
-        }
+        CommunitiesBean commbean = new CommunitiesBean();
+        commbean.setUbean(this);
+        return_string = commbean.load_community_detail();
+        commbean = null;
         break;
       case "community_members":
-        if (cmbean != null) {
-          return_string = cmbean.load_community_members();
-        } else {
-          CommunityMembersBean cmb = new CommunityMembersBean();
-          return_string = cmb.load_community_members();
-        }
+        CommunityMembersBean cmbean = new CommunityMembersBean();
+        cmbean.setUbean(this);
+        return_string = cmbean.load_community_members();
+        cmbean = null;
         break;
       default:
         return_string = "index";
