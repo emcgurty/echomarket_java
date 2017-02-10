@@ -22,10 +22,8 @@ import org.hibernate.Transaction;
 @RequestScoped
 public class CommunitiesBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
-  @Inject
-  CommunityMembersBean cmBean;
+  private  UserBean ubean;
+  private CommunityMembersBean cmBean;
   private String communityId;
   private String communityName;
   private Integer approved;
@@ -60,8 +58,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     String queryString = null;
     Communities comm_Array = null;
     String cid = null;
-    if (ubean != null ) {
-     cid = ubean.getCommunityId();
+    if (getUbean() != null ) {
+     cid = getUbean().getCommunityId();
     }
     queryString = "FROM Communities where community_id = :cid";
     try {
@@ -87,7 +85,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         this.communityName = comm_Array.getCommunityName();
         this.firstName = comm_Array.getFirstName();
         this.lastName = comm_Array.getLastName();
-        this.email = ubean.getEmail();
+        this.email = getUbean().getEmail();
         this.addressLine1 = comm_Array.getAddressLine1();
         this.addressLine2 = comm_Array.getAddressLine2();
         this.postalCode = comm_Array.getPostalCode();
@@ -105,8 +103,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         try {
           //  emm 1.8
           String setCID = null;
-          if (ubean != null ) {
-            setCID = ubean.getCommunityId();
+          if (getUbean() != null ) {
+            setCID = getUbean().getCommunityId();
           }
           hib = hib_session();
           tx = hib.beginTransaction();
@@ -127,10 +125,10 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
           if (result.size() == 1) {
             Participant part_array = (Participant) result.get(0);
            // emm Boolean needCommunityValues = ubean.getCreatorDetail(ubean.getUser_id());
-            this.communityName = ubean.getCommunityName();
+            this.communityName = getUbean().getCommunityName();
             this.firstName = part_array.getFirstName();
             this.lastName = part_array.getLastName();
-            this.email = ubean.getEmail();
+            this.email = getUbean().getEmail();
             this.cellPhone = part_array.getCellPhone();
 
             List getPrimaryAddress = getCommunityPrimaryAddress();
@@ -170,7 +168,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       queryString = " FROM Addresses "
               + " WHERE participant_id = :pid AND addressType = 'primary'";
       primaryAddress = hib.createQuery(queryString)
-              .setParameter("pid", ubean.getParticipant_id())
+              .setParameter("pid", getUbean().getParticipant_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -243,8 +241,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
             sb.update(comm_result);
             tx.commit();
             updateSuccess = true;
-            ubean.setCommunityId(comm_result.getCommunityId());
-            ubean.setCommunityName(comm_result.getCommunityName());
+            getUbean().setCommunityId(comm_result.getCommunityId());
+            getUbean().setCommunityName(comm_result.getCommunityName());
             message(null, "CommunityDetailRecordUpdated", null);
           }
         }
@@ -259,7 +257,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
-      ubean.setComDetailID(updateSuccess);
+      getUbean().setComDetailID(updateSuccess);
 //      ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
     }
     
@@ -530,6 +528,20 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
    */
   public void setCommunityId(String communityId) {
     this.communityId = communityId;
+  }
+
+  /**
+   * @return the ubean
+   */
+  public UserBean getUbean() {
+    return ubean;
+  }
+
+  /**
+   * @param ubean the ubean to set
+   */
+  public void setUbean(UserBean ubean) {
+    this.ubean = ubean;
   }
 
 }
