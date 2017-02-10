@@ -485,7 +485,14 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 
     if (activation_success == true) {
-      return_string = pbean.load_ud("-1");
+
+      if (pbean != null) {
+        return_string = pbean.load_ud("-1");
+      } else {
+        ParticipantBean partB = new ParticipantBean();
+        return_string = partB.load_ud("-1");
+      }
+
     } else {
       setUserToNull();
       return_string = "activate_user.xhtml?reset_code=" + holdResetCode;
@@ -628,7 +635,12 @@ public class UserBean extends AbstractBean implements Serializable {
   protected String skipCommunityMembers() {
     this.comMemberDetailID = true;
     this.editable = 0;
-    return cpbean.load_ud(this.participant_id);
+    if (cpbean != null) {
+      return cpbean.load_ud(this.participant_id);
+    } else {
+      ContactPreferenceBean contB = new ContactPreferenceBean();
+      return contB.load_ud(this.participant_id);
+    }
   }
 
   public String acceptUpdatedUser() {
