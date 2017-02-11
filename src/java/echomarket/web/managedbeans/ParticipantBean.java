@@ -4,7 +4,6 @@ import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
 import echomarket.hibernate.Users;
-import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,18 +15,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "participantBean")
 @SessionScoped
 public class ParticipantBean extends AbstractBean implements Serializable {
 
-  private UserBean ubean;
+  private static final long serialVersionUID = 1L;
+
   private String participant_id;
   private String communityId;
   private int contact_describe_id;
@@ -100,30 +98,30 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
     if (uid != null) {
       if ("-1".equals(uid) == true) {
-        getUbean().setEditable(-1);
-        uid = getUbean().getUser_id();
+        app.setEditable(-1);
+        uid = app.getUser_id();
       } else if ("-1".equals(uid) == false) {
-        if (getUbean().getEditable() == 0) {
-          getUbean().setEditable(1);
+        if (app.getEditable() == 0) {
+          app.setEditable(1);
         } else {
-          getUbean().setEditable(0);
+          app.setEditable(0);
         }
       }
     }
     /// emm 123
-    getUbean().setItemId("");
+    app.setItemId("");
     Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     String action = params.get("action");
 
     if (action != null) {
       if ("participant".equals(action)) {
-        getUbean().setEditable(1);
+        app.setEditable(1);
       }
     }
 
     List partlist = null;
     Participant pp = null;
-    partlist = getCurrentParticipant(getUbean().getParticipant_id());
+    partlist = getCurrentParticipant(app.getParticipant_id());
     if (partlist.size() == 1) {
       pp = (Participant) partlist.get(0);
       this.participant_id = pp.getParticipant_id();
@@ -162,16 +160,16 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.goodwill = pp.getGoodwill();
       this.age18OrMore = pp.getAge18OrMore();
       this.isCreator = pp.getIsCreator();
-      if (getUbean() != null) {
-        getUbean().setCommunityId(communityId);
-        getUbean().setParticipant_id(participant_id);
+      if (app != null) {
+        app.setCommunityId(communityId);
+        app.setParticipant_id(participant_id);
       }
     }
     getExistingAddress("primary");
     getExistingAddress("alternative");
 
-    if (getUbean() != null) {
-      if (getUbean().getEditable() == -1) {
+    if (app != null) {
+      if (app.getEditable() == -1) {
         return "user_agreement";
       } else {
         this.setQuestionAltAddressDelete(-9);
@@ -244,7 +242,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       tx = sb.beginTransaction();
       query = "FROM Participant WHERE user_id = :uid";
       result = sb.createQuery(query)
-              .setParameter("uid", getUbean().getUser_id())
+              .setParameter("uid", app.getUser_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -283,7 +281,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
 
       part.setQuestionAltEmail(questionAltEmailProvide);
-      if (getUbean().getCommunityName() != null) {
+      if (app.getCommunityName() != null) {
         part.setIsCreator(1);
       } else {
         part.setIsCreator(0);
@@ -396,17 +394,17 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
-      getUbean().setParticipant_id(pid);
-      getUbean().setEditable(1);
-      getUbean().setPartID(true);
-//      ubean.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
-      if (getUbean().getCommunityId().isEmpty() == false) {
-        getUbean().setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
+      app.setParticipant_id(pid);
+      app.setEditable(1);
+      app.setPartID(true);
+//      app.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
+      if (app.getCommunityId().isEmpty() == false) {
+        app.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
       }
     } else {
-      getUbean().setEditable(0);
+      app.setEditable(0);
     }
-    return load_ud(getUbean().getUser_id());
+    return load_ud(app.getUser_id());
 
   }
 
@@ -426,7 +424,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.threeStrikesYourOut = this.threeStrikesYourOut + 1;
       if (this.threeStrikesYourOut == 3) {
         message(null, "threeStrikesYourOut", null);
-        return_string = getUbean().Logout();
+        return_string = app.Logout();
       }
     } else {
 
@@ -438,56 +436,56 @@ public class ParticipantBean extends AbstractBean implements Serializable {
 
         Communities comm = null;
 
-        switch (getUbean().getRoleId()) {
+        switch (app.getRoleId()) {
           case 0:
-            part = new Participant(new_ID, getUbean().getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+            part = new Participant(new_ID, app.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
             break;
           case 1:
             comm = new Communities(cid_id);
-            part = new Participant(new_ID, getUbean().getUser_id(), cid_id, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
+            part = new Participant(new_ID, app.getUser_id(), cid_id, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 1);
             sb.save(comm);
             break;
           case 2:
-            part = new Participant(new_ID, getUbean().getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
+            part = new Participant(new_ID, app.getUser_id(), null, goodwill, age18OrMore, instructions, 1, new Date(), getClientIpAddr(), 0);
             break;
         }
 
         sb.save(part);
         tx.commit();
-        getUbean().setEditable(0);  /// which will be toggled as 1 = edit in load_ud
-        getUbean().setParticipant_id(new_ID);
-        getUbean().setAcceptID(true);
-        getUbean().setCommunityId(cid_id);
-        result = getUbean().findUserName();
+        app.setEditable(0);  /// which will be toggled as 1 = edit in load_ud
+        app.setParticipant_id(new_ID);
+        app.setAcceptID(true);
+        app.setCommunityId(cid_id);
+        result = app.findUserName();
         if (result != null) {
           if (result.size() == 1) {
 
             Users uu = (Users) result.get(0);  /// User result that has current user data
             Integer memberCreator = uu.getRoleId();
-            getUbean().setRoleId(memberCreator);
-            getUbean().setEmail(uu.getEmail());
-            getUbean().setUserAlias(uu.getUserAlias());
-            getUbean().setUsername(uu.getUsername());
-            getUbean().setUserType(uu.getUserType());
-            String hold_ut = getUbean().userIsWhichType();  // getting a WELD error
-            getUbean().setUserType(hold_ut);
-            getUbean().setUser_id(uu.getUser_id());
-            getUbean().setPartID(false);
-            getUbean().setCpId(false);
-            getUbean().setLICid(false);
-            getUbean().setLITid(false);
-            getUbean().setCommunityName(uu.getCommunityName());
+            app.setRoleId(memberCreator);
+            app.setEmail(uu.getEmail());
+            app.setUserAlias(uu.getUserAlias());
+            app.setUsername(uu.getUsername());
+            app.setUserType(uu.getUserType());
+            String hold_ut = app.userIsWhichType();  // getting a WELD error
+            app.setUserType(hold_ut);
+            app.setUser_id(uu.getUser_id());
+            app.setPartID(false);
+            app.setCpId(false);
+            app.setLICid(false);
+            app.setLITid(false);
+            app.setCommunityName(uu.getCommunityName());
             result = null;
           }
         }
-        if (getUbean().getRoleId() > 0) {
-          //ubean.getCreatorDetail(ubean.getUser_id());  // sets CommunityName and userType
+        if (app.getRoleId() > 0) {
+          //app.getCreatorDetail(app.getUser_id());  // sets CommunityName and userType
         }
-        return_string = load_ud(getUbean().getUser_id());
+        return_string = load_ud(app.getUser_id());
         message(null, "thanksForAcceptingAgreement", null);
       } catch (Exception ex) {
         message(null, "failedToSaveAgreement", null);
-        return_string = getUbean().Logout();
+        return_string = app.Logout();
         tx.rollback();
         System.out.println("Error in Save/Update Particpant");
         Logger
@@ -538,7 +536,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String getOrganizationName() {
-    if ((organizationName != null) || (getUbean().getEditable() == 1)) {
+    if ((organizationName != null) || (app.getEditable() == 1)) {
       return organizationName;
     } else {
       return "Not provided";
@@ -551,7 +549,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
   }
 
   public String getOtherDescribeYourself() {
-    if ((otherDescribeYourself != null) || (getUbean().getEditable() == 1)) {
+    if ((otherDescribeYourself != null) || (app.getEditable() == 1)) {
       return otherDescribeYourself;
     } else {
       return "Not provided";
@@ -639,7 +637,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
    * @return the emailAlternative
    */
   public String getEmailAlternative() {
-//        if ((emailAlternative != null) || (ubean.getEditable() == 8)) {
+//        if ((emailAlternative != null) || (app.getEditable() == 8)) {
     return emailAlternative;
 //        } else {
 //            return "Not provided";
@@ -952,7 +950,7 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("pid", getUbean().getParticipant_id())
+              .setParameter("pid", app.getParticipant_id())
               .setParameter("which", which)
               .list();
       tx.commit();
@@ -1125,20 +1123,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
    */
   public void setThreeStrikesYourOut(Integer threeStrikesYourOut) {
     this.threeStrikesYourOut = threeStrikesYourOut;
-  }
-
-  /**
-   * @return the ubean
-   */
-  public UserBean getUbean() {
-    return ubean;
-  }
-
-  /**
-   * @param ubean the ubean to set
-   */
-  public void setUbean(UserBean ubean) {
-    this.ubean = ubean;
   }
 
 }
