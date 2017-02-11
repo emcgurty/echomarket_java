@@ -2,8 +2,6 @@ package echomarket.web.managedbeans;
 
 import echomarket.hibernate.LenderTransfer;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,20 +9,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean
 @SessionScoped
 public class LenderTransferBean extends AbstractBean implements Serializable {
 
+  private static final long serialVersionUID = 1L;
  
-  private UserBean ubean;
   private String lenderTransferId;
   private String itemId;
   private String participant_id;
@@ -40,7 +35,6 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
   private Integer thirdPartyPresenceMutual;
   private Integer borrowerReturnsToWhichAddress;
   private Integer willPickUpPreferredLocation;
-
   private String remoteIp;
   private String comment;
 
@@ -124,7 +118,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       addNewCP = params.get("action");
       currentIid = params.get("iid");
-      getUbean().setItemId(currentIid);
+      app.setItemId(currentIid);
       this.itemId = currentIid;
       for (Map.Entry<String, String> entry : params.entrySet()) {
 
@@ -202,7 +196,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
     if (this.lenderTransferId.isEmpty() == true) {
 
-      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, getUbean().getParticipant_id(),
+      LenderTransfer lt = new LenderTransfer(getId(), this.itemId, app.getParticipant_id(),
               this.borrowerComesToWhichAddress,
               this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
               this.willDeliverToBorrower,
@@ -231,14 +225,14 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     } else {
 
       if (this.itemId.isEmpty() == false) {
-        cp_list = getCurrentLT_Iid(getUbean().getParticipant_id(), this.itemId);
+        cp_list = getCurrentLT_Iid(app.getParticipant_id(), this.itemId);
       } else {
-        cp_list = getCurrentLT(getUbean().getParticipant_id());
+        cp_list = getCurrentLT(app.getParticipant_id());
       }
       if (cp_list != null) {
         if (cp_list.size() == 1) {
           LenderTransfer lit = (LenderTransfer) cp_list.get(0);
-          lit.setItemId(getUbean().getItemId());
+          lit.setItemId(app.getItemId());
           lit.setBorrowerComesToWhichAddress(this.borrowerComesToWhichAddress);
           lit.setMeetBorrowerAtAgreed(this.meetBorrowerAtAgreed);
           lit.setMeetBorrowerAtAgreedBorrowerChoice(this.getMeetBorrowerAtAgreedBorrowerChoice());
@@ -272,7 +266,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           }
         } else {
           // Create new record
-          LenderTransfer lt = new LenderTransfer(getId(), this.itemId, getUbean().getParticipant_id(),
+          LenderTransfer lt = new LenderTransfer(getId(), this.itemId, app.getParticipant_id(),
                   this.borrowerComesToWhichAddress,
                   this.meetBorrowerAtAgreed, this.getMeetBorrowerAtAgreedBorrowerChoice(), this.getMeetBorrowerAtAgreedLenderChoice(), this.getMeetBorrowerAtAgreedMutual(),
                   this.willDeliverToBorrower,
@@ -302,20 +296,20 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     }
 
     if (successTransaction == true) {
-      getUbean().setEditable(1);
-      if (getUbean().getItemId() != null) {
-        if (getUbean().getItemId().isEmpty() == false) {
-          getUbean().completeLIT(getUbean().getParticipant_id());
+      app.setEditable(1);
+      if (app.getItemId() != null) {
+        if (app.getItemId().isEmpty() == false) {
+          app.completeLIT(app.getParticipant_id());
         } else {
-          getUbean().setLITid(true);
+          app.setLITid(true);
         }
       }
     } else {
-      getUbean().setEditable(0);
-      getUbean().setLITid(false);
+      app.setEditable(0);
+      app.setLITid(false);
     }
 
-    return load_ud(getUbean().getParticipant_id());
+    return load_ud(app.getParticipant_id());
 //   return "lender_transfer.xhtml?faces-redirect=true";
 //   return "lender_transfer";
 
@@ -340,15 +334,15 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
     }
     // emm 1.8
-    if (getUbean() != null) {
-      if (getUbean().getEditable() != null) {
-        if (getUbean().getEditable() == 0) {
-          getUbean().setEditable(1);
+    if (app != null) {
+      if (app.getEditable() != null) {
+        if (app.getEditable() == 0) {
+          app.setEditable(1);
         } else {
-          getUbean().setEditable(0);
+          app.setEditable(0);
         }
       } else {
-        getUbean().setEditable(1);
+        app.setEditable(1);
       }
       try {
         action = params.get("action");
@@ -357,7 +351,7 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
 
       if (action != null) {
         if ("edit".equals(action)) {
-          getUbean().setEditable(1);
+          app.setEditable(1);
         }
       }
     }
@@ -406,8 +400,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
           ltr = null;
         }
       } else {
-        if (getUbean() != null) {
-          this.participant_id = getUbean().getParticipant_id();
+        if (app != null) {
+          this.participant_id = app.getParticipant_id();
         }
         this.borrowerComesToWhichAddress = -9;
         this.meetBorrowerAtAgreed = -9;
@@ -422,8 +416,8 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
         this.thirdPartyPresenceMutual = -9;
         this.willPickUpPreferredLocation = -9;
         this.borrowerReturnsToWhichAddress = -9;
-        if (getUbean() != null) {
-          getUbean().setEditable(1);
+        if (app != null) {
+          app.setEditable(1);
         }
       }
 
@@ -676,18 +670,6 @@ public class LenderTransferBean extends AbstractBean implements Serializable {
     this.thirdPartyPresenceMutual = thirdPartyPresenceMutual;
   }
 
-  /**
-   * @return the ubean
-   */
-  public UserBean getUbean() {
-    return ubean;
-  }
-
-  /**
-   * @param ubean the ubean to set
-   */
-  public void setUbean(UserBean ubean) {
-    this.ubean = ubean;
-  }
+  
 
 }
