@@ -1,7 +1,6 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.ItemImages;
-import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,17 +11,17 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "itemROBean")
 @ViewScoped
 public class ItemROBean extends AbstractBean implements Serializable {
 
+  private static final long serialVersionUID = 1L;
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
-  
+
   // emm 1.8
   public ItemROBean() {
-    
+
   }
 
   public ArrayList<ItemImages> getPicture() {
@@ -119,7 +118,7 @@ public class ItemROBean extends AbstractBean implements Serializable {
       query = "  SELECT itm FROM Participant part "
               + " left join part.item itm "
               + " WHERE itm.itemType = :it AND part.communityId = null ORDER BY itm.dateCreated";
-      result = session.createQuery(query)            
+      result = session.createQuery(query)
               .setParameter("it", which)
               .list();
       tx.commit();
