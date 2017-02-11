@@ -5,10 +5,10 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.UUID;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
@@ -22,18 +22,17 @@ import org.hibernate.Session;
 @SessionScoped
 public abstract class AbstractBean implements Serializable {
 
-//  
-//    Source:  Setting UUID ids: http://blog.xebia.com/jpa-implementation-patterns-using-uuids-as-primary-keys/
   private static final long serialVersionUID = 1L;
-
-  @Id
+  @Inject
+  UserBean ubean;
+  
+ @Id
   private String id;
 
   public AbstractBean() {
     this.id = UUID.randomUUID().toString();
   }
 
-  
   @Override
   public int hashCode() {
     return getId().hashCode();
