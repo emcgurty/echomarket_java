@@ -8,7 +8,6 @@ import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
 import echomarket.hibernate.PasswordEncryptionService;
-//import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -31,9 +30,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named("ubean")
-//@ManagedBean(eager = true)
-@SessionScoped
-public class UserBean extends UserAbstract implements Serializable {
+@RequestScoped
+public class UserBean extends AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Inject
@@ -52,16 +50,6 @@ public class UserBean extends UserAbstract implements Serializable {
   CommunityMembersBean cmbean;
 
   private String user_id;
-  private String participant_id;
-  private String itemId;
-  private Boolean acceptID;
-  private Boolean creatorDetailID;
-  private Boolean comDetailID;
-  private Boolean comMemberDetailID;
-  private Boolean partID;
-  private Boolean cpId;
-  private Boolean LITid;
-  private Boolean LICid;
   private String username;
   private String firstName;
   private String lastName;
@@ -72,13 +60,10 @@ public class UserBean extends UserAbstract implements Serializable {
   private String email;
   private String resetCode;
   private String appEmail;
-  private String userAction;
-  private String registrationType;
   private String communityId;
   private String communityName;
-  private Integer editable;
   private String isCompleteString;
-
+  
   private Integer roleId;
   private String action;
   private String pid;
@@ -89,38 +74,10 @@ public class UserBean extends UserAbstract implements Serializable {
 
   }
 
-  public String Logout() {
-    setUserToNull();
-    return "index?faces-redirect=true";
-  }
-
   public String clearItemId() {
-    String return_string = null;
-    ItemBean ibean = new ItemBean();  /// This will not work...
     ibean.setItemId("");
-    this.itemId = "";
-    ParticipantBean pbean = new ParticipantBean();
-    return_string = pbean.load_ud(this.participant_id);
-    pbean = null;
-    return return_string;
-
-  }
-
-  private void setUserToNull() {
-    this.user_id = null;
-    this.username = null;
-    this.userAlias = null;
-    this.userType = null;
-    this.userTypeArray = null;
-    this.password = null;
-    this.email = null;
-    this.resetCode = null;
-    this.appEmail = null;
-    this.roleId = null;
-    this.communityId = null;
-    this.communityName = null;
-    this.pid = null;
-    this.editable = 0;
+    app.setItemId("");
+    return pbean.load_ud(app.getParticipant_id());
 
   }
 
@@ -246,7 +203,7 @@ public class UserBean extends UserAbstract implements Serializable {
       queryString = " FROM Participant "
               + " WHERE participant_id  = :pid";
       results = hib.createQuery(queryString)
-              .setParameter("pid", this.participant_id)
+              .setParameter("pid", app.getParticipant_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -280,7 +237,7 @@ public class UserBean extends UserAbstract implements Serializable {
       queryString = " FROM Participant "
               + " WHERE participant_id  = :pid";
       results = hib.createQuery(queryString)
-              .setParameter("pid", this.participant_id)
+              .setParameter("pid", app.getParticipant_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -409,22 +366,9 @@ public class UserBean extends UserAbstract implements Serializable {
     } catch (Exception ex) {
     }
 
-    setUserToNull();
-    this.userAction = "login";
+    app.setUserToNull();
+    app.setUserAction("login");
     return "index";
-  }
-
-  public String userIsWhichType() {
-
-    String returnType = null;
-    if ((this.userType.contains("lend") == true) && (this.userType.contains("borrow") == false)) {
-      returnType = "lend";
-    } else if ((this.userType.contains("borrow") == true) && (this.userType.contains("lend") == false)) {
-      returnType = "borrow";
-    } else if ((this.userType.contains("borrow") == true) && (this.userType.contains("lend") == true)) {
-      returnType = "both";
-    }
-    return returnType;
   }
 
   public String processActivation() {
@@ -436,7 +380,7 @@ public class UserBean extends UserAbstract implements Serializable {
     Integer memberCreator = -9;
     String return_string = null;
     String holdResetCode = getResetCode();  // because if process fails, I will null all user values
-    results = findUserName();
+    results = app.findUserName();
     if (results != null) {
       if (results.size() == 0) {
         message(null, "UserNameNotFound", new Object[]{this.username});
@@ -459,18 +403,18 @@ public class UserBean extends UserAbstract implements Serializable {
 //              setCurrentUserCommunityId(uu.getUser_id());
 //              setCommunityName(uu.getCommunityName());
 //            }
-            setRoleId(memberCreator);
-            setEmail(uu.getEmail());
-            setUserAlias(uu.getUserAlias());
-            setUsername(this.username);
-            setUserType(uu.getUserType());
-            setUserType(this.userIsWhichType());
-            setUser_id(uu.getUser_id());
+            app.setRoleId(memberCreator);
+            app.setEmail(uu.getEmail());
+            app.setUserAlias(uu.getUserAlias());
+            app.setUsername(this.username);
+            app.setUserType(uu.getUserType());
+            app.setUserType(app.userIsWhichType());
+            app.setUser_id(uu.getUser_id());
             /// emm 125
-            setPartID(false);
-            setCpId(false);
-            setLICid(false);
-            setLITid(false);
+            app.setPartID(false);
+            app.setCpId(false);
+            app.setLICid(false);
+            app.setLITid(false);
             results = null;
             message(null, "ActivateSuccessful", new Object[]{this.username});
           }
@@ -482,10 +426,9 @@ public class UserBean extends UserAbstract implements Serializable {
     }
 
     if (activation_success == true) {
-      ParticipantBean pbean = new ParticipantBean();
       return_string = pbean.load_ud("-1");
     } else {
-      setUserToNull();
+      app.setUserToNull();
       return_string = "activate_user.xhtml?reset_code=" + holdResetCode;
     }
 
@@ -494,8 +437,6 @@ public class UserBean extends UserAbstract implements Serializable {
 
   public String processMemberActivation() {
 
-    /// Needs to be broken down into smalller, more testable functions...
-    /// userType usage okay...
     Boolean savedRecord = false;
     Users create_record = null;
     String commName = null;
@@ -616,22 +557,11 @@ public class UserBean extends UserAbstract implements Serializable {
     if (savedRecord == true) {
       returnString = loginUser();   /// will set values 
     } else {
-      setUserToNull();
+      app.setUserToNull();
       returnString = "member_registration.xhtml?pid=" + this.pid;
     }
 
     return returnString;
-  }
-
-  protected String skipCommunityMembers() {
-    this.comMemberDetailID = true;
-    this.editable = 0;
-    String return_string = null;
-    ContactPreferenceBean cpbean = new ContactPreferenceBean();
-    return_string = cpbean.load_ud(this.participant_id);
-    cpbean = null;
-    return return_string;
-
   }
 
   public String acceptUpdatedUser() {
@@ -640,7 +570,7 @@ public class UserBean extends UserAbstract implements Serializable {
     Session hib = null;
     Transaction tx = null;
 
-    results = findUserName();
+    results = app.findUserName();
     Users uu = (Users) results.get(0);
     uu.setActivatedAt(new Date());
     uu.setResetCode(null);
@@ -672,7 +602,7 @@ public class UserBean extends UserAbstract implements Serializable {
     List results = null;
     List accept_results = null;
     String return_string = null;
-    results = findUserName();
+    results = app.findUserName();
     if (results != null) {
 
       if (results.size() == 0) {
@@ -694,11 +624,11 @@ public class UserBean extends UserAbstract implements Serializable {
               return_string = "index";
             } else if (results.size() == 1) {
               Users uu1 = (Users) results.get(0);
-              setUser_id(uu1.getUser_id());
-              setRoleId(uu1.getRoleId());
-              setUserType(uu1.getUserType());  //db
-              setUserAlias(uu1.getUserAlias());
-              setEmail(uu1.getEmail());
+              app.setUser_id(uu1.getUser_id());
+              app.setRoleId(uu1.getRoleId());
+              app.setUserType(uu1.getUserType());  //db
+              app.setUserAlias(uu1.getUserAlias());
+              app.setEmail(uu1.getEmail());
               uu1 = null;
               accept_results = hasAcceptedAgreement();
               if (accept_results != null) {
@@ -708,26 +638,26 @@ public class UserBean extends UserAbstract implements Serializable {
                   return_string = "user_agreement";  ////pbean.load_ud("-1");
                 } else if (accept_results.size() == 1) {
                   accept_results = null;
-                  this.acceptID = true;
+                  app.setAcceptID(true);
                   message(null, "LogInSuccessful", new Object[]{this.username});
                   Users uu = (Users) results.get(0);  /// User result that has current user data
                   memberCreator = uu.getRoleId();
-                  setRoleId(memberCreator);
+                  app.setRoleId(memberCreator);
                   if (memberCreator > 0) {
                     setCurrentUserCommunityId(uu.getUser_id());  // sets cid and pid
-                    setCommunityName(uu.getCommunityName());
+                    app.setCommunityName(uu.getCommunityName());
                   }
 
-                  setEmail(uu.getEmail());
-                  setUserAlias(uu.getUserAlias());
-                  setUsername(this.username);
-                  setUserType(uu.getUserType());
-                  setUserType(this.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
-                  setUser_id(uu.getUser_id());
+                  app.setEmail(uu.getEmail());
+                  app.setUserAlias(uu.getUserAlias());
+                  app.setUsername(this.username);
+                  app.setUserType(uu.getUserType());
+                  app.setUserType(app.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
+                  app.setUser_id(uu.getUser_id());
                   results = null;
-                  this.LICid = false;
-                  this.LITid = false;
-                  this.cpId = false;
+                  app.setLICid(false);
+                  app.setLITid(false);
+                  app.setCpId(false);
 
                   switch (memberCreator) {
                     case 0:  // Individual not with a community
@@ -782,13 +712,13 @@ public class UserBean extends UserAbstract implements Serializable {
         return_string = pbean.load_ud(this.user_id);
         break;
       case "user_contact_preferences":
-        return_string = cpbean.load_ud(this.participant_id);
+        return_string = cpbean.load_ud(app.getParticipant_id());
         break;
       case "lender_transfer":
-        return_string = ltribean.load_ud(this.participant_id);
+        return_string = ltribean.load_ud(app.getParticipant_id());
         break;
       case "lender_conditions":
-        return_string = lcbean.load_ud(this.participant_id);
+        return_string = lcbean.load_ud(app.getParticipant_id());
         break;
       case "community_detail":
         return_string = commbean.load_community_detail();
@@ -818,37 +748,37 @@ public class UserBean extends UserAbstract implements Serializable {
       if (partList.size() == 1) {
         Participant part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
-        this.participant_id = pid;
-        this.partID = true;
+        app.setParticipant_id(pid);
+        app.setPartID(true);
 
       } else {
-        this.editable = 0;
-        this.partID = true;
+        app.setEditable(0);
+        app.setPartID(true);
         return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
 
       if (return_string.isEmpty() == true) {
-        completeContactPreferences(this.participant_id);
+        app.completeContactPreferences(app.getParticipant_id());
 
-        if (this.cpId == false) {
-          setEditable(0);
+        if (app.getCpId() == false) {
+          app.setEditable(0);
           return_string = "user_contact_preferences"; //cpbean.load_ud(pid);
         } else {
           //  emm 123:  No data default 
-          this.editable = 1;
-          switch (this.userType) {
+          app.setEditable(1);
+          switch (app.getUserType()) {
             case "borrow":
               setAction("current");
               return_string = "user_item";
               break;
             case "lend":
               ///setAction("current");
-              completeLIT(this.participant_id);
-              if (this.LITid == false) {
+              app.completeLIT(app.getParticipant_id());
+               if (app.getLITid() == false) {
                 return_string = "lender_transfer"; //ltribean.load_ud(this.participant_id);
               } else {
-                completeLIC(this.participant_id);
-                if (this.LICid == false) {
+                app.completeLIC(app.getParticipant_id());
+               if (app.getLICid() == false) {
                   return_string = "lender_conditions"; //licibean.load_ud(this.participant_id);
                 } else {
                   setAction("current");
@@ -858,16 +788,16 @@ public class UserBean extends UserAbstract implements Serializable {
               break;
             case "both":
               //setAction("current");
-              completeLIT(this.participant_id);
-              if (this.LITid == false) {
+              app.completeLIT(app.getParticipant_id());
+              if (app.getLITid() == false) {
                 return_string = "lender_transfer"; //ltribean.load_ud(this.participant_id);
               } else {
-                completeLIC(this.participant_id);
-                if (this.LICid == false) {
+                app.completeLIC(app.getParticipant_id());
+                if (app.getLICid() == false) {
                   return_string = "lender_conditions"; //licibean.load_ud(this.participant_id);
                 } else {
-                  setAction("current");
-                  this.LICid = true;
+                  app.setAction("current");
+                  app.setLICid(true);
                   return_string = "user_item"; //ibean.load_ud("both", return_null);
                 }
                 break;
@@ -893,15 +823,15 @@ public class UserBean extends UserAbstract implements Serializable {
       if (partList.size() == 1) {
         part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
-        setParticipant_id(pid);
+        app.setParticipant_id(pid);
 //        setPartID(true);
-        setCommunityId(part.getCommunityId());
-        setCreatorDetailID(true);
+        app.setCommunityId(part.getCommunityId());
+        app.setCreatorDetailID(true);
       } else {
 //        setPartID(true);
-        setCommunityId(part.getCommunityId());
-        setCreatorDetailID(true);
-        setEditable(0);
+        app.setCommunityId(part.getCommunityId());
+        app.setCreatorDetailID(true);
+        app.setEditable(0);
         return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
 
@@ -910,14 +840,14 @@ public class UserBean extends UserAbstract implements Serializable {
         Integer hs = completCD.size();
         if (hs == 0) {
 
-          setComDetailID(false);
-          setEditable(1);
+          app.setComDetailID(false);
+          app.setEditable(1);
           return_string = "community_detail"; //commbean.load_community_detail();
         } else {
-          setComDetailID(true);
-          setComMemberDetailID(true);
+          app.setComDetailID(true);
+          app.setComMemberDetailID(true);
           //setCreatorDetailID(true);
-          setEditable(1);
+          app.setEditable(1);
           return_string = "community_members"; //cmbean.load_community_members();
 
         }
@@ -957,11 +887,8 @@ public class UserBean extends UserAbstract implements Serializable {
     if (results != null) {
       if (results.size() == 1) {
         Participant getPID = (Participant) results.get(0);
-        setParticipant_id(getPID.getParticipant_id());
-        setCommunityId(getPID.getCommunityId());
-        /// Seems redundant but set is not working... cid in testing should be b4b
-        this.participant_id = getPID.getParticipant_id();
-        this.communityId = getPID.getCommunityId();
+        app.setParticipant_id(getPID.getParticipant_id());
+        app.setCommunityId(getPID.getCommunityId());
         results = null;
         getPID = null;
       }
@@ -981,7 +908,7 @@ public class UserBean extends UserAbstract implements Serializable {
       queryString = " FROM Communities "
               + " WHERE community_id = :cid and communityName is not null";
       results = hib.createQuery(queryString)
-              .setParameter("cid", this.communityId)
+              .setParameter("cid", app.getCommunityId())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -1008,7 +935,7 @@ public class UserBean extends UserAbstract implements Serializable {
       queryString = " FROM Participant "
               + " WHERE user_id  = :uid AND goodwill = 1 AND age18OrMore = 1";
       results = hib.createQuery(queryString)
-              .setParameter("uid", this.user_id)
+              .setParameter("uid", app.getUser_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -1045,30 +972,6 @@ public class UserBean extends UserAbstract implements Serializable {
     }
 
     return getp;
-  }
-
-  protected List findUserName() {
-
-    Session hib = null;
-    Transaction tx = null;
-    List results = null;
-    String queryString = "from Users where username = :un";
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      results = hib.createQuery(queryString).setParameter("un", this.username).list();
-      tx.commit();
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error at in findUserName");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      hib = null;
-      tx = null;
-    }
-
-    return results;
   }
 
   private List verifyUserIsActivated() {
@@ -1180,8 +1083,8 @@ public class UserBean extends UserAbstract implements Serializable {
         results = null;
       }
     }
-    setUserToNull();
-    this.userAction = "login";
+    app.setUserToNull();
+    app.setUserAction("login");
     return "index";
   }
 
@@ -1211,7 +1114,7 @@ public class UserBean extends UserAbstract implements Serializable {
         tx = null;
         hib = null;
       }
-      String[] appEmail = getApplicationEmail();
+      String[] appEmail = app.getApplicationEmail();
       /// if String not empty, need to code
       try {
         SendEmail se = new SendEmail("forgotPassword", userArray.getUsername(), null, email, appEmail[0], appEmail[1], userArray.getUser_id(), buildReset_Code);
@@ -1221,13 +1124,13 @@ public class UserBean extends UserAbstract implements Serializable {
         Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       }
       message(null, "ForgotUserPasswordSuccess", new Object[]{email});
-      setUserToNull();
-      this.userAction = "login";
+      app.setUserToNull();
+      app.setUserAction("login");
       return "index";
     } else {
       message(null, "ForgotUserPasswordFailed", new Object[]{email});
-      setUserToNull();
-      this.userAction = "login";
+      app.setUserToNull();
+      app.setUserAction("login");
       return "index";
     }
   }
@@ -1242,40 +1145,11 @@ public class UserBean extends UserAbstract implements Serializable {
     }
 
     results = null;
-    setUserToNull();
-    this.userAction = "login";
+    app.setUserToNull();
+    app.setUserAction("login");
 
     return "index";
 
-  }
-
-  protected String[] getApplicationEmail() {
-
-    Session hib = null;
-    Transaction tx = null;
-    List results = null;
-    String[] holdMap = new String[2];
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      results = hib.createQuery("from Map WHERE key_text like '%gmail.com'").list();
-      tx.commit();
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error in getApplicationEmail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      hib = null;
-      tx = null;
-    }
-    if (results != null) {
-      if (results.size() == 1) {
-        Map map = (Map) results.get(0);
-        holdMap[0] = map.getKeyText();
-        holdMap[1] = map.getValueText();
-      }
-    }
-    return holdMap;
   }
 
   private String validateEmailAndPassword(String em, String pw) {
@@ -1512,7 +1386,7 @@ public class UserBean extends UserAbstract implements Serializable {
 
     if (userTypeArray == null && this.userType != null) {
       ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(",")));
-      if ("both".equals(uta.get(0)) && this.editable != null) {
+      if ("both".equals(uta.get(0)) && app.getEditable() != null) {
         List<String> uta2 = Arrays.asList("borrow", "lend");
         return uta2;
       } else {
@@ -1572,39 +1446,7 @@ public class UserBean extends UserAbstract implements Serializable {
     this.user_id = user_id;
   }
 
-  /**
-   * @return the userAction
-   */
-  public String getUserAction() {
-    if (userAction == null) {
-      this.userAction = "dashboard";
-      return userAction;
-    } else {
-      return userAction;
-    }
-  }
-
-  /**
-   * @param userAction the userAction to set
-   */
-  public void setUserAction(String userAction) {
-    this.userAction = userAction;
-  }
-
-  /**
-   * @return the registrationType
-   */
-  public String getRegistrationType() {
-    return registrationType;
-  }
-
-  /**
-   * @param registrationType the registrationType to set
-   */
-  public void setRegistrationType(String registrationType) {
-    this.registrationType = registrationType;
-  }
-
+  
   /**
    * @return the communityName
    */
@@ -1621,19 +1463,19 @@ public class UserBean extends UserAbstract implements Serializable {
 
   public String load_login() {
     this.username = null;
-    this.userAction = "login";
+    app.setUserAction("login");
     return "index";
   }
 
   public String load_forgotUserPassword() {
     this.username = null;
-    this.userAction = "forgotUserPassword";
+    app.setUserAction("forgotUserPassword");
     return "index?faces-redirect=true";
   }
 
   public String load_forgotUsername() {
     this.username = null;
-    this.userAction = "forgotUsername";
+    app.setUserAction("forgotUsername");
     return "index?faces-redirect=true";
   }
 
@@ -1671,159 +1513,6 @@ public class UserBean extends UserAbstract implements Serializable {
     }
     return results;
 
-  }
-
-  protected void completeLIC(String pid) {
-
-    List results = null;
-    Session hib = null;
-    Transaction tx = null;
-    String currentItem = "";
-    if (getItemId() != null) {
-      currentItem = getItemId();
-    }
-    this.LICid = false;
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      if (currentItem.isEmpty() == true) {
-        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid GROUP BY participant_id, dateCreated")
-                .setParameter("pid", pid)
-                .setMaxResults(1)
-                .list();
-      } else {
-        results = hib.createQuery("from LenderItemConditions WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId, dateCreated")
-                .setParameter("pid", pid)
-                .setParameter("iid", currentItem)
-                .setMaxResults(1)
-                .list();
-      }
-      tx.commit();
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error on completeLIC");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
-    } finally {
-      tx = null;
-      hib = null;
-      currentItem = null;
-    }
-    if (results != null) {
-      if (results.size() == 1) {
-        this.LICid = true;
-        results = null;
-      }
-    }
-
-  }
-
-  protected void completeLIT(String pid) {
-
-    List results = null;
-    Session hib = null;
-    Transaction tx = null;
-    String currentItem = "";
-    if (getItemId() != null) {
-      currentItem = getItemId();
-    }
-    this.LITid = false;
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      if (currentItem.isEmpty() == true) {
-        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid GROUP BY participant_id, dateCreated")
-                .setParameter("pid", pid)
-                .setMaxResults(1)
-                .list();
-      } else {
-        results = hib.createQuery("from LenderTransfer WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId, dateCreated")
-                .setParameter("pid", pid)
-                .setParameter("iid", currentItem)
-                .setMaxResults(1)
-                .list();
-      }
-
-      tx.commit();
-
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error on completeLIT");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-      tx = null;
-      hib = null;
-      currentItem = null;
-    }
-    if (results != null) {
-      if (results.size() == 1) {
-        this.LITid = true;
-        results = null;
-      }
-    }
-
-  }
-
-  protected void completeContactPreferences(String pid) {
-
-    List results = null;
-    Session hib = null;
-    Transaction tx = null;
-    String currentItem = "";
-    if (getItemId() != null) {
-      currentItem = getItemId();
-    }
-    this.cpId = false;
-
-    try {
-      hib = hib_session();
-      tx = hib.beginTransaction();
-      if (currentItem.isEmpty() == true) {
-        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid GROUP BY participant_id ORDER BY participant_id ")
-                .setParameter("pid", pid)
-                .setMaxResults(1)
-                .list();
-      } else {
-        results = hib.createQuery("from ContactPreference WHERE participant_id = :pid and itemId = :iid GROUP BY participant_id, itemId")
-                .setParameter("pid", pid)
-                .setParameter("iid", currentItem)
-                .setMaxResults(1)
-                .list();
-      }
-
-      tx.commit();
-
-    } catch (Exception ex) {
-      tx.rollback();
-      System.out.println("Error on completeContactPreferences");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
-    } finally {
-      tx = null;
-      hib = null;
-      currentItem = null;
-    }
-    if (results != null) {
-      if (results.size() == 1) {
-        this.cpId = true;
-        results = null;
-      }
-    }
-
-  }
-
-  /**
-   * @return the editable
-   */
-  public Integer getEditable() {
-    return editable;
-  }
-
-  /**
-   * @param editable the editable to set
-   */
-  public void setEditable(Integer editable) {
-    this.editable = editable;
   }
 
   public String updateUserLogin() {
@@ -1924,14 +1613,14 @@ public class UserBean extends UserAbstract implements Serializable {
       message(null, "LoginUpdateFailed", new Object[]{this.username});
     }
 
-    setUserToNull();
-    this.userAction = "login";
+    app.setUserToNull();
+    app.setUserAction("login");
     return "index";
   }
 
   public String load_ud(Integer which) {
 
-    this.editable = which;
+    app.setEditable(which);
     if (user_id == null) {
       message(null, "LoginInRequiredToReviseUserInformation", null);
       return "index";
@@ -1953,7 +1642,7 @@ public class UserBean extends UserAbstract implements Serializable {
 
     //// which 0 = new, 1 = update
     String[] getMap = new String[2];
-    getMap = getApplicationEmail();
+    getMap = app.getApplicationEmail();
     Boolean return_string = false;
 
     try {
@@ -1990,21 +1679,7 @@ public class UserBean extends UserAbstract implements Serializable {
     return return_string;
   }
 
-  /**
-   * @return the participant_id
-   */
-  public String getParticipant_id() {
-    return participant_id;
-  }
-
-  /**
-   * @param participant_id the participant_id to set
-   */
-  public void setParticipant_id(String participant_id) {
-    this.participant_id = participant_id;
-  }
-
-  /**
+    /**
    * @return the action
    */
   public String getAction() {
@@ -2230,7 +1905,7 @@ public class UserBean extends UserAbstract implements Serializable {
         this.lastName = pt.getLastName();
         this.userAlias = pt.getAlias();
         this.email = pt.getEmailAlternative();
-        this.participant_id = pid;
+        app.setParticipant_id(pid);
       }
     }
     return returnCID;
@@ -2292,98 +1967,7 @@ public class UserBean extends UserAbstract implements Serializable {
     this.pid = pid;
   }
 
-  /**
-   * @return the acceptID
-   */
-  public Boolean getAcceptID() {
-    return acceptID;
-  }
-
-  /**
-   * @param acceptID the acceptID to set
-   */
-  public void setAcceptID(Boolean acceptID) {
-    this.acceptID = acceptID;
-  }
-
-  public Boolean getCpId() {
-    return cpId;
-  }
-
-  public void setCpId(Boolean cpId) {
-    this.cpId = cpId;
-  }
-
-  /**
-   * @return the LITid
-   */
-  public Boolean getLITid() {
-    return LITid;
-  }
-
-  /**
-   * @param LITid the LITid to set
-   */
-  public void setLITid(Boolean LITid) {
-    this.LITid = LITid;
-  }
-
-  /**
-   * @return the LICid
-   */
-  public Boolean getLICid() {
-    return LICid;
-  }
-
-  /**
-   * @param LICid the LICid to set
-   */
-  public void setLICid(Boolean LICid) {
-    this.LICid = LICid;
-  }
-
-  /**
-   * @return the partID
-   */
-  public Boolean getPartID() {
-    return partID;
-  }
-
-  /**
-   * @param partID the partID to set
-   */
-  public void setPartID(Boolean partID) {
-    this.partID = partID;
-  }
-
-  /**
-   * @return the creatorDetailID
-   */
-  public Boolean getCreatorDetailID() {
-    return creatorDetailID;
-  }
-
-  /**
-   * @param creatorDetailID the creatorDetailID to set
-   */
-  public void setCreatorDetailID(Boolean creatorDetailID) {
-    this.creatorDetailID = creatorDetailID;
-  }
-
-  /**
-   * @return the comDetailID
-   */
-  public Boolean getComDetailID() {
-    return comDetailID;
-  }
-
-  /**
-   * @param comDetailID the comDetailID to set
-   */
-  public void setComDetailID(Boolean comDetailID) {
-    this.comDetailID = comDetailID;
-  }
-
+   
   /**
    * @return the isCompleteString
    */
@@ -2398,34 +1982,7 @@ public class UserBean extends UserAbstract implements Serializable {
     this.isCompleteString = isCompleteString;
   }
 
-  /**
-   * @return the itemId
-   */
-  public String getItemId() {
-    return itemId;
-  }
-
-  /**
-   * @param itemId the itemId to set
-   */
-  public void setItemId(String itemId) {
-    this.itemId = itemId;
-  }
-
-  /**
-   * @return the comMemberDetailID
-   */
-  public Boolean getComMemberDetailID() {
-    return comMemberDetailID;
-  }
-
-  /**
-   * @param comMemberDetailID the comMemberDetailID to set
-   */
-  public void setComMemberDetailID(Boolean comMemberDetailID) {
-    this.comMemberDetailID = comMemberDetailID;
-  }
-
+ 
   /**
    * @return the uid
    */
