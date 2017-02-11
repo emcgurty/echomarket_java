@@ -7,16 +7,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "itemc")
 @RequestScoped
 public class ItemConditionBean extends AbstractBean implements Serializable {
 
+  private static final long serialVersionUID = 1L;
 //    private Integer id;
   private String condition;
 
@@ -86,7 +85,7 @@ public class ItemConditionBean extends AbstractBean implements Serializable {
     } catch (Exception e) {
       tx.rollback();
       System.out.println("Error in cat_list");
-        Logger.getLogger(ItemConditionBean.class.getName()).log(Level.SEVERE, null, e);
+      Logger.getLogger(ItemConditionBean.class.getName()).log(Level.SEVERE, null, e);
     } finally {
       session = null;
       tx = null;
