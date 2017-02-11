@@ -5,25 +5,20 @@ import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean
 @RequestScoped
 public class CommunitiesBean extends AbstractBean implements Serializable {
 
-  private  UserBean ubean;
-  private CommunityMembersBean cmBean;
+  private static final long serialVersionUID = 3L;
+
   private String communityId;
   private String communityName;
   private Integer approved;
@@ -43,10 +38,10 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
   private String email;
   private Integer isActive;
   private String remoteIp;
-  
+
   // emm 1.8
   public CommunitiesBean() {
-    
+
   }
 
   public String load_community_detail() {
@@ -58,8 +53,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     String queryString = null;
     Communities comm_Array = null;
     String cid = null;
-    if (getUbean() != null ) {
-     cid = getUbean().getCommunityId();
+    if (app != null) {
+      cid = app.getCommunityId();
     }
     queryString = "FROM Communities where community_id = :cid";
     try {
@@ -85,7 +80,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         this.communityName = comm_Array.getCommunityName();
         this.firstName = comm_Array.getFirstName();
         this.lastName = comm_Array.getLastName();
-        this.email = getUbean().getEmail();
+        this.email = app.getEmail();
         this.addressLine1 = comm_Array.getAddressLine1();
         this.addressLine2 = comm_Array.getAddressLine2();
         this.postalCode = comm_Array.getPostalCode();
@@ -103,8 +98,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         try {
           //  emm 1.8
           String setCID = null;
-          if (getUbean() != null ) {
-            setCID = getUbean().getCommunityId();
+          if (app != null) {
+            setCID = app.getCommunityId();
           }
           hib = hib_session();
           tx = hib.beginTransaction();
@@ -124,11 +119,10 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
         if (result != null) {
           if (result.size() == 1) {
             Participant part_array = (Participant) result.get(0);
-           // emm Boolean needCommunityValues = ubean.getCreatorDetail(ubean.getUser_id());
-            this.communityName = getUbean().getCommunityName();
+            this.communityName = app.getCommunityName();
             this.firstName = part_array.getFirstName();
             this.lastName = part_array.getLastName();
-            this.email = getUbean().getEmail();
+            this.email = app.getEmail();
             this.cellPhone = part_array.getCellPhone();
 
             List getPrimaryAddress = getCommunityPrimaryAddress();
@@ -168,7 +162,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       queryString = " FROM Addresses "
               + " WHERE participant_id = :pid AND addressType = 'primary'";
       primaryAddress = hib.createQuery(queryString)
-              .setParameter("pid", getUbean().getParticipant_id())
+              .setParameter("pid", app.getParticipant_id())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -241,8 +235,8 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
             sb.update(comm_result);
             tx.commit();
             updateSuccess = true;
-            getUbean().setCommunityId(comm_result.getCommunityId());
-            getUbean().setCommunityName(comm_result.getCommunityName());
+            app.setCommunityId(comm_result.getCommunityId());
+            app.setCommunityName(comm_result.getCommunityName());
             message(null, "CommunityDetailRecordUpdated", null);
           }
         }
@@ -257,11 +251,13 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       }
     }
     if (updateSuccess == true) {
-      getUbean().setComDetailID(updateSuccess);
-//      ubean.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
+      app.setComDetailID(updateSuccess);
     }
-    
-    return cmBean.load_community_members();
+
+    CommunityMembersBean cmBean = new CommunityMembersBean();
+    String return_string = cmBean.load_community_members();
+    cmBean = null;
+    return return_string;
   }
 
   /**
@@ -530,18 +526,5 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     this.communityId = communityId;
   }
 
-  /**
-   * @return the ubean
-   */
-  public UserBean getUbean() {
-    return ubean;
-  }
-
-  /**
-   * @param ubean the ubean to set
-   */
-  public void setUbean(UserBean ubean) {
-    this.ubean = ubean;
-  }
-
+ 
 }
