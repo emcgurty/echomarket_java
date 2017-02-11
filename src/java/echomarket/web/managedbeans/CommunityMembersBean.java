@@ -2,7 +2,6 @@ package echomarket.web.managedbeans;
 
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Participant;
-import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,18 +10,16 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean
 @SessionScoped
-
 public class CommunityMembersBean extends AbstractBean implements Serializable {
 
-  private UserBean ubean;
+  private static final long serialVersionUID = 1L;
+
   private String participant_id;
   private String community_id;
   private String remoteIp;
@@ -55,7 +52,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Integer howMany = getHowManyRecords();
     Participant new_cm;
     for (int i = 0; i < howMany; i++) {
-      new_cm = new Participant(UUID.randomUUID().toString(), getUbean().getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
+      new_cm = new Participant(UUID.randomUUID().toString(), app.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
       comm_member.add(new_cm);
     }
     this.new_comm_member_rows = comm_member;
@@ -63,7 +60,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
   }
 
   public String skipMembers() {
-    return getUbean().skipCommunityMembers();
+    return app.skipCommunityMembers();
 
   }
 
@@ -105,9 +102,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
           }
           if (savedRecord == true) {
             getMap = new String[2];
-            getMap = getUbean().getApplicationEmail();
+            getMap = app.getApplicationEmail();
             try {
-              se = new SendEmail("member", this.firstName, this.lastName, this.alias, this.emailAlternative, getMap[0], getMap[1], getUbean().getCommunityName(), this.participant_id, getUbean().getUser_id());
+              se = new SendEmail("member", this.firstName, this.lastName, this.alias, this.emailAlternative, getMap[0], getMap[1], app.getCommunityName(), this.participant_id, app.getUser_id());
               savedRecord = true;
             } catch (Exception ex) {
               System.out.println("Error in Send Member Notification");
@@ -119,8 +116,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
               getMap = null;
             }
             if (savedRecord == true) {
-              getUbean().setPartID(savedRecord);
-              getUbean().setComMemberDetailID(savedRecord);
+              app.setPartID(savedRecord);
+              app.setComMemberDetailID(savedRecord);
               message(null, "NewMember", new Object[]{fullName});
             }
           }
@@ -136,8 +133,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
-    String cid = getUbean().getCommunityId();
-    String uid = getUbean().getUser_id();
+    String cid = app.getCommunityId();
+    String uid = app.getUser_id();
     List result = null;
     Boolean isCreatorRights = false;
     queryString = "FROM Participant where community_id = :cid AND is_creator = 1 AND user_id = :uid ";
@@ -182,7 +179,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
         hib = hib_session();
         tx = hib.beginTransaction();
         result = hib.createQuery(queryString)
-                .setParameter("cid", getUbean().getCommunityId())
+                .setParameter("cid", app.getCommunityId())
                 .list();
         for (int i = 0; i < result.size(); i++) {
           Participant cm = (Participant) result.get(i);
@@ -374,7 +371,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", getUbean().getCommunityId())
+              .setParameter("cid", app.getCommunityId())
               .list();
       tx.commit();
     } catch (Exception ex) {
@@ -403,7 +400,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", getUbean().getCommunityId())
+              .setParameter("cid", app.getCommunityId())
               .list();
       tx.commit();
 
@@ -581,7 +578,7 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       hib = hib_session();
       tx = hib.beginTransaction();
       result = hib.createQuery(queryString)
-              .setParameter("cid", getUbean().getCommunityId())
+              .setParameter("cid", app.getCommunityId())
               .setParameter("fn", this.firstName)
               .setParameter("ln", this.lastName)
               .setParameter("al", this.alias)
@@ -632,20 +629,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
    */
   public void setCurrentRow(Integer currentRow) {
     this.currentRow = currentRow;
-  }
-
-  /**
-   * @return the ubean
-   */
-  public UserBean getUbean() {
-    return ubean;
-  }
-
-  /**
-   * @param ubean the ubean to set
-   */
-  public void setUbean(UserBean ubean) {
-    this.ubean = ubean;
   }
 
 }
