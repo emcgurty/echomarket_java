@@ -24,7 +24,7 @@
 
 
   <!-- ========== Managed Beans ============================================ -->
-  <managed-bean>
+<!--  <managed-bean>
     <managed-bean-name>abstractBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedBeans.AbstractBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
@@ -55,37 +55,15 @@
       <value>#{param['username']}</value>
     </managed-property>
         
-  </managed-bean>
-      
-  <managed-bean>
-    <managed-bean-name>purposeBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.PurposeBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-
-
-
-  <managed-bean>
-    <managed-bean-name>contactDescribesBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.ContactDescribesBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>categoriesBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.CategoriesBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-    
+  </managed-bean>-->
+  
+   
   <validator>  
     <validator-id>selectOneMenuValidator</validator-id>  
     <validator-class>echomarket.resources.SelectOneMenuValidator</validator-class>  
   </validator>
-  <managed-bean>
-    <managed-bean-name>usStatesManagedBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.UsStatesManagedBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
+
+<!--  <managed-bean>
     <managed-bean-name>countriesBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedBeans.CountriesBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
@@ -100,24 +78,24 @@
     <managed-bean-name>searchBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.SearchesBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-
+  </managed-bean>-->
+<!--
   <managed-bean>
     <managed-bean-name>LocaleBean</managed-bean-name>
     <managed-bean-class>LocaleBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
+  </managed-bean>-->
+<!--  <managed-bean>
     <managed-bean-name>communitiesBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.CommunitiesBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
+  </managed-bean>-->
   
  
   <navigation-rule>
     <from-view-id>/user_nae.xhtml</from-view-id>
     <navigation-case>
-      <from-action>#{lenderTransferBean.load_ud(userBean.participant_id)}</from-action>
+      <from-action>#{lenderTransferBean.load_ud(ubean.participant_id)}</from-action>
       
       <to-view-id>/lender_transfer.xhtml</to-view-id>
     </navigation-case>
@@ -127,7 +105,7 @@
   <navigation-rule>
     <from-view-id>/user_item.xhtml</from-view-id>
     <navigation-case>
-      <from-action>#{lenderTransferBean.load_ud(userBean.participant_id)}</from-action>
+      <from-action>#{lenderTransferBean.load_ud(ubean.participant_id)}</from-action>
       
       <to-view-id>/lender_transfer.xhtml</to-view-id>
     </navigation-case>
@@ -136,7 +114,7 @@
    
   
   
-  <managed-bean>
+<!--  <managed-bean>
     <managed-bean-name>participantBean</managed-bean-name>
     <managed-bean-class>echomarket.web.managedbeans.ParticipantBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
@@ -171,5 +149,5 @@
     <managed-bean-class>echomarket.web.managedbeans.CommunityMembersBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
-    
+    -->
 </faces-config>
