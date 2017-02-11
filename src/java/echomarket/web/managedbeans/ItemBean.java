@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,11 +30,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "itemBean")
 @SessionScoped
 public class ItemBean extends AbstractBean implements Serializable {
 
-  private UserBean ubean;
+  private static final long serialVersionUID = 9L;
+ 
   private String itemId;
   private Integer categoryId;
   private String participant_id;
@@ -62,10 +61,10 @@ public class ItemBean extends AbstractBean implements Serializable {
   private ArrayList<ItemImages> picture
           = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)
           ));
-  
+
 // emm 1.8
   public ItemBean() {
-    
+
   }
 
   public ArrayList<ItemImages> getPicture() {
@@ -214,46 +213,45 @@ public class ItemBean extends AbstractBean implements Serializable {
 
     List result = null;
     this.imageFoundList = null;
-   // emm 1.8
-   
-   
-   if (getUbean() != null) {
-    
-    if (iid.isEmpty() == true) {
-        getUbean().setEditable(1);
-    } else {
-        getUbean().setEditable(0);
-    }
+    // emm 1.8
 
-    if (this.itemId != null) {
-      if (this.itemId.isEmpty() == false) {
-        iid = this.itemId;
-          getUbean().setEditable(0);
+    if (app != null) {
+
+      if (iid.isEmpty() == true) {
+        app.setEditable(1);
+      } else {
+        app.setEditable(0);
       }
-    }
 
-    if (getUbean().getItemId() != null) {
-      if (getUbean().getItemId().isEmpty() == false) {
-        iid = getUbean().getItemId();
-          getUbean().setEditable(0);
-      }
-    }
-
-    Map<String, String> params = null;
-    String action = null;
-
-    try {
-      params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-      action = params.get("action");
-      if (action != null) {
-        if ("item".equals(action)) {
-          
-            getUbean().setEditable(1);
+      if (this.itemId != null) {
+        if (this.itemId.isEmpty() == false) {
+          iid = this.itemId;
+          app.setEditable(0);
         }
       }
-    } catch (Exception ex) {
+
+      if (app.getItemId() != null) {
+        if (app.getItemId().isEmpty() == false) {
+          iid = app.getItemId();
+          app.setEditable(0);
+        }
+      }
+
+      Map<String, String> params = null;
+      String action = null;
+
+      try {
+        params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        action = params.get("action");
+        if (action != null) {
+          if ("item".equals(action)) {
+
+            app.setEditable(1);
+          }
+        }
+      } catch (Exception ex) {
+      }
     }
-   } 
 
     if (iid.isEmpty() == false) {
       result = getCurrentItem(iid, which);
@@ -322,7 +320,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     }
     if (itemId.isEmpty() == true) {
 
-      Items ii = new Items(new_iid, getUbean().getParticipant_id(), categoryId, otherItemCategory,
+      Items ii = new Items(new_iid, app.getParticipant_id(), categoryId, otherItemCategory,
               itemModel, itemDescription, itemConditionId, itemCount, comment, new Date(), null, null, 0, notify, itemType, this.remoteIp);
 
       try {
@@ -439,9 +437,9 @@ public class ItemBean extends AbstractBean implements Serializable {
       SendEmail se = null;
       String[] getMap = null;
       getMap = new String[2];
-      getMap = getUbean().getApplicationEmail();
+      getMap = app.getApplicationEmail();
       if (getImageFileNamePart() != null) {
-        se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
+        se = new SendEmail(this.itemType, app.getEmail(), this.itemDescription, this.itemModel, this.itemCount, getFileName(getImageFileNamePart()), this.itemImageCaption, getMap[0], getMap[1], this.remoteIp);
       } else {
         List currentPicture = this.getPicture();
         if (currentPicture != null) {
@@ -449,25 +447,25 @@ public class ItemBean extends AbstractBean implements Serializable {
             ItemImages currentImage = (ItemImages) currentPicture.get(0);
             String currentImageFileName = currentImage.getImageFileName();
             String currentImageFileCaption = currentImage.getItemImageCaption();
-            se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, currentImageFileName, currentImageFileCaption, getMap[0], getMap[1], this.remoteIp);
+            se = new SendEmail(this.itemType, app.getEmail(), this.itemDescription, this.itemModel, this.itemCount, currentImageFileName, currentImageFileCaption, getMap[0], getMap[1], this.remoteIp);
           } else {
-            se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+            se = new SendEmail(this.itemType, app.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
           }
 
         } else {
-          se = new SendEmail(this.itemType, getUbean().getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
+          se = new SendEmail(this.itemType, app.getEmail(), this.itemDescription, this.itemModel, this.itemCount, "", "", getMap[0], getMap[1], this.remoteIp);
         }
       }
 
       se = null;
       getMap = null;
 
-      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, getUbean().getEmail()});
-      getUbean().setItemId(new_iid);
-      getUbean().setEditable(0);
+      message(null, "ItemRecordUpdated", new Object[]{itemType, itemDescription, app.getEmail()});
+      app.setItemId(new_iid);
+      app.setEditable(0);
     } else {
       message(null, "ItemRecordNotUpdated", new Object[]{itemType, itemDescription});
-      getUbean().setEditable(1);
+      app.setEditable(1);
 
     }
     return load_ud(itemType, itemId) + "?faces-redirect=true";
@@ -1012,8 +1010,8 @@ public class ItemBean extends AbstractBean implements Serializable {
    * @return the itemType
    */
   public String getItemType() {
-    if (itemType == null && getUbean().getEditable() == 1) {
-      return getUbean().userIsWhichType();
+    if (itemType == null && app.getEditable() == 1) {
+      return app.userIsWhichType();
     } else {
       return itemType;
     }
@@ -1048,7 +1046,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (result != null) {
         if (result.size() == 1) {
           LenderItemConditions na_lic = (LenderItemConditions) result.get(0);
-          LenderItemConditions new_lic = new LenderItemConditions(getId(), getUbean().getParticipant_id(), iid,
+          LenderItemConditions new_lic = new LenderItemConditions(getId(), app.getParticipant_id(), iid,
                   na_lic.getForFree(), na_lic.getAvailableForPurchase(), na_lic.getAvailableForPurchaseAmount(), na_lic.getSmallFee(),
                   na_lic.getSmallFeeAmount(), na_lic.getAvailableForDonation(), na_lic.getDonateAnonymous(),
                   na_lic.getTrade(), na_lic.getTradeItem(), na_lic.getAgreedNumberOfDays(), na_lic.getAgreedNumberOfHours(), na_lic.getIndefiniteDuration(),
@@ -1103,7 +1101,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (result != null) {
         if (result.size() == 1) {
           LenderTransfer na_lit = (LenderTransfer) result.get(0);
-          LenderTransfer new_lt = new LenderTransfer(getId(), iid, getUbean().getParticipant_id(),
+          LenderTransfer new_lt = new LenderTransfer(getId(), iid, app.getParticipant_id(),
                   na_lit.getBorrowerComesToWhichAddress(),
                   na_lit.getMeetBorrowerAtAgreed(),
                   na_lit.getMeetBorrowerAtAgreedBorrowerChoice(),
@@ -1168,7 +1166,7 @@ public class ItemBean extends AbstractBean implements Serializable {
       if (result != null) {
         if (result.size() == 1) {
           ContactPreference na_cp = (ContactPreference) result.get(0);
-          ContactPreference new_cp = new ContactPreference(getId(), getUbean().getParticipant_id(), iid,
+          ContactPreference new_cp = new ContactPreference(getId(), app.getParticipant_id(), iid,
                   na_cp.getUseWhichContactAddress(), na_cp.getContactByChat(), na_cp.getContactByEmail(), na_cp.getContactByHomePhone(),
                   na_cp.getContactByCellPhone(), na_cp.getContactByAlternativePhone(), na_cp.getContactByFacebook(), na_cp.getContactByTwitter(),
                   na_cp.getContactByInstagram(), na_cp.getContactByLinkedIn(), na_cp.getContactByOtherSocialMedia(), na_cp.getContactByOtherSocialMediaAccess(), new Date());
@@ -1302,18 +1300,6 @@ public class ItemBean extends AbstractBean implements Serializable {
     this.imageFoundList = imageFoundList;
   }
 
-  /**
-   * @return the ubean
-   */
-  public UserBean getUbean() {
-    return ubean;
-  }
-
-  /**
-   * @param ubean the ubean to set
-   */
-  public void setUbean(UserBean ubean) {
-    this.ubean = ubean;
-  }
+  
 
 }
