@@ -4,14 +4,16 @@ import echomarket.hibernate.Countries;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-@ManagedBean(name = "country")
+
+@Named("country")
 @RequestScoped
 public class CountriesBean extends AbstractBean implements Serializable {
 
+  private static final long serialVersionUID = 8L;
   private String countryId;
   private String countryName;
 
