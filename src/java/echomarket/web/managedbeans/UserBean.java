@@ -8,7 +8,7 @@ import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
 import echomarket.hibernate.PasswordEncryptionService;
-import javax.faces.bean.ManagedBean;
+//import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -25,15 +25,31 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-//Need to fixe login approach in event of exisitng data 
-@Named
-@ManagedBean(name = "userBean")
+@Named("ubean")
+//@ManagedBean(eager = true)
 @SessionScoped
-public class UserBean extends AbstractBean implements Serializable {
+public class UserBean extends UserAbstract implements Serializable {
+
+  private static final long serialVersionUID = 1L;
+  @Inject
+  ParticipantBean pbean;
+  @Inject
+  ContactPreferenceBean cpbean;
+  @Inject
+  ItemBean ibean;
+  @Inject
+  LenderTransferBean ltribean;
+  @Inject
+  LenderItemConditionsBean lcbean;
+  @Inject
+  CommunitiesBean commbean;
+  @Inject
+  CommunityMembersBean cmbean;
 
   private String user_id;
   private String participant_id;
@@ -84,8 +100,8 @@ public class UserBean extends AbstractBean implements Serializable {
     ibean.setItemId("");
     this.itemId = "";
     ParticipantBean pbean = new ParticipantBean();
-    pbean.setUbean(this);  /// This should work
     return_string = pbean.load_ud(this.participant_id);
+    pbean = null;
     return return_string;
 
   }
@@ -467,7 +483,6 @@ public class UserBean extends AbstractBean implements Serializable {
 
     if (activation_success == true) {
       ParticipantBean pbean = new ParticipantBean();
-      pbean.setUbean(this);
       return_string = pbean.load_ud("-1");
     } else {
       setUserToNull();
@@ -758,52 +773,28 @@ public class UserBean extends AbstractBean implements Serializable {
 
     switch (return_string) {
       case "user_agreement":
-        ParticipantBean pb = new ParticipantBean();
-        pb.setUbean(this);
-        return_string = pb.load_ud("-1");
-        pb = null;
+        return_string = pbean.load_ud("-1");
         break;
       case "user_item":
-        ItemBean ibean = new ItemBean();
-        ibean.setUbean(this);
         return_string = ibean.load_ud(this.userType, "");
-        ibean = null;
         break;
       case "user_nae":
-        ParticipantBean pb2 = new ParticipantBean();
-        pb2.setUbean(this);
-        return_string = pb2.load_ud(this.user_id);
-        pb2 = null;
+        return_string = pbean.load_ud(this.user_id);
         break;
       case "user_contact_preferences":
-        ContactPreferenceBean cpbean = new ContactPreferenceBean();
-        cpbean.setUbean(this);
         return_string = cpbean.load_ud(this.participant_id);
-        cpbean = null;
         break;
       case "lender_transfer":
-        LenderTransferBean ltribean = new LenderTransferBean();
-        ltribean.setUbean(this);
         return_string = ltribean.load_ud(this.participant_id);
-        ltribean = null;
         break;
       case "lender_conditions":
-        LenderItemConditionsBean lcbean = new LenderItemConditionsBean();
-        lcbean.setUbean(this);
         return_string = lcbean.load_ud(this.participant_id);
-        lcbean = null;
         break;
       case "community_detail":
-        CommunitiesBean commbean = new CommunitiesBean();
-        commbean.setUbean(this);
         return_string = commbean.load_community_detail();
-        commbean = null;
         break;
       case "community_members":
-        CommunityMembersBean cmbean = new CommunityMembersBean();
-        cmbean.setUbean(this);
         return_string = cmbean.load_community_members();
-        cmbean = null;
         break;
       default:
         return_string = "index";
