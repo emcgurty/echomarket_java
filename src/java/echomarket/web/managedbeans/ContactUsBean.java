@@ -2,25 +2,21 @@ package echomarket.web.managedbeans;
 
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.ContactUs;
-import echomarket.hibernate.Users;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-@Named
-@ManagedBean(name = "contactUsBean")
+@Named("contactUsBean")
 @RequestScoped
 public class ContactUsBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
+  private static final long serialVersionUID = 7L;
+ 
   private String user_id;
   private String email;
   private String subject;
@@ -61,14 +57,12 @@ public class ContactUsBean extends AbstractBean implements Serializable {
       SendEmail se = null;
       String[] getMap = null;
       getMap = new String[2];
-      if (ubean == null) {
-        UserBean utmp = new UserBean();
-        getMap = utmp.getApplicationEmail();
-        utmp = null;
+      if (app == null) {
+        getMap = app.getApplicationEmail();
       } else {
-        getMap = ubean.getApplicationEmail();
+        getMap = app.getApplicationEmail();
       }
-      
+
       try {
         se = new SendEmail("contactUs", this.email, this.subject, this.comments, getMap[0], getMap[1], getClientIpAddr());
         message(null, "MessageSuccessfullySent", new Object[]{this.email});
