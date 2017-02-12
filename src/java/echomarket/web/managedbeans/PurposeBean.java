@@ -5,14 +5,14 @@ import java.io.Serializable;
 import java.util.List;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "purposeBean")
 @RequestScoped
 public class PurposeBean extends AbstractBean implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   private String purposeType;
 
@@ -63,8 +63,8 @@ public class PurposeBean extends AbstractBean implements Serializable {
       session = null;
       tx = null;
     }
-   System.out.println("result size");
-   System.out.println(result.size());
+    System.out.println("result size");
+    System.out.println(result.size());
     return result;
   }
 
