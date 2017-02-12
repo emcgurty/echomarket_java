@@ -24,18 +24,18 @@
               <c:when test="${!empty itemBean.itemId}" >
                 <c:set var="iid" value="${itemBean.itemId}"  />  
               </c:when >
-              <c:when test="${!empty userBean.itemId}" >
-                <c:set var="iid" value="${userBean.itemId}"  />  
+              <c:when test="${!empty app.itemId}" >
+                <c:set var="iid" value="${app.itemId}"  />  
               </c:when >
             </c:choose>
 
             <!--<h:outputText value="${iid}  curent IID"  />-->
             <c:set var="displayThirdChoice" value="none" />
-            <c:set var="displayThirdChoice" value="${(userBean.editable == 0) and (lenderTransferBean.thirdPartyPresence == 1)}" />
+            <c:set var="displayThirdChoice" value="${(app.editable == 0) and (lenderTransferBean.thirdPartyPresence == 1)}" />
 
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="${userBean.userAlias}: USER DASHBOARD"  />
+                <h:outputText value="${app.userAlias}: USER DASHBOARD"  />
                 <c:choose >
                   <c:when test="${(empty lenderTransferBean.lenderTransferId) and (empty iid)}" >
                     <c:set var="save_update"  value="Save Item Transfer Preferences" />
@@ -47,10 +47,10 @@
                     <c:set var="save_update"  value="Update or Accept Current Item Transfer Preferences" />
                   </c:when >
                 </c:choose>
-                <h:commandLink  action="${lenderTransferBean.updateLIT()}"  class="right_div"  value="${save_update}"   rendered="${userBean.editable == 1}"  >
+                <h:commandLink  action="${lenderTransferBean.updateLIT()}"  class="right_div"  value="${save_update}"   rendered="${app.editable == 1}"  >
                   <f:param name="iid" value="${iid}" />
                 </h:commandLink> 
-                <h:commandLink  action="${lenderTransferBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="${userBean.editable == 0}" >
+                <h:commandLink  action="${lenderTransferBean.load_ud(app.participant_id)}"  class="right_div" value="Edit Item Transfer Preference"  rendered="${app.editable == 0}" >
                   <f:param name="action" value="edit" />
                   <f:param name="iid" value="#{iid}" />
                 </h:commandLink>
@@ -66,7 +66,7 @@
             <div  class="div_p"  >
               <div style="margin:10px;" >
                 <h:outputText value="Lender Item Transfer Preferences"  />
-                <h:commandLink  action="${lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Continue to 'Lending Item Conditions'" rendered="${userBean.LITid}"  >
+                <h:commandLink  action="${lenderItemConditionsBean.load_ud(app.participant_id)}"  class="right_div" value="Continue to 'Lending Item Conditions'" rendered="${app.LITid}"  >
                   <f:param name="action" value="edit" />
                   <f:param name="iid" value="#{iid}" />
 
@@ -75,7 +75,7 @@
             </div>
 
             <c:choose> 
-              <c:when test="${userBean.editable == 0}" >
+              <c:when test="${app.editable == 0}" >
                 <div  class="div_p"  >
                   <div style="margin:10px;" >
                     <h:outputText value="##" style="color: indigo;" />
@@ -97,13 +97,13 @@
 
               <div id="BComesToWhichAddressGroup" >    
                 <h:outputLabel value="Borrower comes to which address?:" for="borrowerComesToWhichAddress">
-                  <h:selectOneRadio id="borrowerComesToWhichAddress" value="${lenderTransferBean.borrowerComesToWhichAddress}" rendered="${userBean.editable == 1}"  layout="pageDirection" >
+                  <h:selectOneRadio id="borrowerComesToWhichAddress" value="${lenderTransferBean.borrowerComesToWhichAddress}" rendered="${app.editable == 1}"  layout="pageDirection" >
                     <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
                     <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
                     <f:selectItem itemValue="1" itemLabel="Either address is fine." />
                     <f:selectItem itemValue="0" itemLabel="Neither, no pick up at any address please." />	
                   </h:selectOneRadio> 
-                  <c:if test="${userBean.editable == 0}" >
+                  <c:if test="${app.editable == 0}" >
                     <c:choose>
                       <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 0}">
                         <c:set var="cbe" value="Neither, no pick up at any address"/>
@@ -131,12 +131,12 @@
             <div style="margin-left:25px;margin-top:5px;float:left;">                   
 
               <h:outputLabel for="meetBorrowerAtAgreed" value="Will meet with borrower at an agreed location?:"  >
-                <h:selectOneRadio id="meetBorrowerAtAgreed" value="${lenderTransferBean.meetBorrowerAtAgreed}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="meetBorrowerAtAgreed" value="${lenderTransferBean.meetBorrowerAtAgreed}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio>
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.meetBorrowerAtAgreed == 0}">
                       <c:set var="cbe" value="No"/>
@@ -155,12 +155,12 @@
             </div>
             <div id="meetAtAgreedOption" style="margin-right:250px;margin-top:5px;float:right;">  
               <h:outputLabel for="meetBorrowerAtAgreedLenderChoice" value="Lender's choice?:"  >
-                <h:selectOneRadio id="meetBorrowerAtAgreedLenderChoice" value="${lenderTransferBean.meetBorrowerAtAgreedLenderChoice}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="meetBorrowerAtAgreedLenderChoice" value="${lenderTransferBean.meetBorrowerAtAgreedLenderChoice}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio>
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.meetBorrowerAtAgreedLenderChoice == 0}">
                       <c:set var="cbe" value="No"/>
@@ -177,12 +177,12 @@
               </h:outputLabel>
 
               <h:outputLabel for="meetBorrowerAtAgreedBorrowerChoice" value="Borrower's choice?:"  >
-                <h:selectOneRadio id="meetBorrowerAtAgreedBorrowerChoice" value="${lenderTransferBean.meetBorrowerAtAgreedBorrowerChoice}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="meetBorrowerAtAgreedBorrowerChoice" value="${lenderTransferBean.meetBorrowerAtAgreedBorrowerChoice}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio>
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.meetBorrowerAtAgreedBorrowerChoice == 0}">
                       <c:set var="cbe" value="No"/>
@@ -199,12 +199,12 @@
               </h:outputLabel>
 
               <h:outputLabel for="meetBorrowerAtAgreedMutual" value="Mutual Agreement?:"  >
-                <h:selectOneRadio id="meetBorrowerAtAgreedMutual" value="${lenderTransferBean.meetBorrowerAtAgreedMutual}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="meetBorrowerAtAgreedMutual" value="${lenderTransferBean.meetBorrowerAtAgreedMutual}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio>
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.meetBorrowerAtAgreedMutual == 0}">
                       <c:set var="cbe" value="No"/>
@@ -228,12 +228,12 @@
             <div style="margin-left:25px;margin-top:5px;float:left;width:100%;">                    
 
               <h:outputLabel for="willDeliverToBorrower" value="Will deliver to borrower preferred location?:"  >
-                <h:selectOneRadio id="willDeliverToBorrower" value="${lenderTransferBean.willDeliverToBorrower}" rendered="${userBean.editable == 1}">
+                <h:selectOneRadio id="willDeliverToBorrower" value="${lenderTransferBean.willDeliverToBorrower}" rendered="${app.editable == 1}">
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio>    
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.willDeliverToBorrower == 0}">
                       <c:set var="cbe" value="No"/>
@@ -255,11 +255,11 @@
             <div style="margin-left:25px;margin-top:5px;float:left;">
 
               <h:outputLabel for="thirdPartyPresence" value="Would you like a third-party present during transfer to borrower?:"  >
-                <h:selectOneRadio id="thirdPartyPresence" value="${lenderTransferBean.thirdPartyPresence}" rendered="${userBean.editable == 1}">
+                <h:selectOneRadio id="thirdPartyPresence" value="${lenderTransferBean.thirdPartyPresence}" rendered="${app.editable == 1}">
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
                 </h:selectOneRadio>    
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.thirdPartyPresence == 0}">
                       <c:set var="cbe" value="No"/>
@@ -279,12 +279,12 @@
 
             <div id="thirdPartyPresenceL2BGroup" style="margin-right:250px;margin-top:5px;float:right;display:${displayThirdChoice};">
               <h:outputLabel value="Lender's Choice?:" for="thirdPartyPresenceLenderChoice">
-                <h:selectOneRadio id="thirdPartyPresenceLenderChoice" value="${lenderTransferBean.thirdPartyPresenceLenderChoice}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="thirdPartyPresenceLenderChoice" value="${lenderTransferBean.thirdPartyPresenceLenderChoice}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio> 
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.thirdPartyPresenceLenderChoice == 0}">
                       <c:set var="cbe" value="No"/>
@@ -300,12 +300,12 @@
                 </c:if>  
               </h:outputLabel>
               <h:outputLabel value="Borrower's Choice?:" for="thirdPartyPresenceBorrowerChoice">
-                <h:selectOneRadio id="thirdPartyPresenceBorrowerChoice" value="${lenderTransferBean.thirdPartyPresenceBorrowerChoice}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="thirdPartyPresenceBorrowerChoice" value="${lenderTransferBean.thirdPartyPresenceBorrowerChoice}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio> 
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.thirdPartyPresenceBorrowerChoice == 0}">
                       <c:set var="cbe" value="No"/>
@@ -321,12 +321,12 @@
                 </c:if>  
               </h:outputLabel>
               <h:outputLabel value="Mutual Agreement?:" for="thirdPartyPresenceMutual">
-                <h:selectOneRadio id="thirdPartyPresenceMutual" value="${lenderTransferBean.thirdPartyPresenceMutual}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="thirdPartyPresenceMutual" value="${lenderTransferBean.thirdPartyPresenceMutual}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio> 
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.thirdPartyPresenceMutual == 0}">
                       <c:set var="cbe" value="No"/>
@@ -360,13 +360,13 @@
               <div id="borrowerReturnsToWhichAddressGroup" >    
 
                 <h:outputLabel value="Borrower returns to your:" for="borrowerReturnsToWhichAddress">
-                  <h:selectOneRadio id="borrowerReturnsToWhichAddress" value="${lenderTransferBean.borrowerReturnsToWhichAddress}"  rendered="${userBean.editable == 1}">
+                  <h:selectOneRadio id="borrowerReturnsToWhichAddress" value="${lenderTransferBean.borrowerReturnsToWhichAddress}"  rendered="${app.editable == 1}">
                     <f:selectItem itemValue="3" itemLabel="... Primary Address?" />
                     <f:selectItem itemValue="2" itemLabel="... Alternative Address?" />	
                     <f:selectItem itemValue="1" itemLabel="Either address is fine." />
                     <f:selectItem itemValue="0" itemLabel="Neither, no address contact please." />	
                   </h:selectOneRadio>    
-                  <c:if test="${userBean.editable == 0}" >
+                  <c:if test="${app.editable == 0}" >
                     <c:choose>
                       <c:when test="${lenderTransferBean.borrowerReturnsToWhichAddress == 0}">
                         <c:set var="cbe" value="Neither, no pick up at any address"/>
@@ -390,12 +390,12 @@
               </div>
 
               <h:outputLabel for="willPickUpPreferredLocation" value="Will pick up at borrower's location?:"  >
-                <h:selectOneRadio id="willPickUpPreferredLocation" value="${lenderTransferBean.willPickUpPreferredLocation}" rendered="${userBean.editable == 1}" >
+                <h:selectOneRadio id="willPickUpPreferredLocation" value="${lenderTransferBean.willPickUpPreferredLocation}" rendered="${app.editable == 1}" >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio>    
-                <c:if test="${userBean.editable == 0}" >
+                <c:if test="${app.editable == 0}" >
                   <c:choose>
                     <c:when test="${lenderTransferBean.willPickUpPreferredLocation == 0}">
                       <c:set var="cbe" value="No"/>
@@ -414,8 +414,8 @@
           </div>
           <div style="margin-left:25px;margin-top:5px;float:left;">
             <h:outputLabel for="comment" value="Additional transfer preferences: (255 characters)" >
-              <h:inputTextarea id="comment"  value="#{lenderTransferBean.comment}"  cols="40" rows="10" rendered="#{userBean.editable == 1}" style="margin-left:10px;"  />
-              <c:if test="#{userBean.editable == 0}" >
+              <h:inputTextarea id="comment"  value="#{lenderTransferBean.comment}"  cols="40" rows="10" rendered="#{app.editable == 1}" style="margin-left:10px;"  />
+              <c:if test="#{app.editable == 0}" >
                 <h:inputTextarea readonly="true" value="#{lenderTransferBean.comment}"  rows="10"  cols="40" label="Additional.."/>
               </c:if> 
             </h:outputLabel>
