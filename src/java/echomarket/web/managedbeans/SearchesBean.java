@@ -6,19 +6,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean(name = "searchesBean")
 @SessionScoped
 public class SearchesBean extends AbstractBean implements Serializable {
 
-  @Inject
-  UserBean ubean;
+  private static final long serialVersionUID = 1L;
   @Inject
   ReadOnlyBean robean;
 
@@ -109,8 +106,8 @@ public class SearchesBean extends AbstractBean implements Serializable {
             + "  INNER JOIN part.addresses addr "
             + "  WHERE addr.addressType = 'primary' ";
 
-    if (ubean.getComDetailID() != null) {
-      fromStatement = fromStatement + "  AND part.communityId = \'" + ubean.getCommunityId() + "\' ";   /// When the heck did I change that!  I would have never selected that property.
+    if (app.getComDetailID() != null) {
+      fromStatement = fromStatement + "  AND part.communityId = \'" + app.getCommunityId() + "\' ";   /// When the heck did I change that!  I would have never selected that property.
     } else {
       fromStatement = fromStatement + " AND part.communityId is null";
     }
