@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,7 +19,7 @@ import org.hibernate.Session;
  * Abstract base class for managed beans to share utility methods.</p>
  */
 @Named
-@ApplicationScoped
+@SessionScoped
 public abstract class AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
