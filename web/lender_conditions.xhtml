@@ -22,8 +22,8 @@
             <c:when test="${!empty itemBean.itemId}" >
               <c:set var="iid" value="${itemBean.itemId}"  />  
             </c:when >
-            <c:when test="${!empty userBean.itemId}" >
-              <c:set var="iid" value="${userBean.itemId}"  />  
+            <c:when test="${!empty app.itemId}" >
+              <c:set var="iid" value="${app.itemId}"  />  
             </c:when >
           </c:choose>
           <!--<h:outputText value="${iid}  curent IID"  />-->
@@ -31,7 +31,7 @@
           <div id="form_monetary" class="contact_information" style="width:100%;" >
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
-                <h:outputText value="#{userBean.userAlias}: USER DASHBOARD"  />
+                <h:outputText value="#{app.userAlias}: USER DASHBOARD"  />
                 <c:choose >
                   <c:when test="#{(empty lenderItemConditionsBean.lender_item_condition_id) and (empty iid)}" >
                     <c:set var="save_update"  value="Save Lender Item Conditions" />
@@ -43,11 +43,11 @@
                     <c:set var="save_update"  value="Update or Accept Current Lender Item Conditions" />
                   </c:when >
                 </c:choose>
-                <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="#{save_update}"  rendered="#{userBean.editable == 1}"  >
+                <h:commandLink  action="#{lenderItemConditionsBean.updateLIC()}"  class="right_div" value="#{save_update}"  rendered="#{app.editable == 1}"  >
                   <f:param name="iid" value="${iid}" />
                 </h:commandLink>
 
-                <h:commandLink  action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  class="right_div" value="Edit Lender Item Conditions"  rendered="#{userBean.editable == 0}" >
+                <h:commandLink  action="#{lenderItemConditionsBean.load_ud(app.participant_id)}"  class="right_div" value="Edit Lender Item Conditions"  rendered="#{app.editable == 0}" >
                   <f:param name="action" value="edit" />
                   <f:param name="iid" value="#{iid}" />
                 </h:commandLink>
@@ -64,7 +64,7 @@
             </div>
 
             <c:choose> 
-              <c:when test="#{userBean.editable == 0}" >
+              <c:when test="#{app.editable == 0}" >
                 <div  class="div_p"  >
                   <div style="margin:10px;" >
                     <h:outputText value="##" class="RO_text"/>
@@ -77,12 +77,12 @@
 
             <div style="margin-left:25px;margin-top:5px;width:100%;">
               <h:outputLabel for="forFree" value="For Free?"  >
-                <h:selectOneRadio rendered="#{userBean.editable == 1}" id="forFree" value="#{lenderItemConditionsBean.forFree}" layout='lineDirection' >
+                <h:selectOneRadio rendered="#{app.editable == 1}" id="forFree" value="#{lenderItemConditionsBean.forFree}" layout='lineDirection' >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio>    
-                <c:if test="#{userBean.editable == 0}" >
+                <c:if test="#{app.editable == 0}" >
                   <c:choose>
                     <c:when test="#{lenderItemConditionsBean.forFree == 0}">
                       <c:set var="cbe" value="No"/>
@@ -104,11 +104,11 @@
                 <tr>
                   <td>  
                     <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="smallFee" value="#{lenderItemConditionsBean.smallFee}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="smallFee" value="#{lenderItemConditionsBean.smallFee}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
                       </h:selectOneRadio>  
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.smallFee == 0}">
                             <c:set var="cbe" value="No"/>
@@ -126,11 +126,11 @@
                   </td>
                   <td>
                     <h:outputLabel for="smallFeeAmount" value="If yes, what fee amount?" >
-                      <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" rendered="#{userBean.editable == 1}"  size="10" maxlength="10">
+                      <h:inputText id="smallFeeAmount" value="#{lenderItemConditionsBean.smallFeeAmount}" rendered="#{app.editable == 1}"  size="10" maxlength="10">
                         <f:convertNumber type="currency"  pattern="#0.00" currencySymbol="$" />
                       </h:inputText>    
                       <span class="error-message" id="smallFee" ></span>       
-                      <h:outputText id="smallFeeAmountString"   value="#{lenderItemConditionsBean.smallFeeAmount}" class="RO_text" rendered="#{userBean.editable == 0}" />
+                      <h:outputText id="smallFeeAmountString"   value="#{lenderItemConditionsBean.smallFeeAmount}" class="RO_text" rendered="#{app.editable == 0}" />
                     </h:outputLabel>
                   </td>
                 </tr>
@@ -145,12 +145,12 @@
                   <td>  
 
                     <h:outputLabel for="availableForPurchase" value="Item may be available for small purchase amount?:"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="availableForPurchase" value="#{lenderItemConditionsBean.availableForPurchase}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="availableForPurchase" value="#{lenderItemConditionsBean.availableForPurchase}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
 
                       </h:selectOneRadio>    
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.availableForPurchase == 0}">
                             <c:set var="cbe" value="No"/>
@@ -169,10 +169,10 @@
                   </td>
                   <td>
                     <h:outputLabel for="availableForPurchaseAmount" value="If yes, what purchase amount?:" >
-                      <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}"  size="10" maxlength="10" rendered="#{userBean.editable == 1}" >
+                      <h:inputText id="availableForPurchaseAmount" value="#{lenderItemConditionsBean.availableForPurchaseAmount}"  size="10" maxlength="10" rendered="#{app.editable == 1}" >
                         <f:convertNumber type="currency"  pattern="#0.00" currencySymbol="$" />
                       </h:inputText> 
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <h:outputText id="availableForPurchaseAmountString"   value="#{lenderItemConditionsBean.availableForPurchaseAmount}" class="RO_text" />
                       </c:if> 
                     </h:outputLabel>
@@ -183,12 +183,12 @@
                   <td>  
 
                     <h:outputLabel for="availableForDonation" value="Item may be available for donation?:"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="availableForDonation" value="#{lenderItemConditionsBean.availableForDonation}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="availableForDonation" value="#{lenderItemConditionsBean.availableForDonation}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
 
                       </h:selectOneRadio>    
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.availableForDonation == 0}">
                             <c:set var="cbe" value="No"/>
@@ -207,12 +207,12 @@
                   <td>
 
                     <h:outputLabel for="donateAnonymous" value="If yes, would you like to anonymously donate?:"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="donateAnonymous" value="#{lenderItemConditionsBean.donateAnonymous}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="donateAnonymous" value="#{lenderItemConditionsBean.donateAnonymous}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
 
                       </h:selectOneRadio>    
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.donateAnonymous == 0}">
                             <c:set var="cbe" value="No"/>
@@ -233,12 +233,12 @@
                   <td>  
 
                     <h:outputLabel for="trade" value="Would you be interesting in trading?:"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="trade" value="#{lenderItemConditionsBean.trade}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="trade" value="#{lenderItemConditionsBean.trade}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
 
                       </h:selectOneRadio>    
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.trade == 0}">
                             <c:set var="cbe" value="No"/>
@@ -257,8 +257,8 @@
                   <td>
 
                     <h:outputLabel for="tradeItem" value="If yes, what would you like in exchange?" >
-                      <h:inputText id="tradeItem" value="#{lenderItemConditionsBean.tradeItem}"  rendered="#{userBean.editable == 1}" maxlength="24"/>
-                      <c:if test="#{userBean.editable == 0}" >
+                      <h:inputText id="tradeItem" value="#{lenderItemConditionsBean.tradeItem}"  rendered="#{app.editable == 1}" maxlength="24"/>
+                      <c:if test="#{app.editable == 0}" >
                         <h:outputText id="tradeItemString"   value="#{lenderItemConditionsBean.tradeItem}" class="RO_text" />
                       </c:if> 
                     </h:outputLabel>
@@ -268,12 +268,12 @@
                 <tr>
                   <td>  
                     <h:outputLabel for="securityDeposit" value="Do you require a security deposit?:"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="securityDeposit" value="#{lenderItemConditionsBean.securityDeposit}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="securityDeposit" value="#{lenderItemConditionsBean.securityDeposit}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
 
                       </h:selectOneRadio>    
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.securityDeposit == 0}">
                             <c:set var="cbe" value="No"/>
@@ -292,11 +292,11 @@
                   <td>
 
                     <h:outputLabel for="securityDepositAmount" value="If yes, please provide the security deposit amount:" >
-                      <h:inputText id="securityDepositAmount" value="#{lenderItemConditionsBean.securityDepositAmount}"  size="10" rendered="#{userBean.editable == 1}" maxlength="10">
+                      <h:inputText id="securityDepositAmount" value="#{lenderItemConditionsBean.securityDepositAmount}"  size="10" rendered="#{app.editable == 1}" maxlength="10">
                         <f:convertNumber type="currency"  pattern="##0.00" currencySymbol="$" />
                       </h:inputText> 
                       <span class="security_deposit_amount_error"></span>
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <h:outputText id="securityDepositAmountString"   value="#{lenderItemConditionsBean.securityDepositAmount}" class="RO_text" />
                       </c:if> 
                     </h:outputLabel>
@@ -317,12 +317,12 @@
 
             <div style="float:left;width:33%;margin-left:25px;">
               <h:outputLabel for="agreedNumberOfDays" value="Agreed number of days?:"  >
-                <h:selectOneRadio rendered="#{userBean.editable == 1}" id="agreedNumberOfDays" value="#{lenderItemConditionsBean.agreedNumberOfDays}" layout='lineDirection'>
+                <h:selectOneRadio rendered="#{app.editable == 1}" id="agreedNumberOfDays" value="#{lenderItemConditionsBean.agreedNumberOfDays}" layout='lineDirection'>
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio> 
-                <c:if test="#{userBean.editable == 0}" >
+                <c:if test="#{app.editable == 0}" >
                   <c:choose>
                     <c:when test="#{lenderItemConditionsBean.agreedNumberOfDays == 0}">
                       <c:set var="cbe" value="No"/>
@@ -343,12 +343,12 @@
 
             <div style="float:left;">
               <h:outputLabel for="agreedNumberOfHours" value="Agreed number of hours?:"  >
-                <h:selectOneRadio rendered="#{userBean.editable == 1}" id="agreedNumberOfHours" value="#{lenderItemConditionsBean.agreedNumberOfHours}" layout='lineDirection'>
+                <h:selectOneRadio rendered="#{app.editable == 1}" id="agreedNumberOfHours" value="#{lenderItemConditionsBean.agreedNumberOfHours}" layout='lineDirection'>
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio> 
-                <c:if test="#{userBean.editable == 0}" >
+                <c:if test="#{app.editable == 0}" >
                   <c:choose>
                     <c:when test="#{lenderItemConditionsBean.agreedNumberOfHours == 0}">
                       <c:set var="cbe" value="No"/>
@@ -367,12 +367,12 @@
             <div style="float:left;margin-left:40px;">
 
               <h:outputLabel for="indefiniteDuration" value="Indefinite?"  >
-                <h:selectOneRadio rendered="#{userBean.editable == 1}" id="indefiniteDuration" value="#{lenderItemConditionsBean.indefiniteDuration}" layout='lineDirection'>
+                <h:selectOneRadio rendered="#{app.editable == 1}" id="indefiniteDuration" value="#{lenderItemConditionsBean.indefiniteDuration}" layout='lineDirection'>
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
 
                 </h:selectOneRadio> 
-                <c:if test="#{userBean.editable == 0}" >
+                <c:if test="#{app.editable == 0}" >
                   <c:choose>
                     <c:when test="#{lenderItemConditionsBean.indefiniteDuration == 0}">
                       <c:set var="cbe" value="No"/>
@@ -404,12 +404,12 @@
                   <div style="margin-left:25px;margin-top:5px;">
 
                     <h:outputLabel for="presentDuringBorrowingPeriod" value="Would you like to be present during borrowing period?"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="presentDuringBorrowingPeriod" value="#{lenderItemConditionsBean.presentDuringBorrowingPeriod}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="presentDuringBorrowingPeriod" value="#{lenderItemConditionsBean.presentDuringBorrowingPeriod}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
 
                       </h:selectOneRadio>    
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.presentDuringBorrowingPeriod == 0}">
                             <c:set var="cbe" value="No"/>
@@ -431,12 +431,12 @@
                     <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
 
                       <h:outputLabel for="entirePeriod" value="During the entire lending period?:"  >
-                        <h:selectOneRadio rendered="#{userBean.editable == 1}" id="entirePeriod" value="#{lenderItemConditionsBean.entirePeriod}" layout='lineDirection'>
+                        <h:selectOneRadio rendered="#{app.editable == 1}" id="entirePeriod" value="#{lenderItemConditionsBean.entirePeriod}" layout='lineDirection'>
                           <f:selectItem itemValue="1" itemLabel="Yes" />
                           <f:selectItem itemValue="0" itemLabel="No" />
 
                         </h:selectOneRadio>    
-                        <c:if test="#{userBean.editable == 0}" >
+                        <c:if test="#{app.editable == 0}" >
                           <c:choose>
                             <c:when test="#{lenderItemConditionsBean.entirePeriod == 0}">
                               <c:set var="cbe" value="No"/>
@@ -456,12 +456,12 @@
                     <div style="margin-left:25px;margin-top:5px;margin-right:10px;">
 
                       <h:outputLabel for="partialPeriod" value="During lending period partially?:"  >
-                        <h:selectOneRadio rendered="#{userBean.editable == 1}" id="partialPeriod" value="#{lenderItemConditionsBean.partialPeriod}" layout='lineDirection'>
+                        <h:selectOneRadio rendered="#{app.editable == 1}" id="partialPeriod" value="#{lenderItemConditionsBean.partialPeriod}" layout='lineDirection'>
                           <f:selectItem itemValue="1" itemLabel="Yes" />
                           <f:selectItem itemValue="0" itemLabel="No" />
 
                         </h:selectOneRadio>    
-                        <c:if test="#{userBean.editable == 0}" >
+                        <c:if test="#{app.editable == 0}" >
                           <c:choose>
                             <c:when test="#{lenderItemConditionsBean.partialPeriod == 0}">
                               <c:set var="cbe" value="No"/>
@@ -485,12 +485,12 @@
                 <td style="vertical-align:top;">
                   <div style="margin-left:25px;margin-top:5px;">
                     <h:outputLabel for="provideProperUseTraining" value="Would you like to provide item proper-use training?"  >
-                      <h:selectOneRadio rendered="#{userBean.editable == 1}" id="provideProperUseTraining" value="#{lenderItemConditionsBean.provideProperUseTraining}" layout='lineDirection'>
+                      <h:selectOneRadio rendered="#{app.editable == 1}" id="provideProperUseTraining" value="#{lenderItemConditionsBean.provideProperUseTraining}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
 
                       </h:selectOneRadio>    
-                      <c:if test="#{userBean.editable == 0}" >
+                      <c:if test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{lenderItemConditionsBean.provideProperUseTraining == 0}">
                             <c:set var="cbe" value="No"/>
@@ -511,12 +511,12 @@
                 <td style="vertical-align:top;">
                   <div style="margin-left:15px;margin-top:5px;">
                     <h:outputLabel for="specificConditions" value="I have specific conditions of lending:" >
-                      <h:inputTextarea id="specificConditions"  value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" rendered="#{userBean.editable == 1}" />
-                      <c:if test="#{userBean.editable == 0}" >
+                      <h:inputTextarea id="specificConditions"  value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" rendered="#{app.editable == 1}" />
+                      <c:if test="#{app.editable == 0}" >
                         <h:inputTextarea readonly="true" value="#{lenderItemConditionsBean.specificConditions}"  cols="40" rows="10" title="Specific conditions.." />
                       </c:if> 
                     </h:outputLabel>
-                    <c:if test="#{userBean.editable == 1}" >
+                    <c:if test="#{app.editable == 1}" >
                       <span class="required_fields" style="margin-left:5px;">255 characters permitted</span>                    
                     </c:if>  
                   </div>
