@@ -5,13 +5,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named("app")
-@ApplicationScoped
+@SessionScoped
 public class ApplicationParams extends UserAbstract implements Serializable {
 
   private static final long serialVersionUID = 1L;
