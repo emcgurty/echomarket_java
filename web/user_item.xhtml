@@ -30,11 +30,11 @@
 
               </c:choose>
 
-              <h:outputText value="#{label} ITEM"  rendered="#{userBean.editable == 1}" />
-              <h:outputText value="ITEM: #{itemBean.itemDescription}"  rendered="#{userBean.editable == 0}" />
-              <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save Item"  rendered="#{userBean.editable == 1}" />
+              <h:outputText value="#{label} ITEM"  rendered="#{app.editable == 1}" />
+              <h:outputText value="ITEM: #{itemBean.itemDescription}"  rendered="#{app.editable == 0}" />
+              <h:commandLink  action="#{itemBean.saveItem()}"  class="right_div" value="Save Item"  rendered="#{app.editable == 1}" />
 
-              <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{userBean.editable == 0}" >
+              <h:commandLink  action="#{itemBean.load_ud(itemBean.itemType, itemBean.itemId)}"  class="right_div" value="Edit Item"  rendered="#{app.editable == 0}" >
                 <f:param name="action" value="item" />
               </h:commandLink>
             </div> 
@@ -51,9 +51,9 @@
             <div style="margin:10px;" >
               <c:set var="itype" value="#{itemBean.itemType}" />
               <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
-              <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{(itype ne 'both') and (userBean.editable == 1)}" />
-              <h:outputText value="The Item you would like to... Please select: " rendered="#{(itype == 'both') and (userBean.editable == 1)}" />
-              <h:selectOneMenu id="whichType" value="#{itemBean.whichType}" rendered="#{(itype == 'both') and (userBean.editable == 1)}"  >
+              <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{(itype ne 'both') and (app.editable == 1)}" />
+              <h:outputText value="The Item you would like to... Please select: " rendered="#{(itype == 'both') and (app.editable == 1)}" />
+              <h:selectOneMenu id="whichType" value="#{itemBean.whichType}" rendered="#{(itype == 'both') and (app.editable == 1)}"  >
                 <f:selectItem itemValue="borrow" itemLabel="BORROW" />	
                 <f:selectItem itemValue="lend" itemLabel="LEND" />
               </h:selectOneMenu>   
@@ -74,12 +74,12 @@
               <td style="width:50%;">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
-                    <h:selectOneMenu id="categoryId" value="#{itemBean.categoryId}"  style="margin-left:10px"  class="items select"   rendered="#{userBean.editable == 1}">
+                    <h:selectOneMenu id="categoryId" value="#{itemBean.categoryId}"  style="margin-left:10px"  class="items select"   rendered="#{app.editable == 1}">
                       <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
                                      itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
                       </f:selectItems>
                     </h:selectOneMenu>
-                    <h:outputText  id="categoryIdString" value="#{cats.getCategoryName(itemBean.categoryId)}"   rendered="#{userBean.editable == 0}" class="RO_text"/>
+                    <h:outputText  id="categoryIdString" value="#{cats.getCategoryName(itemBean.categoryId)}"   rendered="#{app.editable == 0}" class="RO_text"/>
                   </h:outputLabel>  
                   <br /><span class="error-message" id="categoryId" ></span>
                 </div>
@@ -88,8 +88,8 @@
 
                 <div id="other_category" style="display:none;">    
                   <h:outputLabel for="otherItemCategory" value="Add another category:" ><span class="required_fields">*</span>
-                    <h:inputText  value="#{itemBean.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"    rendered="#{userBean.editable == 1}" maxlength="24" />
-                    <h:outputText  id="otherItemCategoryString" value="#{itemBean.otherItemCategory}"   rendered="#{userBean.editable == 0}"/>
+                    <h:inputText  value="#{itemBean.otherItemCategory}" id="otherItemCategory"  class="items"  style="margin-left:10px"    rendered="#{app.editable == 1}" maxlength="24" />
+                    <h:outputText  id="otherItemCategoryString" value="#{itemBean.otherItemCategory}"   rendered="#{app.editable == 0}"/>
                   </h:outputLabel>    
                   <span class="error-message" id="otherItemCategory" ></span>
                 </div>
@@ -100,12 +100,12 @@
               <td colspan='2'>
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel value="#{bundle.BasedOnB}"  for="notify"  >
-                    <h:selectOneRadio id="notify" value="#{itemBean.notify}"   rendered="#{userBean.editable == 1}" >
+                    <h:selectOneRadio id="notify" value="#{itemBean.notify}"   rendered="#{app.editable == 1}" >
                       <f:selectItem itemValue="1" itemLabel="Yes" />
                       <f:selectItem itemValue="0" itemLabel="No" />
                     </h:selectOneRadio>    
                     <c:choose>
-                      <c:when test="#{userBean.editable == 0}" >
+                      <c:when test="#{app.editable == 0}" >
                         <c:choose>
                           <c:when test="#{itemBean.notify == 0}">
                             <c:set var="cbe" value="No"/>
@@ -130,15 +130,15 @@
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemDescription" value="#{bundle.ItemDescription}" ><span class="required_fields">*</span>
                     <h:inputText  id="itemDescription" value="#{itemBean.itemDescription}" class="items"  style="margin-left:10px"   
-                                  rendered="#{userBean.editable == 1}" maxlength="50" required="true" requiredMessage="Item description is required"/>
-                    <h:outputText  value="#{itemBean.itemDescription}"    rendered="#{userBean.editable == 0}"  class="RO_text" />
+                                  rendered="#{app.editable == 1}" maxlength="50" required="true" requiredMessage="Item description is required"/>
+                    <h:outputText  value="#{itemBean.itemDescription}"    rendered="#{app.editable == 0}"  class="RO_text" />
                   </h:outputLabel>
                   <span class="error-message" id="itemDescription" ></span>
                 </div></td>
               <td style="width:50%">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
-                    <h:selectOneMenu id="itemConditionId" value="#{itemBean.itemConditionId}"  style="margin-left:10px" class="items select"   rendered="#{userBean.editable == 1}">
+                    <h:selectOneMenu id="itemConditionId" value="#{itemBean.itemConditionId}"  style="margin-left:10px" class="items select"   rendered="#{app.editable == 1}">
                       
                       <f:selectItems id="item_condition" value="#{itemConditionBean.buildItemConditionsArray()}"  
                                      var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
@@ -147,7 +147,7 @@
                     </h:selectOneMenu>
                      
                     <c:choose>
-                      <c:when test="#{userBean.editable == 0}" >
+                      <c:when test="#{app.editable == 0}" >
                         <c:set var="icn" value="#{itemConditionBean.getItemConditionName(itemBean.itemConditionId)}" />
                         <h:outputText  id="itemConditionIdString" value="#{icn}" class="RO_text"/>
                       </c:when>  
@@ -162,15 +162,15 @@
               <td  style="width:50%;">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemModel" value="#{bundle.ItemModel}" >
-                    <h:inputText id="itemModel" value="#{itemBean.itemModel}"  style="margin-left:10px"   rendered="#{userBean.editable == 1}" maxlength="24" />
-                    <h:outputText  id="itemModelString" value="#{itemBean.itemModel}"   rendered="#{userBean.editable == 0}" class="RO_text"/>
+                    <h:inputText id="itemModel" value="#{itemBean.itemModel}"  style="margin-left:10px"   rendered="#{app.editable == 1}" maxlength="24" />
+                    <h:outputText  id="itemModelString" value="#{itemBean.itemModel}"   rendered="#{app.editable == 0}" class="RO_text"/>
                   </h:outputLabel>
                 </div></td>
               <td  style="width:50%;">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
-                    <h:inputText  id="itemCount" value="#{itemBean.itemCount}" size="2" maxlength="2" required="true" requiredMessage="Please enter a numeric value between 1 and 25."  class="items"  style="margin-left:10px"   rendered="#{userBean.editable == 1}"/>
-                    <h:outputText  id="itemCountString" value="#{itemBean.itemCount}"   rendered="#{userBean.editable == 0}" class="RO_text"/>
+                    <h:inputText  id="itemCount" value="#{itemBean.itemCount}" size="2" maxlength="2" required="true" requiredMessage="Please enter a numeric value between 1 and 25."  class="items"  style="margin-left:10px"   rendered="#{app.editable == 1}"/>
+                    <h:outputText  id="itemCountString" value="#{itemBean.itemCount}"   rendered="#{app.editable == 0}" class="RO_text"/>
                   </h:outputLabel>
                   <span class="error-message" id="itemCount" ></span>
                 </div></td>
@@ -178,7 +178,7 @@
           </table>
           <br />
           <div style="margin-left:25px;margin-top:5px;float:left;">
-            <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 1}" >
+            <h:dataTable id="picture"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{app.editable == 1}" >
               <h:column rowHeader="">
                 <div style="margin-left:25px;margin-top:5px;float:left;">
                   <h:outputLabel for="imageFileNamePart" value="Image of Item" >    
@@ -205,7 +205,7 @@
               </h:column>
             </h:dataTable>
 
-            <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{userBean.editable == 0}">
+            <h:dataTable id="pictureRO"  value="#{itemBean.getCurrentItemImage(itemBean.itemId)}" var="image"   rendered="#{app.editable == 0}">
               <h:column rowHeader="">
                 <div style="margin-left:5px;margin-top:5px;float:left;display:block;" id="image_details">
                   <h:outputLabel for="imageView" value="Uploaded Image:"  >
