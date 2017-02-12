@@ -13,7 +13,7 @@
     <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'lend')}" />
     <c:set value="${fn:length(currentHistory) - 1}" var="sizeOfCurrentHistory" />
   </h:head>
-  <h:form enctype="multipart/form-data" id="l_history"  >
+  <h:form enctype="multipart/form-data" >
     <body  >
       <ui:include src="/item_menu.xhtml" id="lending_item_menu" />  
 
@@ -55,10 +55,10 @@
           <h:graphicImage name="#{currentImage}" library="lend_images" alt="Item Image"   height="100" width="100" rendered="#{!empty currentImage}" />
           
           <br />
-          <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history.itemId)}" immediate="true" rendered="#{history.participant_id == userBean.participant_id}"  >
+          <h:commandButton value="Edit"  action="#{itemBean.load_ud('lend', history.itemId)}" immediate="true" rendered="#{history.participant_id == app.participant_id}"  >
             <f:param name="action" value="item" />     
           </h:commandButton>    
-          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId, history.itemDescription)}"  immediate="true"  rendered="#{history.participant_id == userBean.participant_id}"  >
+          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId, history.itemDescription)}"  immediate="true"  rendered="#{history.participant_id == app.participant_id}"  >
           </h:commandButton>    
             
           </div>    
