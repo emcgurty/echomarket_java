@@ -75,7 +75,7 @@
             </tr>
             <tr >
                 <td style="width:50%;padding-bottom: 15px;">
-                    <f:event listener="#{userBean.validatePassword}" type="postValidate" />
+                    <f:event listener="#{app.validatePassword}" type="postValidate" />
                     <h:outputLabel for="password" value="#{b_password}" >       
                         <h:inputSecret id="password"
                                        size="16" maxlength="16"
