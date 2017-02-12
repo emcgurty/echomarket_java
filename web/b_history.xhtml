@@ -15,7 +15,7 @@
 
   </h:head>
 
-  <h:form enctype="multipart/form-data" id="b_history" >
+  <h:form enctype="multipart/form-data" >
     <body  >
       <ui:include src="/item_menu.xhtml" id="borrowing_item_menu" />  
       <div class="top" style="margin-top:10px;"  >
@@ -53,10 +53,10 @@
           <h:graphicImage name="#{currentImage}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty currentImage}" />
 
           <br />
-          <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history.itemId)}" immediate="true" rendered="#{history.participant_id == userBean.participant_id}"  >
+          <h:commandButton value="Edit"  action="#{itemBean.load_ud('borrow', history.itemId)}" immediate="true" rendered="#{history.participant_id == app.participant_id}"  >
             <f:param name="action" value="item" />     
           </h:commandButton>    
-          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId, history.itemDescription)}"  immediate="true"  rendered="#{history.participant_id == userBean.participant_id}"  >
+          <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId, history.itemDescription)}"  immediate="true"  rendered="#{history.participant_id == app.participant_id}"  >
           </h:commandButton>    
 
           </div>
