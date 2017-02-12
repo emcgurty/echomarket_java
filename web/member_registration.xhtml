@@ -27,7 +27,6 @@
     <c:set var="pid"  value="#{request.getParameter('pid')}"  />
     <c:set var="uid"  value="#{request.getParameter('uid')}"  />
 
-
     <h:form id="community_member_registration"   >
 
       <c:forEach items="#{userBean.getMemberRegistrationInformation(pid)}"  var="memInfo"  >
