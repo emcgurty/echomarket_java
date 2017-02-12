@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-@ManagedBean(name = "cats")
+@Named("cats")
 @RequestScoped
 public class CategoriesBean extends AbstractBean implements Serializable {
 
+  private static final long serialVersionUID = 2L;
   private Integer id;
   private String categoryType;
 
