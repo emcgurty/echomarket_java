@@ -5,13 +5,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.faces.bean.ViewScoped;
+import javax.enterprise.context.RequestScoped;
+
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ViewScoped
+@RequestScoped
 public class ItemROBean extends AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
