@@ -34,7 +34,7 @@
       <h:commandLink immediate="true"  action="#{participantBean.load_ud('-1')}"  value="EchoMarket Agreement"  rendered="#{app.editable == -1}" />
     </li>
     <li class="subs" id="tab_item_2" >
-      <h:commandLink immediate="true"  action="#{app.load_ud(0)}"  value="Login Detail"  rendered="#{app.acceptID}" >
+      <h:commandLink immediate="true"  action="#{userBean.load_ud(0)}"  value="Login Detail"  rendered="#{app.acceptID}" >
         <f:param name="action" value="login" />
       </h:commandLink>
     </li>
