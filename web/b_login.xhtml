@@ -25,7 +25,7 @@
           <h:panelGroup>
             <h:outputLabel for="username" value="#{bundle.username}" >       
               <h:inputText id="username"
-                           value="#{ubean.username}"
+                           value="#{userBean.username}"
                            size="16" 
                            required="true"
                            requiredMessage="#{bundle.ReqUserName}"
@@ -44,7 +44,7 @@
                              size="16"
                              maxlength="16"
                              title="#{bundle.PasswordMustContain}"
-                             value="#{ubean.password}"
+                             value="#{userBean.password}"
                              required="true"
                              requiredMessage="#{bundle.ReqPassword}"
                              autocomplete="off"
@@ -58,24 +58,24 @@
       <tr>
         <td style="padding-bottom: 15px;">  
           <p>
-            <h:commandLink  action="#{ubean.loginUser()}" id="user_login_command" value="Login"  />
+            <h:commandLink  action="#{userBean.loginUser()}" id="user_login_command" value="Login"  />
             <br />
             <br />
-            <h:commandLink  action="#{ubean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
+            <h:commandLink  action="#{userBean.load_forgotUsername()}" id="forgot_username" value="Forgot Username" immediate="false" >
               <f:ajax />
             </h:commandLink>
             <h:outputText value=" | " />
-            <h:commandLink  action="#{ubean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password" immediate="false"   >
+            <h:commandLink  action="#{userBean.load_forgotUserPassword()}" id="forgot_password" value="Forgot Password" immediate="false"   >
               <f:ajax />
             </h:commandLink>
             <br />
             <br />
-            <h:commandLink  action="#{ubean.load_user_registration()}" id="i_register" value="Individual or Organization Registration"   >
+            <h:commandLink  action="#{userBean.load_user_registration()}" id="i_register" value="Individual or Organization Registration"   >
               <f:ajax />
             </h:commandLink>
             <br />
             <br />
-            <h:commandLink  action="#{app.load_community_registration()}" id="c_register" value="Community Registration"   >
+            <h:commandLink  action="#{userBean.load_community_registration()}" id="c_register" value="Community Registration"   >
               <f:ajax />
             </h:commandLink>
           </p>     
