@@ -1,12 +1,3 @@
-/*
- * Copyright 2012 Oracle and/or its affiliates.
- * All rights reserved.  You may not modify, use,
- * reproduce, or distribute this software except in
- * compliance with  the terms of the License at:
- * http://developers.sun.com/license/berkeley_license.html
- */
-
-
 package echomarket.web.managedbeans;
 
 import java.io.Serializable;
@@ -14,7 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 
@@ -22,8 +13,10 @@ import javax.inject.Named;
  * <p>Managed bean that retrieves current locale, used on each page.</p>
  */
 @Named
-@ApplicationScoped
+@RequestScoped
 public class LocaleBean extends AbstractBean implements Serializable {
+   private static final long serialVersionUID = 1L;
+  
     private static final Logger logger = Logger.getLogger(
                 "echomarket.web.managedbeans.LocaleBean");
     private Locale locale = context()
