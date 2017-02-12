@@ -1,6 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -154,7 +151,7 @@
         </div>
       </c:forEach>
       <c:set var="performedSearch"  value="#{searchesBean.performedSearch}" />
-      
+
       <c:choose>
         <c:when test="#{performedSearch and fn:length(currentSearchResult) lt 1}" >
           <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
