@@ -3,7 +3,6 @@ package echomarket.web.managedbeans;
 import echomarket.hibernate.Addresses;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
-import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
