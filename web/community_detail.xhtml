@@ -34,7 +34,7 @@
           </div> 
 
           <c:choose>  
-            <c:when test="#{userBean.comDetailID}" >
+            <c:when test="#{app.comDetailID}" >
               <div class="top" >
                 <div style="margin:10px;margin-top:25px;" >
                   <h:outputText value="#{bundle.addMembers}" />
@@ -49,7 +49,7 @@
           <table style="width:95%;margin-left: 50px" align="center" id="community_detail_table">
             <tr>
               <td style="padding-top: 7px;padding-bottom: 7px;" colspan="2">
-                <span class="required_fields" style="margin-left:7px;color:maroon;" >  Registration Community Name: #{userBean.communityName} </span>  
+                <span class="required_fields" style="margin-left:7px;color:maroon;" >  Registration Community Name: #{app.communityName} </span>  
               </td>
             </tr>            
             <tr >
@@ -67,7 +67,7 @@
             </tr>
             <tr>
               <td style="padding-top: 7px;padding-bottom: 7px;" colspan="2">
-                <h:outputLabel for="email"  value="#{bundle.c_detail_email} (#{userBean.email})"><span id="email" class="required_fields">*</span>       
+                <h:outputLabel for="email"  value="#{bundle.c_detail_email} (#{app.email})"><span id="email" class="required_fields">*</span>       
                   <h:inputText id="email" value="#{communitiesBean.email}"  maxlength="50"/>
                 </h:outputLabel>
 
