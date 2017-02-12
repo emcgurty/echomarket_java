@@ -30,9 +30,9 @@
         <div class="top" >
           <div style="margin:10px;margin-top:25px;" >
             <h:outputText value="#{app.userAlias}: USER DASHBOARD"  />
-            <h:commandLink  action="#{ubean.updateUserLogin()}"  class="right_div" value="Save Login Update"  rendered="#{app.editable == 1}" />
-            <h:commandLink  action="#{ubean.load_ud(0)}"  class="right_div" value="Cancel"  rendered="#{app.editable == 1}" immediate="true" />
-            <h:commandLink  action="#{ubean.load_ud(1)}"  class="right_div" value="Edit Login Information"  rendered="#{app.editable == 0}" />
+            <h:commandLink  action="#{userBean.updateUserLogin()}"  class="right_div" value="Save Login Update"  rendered="#{app.editable == 1}" />
+            <h:commandLink  action="#{userBean.load_ud(0)}"  class="right_div" value="Cancel"  rendered="#{app.editable == 1}" immediate="true" />
+            <h:commandLink  action="#{userBean.load_ud(1)}"  class="right_div" value="Edit Login Information"  rendered="#{app.editable == 0}" />
             <br />
             <div class="messagecolor">
               <h:messages showSummary="true" 
@@ -84,7 +84,7 @@
                 <td style="width:50%;padding-bottom: 15px;">
                   <h:outputLabel for="username" value="#{bundle.username}" >       
                     <h:inputText id="username"
-                                 value="#{ubean.username}"
+                                 value="#{userBean.username}"
                                  size="16" maxlength="18"
                                  required="true"
                                  requiredMessage="#{bundle.ReqUserName}"
@@ -100,7 +100,7 @@
                   <h:outputLabel for="userAlias"  value="#{bundle.userAlias}">       
                     <h:inputText id="userAlias"
                                  size="16" maxlength="18"
-                                 value="#{ubean.userAlias}"
+                                 value="#{userBean.userAlias}"
                                  title="#{bundle.userAlias}"
                                  required="true"
                                  requiredMessage="#{bundle.ReqUserAlias}"
@@ -114,11 +114,11 @@
               </tr>
               <tr >
                 <td style="width:50%;padding-bottom: 15px;">
-                  <f:event listener="#{app.validatePassword}" type="postValidate"  rendered="#{app.editable == 1}"/>
+                  <f:event listener="#{userBean.validatePassword}" type="postValidate"  rendered="#{app.editable == 1}"/>
                   <h:outputLabel for="password" value="#{bundle.password}" >       
                     <h:inputSecret id="password"
                                    size="16" maxlength="16"
-                                   value="#{ubean.password}"
+                                   value="#{userBean.password}"
                                    title="#{bundle.PasswordMustContain}"
                                    required="true"
                                    requiredMessage="#{bundle.ReqPassword}"
@@ -149,7 +149,7 @@
                   <h:outputLabel for="email" value="#{bundle.email}" >       
                     <h:inputText id="email"
                                  size="16" maxlength="50"
-                                 value="#{ubean.email}"
+                                 value="#{userBean.email}"
                                  title="#{bundle.email}"
                                  required="true"
                                  requiredMessage="#{bundle.ReqEmail}"
@@ -167,9 +167,9 @@
               </tr >
               <tr >
                 <td colspan="2" style="width:100%;padding-bottom: 15px;">
-                  <c:set var="niceUT" value="#{fn:trim(ubean.getPrettyUserType())}" />
+                  <c:set var="niceUT" value="#{fn:trim(userBean.getPrettyUserType())}" />
                   <h:outputLabel for="userTypeArray" value="#{bundle.userType}" rendered="#{app.editable == 1}">
-                    <h:selectManyCheckbox id="userTypeArray" value="#{ubean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate..." rendered="#{app.editable == 1}">
+                    <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate..." rendered="#{app.editable == 1}">
                       <f:selectItems id="user_type_value" value="#{purposeBean.buildPurposeArray()}"  var="c"
                                      itemLabel="#{c.purposeType}" itemValue="#{c.purposeShort}"   >   
                       </f:selectItems>
