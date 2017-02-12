@@ -32,7 +32,7 @@ import org.hibernate.Transaction;
 @Named
 @RequestScoped
 public class UserBean extends AbstractBean implements Serializable {
-
+  
   private static final long serialVersionUID = 1L;
   @Inject
   ParticipantBean pbean;
@@ -48,7 +48,7 @@ public class UserBean extends AbstractBean implements Serializable {
   CommunitiesBean commbean;
   @Inject
   CommunityMembersBean cmbean;
-
+  
   private String user_id;
   private String username;
   private String firstName;
@@ -71,42 +71,42 @@ public class UserBean extends AbstractBean implements Serializable {
 
 // emm 1.8
   public UserBean() {
-
+    
   }
-
+  
   public String clearItemId() {
     ibean.setItemId("");
     app.setItemId("");
     return pbean.load_ud(app.getParticipant_id());
-
+    
   }
-
+  
   public String getEmail() {
     return email;
   }
-
+  
   public void setEmail(String email) {
     this.email = email;
   }
-
+  
   public String getUserAlias() {
     return userAlias;
   }
-
+  
   public void setUserAlias(String ua) {
     this.userAlias = ua;
   }
-
+  
   public String getUserType() {
     return userType;
   }
-
+  
   public String getPrettyUserType() {
-
+    
     String return_string = "";
-
+    
     if (this.userType != null) {
-
+      
       switch (this.userType) {
         case "both":
           return_string = "Borrowing and Lending";
@@ -121,27 +121,27 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     return return_string;
   }
-
+  
   public void setUserType(String ut) {
     this.userType = ut;
   }
-
+  
   public String getUsername() {
     return username;
   }
-
+  
   public void setUsername(String username) {
     this.username = username;
   }
-
+  
   public String getPassword() {
     return password;
   }
-
+  
   public void setPassword(String password) {
     this.password = password;
   }
-
+  
   public String registerCommunityMember() {   /// Need to test this...
     Boolean updateEntity = false;
     String strGetUserThatCreatedMember = getUserThatCreatedMember();  // return user_id of participant
@@ -155,7 +155,7 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     return return_string;
   }
-
+  
   protected Boolean getCreatorDetail(String uid) {   /// Not sure about this...
     List results = null;
     Session hib = null;
@@ -179,7 +179,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-
+    
     if (results != null) {
       if (results.size() == 1) {
         Users user = (Users) results.get(0);
@@ -190,7 +190,7 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     return return_result;
   }
-
+  
   private String getUserThatCreatedMember() {
     List results = null;
     Session hib = null;
@@ -214,7 +214,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-
+    
     if (results != null) {
       if (results.size() == 1) {
         Participant part = (Participant) results.get(0);
@@ -223,14 +223,14 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     return return_result;
   }
-
+  
   private Boolean updateParticipantRecord() {
     List results = null;
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
     Boolean return_result = false;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -248,7 +248,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-
+    
     if (results != null) {
       if (results.size() == 1) {
         Participant part = (Participant) results.get(0);
@@ -273,31 +273,31 @@ public class UserBean extends AbstractBean implements Serializable {
         }
       }
     }
-
+    
     return return_result;
   }
-
+  
   public String registerUser() {
-
+    
     Boolean savedRecord = false;
     String returnString = null;
     savedRecord = checkForDuplicateEmail(this.email);
     if (savedRecord == false) {
       savedRecord = checkForDuplicateUserName();
     }
-
+    
     if (savedRecord == true) {
       returnString = "user_registration";
       message(null, "EitherEmailOrUsernameExistOnDateBase", null);
     } else {
       returnString = registerValidUser();
     }
-
+    
     return returnString;
   }
-
+  
   private String registerValidUser() {
-
+    
     Boolean savedRecord = false;
     Users create_record = null;
     String commName = null;
@@ -307,7 +307,7 @@ public class UserBean extends AbstractBean implements Serializable {
     String fullname = this.username;
     String ac = null;  // holds reset_code
     commName = this.communityName;
-
+    
     try {
       current_user_id = getId();
       this.user_id = current_user_id;
@@ -318,7 +318,7 @@ public class UserBean extends AbstractBean implements Serializable {
       }
       hold_ut = hold_ut.substring(0, hold_ut.length() - 1);
       if (commName != null) {
-
+        
         create_record = new Users(current_user_id, this.username, commName, this.email, this.password, this.resetCode, this.userAlias, hold_ut, 1);
       } else {
         create_record = new Users(current_user_id, this.username, null, this.email, this.password, this.resetCode, this.userAlias, hold_ut, 0);
@@ -326,7 +326,7 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       // Need to learn error on creating new entity object
     }
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -345,7 +345,7 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = null;
       create_record = null;
     }
-
+    
     if (savedRecord == true) {
       savedRecord = sendActivationEmail(ac, 0);
     }
@@ -358,21 +358,21 @@ public class UserBean extends AbstractBean implements Serializable {
     } else {
       message(null, "NewRegistrationFailed", new Object[]{fullname});
     }
-
+    
     try {
       java.util.Map<String, String> params = null;
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       setAction(params.get("action"));
     } catch (Exception ex) {
     }
-
+    
     app.setUserToNull();
     app.setUserAction("login");
     return "index";
   }
-
+  
   public String processActivation() {
-
+    
     Boolean b_local_results = false;
     Boolean activation_success = true;
     List results = null;
@@ -380,6 +380,7 @@ public class UserBean extends AbstractBean implements Serializable {
     Integer memberCreator = -9;
     String return_string = null;
     String holdResetCode = getResetCode();  // because if process fails, I will null all user values
+    app.setUsername(this.username);
     results = app.findUserName();
     if (results != null) {
       if (results.size() == 0) {
@@ -424,19 +425,19 @@ public class UserBean extends AbstractBean implements Serializable {
       message(null, "UserNameNotFound", new Object[]{this.username});
       activation_success = false;
     }
-
+    
     if (activation_success == true) {
       return_string = pbean.load_ud("-1");
     } else {
       app.setUserToNull();
       return_string = "activate_user.xhtml?reset_code=" + holdResetCode;
     }
-
+    
     return return_string;
   }
-
+  
   public String processMemberActivation() {
-
+    
     Boolean savedRecord = false;
     Users create_record = null;
     String commName = null;
@@ -447,12 +448,12 @@ public class UserBean extends AbstractBean implements Serializable {
     String returnString = null;
     List results = null;
     commName = this.communityName;
-
+    
     savedRecord = checkForDuplicateEmail(this.email);
     if (savedRecord == false) {
       savedRecord = checkForDuplicateUserName();
     }
-
+    
     if (savedRecord == false) {
       try {
         queryString = " FROM Users user WHERE user.user_id = :uid";
@@ -471,7 +472,7 @@ public class UserBean extends AbstractBean implements Serializable {
         hib = null;
         tx = null;
       }
-
+      
       if (results != null) {
         if (results.size() == 1) {
           Users uu = (Users) results.get(0);
@@ -480,7 +481,7 @@ public class UserBean extends AbstractBean implements Serializable {
           results = null;
         }
       }
-
+      
       if (savedRecord == true) {
         try {
           queryString = " FROM Participant part WHERE part.participant_id = :pid";
@@ -499,9 +500,9 @@ public class UserBean extends AbstractBean implements Serializable {
           } finally {
             hib = null;
             tx = null;
-
+            
           }
-
+          
           if (results != null) {
             if (results.size() == 1) {
               hib = hib_session();
@@ -516,7 +517,7 @@ public class UserBean extends AbstractBean implements Serializable {
               tx.commit();
               savedRecord = true;
             }
-
+            
           }
         } catch (Exception ex) {
           tx.rollback();
@@ -526,7 +527,7 @@ public class UserBean extends AbstractBean implements Serializable {
           hib = null;
           tx = null;
         }
-
+        
       }
       if (savedRecord == true) {
         try {
@@ -553,23 +554,23 @@ public class UserBean extends AbstractBean implements Serializable {
     } else {
       message(null, "DuplicateUserNameOrEmail", new Object[]{this.username, this.email});
     }
-
+    
     if (savedRecord == true) {
       returnString = loginUser();   /// will set values 
     } else {
       app.setUserToNull();
       returnString = "member_registration.xhtml?pid=" + this.pid;
     }
-
+    
     return returnString;
   }
-
+  
   public String acceptUpdatedUser() {
-
+    
     List results = null;
     Session hib = null;
     Transaction tx = null;
-
+    app.setUsername(this.username);
     results = app.findUserName();
     Users uu = (Users) results.get(0);
     uu.setActivatedAt(new Date());
@@ -589,11 +590,11 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       results = null;
     }
-
+    
     return loginUser();
-
+    
   }
-
+  
   public String loginUser() {
     // debugging with password assignment
     this.password = "Emcgurty123!";
@@ -605,7 +606,7 @@ public class UserBean extends AbstractBean implements Serializable {
     app.setUsername(this.username);
     results = app.findUserName();
     if (results != null) {
-
+      
       if (results.size() == 0) {
         message(null, "UserNameNotFound", new Object[]{this.username});
         this.username = null;
@@ -648,7 +649,7 @@ public class UserBean extends AbstractBean implements Serializable {
                     setCurrentUserCommunityId(uu.getUser_id());  // sets cid and pid
                     app.setCommunityName(uu.getCommunityName());
                   }
-
+                  
                   app.setEmail(uu.getEmail());
                   app.setUserAlias(uu.getUserAlias());
                   app.setUsername(this.username);
@@ -659,7 +660,7 @@ public class UserBean extends AbstractBean implements Serializable {
                   app.setLICid(false);
                   app.setLITid(false);
                   app.setCpId(false);
-
+                  
                   switch (memberCreator) {
                     case 0:  // Individual not with a community
                       findWhatIsComplete();
@@ -686,22 +687,22 @@ public class UserBean extends AbstractBean implements Serializable {
                 return_string = "user_agreement"; //pbean.load_ud("-1");
               }
             }
-
+            
           } else {
             message(null, "UserHasNotActivated", new Object[]{this.username});
             this.username = null;
             return_string = "index";
           }
-
+          
         } else {  // Closes null findUserName
           message(null, "UserNameNotFound", new Object[]{this.username});
           this.username = null;
           return_string = "index";
         }
       }
-
+      
     }
-
+    
     switch (return_string) {
       case "user_agreement":
         return_string = pbean.load_ud("-1");
@@ -729,7 +730,7 @@ public class UserBean extends AbstractBean implements Serializable {
         break;
       default:
         return_string = "index";
-
+      
     }
     if ("community_detail".equals(return_string) || "user_agreement".equals(return_string) || "index".equals(return_string)) {
       return return_string;  // no redirect because lose data
@@ -738,9 +739,9 @@ public class UserBean extends AbstractBean implements Serializable {
     }
 //    return return_string;   /// need to stop forwarding from index
   }
-
+  
   private String findWhatIsComplete() {
-
+    
     String return_string = "";
     String pid = null;
     String return_null = "";
@@ -751,16 +752,16 @@ public class UserBean extends AbstractBean implements Serializable {
         pid = part.getParticipant_id();
         app.setParticipant_id(pid);
         app.setPartID(true);
-
+        
       } else {
         app.setEditable(0);
         app.setPartID(true);
         return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
-
+      
       if (return_string.isEmpty() == true) {
         app.completeContactPreferences(app.getParticipant_id());
-
+        
         if (app.getCpId() == false) {
           app.setEditable(0);
           return_string = "user_contact_preferences"; //cpbean.load_ud(pid);
@@ -775,11 +776,11 @@ public class UserBean extends AbstractBean implements Serializable {
             case "lend":
               ///setAction("current");
               app.completeLIT(app.getParticipant_id());
-               if (app.getLITid() == false) {
+              if (app.getLITid() == false) {
                 return_string = "lender_transfer"; //ltribean.load_ud(this.participant_id);
               } else {
                 app.completeLIC(app.getParticipant_id());
-               if (app.getLICid() == false) {
+                if (app.getLICid() == false) {
                   return_string = "lender_conditions"; //licibean.load_ud(this.participant_id);
                 } else {
                   setAction("current");
@@ -813,9 +814,9 @@ public class UserBean extends AbstractBean implements Serializable {
     this.isCompleteString = return_string;
     return return_string;
   }
-
+  
   private void findWhatIsCommunityComplete() {
-
+    
     String return_string = "";
     String pid = null;
     Participant part = null;
@@ -835,12 +836,12 @@ public class UserBean extends AbstractBean implements Serializable {
         app.setEditable(0);
         return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
-
+      
       if (return_string.isEmpty() == true) {
         List completCD = completeCommunityDetail();
         Integer hs = completCD.size();
         if (hs == 0) {
-
+          
           app.setComDetailID(false);
           app.setEditable(1);
           return_string = "community_detail"; //commbean.load_community_detail();
@@ -859,13 +860,13 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     this.isCompleteString = return_string;
   }
-
+  
   private void setCurrentUserCommunityId(String uid) {
     List results = null;
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -879,12 +880,12 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on getCurrentUserCommunityId");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
+      
     } finally {
       tx = null;
       hib = null;
     }
-
+    
     if (results != null) {
       if (results.size() == 1) {
         Participant getPID = (Participant) results.get(0);
@@ -894,15 +895,15 @@ public class UserBean extends AbstractBean implements Serializable {
         getPID = null;
       }
     }
-
+    
   }
-
+  
   private List completeCommunityDetail() {
     List results = null;
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -923,13 +924,13 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     return results;
   }
-
+  
   private List hasAcceptedAgreement() {
     List results = null;
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -950,9 +951,9 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     return results;
   }
-
+  
   private Boolean validateUserPassword(List auth_result) {
-
+    
     Users users_Array = null;
     users_Array = new Users();
     Boolean getp = false;
@@ -971,17 +972,17 @@ public class UserBean extends AbstractBean implements Serializable {
       crypted_password = null;
       pes = null;
     }
-
+    
     return getp;
   }
-
+  
   private List verifyUserIsActivated() {
-
+    
     Session hib = null;
     Transaction tx = null;
     List results = null;
     String queryString = "from Users where username = :un  and activated_at != null";
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -995,12 +996,12 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = null;
       tx = null;
     }
-
+    
     return results;
   }
-
+  
   private Boolean ActivateUser() {
-
+    
     List results = null;
     Date ndate = new Date();
     Session session = null;
@@ -1008,7 +1009,7 @@ public class UserBean extends AbstractBean implements Serializable {
     String queryString = null;
     Boolean resultSuccess = false;
     Users users_Array = null;
-
+    
     try {
       queryString = "from Users where reset_code = :rc";
       session = hib_session();
@@ -1023,7 +1024,7 @@ public class UserBean extends AbstractBean implements Serializable {
       session = null;
       tx = null;
     }
-
+    
     if (results != null) {
       if (results.size() == 1) {
         try {
@@ -1045,17 +1046,17 @@ public class UserBean extends AbstractBean implements Serializable {
         }
       }
     }
-
+    
     return resultSuccess;
   }
-
+  
   public String managePasswordChange() {
     Session hib = null;
     Transaction tx = null;
     Users userArray = null;
     List results = validateUserNameResetCode();   // return user with reset code
     if (results != null) {
-
+      
       try {
         userArray = (Users) results.get(0);
         hib = hib_session();
@@ -1088,13 +1089,13 @@ public class UserBean extends AbstractBean implements Serializable {
     app.setUserAction("login");
     return "index";
   }
-
+  
   public String forgotUserPassword() {
     String buildReset_Code = null;
     Users userArray = null;
     Session hib = null;
     Transaction tx = null;
-
+    
     List results = validateEmail(email);
     if (results != null) {
       try {
@@ -1135,26 +1136,26 @@ public class UserBean extends AbstractBean implements Serializable {
       return "index";
     }
   }
-
+  
   public String forgotUserName() {
-
+    
     String results = validateEmailAndPassword(getEmail(), getPassword());
     if (results != null) {
       message(null, "FoundUsername", new Object[]{results});
     } else {
       message(null, "UserNameNotFound", null);
     }
-
+    
     results = null;
     app.setUserToNull();
     app.setUserAction("login");
-
+    
     return "index";
-
+    
   }
-
+  
   private String validateEmailAndPassword(String em, String pw) {
-
+    
     Session hib = null;
     Transaction tx = null;
     List results = null;
@@ -1183,33 +1184,33 @@ public class UserBean extends AbstractBean implements Serializable {
         return_user_name = users_Array.getUsername();
         byte[] salt = users_Array.getSalt();
         byte[] crypted_password = users_Array.getCryptedPassword();
-
+        
         PasswordEncryptionService pes = new PasswordEncryptionService();
         try {
           auth_pw = pes.authenticate(pw, crypted_password, salt);
-
+          
         } catch (NoSuchAlgorithmException ex) {
           Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
+          
         } catch (InvalidKeySpecException ex) {
           Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
         }
       }
     }
-
+    
     if (auth_pw == true && auth_em == true) {
       return return_user_name;
     } else {
       return null;
     }
   }
-
+  
   private List validateEmail(String email) {
     Session hib = null;
     Transaction tx = null;
     List results = null;
     String queryString = null;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1221,20 +1222,20 @@ public class UserBean extends AbstractBean implements Serializable {
       System.out.println("Error in validateEmail");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     }
-
+    
     if (results.size() == 1) {
       return results;
     } else {
       return null;
     }
   }
-
+  
   private List validateUserNameResetCode() {
     Session hib = null;
     Transaction tx = null;
     String queryString = null;
     List results = null;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1255,7 +1256,7 @@ public class UserBean extends AbstractBean implements Serializable {
       return null;
     }
   }
-
+  
   public void getMemberAlias(ComponentSystemEvent event) {
     UIComponent components = event.getComponent();
     UIInput uiInputAlias = (UIInput) components.findComponent("userAlias");
@@ -1275,9 +1276,9 @@ public class UserBean extends AbstractBean implements Serializable {
       return;
     }
   }
-
+  
   public void getMemberEmail(ComponentSystemEvent event) {
-
+    
     UIComponent components = event.getComponent();
     UIInput uiInputEmail = (UIInput) components.findComponent("email");
     String reg_email = uiInputEmail.getLocalValue() == null ? "" : uiInputEmail.getLocalValue().toString();
@@ -1296,9 +1297,9 @@ public class UserBean extends AbstractBean implements Serializable {
       return;
     }
   }
-
+  
   public void makeCDselection(ComponentSystemEvent event) {
-
+    
     UIComponent components = event.getComponent();
     UIInput uiInputCD = (UIInput) components.findComponent("contact_describe_id");
     String reg_cd = uiInputCD.getLocalValue() == null ? "" : uiInputCD.getLocalValue().toString();
@@ -1317,9 +1318,9 @@ public class UserBean extends AbstractBean implements Serializable {
       return;
     }
   }
-
+  
   public void makeCountryselection(ComponentSystemEvent event) {
-
+    
     UIComponent components = event.getComponent();
     UIInput uiInputCD = (UIInput) components.findComponent("countryId");
     String reg_cd = uiInputCD.getLocalValue() == null ? "" : uiInputCD.getLocalValue().toString();
@@ -1338,14 +1339,14 @@ public class UserBean extends AbstractBean implements Serializable {
       return;
     }
   }
-
+  
   public void validatePassword(ComponentSystemEvent event) {
-
+    
     UIComponent components = event.getComponent();
 
     // get password
     UIInput uiInputPassword = (UIInput) components.findComponent("password");
-
+    
     String password = uiInputPassword.getLocalValue() == null ? "" : uiInputPassword.getLocalValue().toString();
     String passwordId = uiInputPassword.getClientId();
 
@@ -1373,7 +1374,7 @@ public class UserBean extends AbstractBean implements Serializable {
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         context().addMessage(passwordId, msg);
         context().renderResponse();
-
+        
       } else {
         return;
       }
@@ -1384,7 +1385,7 @@ public class UserBean extends AbstractBean implements Serializable {
    * @return the userTypeArray
    */
   public List<String> getUserTypeArray() {
-
+    
     if (userTypeArray == null && this.userType != null) {
       ArrayList<String> uta = new ArrayList<String>(Arrays.asList(this.userType.split(",")));
       if ("both".equals(uta.get(0)) && app.getEditable() != null) {
@@ -1447,7 +1448,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.user_id = user_id;
   }
 
-  
   /**
    * @return the communityName
    */
@@ -1461,41 +1461,41 @@ public class UserBean extends AbstractBean implements Serializable {
   public void setCommunityName(String communityName) {
     this.communityName = communityName;
   }
-
+  
   public String load_login() {
     this.username = null;
     app.setUserAction("login");
     return "index";
   }
-
+  
   public String load_forgotUserPassword() {
     this.username = null;
     app.setUserAction("forgotUserPassword");
     return "index?faces-redirect=true";
   }
-
+  
   public String load_forgotUsername() {
     this.username = null;
     app.setUserAction("forgotUsername");
     return "index?faces-redirect=true";
   }
-
+  
   public String load_user_registration() {
     this.roleId = 0;
     return "user_registration.xhtml?faces-redirect=true";
   }
-
+  
   public String load_community_registration() {
     this.roleId = 1;
     return "community_registration.xhtml?faces-redirect=true";
   }
-
+  
   public List completeParticipantRecord() {
-
+    
     List results = null;
     Session hib = null;
     Transaction tx = null;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1513,9 +1513,9 @@ public class UserBean extends AbstractBean implements Serializable {
       hib = null;
     }
     return results;
-
+    
   }
-
+  
   public String updateUserLogin() {
 
     // called by user_login_update.xhtml, which will produce email if user changed password
@@ -1529,7 +1529,7 @@ public class UserBean extends AbstractBean implements Serializable {
     Users uu = null;
     byte[] new_salt = null;
     byte[] new_passwordEncrypt = null;
-
+    
     try {
       queryString = " FROM Users "
               + " WHERE user_id  = :uid";
@@ -1543,12 +1543,12 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User, retrieving current user information");
-
+      
     } finally {
       hib = null;
       tx = null;
     }
-
+    
     if (result != null) {
       if (result.size() == 1) {
         wasPasswordChanged = validateUserPassword(result);  // if false then user changed password;
@@ -1561,7 +1561,7 @@ public class UserBean extends AbstractBean implements Serializable {
             resetCodeString = UUID.randomUUID().toString();
             uu = null;
           } catch (Exception ex) {
-
+            
           } finally {
             uu = null;
           }
@@ -1577,7 +1577,7 @@ public class UserBean extends AbstractBean implements Serializable {
           // emm 1.8 String userTypeString = String.join(",", getUserTypeArray());
           String userTypeString = "borrow";
           uu.setUserType(userTypeString);
-
+          
           if (this.communityName != null) {
             uu.setCommunityName(communityName);
           }
@@ -1602,7 +1602,7 @@ public class UserBean extends AbstractBean implements Serializable {
         }
       }
     }
-
+    
     if (updateSuccess == true) {
       if (wasPasswordChanged == false) {
         sendActivationEmail(resetCodeString, 1);  /// email will direct user to update_user.xhtml
@@ -1613,41 +1613,41 @@ public class UserBean extends AbstractBean implements Serializable {
     } else {
       message(null, "LoginUpdateFailed", new Object[]{this.username});
     }
-
+    
     app.setUserToNull();
     app.setUserAction("login");
     return "index";
   }
-
+  
   public String load_ud(Integer which) {
-
+    
     app.setEditable(which);
     if (user_id == null) {
       message(null, "LoginInRequiredToReviseUserInformation", null);
       return "index";
     } else {
-
+      
       return "user_login_update";
     }
   }
-
+  
   public Integer getRoleId() {
     return roleId;
   }
-
+  
   public void setRoleId(Integer roleId) {
     this.roleId = roleId;
   }
-
+  
   private Boolean sendActivationEmail(String resetCodeString, Integer which) {
 
     //// which 0 = new, 1 = update
     String[] getMap = new String[2];
     getMap = app.getApplicationEmail();
     Boolean return_string = false;
-
+    
     try {
-
+      
       switch (which) {
         case 0:
           if (this.communityName == null) {
@@ -1666,7 +1666,7 @@ public class UserBean extends AbstractBean implements Serializable {
           se = null;
           break;
       }
-
+      
       return_string = true;
     } catch (Exception ex) {
       System.out.println("Send Mail Failed");
@@ -1676,11 +1676,11 @@ public class UserBean extends AbstractBean implements Serializable {
     } finally {
       getMap = null;
     }
-
+    
     return return_string;
   }
 
-    /**
+  /**
    * @return the action
    */
   public String getAction() {
@@ -1707,14 +1707,14 @@ public class UserBean extends AbstractBean implements Serializable {
   public void setCommunityId(String communityId) {
     this.communityId = communityId;
   }
-
+  
   private Boolean checkForDuplicateAlias(String alias) {
-
+    
     Session hib = null;
     Transaction tx = null;
     List results = null;
     Boolean foundAlias = false;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1738,13 +1738,13 @@ public class UserBean extends AbstractBean implements Serializable {
     results = null;
     return foundAlias;
   }
-
+  
   private Boolean checkForDuplicateEmail(String em) {
     Session hib = null;
     Transaction tx = null;
     List results = null;
     Boolean foundEmail = false;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1768,14 +1768,14 @@ public class UserBean extends AbstractBean implements Serializable {
     results = null;
     return foundEmail;
   }
-
+  
   private Boolean checkForDuplicateUserName() {
     String currentUserName = this.username;
     Session hib = null;
     Transaction tx = null;
     List results = null;
     Boolean foundUserName = false;
-
+    
     try {
       hib = hib_session();
       tx = hib.beginTransaction();
@@ -1827,9 +1827,9 @@ public class UserBean extends AbstractBean implements Serializable {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
-
+  
   public List getMemberRegistrationInformation(String pid) {
-
+    
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -1854,7 +1854,7 @@ public class UserBean extends AbstractBean implements Serializable {
       tx = null;
       hib = null;
     }
-
+    
     if (result != null) {
       if (result.size() == 1) {
         pt = (Participant) result.get(0);
@@ -1863,15 +1863,15 @@ public class UserBean extends AbstractBean implements Serializable {
         this.userAlias = pt.getAlias();
         this.email = pt.getEmailAlternative();
         this.username = null;
-
+        
       }
     }
-
+    
     return result;
   }
-
+  
   private String getMemberInformation(String pid) {
-
+    
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -1895,7 +1895,7 @@ public class UserBean extends AbstractBean implements Serializable {
     } finally {
       tx = null;
       hib = null;
-
+      
     }
     if (result != null) {
       if (result.size() == 1) {
@@ -1911,9 +1911,9 @@ public class UserBean extends AbstractBean implements Serializable {
     }
     return returnCID;
   }
-
+  
   public String getRegistrationCommunityName(String pid) {
-
+    
     List result = null;
     Session hib = null;
     Transaction tx = null;
@@ -1921,7 +1921,7 @@ public class UserBean extends AbstractBean implements Serializable {
     String returnString = null;
     Communities pt = null;
     String getCID = getMemberInformation(pid);
-
+    
     queryString = "FROM Communities where community_id = :cid";
     try {
       hib = hib_session();
@@ -1939,9 +1939,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } finally {
       tx = null;
       hib = null;
-
+      
     }
-
+    
     if (result != null) {
       if (result.size() == 1) {
         pt = (Communities) result.get(0);
@@ -1951,7 +1951,7 @@ public class UserBean extends AbstractBean implements Serializable {
     result = null;
     pt = null;
     return returnString;
-
+    
   }
 
   /**
@@ -1968,7 +1968,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.pid = pid;
   }
 
-   
   /**
    * @return the isCompleteString
    */
@@ -1983,7 +1982,6 @@ public class UserBean extends AbstractBean implements Serializable {
     this.isCompleteString = isCompleteString;
   }
 
- 
   /**
    * @return the uid
    */
@@ -1997,5 +1995,5 @@ public class UserBean extends AbstractBean implements Serializable {
   public void setUid(String uid) {
     this.uid = uid;
   }
-
+  
 }
