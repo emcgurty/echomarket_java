@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-              version="2.0">
-
-    
+<faces-config
+  xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+  version="2.2">
   <!-- ========== Application Wide Features ================================ -->
 
 
@@ -24,78 +23,17 @@
 
 
   <!-- ========== Managed Beans ============================================ -->
-<!--  <managed-bean>
-    <managed-bean-name>abstractBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.AbstractBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-      
-  </managed-bean>
-
-                                                    
-  <managed-bean >
-    <managed-bean-name>usersBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.UserBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-    <managed-property>
-      <description>Gets the reset code from url</description>
-      <property-name>reset_code</property-name>
-      <property-class>java.lang.String</property-class>
-      <value>#{param['reset_code']}</value>
-    </managed-property>
-    <managed-property>
-      <description>Gets the participant id from url</description>
-      <property-name>pid</property-name>
-      <property-class>java.lang.String</property-class>
-      <value>#{param['[pid']}</value>
-    </managed-property>
-    <managed-property>
-      <description>Gets the username from the url</description>
-      <property-name>username</property-name>
-      <property-class>java.lang.String</property-class>
-      <value>#{param['username']}</value>
-    </managed-property>
-        
-  </managed-bean>-->
-  
-   
+    
   <validator>  
     <validator-id>selectOneMenuValidator</validator-id>  
     <validator-class>echomarket.resources.SelectOneMenuValidator</validator-class>  
   </validator>
 
-<!--  <managed-bean>
-    <managed-bean-name>countriesBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.CountriesBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>itemConditionBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedBeans.ItemConditionBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-
-  <managed-bean>
-    <managed-bean-name>searchBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.SearchesBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>-->
-<!--
-  <managed-bean>
-    <managed-bean-name>LocaleBean</managed-bean-name>
-    <managed-bean-class>LocaleBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>-->
-<!--  <managed-bean>
-    <managed-bean-name>communitiesBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.CommunitiesBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>-->
-  
  
   <navigation-rule>
     <from-view-id>/user_nae.xhtml</from-view-id>
     <navigation-case>
-      <from-action>#{lenderTransferBean.load_ud(ubean.participant_id)}</from-action>
+      <from-action>#{lenderTransferBean.load_ud(userBean.participant_id)}</from-action>
       
       <to-view-id>/lender_transfer.xhtml</to-view-id>
     </navigation-case>
@@ -105,49 +43,14 @@
   <navigation-rule>
     <from-view-id>/user_item.xhtml</from-view-id>
     <navigation-case>
-      <from-action>#{lenderTransferBean.load_ud(ubean.participant_id)}</from-action>
+      <from-action>#{lenderTransferBean.load_ud(userBean.participant_id)}</from-action>
       
       <to-view-id>/lender_transfer.xhtml</to-view-id>
     </navigation-case>
     
   </navigation-rule>
-   
+
   
   
-<!--  <managed-bean>
-    <managed-bean-name>participantBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.ParticipantBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>itemBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.ItemBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>contactPreferenceBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.ContactPreferenceBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>lenderTransferBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.LenderTransferBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>lenderItemConditionsBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.LenderItemConditionsBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>readOnlyBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.ReadOnlyBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
-  <managed-bean>
-    <managed-bean-name>communityMembersBean</managed-bean-name>
-    <managed-bean-class>echomarket.web.managedbeans.CommunityMembersBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-    -->
+    
 </faces-config>
