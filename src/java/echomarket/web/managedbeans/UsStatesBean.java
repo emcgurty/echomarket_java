@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-@Named
-@ManagedBean(name = "uss")
+@Named("uss")
 @RequestScoped
 public class UsStatesBean extends AbstractBean implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   private String id;
   private String stateName;
