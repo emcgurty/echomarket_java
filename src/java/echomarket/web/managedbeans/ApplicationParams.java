@@ -12,7 +12,7 @@ import org.hibernate.Transaction;
 
 @Named("app")
 @SessionScoped
-public class ApplicationParams extends UserAbstract implements Serializable {
+public class ApplicationParams extends AppAbstract implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
