@@ -1,3 +1,6 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition 
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -7,19 +10,19 @@
   <h:head>
     <h:outputStylesheet library="css" name="item_nav.css"/>
   </h:head>
-  <h:inputHidden id="acceptID" value="#{userBean.acceptID}"  />
-  <h:inputHidden id="partID" value="#{userBean.partID}"  />
-  <h:inputHidden id="cpId" value="#{userBean.cpId}"  />
-  <h:inputHidden id="LITid" value="#{userBean.LITid}"  />
-  <h:inputHidden id="LICid" value="#{userBean.LICid}"  />
-  <c:set var="whichType" value="#{userBean.userType}" />
+  <h:inputHidden id="acceptID" value="#{app.acceptID}"  />
+  <h:inputHidden id="partID" value="#{app.partID}"  />
+  <h:inputHidden id="cpId" value="#{app.cpId}"  />
+  <h:inputHidden id="LITid" value="#{app.LITid}"  />
+  <h:inputHidden id="LICid" value="#{app.LICid}"  />
+  <c:set var="whichType" value="#{app.userType}" />
 
   <c:choose >
     <c:when test="${!empty itemBean.itemId}" >
       <c:set var="iid" value="${itemBean.itemId}"  />  
     </c:when >
-    <c:when test="${!empty userBean.itemId}" >
-      <c:set var="iid" value="${userBean.itemId}"  />  
+    <c:when test="${!empty app.itemId}" >
+      <c:set var="iid" value="${app.itemId}"  />  
     </c:when >
   </c:choose>
   
@@ -62,7 +65,7 @@
       <c:when test="#{(whichType == 'borrow') and (!empty iid)}"  >
         <li id="tab_item_1">
           <c:set var="newItemLabel" value="Item Contact Preferences"  />
-          <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  >
+          <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(app.participant_id)}"  value="#{newItemLabel}"  >
             <f:param name="action" value="edit" />
             <f:param name="iid" value="#{iid}" />
           </h:commandLink>
@@ -74,14 +77,14 @@
           <ul>
             <li id="tab_item_11">
               <c:set var="newItemLabel" value="Contact Preferences"  />
-              <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(userBean.participant_id)}"  value="#{newItemLabel}"  >
+              <h:commandLink immediate="true"  action="#{contactPreferenceBean.load_ud(app.participant_id)}"  value="#{newItemLabel}"  >
                 <f:param name="action" value="edit" />
                 <f:param name="iid" value="#{iid}" />
               </h:commandLink>
             </li>
             <li id="tab_item_12" >
               <c:set var="newItemLabelTrans" value="Transfer Preferences"  />
-              <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelTrans}"  rendered="#{userBean.cpId}" > 
+              <h:commandLink  immediate="true" action="#{lenderTransferBean.load_ud(app.participant_id)}"  value="#{newItemLabelTrans}"  rendered="#{app.cpId}" > 
                 <f:param name="action" value="edit" />
                 <f:param name="iid" value="#{iid}" />
 
@@ -89,7 +92,7 @@
             </li>
             <li id="tab_item_13" >
               <c:set var="newItemLabelCond" value="Lending Conditions"  />
-              <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(userBean.participant_id)}"  value="#{newItemLabelCond}"  rendered="#{userBean.LITid}" >  
+              <h:commandLink  immediate="true" action="#{lenderItemConditionsBean.load_ud(app.participant_id)}"  value="#{newItemLabelCond}"  rendered="#{app.LITid}" >  
                 <f:param name="action" value="edit" />
                 <f:param name="iid" value="#{iid}" />
               </h:commandLink>   
@@ -103,15 +106,15 @@
       <c:when test="#{whichType == 'borrow'}"  >
         <li id="tab_item_15" >
           <c:set var="newItemLabel" value="Your Borrowing History"  />
-          <h:commandLink immediate="true"  action="#{itemBean.getBorrowerHistory(userBean.participant_id, 0)}"  rendered="true" >
+          <h:commandLink immediate="true"  action="#{itemBean.getBorrowerHistory(app.participant_id, 0)}"  rendered="true" >
             <h:outputText value="${newItemLabel}" />
           </h:commandLink>
         </li>
         <c:choose >
-          <c:when  test="#{!empty userBean.communityId}" >
+          <c:when  test="#{!empty app.communityId}" >
             <li id="tab_item_15" >
               <c:set var="newItemLabel" value="Your Community's Borrowing History"  />
-              <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(userBean.communityId, 1)}"   rendered="true">
+              <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(app.communityId, 1)}"   rendered="true">
                 <h:outputText value="${newItemLabel}" />
               </h:commandLink>   
             </li>
@@ -121,15 +124,15 @@
       <c:when test="#{whichType == 'lend'}"  >
         <li id="tab_item_16">
           <c:set var="newItemLabel" value="Your Lending History"  />
-          <h:commandLink immediate="true"  action="#{itemBean.getLenderHistory(userBean.participant_id, 0)}"   rendered="true" >
+          <h:commandLink immediate="true"  action="#{itemBean.getLenderHistory(app.participant_id, 0)}"   rendered="true" >
             <h:outputText value="${newItemLabel}" />
           </h:commandLink>
         </li>
         <c:choose >
-          <c:when  test="#{!empty userBean.communityId}"  >
+          <c:when  test="#{!empty app.communityId}"  >
             <li id="tab_item_16" >
               <c:set var="newItemLabel" value="Your Community's Lending History"  />
-              <h:commandLink  immediate="true" action="#{itemBean.getLenderHistory(userBean.communityId, 1)}"   rendered="true">
+              <h:commandLink  immediate="true" action="#{itemBean.getLenderHistory(app.communityId, 1)}"   rendered="true">
                 <h:outputText value="${newItemLabel}" />
               </h:commandLink>   
             </li>
@@ -142,15 +145,15 @@
           <ul>
             <li id="tab_item_16">
               <c:set var="newItemLabel" value="Your Borrowing History"  />
-              <h:commandLink immediate="true"  action="#{itemBean.getBorrowerHistory(userBean.participant_id, 0)}"  rendered="true" >
+              <h:commandLink immediate="true"  action="#{itemBean.getBorrowerHistory(app.participant_id, 0)}"  rendered="true" >
                 <h:outputText value="${newItemLabel}" />
               </h:commandLink>
             </li>
             <c:choose >
-              <c:when  test="#{!empty userBean.communityId}"  >
+              <c:when  test="#{!empty app.communityId}"  >
                 <li id="tab_item_16" >
                   <c:set var="newItemLabel" value="Your Community's Borrowing History"  />
-                  <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(userBean.communityId, 1)}"  rendered="true">
+                  <h:commandLink  immediate="true" action="#{itemBean.getBorrowerHistory(app.communityId, 1)}"  rendered="true">
                     <h:outputText value="${newItemLabel}" />
                   </h:commandLink>   
                 </li>
@@ -161,14 +164,14 @@
 
             <li id="tab_item_16">
               <c:set var="newItemLabel" value="Your Lending History"  />
-              <h:commandLink immediate="true"  action="#{itemBean.getLenderHistory(userBean.participant_id, 0)}"  value="#{newItemLabel}"  rendered="true" >
+              <h:commandLink immediate="true"  action="#{itemBean.getLenderHistory(app.participant_id, 0)}"  value="#{newItemLabel}"  rendered="true" >
               </h:commandLink>
             </li>
             <c:choose >
-              <c:when  test="#{!empty userBean.communityId}"  >
+              <c:when  test="#{!empty app.communityId}"  >
                 <li id="tab_item_16" >
                   <c:set var="newItemLabel" value="Your Community's Lending History"  />
-                  <h:commandLink  immediate="true" action="#{itemBean.getLenderHistory(userBean.communityId, 1)}"  value="#{newItemLabel}"  rendered="true">
+                  <h:commandLink  immediate="true" action="#{itemBean.getLenderHistory(app.communityId, 1)}"  value="#{newItemLabel}"  rendered="true">
                   </h:commandLink>   
                 </li>
               </c:when>         
