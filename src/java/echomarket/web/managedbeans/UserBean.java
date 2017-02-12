@@ -1,9 +1,9 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.PasswordValidator;
-import echomarket.hibernate.Purpose;
+//import echomarket.hibernate.Purpose;
 import echomarket.hibernate.Users;
-import echomarket.hibernate.Map;
+//import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
 import echomarket.hibernate.Participant;
@@ -29,7 +29,7 @@ import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-@Named("ubean")
+@Named
 @RequestScoped
 public class UserBean extends AbstractBean implements Serializable {
 
@@ -602,6 +602,7 @@ public class UserBean extends AbstractBean implements Serializable {
     List results = null;
     List accept_results = null;
     String return_string = null;
+    app.setUsername(this.username);
     results = app.findUserName();
     if (results != null) {
 
