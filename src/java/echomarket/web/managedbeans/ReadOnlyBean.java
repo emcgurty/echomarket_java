@@ -1,7 +1,6 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.Participant;
-import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -13,22 +12,20 @@ import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-
 @Named
-@ManagedBean(name = "readOnlyBean")
 @SessionScoped
 public class ReadOnlyBean extends AbstractBean implements Serializable {
 
+  private static final long serialVersionUID = 1L;
   private String participant_id;
   private String itemId;
   private String which;
   private List itemFoundList;
-  
+
   // emm 1.8
   public ReadOnlyBean() {
-    
+
   }
-  
 
   public String load_RO(String strwhich, String iid, String pid) {
     if ((strwhich.isEmpty() == false) && (iid.isEmpty() == false) && (pid.isEmpty() == false)) {
