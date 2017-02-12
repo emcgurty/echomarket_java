@@ -296,7 +296,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return returnString;
   }
 
-  private String registerValidUser() {
+  private String registerValidUser() {    // been reviewed
 
     Boolean savedRecord = false;
     Users create_record = null;
@@ -432,7 +432,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return return_string;
   }
 
-  public String processMemberActivation() {
+  public String processMemberActivation() {   // no app canges here becuase user has not logged in yet
 
     Boolean savedRecord = false;
     Users create_record = null;
@@ -561,7 +561,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return returnString;
   }
 
-  public String acceptUpdatedUser() {
+  public String acceptUpdatedUser() {  /// no changes here becuase user has to login
 
     List results = null;
     Session hib = null;
@@ -625,14 +625,14 @@ public class UserBean extends AbstractBean implements Serializable {
               app.setUsername(null);
               return_string = "index";
             } else if (results.size() == 1) {
-              Users uu1 = (Users) results.get(0);
-              app.setUser_id(uu1.getUser_id());
-              app.setRoleId(uu1.getRoleId());
-              app.setUserType(uu1.getUserType());  //db
-              app.setUserAlias(uu1.getUserAlias());
-              app.setEmail(uu1.getEmail());
-              uu1 = null;
-              accept_results = hasAcceptedAgreement();
+//              Users uu1 = (Users) results.get(0);
+//              app.setUser_id(uu1.getUser_id());
+//              app.setRoleId(uu1.getRoleId());
+//              app.setUserType(uu1.getUserType());  //db
+//              app.setUserAlias(uu1.getUserAlias());
+//              app.setEmail(uu1.getEmail());
+//              uu1 = null;
+              accept_results = hasAcceptedAgreement();  /// returns a Participant record
               if (accept_results != null) {
                 if (accept_results.size() == 0) {
                   accept_results = null;
@@ -656,6 +656,7 @@ public class UserBean extends AbstractBean implements Serializable {
                   app.setUserType(uu.getUserType());
                   app.setUserType(app.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
                   app.setUser_id(uu.getUser_id());
+                  this.user_id = uu.getUser_id();  // needed for findWhatIsComplete
                   results = null;
                   app.setLICid(false);
                   app.setLITid(false);
@@ -826,11 +827,9 @@ public class UserBean extends AbstractBean implements Serializable {
         part = (Participant) partList.get(0);
         pid = part.getParticipant_id();
         app.setParticipant_id(pid);
-//        setPartID(true);
         app.setCommunityId(part.getCommunityId());
         app.setCreatorDetailID(true);
       } else {
-//        setPartID(true);
         app.setCommunityId(part.getCommunityId());
         app.setCreatorDetailID(true);
         app.setEditable(0);
@@ -841,14 +840,12 @@ public class UserBean extends AbstractBean implements Serializable {
         List completCD = completeCommunityDetail();
         Integer hs = completCD.size();
         if (hs == 0) {
-
           app.setComDetailID(false);
           app.setEditable(1);
           return_string = "community_detail"; //commbean.load_community_detail();
         } else {
           app.setComDetailID(true);
           app.setComMemberDetailID(true);
-          //setCreatorDetailID(true);
           app.setEditable(1);
           return_string = "community_members"; //cmbean.load_community_members();
 
@@ -1490,7 +1487,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return "community_registration.xhtml?faces-redirect=true";
   }
 
-  public List completeParticipantRecord() {
+  private List completeParticipantRecord() {  
 
     List results = null;
     Session hib = null;
@@ -1516,7 +1513,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  public String updateUserLogin() {
+  public String updateUserLogin() {   
 
     // called by user_login_update.xhtml, which will produce email if user changed password
     Boolean updateSuccess = false;
@@ -1591,6 +1588,7 @@ public class UserBean extends AbstractBean implements Serializable {
           app.setUsername(this.username);
           app.setUserAlias(this.userAlias);
           app.setEmail(this.email);
+          app.setRoleId(uu.getRoleId());   /// really not necessary
           app.setUserType(userTypeString);
           app.setUserType(app.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....          
         } catch (Exception ex) {
@@ -1851,7 +1849,7 @@ public class UserBean extends AbstractBean implements Serializable {
     this.lastName = lastName;
   }
 
-  public List getMemberRegistrationInformation(String pid) {
+  public List getMemberRegistrationInformation(String pid) {   /// called from a GUI
 
     List result = null;
     Session hib = null;
@@ -1893,7 +1891,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return result;
   }
 
-  private String getMemberInformation(String pid) {
+  private String getMemberInformation(String pid) {   // called from GUI
 
     List result = null;
     Session hib = null;
@@ -1935,7 +1933,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return returnCID;
   }
 
-  public String getRegistrationCommunityName(String pid) {
+  public String getRegistrationCommunityName(String pid) {   /// called from member_registration.xhmlt, user not known
 
     List result = null;
     Session hib = null;
