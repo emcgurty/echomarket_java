@@ -15,7 +15,7 @@
 
   <h:form  id="individual_registration"  >
 
-    <c:if test="#{userBean.roleId == 1}"  >
+    <c:if test="#{app.roleId == 1}"  >
       <c:set var="b_alias" scope="view" value="#{bundle.c_userAlias}" />
       <c:set var="b_username" scope="view" value="#{bundle.c_username}" />
       <c:set var="b_password" scope="view" value="#{bundle.c_password}" />
@@ -24,7 +24,7 @@
       <c:set var="b_userType" scope="view" value="#{bundle.c_userType}" />
     </c:if>
 
-    <c:if test="#{userBean.roleId != 1}"  >
+    <c:if test="#{app.roleId != 1}"  >
       <c:set var="b_alias" scope="view" value="#{bundle.userAlias}" />
       <c:set var="b_username" scope="view" value="#{bundle.username}" />
       <c:set var="b_password" scope="view" value="#{bundle.password}" />
@@ -121,8 +121,8 @@
 
           <h:outputLabel for="userTypeArray" value="#{b_userType}" >
             <h:selectManyCheckbox id="userTypeArray" value="#{userBean.userTypeArray}"  layout="lineDirection" required="true"  requiredMessage="Please provide how you would like to Participate...">
-             	<f:selectItem itemValue="borrow" itemLabel="Borrowing" />
-                <f:selectItem itemValue="lend" itemLabel="Lending" />  	
+              <f:selectItem itemValue="borrow" itemLabel="Borrowing" />
+              <f:selectItem itemValue="lend" itemLabel="Lending" />  	
             </h:selectManyCheckbox>
           </h:outputLabel>   
         </td>
