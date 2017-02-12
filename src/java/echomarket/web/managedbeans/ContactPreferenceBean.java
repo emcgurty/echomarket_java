@@ -8,23 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 @Named
-@ManagedBean
 @SessionScoped
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
-  
-  private UserBean ubean;
+  private static final long serialVersionUID = 6L;
+ 
   private String contactPreferenceId;
   private String participant_id;
   private String itemId;
@@ -278,7 +274,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
       params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
       addNewCP = params.get("action");
       currentIid = params.get("iid");
-      getUbean().setItemId(currentIid);
+      app.setItemId(currentIid);
       this.itemId = currentIid;
       for (Map.Entry<String, String> entry : params.entrySet()) {
 
@@ -329,7 +325,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     if (this.contactPreferenceId.isEmpty() == true) {
 
       ContactPreference part = new ContactPreference(getId(),
-              getUbean().getParticipant_id(), this.itemId,
+              app.getParticipant_id(), this.itemId,
               this.useWhichContactAddress, this.contactByChat,
               this.contactByEmail, this.contactByHomePhone,
               this.contactByCellPhone, this.contactByAlternativePhone,
@@ -354,9 +350,9 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } else {
 
       if (this.itemId.isEmpty() == false) {
-        cp_list = getCurrentCP_Id(getUbean().getParticipant_id(), this.itemId);
+        cp_list = getCurrentCP_Id(app.getParticipant_id(), this.itemId);
       } else {
-        cp_list = getCurrentCP(getUbean().getParticipant_id());
+        cp_list = getCurrentCP(app.getParticipant_id());
       }
       if (cp_list != null) {
         if (cp_list.size() == 1) {
@@ -395,7 +391,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           }
         } else {
           // Create new record
-          ContactPreference part = new ContactPreference(getId(), getUbean().getParticipant_id(),
+          ContactPreference part = new ContactPreference(getId(), app.getParticipant_id(),
                   this.itemId, this.useWhichContactAddress, this.contactByChat,
                   this.contactByEmail, this.contactByHomePhone, this.contactByCellPhone,
                   this.contactByAlternativePhone, this.contactByFacebook, this.contactByTwitter,
@@ -407,7 +403,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
             tx = sb.beginTransaction();
             sb.save(part);
             tx.commit();
-            //ubean.setCpId(true);
+            //app.setCpId(true);
             message(null, "CPSaved", null);
             successTransaction = true;
           } catch (Exception ex) {
@@ -423,19 +419,19 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     }
 
     if (successTransaction == true) {
-      getUbean().setEditable(1);
-      if (getUbean().getItemId() != null) {
-        if (getUbean().getItemId().isEmpty() == false) {
-          getUbean().completeContactPreferences(getUbean().getParticipant_id());
+      app.setEditable(1);
+      if (app.getItemId() != null) {
+        if (app.getItemId().isEmpty() == false) {
+          app.completeContactPreferences(app.getParticipant_id());
         } else {
-          getUbean().setCpId(true);
+          app.setCpId(true);
         }
       }
     } else {
-      getUbean().setEditable(0);
-      getUbean().setCpId(false);
+      app.setEditable(0);
+      app.setCpId(false);
     }
-    return load_ud(getUbean().getParticipant_id());
+    return load_ud(app.getParticipant_id());
   }
 
   public String load_ud(String pid) {
@@ -456,29 +452,28 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     } catch (Exception ex) {
     }
     // emm 1.8
-    if (getUbean() != null) {
+    if (app != null) {
 
-      if (getUbean().getEditable() != null) {
-        if (getUbean().getEditable() == 0) {
-          getUbean().setEditable(1);
+      if (app.getEditable() != null) {
+        if (app.getEditable() == 0) {
+          app.setEditable(1);
         } else {
-          getUbean().setEditable(0);
+          app.setEditable(0);
         }
       } else {
-        getUbean().setEditable(1);
+        app.setEditable(1);
       }
 
-    
-    try {
-      action = params.get("action");
-    } catch (Exception ex) {
-    }
-
-    if (action != null) {
-      if ("edit".equals(action)) {
-          getUbean().setEditable(1);
+      try {
+        action = params.get("action");
+      } catch (Exception ex) {
       }
-    }
+
+      if (action != null) {
+        if ("edit".equals(action)) {
+          app.setEditable(1);
+        }
+      }
     }
     if (strIid != null) {
       partlist = getCurrentCP_Id(pid, strIid);
@@ -520,10 +515,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           getParticipantAddreseEmailAlts(this.participant_id);
           pp = null;
         }
-      } else {
-        if (getUbean() != null) {
-        getParticipantAddreseEmailAlts(getUbean().getParticipant_id());
-        }
+      } else if (app != null) {
+        getParticipantAddreseEmailAlts(app.getParticipant_id());
       }
     }
     partlist = null;
@@ -785,18 +778,6 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     this.userAlternativeEmail = userAlternativeEmail;
   }
 
-  /**
-   * @return the ubean
-   */
-  public UserBean getUbean() {
-    return ubean;
-  }
 
-  /**
-   * @param ubean the ubean to set
-   */
-  public void setUbean(UserBean ubean) {
-    this.ubean = ubean;
-  }
 
 }
