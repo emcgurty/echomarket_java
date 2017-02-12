@@ -10,11 +10,11 @@
 
   <h:form id="application_menu">
     <c:choose>
-      <c:when test="${userBean.userAlias == null}">
+      <c:when test="${app.userAlias == null}">
         <c:set var="username" value="Friend" />
       </c:when>
       <c:otherwise>
-        <c:set var="username" value="#{userBean.userAlias}" />
+        <c:set var="username" value="#{app.userAlias}" />
       </c:otherwise>
     </c:choose>
     <ul id="nav" class="menu">
@@ -35,7 +35,7 @@
         <h:commandLink id="search_items" action="search" value="SEARCH!"/>
       </li>
       
-      <c:if test="#{userBean.user_id == null}" >
+      <c:if test="#{app.user_id == null}" >
         <li class="subs">
           <a href="#s1">Login</a>
           <ul>
@@ -75,9 +75,9 @@
           </ul>
         </li>
       </c:if>
-      <c:if test="#{userBean.user_id != null}" >
+      <c:if test="#{app.user_id != null}" >
         <li class="subs">
-          <h:commandLink  id="user_logout" value="Log Out" action="#{userBean.Logout()}">
+          <h:commandLink  id="user_logout" value="Log Out" action="#{app.Logout()}">
             <f:actionListener  type="echomarket.listeners.EndSession"  /> 
           </h:commandLink>
         </li>
