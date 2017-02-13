@@ -212,9 +212,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } else {
       message(null, "NotSuccessDeleteUser", new Object[]{app.getUsername()});
     }
-    
+
     return app.Logout();
-    
+
   }
 
   public String clearItemId() {
@@ -755,117 +755,127 @@ public class UserBean extends AbstractBean implements Serializable {
   }
 
   public String loginUser() {
-    // debugging with password assignment
+    
+  // debugging with password assignment
     this.password = "Emcgurty123!";
-
-    Boolean b_local_results = false;
+    Boolean resultsSuccess = false;
     Integer memberCreator = -9;
     List results = null;
     List accept_results = null;
     String return_string = null;
-    app.setUsername(this.username);
+    app.setUsername(this.username);  /// need username in app
+
+    // Fnd the user name first
     results = app.findUserName();
     if (results != null) {
-
       if (results.size() == 0) {
         message(null, "UserNameNotFound", new Object[]{this.username});
         this.username = null;
         app.setUsername(null);
         return_string = "index";
-      } else if (results.size() == 1) {
-        Boolean validPassword = validateUserPassword(results);
-        if (validPassword == false) {
-          message(null, "InvalidPassword", new Object[]{this.username});
-          this.username = null;
-          app.setUsername(null);
-          return_string = "index";
-        } else if (validPassword == true) {
-          results = verifyUserIsActivated();
-          if (results != null) {
-            if (results.size() == 0) {
-              message(null, "UserHasNotActivated", new Object[]{this.username});
-              this.username = null;
-              app.setUsername(null);
-              return_string = "index";
-            } else if (results.size() == 1) {
-//              Users uu1 = (Users) results.get(0);
-//              app.setUser_id(uu1.getUser_id());
-//              app.setRoleId(uu1.getRoleId());
-//              app.setUserType(uu1.getUserType());  //db
-//              app.setUserAlias(uu1.getUserAlias());
-//              app.setEmail(uu1.getEmail());
-//              uu1 = null;
-              accept_results = hasAcceptedAgreement();  /// returns a Participant record
-              if (accept_results != null) {
-                if (accept_results.size() == 0) {
-                  accept_results = null;
-                  message(null, "UserHasNotAccepted", new Object[]{this.username});
-                  return_string = "user_agreement";  ////pbean.load_ud("-1");
-                } else if (accept_results.size() == 1) {
-                  accept_results = null;
-                  app.setAcceptID(true);
-                  message(null, "LogInSuccessful", new Object[]{this.username});
-                  Users uu = (Users) results.get(0);  /// User result that has current user data
-                  memberCreator = uu.getRoleId();
-                  app.setRoleId(memberCreator);
-                  if (memberCreator > 0) {
-                    setCurrentUserCommunityId(uu.getUser_id());  // sets cid and pid
-                    app.setCommunityName(uu.getCommunityName());
-                  }
+        resultsSuccess = false;
+      } else {
+        resultsSuccess = true;
 
-                  app.setEmail(uu.getEmail());
-                  app.setUserAlias(uu.getUserAlias());
-                  app.setUsername(this.username);
-                  app.setUserType(uu.getUserType());
-                  app.setUserType(app.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
-                  app.setUser_id(uu.getUser_id());
-                  this.user_id = uu.getUser_id();  // needed for findWhatIsComplete
-                  results = null;
-                  app.setLICid(false);
-                  app.setLITid(false);
-                  app.setCpId(false);
+      }
+    }
 
-                  switch (memberCreator) {
-                    case 0:  // Individual not with a community
-                      findWhatIsComplete();
-                      return_string = this.isCompleteString;
-                      break;
-                    case 1:  // A community creator
-                      findWhatIsCommunityComplete();
-                      return_string = this.isCompleteString;
-                      if (return_string.isEmpty() == true) {
-                        findWhatIsComplete();  // hold needs to be written
-                        return_string = this.isCompleteString;
-                      }
-                      break;
-                    case 2:  // A member of a community
-                      findWhatIsComplete(); // hold needs to be written
-                      return_string = this.isCompleteString;
-                      break;
-                    default:
-                      break;
-                  }
-                }
-              } else {
-                message(null, "UserHasNotAccepted", new Object[]{this.username});
-                return_string = "user_agreement"; //pbean.load_ud("-1");
-              }
-            }
+    if (resultsSuccess == true) {
+      // validate the password
+      if (validateUserPassword(results) == false) {
+        message(null, "InvalidPassword", new Object[]{this.username});
+        this.username = null;
+        app.setUsername(null);
+        return_string = "index";
+        resultsSuccess = false;
+      } else {
+        resultsSuccess = true;
+      }
+    }
 
-          } else {
-            message(null, "UserHasNotActivated", new Object[]{this.username});
-            this.username = null;
-            return_string = "index";
-          }
+    if (resultsSuccess == true) {
 
-        } else {  // Closes null findUserName
-          message(null, "UserNameNotFound", new Object[]{this.username});
-          this.username = null;
-          return_string = "index";
+      // Check to see if user has activated
+      Users uu1 = (Users) results.get(0);
+      if (uu1.getActivatedAt() == null) {
+        // then user has activated
+        app.setUser_id(uu1.getUser_id());
+        this.user_id = uu1.getUser_id();  /// need 
+        uu1 = null;
+        resultsSuccess = true;
+      } else {
+        message(null, "UserHasNotActivated", new Object[]{this.username});
+        this.username = null;
+        app.setUsername(null);
+        this.user_id = null;
+        app.setUser_id(null);
+        return_string = "index";
+        resultsSuccess = false;
+      }
+    }
+
+    if (resultsSuccess == true) {
+      accept_results = hasAcceptedAgreement();  /// returns a Participant record
+      if (accept_results != null) {
+        if (accept_results.size() == 0) {
+          accept_results = null;
+          message(null, "UserHasNotAccepted", new Object[]{this.username});
+          return_string = "user_agreement";  ////pbean.load_ud("-1");
+          resultsSuccess = false;
+        } else if (accept_results.size() == 1) {
+          accept_results = null;
+          app.setAcceptID(true);
+          message(null, "LogInSuccessful", new Object[]{this.username});
+          resultsSuccess = true;
         }
       }
-
     }
+
+    if (resultsSuccess == true) {
+
+      Users uu = (Users) results.get(0);  /// Set  local and app values
+      memberCreator = uu.getRoleId();
+      app.setRoleId(memberCreator);
+      if (memberCreator > 0) {
+        setCurrentUserCommunityId(uu.getUser_id());  // sets cid and pid
+        app.setCommunityName(uu.getCommunityName());
+      }
+
+      app.setEmail(uu.getEmail());
+      app.setUserAlias(uu.getUserAlias());
+      app.setUsername(this.username);
+      app.setUserType(uu.getUserType());
+      app.setUserType(app.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
+      app.setUser_id(uu.getUser_id());
+      this.user_id = uu.getUser_id();  // needed for findWhatIsComplete
+      results = null;
+      uu = null;
+      app.setLICid(false);
+      app.setLITid(false);
+      app.setCpId(false);
+
+    switch (memberCreator) {
+      case 0:  // Individual not with a community
+        findWhatIsComplete();
+        return_string = this.isCompleteString;
+        break;
+      case 1:  // A community creator
+        findWhatIsCommunityComplete();
+        return_string = this.isCompleteString;
+        if (return_string.isEmpty() == true) {
+          findWhatIsComplete();  // hold needs to be written
+          return_string = this.isCompleteString;
+        }
+        break;
+      case 2:  // A member of a community
+        findWhatIsComplete(); // hold needs to be written
+        return_string = this.isCompleteString;
+        break;
+      default:
+        break;
+    }
+  }
+
     app.setEditable(1);
     switch (return_string) {
       case "user_agreement":
@@ -1040,8 +1050,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on getCurrentUserCommunityId");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
 
     } finally {
       tx = null;
@@ -1079,8 +1104,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on completeCommunityDetail");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1108,8 +1148,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on hasAcceptedAgreement");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1130,13 +1185,43 @@ public class UserBean extends AbstractBean implements Serializable {
     try {
       getp = pes.authenticate(this.password, crypted_password, salt);
 
-    } catch (NoSuchAlgorithmException ex) {
-      Logger.getLogger(UserBean.class
-              .getName()).log(Level.SEVERE, null, ex);
+    
 
-    } catch (InvalidKeySpecException ex) {
+
+
+
+
+
+
+
+
+} catch (NoSuchAlgorithmException ex) {
       Logger.getLogger(UserBean.class
-              .getName()).log(Level.SEVERE, null, ex);
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
+
+    
+
+
+
+
+
+
+
+
+
+} catch (InvalidKeySpecException ex) {
+      Logger.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       salt = null;
       crypted_password = null;
@@ -1162,8 +1247,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error at in verifyUserIsActivated");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -1192,8 +1292,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error in activateUser");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       session = null;
       tx = null;
@@ -1213,8 +1328,23 @@ public class UserBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
           tx.rollback();
           Logger
-                  .getLogger(UserBean.class
-                          .getName()).log(Level.SEVERE, null, ex);
+                  
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
         } finally {
           users_Array = null;
           session = null;
@@ -1237,28 +1367,88 @@ public class UserBean extends AbstractBean implements Serializable {
         userArray = (Users) results.get(0);
         hib = hib_session();
         tx = hib.beginTransaction();
-        Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
+        Users 
+
+
+
+
+
+
+
+
+
+uu = (Users) hib.get(Users.class
+
+
+
+
+, userArray.getUser_id());
         uu.setResetCode(null);
         uu.setActivatedAt(new Date());
         PasswordEncryptionService pes = new PasswordEncryptionService();
         try {
           uu.setCryptedPassword(pes.getEncryptedPassword(this.password, uu.getSalt()));
 
-        } catch (NoSuchAlgorithmException ex) {
-          Logger.getLogger(UserBean.class
-                  .getName()).log(Level.SEVERE, null, ex);
+        
 
-        } catch (InvalidKeySpecException ex) {
+
+
+
+
+
+
+
+
+} catch (NoSuchAlgorithmException ex) {
           Logger.getLogger(UserBean.class
-                  .getName()).log(Level.SEVERE, null, ex);
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
+
+        
+
+
+
+
+
+
+
+
+
+} catch (InvalidKeySpecException ex) {
+          Logger.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
         }
         tx.commit();
         message(null, "PasswordChangeSuccess", new Object[]{});
       } catch (Exception ex) {
         tx.rollback();
         Logger
-                .getLogger(UserBean.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
         message(null, "PasswordChangeSuccessFailed", new Object[]{});
       } finally {
         userArray = null;
@@ -1285,7 +1475,22 @@ public class UserBean extends AbstractBean implements Serializable {
           userArray = (Users) results.get(0);
           hib = hib_session();
           tx = hib.beginTransaction();
-          Users uu = (Users) hib.get(Users.class, userArray.getUser_id());
+          Users 
+
+
+
+
+
+
+
+
+
+uu = (Users) hib.get(Users.class
+
+
+
+
+, userArray.getUser_id());
           buildReset_Code = uu.BuildRandomValue();
           uu.setResetCode(buildReset_Code);
           tx.commit();
@@ -1294,8 +1499,23 @@ public class UserBean extends AbstractBean implements Serializable {
         tx.rollback();
         System.out.println("Tx commit failed..");
         Logger
-                .getLogger(UserBean.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
       } finally {
         tx = null;
         hib = null;
@@ -1308,8 +1528,23 @@ public class UserBean extends AbstractBean implements Serializable {
       } catch (Exception ex) {
         System.out.println("Send Mail Failed");
         Logger
-                .getLogger(UserBean.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
       }
       message(null, "ForgotUserPasswordSuccess", new Object[]{email});
       app.setUserToNull();
@@ -1359,8 +1594,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error in ValiateEmailandPassword");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -1377,13 +1627,43 @@ public class UserBean extends AbstractBean implements Serializable {
         try {
           auth_pw = pes.authenticate(pw, crypted_password, salt);
 
-        } catch (NoSuchAlgorithmException ex) {
-          Logger.getLogger(UserBean.class
-                  .getName()).log(Level.SEVERE, null, ex);
+        
 
-        } catch (InvalidKeySpecException ex) {
+
+
+
+
+
+
+
+
+} catch (NoSuchAlgorithmException ex) {
           Logger.getLogger(UserBean.class
-                  .getName()).log(Level.SEVERE, null, ex);
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
+
+        
+
+
+
+
+
+
+
+
+
+} catch (InvalidKeySpecException ex) {
+          Logger.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
         }
       }
     }
@@ -1411,8 +1691,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error in validateEmail");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     }
 
     if (results.size() == 1) {
@@ -1438,8 +1733,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error in validateUserNameResetCode");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -1701,8 +2011,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on completeParticipantRecord");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1738,8 +2063,23 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User, retrieving current user information");
 
     } finally {
@@ -1795,8 +2135,23 @@ public class UserBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
           tx.rollback();
           Logger
-                  .getLogger(UserBean.class
-                          .getName()).log(Level.SEVERE, null, ex);
+                  
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
           System.out.println("Error on Update User, updating current user information");
         } finally {
           hib = null;
@@ -1895,8 +2250,23 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       System.out.println("Send Mail Failed");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       getMap = null;
     }
@@ -1948,8 +2318,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on checkForDuplicateEmail");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -1978,8 +2363,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on checkForDuplicateEmail");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -2009,8 +2409,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error in checkForDuplicateUserName");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -2072,8 +2487,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on getMemberRegistrationInformation");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -2114,8 +2544,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on getMemberInformation");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -2158,8 +2603,23 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       System.out.println("Error on getRegistrationCommunityName");
       Logger
-              .getLogger(UserBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+              
+
+
+
+
+
+
+
+
+
+.getLogger(UserBean.class
+
+
+
+
+
+.getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
