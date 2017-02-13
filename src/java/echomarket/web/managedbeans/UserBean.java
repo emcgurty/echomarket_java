@@ -6,6 +6,7 @@ import echomarket.hibernate.Users;
 //import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
+import echomarket.hibernate.Items;
 import echomarket.hibernate.Participant;
 import echomarket.hibernate.PasswordEncryptionService;
 import java.io.Serializable;
@@ -71,7 +72,149 @@ public class UserBean extends AbstractBean implements Serializable {
 
 // emm 1.8
   public UserBean() {
+  }
 
+  public String deleteUser() {
+
+    String query = null;
+    Session sb = null;
+    Transaction tx = null;
+    List result = null;
+    Boolean resultSuccess = false;
+    Integer result_size = 0;
+
+    try {
+      sb = hib_session();
+      tx = sb.beginTransaction();
+      query = "FROM Participant WHERE user_id = :uid";
+      result = sb.createQuery(query)
+              .setParameter("uid", app.getUser_id())
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error in retrieving Participant in DeleteUser");
+      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      sb = null;
+      tx = null;
+    }
+
+    // Have to delete participant first
+    if (result != null) {
+      if (result.size() == 1) {
+        try {
+          sb = hib_session();
+          tx = sb.beginTransaction();
+          sb.delete((Participant) result.get(0));
+          tx.commit();
+          resultSuccess = true;
+        } catch (Exception ex) {
+          tx.rollback();
+          System.out.println("Error in Delete Participant");
+          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+
+        } finally {
+          sb = null;
+          tx = null;
+        }
+      }
+    }
+
+    if (resultSuccess == true) {
+
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        query = "FROM User WHERE user_id = :uid";
+        result = sb.createQuery(query)
+                .setParameter("uid", app.getUser_id())
+                .list();
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in retrieving User in DeleteUser");
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+        sb = null;
+        tx = null;
+      }
+
+      // Delete Participant
+      if (result != null) {
+        if (result.size() == 1) {
+          try {
+            sb = hib_session();
+            tx = sb.beginTransaction();
+            sb.delete((Users) result.get(0));
+            tx.commit();
+            resultSuccess = true;
+          } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in Deleting User");
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+
+          } finally {
+            sb = null;
+            tx = null;
+          }
+        }
+      }
+
+    }
+
+    if (resultSuccess == true) {
+
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        query = "FROM Items WHERE participant_id = :pid";
+        result = sb.createQuery(query)
+                .setParameter("pid", app.getParticipant_id())
+                .list();
+        tx.commit();
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in retrieving Items in DeleteUser");
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+        sb = null;
+        tx = null;
+      }
+
+      // Delete Items
+      if (result != null) {
+        result_size = result.size();
+        if (result_size > 0) {
+          try {
+            sb = hib_session();
+            tx = sb.beginTransaction();
+            for (int i = 0; i < result_size; i++) {
+              sb.delete((Items) result.get(i));
+            }
+            tx.commit();
+            resultSuccess = true;
+          } catch (Exception ex) {
+            tx.rollback();
+            System.out.println("Error in Deleting Items");
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+
+          } finally {
+            sb = null;
+            tx = null;
+          }
+        }
+      }
+    }
+    /// etc.  I need to set up Hibernate with cascade... But this is fine for the moment
+    if (resultSuccess == true) {
+      message(null, "SuccessDeleteUser", new Object[]{app.getUsername()});
+    } else {
+      message(null, "NotSuccessDeleteUser", new Object[]{app.getUsername()});
+    }
+    
+    return app.Logout();
+    
   }
 
   public String clearItemId() {
@@ -174,7 +317,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on getCreatorDetail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -209,7 +354,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on updateParticipantRecord in Hibernate session");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -243,7 +390,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on updateParticipantRecord in Hibernate session");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       tx = null;
       hib = null;
@@ -266,7 +415,9 @@ public class UserBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
           tx.rollback();
           System.out.println("Error on updateParticipantRecord in updating");
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger
+                  .getLogger(UserBean.class
+                          .getName()).log(Level.SEVERE, null, ex);
         } finally {
           tx = null;
           hib = null;
@@ -338,7 +489,9 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.rollback();
       this.user_id = null;
       System.out.println("Error in registerUser");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       message(null, "LoginNotUpdated", new Object[]{this.username, this.email});
     } finally {
       tx = null;
@@ -463,7 +616,9 @@ public class UserBean extends AbstractBean implements Serializable {
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Error in updatingNewMemberParticpant, get UserType");
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        Logger
+                .getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
       } finally {
         hib = null;
         tx = null;
@@ -491,7 +646,9 @@ public class UserBean extends AbstractBean implements Serializable {
           } catch (Exception ex) {
             tx.rollback();
             System.out.println("Error in updatingNewMemberParticpant, getting current participant record");
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(UserBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
             savedRecord = false;
           } finally {
             hib = null;
@@ -518,7 +675,9 @@ public class UserBean extends AbstractBean implements Serializable {
         } catch (Exception ex) {
           tx.rollback();
           System.out.println("Error in updatingNewMemberParticpant");
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger
+                  .getLogger(UserBean.class
+                          .getName()).log(Level.SEVERE, null, ex);
         } finally {
           hib = null;
           tx = null;
@@ -539,7 +698,9 @@ public class UserBean extends AbstractBean implements Serializable {
           tx.rollback();
           this.user_id = null;
           System.out.println("Error in processMemberActivation create new user");
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger
+                  .getLogger(UserBean.class
+                          .getName()).log(Level.SEVERE, null, ex);
           message(null, "MemberRegistrationNotUpdated", new Object[]{this.username, this.email});
         } finally {
           tx = null;
@@ -580,7 +741,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in acceptUpdatedUser");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -876,7 +1039,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on getCurrentUserCommunityId");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
 
     } finally {
       tx = null;
@@ -913,7 +1078,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on completeCommunityDetail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -940,7 +1107,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on hasAcceptedAgreement");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -960,10 +1129,14 @@ public class UserBean extends AbstractBean implements Serializable {
     PasswordEncryptionService pes = new PasswordEncryptionService();
     try {
       getp = pes.authenticate(this.password, crypted_password, salt);
+
     } catch (NoSuchAlgorithmException ex) {
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(UserBean.class
+              .getName()).log(Level.SEVERE, null, ex);
+
     } catch (InvalidKeySpecException ex) {
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(UserBean.class
+              .getName()).log(Level.SEVERE, null, ex);
     } finally {
       salt = null;
       crypted_password = null;
@@ -988,7 +1161,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error at in verifyUserIsActivated");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -1016,7 +1191,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in activateUser");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       session = null;
       tx = null;
@@ -1035,7 +1212,9 @@ public class UserBean extends AbstractBean implements Serializable {
           resultSuccess = true;
         } catch (Exception ex) {
           tx.rollback();
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger
+                  .getLogger(UserBean.class
+                          .getName()).log(Level.SEVERE, null, ex);
         } finally {
           users_Array = null;
           session = null;
@@ -1064,16 +1243,22 @@ public class UserBean extends AbstractBean implements Serializable {
         PasswordEncryptionService pes = new PasswordEncryptionService();
         try {
           uu.setCryptedPassword(pes.getEncryptedPassword(this.password, uu.getSalt()));
+
         } catch (NoSuchAlgorithmException ex) {
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(UserBean.class
+                  .getName()).log(Level.SEVERE, null, ex);
+
         } catch (InvalidKeySpecException ex) {
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(UserBean.class
+                  .getName()).log(Level.SEVERE, null, ex);
         }
         tx.commit();
         message(null, "PasswordChangeSuccess", new Object[]{});
       } catch (Exception ex) {
         tx.rollback();
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        Logger
+                .getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
         message(null, "PasswordChangeSuccessFailed", new Object[]{});
       } finally {
         userArray = null;
@@ -1108,7 +1293,9 @@ public class UserBean extends AbstractBean implements Serializable {
       } catch (Exception ex) {
         tx.rollback();
         System.out.println("Tx commit failed..");
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        Logger
+                .getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
       } finally {
         tx = null;
         hib = null;
@@ -1120,7 +1307,9 @@ public class UserBean extends AbstractBean implements Serializable {
         se = null;
       } catch (Exception ex) {
         System.out.println("Send Mail Failed");
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        Logger
+                .getLogger(UserBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
       }
       message(null, "ForgotUserPasswordSuccess", new Object[]{email});
       app.setUserToNull();
@@ -1169,7 +1358,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in ValiateEmailandPassword");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -1187,10 +1378,12 @@ public class UserBean extends AbstractBean implements Serializable {
           auth_pw = pes.authenticate(pw, crypted_password, salt);
 
         } catch (NoSuchAlgorithmException ex) {
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(UserBean.class
+                  .getName()).log(Level.SEVERE, null, ex);
 
         } catch (InvalidKeySpecException ex) {
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(UserBean.class
+                  .getName()).log(Level.SEVERE, null, ex);
         }
       }
     }
@@ -1217,7 +1410,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in validateEmail");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     }
 
     if (results.size() == 1) {
@@ -1242,7 +1437,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error in validateUserNameResetCode");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
     } finally {
       hib = null;
       tx = null;
@@ -1487,7 +1684,7 @@ public class UserBean extends AbstractBean implements Serializable {
     return "community_registration.xhtml?faces-redirect=true";
   }
 
-  private List completeParticipantRecord() {  
+  private List completeParticipantRecord() {
 
     List results = null;
     Session hib = null;
@@ -1503,7 +1700,9 @@ public class UserBean extends AbstractBean implements Serializable {
     } catch (Exception ex) {
       tx.rollback();
       System.out.println("Error on completeParticipantRecord");
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       return null;
     } finally {
       tx = null;
@@ -1513,7 +1712,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
   }
 
-  public String updateUserLogin() {   
+  public String updateUserLogin() {
 
     // called by user_login_update.xhtml, which will produce email if user changed password
     Boolean updateSuccess = false;
@@ -1538,7 +1737,9 @@ public class UserBean extends AbstractBean implements Serializable {
       tx.commit();
     } catch (Exception ex) {
       tx.rollback();
-      Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
       System.out.println("Error on Update User, retrieving current user information");
 
     } finally {
@@ -1593,7 +1794,9 @@ public class UserBean extends AbstractBean implements Serializable {
           app.setUserType(app.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....          
         } catch (Exception ex) {
           tx.rollback();
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+          Logger
+                  .getLogger(UserBean.class
+                          .getName()).log(Level.SEVERE, null, ex);
           System.out.println("Error on Update User, updating current user information");
         } finally {
           hib = null;
@@ -1629,7 +1832,7 @@ public class UserBean extends AbstractBean implements Serializable {
       return "index";
     } else {
       try {
-        
+
         results = app.findUserName();
         if (results != null) {
           if (results.size() == 1) {
@@ -1639,10 +1842,10 @@ public class UserBean extends AbstractBean implements Serializable {
             this.username = uu.getUsername();
             this.userAlias = uu.getUserAlias();
             this.email = uu.getEmail();
-            
+
           }
         }
-      } catch (Exception ex)  {
+      } catch (Exception ex) {
         System.out.println("Error in UserBean, load_ud");
       } finally {
         results = null;
