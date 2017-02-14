@@ -20,7 +20,7 @@ import org.hibernate.Transaction;
 public class ContactPreferenceBean extends AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 6L;
- 
+
   private String contactPreferenceId;
   private String participant_id;
   private String itemId;
@@ -609,11 +609,16 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     if (result != null) {
       if (result.size() == 1) {
         Participant part = (Participant) result.get(0);
-        if (part.getQuestionAltAddress() == 1) {
-          this.setQuestionAltAddress(true);
+        if (part.getQuestionAltAddress() != null) {
+          if (part.getQuestionAltAddress() == 1) {
+            this.setQuestionAltAddress(true);
+          } else {
+            this.setQuestionAltAddress(false);
+          }
         } else {
           this.setQuestionAltAddress(false);
         }
+                
         if (part.getEmailAlternative() != null) {
           this.displayAlternativeEmail = true;
           this.userAlternativeEmail = part.getEmailAlternative();
@@ -621,6 +626,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           this.displayAlternativeEmail = false;
           this.userAlternativeEmail = null;
         }
+                       
+        
         if (part.getDisplayAddress() == 1) {
           this.displayPrimary = true;
         } else {
@@ -777,7 +784,5 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   public void setUserAlternativeEmail(String userAlternativeEmail) {
     this.userAlternativeEmail = userAlternativeEmail;
   }
-
-
 
 }
