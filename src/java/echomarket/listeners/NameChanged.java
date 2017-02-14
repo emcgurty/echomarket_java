@@ -1,12 +1,3 @@
-/*
- * Copyright 2012 Oracle and/or its affiliates.
- * All rights reserved.  You may not modify, use,
- * reproduce, or distribute this software except in
- * compliance with  the terms of the License at:
- * http://developers.sun.com/license/berkeley_license.html
- */
-
-
 package echomarket.listeners;
 
 import java.util.logging.Level;
@@ -36,7 +27,7 @@ public class NameChanged extends Object implements ValueChangeListener {
         
         if (null != event.getNewValue()) {
              if ("name".equals(current)) {
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "name", event.getNewValue()); }
+                       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "name", event.getNewValue()); }
              else if ("selected_zip_code".equals(current)) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "selected_zip_code", event.getNewValue()); }
         }
