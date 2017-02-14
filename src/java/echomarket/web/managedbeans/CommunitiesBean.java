@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -18,6 +19,9 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 3L;
 
+  @Inject
+  CommunityMembersBean cmBean;
+  
   private String communityId;
   private String communityName;
   private Integer approved;
@@ -184,6 +188,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
     String query = null;
     List result = null;
     Communities comm_result = null;
+    String return_string = null;
 
     if (this.communityId.isEmpty() == true) {
       ///  Should never be empty
@@ -253,9 +258,7 @@ public class CommunitiesBean extends AbstractBean implements Serializable {
       app.setComDetailID(updateSuccess);
     }
 
-    CommunityMembersBean cmBean = new CommunityMembersBean();
-    String return_string = cmBean.load_community_members();
-    cmBean = null;
+    return_string = cmBean.load_community_members();
     return return_string;
   }
 
