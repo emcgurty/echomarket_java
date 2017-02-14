@@ -48,7 +48,7 @@ public class ApplicationParams extends AppAbstract implements Serializable {
 
   public String Logout() {
     setUserToNull();
-    return "index?faces-redirect=true";
+    return "index";
   }
 
   protected void setUserToNull() {
