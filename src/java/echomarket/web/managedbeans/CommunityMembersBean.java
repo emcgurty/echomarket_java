@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+//import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -20,6 +21,9 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+//  @Inject
+//  UserBean ubean;
+  
   private String participant_id;
   private String community_id;
   private String remoteIp;
@@ -59,10 +63,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
     return comm_member;
   }
 
-  public String skipMembers() {
-    return app.skipCommunityMembers();
-
-  }
+//  public String skipMembers() {
+//    return ubean.skipCommunityMembers();   // hopefully not cyclic
+//
+//  }
 
   public String actionSave() {
     this.errorMessage = null;
