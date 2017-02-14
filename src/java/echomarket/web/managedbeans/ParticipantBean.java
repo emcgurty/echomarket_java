@@ -396,10 +396,11 @@ public class ParticipantBean extends AbstractBean implements Serializable {
     if (updateSuccess == true) {
       app.setParticipant_id(pid);
       app.setEditable(1);
-      app.setPartID(true);
-//      app.setComDetailID(updateSuccess);  //allows the Community Detail option to be available in menu
       if (app.getCommunityId().isEmpty() == false) {
+        app.setComDetailID(updateSuccess);
         app.setCreatorDetailID(updateSuccess); //allows the Community Members option to be available in menu
+      } else {
+        app.setPartID(updateSuccess);
       }
     } else {
       app.setEditable(0);
