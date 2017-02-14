@@ -241,17 +241,6 @@ public class ApplicationParams extends AppAbstract implements Serializable {
     return results;
   }
 
-  protected String skipCommunityMembers() {
-    this.comMemberDetailID = true;
-    this.editable = 0;
-    String return_string = null;
-    ContactPreferenceBean cpbean = new ContactPreferenceBean();
-    return_string = cpbean.load_ud(this.participant_id);
-    cpbean = null;
-    return return_string;
-
-  }
-
   protected String[] getApplicationEmail() {
 
     Session hib = null;
