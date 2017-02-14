@@ -75,6 +75,15 @@ public class UserBean extends AbstractBean implements Serializable {
   public UserBean() {
   }
 
+//  protected String skipCommunityMembers() {
+//    app.setComMemberDetailID(true);
+//    app.setEditable(0);
+//    String return_string = null;
+//    return_string = cpbean.load_ud(app.getParticipant_id());
+//    return return_string;
+//
+//  }
+
   public String deleteUser() {
 
     Query query = null;
