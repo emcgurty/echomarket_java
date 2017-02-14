@@ -83,7 +83,6 @@ public class UserBean extends AbstractBean implements Serializable {
 //    return return_string;
 //
 //  }
-
   public String deleteUser() {
 
     Query query = null;
@@ -91,7 +90,7 @@ public class UserBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     Integer result = -2;
     Boolean resultSuccess = false;
-    
+
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
@@ -946,7 +945,8 @@ public class UserBean extends AbstractBean implements Serializable {
     String return_string = "";
     String pid = null;
     Participant part = null;
-    List partList = completeParticipantRecord();
+
+    List partList = completeParticipantRecord();  /// Is firstName present?
     if (partList != null) {
       if (partList.size() == 1) {
         part = (Participant) partList.get(0);
@@ -960,24 +960,51 @@ public class UserBean extends AbstractBean implements Serializable {
         app.setEditable(0);
         return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
+      partList = null;
+    }
 
-      if (return_string.isEmpty() == true) {
-        List completCD = completeCommunityDetail();
-        Integer hs = completCD.size();
-        if (hs == 0) {
-          app.setComDetailID(false);
+    if (return_string.isEmpty() == true) {
+      List completeCD = completeCommunityDetail();  /// Is there are community record?
+      if (completeCD != null) {
+        if (completeCD.size() == 1) {
+          app.setComDetailID(true);
+          app.setComMemberDetailID(true);
+          Communities cm = (Communities) completeCD.get(0);
+          app.setCommunityName(cm.getCommunityName());
+          app.setCommunityId(cm.getCommunityId());
+          cm = null;
           app.setEditable(1);
-          return_string = "community_detail"; //commbean.load_community_detail();
         } else {
           app.setComDetailID(true);
           app.setComMemberDetailID(true);
           app.setEditable(1);
-          return_string = "community_members"; //cmbean.load_community_members();
-
+          return_string = "community_detail"; //commbean.load_community_detail();
         }
+        
+        completeCD = null;
       }
+    }
+
+    if (return_string.isEmpty() == true) {
+      List completeCM = completeCommunityMemberRecord();
+      if (completeCM != null) {
+        if (completeCM.size() > 1) {
+          app.setComDetailID(true);
+          app.setComMemberDetailID(true);
+          app.setPartID(true);
+          app.setEditable(1);
+        } else {
+          app.setComDetailID(true);
+          app.setComMemberDetailID(true);
+          app.setPartID(true);
+          app.setEditable(1);
+          return_string = "community_members"; //commbean.load_community_detail();
+        }
+
+      }
+
     } else {
-      message(null, "ParticpantNotFound", null);
+      message(null, "ParticipantNotFound", null);
       return_string = "index";
     }
     this.isCompleteString = return_string;
@@ -1644,6 +1671,34 @@ public class UserBean extends AbstractBean implements Serializable {
   public String load_community_registration() {
     this.roleId = 1;
     return "community_registration.xhtml?faces-redirect=true";
+  }
+
+  private List completeCommunityMemberRecord() {
+
+    List results = null;
+    Session hib = null;
+    Transaction tx = null;
+
+    try {
+      hib = hib_session();
+      tx = hib.beginTransaction();
+      results = hib.createQuery("from Participant WHERE community_id = :cid ")
+              .setParameter("cid", app.getCommunityId())
+              .list();
+      tx.commit();
+    } catch (Exception ex) {
+      tx.rollback();
+      System.out.println("Error on completeParticipantRecord");
+      Logger
+              .getLogger(UserBean.class
+                      .getName()).log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      tx = null;
+      hib = null;
+    }
+    return results;
+
   }
 
   private List completeParticipantRecord() {
