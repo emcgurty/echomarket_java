@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -76,48 +77,45 @@ public class UserBean extends AbstractBean implements Serializable {
 
   public String deleteUser() {
 
-    String query = null;
+    Query query = null;
     Session sb = null;
     Transaction tx = null;
-    List result = null;
+    Integer result = -2;
     Boolean resultSuccess = false;
-    Integer result_size = 0;
-
+    
     try {
       sb = hib_session();
       tx = sb.beginTransaction();
-      query = "FROM Participant WHERE user_id = :uid";
-      result = sb.createQuery(query)
-              .setParameter("uid", app.getUser_id())
-              .list();
+      query = sb.createQuery("delete Participant where user_id = :uid");
+      query.setParameter("uid", app.getParticipant_id());
+      result = query.executeUpdate();
       tx.commit();
+      resultSuccess = true;
     } catch (Exception ex) {
       tx.rollback();
-      System.out.println("Error in retrieving Participant in DeleteUser");
+      System.out.println("Error in deleting Participant in DeleteUser");
       Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       sb = null;
       tx = null;
     }
 
-    // Have to delete participant first
-    if (result != null) {
-      if (result.size() == 1) {
-        try {
-          sb = hib_session();
-          tx = sb.beginTransaction();
-          sb.delete((Participant) result.get(0));
-          tx.commit();
-          resultSuccess = true;
-        } catch (Exception ex) {
-          tx.rollback();
-          System.out.println("Error in Delete Participant");
-          Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
-        } finally {
-          sb = null;
-          tx = null;
-        }
+    if (resultSuccess == true) {
+      try {
+        sb = hib_session();
+        tx = sb.beginTransaction();
+        query = sb.createQuery("delete Users where user_id = :uid");
+        query.setParameter("uid", app.getUser_id());
+        result = query.executeUpdate();
+        tx.commit();
+        resultSuccess = true;
+      } catch (Exception ex) {
+        tx.rollback();
+        System.out.println("Error in deleting User in DeleteUser");
+        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+      } finally {
+        sb = null;
+        tx = null;
       }
     }
 
@@ -126,86 +124,22 @@ public class UserBean extends AbstractBean implements Serializable {
       try {
         sb = hib_session();
         tx = sb.beginTransaction();
-        query = "FROM User WHERE user_id = :uid";
-        result = sb.createQuery(query)
-                .setParameter("uid", app.getUser_id())
-                .list();
+        query = sb.createQuery("delete Items where participant_id = :pid");
+        query.setParameter("pid", app.getParticipant_id());
+        result = query.executeUpdate();
         tx.commit();
+        resultSuccess = true;
       } catch (Exception ex) {
         tx.rollback();
-        System.out.println("Error in retrieving User in DeleteUser");
+        System.out.println("Error in deleting Items in DeleteUser");
         Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
       } finally {
         sb = null;
         tx = null;
       }
 
-      // Delete Participant
-      if (result != null) {
-        if (result.size() == 1) {
-          try {
-            sb = hib_session();
-            tx = sb.beginTransaction();
-            sb.delete((Users) result.get(0));
-            tx.commit();
-            resultSuccess = true;
-          } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("Error in Deleting User");
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
-          } finally {
-            sb = null;
-            tx = null;
-          }
-        }
-      }
-
     }
 
-    if (resultSuccess == true) {
-
-      try {
-        sb = hib_session();
-        tx = sb.beginTransaction();
-        query = "FROM Items WHERE participant_id = :pid";
-        result = sb.createQuery(query)
-                .setParameter("pid", app.getParticipant_id())
-                .list();
-        tx.commit();
-      } catch (Exception ex) {
-        tx.rollback();
-        System.out.println("Error in retrieving Items in DeleteUser");
-        Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-      } finally {
-        sb = null;
-        tx = null;
-      }
-
-      // Delete Items
-      if (result != null) {
-        result_size = result.size();
-        if (result_size > 0) {
-          try {
-            sb = hib_session();
-            tx = sb.beginTransaction();
-            for (int i = 0; i < result_size; i++) {
-              sb.delete((Items) result.get(i));
-            }
-            tx.commit();
-            resultSuccess = true;
-          } catch (Exception ex) {
-            tx.rollback();
-            System.out.println("Error in Deleting Items");
-            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
-
-          } finally {
-            sb = null;
-            tx = null;
-          }
-        }
-      }
-    }
     /// etc.  I need to set up Hibernate with cascade... But this is fine for the moment
     if (resultSuccess == true) {
       message(null, "SuccessDeleteUser", new Object[]{app.getUsername()});
