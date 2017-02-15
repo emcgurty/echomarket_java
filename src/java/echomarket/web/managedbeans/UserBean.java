@@ -1,12 +1,9 @@
 package echomarket.web.managedbeans;
 
 import echomarket.hibernate.PasswordValidator;
-//import echomarket.hibernate.Purpose;
 import echomarket.hibernate.Users;
-//import echomarket.hibernate.Map;
 import echomarket.SendEmail.SendEmail;
 import echomarket.hibernate.Communities;
-import echomarket.hibernate.Items;
 import echomarket.hibernate.Participant;
 import echomarket.hibernate.PasswordEncryptionService;
 import java.io.Serializable;
@@ -980,7 +977,7 @@ public class UserBean extends AbstractBean implements Serializable {
           app.setEditable(1);
           return_string = "community_detail"; //commbean.load_community_detail();
         }
-        
+
         completeCD = null;
       }
     }
@@ -1085,12 +1082,16 @@ public class UserBean extends AbstractBean implements Serializable {
     String queryString = null;
 
     try {
+      System.out.println("Current user id: this");
+      System.out.println(this.user_id);
+      System.out.println("Current user id: app");
+      System.out.println(this.user_id);
       hib = hib_session();
       tx = hib.beginTransaction();
       queryString = " FROM Participant "
               + " WHERE user_id  = :uid AND goodwill = 1 AND age18OrMore = 1";
       results = hib.createQuery(queryString)
-              .setParameter("uid", app.getUser_id())
+              .setParameter("uid", this.user_id)
               .list();
       tx.commit();
     } catch (Exception ex) {
