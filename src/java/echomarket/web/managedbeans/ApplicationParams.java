@@ -44,6 +44,31 @@ public class ApplicationParams extends AppAbstract implements Serializable {
 
 // emm 1.8
   public ApplicationParams() {
+    user_id = null;
+    participant_id = null;
+    itemId = null;
+    acceptID = false;
+    creatorDetailID = false;
+    comDetailID = false;
+    comMemberDetailID = false;
+    partID = false;
+    cpId = false;
+    LITid = false;
+    LICid = false;
+    username = null;
+    firstName = "";
+    lastName = "";
+    userAlias = "";
+    userType = "";
+    email = "";
+    userAction = "";
+    communityId = "";
+    communityName = "";
+    editable = -99;
+    roleId = -9;
+    action = "";
+    pid = "";
+    uid = "";    /// user_id for member registration url
   }
 
   public String Logout() {
