@@ -21,9 +21,6 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-//  @Inject
-//  UserBean ubean;
-  
   private String participant_id;
   private String community_id;
   private String remoteIp;
@@ -49,25 +46,10 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   }
 
-  private List getNewMemberList() {
-    this.errorMessage = null;
-    // TO DO: Need to code for when getHowMany = 0... Managed in addAction()
-    ArrayList<Participant> comm_member = new ArrayList<Participant>();
-    Integer howMany = getHowManyRecords();
-    Participant new_cm;
-    for (int i = 0; i < howMany; i++) {
-      new_cm = new Participant(UUID.randomUUID().toString(), app.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
-      comm_member.add(new_cm);
-    }
-    this.new_comm_member_rows = comm_member;
-    return comm_member;
-  }
-
 //  public String skipMembers() {
 //    return ubean.skipCommunityMembers();   // hopefully not cyclic
 //
 //  }
-
   public String actionSave() {
     this.errorMessage = null;
     Session hib = null;
@@ -202,6 +184,8 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
       }
 
       this.editable = 0;
+      /// applicationBean editable not used here
+      
       return "community_members";
     } else {
       message(null, "MustBeCommunityCreatorAddMember", null);
@@ -500,6 +484,28 @@ public class CommunityMembersBean extends AbstractBean implements Serializable {
 
   public void setIsCreator(Integer isCreator) {
     this.isCreator = isCreator;
+  }
+
+  private List getNewMemberList() {
+    this.errorMessage = null;
+    Integer howMany = -1;
+    ArrayList<Participant> comm_member = new ArrayList<Participant>();
+    
+    if (getHowManyRecords() == null ) {
+      howMany = 1;
+    } else {
+      howMany = getHowManyRecords();
+    }
+
+    System.out.println("HOW MANY RECORDS");
+    System.out.println(howMany);
+    Participant new_cm;
+    for (Integer i = 0; i < howMany; i++) {
+      new_cm = new Participant(UUID.randomUUID().toString(), app.getCommunityId(), UUID.randomUUID().toString(), null, null, null, null, null, 1, 1, new Date(), new Date(), i, 0, 0, null, 0);
+      comm_member.add(new_cm);
+    }
+    this.new_comm_member_rows = comm_member;
+    return comm_member;
   }
 
   public List getNew_member() {
