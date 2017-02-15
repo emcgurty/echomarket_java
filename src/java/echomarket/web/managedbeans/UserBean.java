@@ -877,7 +877,7 @@ public class UserBean extends AbstractBean implements Serializable {
 
       } else {
         app.setEditable(0);
-        app.setPartID(true);
+        //app.setPartID(true);
         return_string = "user_nae"; //pbean.load_ud(this.user_id);
       }
 
