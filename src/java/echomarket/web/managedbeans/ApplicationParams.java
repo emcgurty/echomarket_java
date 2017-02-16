@@ -77,16 +77,31 @@ public class ApplicationParams extends AppAbstract implements Serializable {
   }
 
   protected void setUserToNull() {
-    this.user_id = null;
-    this.username = null;
-    this.userAlias = null;
-    this.userType = null;
-    this.email = null;
-    this.roleId = null;
-    this.communityId = null;
-    this.communityName = null;
-    this.pid = null;
-    this.editable = 0;
+    user_id = null;
+    participant_id = null;
+    itemId = null;
+    acceptID = false;
+    creatorDetailID = false;
+    comDetailID = false;
+    comMemberDetailID = false;
+    partID = false;
+    cpId = false;
+    LITid = false;
+    LICid = false;
+    username = null;
+    firstName = "";
+    lastName = "";
+    userAlias = "";
+    userType = "";
+    email = "";
+    userAction = "";
+    communityId = "";
+    communityName = "";
+    editable = 0;
+    roleId = -9;
+    action = "";
+    pid = "";
+    uid = "";    /// user_id for member registration url
 
   }
 
