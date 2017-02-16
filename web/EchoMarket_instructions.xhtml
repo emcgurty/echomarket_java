@@ -21,10 +21,10 @@
         <h:outputText value="EchoMarket Instructions"  style="margin-top:15px;"/>
 
         <c:choose>
-          <c:when test="#{!empty app.acceptID}" >
-            <h:commandLink  action="user_agreement"  class="right_div" value="I have read these Instructions."  />
+          <c:when test="#{!app.acceptID}" >
+            <h:commandLink  onclick="window.history.back();"  class="right_div" value="I have read these Instructions."  />
           </c:when>
-          <c:when test="#{empty app.acceptID}" >
+          <c:when test="#{app.acceptID}" >
             <h:commandLink  class="right_div" value="Okay..."  onclick="window.history.back();"/>
           </c:when>
         </c:choose>
