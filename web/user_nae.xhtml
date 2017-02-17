@@ -76,7 +76,7 @@
             </div> 
             <div style="margin:10px;" >
               <h:outputText value="#{sub_title}" />
-              <h:outputText  value="#{app.creatorDetailID}" />              
+              
               <h:commandLink  action="#{communitiesBean.load_community_detail()}"  class="right_div" value="Continue to 'Community Detail'" rendered="#{app.editable == 0 and app.creatorDetailID}" >
               </h:commandLink>              
 
