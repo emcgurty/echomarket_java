@@ -1511,7 +1511,7 @@ public class UserBean extends AbstractBean implements Serializable {
     String CDId = uiInputCD.getClientId();
     if (reg_cd != null) {
       if ("-2".equals(reg_cd) == true) {
-        FacesMessage msg = new FacesMessage("Plese make a Country selection");
+        FacesMessage msg = new FacesMessage("Please make a Country selection");
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         context().addMessage(CDId, msg);
         context().renderResponse();
