@@ -59,6 +59,10 @@
           <div class="top" >
             <div style="margin:10px;margin-top:25px;" >
               <h:outputText value="#{title}: USER DASHBOARD"  />
+              <span class="required_field_text">( </span>              
+              <span class="required_fields">*</span>              
+              <span class="required_field_text"> = Required Information )</span>              
+              
               <c:choose >
                 <c:when test="#{empty participantBean.participant_id}" >
                   <c:set var="save_update"  value="Save " />
@@ -76,7 +80,7 @@
               <h:commandLink  action="#{communitiesBean.load_community_detail()}"  class="right_div" value="Continue to 'Community Detail'" rendered="#{app.editable == 0 and app.creatorDetailID}" >
               </h:commandLink>              
 
-              <h:commandLink  action="#{contactPreferenceBean.load_ud(app.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{app.partID}" >
+              <h:commandLink  action="#{contactPreferenceBean.load_ud(app.participant_id)}"  class="right_div" value="Continue to 'Default Contact Preferences'" rendered="#{app.partID}"  >
                 <f:param name="action" value="edit" />
                 <c:choose>
                   <c:when test="#{!empty itemBean.itemId}" >
@@ -233,8 +237,8 @@
 
                 <div style="margin-left: 25px;float:left">
                   <h:outputLabel value="First Name:" for="firstName" ><span id="firstName" class="required_fields">*</span>
-                    <h:inputText  id="firstName" value="#{participantBean.firstName}"  maxlength="24" size="24"  rendered="#{(app.editable == 1) and (empty participantBean.firstName)}"   />
-                    <h:inputText  id="firstNamea" value="#{participantBean.firstName}"  maxlength="24" size="24"  rendered="#{(app.editable == 1) and (!empty participantBean.firstName)}"   />
+                    <h:inputText  id="firstName" value="#{participantBean.firstName}"  maxlength="24" size="24"  rendered="#{(app.editable == 1) and (empty participantBean.firstName)}"   required="true"  requiredMessage="First name is required" />
+                    <h:inputText  id="firstNamea" value="#{participantBean.firstName}"  maxlength="24" size="24"  rendered="#{(app.editable == 1) and (!empty participantBean.firstName)}" required="true"  requiredMessage="First name is required"   />
                     <h:outputText  value="#{participantBean.firstName}"  rendered="#{app.editable == 0}" class="RO_text" />
                   </h:outputLabel>
                   <span class="error-message" id="firstName" ></span>
@@ -247,7 +251,7 @@
                 </div>
                 <div style="margin-left: 25px;float:left">
                   <h:outputLabel value="Last Name:"  for="lastName" ><span id="lastName" class="required_fields">*</span>
-                    <h:inputText  id="lastName" value="#{participantBean.lastName}" maxlength="24" size="24" rendered="#{app.editable == 1}" />
+                    <h:inputText  id="lastName" value="#{participantBean.lastName}" maxlength="24" size="24" rendered="#{app.editable == 1}" required="true"  requiredMessage="Last name is required" />
                     <h:outputText  value="#{participantBean.lastName}"  rendered="#{app.editable == 0}" class="RO_text" />
                   </h:outputLabel>
                   <span class="error-message" id="lastName" ></span>
