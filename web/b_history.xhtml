@@ -10,6 +10,7 @@
                 >
 
   <h:head>
+    <!--I have tried to incorporate this set inside h:form as well. Still multiple calls-->
     <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'borrow')}" />
     <c:set value="${fn:length(currentHistory) - 1}" var="sizeOfCurrentHistory" />
 
@@ -28,7 +29,7 @@
                       />
         </div>
       </div> 
-
+       <!--I have tried with dataTable and ui:repeat.  Still multiple calls. And used step/begin in foreach-->
        <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
         
          <div style="margin-left:25px;margin-top:15px;position: relative;float:left;display:block;border-right:solid gray dashed ;" >
