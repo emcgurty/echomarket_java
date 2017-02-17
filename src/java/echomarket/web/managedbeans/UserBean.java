@@ -696,7 +696,7 @@ public class UserBean extends AbstractBean implements Serializable {
   public String loginUser() {
 
     // debugging with password assignment
-    this.password = "Emcgurty123!";
+    // this.password = "Emcgurty123!";
     Boolean resultsSuccess = false;
     Integer memberCreator = -9;
     List results = null;
