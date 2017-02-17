@@ -15,10 +15,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-/**
- * <p>
- * Action listener for the command links on the index page.</p>
- */
+
 public class UserActionListener implements ActionListener {
 
     private static final Logger logger = Logger.getLogger(
