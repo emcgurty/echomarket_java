@@ -302,7 +302,7 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   public String saveItem() {
 
-// Data gathering of image caption now seems to by working fine.  Realize I have to eliminate redunancy in code
+    // Data gathering of image caption now seems to by working fine.  Realize I have to eliminate redunancy in code
     Session sb = null;
     Transaction tx = null;
     Boolean bret = false;
@@ -633,7 +633,7 @@ public class ItemBean extends AbstractBean implements Serializable {
   }
 
   private Boolean SaveUserItemImage(Part ui, String bid) throws IOException {
-    
+
     Boolean fileCreate = false;
     OutputStream out = null;
     InputStream filecontent = null;
@@ -643,7 +643,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     String image_path = resource_path + "\\" + this.itemType + "_images\\";
     String buildFileName = image_path + bid + "_" + getFileName(ui);
     File files = null;
-    
+
     try {
       files = new File(buildFileName);
       fileCreate = true;
@@ -1003,7 +1003,7 @@ public class ItemBean extends AbstractBean implements Serializable {
     this.itemType = itemType;
   }
 
- public void deleteCurrentRecord(String iid, String itemDescription) {
+  public void deleteCurrentRecord(String iid, String itemDescription) {
     // Need to set up hibernate to cascade for all affected tables...
     Session hib = null;
     Transaction tx = null;
