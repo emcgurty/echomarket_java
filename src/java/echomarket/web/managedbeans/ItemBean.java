@@ -18,9 +18,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.Id;
@@ -34,7 +36,7 @@ import org.hibernate.Transaction;
 public class ItemBean extends AbstractBean implements Serializable {
 
   private static final long serialVersionUID = 9L;
- 
+
   private String itemId;
   private Integer categoryId;
   private String participant_id;
@@ -646,39 +648,32 @@ public class ItemBean extends AbstractBean implements Serializable {
   }
 
   private Boolean SaveUserItemImage(Part ui, String bid) throws IOException {
+    
     Boolean fileCreate = false;
     OutputStream out = null;
     InputStream filecontent = null;
-    String itemImagePath = null;
-    //String sPath1 = new File(".").getCanonicalPath();  -- tested many 
-    // Just for development purposes.... Need to make this into separate function
-    String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
-
-    String sPath2 = "//" + this.itemType + "_images//";
-    String buildFileName = bid + "_" + getFileName(ui);
-    String sPath3 = buildFileName;
-    File files = new File(sPath1 + sPath2);
-    //Boolean makeDirectory = files.mkdirs();
-    itemImagePath = sPath1 + sPath2 + sPath3;
+    ExternalContext ctx = context().getExternalContext();
+    String absoluteWebPath = ctx.getRealPath("/");
+    String resource_path = absoluteWebPath + "\\resources\\";
+    String image_path = resource_path + "\\" + this.itemType + "_images\\";
+    String buildFileName = image_path + bid + "_" + getFileName(ui);
+    File files = null;
+    
     try {
-      files = new File(itemImagePath);
+      files = new File(buildFileName);
       fileCreate = true;
     } catch (Exception ex) {
       System.out.println("Error in Creating New File");
-      Logger
-              .getLogger(ItemBean.class
-                      .getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     if (fileCreate == true) {
-
       if (files.exists()) {
         /// User may be using same image file name but has been editted
         files.delete();
       }
 
       try {
-        files = new File(itemImagePath);   /// not sure I have to run it again, esp if was deleted above
         out = new FileOutputStream(files);
         filecontent = ui.getInputStream();
         int read = 0;
@@ -1299,7 +1294,5 @@ public class ItemBean extends AbstractBean implements Serializable {
   public void setImageFoundList(List imageFoundList) {
     this.imageFoundList = imageFoundList;
   }
-
-  
 
 }
