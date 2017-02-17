@@ -24,10 +24,11 @@
       <div  class="top" id="form_user_registration" style="font-size:20px;margin-left:5px;" >
         <div style="margin:10px;" >
           <h:outputText value="Individual or Organization Registration"  />
+          
           <h:commandLink  action="#{userBean.registerUser()}" value="Register" class="right_div"  >
             <f:param id="new" value="action"  />
           </h:commandLink>
-          
+           <p style="font-size: 16px;color:indigo;">All fields are required.</p> 
         </div>
         <div id="individualNameGroup" style="float:left;margin:5px;width:95%;"  >
           <ui:include src="individual_registration_detail.xhtml" />
