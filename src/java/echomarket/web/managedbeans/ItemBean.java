@@ -908,7 +908,7 @@ public class ItemBean extends AbstractBean implements Serializable {
         tx.commit();
       } catch (Exception e) {
         tx.rollback();
-        System.out.println("Error in ParticipantItems");
+        System.out.println("Error in getParticipantItems");
         Logger.getLogger(ItemBean.class.getName()).log(Level.SEVERE, null, e);
 
       } finally {
@@ -929,13 +929,12 @@ public class ItemBean extends AbstractBean implements Serializable {
   private Boolean DeleteImageFile(String fileName) {
 
     Boolean return_delete_true = false;
-    String sPath1 = "C://Users//emm//Documents//NetBeansProjects//giving_taking//web//resources";
-    String sPath2 = "//" + this.itemType + "_images//";
-    String sPath3 = fileName;
-    File files = new File(sPath1 + sPath2);
-    //Boolean makeDirectory = files.mkdirs();
-    String itemImagePath = sPath1 + sPath2 + sPath3;
-    files = new File(itemImagePath);
+    ExternalContext ctx = context().getExternalContext();
+    String absoluteWebPath = ctx.getRealPath("/");
+    String resource_path = absoluteWebPath + "\\resources\\";
+    String image_path = resource_path + "\\" + this.itemType + "_images\\";
+    String buildFileName = image_path + fileName;
+    File files = new File(buildFileName);
 
     if (files.exists()) {
       /// User may be using same image file name but has been editted
