@@ -74,6 +74,11 @@ span.required_fields {
   font-size:16px;
 
 }
+span.required_field_text {
+  color: indigo;
+  font-size:16px;
+
+}
 form {
   margin: 0;
   padding: 0;
