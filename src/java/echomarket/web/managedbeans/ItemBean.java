@@ -1,11 +1,8 @@
 package echomarket.web.managedbeans;
 
 import echomarket.SendEmail.SendEmail;
-import echomarket.hibernate.ContactPreference;
 import echomarket.hibernate.Items;
 import echomarket.hibernate.ItemImages;
-import echomarket.hibernate.LenderItemConditions;
-import echomarket.hibernate.LenderTransfer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,7 +15,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
