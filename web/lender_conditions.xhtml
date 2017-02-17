@@ -26,12 +26,12 @@
               <c:set var="iid" value="${app.itemId}"  />  
             </c:when >
           </c:choose>
-          <!--<h:outputText value="${iid}  curent IID"  />-->
-
+          
           <div id="form_monetary" class="contact_information" style="width:100%;" >
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{app.userAlias}: USER DASHBOARD"  />
+       
                 <c:choose >
                   <c:when test="#{(empty lenderItemConditionsBean.lender_item_condition_id) and (empty iid)}" >
                     <c:set var="save_update"  value="Save Lender Item Conditions" />
