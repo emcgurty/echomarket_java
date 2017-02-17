@@ -11,7 +11,7 @@
 
   <h:head>
     <!--I have tried to incorporate this set inside h:form as well. Still multiple calls-->
-    <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'borrow')}" />
+    <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'borrow')}" scope="request"/>
     <c:set value="${fn:length(currentHistory) - 1}" var="sizeOfCurrentHistory" />
 
   </h:head>
