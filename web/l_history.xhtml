@@ -10,7 +10,7 @@
                 >
 
   <h:head>
-    <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'lend')}" />
+    <c:set var="currentHistory"  value="${itemBean.getParticipantItems(itemBean.history_id, 'lend')}" scope="request" />
     <c:set value="${fn:length(currentHistory) - 1}" var="sizeOfCurrentHistory" />
   </h:head>
   <h:form enctype="multipart/form-data" >
