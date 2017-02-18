@@ -270,7 +270,6 @@
 
       <c:forEach var="isPresent"  items="#{data_bysm}" >
         <c:set var="socialMediaPresent" value="#{(!empty isPresent.contactByFacebook) or (!empty isPresent.contactByLinkedIn)  or (!empty isPresent.contactByInstagram) or (!empty isPresent.contactByTwitter) or (!empty isPresent.contactByTwitter) or (!empty isPresent.contactByInstagram) or (!empty isPresent.contactByOtherSocialMedia) or (!empty isPresent.contactByOtherSocialMediaAccess)}"  />
-
       </c:forEach>
 
       <h:dataTable value="#{gbp}" var="byp" rendered="#{(fn:length(gbp)  == 1) and (phoneNumbersPresent == true)}" >       
