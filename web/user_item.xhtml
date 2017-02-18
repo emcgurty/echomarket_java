@@ -50,7 +50,7 @@
           <div  class="div_p" >
             <div style="margin:10px;" >
               <c:set var="itype" value="#{itemBean.itemType}" />
-               <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
+              <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
               <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{(itype ne 'both') and (app.editable == 1)}" />
               <h:outputText value="The Item you would like to... Please select: " rendered="#{(itype == 'both') and (app.editable == 1)}" />
               <h:selectOneMenu id="whichType" value="#{itemBean.whichType}" rendered="#{(itype == 'both') and (app.editable == 1)}"  >
@@ -141,13 +141,13 @@
                   <f:event listener="#{itemBean.makeItemConditionSelection}" type="postValidate" />
                   <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
                     <h:selectOneMenu id="itemConditionId" value="#{itemBean.itemConditionId}"  style="margin-left:10px" class="items select"   rendered="#{app.editable == 1}">
-                      
+
                       <f:selectItems id="item_condition" value="#{itemConditionBean.buildItemConditionsArray()}"  
                                      var="c" itemValue="#{c.id}" itemLabel="#{c.condition}" 
                                      >   
                       </f:selectItems>    
                     </h:selectOneMenu>
-                     
+
                     <c:choose>
                       <c:when test="#{app.editable == 0}" >
                         <c:set var="icn" value="#{itemConditionBean.getItemConditionName(itemBean.itemConditionId)}" />
@@ -171,11 +171,15 @@
               <td  style="width:50%;">
                 <div style="margin-left:25px;margin-top:5px;">
                   <h:outputLabel for="itemCount" value="#{bundle.NumberOfItems}" ><span class="required_fields">*</span>
-                    <h:inputText  id="itemCount" value="#{itemBean.itemCount}" size="2" maxlength="2" required="true" requiredMessage="Please enter a numeric value between 1 and 25."  class="items"  style="margin-left:10px"   rendered="#{app.editable == 1}"/>
+                    <c:if test="#{app.editable == 1}" >
+                      <span class="required_field_text"> Between a count of 1 and 25</span>
+                    </c:if>
+                    <h:inputText  id="itemCount" value="#{itemBean.itemCount}" size="2" maxlength="2" class="items"  style="margin-left:10px"   rendered="#{app.editable == 1}"  required="true" requiredMessage="Please enter an Item Count between 1 and 25."/>
                     <h:outputText  id="itemCountString" value="#{itemBean.itemCount}"   rendered="#{app.editable == 0}" class="RO_text"/>
                   </h:outputLabel>
                   <span class="error-message" id="itemCount" ></span>
-                </div></td>
+                </div>
+              </td>
             </tr>
           </table>
           <br />
