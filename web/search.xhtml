@@ -124,7 +124,7 @@
         <span class="error-message" id="echo_market_search_error"></span>
       </div>
 
-      <c:set var="currentSearchResult"  value="#{searchesBean.itemDetail}" />
+      <c:set var="currentSearchResult"  value="#{searchesBean.itemDetail}" scope="request" />
       <c:forEach items="#{currentSearchResult}" var="var_search"  rendered="${fn:length(currentSearchResult) gt 0}" >
 
         <div style="margin-left:25px;margin-top:15px;float:left;display:block;" >
