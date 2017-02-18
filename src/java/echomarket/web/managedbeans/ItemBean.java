@@ -18,8 +18,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
 import javax.persistence.Id;
 import javax.servlet.http.Part;
@@ -293,8 +297,6 @@ public class ItemBean extends AbstractBean implements Serializable {
       this.history_which = null;
       ArrayList<ItemImages> tmp_picture = new ArrayList<ItemImages>(Arrays.asList(new ItemImages(null, null, null, null, null, "echo_market.png", null)));
       setPicture(tmp_picture);
-      /// loading picture needs a delay.... Not hapy with this.  Must be a way to test without using sleep
-
     }
 
     return "user_item";
@@ -306,15 +308,19 @@ public class ItemBean extends AbstractBean implements Serializable {
     Transaction tx = null;
     Boolean bret = false;
     String strRetId = null;
-    String new_iid = getId();  
+    String new_iid = getId();
     List result = null;
-    this.remoteIp = getClientIpAddr();
+
+    if (this.itemCount < 0 || this.itemCount > 25) {
+      this.itemCount = 1;
+    }
 
     if ("both".equals(itemType)) {
       if (whichType.isEmpty() == false) {
         this.itemType = whichType;
       }
     }
+    this.remoteIp = getClientIpAddr();
     if (itemId.isEmpty() == true) {
 
       Items ii = new Items(new_iid, app.getParticipant_id(), categoryId, otherItemCategory,
@@ -1103,6 +1109,48 @@ public class ItemBean extends AbstractBean implements Serializable {
    */
   public void setImageFoundList(List imageFoundList) {
     this.imageFoundList = imageFoundList;
+  }
+
+  public void makeItemConditionSelection(ComponentSystemEvent event) {
+
+    UIComponent components = event.getComponent();
+    UIInput uiInputCat = (UIInput) components.findComponent("itemConditionId");
+    String reg_cd = uiInputCat.getLocalValue() == null ? "" : uiInputCat.getLocalValue().toString();
+    String CatId = uiInputCat.getClientId();
+    if (reg_cd != null) {
+      if ("-2".equals(reg_cd) == true) {
+        FacesMessage msg = new FacesMessage("Please make an Item Condition Selection");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context().addMessage(CatId, msg);
+        context().renderResponse();
+      } else {
+        return;
+      }
+    } else {
+      // Required true do its job 
+      return;
+    }
+  }
+
+  public void makeCategorySelection(ComponentSystemEvent event) {
+
+    UIComponent components = event.getComponent();
+    UIInput uiInputCat = (UIInput) components.findComponent("categoryId");
+    String reg_cd = uiInputCat.getLocalValue() == null ? "" : uiInputCat.getLocalValue().toString();
+    String CatId = uiInputCat.getClientId();
+    if (reg_cd != null) {
+      if ("-2".equals(reg_cd) == true) {
+        FacesMessage msg = new FacesMessage("Please make a Category Selection");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context().addMessage(CatId, msg);
+        context().renderResponse();
+      } else {
+        return;
+      }
+    } else {
+      // Required true do its job 
+      return;
+    }
   }
 
 }
