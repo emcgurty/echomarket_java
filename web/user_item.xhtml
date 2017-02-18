@@ -50,7 +50,7 @@
           <div  class="div_p" >
             <div style="margin:10px;" >
               <c:set var="itype" value="#{itemBean.itemType}" />
-              <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
+               <h:inputHidden id="itemType" value="#{itemBean.itemType}"  />
               <h:outputText value="The item you would like to #{fn:toUpperCase(itype)} ..." style="font-size: large;color:indigo;" rendered="#{(itype ne 'both') and (app.editable == 1)}" />
               <h:outputText value="The Item you would like to... Please select: " rendered="#{(itype == 'both') and (app.editable == 1)}" />
               <h:selectOneMenu id="whichType" value="#{itemBean.whichType}" rendered="#{(itype == 'both') and (app.editable == 1)}"  >
