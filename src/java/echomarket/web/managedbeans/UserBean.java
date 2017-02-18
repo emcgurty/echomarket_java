@@ -696,7 +696,7 @@ public class UserBean extends AbstractBean implements Serializable {
   public String loginUser() {
 
     // debugging with password assignment
-    // this.password = "Emcgurty123!";
+    this.password = "Emcgurty123!";
     Boolean resultsSuccess = false;
     Integer memberCreator = -9;
     List results = null;
@@ -786,8 +786,11 @@ public class UserBean extends AbstractBean implements Serializable {
       app.setUserAlias(uu.getUserAlias());
       app.setUsername(this.username);
       app.setUserType(uu.getUserType());
-      app.setUserType(app.userIsWhichType());  /// I should never have to call userIsWhichTYpe again.....
-      app.setUser_id(uu.getUser_id());
+      String hold_user_type = app.userIsWhichType();
+      app.setUserType(hold_user_type);  /// I should never have to call userIsWhichTYpe again.....
+      hold_user_type = app.getUserType();  ///debugging
+      this.userType = hold_user_type;  
+      app.setUser_id(uu.getUser_id());  
       this.user_id = uu.getUser_id();  // needed for findWhatIsComplete
       results = null;
       uu = null;
