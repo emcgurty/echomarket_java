@@ -185,11 +185,10 @@
             </h:column>
           </h:dataTable>
 
-          <c:set var="newMemberData" value="#{communityMembersBean.new_member}"  />
+          <c:set var="newMemberData" value="#{communityMembersBean.new_member}"  scope="request"/>
           <c:set var="nm_empty"  value="false" />
           <c:forEach items="${newMemberData}" var="nm"  >
             <c:set var="nm_empty"  value="#{!empty nm.rowIndex}" />
-            <h:outputText value="#{nm.rowIndex} == ri"  />
           </c:forEach>
           <c:if test="#{nm_empty}" >
             <h:dataTable value="#{newMemberData}" id="new_member" var="newm" 
