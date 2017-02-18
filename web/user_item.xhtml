@@ -73,7 +73,8 @@
             <tr class="odd">
               <td style="width:50%;">
                 <div style="margin-left:25px;margin-top:5px;">
-                  <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>
+                  <f:event listener="#{itemBean.makeCategorySelection}" type="postValidate" />
+                  <h:outputLabel for="categoryId" value="Category:" ><span class="required_fields">*</span>                  
                     <h:selectOneMenu id="categoryId" value="#{itemBean.categoryId}"  style="margin-left:10px"  class="items select"   rendered="#{app.editable == 1}">
                       <f:selectItems id="category_id_value" value="#{cats.buildCatArray()}"   var="c"
                                      itemLabel="#{c.categoryType}" itemValue="#{c.id}" >
@@ -137,6 +138,7 @@
                 </div></td>
               <td style="width:50%">
                 <div style="margin-left:25px;margin-top:5px;">
+                  <f:event listener="#{itemBean.makeItemConditionSelection}" type="postValidate" />
                   <h:outputLabel value="#{bundle.ItemCondition}" for="itemConditionId"  ><span class="required_fields">*</span>
                     <h:selectOneMenu id="itemConditionId" value="#{itemBean.itemConditionId}"  style="margin-left:10px" class="items select"   rendered="#{app.editable == 1}">
                       
