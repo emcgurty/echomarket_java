@@ -28,26 +28,26 @@
                       />
         </div>
       </div> 
-       <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
-        
-         <div style="margin-left:25px;margin-top:15px;position: relative;float:left;display:block;border-right:solid gray dashed ;" >
-           
-            <h:outputLabel for="itemDescription" value="Item Description:" >
-              <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
-            </h:outputLabel>
-            <br />
-            <h:outputLabel for="itemModel" value="Item Model:" >
-              <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
-            </h:outputLabel>
-            <br />
-            <h:outputLabel value="Item Approved:" >
-              <h:outputText   value="Yes" style="margin-left:10px;color:black;"  rendered="${history.approved == 1}"/>
-              <h:outputText  value="No" style="margin-left:10px;color:black;"  rendered="${history.approved == 0}"/>
-            </h:outputLabel>
-            <br />
-            <h:outputLabel value="Date Created:" >
-                  <h:outputText  value="#{history.dateCreated}" style="margin-left:10px;color:black;"/>
-            </h:outputLabel>
+      <c:forEach  items="${currentHistory}" var="history" rendered="${fn:length(currentHistory) > 0}" >
+
+        <div style="margin-left:25px;margin-top:15px;position: relative;float:left;display:block;border-right:solid gray dashed ;" >
+
+          <h:outputLabel for="itemDescription" value="Item Description:" >
+            <h:outputText  id="itemDescription" value="#{history.itemDescription}" style="margin-left:10px;color:black;"/>
+          </h:outputLabel>
+          <br />
+          <h:outputLabel for="itemModel" value="Item Model:" >
+            <h:outputText  id="itemModel" value="#{history.itemModel}" style="margin-left:10px;color:black;"/>
+          </h:outputLabel>
+          <br />
+          <h:outputLabel value="Item Approved:" >
+            <h:outputText   value="Yes" style="margin-left:10px;color:black;"  rendered="${history.approved == 1}"/>
+            <h:outputText  value="No" style="margin-left:10px;color:black;"  rendered="${history.approved == 0}"/>
+          </h:outputLabel>
+          <br />
+          <h:outputLabel value="Date Created:" >
+            <h:outputText  value="#{history.dateCreated}" style="margin-left:10px;color:black;"/>
+          </h:outputLabel>
           <c:set var="currentImage"  value="#{itemBean.getCurrentImageName(history.itemId)}"  />
           <h:graphicImage name="#{currentImage}" library="borrow_images" alt="Item Image"   height="100" width="100" rendered="#{!empty currentImage}" />
 
@@ -58,8 +58,8 @@
           <h:commandButton value="Delete"  action="#{itemBean.deleteCurrentRecord(history.itemId, history.itemDescription)}"  immediate="true"  rendered="#{history.participant_id == app.participant_id}"  >
           </h:commandButton>    
 
-          </div>
-       </c:forEach>
+        </div>
+      </c:forEach>
 
       <div class="borrower_registration" >
         <h:outputText value="No Borrower History Records Found" rendered="${fn:length(currentHistory) == 0}" />
