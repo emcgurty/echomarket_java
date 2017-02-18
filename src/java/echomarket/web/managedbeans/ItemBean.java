@@ -302,12 +302,11 @@ public class ItemBean extends AbstractBean implements Serializable {
 
   public String saveItem() {
 
-    // Data gathering of image caption now seems to by working fine.  Realize I have to eliminate redunancy in code
     Session sb = null;
     Transaction tx = null;
     Boolean bret = false;
     String strRetId = null;
-    String new_iid = getId();  // As ItemBean is session, this fails in 
+    String new_iid = getId();  
     List result = null;
     this.remoteIp = getClientIpAddr();
 
