@@ -25,7 +25,7 @@
       <c:set var="div_display" value="block" rendered="#{app.editable == 0}" />    
     </h:head>
     <h:form id="personal_information" class="user_nae" >
-      <body onload="changeMenuBackground(2);"  >
+      <body >
         <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
         <div id="form_NAE" class="contact_information" >
 
@@ -33,13 +33,13 @@
             <c:when test="#{rid == 0}" >
 
               <c:set var="allow" value="public"  />  
-              <c:set var="title" value="USER"  />  
+              <c:set var="title" value="#{app.userAlias}"  />  
 
             </c:when>
             <c:when test="#{rid gt 0}" >
 
               <c:set var="allow" value="Community"  />  
-              <c:set var="title" value="#{app.communityName}"  />  
+              <c:set var="title" value="#{app.userAlias}"  />  
             </c:when>
           </c:choose>
 
