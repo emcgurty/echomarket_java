@@ -15,7 +15,7 @@
 
   <ui:define name="content">
     <h:form id="personal_information"  class="lender_conditions">
-      <body onload="changeMenuBackground(3);"  >
+      <body  >
         <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
         <div id="lender_registration" class="contact_information" >
           <c:choose >
@@ -26,12 +26,12 @@
               <c:set var="iid" value="${app.itemId}"  />  
             </c:when >
           </c:choose>
-          
+
           <div id="form_monetary" class="contact_information" style="width:100%;" >
             <div class="top" >
               <div style="margin:10px;margin-top:25px;" >
                 <h:outputText value="#{app.userAlias}: USER DASHBOARD"  />
-       
+
                 <c:choose >
                   <c:when test="#{(empty lenderItemConditionsBean.lender_item_condition_id) and (empty iid)}" >
                     <c:set var="save_update"  value="Save Lender Item Conditions" />
@@ -55,6 +55,12 @@
                 <h:inputHidden id="itemId" value="${iid}"  />
 
               </div> 
+              <div  class="div_p"  >
+                <div style="margin:10px;" >
+                  <h:outputText value="Lender Item Conditions"  />
+                </div>
+              </div>
+
               <div class="messagecolor">
                 <h:messages showSummary="true" 
                             showDetail="false"
@@ -75,8 +81,8 @@
             </c:choose>
 
 
-            <div style="margin-left:25px;margin-top:5px;width:100%;">
-              <h:outputLabel for="forFree" value="For Free?"  >
+            <div style="margin-left:15px;margin-top:5px;width:100%;">
+              <h:outputLabel for="forFree" value="Item Offered For Free?"  >
                 <h:selectOneRadio rendered="#{app.editable == 1}" id="forFree" value="#{lenderItemConditionsBean.forFree}" layout='lineDirection' >
                   <f:selectItem itemValue="1" itemLabel="Yes" />
                   <f:selectItem itemValue="0" itemLabel="No" />
@@ -103,7 +109,7 @@
               <table class="personal" >
                 <tr>
                   <td>  
-                    <h:outputLabel for="smallFee" value="Small borrowing fee?:"  >
+                    <h:outputLabel for="smallFee" value="Item has a small borrowing fee?:"  >
                       <h:selectOneRadio rendered="#{app.editable == 1}" id="smallFee" value="#{lenderItemConditionsBean.smallFee}" layout='lineDirection'>
                         <f:selectItem itemValue="1" itemLabel="Yes" />
                         <f:selectItem itemValue="0" itemLabel="No" />
