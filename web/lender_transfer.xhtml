@@ -16,7 +16,7 @@
   <ui:define name="content">
     <h:form id="personal_information"  class="lender_transfer">
       <div id="lender_transfer" class="contact_information" >
-        <body onload="changeMenuBackground(3);"  >
+        <body >
           <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
           <div id="form_lender_to_borrower" class="contact_information" >
 
@@ -28,8 +28,6 @@
                 <c:set var="iid" value="${app.itemId}"  />  
               </c:when >
             </c:choose>
-
-            <!--<h:outputText value="${iid}  curent IID"  />-->
             <c:set var="displayThirdChoice" value="none" />
             <c:set var="displayThirdChoice" value="${(app.editable == 0) and (lenderTransferBean.thirdPartyPresence == 1)}" />
 
@@ -69,7 +67,6 @@
                 <h:commandLink  action="${lenderItemConditionsBean.load_ud(app.participant_id)}"  class="right_div" value="Continue to 'Lending Item Conditions'" rendered="${app.LITid}"  >
                   <f:param name="action" value="edit" />
                   <f:param name="iid" value="#{iid}" />
-
                 </h:commandLink>
               </div>
             </div>
