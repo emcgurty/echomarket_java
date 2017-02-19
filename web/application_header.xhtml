@@ -17,14 +17,14 @@
           MARKET
         </h1> 
         <c:if test="#{empty app.communityId}" >
-        <h2>
-          Building Communities of Shared Goods
-        </h2>
-          </c:if>
+          <h2>
+            Building Communities of Shared Goods
+          </h2>
+        </c:if>
         <c:if test="#{!empty app.communityId}" >
-        <h2>
-          <h:outputText value="Community: #{app.communityName}" />
-        </h2>
+          <h2>
+            <h:outputText value="Community: #{app.communityName}" />
+          </h2>
         </c:if>
         <h3 style="color:maroon;"> 
           EchoMarket is in its 'Alpha Phase', its design and functionality are operating as intended.  Please use menu option 'Contact EchoMarket' if you encounter problems, or you would like to make a suggestion.
