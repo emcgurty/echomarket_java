@@ -3,7 +3,8 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"  >
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
   <h:form> 
 
@@ -15,9 +16,16 @@
           <h:graphicImage name="echo_market.png" library="images" alt="Echomarket logo"  height="50" width="50"/>
           MARKET
         </h1> 
+        <c:if test="#{empty app.communityId}" >
         <h2>
           Building Communities of Shared Goods
         </h2>
+          </c:if>
+        <c:if test="#{!empty app.communityId}" >
+        <h2>
+          <h:outputText value="Community: #{app.communityName}" />
+        </h2>
+        </c:if>
         <h3 style="color:maroon;"> 
           EchoMarket is in its 'Alpha Phase', its design and functionality are operating as intended.  Please use menu option 'Contact EchoMarket' if you encounter problems, or you would like to make a suggestion.
         </h3>
