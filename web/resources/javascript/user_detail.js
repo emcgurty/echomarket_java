@@ -33,17 +33,15 @@ $(document).ready(function () {
 //
 //
 //  });
-function countCharacters(input) {
+  function countCharacters(input) {
 //  var text_max = 255;
-  var text_length = $(input).val().length;
-  var text_remaining = text_max - text_length;
-  $('#textarea_feedback').html(text_remaining + ' characters remaining');
-}
+    var text_length = $(input).val().length;
+    var text_remaining = text_max - text_length;
+    $('#textarea_feedback').html(text_remaining + ' characters remaining');
+  }
 
 
 });
-
-
 //
 //function setAltAddress(input) {
 //
@@ -85,7 +83,7 @@ function clearCommunityDefaultAddress() {
 
 }
 function checkSmallFee(input) {
-
+  alert("smal fee");
   if (input.value == 1) {
     if (input.checked == true) {
       $("span#smallFeeAmount").css("visibility", "visible");
@@ -162,7 +160,6 @@ function checkAltAddress(input) {
     }
   }
 }
-
 
 
 
