@@ -135,7 +135,23 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.lastName = pp.getLastName();
       this.alias = pp.getAlias();
       this.displayName = pp.getDisplayName();
+      
       this.displayAddress = pp.getDisplayAddress();
+      if (this.displayAddress == 1) {
+        app.setDisplayPrimary(true);
+      } else {
+        app.setDisplayPrimary(false);
+      }
+      
+      
+      this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
+      if (this.displayAlternativeAddress == 1) {
+        app.setDisplayAlternative(true);
+      } else {
+        app.setDisplayAlternative(false);
+      }
+      
+      
       this.homePhone = pp.getHomePhone();
       this.cellPhone = pp.getCellPhone();
       this.alternativePhone = pp.getAlternativePhone();
@@ -144,7 +160,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       this.displayCellPhone = pp.getDisplayCellPhone();
       this.displayAlternativePhone = pp.getDisplayAlternativePhone();
 
-      this.displayAlternativeAddress = pp.getDisplayAlternativeAddress();
       if (pp.getQuestionAltAddress() == null) {
         this.questionAltAddressProvide = -9;
       } else {
@@ -270,7 +285,25 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setMi(mi);
       part.setLastName(lastName);
       part.setDisplayName(displayName);
+
       part.setDisplayAddress(displayAddress);
+      if (this.displayAlternativeAddress == 1) {
+        app.setDisplayPrimary(true);
+      } else {
+        app.setDisplayPrimary(false);
+      }
+
+      if (this.displayAlternativeAddress != null) {
+        part.setDisplayAlternativeAddress(displayAlternativeAddress);
+        if (this.displayAlternativeAddress == 1) {
+          app.setDisplayAlternative(true);
+        } else {
+          app.setDisplayAlternative(false);
+        }
+      } else {
+          app.setDisplayAlternative(false);
+      }
+
       part.setHomePhone(homePhone);
       part.setCellPhone(cellPhone);
       part.setAlternativePhone(alternativePhone);
@@ -302,7 +335,6 @@ public class ParticipantBean extends AbstractBean implements Serializable {
       part.setDisplayHomePhone(displayHomePhone);
       part.setDisplayCellPhone(displayCellPhone);
       part.setDisplayAlternativePhone(displayAlternativePhone);
-      part.setDisplayAlternativeAddress(displayAlternativeAddress);
 
       sb.update(part);
       tx.commit();
