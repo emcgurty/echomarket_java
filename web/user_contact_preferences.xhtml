@@ -28,12 +28,11 @@
               <c:set var="iid" value="${app.itemId}"  />  
             </c:when >
           </c:choose>
-          <!--<h:outputText value="${iid}  curent IID"  />-->
 
           <c:set var="ut" value="#{itemBean.itemType}" rendered="#{!empty itemBean.itemType}" />  
           <c:set var="ut" value="#{app.userType}" rendered="#{empty itemBean.itemType}" />  
-          <c:set var="displayAltAddress" value="#{contactPreferenceBean.displayAlternative}" />
-          <c:set var="displayPrimaryAddress" value="#{contactPreferenceBean.displayPrimary}" />
+          <c:set var="displayAltAddress" value="#{app.displayAlternative}" />
+          <c:set var="displayPrimaryAddress" value="#{app.displayPrimary}" />
           <c:set var="displayHomePhone" value="#{contactPreferenceBean.displayHomePhone}" />
           <c:set var="displayCellPhone" value="#{contactPreferenceBean.displayCellPhone}" />
           <c:set var="displayAlternativePhone" value="#{contactPreferenceBean.displayAlternativePhone}" />
@@ -113,17 +112,17 @@
                     <c:if test="#{app.editable == 1}" >
                       <h:selectOneRadio id="useWhichContactAddress" value="#{contactPreferenceBean.useWhichContactAddress}"   layout="pageDirection" >
                         <c:choose> 
-                          <c:when test="#{displayPrimaryAddress == true  and displayAltAddress == true}"   >
+                          <c:when test="${displayPrimaryAddress == true  and displayAltAddress == true}"   >
                             <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
                             <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?"  />	
                             <f:selectItem itemValue="1" itemLabel="Either address is fine."  />
                             <f:selectItem itemValue="0" itemLabel="No address contact please."  />
                           </c:when>
-                          <c:when test="#{displayPrimaryAddress == true  and displayAltAddress == false}"   >
+                          <c:when test="${displayPrimaryAddress == true  and displayAltAddress == false}"   >
                             <f:selectItem itemValue="3" itemLabel="Use your Primary Address?"  />
                             <f:selectItem itemValue="0" itemLabel="No address contact please."  />
                           </c:when>
-                          <c:when test="#{displayPrimaryAddress == false  and displayAltAddress == true}"   >
+                          <c:when test="${displayPrimaryAddress == false  and displayAltAddress == true}"   >
                             <f:selectItem itemValue="2" itemLabel="Use your Alternative Address?"  />	
                             <f:selectItem itemValue="0" itemLabel="No address contact please."  />
                           </c:when>
