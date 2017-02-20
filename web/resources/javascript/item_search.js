@@ -23,7 +23,7 @@ $(document).ready(function () {
 
     $("input[name='search:zip_code_radius']").bind('change', function () {
         var test_is_checked = $("input[name='search:zip_code_radius']:checked").val();
-//        alert(test_is_checked);
+
         if (test_is_checked) {
             $("input[name='search:postalCode']").trigger('change');
         }

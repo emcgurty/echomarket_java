@@ -83,7 +83,7 @@ function clearCommunityDefaultAddress() {
 
 }
 function checkSmallFee(input) {
-  alert("smal fee");
+ 
   if (input.value == 1) {
     if (input.checked == true) {
       $("span#smallFeeAmount").css("visibility", "visible");

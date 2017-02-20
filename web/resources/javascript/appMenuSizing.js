@@ -20,13 +20,13 @@ function size_of_menu() {
     var nav_menu = $("div#nav").css("width");
 
     if (bmw) {
-//        alert(1);
+
         $("div.application_footer").css("width", bmw);
     } else if (lmw) {
-//        alert(2);
+
         $("div.application_footer").css("width", lmw);
     } else {
-//        alert(3);
+
         $("div.application_footer").css("width", nav_menu);
     }
 

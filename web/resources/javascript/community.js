@@ -6,7 +6,6 @@ $(document).ready(function () {
         $("span.error-message").css("visibility", "hidden");
         $("span.error-message").text("");
         var current_id = this.id;
-//        alert(current_id);
         if (this.id.includes('howManyRecords')) {
             current_id = this.id;
             current_value = $(this).val();

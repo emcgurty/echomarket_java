@@ -9,22 +9,7 @@ $(document).ready(function ($) {
 //        alert("select change");
     });
     $('input').on('change', function () {
-//       alert("input change");
-//       Below no longer needed.  Need to code for client side validation
-//        if (this.id.includes('registrationType')) {
-//            
-//            var y_n = $(this).val();
-//            if (y_n == 5) {
-//
-//                $("div#individualNameGroup").css("display", "none");
-//                $("div#communityNameGroup").css("display", "block");
-//
-//
-//            } else {
-//                $("div#individualNameGroup").css("display", "block");
-//                $("div#communityNameGroup").css("display", "none");
-//            }
-//        }
+
     });
    
 
