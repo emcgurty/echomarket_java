@@ -38,8 +38,8 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
   private String contactByOtherSocialMediaAccess;
   private Boolean questionAltAddress;
   private Boolean questionAltEmail;
-  private Boolean displayPrimary;
-  private Boolean displayAlternative;
+//  private Boolean displayPrimary;
+//  private Boolean displayAlternative;
   private Boolean displayHomePhone;
   private Boolean displayAlternativePhone;
   private Boolean displayCellPhone;
@@ -618,7 +618,7 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
         } else {
           this.setQuestionAltAddress(false);
         }
-                
+
         if (part.getEmailAlternative() != null) {
           this.displayAlternativeEmail = true;
           this.userAlternativeEmail = part.getEmailAlternative();
@@ -626,17 +626,17 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
           this.displayAlternativeEmail = false;
           this.userAlternativeEmail = null;
         }
-                       
-        
+
+/// Now being managed in applicationParams becuase information needed for both ContactPreferenceBean and LenderTransferBean        
         if (part.getDisplayAddress() == 1) {
-          this.displayPrimary = true;
+          app.setDisplayPrimary(true);
         } else {
-          this.displayPrimary = false;
+          app.setDisplayPrimary(false);
         }
         if (part.getDisplayAlternativeAddress() == 1) {
-          this.displayAlternative = true;
+          app.setDisplayAlternative(true);
         } else {
-          this.displayAlternative = false;
+          app.setDisplayAlternative(false);
         }
         if (part.getDisplayHomePhone() == 1) {
           this.displayHomePhone = true;
@@ -687,34 +687,33 @@ public class ContactPreferenceBean extends AbstractBean implements Serializable 
     this.questionAltEmail = questionAltEmail;
   }
 
-  /**
-   * @return the displayPrimary
-   */
-  public Boolean getDisplayPrimary() {
-    return displayPrimary;
-  }
-
-  /**
-   * @param displayPrimary the displayPrimary to set
-   */
-  public void setDisplayPrimary(Boolean displayPrimary) {
-    this.displayPrimary = displayPrimary;
-  }
-
-  /**
-   * @return the displayAlternative
-   */
-  public Boolean getDisplayAlternative() {
-    return displayAlternative;
-  }
-
-  /**
-   * @param displayAlternative the displayAlternative to set
-   */
-  public void setDisplayAlternative(Boolean displayAlternative) {
-    this.displayAlternative = displayAlternative;
-  }
-
+//  /**
+//   * @return the displayPrimary
+//   */
+//  public Boolean getDisplayPrimary() {
+//    return displayPrimary;
+//  }
+//
+//  /**
+//   * @param displayPrimary the displayPrimary to set
+//   */
+//  public void setDisplayPrimary(Boolean displayPrimary) {
+//    this.displayPrimary = displayPrimary;
+//  }
+//
+//  /**
+//   * @return the displayAlternative
+//   */
+//  public Boolean getDisplayAlternative() {
+//    return displayAlternative;
+//  }
+//
+//  /**
+//   * @param displayAlternative the displayAlternative to set
+//   */
+//  public void setDisplayAlternative(Boolean displayAlternative) {
+//    this.displayAlternative = displayAlternative;
+//  }
   /**
    * @return the displayHomePhone
    */
