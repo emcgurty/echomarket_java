@@ -19,7 +19,8 @@
         <body >
           <ui:include src="/menu_options.xhtml" id="user_detail_menu" />  
           <div id="form_lender_to_borrower" class="contact_information" >
-
+            <c:set var="displayAltAddress" value="#{app.displayAlternative}" />
+            <c:set var="displayPrimaryAddress" value="#{app.displayPrimary}" />
             <c:choose >
               <c:when test="${!empty itemBean.itemId}" >
                 <c:set var="iid" value="${itemBean.itemId}"  />  
@@ -89,42 +90,60 @@
 
               </div>
             </div>
+           
+            <c:if test="#{displayPrimaryAddress == false  and displayAltAddress == false}"   >
+              <h:inputHidden  id="borrowerComesToWhichAddress" value="0" />
+            </c:if>
+            <c:if test="#{displayPrimaryAddress == true  or displayAltAddress == true}"   >
 
-            <div style="margin-left:25px;margin-top:5px;float:left;width:100%;">
+              <div style="margin-left:25px;margin-top:5px;float:left;width:100%;">
 
-              <div id="BComesToWhichAddressGroup" >    
-                <h:outputLabel value="Borrower comes to which address?:" for="borrowerComesToWhichAddress">
-                  <h:selectOneRadio id="borrowerComesToWhichAddress" value="${lenderTransferBean.borrowerComesToWhichAddress}" rendered="${app.editable == 1}"  layout="pageDirection" >
-                    <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
-                    <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
-                    <f:selectItem itemValue="1" itemLabel="Either address is fine." />
-                    <f:selectItem itemValue="0" itemLabel="Neither, no pick up at any address please." />	
-                  </h:selectOneRadio> 
-                  <c:if test="${app.editable == 0}" >
-                    <c:choose>
-                      <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 0}">
-                        <c:set var="cbe" value="Neither, no pick up at any address"/>
-                      </c:when>
-                      <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 1}">
-                        <c:set var="cbe" value="Either address is fine"/>
-                      </c:when>
-                      <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 2}">
-                        <c:set var="cbe" value="To your alternative address"/>
-                      </c:when>
-                      <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 3}">
-                        <c:set var="cbe" value="To your primary address"/>
-                      </c:when>
-                      <c:otherwise>
-                        <c:set var="cbe" value="##"/>
-                      </c:otherwise>
-                    </c:choose>
-                    <h:outputText value="${cbe}" class="RO_text" />
-                  </c:if>  
-                </h:outputLabel>
+                <div id="BComesToWhichAddressGroup" >    
+                  <h:outputLabel value="Borrower comes to which address?:" for="borrowerComesToWhichAddress">
+                    <h:selectOneRadio id="borrowerComesToWhichAddress" value="${lenderTransferBean.borrowerComesToWhichAddress}" rendered="${app.editable == 1}"  layout="pageDirection" >
+                      <c:if test="#{displayPrimaryAddress == true  and displayAltAddress == true}"   >
+                      <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
+                      <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
+                      <f:selectItem itemValue="1" itemLabel="Either address is fine." />
+                      <f:selectItem itemValue="0" itemLabel="Neither, no pick up at any address please." />	
+                      </c:if>
+                      <c:if test="#{displayPrimaryAddress == true  and displayAltAddress == false}"   >
+                      <f:selectItem itemValue="3" itemLabel="... your Primary Address?" />
+                      <f:selectItem itemValue="0" itemLabel="Neither, no pick up at an address please." />	
+                      </c:if>
+                      <c:if test="#{displayPrimaryAddress == false  and displayAltAddress == true}"   >
+                      <f:selectItem itemValue="2" itemLabel="... your Alternative Address?" />	
+                      <f:selectItem itemValue="0" itemLabel="Neither, no pick up at an address please." />	
+                      </c:if>
+                    </h:selectOneRadio> 
+                    <c:if test="${app.editable == 0}" >
+                      <c:choose>
+                        <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 0}">
+                          <c:set var="cbe" value="Neither, no pick up at any address"/>
+                        </c:when>
+                        <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 1}">
+                          <c:set var="cbe" value="Either address is fine"/>
+                        </c:when>
+                        <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 2}">
+                          <c:set var="cbe" value="To your alternative address"/>
+                        </c:when>
+                        <c:when test="${lenderTransferBean.borrowerComesToWhichAddress == 3}">
+                          <c:set var="cbe" value="To your primary address"/>
+                        </c:when>
+                        <c:otherwise>
+                          <c:set var="cbe" value="##"/>
+                        </c:otherwise>
+                      </c:choose>
+                      <h:outputText value="${cbe}" class="RO_text" />
+                    </c:if>  
+                  </h:outputLabel>
+                </div>
+                <hr />
               </div>
-              <hr />
-            </div>
 
+            </c:if>
+
+            ////
             <div style="margin-left:25px;margin-top:5px;float:left;">                   
 
               <h:outputLabel for="meetBorrowerAtAgreed" value="Will meet with borrower at an agreed location?:"  >
