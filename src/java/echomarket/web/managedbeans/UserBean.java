@@ -696,7 +696,7 @@ public class UserBean extends AbstractBean implements Serializable {
   public String loginUser() {
 
     // debugging with password assignment
-    this.password = "Emcgurty123!";
+    // this.password = "Emcgurty123!";
     Boolean resultsSuccess = false;
     Integer memberCreator = -9;
     List results = null;
@@ -877,6 +877,17 @@ public class UserBean extends AbstractBean implements Serializable {
         pid = part.getParticipant_id();
         app.setParticipant_id(pid);
         app.setPartID(true);
+        if (part.getDisplayAlternativeAddress() == 1) {
+          app.setDisplayPrimary(true); 
+        } else {
+          app.setDisplayPrimary(false);   
+        }
+        if (part.getDisplayAddress() == 1) {
+          app.setDisplayAlternative(true); 
+        } else {
+          app.setDisplayAlternative(false);   
+        }
+
 
       } else {
         app.setEditable(0);
@@ -885,7 +896,8 @@ public class UserBean extends AbstractBean implements Serializable {
       }
 
       if (return_string.isEmpty() == true) {
-        app.completeContactPreferences(app.getParticipant_id());
+        String hold_pid = app.getParticipant_id();
+        app.completeContactPreferences(hold_pid);   /// WELD doesn't like method args to be injected varaibless
 
         if (app.getCpId() == false) {
           app.setEditable(0);
