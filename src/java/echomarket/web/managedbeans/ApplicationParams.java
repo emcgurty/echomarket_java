@@ -41,6 +41,9 @@ public class ApplicationParams extends AppAbstract implements Serializable {
   private String action;
   private String pid;
   private String uid;    /// user_id for member registration url
+  private Boolean displayPrimary;
+  private Boolean displayAlternative;
+
 
 // emm 1.8
   public ApplicationParams() {
@@ -631,6 +634,34 @@ public class ApplicationParams extends AppAbstract implements Serializable {
    */
   public void setComMemberDetailID(Boolean comMemberDetailID) {
     this.comMemberDetailID = comMemberDetailID;
+  }
+
+  /**
+   * @return the displayPrimary
+   */
+  public Boolean getDisplayPrimary() {
+    return displayPrimary;
+  }
+
+  /**
+   * @param displayPrimary the displayPrimary to set
+   */
+  public void setDisplayPrimary(Boolean displayPrimary) {
+    this.displayPrimary = displayPrimary;
+  }
+
+  /**
+   * @return the displayAlternative
+   */
+  public Boolean getDisplayAlternative() {
+    return displayAlternative;
+  }
+
+  /**
+   * @param displayAlternative the displayAlternative to set
+   */
+  public void setDisplayAlternative(Boolean displayAlternative) {
+    this.displayAlternative = displayAlternative;
   }
 
 }
