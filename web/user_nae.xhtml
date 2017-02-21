@@ -185,7 +185,7 @@
                   <div style="display:block;float:left;height:auto;width:inherit;margin-top:10px;margin-right:50px;">
                     <div style="float:left;margin-left:25px">
                       <h:outputLabel value="#{bundle.OrganizationName}"  for="organizationName" rendered="#{(app.editable == 1) or ( (app.editable == 0) and (!empty participantBean.organizationName) )  }" >
-                        <h:inputText  id="organizationName" value="#{participantBean.organizationName}"  rendered="#{app.editable == 1}" maxlength="50" />
+                        <h:inputText  id="organizationName" value="#{participantBean.organizationName}"  rendered="#{app.editable == 1}" maxlength="50" size="40"/>
                         <h:outputText value="#{participantBean.organizationName}" rendered="#{app.editable == 0}" class="RO_text" />
                       </h:outputLabel>
                       <span class="error-message" id="organizationName" ></span>
