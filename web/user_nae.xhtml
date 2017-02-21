@@ -194,7 +194,7 @@
                     <c:choose >
                       <c:when test="#{rid == 0}" >
                         <div id="yesNoOrganization" style="margin-left:5px;display: block;float:left;">  
-                          <h:outputLabel value="Allow #{allow} to see your Organization Name?:"  for="displayOrganization" rendered="#{(app.editable == 1) or ( (app.editable == 0) and (!empty participantBean.organizationName) )  }">
+                          <h:outputLabel value="Allow #{allow} to see your Organization Name or Website Link?:"  for="displayOrganization" rendered="#{(app.editable == 1) or ( (app.editable == 0) and (!empty participantBean.organizationName) )  }">
                             <h:selectOneRadio id="displayOrganization" value="#{participantBean.displayOrganization}" layout='lineDirection'  rendered="#{app.editable == 1}" >
                               <f:selectItem itemValue="1" itemLabel="Yes" />
                               <f:selectItem itemValue="0" itemLabel="No" />
