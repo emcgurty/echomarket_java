@@ -1,5 +1,10 @@
 # echomarket_java
-Echomarket in Java, IDE Netbeans, Faces, Hibernate 
+EchoMarket is a goodwill resource for lending, borrowing and even trading or donating some of life's necessities, or items that you need just once and you want to avoid a one-time purchase.     
+Echo Market is offered as a facilitating service to introduce borrowers seeking to lenders offering EchoMarket approved items.    
+Once a borrower or lender has been introduced, EchoMarket will play no mediating role in that event, except in the case of anonymous item donations.  
+EchoMarket was designed to protect participant privacy and assure success in participation.    
+    
+Echomarket was built using Java, IDE Netbeans, Faces, Hibernate with MySQL 
 Fully functional as a (CDI) Contexts and Dependency Injection application.  Look at AbstracBean as a starting point. 
 Runs in GlassFish and Tomee.  Tomcat apparently does not support CDI.  Tomcat will load the application but not recognize request variables.
 
