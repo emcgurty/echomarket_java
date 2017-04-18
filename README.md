@@ -1,4 +1,6 @@
 # echomarket_java
+Update April 18, 2017:  In seeking employment to prove -- yet again and again -- my web development skills, I re-wrote EchoMaket in ROR 5.  Rewrite went well,  didn't rewriting all views as that effort is very time-consuming.  If you are interested in seeing that code, please contact me.
+
 EchoMarket is a goodwill resource for lending, borrowing and even trading or donating some of life's necessities, or items that you need just once and you want to avoid a one-time purchase.     
 Echo Market is offered as a facilitating service to introduce borrowers seeking to lenders offering EchoMarket approved items.    
 Once a borrower or lender has been introduced, EchoMarket will play no mediating role in that event, except in the case of anonymous item donations.  
