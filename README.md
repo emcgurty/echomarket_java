@@ -1,5 +1,5 @@
 # echomarket_java
-Update April 18, 2017:  In seeking employment to prove -- yet again and again -- my web development skills, I re-wrote EchoMaket in ROR 5.  Rewrite went well,  didn't rewrite all views as that effort is very time-consuming.  Structure is very different as Active Record is superior to Hibernate  and SessionHelper with current_user excellent. If you are interested in seeing that code, please contact me.
+Update April 18, 2017:  I re-wrote EchoMarket in ROR 5.  Rewrite went well,  didn't rewrite all views as that effort is very time-consuming.  Structure is very different as Active Record is superior to Hibernate  and SessionHelper with current_user excellent. If you are interested in seeing that code, please contact me.
 
 EchoMarket is a goodwill resource for lending, borrowing and even trading or donating some of life's necessities, or items that you need just once and you want to avoid a one-time purchase.     
 Echo Market is offered as a facilitating service to introduce borrowers seeking to lenders offering EchoMarket approved items.    
